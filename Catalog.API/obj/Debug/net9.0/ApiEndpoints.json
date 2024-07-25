@@ -1,0 +1,142 @@
+[
+  {
+    "ContainingType": "Catalog.API.API.CatalogAPI",
+    "Method": "GetPaginatedItem",
+    "RelativePath": "api/v1/catalog/items",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "PageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "GetPaginatedItem"
+    ],
+    "EndpointName": "GetPaginatedItem"
+  },
+  {
+    "ContainingType": "Catalog.API.API.CatalogAPI",
+    "Method": "CreateNewItem",
+    "RelativePath": "api/v1/catalog/items",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "Catalog.API.Commands.CreateItem.CreateItemCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "CreateNewItem"
+    ],
+    "EndpointName": "CreateNewItem"
+  },
+  {
+    "ContainingType": "Catalog.API.API.CatalogAPI",
+    "Method": "GetItemById",
+    "RelativePath": "api/v1/catalog/items/{itemId}",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "GetItemById"
+    ],
+    "EndpointName": "GetItemById"
+  },
+  {
+    "ContainingType": "Catalog.API.API.CatalogAPI",
+    "Method": "UpdateItemById",
+    "RelativePath": "api/v1/catalog/items/{itemId}",
+    "HttpMethod": "PUT",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "command",
+        "Type": "Catalog.API.Commands.UpdateItem.UpdateItemCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "UpdateItemById"
+    ],
+    "EndpointName": "UpdateItemById"
+  },
+  {
+    "ContainingType": "Catalog.API.API.CatalogAPI",
+    "Method": "DeleteItemById",
+    "RelativePath": "api/v1/catalog/items/{itemId}",
+    "HttpMethod": "DELETE",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ],
+    "Tags": [
+      "DeleteItemById"
+    ],
+    "EndpointName": "DeleteItemById"
+  }
+]

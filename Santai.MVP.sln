@@ -1,0 +1,58 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35103.136
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{969E9CCB-9F9F-4FAD-8A78-AD135FFF85FE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{A9044507-EDCF-4240-9109-6091EF5A7B1B}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.API", "Catalog.API\Catalog.API.csproj", "{4AEF7FC2-6E0D-4399-BCB7-57B30B209124}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Domain", "Catalog.Domain\Catalog.Domain.csproj", "{6093AEE2-87F3-4795-9505-502EA4BFED0F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Catalog.Infrastructure", "Catalog.Infrastructure\Catalog.Infrastructure.csproj", "{1A42A110-2A3F-4632-A644-939C7B51D664}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{877CE680-2C71-437A-B502-B3A2E3A241AB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Catalog", "Catalog", "{7066B91C-B837-4C7C-9190-E95DDEBD727E}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "LoadTesting", "LoadTesting", "{BFA1C711-84FD-4562-AA58-4EBD2E54F09F}"
+	ProjectSection(SolutionItems) = preProject
+		CatalogStressTest.js = CatalogStressTest.js
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{4AEF7FC2-6E0D-4399-BCB7-57B30B209124}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4AEF7FC2-6E0D-4399-BCB7-57B30B209124}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4AEF7FC2-6E0D-4399-BCB7-57B30B209124}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4AEF7FC2-6E0D-4399-BCB7-57B30B209124}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6093AEE2-87F3-4795-9505-502EA4BFED0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6093AEE2-87F3-4795-9505-502EA4BFED0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6093AEE2-87F3-4795-9505-502EA4BFED0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6093AEE2-87F3-4795-9505-502EA4BFED0F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1A42A110-2A3F-4632-A644-939C7B51D664}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A42A110-2A3F-4632-A644-939C7B51D664}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A42A110-2A3F-4632-A644-939C7B51D664}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A42A110-2A3F-4632-A644-939C7B51D664}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{A9044507-EDCF-4240-9109-6091EF5A7B1B} = {969E9CCB-9F9F-4FAD-8A78-AD135FFF85FE}
+		{4AEF7FC2-6E0D-4399-BCB7-57B30B209124} = {A9044507-EDCF-4240-9109-6091EF5A7B1B}
+		{6093AEE2-87F3-4795-9505-502EA4BFED0F} = {A9044507-EDCF-4240-9109-6091EF5A7B1B}
+		{1A42A110-2A3F-4632-A644-939C7B51D664} = {A9044507-EDCF-4240-9109-6091EF5A7B1B}
+		{7066B91C-B837-4C7C-9190-E95DDEBD727E} = {877CE680-2C71-437A-B502-B3A2E3A241AB}
+		{BFA1C711-84FD-4562-AA58-4EBD2E54F09F} = {7066B91C-B837-4C7C-9190-E95DDEBD727E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3F012C31-7F5E-479A-A242-C16A92A8448D}
+	EndGlobalSection
+EndGlobal
