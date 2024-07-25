@@ -1,14 +1,14 @@
-using Catalog.API.API; 
-using Catalog.Infrastructure; 
-using Catalog.Infrastructure.Repositories; 
+using Catalog.API.API;
+using Catalog.Infrastructure;
+using Catalog.Infrastructure.Repositories;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Catalog.API.Validators;
 using Catalog.API.Services;
 using Catalog.Domain.Aggregates.ItemAggregate;
 using Catalog.Domain.Aggregates.CategoryAggregate;
 using Catalog.Domain.SeedWork;
+using Catalog.API.Validators.Item; 
 
 var builder = WebApplication.CreateBuilder(args); 
 
@@ -67,11 +67,15 @@ if (app.Environment.IsDevelopment())
     
     app.UseSwaggerUI(c => 
     {      
+
     });
     
     app.MapOpenApi();
-} 
+}
 
-app.CatalogRouter("api/v1/catalog");     
+const string groupName = "api/v1/catalog"; 
+app.ItemRouter(groupName);     
+app.CategoryRouter(groupName); 
+app.BrandRouter(groupName); 
 
 app.Run(); 

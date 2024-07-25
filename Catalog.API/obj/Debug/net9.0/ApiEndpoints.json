@@ -1,6 +1,246 @@
 [
   {
-    "ContainingType": "Catalog.API.API.CatalogAPI",
+    "ContainingType": "Catalog.API.API.BrandAPI",
+    "Method": "GetPaginatedBrand",
+    "RelativePath": "api/v1/catalog/brands",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "PageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.BrandAPI",
+    "Method": "CreateNewBrand",
+    "RelativePath": "api/v1/catalog/brands",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "Catalog.API.Commands.Brands.CreateBrand.CreateBrandCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.BrandAPI",
+    "Method": "GetBrandById",
+    "RelativePath": "api/v1/catalog/brands/{brandId}",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "brandId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.BrandAPI",
+    "Method": "UpdateBrandById",
+    "RelativePath": "api/v1/catalog/brands/{brandId}",
+    "HttpMethod": "PUT",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "brandId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "command",
+        "Type": "Catalog.API.Commands.Brands.UpdateBrand.UpdateBrandCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.BrandAPI",
+    "Method": "DeleteBrandById",
+    "RelativePath": "api/v1/catalog/brands/{brandId}",
+    "HttpMethod": "DELETE",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "brandId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.CategoryAPI",
+    "Method": "GetPaginatedCategory",
+    "RelativePath": "api/v1/catalog/categories",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "PageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.CategoryAPI",
+    "Method": "CreateNewCategory",
+    "RelativePath": "api/v1/catalog/categories",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "Catalog.API.Commands.Categories.CreateCategory.CreateCategoryCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.CategoryAPI",
+    "Method": "GetCategoryById",
+    "RelativePath": "api/v1/catalog/categories/{categoryId}",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.CategoryAPI",
+    "Method": "UpdateCategoryById",
+    "RelativePath": "api/v1/catalog/categories/{categoryId}",
+    "HttpMethod": "PUT",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryId",
+        "Type": "System.String",
+        "IsRequired": true
+      },
+      {
+        "Name": "command",
+        "Type": "Catalog.API.Commands.Categories.UpdateCategory.UpdateCategoryCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.CategoryAPI",
+    "Method": "DeleteCategoryById",
+    "RelativePath": "api/v1/catalog/categories/{categoryId}",
+    "HttpMethod": "DELETE",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "categoryId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.ItemAPI",
     "Method": "GetPaginatedItem",
     "RelativePath": "api/v1/catalog/items",
     "HttpMethod": "GET",
@@ -24,14 +264,10 @@
         "MediaTypes": [],
         "StatusCode": 200
       }
-    ],
-    "Tags": [
-      "GetPaginatedItem"
-    ],
-    "EndpointName": "GetPaginatedItem"
+    ]
   },
   {
-    "ContainingType": "Catalog.API.API.CatalogAPI",
+    "ContainingType": "Catalog.API.API.ItemAPI",
     "Method": "CreateNewItem",
     "RelativePath": "api/v1/catalog/items",
     "HttpMethod": "POST",
@@ -40,7 +276,7 @@
     "Parameters": [
       {
         "Name": "command",
-        "Type": "Catalog.API.Commands.CreateItem.CreateItemCommand",
+        "Type": "Catalog.API.Commands.Items.CreateItem.CreateItemCommand",
         "IsRequired": true
       }
     ],
@@ -50,14 +286,10 @@
         "MediaTypes": [],
         "StatusCode": 200
       }
-    ],
-    "Tags": [
-      "CreateNewItem"
-    ],
-    "EndpointName": "CreateNewItem"
+    ]
   },
   {
-    "ContainingType": "Catalog.API.API.CatalogAPI",
+    "ContainingType": "Catalog.API.API.ItemAPI",
     "Method": "GetItemById",
     "RelativePath": "api/v1/catalog/items/{itemId}",
     "HttpMethod": "GET",
@@ -76,14 +308,10 @@
         "MediaTypes": [],
         "StatusCode": 200
       }
-    ],
-    "Tags": [
-      "GetItemById"
-    ],
-    "EndpointName": "GetItemById"
+    ]
   },
   {
-    "ContainingType": "Catalog.API.API.CatalogAPI",
+    "ContainingType": "Catalog.API.API.ItemAPI",
     "Method": "UpdateItemById",
     "RelativePath": "api/v1/catalog/items/{itemId}",
     "HttpMethod": "PUT",
@@ -97,7 +325,7 @@
       },
       {
         "Name": "command",
-        "Type": "Catalog.API.Commands.UpdateItem.UpdateItemCommand",
+        "Type": "Catalog.API.Commands.Items.UpdateItem.UpdateItemCommand",
         "IsRequired": true
       }
     ],
@@ -107,14 +335,10 @@
         "MediaTypes": [],
         "StatusCode": 200
       }
-    ],
-    "Tags": [
-      "UpdateItemById"
-    ],
-    "EndpointName": "UpdateItemById"
+    ]
   },
   {
-    "ContainingType": "Catalog.API.API.CatalogAPI",
+    "ContainingType": "Catalog.API.API.ItemAPI",
     "Method": "DeleteItemById",
     "RelativePath": "api/v1/catalog/items/{itemId}",
     "HttpMethod": "DELETE",
@@ -133,10 +357,6 @@
         "MediaTypes": [],
         "StatusCode": 200
       }
-    ],
-    "Tags": [
-      "DeleteItemById"
-    ],
-    "EndpointName": "DeleteItemById"
+    ]
   }
 ]

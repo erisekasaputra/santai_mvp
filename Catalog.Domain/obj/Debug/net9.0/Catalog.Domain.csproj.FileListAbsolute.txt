@@ -6,6 +6,7 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.AssemblyInfoInputs.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.AssemblyInfo.cs
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.csproj.CoreCompileInputs.cache
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.sourcelink.json
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Domain\obj\Debug\net9.0\refint\Catalog.Domain.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.pdb

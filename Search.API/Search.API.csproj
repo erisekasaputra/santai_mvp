@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-preview.6.24328.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Applications\IntegrationEvents\Events\Incoming\" />
+    <Folder Include="Applications\IntegrationEvents\Events\Outgoing\" />
+    <Folder Include="Applications\IntegrationEvents\Handlers\" />
+  </ItemGroup>
+
+</Project>

@@ -14,7 +14,7 @@ public static class ItemExtension
         } 
     }
 
-    private static ItemDto ToItemDto(this Item item)
+    public static ItemDto ToItemDto(this Item item)
     { 
         return new ItemDto( 
             item.Id,

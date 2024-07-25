@@ -49,11 +49,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Background\" />
     <Folder Include="IntegrationEvents\EventHandlers\Incoming\" />
-    <Folder Include="IntegrationEvents\EventHandlers\Outgoing\" />
     <Folder Include="IntegrationEvents\Events\Incoming\" />
-    <Folder Include="IntegrationEvents\Events\" />
-    <Folder Include="IntegrationEvents\Events\Outgoing\" />
   </ItemGroup>
 
 </Project>

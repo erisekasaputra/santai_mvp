@@ -22,6 +22,27 @@ namespace Catalog.API.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("Catalog.Domain.Aggregates.BrandAggregate.Brand", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasMaxLength(26)
+                        .HasColumnType("nvarchar(26)");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("brands", (string)null);
+                });
+
             modelBuilder.Entity("Catalog.Domain.Aggregates.CategoryAggregate.Category", b =>
                 {
                     b.Property<string>("Id")
@@ -30,8 +51,8 @@ namespace Catalog.API.Migrations
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -49,6 +70,10 @@ namespace Catalog.API.Migrations
                         .HasMaxLength(26)
                         .HasColumnType("nvarchar(26)");
 
+                    b.Property<string>("BrandId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(26)");
+
                     b.Property<string>("CategoryId")
                         .IsRequired()
                         .HasColumnType("nvarchar(26)");
@@ -63,8 +88,8 @@ namespace Catalog.API.Migrations
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
-                        .HasMaxLength(512)
-                        .HasColumnType("nvarchar(512)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<decimal>("LastPrice")
                         .HasColumnType("decimal(18, 2)");
@@ -85,6 +110,8 @@ namespace Catalog.API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BrandId");
+
                     b.HasIndex("CategoryId");
 
                     b.ToTable("items", (string)null);
@@ -92,13 +119,26 @@ namespace Catalog.API.Migrations
 
             modelBuilder.Entity("Catalog.Domain.Aggregates.ItemAggregate.Item", b =>
                 {
+                    b.HasOne("Catalog.Domain.Aggregates.BrandAggregate.Brand", "Brand")
+                        .WithMany("Brands")
+                        .HasForeignKey("BrandId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("Catalog.Domain.Aggregates.CategoryAggregate.Category", "Category")
                         .WithMany("Items")
                         .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.Navigation("Brand");
+
                     b.Navigation("Category");
+                });
+
+            modelBuilder.Entity("Catalog.Domain.Aggregates.BrandAggregate.Brand", b =>
+                {
+                    b.Navigation("Brands");
                 });
 
             modelBuilder.Entity("Catalog.Domain.Aggregates.CategoryAggregate.Category", b =>

@@ -1,14 +1,20 @@
 ﻿
+using Catalog.Domain.Aggregates.BrandAggregate;
 using Catalog.Domain.Aggregates.CategoryAggregate;
+using Catalog.Domain.Events;
 using Catalog.Domain.SeedWork;
 
 namespace Catalog.Domain.Aggregates.ItemAggregate;
 
-public class Item : Entity<string>, IAggregateRoot
+public class Item : Entity, IAggregateRoot
 {
     public string CategoryId { get; set; }
 
     public Category Category { get; set; }
+
+    public string BrandId { get; set; }
+
+    public Brand Brand { get; set; }
 
     public string Name { get; set; }
 
@@ -24,11 +30,14 @@ public class Item : Entity<string>, IAggregateRoot
 
     public int StockQuantity { get; private set; }
 
-    public int SoldQuantity { get; private set; }
-    
-    public Item(string id, string name, string description, decimal price, string imageUrl, DateTime createdAt, int stockQuantity, int soldQuantity, string categoryId, Category category) 
+    public int SoldQuantity { get; private set; } 
+
+    public Item() 
+    {  
+    }
+ 
+    public Item(string name, string description, decimal price, string imageUrl, DateTime createdAt, int stockQuantity, int soldQuantity, string categoryId, Category category, string brandId, Brand brand) 
     {
-        Id = id;
         Name = name;
         Description = description;
         Price = price;
@@ -38,7 +47,31 @@ public class Item : Entity<string>, IAggregateRoot
         SoldQuantity = soldQuantity;
         CategoryId = categoryId;
         Category = category;
+        BrandId = brandId;
+        Brand = brand;
+
+        this.AddDomainEvent(new ItemCreatedDomainEvent(this));
     }
+
+    public void Update(string name, string description, string imageUrl, string categoryId, Category category, string brandId, Brand brand)
+    {
+        ArgumentException.ThrowIfNullOrEmpty(name);
+        ArgumentException.ThrowIfNullOrEmpty(description);
+        ArgumentException.ThrowIfNullOrEmpty(imageUrl);
+        ArgumentException.ThrowIfNullOrEmpty(categoryId);
+        ArgumentNullException.ThrowIfNull(category);
+        ArgumentException.ThrowIfNullOrEmpty(brandId);
+        ArgumentNullException.ThrowIfNull(brand); 
+
+        Name = name;
+        Description = description;
+        ImageUrl = imageUrl;
+        CategoryId = categoryId;
+        Category = category;
+        BrandId = brandId;
+        Brand = brand;
+    }
+
     public void DecreaseStockQuantity(int amount)
     {
         ArgumentOutOfRangeException.ThrowIfLessThan(StockQuantity, amount, "Stock quantity is not enough");

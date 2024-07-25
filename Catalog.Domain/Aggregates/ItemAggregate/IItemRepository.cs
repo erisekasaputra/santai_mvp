@@ -1,6 +1,4 @@
-﻿using Catalog.Domain.SeedWork;
-
-namespace Catalog.Domain.Aggregates.ItemAggregate;
+﻿namespace Catalog.Domain.Aggregates.ItemAggregate;
 
 public interface IItemRepository
 {

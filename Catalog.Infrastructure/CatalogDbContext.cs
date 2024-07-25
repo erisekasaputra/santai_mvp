@@ -1,4 +1,5 @@
-﻿using Catalog.Domain.Aggregates.CategoryAggregate;
+﻿using Catalog.Domain.Aggregates.BrandAggregate;
+using Catalog.Domain.Aggregates.CategoryAggregate;
 using Catalog.Domain.Aggregates.ItemAggregate; 
 using Catalog.Infrastructure.EntityConfiguration;
 using MediatR;
@@ -10,8 +11,9 @@ namespace Catalog.Infrastructure;
 
 public class CatalogDbContext(DbContextOptions<CatalogDbContext> options, IMediator mediator) : DbContext(options) 
 { 
-    public DbSet<Category> Categories { get; set; }
     public DbSet<Item> Items { get; set; }
+    public DbSet<Category> Categories { get; set; }
+    public DbSet<Brand> Brands { get; set; }
 
     private readonly IMediator _mediator = mediator;
 
@@ -22,9 +24,7 @@ public class CatalogDbContext(DbContextOptions<CatalogDbContext> options, IMedia
     public bool HasActiveTransaction => _currentTransaction != null;
 
     public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
-    {
-        await _mediator.DispatchDomainEventsAsync(this);
-
+    {  
         _ = await base.SaveChangesAsync(cancellationToken);
 
         return true;
@@ -94,6 +94,8 @@ public class CatalogDbContext(DbContextOptions<CatalogDbContext> options, IMedia
         modelBuilder.ApplyConfiguration(new ItemEntityConfigurator());
 
         modelBuilder.ApplyConfiguration(new CategoryEntityConfigurator());
+
+        modelBuilder.ApplyConfiguration(new BrandEntityConfigurator());
         
         base.OnModelCreating(modelBuilder);
     }  

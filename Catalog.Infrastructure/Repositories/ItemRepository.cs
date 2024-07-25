@@ -33,6 +33,7 @@ public class ItemRepository(CatalogDbContext context) : IItemRepository
             .Take(pageSize)
             .Include(d => d.Category)
             .AsNoTracking()
+            .OrderBy(x => x.Name)
             .ToListAsync();
 
         return (totalCount, totalPages, items);

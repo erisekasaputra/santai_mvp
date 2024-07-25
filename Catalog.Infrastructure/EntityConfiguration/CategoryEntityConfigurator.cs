@@ -5,7 +5,7 @@ using Catalog.Domain.Aggregates.CategoryAggregate;
 namespace Catalog.Infrastructure.EntityConfiguration;
 
 public class CategoryEntityConfigurator : IEntityTypeConfiguration<Category>
-{
+{ 
     public void Configure(EntityTypeBuilder<Category> builder)
     {
         builder.ToTable("categories");
@@ -23,5 +23,7 @@ public class CategoryEntityConfigurator : IEntityTypeConfiguration<Category>
         builder.Property(x => x.ImageUrl)
             .IsRequired()
             .HasMaxLength(500); 
+
+        builder.Ignore(x => x.DomainEvents);
     }
 }
