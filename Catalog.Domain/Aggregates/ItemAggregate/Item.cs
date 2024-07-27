@@ -2,7 +2,7 @@
 using Catalog.Domain.Aggregates.CategoryAggregate;
 using Catalog.Domain.Aggregates.OwnerReviewAggregate;
 using Catalog.Domain.Events;
-using Catalog.Domain.SeedWork;
+using Catalog.Domain.SeedWork; 
 
 namespace Catalog.Domain.Aggregates.ItemAggregate;
 
@@ -32,23 +32,24 @@ public class Item : Entity, IAggregateRoot
 
     public DateTime CreatedAt { get; private set; }
 
-    public ICollection<OwnerReview> OwnerReviews { get; set; } 
+
+    private readonly IList<OwnerReview> _ownerReviews = [];
+
+    public IReadOnlyCollection<OwnerReview> OwnerReviews => _ownerReviews.AsReadOnly(); 
 
     public Item()
-    {
-
+    { 
     }
       
-    public Item(string name, string description, decimal price, string imageUrl, DateTime createdAt, int stockQuantity, int soldQuantity, string categoryId, Category category, string brandId, Brand brand, ICollection<OwnerReview> ownerReviews) 
-    {
+    public Item(string name, string description, decimal price, string imageUrl, DateTime createdAt, int stockQuantity, int soldQuantity, string categoryId, Category category, string brandId, Brand brand, ICollection<OwnerReview> ownerReviews) : this()
+    { 
         ArgumentException.ThrowIfNullOrEmpty(name);
         ArgumentException.ThrowIfNullOrEmpty(description);
         ArgumentException.ThrowIfNullOrEmpty(imageUrl);
         ArgumentException.ThrowIfNullOrEmpty(categoryId);
         ArgumentNullException.ThrowIfNull(category);
         ArgumentException.ThrowIfNullOrEmpty(brandId);
-        ArgumentNullException.ThrowIfNull(brand);
-        ArgumentNullException.ThrowIfNull(ownerReviews);
+        ArgumentNullException.ThrowIfNull(brand); 
          
         Name = name;
         Description = description;
@@ -61,18 +62,20 @@ public class Item : Entity, IAggregateRoot
         Category = category;
         BrandId = brandId;
         Brand = brand;
-        OwnerReviews = ownerReviews;
+
+        _ownerReviews.Clear(); 
+        var filteredOwnerReview = ownerReviews.GroupBy(r => r.Title).Select(g => g.First()).ToList();
+        foreach (var ownerReview in filteredOwnerReview)
+        {
+            _ownerReviews.Add(ownerReview);
+        }
 
         RaiseItemCreatedDomainEvent();
-    }
+    } 
+      
 
-    private void RaiseItemCreatedDomainEvent()
-    {
-        this.AddDomainEvent(new ItemCreatedDomainEvent(this));
-    }
-
-    public void Update(string name, string description, string imageUrl, string categoryId, Category category, string brandId, Brand brand, List<OwnerReview> ownerReviews)
-    {
+    public void Update(string name, string description, string imageUrl, string categoryId, Category category, string brandId, Brand brand, ICollection<OwnerReview> ownerReviews)
+    { 
         ArgumentException.ThrowIfNullOrEmpty(name);
         ArgumentException.ThrowIfNullOrEmpty(description);
         ArgumentException.ThrowIfNullOrEmpty(imageUrl);
@@ -88,13 +91,20 @@ public class Item : Entity, IAggregateRoot
         Category = category;
         BrandId = brandId;
         Brand = brand;
-        OwnerReviews = ownerReviews;
-        this.AddDomainEvent(new ItemUpdatedDomainEvent(this));
+
+        _ownerReviews.Clear();
+        var filteredOwnerReview = ownerReviews.GroupBy(r => r.Title).Select(g => g.First()).ToList();
+        foreach (var ownerReview in filteredOwnerReview)
+        {
+            _ownerReviews.Add(ownerReview);
+        }  
+
+        RaiseItemUpdatedDomainEvent();
     }
 
     public void Delete()
     {
-        this.AddDomainEvent(new ItemDeletedDomainEvent(this.Id));
+        RaiseItemDeletedDomainEvent();
     }
 
     public void DecreaseStockQuantity(int amount)
@@ -151,5 +161,19 @@ public class Item : Entity, IAggregateRoot
 
         LastPrice = Price;
         Price = amount;
+    }
+
+    private void RaiseItemCreatedDomainEvent()
+    {
+        AddDomainEvent(new ItemCreatedDomainEvent(this));
+    }
+    private void RaiseItemDeletedDomainEvent()
+    {
+        AddDomainEvent(new ItemDeletedDomainEvent(Id));
+    }
+
+    private void RaiseItemUpdatedDomainEvent()
+    { 
+        AddDomainEvent(new ItemUpdatedDomainEvent(this));
     }
 }

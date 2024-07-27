@@ -16,8 +16,10 @@ public class ItemRepository(CatalogDbContext context) : IItemRepository
     public async Task<Item?> GetItemByIdAsync(string id)
     {
         return await _context.Items
-            .Include(d => d.Category)
-            .FirstOrDefaultAsync(entity => entity.Id == id);
+            .Include(p => p.Category)
+            .Include(p => p.Brand)
+            .Include(p => p.OwnerReviews)
+            .FirstOrDefaultAsync(e => e.Id == id);
     }
 
     public async Task<(int TotalCount, int TotalPages, IEnumerable<Item> Items)> GetPaginatedItemsAsync(int pageNumber, int pageSize)

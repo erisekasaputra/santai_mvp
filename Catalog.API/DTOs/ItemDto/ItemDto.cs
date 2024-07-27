@@ -9,6 +9,4 @@ public record ItemDto(string Id,
                   int StockQuantity,
                   int SoldQuantity,
                   string CategoryId,
-                  string CategoryName)
-{   
-}
+                  string CategoryName);

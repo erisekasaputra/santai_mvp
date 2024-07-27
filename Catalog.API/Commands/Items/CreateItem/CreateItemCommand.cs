@@ -1,5 +1,5 @@
-﻿using Catalog.API.SeedWorks;
-using Catalog.Domain.Aggregates.OwnerReviewAggregate;
+﻿using Catalog.API.DTOs.OwnerReviewDto;
+using Catalog.API.SeedWorks; 
 using MediatR;
 
 namespace Catalog.API.Commands.Items.CreateItem; 
@@ -13,4 +13,4 @@ public record CreateItemCommand(
     int SoldQuantity,
     string CategoryId,
     string BrandId,
-    IEnumerable<OwnerReview> OwnerReviews) : IRequest<Result<CreateItemResponse>>;
+    IEnumerable<OwnerReviewDto> OwnerReviews) : IRequest<Result<CreateItemResponse>>;

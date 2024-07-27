@@ -36,9 +36,8 @@ public class ItemEntityConfigurator : IEntityTypeConfiguration<Item>
             .OnDelete(DeleteBehavior.SetNull);
 
         builder.HasMany(i => i.OwnerReviews)
-            .WithOne(or => or.Item)
-            .HasForeignKey(or => or.ItemId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .WithOne()
+            .HasForeignKey("ItemId");
 
         builder.HasOne(ci => ci.Brand)
             .WithMany(ic => ic.Items)
