@@ -1,4 +1,5 @@
 ﻿using Catalog.API.SeedWorks;
+using Catalog.Domain.Aggregates.OwnerReviewAggregate;
 using MediatR;
 
 namespace Catalog.API.Commands.Items.UpdateItem;
@@ -12,6 +13,5 @@ public record UpdateItemCommand(
     int StockQuantity,
     int SoldQuantity,
     string CategoryId,
-    string BrandId) : IRequest<Result<Unit>>
-{
-}
+    string BrandId,
+    IEnumerable<OwnerReview> OwnerReviews) : IRequest<Result<Unit>>;

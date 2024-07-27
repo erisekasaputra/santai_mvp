@@ -1,5 +1,4 @@
-﻿using Catalog.Domain.Aggregates.ItemAggregate;
-using Catalog.Domain.SeedWork;
+﻿using Catalog.Domain.Aggregates.ItemAggregate; 
 using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Infrastructure.Repositories;
@@ -40,11 +39,12 @@ public class ItemRepository(CatalogDbContext context) : IItemRepository
     }
 
     public void UpdateItem(Item item)
-    {
+    { 
         _context.Items.Update(item);
     }
     public void DeleteItem(Item item)
     {
+        item.Delete();
         _context.Items.Remove(item);
     } 
 }

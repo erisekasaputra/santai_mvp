@@ -3,7 +3,4 @@ using MediatR;
 
 namespace Catalog.Domain.Events;
 
-public class ItemCreatedDomainEvent(Item item) : INotification
-{
-    public Item Item { get; set; } = item;
-}
+public record ItemCreatedDomainEvent(Item Item) : INotification;

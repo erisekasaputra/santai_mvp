@@ -1,12 +1,39 @@
-version: '3.0'
+version: '3.9'
 
 services:
-  sqlinstance:
-    image: mcr.microsoft.com/mssql/server:2022-latest
-    container_name: sqlinstance
-    restart: always
-    ports:
-      - 1433:1433
-    environment:
-      - "ACCEPT_EULA=Y"
-      - "MSSQL_SA_PASSWORD=000328Eris@"
+    rabbitmq:    
+        image: rabbitmq:3-management
+        container_name: rabbitmq-santai
+        ports:
+            - "5672:5672"
+            - "15672:15672"
+        environment:
+            RABBITMQ_DEFAULT_USER: eris
+            RABBITMQ_DEFAULT_PASS: 000328Eris@
+
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch:8.8.1
+        container_name: elasticsearch-santai
+        environment:
+            - discovery.type=single-node
+            - xpack.security.enabled=false
+            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+        ports:
+            - 9200:9200
+            - 9300:9300
+        volumes:
+            - es_data:/usr/share/elasticsearch/data
+
+    redis:
+        image: redis:latest
+        container_name: redis-santai
+        ports:
+            - "6379:6379" 
+    dynamodb:
+        image: amazon/dynamodb-local:latest
+        container_name: dynamodb-santai
+        ports:
+            - "8000:8000"
+        
+volumes:
+  es_data:

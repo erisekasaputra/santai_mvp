@@ -50,6 +50,26 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "dependencies": {
+            "Elastic.Apm.Elasticsearch": {
+              "target": "Package",
+              "version": "[1.28.0, )"
+            },
+            "Elastic.Clients.Elasticsearch": {
+              "target": "Package",
+              "version": "[8.14.6, )"
+            },
+            "MassTransit": {
+              "target": "Package",
+              "version": "[8.2.4-develop.1875, )"
+            },
+            "MassTransit.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.2.4-develop.1875, )"
+            },
+            "MassTransit.Kafka": {
+              "target": "Package",
+              "version": "[8.2.4-develop.1875, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.0-preview.6.24328.4, )"

@@ -13,7 +13,8 @@ public class DeleteItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
 
         if (item is not null)
         {
-            _unitOfWork.Items.DeleteItem(item);
+            _unitOfWork.Items.DeleteItem(item); 
+
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 

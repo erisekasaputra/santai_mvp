@@ -12,8 +12,7 @@ public class BrandEntityConfigurator : IEntityTypeConfiguration<Brand>
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Id)
-            .IsRequired()
+        builder.Property(x => x.Id) 
             .HasMaxLength(26); 
 
         builder.Property(x => x.Name)
@@ -23,8 +22,7 @@ public class BrandEntityConfigurator : IEntityTypeConfiguration<Brand>
         builder.Property(x => x.ImageUrl)
             .IsRequired()
             .HasMaxLength(500);
-
-
+         
         builder.Ignore(x => x.DomainEvents);
     }
 }

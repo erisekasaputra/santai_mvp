@@ -1,13 +1,15 @@
 ﻿using Catalog.API.SeedWorks;
 using Catalog.Domain.Aggregates.BrandAggregate;
 using Catalog.Domain.SeedWork;
+using MassTransit;
+using MassTransit.Transports;
 using MediatR;
 
 namespace Catalog.API.Commands.Brands.CreateBrand;
 
 public class CreateBrandCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateBrandCommand, Result<CreateBrandResponse>>
 {
-    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork; 
     public async Task<Result<CreateBrandResponse>> Handle(CreateBrandCommand request, CancellationToken cancellationToken)
     {
         var existingBrand = await _unitOfWork.Brands.GetBrandByNameAsync(request.Name);
@@ -24,10 +26,10 @@ public class CreateBrandCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler
 
         var response = await _unitOfWork.Brands.CreateBrandAsync(brand);
 
-        if (response == null)
+        if (response is null)
         {
             return Result<CreateBrandResponse>.Failure("We encountered an issue while creating the brand. Please try again later or contact support if the problem persists.", 500);
-        }
+        } 
 
         var result = await _unitOfWork.SaveChangesAsync(cancellationToken);
 

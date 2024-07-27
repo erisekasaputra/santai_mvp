@@ -1,14 +1,13 @@
 using Catalog.API.API;
-using Catalog.Infrastructure;
-using Catalog.Infrastructure.Repositories;
+using Catalog.Infrastructure; 
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Catalog.API.Services;
-using Catalog.Domain.Aggregates.ItemAggregate;
-using Catalog.Domain.Aggregates.CategoryAggregate;
+using Catalog.API.Services; 
 using Catalog.Domain.SeedWork;
-using Catalog.API.Validators.Item; 
+using Catalog.API.Validators.Item;
+using MassTransit;
+using Catalog.Contracts;
 
 var builder = WebApplication.CreateBuilder(args); 
 
@@ -31,15 +30,6 @@ builder.Services.AddFluentValidationClientsideAdapters();
 
 builder.Services.AddValidatorsFromAssemblyContaining<CreateItemCommandValidator>();
 
-builder.Services.AddDbContext<CatalogDbContext>(opt =>
-{
-    opt.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), optionBuilder =>
-    {
-        optionBuilder.MigrationsAssembly("Catalog.API");
-        optionBuilder.CommandTimeout(30);
-    }); 
-}); 
-
 builder.Services.AddRouting();
 
 builder.Services.AddOpenApi();
@@ -50,11 +40,40 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<ApplicationService>();
 
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); 
 
-builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddDbContext<CatalogDbContext>(opt =>
+{
+    opt.UseSqlServer(builder.Configuration["Database:SqlServer"], optionBuilder =>
+    {
+        optionBuilder.MigrationsAssembly("Catalog.API");
+        optionBuilder.CommandTimeout(30);
+    });
+});
 
-builder.Services.AddScoped<ICategoryRepository, CategoryRepository>(); 
+builder.Services.AddMassTransit(x =>
+{
+    x.AddEntityFrameworkOutbox<CatalogDbContext>(o =>
+    {
+        o.DuplicateDetectionWindow = TimeSpan.FromSeconds(30);
+        o.QueryDelay = TimeSpan.FromSeconds(1);
+        o.QueryTimeout = TimeSpan.FromSeconds(30);
+        o.QueryMessageLimit = 100;
+        o.UseSqlServer();
+        o.UseBusOutbox();
+    }); 
+
+    x.UsingRabbitMq((context, configure) =>
+    {
+        configure.Host(builder.Configuration["RabbitMQ:Host"]!, host =>
+        {
+            host.Username(builder.Configuration["RabbitMQ:Username"] ?? "user");
+            host.Password(builder.Configuration["RabbitMQ:Password"] ?? "user");
+        }); 
+
+        configure.ConfigureEndpoints(context);
+    }); 
+});  
  
 var app = builder.Build();  
 
@@ -71,7 +90,7 @@ if (app.Environment.IsDevelopment())
     });
     
     app.MapOpenApi();
-}
+} 
 
 const string groupName = "api/v1/catalog"; 
 app.ItemRouter(groupName);     

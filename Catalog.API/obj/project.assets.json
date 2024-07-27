@@ -2,7 +2,52 @@
   "version": 3,
   "targets": {
     "net9.0": {
-      "Azure.Core/1.40.0": {
+      "AWSSDK.Core/3.7.304.30": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/AWSSDK.Core.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.Core.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "AWSSDK.SimpleNotificationService/3.7.302.1": {
+        "type": "package",
+        "dependencies": {
+          "AWSSDK.Core": "[3.7.304.30, 4.0.0)"
+        },
+        "compile": {
+          "lib/net8.0/AWSSDK.SimpleNotificationService.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.SimpleNotificationService.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "AWSSDK.SQS/3.7.301.33": {
+        "type": "package",
+        "dependencies": {
+          "AWSSDK.Core": "[3.7.304.30, 4.0.0)"
+        },
+        "compile": {
+          "lib/net8.0/AWSSDK.SQS.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.SQS.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "Azure.Core/1.41.0": {
         "type": "package",
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "1.1.1",
@@ -25,12 +70,30 @@
           }
         }
       },
-      "Azure.Identity/1.12.0": {
+      "Azure.Core.Experimental/0.1.0-preview.34": {
         "type": "package",
         "dependencies": {
-          "Azure.Core": "1.40.0",
-          "Microsoft.Identity.Client": "4.61.3",
-          "Microsoft.Identity.Client.Extensions.Msal": "4.61.3",
+          "Azure.Core": "1.39.0",
+          "Microsoft.CSharp": "4.7.0"
+        },
+        "compile": {
+          "lib/net6.0/Azure.Core.Experimental.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/Azure.Core.Experimental.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Azure.Identity/1.13.0-beta.1": {
+        "type": "package",
+        "dependencies": {
+          "Azure.Core": "1.41.0",
+          "Azure.Core.Experimental": "0.1.0-preview.34",
+          "Microsoft.Identity.Client": "4.62.0",
+          "Microsoft.Identity.Client.Extensions.Msal": "4.62.0",
           "System.Memory": "4.5.4",
           "System.Security.Cryptography.ProtectedData": "4.7.0",
           "System.Text.Json": "4.7.2",
@@ -47,11 +110,11 @@
           }
         }
       },
-      "Confluent.Kafka/2.4.0": {
+      "Confluent.Kafka/2.5.0": {
         "type": "package",
         "dependencies": {
           "System.Memory": "4.5.0",
-          "librdkafka.redist": "2.4.0"
+          "librdkafka.redist": "2.5.0"
         },
         "compile": {
           "lib/net6.0/Confluent.Kafka.dll": {
@@ -114,7 +177,7 @@
           }
         }
       },
-      "Hangfire.Core/1.8.12": {
+      "Hangfire.Core/1.8.14": {
         "type": "package",
         "dependencies": {
           "Newtonsoft.Json": "11.0.1"
@@ -127,50 +190,6 @@
         "runtime": {
           "lib/netstandard2.0/Hangfire.Core.dll": {
             "related": ".xml"
-          }
-        },
-        "resource": {
-          "lib/netstandard2.0/ca/Hangfire.Core.resources.dll": {
-            "locale": "ca"
-          },
-          "lib/netstandard2.0/de/Hangfire.Core.resources.dll": {
-            "locale": "de"
-          },
-          "lib/netstandard2.0/es/Hangfire.Core.resources.dll": {
-            "locale": "es"
-          },
-          "lib/netstandard2.0/fa/Hangfire.Core.resources.dll": {
-            "locale": "fa"
-          },
-          "lib/netstandard2.0/fr/Hangfire.Core.resources.dll": {
-            "locale": "fr"
-          },
-          "lib/netstandard2.0/nb/Hangfire.Core.resources.dll": {
-            "locale": "nb"
-          },
-          "lib/netstandard2.0/nl/Hangfire.Core.resources.dll": {
-            "locale": "nl"
-          },
-          "lib/netstandard2.0/pt-BR/Hangfire.Core.resources.dll": {
-            "locale": "pt-BR"
-          },
-          "lib/netstandard2.0/pt-PT/Hangfire.Core.resources.dll": {
-            "locale": "pt-PT"
-          },
-          "lib/netstandard2.0/pt/Hangfire.Core.resources.dll": {
-            "locale": "pt"
-          },
-          "lib/netstandard2.0/sv/Hangfire.Core.resources.dll": {
-            "locale": "sv"
-          },
-          "lib/netstandard2.0/tr-TR/Hangfire.Core.resources.dll": {
-            "locale": "tr-TR"
-          },
-          "lib/netstandard2.0/zh-TW/Hangfire.Core.resources.dll": {
-            "locale": "zh-TW"
-          },
-          "lib/netstandard2.0/zh/Hangfire.Core.resources.dll": {
-            "locale": "zh"
           }
         }
       },
@@ -187,7 +206,7 @@
           }
         }
       },
-      "librdkafka.redist/2.4.0": {
+      "librdkafka.redist/2.5.0": {
         "type": "package",
         "build": {
           "build/_._": {}
@@ -201,11 +220,7 @@
             "assetType": "native",
             "rid": "linux-x64"
           },
-          "runtimes/linux-x64/native/centos6-librdkafka.so": {
-            "assetType": "native",
-            "rid": "linux-x64"
-          },
-          "runtimes/linux-x64/native/centos7-librdkafka.so": {
+          "runtimes/linux-x64/native/centos8-librdkafka.so": {
             "assetType": "native",
             "rid": "linux-x64"
           },
@@ -295,10 +310,10 @@
           }
         }
       },
-      "MassTransit/8.2.4-develop.1872": {
+      "MassTransit/8.2.4-develop.1875": {
         "type": "package",
         "dependencies": {
-          "MassTransit.Abstractions": "8.2.4-develop.1872",
+          "MassTransit.Abstractions": "8.2.4-develop.1875",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
           "Microsoft.Extensions.Diagnostics.HealthChecks": "8.0.0",
           "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
@@ -316,7 +331,7 @@
           }
         }
       },
-      "MassTransit.Abstractions/8.2.4-develop.1872": {
+      "MassTransit.Abstractions/8.2.4-develop.1875": {
         "type": "package",
         "compile": {
           "lib/net8.0/MassTransit.Abstractions.dll": {
@@ -329,10 +344,28 @@
           }
         }
       },
-      "MassTransit.EntityFrameworkCore/8.2.4-develop.1872": {
+      "MassTransit.AmazonSQS/8.2.4-develop.1875": {
         "type": "package",
         "dependencies": {
-          "MassTransit": "8.2.4-develop.1872",
+          "AWSSDK.SQS": "3.7.301.33",
+          "AWSSDK.SimpleNotificationService": "3.7.302.1",
+          "MassTransit": "8.2.4-develop.1875"
+        },
+        "compile": {
+          "lib/net8.0/MassTransit.AmazonSqsTransport.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/MassTransit.AmazonSqsTransport.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "MassTransit.EntityFrameworkCore/8.2.4-develop.1875": {
+        "type": "package",
+        "dependencies": {
+          "MassTransit": "8.2.4-develop.1875",
           "Microsoft.EntityFrameworkCore.Relational": "8.0.0"
         },
         "compile": {
@@ -346,11 +379,11 @@
           }
         }
       },
-      "MassTransit.Hangfire/8.2.4-develop.1872": {
+      "MassTransit.Hangfire/8.2.4-develop.1875": {
         "type": "package",
         "dependencies": {
-          "Hangfire.Core": "1.8.12",
-          "MassTransit": "8.2.4-develop.1872"
+          "Hangfire.Core": "1.8.14",
+          "MassTransit": "8.2.4-develop.1875"
         },
         "compile": {
           "lib/net8.0/MassTransit.HangfireIntegration.dll": {
@@ -363,11 +396,11 @@
           }
         }
       },
-      "MassTransit.Kafka/8.2.4-develop.1872": {
+      "MassTransit.Kafka/8.2.4-develop.1875": {
         "type": "package",
         "dependencies": {
-          "Confluent.Kafka": "2.4.0",
-          "MassTransit": "8.2.4-develop.1872"
+          "Confluent.Kafka": "2.5.0",
+          "MassTransit": "8.2.4-develop.1875"
         },
         "compile": {
           "lib/net8.0/MassTransit.KafkaIntegration.dll": {
@@ -380,20 +413,19 @@
           }
         }
       },
-      "MassTransit.Prometheus/8.1.3": {
+      "MassTransit.RabbitMQ/8.2.4-develop.1875": {
         "type": "package",
         "dependencies": {
-          "MassTransit": "8.1.3",
-          "Microsoft.Extensions.Http": "8.0.0",
-          "prometheus-net": "6.0.0"
+          "MassTransit": "8.2.4-develop.1875",
+          "RabbitMQ.Client": "6.8.1"
         },
         "compile": {
-          "lib/net8.0/MassTransit.PrometheusIntegration.dll": {
+          "lib/net8.0/MassTransit.RabbitMqTransport.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net8.0/MassTransit.PrometheusIntegration.dll": {
+          "lib/net8.0/MassTransit.RabbitMqTransport.dll": {
             "related": ".xml"
           }
         }
@@ -797,7 +829,7 @@
           }
         }
       },
-      "Microsoft.CSharp/4.5.0": {
+      "Microsoft.CSharp/4.7.0": {
         "type": "package",
         "compile": {
           "ref/netcoreapp2.0/_._": {}
@@ -1064,26 +1096,6 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
-      "Microsoft.Extensions.Configuration/8.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "8.0.0",
-          "Microsoft.Extensions.Primitives": "8.0.0"
-        },
-        "compile": {
-          "lib/net8.0/Microsoft.Extensions.Configuration.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.Extensions.Configuration.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net6.0/_._": {}
-        }
-      },
       "Microsoft.Extensions.Configuration.Abstractions/9.0.0-preview.6.24327.7": {
         "type": "package",
         "dependencies": {
@@ -1101,25 +1113,6 @@
         },
         "build": {
           "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Configuration.Binder/8.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "8.0.0"
-        },
-        "compile": {
-          "lib/net8.0/Microsoft.Extensions.Configuration.Binder.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.Extensions.Configuration.Binder.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/netstandard2.0/Microsoft.Extensions.Configuration.Binder.targets": {}
         }
       },
       "Microsoft.Extensions.DependencyInjection/9.0.0-preview.6.24327.7": {
@@ -1175,27 +1168,6 @@
         },
         "build": {
           "buildTransitive/net8.0/_._": {}
-        }
-      },
-      "Microsoft.Extensions.Diagnostics/8.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration": "8.0.0",
-          "Microsoft.Extensions.Diagnostics.Abstractions": "8.0.0",
-          "Microsoft.Extensions.Options.ConfigurationExtensions": "8.0.0"
-        },
-        "compile": {
-          "lib/net8.0/Microsoft.Extensions.Diagnostics.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.Extensions.Diagnostics.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net6.0/_._": {}
         }
       },
       "Microsoft.Extensions.Diagnostics.Abstractions/8.0.0": {
@@ -1293,30 +1265,6 @@
           "buildTransitive/net6.0/_._": {}
         }
       },
-      "Microsoft.Extensions.Http/8.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "8.0.0",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
-          "Microsoft.Extensions.Diagnostics": "8.0.0",
-          "Microsoft.Extensions.Logging": "8.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
-          "Microsoft.Extensions.Options": "8.0.0"
-        },
-        "compile": {
-          "lib/net8.0/Microsoft.Extensions.Http.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.Extensions.Http.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net6.0/_._": {}
-        }
-      },
       "Microsoft.Extensions.Logging/9.0.0-preview.6.24327.7": {
         "type": "package",
         "dependencies": {
@@ -1377,29 +1325,6 @@
           "buildTransitive/net8.0/Microsoft.Extensions.Options.targets": {}
         }
       },
-      "Microsoft.Extensions.Options.ConfigurationExtensions/8.0.0": {
-        "type": "package",
-        "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "8.0.0",
-          "Microsoft.Extensions.Configuration.Binder": "8.0.0",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
-          "Microsoft.Extensions.Options": "8.0.0",
-          "Microsoft.Extensions.Primitives": "8.0.0"
-        },
-        "compile": {
-          "lib/net8.0/Microsoft.Extensions.Options.ConfigurationExtensions.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net8.0/Microsoft.Extensions.Options.ConfigurationExtensions.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net6.0/_._": {}
-        }
-      },
       "Microsoft.Extensions.Primitives/9.0.0-preview.6.24327.7": {
         "type": "package",
         "compile": {
@@ -1416,7 +1341,7 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
-      "Microsoft.Identity.Client/4.61.3": {
+      "Microsoft.Identity.Client/4.62.0": {
         "type": "package",
         "dependencies": {
           "Microsoft.IdentityModel.Abstractions": "6.35.0",
@@ -1433,10 +1358,10 @@
           }
         }
       },
-      "Microsoft.Identity.Client.Extensions.Msal/4.61.3": {
+      "Microsoft.Identity.Client.Extensions.Msal/4.62.0": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Identity.Client": "4.61.3",
+          "Microsoft.Identity.Client": "4.62.0",
           "System.Security.Cryptography.ProtectedData": "4.5.0"
         },
         "compile": {
@@ -1644,25 +1569,20 @@
           }
         }
       },
-      "prometheus-net/6.0.0": {
+      "RabbitMQ.Client/6.8.1": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Extensions.Http": "3.1.9"
+          "System.Memory": "4.5.5",
+          "System.Threading.Channels": "7.0.0"
         },
         "compile": {
-          "lib/net6.0/Prometheus.NetCore.dll": {
-            "related": ".deps.json;.pdb;.xml"
-          },
-          "lib/net6.0/Prometheus.NetStandard.dll": {
-            "related": ".deps.json;.pdb;.xml"
+          "lib/netstandard2.0/RabbitMQ.Client.dll": {
+            "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net6.0/Prometheus.NetCore.dll": {
-            "related": ".deps.json;.pdb;.xml"
-          },
-          "lib/net6.0/Prometheus.NetStandard.dll": {
-            "related": ".deps.json;.pdb;.xml"
+          "lib/netstandard2.0/RabbitMQ.Client.dll": {
+            "related": ".xml"
           }
         }
       },
@@ -2037,7 +1957,7 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
-      "System.Memory/4.5.4": {
+      "System.Memory/4.5.5": {
         "type": "package",
         "compile": {
           "ref/netcoreapp2.1/_._": {}
@@ -2294,7 +2214,7 @@
       "System.Threading.Channels/7.0.0": {
         "type": "package",
         "compile": {
-          "lib/net7.0/_._": {
+          "lib/net7.0/System.Threading.Channels.dll": {
             "related": ".xml"
           }
         },
@@ -2351,6 +2271,16 @@
           }
         }
       },
+      "Catalog.Contracts/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/Catalog.Contracts.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Catalog.Contracts.dll": {}
+        }
+      },
       "Catalog.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
@@ -2369,13 +2299,11 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
-          "Azure.Identity": "1.12.0",
+          "Azure.Identity": "1.13.0-beta.1",
           "Catalog.Domain": "1.0.0",
-          "MassTransit": "8.2.4-develop.1872",
-          "MassTransit.EntityFrameworkCore": "8.2.4-develop.1872",
-          "MassTransit.Hangfire": "8.2.4-develop.1872",
-          "MassTransit.Kafka": "8.2.4-develop.1872",
-          "MassTransit.Prometheus": "8.1.3",
+          "MassTransit.EntityFrameworkCore": "8.2.4-develop.1875",
+          "MassTransit.Hangfire": "8.2.4-develop.1875",
+          "MassTransit.Kafka": "8.2.4-develop.1875",
           "MediatR": "12.4.0",
           "Microsoft.EntityFrameworkCore": "9.0.0-preview.6.24327.4",
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.0-preview.6.24327.4",
@@ -2393,16 +2321,109 @@
     }
   },
   "libraries": {
-    "Azure.Core/1.40.0": {
-      "sha512": "eOx6wk3kQ3SCnoAj7IytAu/d99l07PdarmUc+RmMkVOTkcQ3s+UQEaGzMyEqC2Ua4SKnOW4Xw/klLeB5V2PiSA==",
+    "AWSSDK.Core/3.7.304.30": {
+      "sha512": "TJdogpjIbdBrrlyBEmDCO28+qqR85RXs62ElK2NiMyzOEmnBNR2zRL8kEqqUk2V8TPyKKeBXRW0BkUX4yh8MjQ==",
       "type": "package",
-      "path": "azure.core/1.40.0",
+      "path": "awssdk.core/3.7.304.30",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "awssdk.core.3.7.304.30.nupkg.sha512",
+        "awssdk.core.nuspec",
+        "images/AWSLogo.png",
+        "lib/net35/AWSSDK.Core.dll",
+        "lib/net35/AWSSDK.Core.pdb",
+        "lib/net35/AWSSDK.Core.xml",
+        "lib/net45/AWSSDK.Core.dll",
+        "lib/net45/AWSSDK.Core.pdb",
+        "lib/net45/AWSSDK.Core.xml",
+        "lib/net8.0/AWSSDK.Core.dll",
+        "lib/net8.0/AWSSDK.Core.pdb",
+        "lib/net8.0/AWSSDK.Core.xml",
+        "lib/netcoreapp3.1/AWSSDK.Core.dll",
+        "lib/netcoreapp3.1/AWSSDK.Core.pdb",
+        "lib/netcoreapp3.1/AWSSDK.Core.xml",
+        "lib/netstandard2.0/AWSSDK.Core.dll",
+        "lib/netstandard2.0/AWSSDK.Core.pdb",
+        "lib/netstandard2.0/AWSSDK.Core.xml",
+        "tools/account-management.ps1"
+      ]
+    },
+    "AWSSDK.SimpleNotificationService/3.7.302.1": {
+      "sha512": "c/9ncl/v+g6dpZm+sNQazGgTcf9UAObcxxbKpHEP94s7KxjQJzM3WrN5ySxS/VJK93PnmMnp8kweB2Sxw7GYGg==",
+      "type": "package",
+      "path": "awssdk.simplenotificationservice/3.7.302.1",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "analyzers/dotnet/cs/AWSSDK.SimpleNotificationService.CodeAnalysis.dll",
+        "analyzers/dotnet/cs/SharedAnalysisCode.dll",
+        "awssdk.simplenotificationservice.3.7.302.1.nupkg.sha512",
+        "awssdk.simplenotificationservice.nuspec",
+        "images/AWSLogo.png",
+        "lib/net35/AWSSDK.SimpleNotificationService.dll",
+        "lib/net35/AWSSDK.SimpleNotificationService.pdb",
+        "lib/net35/AWSSDK.SimpleNotificationService.xml",
+        "lib/net45/AWSSDK.SimpleNotificationService.dll",
+        "lib/net45/AWSSDK.SimpleNotificationService.pdb",
+        "lib/net45/AWSSDK.SimpleNotificationService.xml",
+        "lib/net8.0/AWSSDK.SimpleNotificationService.dll",
+        "lib/net8.0/AWSSDK.SimpleNotificationService.pdb",
+        "lib/net8.0/AWSSDK.SimpleNotificationService.xml",
+        "lib/netcoreapp3.1/AWSSDK.SimpleNotificationService.dll",
+        "lib/netcoreapp3.1/AWSSDK.SimpleNotificationService.pdb",
+        "lib/netcoreapp3.1/AWSSDK.SimpleNotificationService.xml",
+        "lib/netstandard2.0/AWSSDK.SimpleNotificationService.dll",
+        "lib/netstandard2.0/AWSSDK.SimpleNotificationService.pdb",
+        "lib/netstandard2.0/AWSSDK.SimpleNotificationService.xml",
+        "tools/install.ps1",
+        "tools/uninstall.ps1"
+      ]
+    },
+    "AWSSDK.SQS/3.7.301.33": {
+      "sha512": "vQnxWjrVoAt2TifJv9CTDles6CZLgnF7gGb5CsJZcpOuRnGtGGatr/lCmsJjRMKyc3qFNPwHa4glXKDNbgUh8g==",
+      "type": "package",
+      "path": "awssdk.sqs/3.7.301.33",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "analyzers/dotnet/cs/AWSSDK.SQS.CodeAnalysis.dll",
+        "analyzers/dotnet/cs/SharedAnalysisCode.dll",
+        "awssdk.sqs.3.7.301.33.nupkg.sha512",
+        "awssdk.sqs.nuspec",
+        "images/AWSLogo.png",
+        "lib/net35/AWSSDK.SQS.dll",
+        "lib/net35/AWSSDK.SQS.pdb",
+        "lib/net35/AWSSDK.SQS.xml",
+        "lib/net45/AWSSDK.SQS.dll",
+        "lib/net45/AWSSDK.SQS.pdb",
+        "lib/net45/AWSSDK.SQS.xml",
+        "lib/net8.0/AWSSDK.SQS.dll",
+        "lib/net8.0/AWSSDK.SQS.pdb",
+        "lib/net8.0/AWSSDK.SQS.xml",
+        "lib/netcoreapp3.1/AWSSDK.SQS.dll",
+        "lib/netcoreapp3.1/AWSSDK.SQS.pdb",
+        "lib/netcoreapp3.1/AWSSDK.SQS.xml",
+        "lib/netstandard2.0/AWSSDK.SQS.dll",
+        "lib/netstandard2.0/AWSSDK.SQS.pdb",
+        "lib/netstandard2.0/AWSSDK.SQS.xml",
+        "tools/install.ps1",
+        "tools/uninstall.ps1"
+      ]
+    },
+    "Azure.Core/1.41.0": {
+      "sha512": "7OO8rPCVSvXj2IQET3NkRf8hU2ZDCCvCIUhlrE089qkLNpNfWufJnBwHRKLAOWF3bhKBGJS/9hPBgjJ8kupUIg==",
+      "type": "package",
+      "path": "azure.core/1.41.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "CHANGELOG.md",
         "README.md",
-        "azure.core.1.40.0.nupkg.sha512",
+        "azure.core.1.41.0.nupkg.sha512",
         "azure.core.nuspec",
         "azureicon.png",
         "lib/net461/Azure.Core.dll",
@@ -2415,31 +2436,52 @@
         "lib/netstandard2.0/Azure.Core.xml"
       ]
     },
-    "Azure.Identity/1.12.0": {
-      "sha512": "OBIM3aPz8n9oEO5fdnee+Vsc5Nl4W3FeslPpESyDiyByntQI5BAa76KD60eFXm9ulevnwxGZP9YXL8Y+paI5Uw==",
+    "Azure.Core.Experimental/0.1.0-preview.34": {
+      "sha512": "I1zQgfB0oZwFFOdP5UqsBkEFMlmYi7L36mFFJBOe2yFdcX52JLLov74MTKNFlhZ0OwMjw2J6zIXfO/Yj0xWN2w==",
       "type": "package",
-      "path": "azure.identity/1.12.0",
+      "path": "azure.core.experimental/0.1.0-preview.34",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "CHANGELOG.md",
         "README.md",
-        "azure.identity.1.12.0.nupkg.sha512",
+        "azure.core.experimental.0.1.0-preview.34.nupkg.sha512",
+        "azure.core.experimental.nuspec",
+        "azureicon.png",
+        "lib/net461/Azure.Core.Experimental.dll",
+        "lib/net461/Azure.Core.Experimental.xml",
+        "lib/net6.0/Azure.Core.Experimental.dll",
+        "lib/net6.0/Azure.Core.Experimental.xml",
+        "lib/netstandard2.0/Azure.Core.Experimental.dll",
+        "lib/netstandard2.0/Azure.Core.Experimental.xml"
+      ]
+    },
+    "Azure.Identity/1.13.0-beta.1": {
+      "sha512": "9I6R0NyK/idX+rUFSiLov/RKOIvaVQLZaTi0FfHlQ75lLH4foE6UBar6iS57fLtoKEwY6H4d/EXrNOsfSFJVvw==",
+      "type": "package",
+      "path": "azure.identity/1.13.0-beta.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "CHANGELOG.md",
+        "README.md",
+        "azure.identity.1.13.0-beta.1.nupkg.sha512",
         "azure.identity.nuspec",
         "azureicon.png",
         "lib/netstandard2.0/Azure.Identity.dll",
         "lib/netstandard2.0/Azure.Identity.xml"
       ]
     },
-    "Confluent.Kafka/2.4.0": {
-      "sha512": "3xrE8SUSLN10klkDaXFBAiXxTc+2wMffvjcZ3RUyvOo2ckaRJZ3dY7yjs6R7at7+tjUiuq2OlyTiEaV6G9zFHA==",
+    "Confluent.Kafka/2.5.0": {
+      "sha512": "WZsnfuJdV9lkydnqilcFKH2THnsAhJL7zltcoBmbStstzP1FPCO8G7KEJA2nGZTQygVMBfSWeLuYo7sZKu8cxA==",
       "type": "package",
-      "path": "confluent.kafka/2.4.0",
+      "path": "confluent.kafka/2.5.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
-        "confluent.kafka.2.4.0.nupkg.sha512",
+        "confluent-logo.png",
+        "confluent.kafka.2.5.0.nupkg.sha512",
         "confluent.kafka.nuspec",
         "lib/net462/Confluent.Kafka.dll",
         "lib/net462/Confluent.Kafka.xml",
@@ -2512,10 +2554,10 @@
         "lib/netstandard2.1/FluentValidation.DependencyInjectionExtensions.xml"
       ]
     },
-    "Hangfire.Core/1.8.12": {
-      "sha512": "EP2JbfDiOAo6Jo3VmQAbRm7Cq6tcldiI2V/xYYjilIGutWuhgxM7aP+uJW6sE5LAnrLL54ahYfBISJLdE1VimQ==",
+    "Hangfire.Core/1.8.14": {
+      "sha512": "tj/+J8/UdaxydFX6VQr5IEyBtVbAOvkQ8X8tIQKwY9zlpmK83hP4iHEQQQ26zzGUpcE1HlPc6PBUv0NgUDXS3A==",
       "type": "package",
-      "path": "hangfire.core/1.8.12",
+      "path": "hangfire.core/1.8.14",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2526,73 +2568,17 @@
         "LICENSE_STANDARD",
         "NOTICES",
         "README.md",
-        "hangfire.core.1.8.12.nupkg.sha512",
+        "hangfire.core.1.8.14.nupkg.sha512",
         "hangfire.core.nuspec",
         "icon.png",
         "lib/net451/Hangfire.Core.dll",
         "lib/net451/Hangfire.Core.xml",
-        "lib/net451/ca/Hangfire.Core.resources.dll",
-        "lib/net451/de/Hangfire.Core.resources.dll",
-        "lib/net451/es/Hangfire.Core.resources.dll",
-        "lib/net451/fa/Hangfire.Core.resources.dll",
-        "lib/net451/fr/Hangfire.Core.resources.dll",
-        "lib/net451/nb/Hangfire.Core.resources.dll",
-        "lib/net451/nl/Hangfire.Core.resources.dll",
-        "lib/net451/pt-BR/Hangfire.Core.resources.dll",
-        "lib/net451/pt-PT/Hangfire.Core.resources.dll",
-        "lib/net451/pt/Hangfire.Core.resources.dll",
-        "lib/net451/sv/Hangfire.Core.resources.dll",
-        "lib/net451/tr-TR/Hangfire.Core.resources.dll",
-        "lib/net451/zh-TW/Hangfire.Core.resources.dll",
-        "lib/net451/zh/Hangfire.Core.resources.dll",
         "lib/net46/Hangfire.Core.dll",
         "lib/net46/Hangfire.Core.xml",
-        "lib/net46/ca/Hangfire.Core.resources.dll",
-        "lib/net46/de/Hangfire.Core.resources.dll",
-        "lib/net46/es/Hangfire.Core.resources.dll",
-        "lib/net46/fa/Hangfire.Core.resources.dll",
-        "lib/net46/fr/Hangfire.Core.resources.dll",
-        "lib/net46/nb/Hangfire.Core.resources.dll",
-        "lib/net46/nl/Hangfire.Core.resources.dll",
-        "lib/net46/pt-BR/Hangfire.Core.resources.dll",
-        "lib/net46/pt-PT/Hangfire.Core.resources.dll",
-        "lib/net46/pt/Hangfire.Core.resources.dll",
-        "lib/net46/sv/Hangfire.Core.resources.dll",
-        "lib/net46/tr-TR/Hangfire.Core.resources.dll",
-        "lib/net46/zh-TW/Hangfire.Core.resources.dll",
-        "lib/net46/zh/Hangfire.Core.resources.dll",
         "lib/netstandard1.3/Hangfire.Core.dll",
         "lib/netstandard1.3/Hangfire.Core.xml",
-        "lib/netstandard1.3/ca/Hangfire.Core.resources.dll",
-        "lib/netstandard1.3/de/Hangfire.Core.resources.dll",
-        "lib/netstandard1.3/es/Hangfire.Core.resources.dll",
-        "lib/netstandard1.3/fa/Hangfire.Core.resources.dll",
-        "lib/netstandard1.3/fr/Hangfire.Core.resources.dll",
-        "lib/netstandard1.3/nb/Hangfire.Core.resources.dll",
-        "lib/netstandard1.3/nl/Hangfire.Core.resources.dll",
-        "lib/netstandard1.3/pt-BR/Hangfire.Core.resources.dll",
-        "lib/netstandard1.3/pt-PT/Hangfire.Core.resources.dll",
-        "lib/netstandard1.3/pt/Hangfire.Core.resources.dll",
-        "lib/netstandard1.3/sv/Hangfire.Core.resources.dll",
-        "lib/netstandard1.3/tr-TR/Hangfire.Core.resources.dll",
-        "lib/netstandard1.3/zh-TW/Hangfire.Core.resources.dll",
-        "lib/netstandard1.3/zh/Hangfire.Core.resources.dll",
         "lib/netstandard2.0/Hangfire.Core.dll",
-        "lib/netstandard2.0/Hangfire.Core.xml",
-        "lib/netstandard2.0/ca/Hangfire.Core.resources.dll",
-        "lib/netstandard2.0/de/Hangfire.Core.resources.dll",
-        "lib/netstandard2.0/es/Hangfire.Core.resources.dll",
-        "lib/netstandard2.0/fa/Hangfire.Core.resources.dll",
-        "lib/netstandard2.0/fr/Hangfire.Core.resources.dll",
-        "lib/netstandard2.0/nb/Hangfire.Core.resources.dll",
-        "lib/netstandard2.0/nl/Hangfire.Core.resources.dll",
-        "lib/netstandard2.0/pt-BR/Hangfire.Core.resources.dll",
-        "lib/netstandard2.0/pt-PT/Hangfire.Core.resources.dll",
-        "lib/netstandard2.0/pt/Hangfire.Core.resources.dll",
-        "lib/netstandard2.0/sv/Hangfire.Core.resources.dll",
-        "lib/netstandard2.0/tr-TR/Hangfire.Core.resources.dll",
-        "lib/netstandard2.0/zh-TW/Hangfire.Core.resources.dll",
-        "lib/netstandard2.0/zh/Hangfire.Core.resources.dll"
+        "lib/netstandard2.0/Hangfire.Core.xml"
       ]
     },
     "Humanizer.Core/2.14.1": {
@@ -2613,10 +2599,10 @@
         "logo.png"
       ]
     },
-    "librdkafka.redist/2.4.0": {
-      "sha512": "uqi1sNe0LEV50pYXZ3mYNJfZFF1VmsZ6m8wbpWugAAPOzOcX8FJP5FOhLMoUKVFiuenBH2v8zVBht7f1RCs3rA==",
+    "librdkafka.redist/2.5.0": {
+      "sha512": "0YQBronD1pdiYDMsz3DoVNLO8KVJpQ+svAzHqzE4CHHU9wAr+Uc5/s77gYpcodPQjpw7E2HvUJxrvhUd0l/E0Q==",
       "type": "package",
-      "path": "librdkafka.redist/2.4.0",
+      "path": "librdkafka.redist/2.5.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2632,12 +2618,11 @@
         "build/native/lib/win/x86/win-x86-Release/v142/librdkafka.lib",
         "build/native/lib/win/x86/win-x86-Release/v142/librdkafkacpp.lib",
         "build/native/librdkafka.redist.targets",
-        "librdkafka.redist.2.4.0.nupkg.sha512",
+        "librdkafka.redist.2.5.0.nupkg.sha512",
         "librdkafka.redist.nuspec",
         "runtimes/linux-arm64/native/librdkafka.so",
         "runtimes/linux-x64/native/alpine-librdkafka.so",
-        "runtimes/linux-x64/native/centos6-librdkafka.so",
-        "runtimes/linux-x64/native/centos7-librdkafka.so",
+        "runtimes/linux-x64/native/centos8-librdkafka.so",
         "runtimes/linux-x64/native/librdkafka.so",
         "runtimes/osx-arm64/native/librdkafka.dylib",
         "runtimes/osx-x64/native/librdkafka.dylib",
@@ -2661,10 +2646,10 @@
         "runtimes/win-x86/native/zstd.dll"
       ]
     },
-    "MassTransit/8.2.4-develop.1872": {
-      "sha512": "9PzkgukCjdrHIyJAcJBJGCrrI0FoGxMSOmn0x4f+0D1yAubjBjTC8SwEEwTh9hs+40bat3dZ4RgRjdLakSVqpA==",
+    "MassTransit/8.2.4-develop.1875": {
+      "sha512": "Tcg/XiEVPpyZJ0xoIlYJ70clOkqE73L7+zuBhlkJ40Ei/KTexkyOiq+MrydHjEqkU8yWQD6NBgSwdAWMbuDqbg==",
       "type": "package",
-      "path": "masstransit/8.2.4-develop.1872",
+      "path": "masstransit/8.2.4-develop.1875",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2677,15 +2662,15 @@
         "lib/net8.0/MassTransit.xml",
         "lib/netstandard2.0/MassTransit.dll",
         "lib/netstandard2.0/MassTransit.xml",
-        "masstransit.8.2.4-develop.1872.nupkg.sha512",
+        "masstransit.8.2.4-develop.1875.nupkg.sha512",
         "masstransit.nuspec",
         "mt-logo-small.png"
       ]
     },
-    "MassTransit.Abstractions/8.2.4-develop.1872": {
-      "sha512": "beQ5C8xmO+1vCpOTe8Ah4/UC4v2kMABMaiWnQWNKpoykUsclEXQfmSLqx9Kio4pf9y0zhw7IPrNR5B3cMPSqqA==",
+    "MassTransit.Abstractions/8.2.4-develop.1875": {
+      "sha512": "DKMipXj00F5T3/Z4Hy1vKjl+txo8eoXFw0gRBixgBRvwUPEIzsy+6EpWdemmWPr0ELmM7qzA3dB2pJjCoqQh7Q==",
       "type": "package",
-      "path": "masstransit.abstractions/8.2.4-develop.1872",
+      "path": "masstransit.abstractions/8.2.4-develop.1875",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2698,15 +2683,36 @@
         "lib/net8.0/MassTransit.Abstractions.xml",
         "lib/netstandard2.0/MassTransit.Abstractions.dll",
         "lib/netstandard2.0/MassTransit.Abstractions.xml",
-        "masstransit.abstractions.8.2.4-develop.1872.nupkg.sha512",
+        "masstransit.abstractions.8.2.4-develop.1875.nupkg.sha512",
         "masstransit.abstractions.nuspec",
         "mt-logo-small.png"
       ]
     },
-    "MassTransit.EntityFrameworkCore/8.2.4-develop.1872": {
-      "sha512": "GTgoBNTcu6LxSpth4wVre9STjAj6s28rb02zZ9j0cKNLF5K6gsmVZwAFDpuuBuUwfiRJ0qplTSAI/HZEslnQXw==",
+    "MassTransit.AmazonSQS/8.2.4-develop.1875": {
+      "sha512": "lFgisdRzEirZQ1hcNKi9kQ+38kZndkWvjYN8s1BZAgnO68eqot1slnmPrYOuXNqVCL6JwDroJwtKPbDIJXrQ5g==",
       "type": "package",
-      "path": "masstransit.entityframeworkcore/8.2.4-develop.1872",
+      "path": "masstransit.amazonsqs/8.2.4-develop.1875",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NuGet.README.md",
+        "lib/net472/MassTransit.AmazonSqsTransport.dll",
+        "lib/net472/MassTransit.AmazonSqsTransport.xml",
+        "lib/net6.0/MassTransit.AmazonSqsTransport.dll",
+        "lib/net6.0/MassTransit.AmazonSqsTransport.xml",
+        "lib/net8.0/MassTransit.AmazonSqsTransport.dll",
+        "lib/net8.0/MassTransit.AmazonSqsTransport.xml",
+        "lib/netstandard2.0/MassTransit.AmazonSqsTransport.dll",
+        "lib/netstandard2.0/MassTransit.AmazonSqsTransport.xml",
+        "masstransit.amazonsqs.8.2.4-develop.1875.nupkg.sha512",
+        "masstransit.amazonsqs.nuspec",
+        "mt-logo-small.png"
+      ]
+    },
+    "MassTransit.EntityFrameworkCore/8.2.4-develop.1875": {
+      "sha512": "3gZuPxPgxcA9TTKZAGbQjTooBZlP3PXe4YsfWDHcJV0pGe+TZsTcxoMiq12YnqJPXQ+nqFem0MbpbYzyM7qfAA==",
+      "type": "package",
+      "path": "masstransit.entityframeworkcore/8.2.4-develop.1875",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2717,15 +2723,15 @@
         "lib/net8.0/MassTransit.EntityFrameworkCoreIntegration.xml",
         "lib/netstandard2.0/MassTransit.EntityFrameworkCoreIntegration.dll",
         "lib/netstandard2.0/MassTransit.EntityFrameworkCoreIntegration.xml",
-        "masstransit.entityframeworkcore.8.2.4-develop.1872.nupkg.sha512",
+        "masstransit.entityframeworkcore.8.2.4-develop.1875.nupkg.sha512",
         "masstransit.entityframeworkcore.nuspec",
         "mt-logo-small.png"
       ]
     },
-    "MassTransit.Hangfire/8.2.4-develop.1872": {
-      "sha512": "azGbf/m7pAJ8MYxqc/BI9M4+3R5QJ6TXSsuR73/Vp0cKPBI4GY6HfeLoQUohU9TR95JIr/GswmqYwPn0mRX49A==",
+    "MassTransit.Hangfire/8.2.4-develop.1875": {
+      "sha512": "3XXenKVmVHBXFhXA8mqEd/r3CAuIJvdwytq8vZER3vtqrLm/8GubTwotvm1OnOLhNLaZMCfxhtjjm8cphdFSXQ==",
       "type": "package",
-      "path": "masstransit.hangfire/8.2.4-develop.1872",
+      "path": "masstransit.hangfire/8.2.4-develop.1875",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2738,15 +2744,15 @@
         "lib/net8.0/MassTransit.HangfireIntegration.xml",
         "lib/netstandard2.0/MassTransit.HangfireIntegration.dll",
         "lib/netstandard2.0/MassTransit.HangfireIntegration.xml",
-        "masstransit.hangfire.8.2.4-develop.1872.nupkg.sha512",
+        "masstransit.hangfire.8.2.4-develop.1875.nupkg.sha512",
         "masstransit.hangfire.nuspec",
         "mt-logo-small.png"
       ]
     },
-    "MassTransit.Kafka/8.2.4-develop.1872": {
-      "sha512": "jAJSjBhdoNKjbPfxvR4CfKscUcOWIP7WBOHp+0hxUIFxRMLJ9M1mtcicBEeNlVFmIUC+/rBqX0CQrd3CdQlEug==",
+    "MassTransit.Kafka/8.2.4-develop.1875": {
+      "sha512": "A9lwo9HUIwtNxbb17X5o/culy3Vi6/bLDFJyezSa1qAFsP/p/ZGs/dYZbpbMLvsrhimEn5o8B8cyB9HNMU4IAw==",
       "type": "package",
-      "path": "masstransit.kafka/8.2.4-develop.1872",
+      "path": "masstransit.kafka/8.2.4-develop.1875",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2759,31 +2765,29 @@
         "lib/net8.0/MassTransit.KafkaIntegration.xml",
         "lib/netstandard2.0/MassTransit.KafkaIntegration.dll",
         "lib/netstandard2.0/MassTransit.KafkaIntegration.xml",
-        "masstransit.kafka.8.2.4-develop.1872.nupkg.sha512",
+        "masstransit.kafka.8.2.4-develop.1875.nupkg.sha512",
         "masstransit.kafka.nuspec",
         "mt-logo-small.png"
       ]
     },
-    "MassTransit.Prometheus/8.1.3": {
-      "sha512": "UOkFEDixsZqxYLzJdSCnlz9c6o672jImplRzh4D3IHwEPWzCv52HPok5F8BXYHh52h+bRnTtJXFvgSrGdSNK3A==",
+    "MassTransit.RabbitMQ/8.2.4-develop.1875": {
+      "sha512": "F/JfZK9qpjC5Ysb9vjkr2rctU0zC5rhWjg+HFJfbH4lgrwS25H0TFZ2/nLGCPvV/HSWxS1dMqYc4TkkZEN+xtw==",
       "type": "package",
-      "path": "masstransit.prometheus/8.1.3",
+      "path": "masstransit.rabbitmq/8.2.4-develop.1875",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "NuGet.README.md",
-        "lib/net462/MassTransit.PrometheusIntegration.dll",
-        "lib/net462/MassTransit.PrometheusIntegration.xml",
-        "lib/net6.0/MassTransit.PrometheusIntegration.dll",
-        "lib/net6.0/MassTransit.PrometheusIntegration.xml",
-        "lib/net7.0/MassTransit.PrometheusIntegration.dll",
-        "lib/net7.0/MassTransit.PrometheusIntegration.xml",
-        "lib/net8.0/MassTransit.PrometheusIntegration.dll",
-        "lib/net8.0/MassTransit.PrometheusIntegration.xml",
-        "lib/netstandard2.0/MassTransit.PrometheusIntegration.dll",
-        "lib/netstandard2.0/MassTransit.PrometheusIntegration.xml",
-        "masstransit.prometheus.8.1.3.nupkg.sha512",
-        "masstransit.prometheus.nuspec",
+        "lib/net472/MassTransit.RabbitMqTransport.dll",
+        "lib/net472/MassTransit.RabbitMqTransport.xml",
+        "lib/net6.0/MassTransit.RabbitMqTransport.dll",
+        "lib/net6.0/MassTransit.RabbitMqTransport.xml",
+        "lib/net8.0/MassTransit.RabbitMqTransport.dll",
+        "lib/net8.0/MassTransit.RabbitMqTransport.xml",
+        "lib/netstandard2.0/MassTransit.RabbitMqTransport.dll",
+        "lib/netstandard2.0/MassTransit.RabbitMqTransport.xml",
+        "masstransit.rabbitmq.8.2.4-develop.1875.nupkg.sha512",
+        "masstransit.rabbitmq.nuspec",
         "mt-logo-small.png"
       ]
     },
@@ -3808,10 +3812,10 @@
         "microsoft.codeanalysis.workspaces.msbuild.nuspec"
       ]
     },
-    "Microsoft.CSharp/4.5.0": {
-      "sha512": "kaj6Wb4qoMuH3HySFJhxwQfe8R/sJsNJnANrvv8WdFPMoNbKY5htfNscv+LHCu5ipz+49m2e+WQXpLXr9XYemQ==",
+    "Microsoft.CSharp/4.7.0": {
+      "sha512": "pTj+D3uJWyN3My70i2Hqo+OXixq3Os2D1nJ2x92FFo6sk8fYS1m1WLNTs0Dc1uPaViH0YvEEwvzddQ7y4rhXmA==",
       "type": "package",
-      "path": "microsoft.csharp/4.5.0",
+      "path": "microsoft.csharp/4.7.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3824,6 +3828,7 @@
         "lib/netcoreapp2.0/_._",
         "lib/netstandard1.3/Microsoft.CSharp.dll",
         "lib/netstandard2.0/Microsoft.CSharp.dll",
+        "lib/netstandard2.0/Microsoft.CSharp.xml",
         "lib/portable-net45+win8+wp8+wpa81/_._",
         "lib/uap10.0.16299/_._",
         "lib/win8/_._",
@@ -3833,7 +3838,7 @@
         "lib/xamarinmac20/_._",
         "lib/xamarintvos10/_._",
         "lib/xamarinwatchos10/_._",
-        "microsoft.csharp.4.5.0.nupkg.sha512",
+        "microsoft.csharp.4.7.0.nupkg.sha512",
         "microsoft.csharp.nuspec",
         "ref/MonoAndroid10/_._",
         "ref/MonoTouch10/_._",
@@ -4428,36 +4433,6 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Extensions.Configuration/8.0.0": {
-      "sha512": "0J/9YNXTMWSZP2p2+nvl8p71zpSwokZXZuJW+VjdErkegAnFdO1XlqtA62SJtgVYHdKu3uPxJHcMR/r35HwFBA==",
-      "type": "package",
-      "path": "microsoft.extensions.configuration/8.0.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "LICENSE.TXT",
-        "PACKAGE.md",
-        "THIRD-PARTY-NOTICES.TXT",
-        "buildTransitive/net461/Microsoft.Extensions.Configuration.targets",
-        "buildTransitive/net462/_._",
-        "buildTransitive/net6.0/_._",
-        "buildTransitive/netcoreapp2.0/Microsoft.Extensions.Configuration.targets",
-        "lib/net462/Microsoft.Extensions.Configuration.dll",
-        "lib/net462/Microsoft.Extensions.Configuration.xml",
-        "lib/net6.0/Microsoft.Extensions.Configuration.dll",
-        "lib/net6.0/Microsoft.Extensions.Configuration.xml",
-        "lib/net7.0/Microsoft.Extensions.Configuration.dll",
-        "lib/net7.0/Microsoft.Extensions.Configuration.xml",
-        "lib/net8.0/Microsoft.Extensions.Configuration.dll",
-        "lib/net8.0/Microsoft.Extensions.Configuration.xml",
-        "lib/netstandard2.0/Microsoft.Extensions.Configuration.dll",
-        "lib/netstandard2.0/Microsoft.Extensions.Configuration.xml",
-        "microsoft.extensions.configuration.8.0.0.nupkg.sha512",
-        "microsoft.extensions.configuration.nuspec",
-        "useSharedDesignerContext.txt"
-      ]
-    },
     "Microsoft.Extensions.Configuration.Abstractions/9.0.0-preview.6.24327.7": {
       "sha512": "kdy2gRkktBI9H00j1cqhnd5NG2VCdjpswkWRdWGBDvf5wRhIQcGHJ2vBmPmupIfE7peFV1WMnBRnw4RVUyuQTg==",
       "type": "package",
@@ -4483,47 +4458,6 @@
         "lib/netstandard2.0/Microsoft.Extensions.Configuration.Abstractions.xml",
         "microsoft.extensions.configuration.abstractions.9.0.0-preview.6.24327.7.nupkg.sha512",
         "microsoft.extensions.configuration.abstractions.nuspec",
-        "useSharedDesignerContext.txt"
-      ]
-    },
-    "Microsoft.Extensions.Configuration.Binder/8.0.0": {
-      "sha512": "mBMoXLsr5s1y2zOHWmKsE9veDcx8h1x/c3rz4baEdQKTeDcmQAPNbB54Pi/lhFO3K431eEq6PFbMgLaa6PHFfA==",
-      "type": "package",
-      "path": "microsoft.extensions.configuration.binder/8.0.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "LICENSE.TXT",
-        "PACKAGE.md",
-        "THIRD-PARTY-NOTICES.TXT",
-        "analyzers/dotnet/cs/Microsoft.Extensions.Configuration.Binder.SourceGeneration.dll",
-        "analyzers/dotnet/cs/cs/Microsoft.Extensions.Configuration.Binder.SourceGeneration.resources.dll",
-        "analyzers/dotnet/cs/de/Microsoft.Extensions.Configuration.Binder.SourceGeneration.resources.dll",
-        "analyzers/dotnet/cs/es/Microsoft.Extensions.Configuration.Binder.SourceGeneration.resources.dll",
-        "analyzers/dotnet/cs/fr/Microsoft.Extensions.Configuration.Binder.SourceGeneration.resources.dll",
-        "analyzers/dotnet/cs/it/Microsoft.Extensions.Configuration.Binder.SourceGeneration.resources.dll",
-        "analyzers/dotnet/cs/ja/Microsoft.Extensions.Configuration.Binder.SourceGeneration.resources.dll",
-        "analyzers/dotnet/cs/ko/Microsoft.Extensions.Configuration.Binder.SourceGeneration.resources.dll",
-        "analyzers/dotnet/cs/pl/Microsoft.Extensions.Configuration.Binder.SourceGeneration.resources.dll",
-        "analyzers/dotnet/cs/pt-BR/Microsoft.Extensions.Configuration.Binder.SourceGeneration.resources.dll",
-        "analyzers/dotnet/cs/ru/Microsoft.Extensions.Configuration.Binder.SourceGeneration.resources.dll",
-        "analyzers/dotnet/cs/tr/Microsoft.Extensions.Configuration.Binder.SourceGeneration.resources.dll",
-        "analyzers/dotnet/cs/zh-Hans/Microsoft.Extensions.Configuration.Binder.SourceGeneration.resources.dll",
-        "analyzers/dotnet/cs/zh-Hant/Microsoft.Extensions.Configuration.Binder.SourceGeneration.resources.dll",
-        "buildTransitive/netstandard2.0/Microsoft.Extensions.Configuration.Binder.targets",
-        "lib/net462/Microsoft.Extensions.Configuration.Binder.dll",
-        "lib/net462/Microsoft.Extensions.Configuration.Binder.xml",
-        "lib/net6.0/Microsoft.Extensions.Configuration.Binder.dll",
-        "lib/net6.0/Microsoft.Extensions.Configuration.Binder.xml",
-        "lib/net7.0/Microsoft.Extensions.Configuration.Binder.dll",
-        "lib/net7.0/Microsoft.Extensions.Configuration.Binder.xml",
-        "lib/net8.0/Microsoft.Extensions.Configuration.Binder.dll",
-        "lib/net8.0/Microsoft.Extensions.Configuration.Binder.xml",
-        "lib/netstandard2.0/Microsoft.Extensions.Configuration.Binder.dll",
-        "lib/netstandard2.0/Microsoft.Extensions.Configuration.Binder.xml",
-        "microsoft.extensions.configuration.binder.8.0.0.nupkg.sha512",
-        "microsoft.extensions.configuration.binder.nuspec",
         "useSharedDesignerContext.txt"
       ]
     },
@@ -4612,35 +4546,6 @@
         "lib/netstandard2.0/Microsoft.Extensions.DependencyModel.xml",
         "microsoft.extensions.dependencymodel.9.0.0-preview.6.24327.7.nupkg.sha512",
         "microsoft.extensions.dependencymodel.nuspec",
-        "useSharedDesignerContext.txt"
-      ]
-    },
-    "Microsoft.Extensions.Diagnostics/8.0.0": {
-      "sha512": "3PZp/YSkIXrF7QK7PfC1bkyRYwqOHpWFad8Qx+4wkuumAeXo1NHaxpS9LboNA9OvNSAu+QOVlXbMyoY+pHSqcw==",
-      "type": "package",
-      "path": "microsoft.extensions.diagnostics/8.0.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "LICENSE.TXT",
-        "THIRD-PARTY-NOTICES.TXT",
-        "buildTransitive/net461/Microsoft.Extensions.Diagnostics.targets",
-        "buildTransitive/net462/_._",
-        "buildTransitive/net6.0/_._",
-        "buildTransitive/netcoreapp2.0/Microsoft.Extensions.Diagnostics.targets",
-        "lib/net462/Microsoft.Extensions.Diagnostics.dll",
-        "lib/net462/Microsoft.Extensions.Diagnostics.xml",
-        "lib/net6.0/Microsoft.Extensions.Diagnostics.dll",
-        "lib/net6.0/Microsoft.Extensions.Diagnostics.xml",
-        "lib/net7.0/Microsoft.Extensions.Diagnostics.dll",
-        "lib/net7.0/Microsoft.Extensions.Diagnostics.xml",
-        "lib/net8.0/Microsoft.Extensions.Diagnostics.dll",
-        "lib/net8.0/Microsoft.Extensions.Diagnostics.xml",
-        "lib/netstandard2.0/Microsoft.Extensions.Diagnostics.dll",
-        "lib/netstandard2.0/Microsoft.Extensions.Diagnostics.xml",
-        "microsoft.extensions.diagnostics.8.0.0.nupkg.sha512",
-        "microsoft.extensions.diagnostics.nuspec",
         "useSharedDesignerContext.txt"
       ]
     },
@@ -4768,36 +4673,6 @@
         "lib/netstandard2.1/Microsoft.Extensions.Hosting.Abstractions.xml",
         "microsoft.extensions.hosting.abstractions.8.0.0.nupkg.sha512",
         "microsoft.extensions.hosting.abstractions.nuspec",
-        "useSharedDesignerContext.txt"
-      ]
-    },
-    "Microsoft.Extensions.Http/8.0.0": {
-      "sha512": "cWz4caHwvx0emoYe7NkHPxII/KkTI8R/LC9qdqJqnKv2poTJ4e2qqPGQqvRoQ5kaSA4FU5IV3qFAuLuOhoqULQ==",
-      "type": "package",
-      "path": "microsoft.extensions.http/8.0.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "LICENSE.TXT",
-        "PACKAGE.md",
-        "THIRD-PARTY-NOTICES.TXT",
-        "buildTransitive/net461/Microsoft.Extensions.Http.targets",
-        "buildTransitive/net462/_._",
-        "buildTransitive/net6.0/_._",
-        "buildTransitive/netcoreapp2.0/Microsoft.Extensions.Http.targets",
-        "lib/net462/Microsoft.Extensions.Http.dll",
-        "lib/net462/Microsoft.Extensions.Http.xml",
-        "lib/net6.0/Microsoft.Extensions.Http.dll",
-        "lib/net6.0/Microsoft.Extensions.Http.xml",
-        "lib/net7.0/Microsoft.Extensions.Http.dll",
-        "lib/net7.0/Microsoft.Extensions.Http.xml",
-        "lib/net8.0/Microsoft.Extensions.Http.dll",
-        "lib/net8.0/Microsoft.Extensions.Http.xml",
-        "lib/netstandard2.0/Microsoft.Extensions.Http.dll",
-        "lib/netstandard2.0/Microsoft.Extensions.Http.xml",
-        "microsoft.extensions.http.8.0.0.nupkg.sha512",
-        "microsoft.extensions.http.nuspec",
         "useSharedDesignerContext.txt"
       ]
     },
@@ -4947,36 +4822,6 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Extensions.Options.ConfigurationExtensions/8.0.0": {
-      "sha512": "0f4DMRqEd50zQh+UyJc+/HiBsZ3vhAQALgdkcQEalSH1L2isdC7Yj54M3cyo5e+BeO5fcBQ7Dxly8XiBBcvRgw==",
-      "type": "package",
-      "path": "microsoft.extensions.options.configurationextensions/8.0.0",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "LICENSE.TXT",
-        "PACKAGE.md",
-        "THIRD-PARTY-NOTICES.TXT",
-        "buildTransitive/net461/Microsoft.Extensions.Options.ConfigurationExtensions.targets",
-        "buildTransitive/net462/_._",
-        "buildTransitive/net6.0/_._",
-        "buildTransitive/netcoreapp2.0/Microsoft.Extensions.Options.ConfigurationExtensions.targets",
-        "lib/net462/Microsoft.Extensions.Options.ConfigurationExtensions.dll",
-        "lib/net462/Microsoft.Extensions.Options.ConfigurationExtensions.xml",
-        "lib/net6.0/Microsoft.Extensions.Options.ConfigurationExtensions.dll",
-        "lib/net6.0/Microsoft.Extensions.Options.ConfigurationExtensions.xml",
-        "lib/net7.0/Microsoft.Extensions.Options.ConfigurationExtensions.dll",
-        "lib/net7.0/Microsoft.Extensions.Options.ConfigurationExtensions.xml",
-        "lib/net8.0/Microsoft.Extensions.Options.ConfigurationExtensions.dll",
-        "lib/net8.0/Microsoft.Extensions.Options.ConfigurationExtensions.xml",
-        "lib/netstandard2.0/Microsoft.Extensions.Options.ConfigurationExtensions.dll",
-        "lib/netstandard2.0/Microsoft.Extensions.Options.ConfigurationExtensions.xml",
-        "microsoft.extensions.options.configurationextensions.8.0.0.nupkg.sha512",
-        "microsoft.extensions.options.configurationextensions.nuspec",
-        "useSharedDesignerContext.txt"
-      ]
-    },
     "Microsoft.Extensions.Primitives/9.0.0-preview.6.24327.7": {
       "sha512": "VogVd1RpBK7/KjpKIxNQPiPgAvh84tgiTvQmk5mXDFCR0sINvyyIZSO9cE0dRtAQBqkd1jlmcfTwoGVS5EaMUg==",
       "type": "package",
@@ -5005,16 +4850,18 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Identity.Client/4.61.3": {
-      "sha512": "naJo/Qm35Caaoxp5utcw+R8eU8ZtLz2ALh8S+gkekOYQ1oazfCQMWVT4NJ/FnHzdIJlm8dMz0oMpMGCabx5odA==",
+    "Microsoft.Identity.Client/4.62.0": {
+      "sha512": "2q5m8ASh9lJ714CkCxA1lmj60K6OeDR2vV78adviOM/ZEoISldY+THr7gmqJ6rtSbZ0J4R/a9KcgL/wm8Ogi4Q==",
       "type": "package",
-      "path": "microsoft.identity.client/4.61.3",
+      "path": "microsoft.identity.client/4.62.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
         "lib/net462/Microsoft.Identity.Client.dll",
         "lib/net462/Microsoft.Identity.Client.xml",
+        "lib/net472/Microsoft.Identity.Client.dll",
+        "lib/net472/Microsoft.Identity.Client.xml",
         "lib/net6.0-android31.0/Microsoft.Identity.Client.dll",
         "lib/net6.0-android31.0/Microsoft.Identity.Client.xml",
         "lib/net6.0-ios15.4/Microsoft.Identity.Client.dll",
@@ -5023,14 +4870,14 @@
         "lib/net6.0/Microsoft.Identity.Client.xml",
         "lib/netstandard2.0/Microsoft.Identity.Client.dll",
         "lib/netstandard2.0/Microsoft.Identity.Client.xml",
-        "microsoft.identity.client.4.61.3.nupkg.sha512",
+        "microsoft.identity.client.4.62.0.nupkg.sha512",
         "microsoft.identity.client.nuspec"
       ]
     },
-    "Microsoft.Identity.Client.Extensions.Msal/4.61.3": {
-      "sha512": "PWnJcznrSGr25MN8ajlc2XIDW4zCFu0U6FkpaNLEWLgd1NgFCp5uDY3mqLDgM8zCN8hqj8yo5wHYfLB2HjcdGw==",
+    "Microsoft.Identity.Client.Extensions.Msal/4.62.0": {
+      "sha512": "ylCHQwNpT+YYu4Le+r0x5XRHKsFtIgIIAHshDWIlgeA/AoFs/9yREdtSeIELdN7X3lJAIiUjJR8z7r7KJ3ETLw==",
       "type": "package",
-      "path": "microsoft.identity.client.extensions.msal/4.61.3",
+      "path": "microsoft.identity.client.extensions.msal/4.62.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -5038,7 +4885,7 @@
         "lib/net6.0/Microsoft.Identity.Client.Extensions.Msal.xml",
         "lib/netstandard2.0/Microsoft.Identity.Client.Extensions.Msal.dll",
         "lib/netstandard2.0/Microsoft.Identity.Client.Extensions.Msal.xml",
-        "microsoft.identity.client.extensions.msal.4.61.3.nupkg.sha512",
+        "microsoft.identity.client.extensions.msal.4.62.0.nupkg.sha512",
         "microsoft.identity.client.extensions.msal.nuspec"
       ]
     },
@@ -5324,39 +5171,21 @@
         "packageIcon.png"
       ]
     },
-    "prometheus-net/6.0.0": {
-      "sha512": "rD6iXx1mKx6uy5E7YkktLxvBQKFTbNfe3qc43s+9ZuYWgEm41QMTlw/a+R+Hs86NkfHG3oHYAJuP7c7HQ+oj9Q==",
+    "RabbitMQ.Client/6.8.1": {
+      "sha512": "jNsmGgmCNw2S/NzskeN2ijtGywtH4Sk/G6jWUTD5sY9SrC27Xz6BsLIiB8hdsfjeyWCa4j4GvCIGkpE8wrjU1Q==",
       "type": "package",
-      "path": "prometheus-net/6.0.0",
+      "path": "rabbitmq.client/6.8.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "images/prometheus-net-logo.png",
-        "lib/net462/Prometheus.NetStandard.dll",
-        "lib/net462/Prometheus.NetStandard.pdb",
-        "lib/net462/Prometheus.NetStandard.xml",
-        "lib/net6.0/Prometheus.NetCore.deps.json",
-        "lib/net6.0/Prometheus.NetCore.dll",
-        "lib/net6.0/Prometheus.NetCore.pdb",
-        "lib/net6.0/Prometheus.NetCore.xml",
-        "lib/net6.0/Prometheus.NetStandard.deps.json",
-        "lib/net6.0/Prometheus.NetStandard.dll",
-        "lib/net6.0/Prometheus.NetStandard.pdb",
-        "lib/net6.0/Prometheus.NetStandard.xml",
-        "lib/netcoreapp3.1/Prometheus.NetCore.deps.json",
-        "lib/netcoreapp3.1/Prometheus.NetCore.dll",
-        "lib/netcoreapp3.1/Prometheus.NetCore.pdb",
-        "lib/netcoreapp3.1/Prometheus.NetCore.xml",
-        "lib/netcoreapp3.1/Prometheus.NetStandard.deps.json",
-        "lib/netcoreapp3.1/Prometheus.NetStandard.dll",
-        "lib/netcoreapp3.1/Prometheus.NetStandard.pdb",
-        "lib/netcoreapp3.1/Prometheus.NetStandard.xml",
-        "lib/netstandard2.0/Prometheus.NetStandard.deps.json",
-        "lib/netstandard2.0/Prometheus.NetStandard.dll",
-        "lib/netstandard2.0/Prometheus.NetStandard.pdb",
-        "lib/netstandard2.0/Prometheus.NetStandard.xml",
-        "prometheus-net.6.0.0.nupkg.sha512",
-        "prometheus-net.nuspec"
+        "README.md",
+        "icon.png",
+        "lib/net462/RabbitMQ.Client.dll",
+        "lib/net462/RabbitMQ.Client.xml",
+        "lib/netstandard2.0/RabbitMQ.Client.dll",
+        "lib/netstandard2.0/RabbitMQ.Client.xml",
+        "rabbitmq.client.6.8.1.nupkg.sha512",
+        "rabbitmq.client.nuspec"
       ]
     },
     "Serilog/4.0.1-dev-02205": {
@@ -5924,10 +5753,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "System.Memory/4.5.4": {
-      "sha512": "1MbJTHS1lZ4bS4FmsJjnuGJOu88ZzTT2rLvrhW7Ygic+pC0NWA+3hgAen0HRdsocuQXCkUTdFn9yHJJhsijDXw==",
+    "System.Memory/4.5.5": {
+      "sha512": "XIWiDvKPXaTveaB7HVganDlOCRoj03l+jrwNvcge/t8vhGYKvqV+dMv6G4SAX2NoNmN0wZfVPTAlFwZcZvVOUw==",
       "type": "package",
-      "path": "system.memory/4.5.4",
+      "path": "system.memory/4.5.5",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -5941,7 +5770,7 @@
         "lib/netstandard2.0/System.Memory.dll",
         "lib/netstandard2.0/System.Memory.xml",
         "ref/netcoreapp2.1/_._",
-        "system.memory.4.5.4.nupkg.sha512",
+        "system.memory.4.5.5.nupkg.sha512",
         "system.memory.nuspec",
         "useSharedDesignerContext.txt",
         "version.txt"
@@ -6702,6 +6531,11 @@
         "ulid.nuspec"
       ]
     },
+    "Catalog.Contracts/1.0.0": {
+      "type": "project",
+      "path": "../Catalog.Contracts/Catalog.Contracts.csproj",
+      "msbuildProject": "../Catalog.Contracts/Catalog.Contracts.csproj"
+    },
     "Catalog.Domain/1.0.0": {
       "type": "project",
       "path": "../Catalog.Domain/Catalog.Domain.csproj",
@@ -6715,16 +6549,17 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
-      "Azure.Identity >= 1.12.0",
+      "Azure.Identity >= 1.13.0-beta.1",
+      "Catalog.Contracts >= 1.0.0",
       "Catalog.Infrastructure >= 1.0.0",
       "FluentValidation >= 11.9.2",
       "FluentValidation.AspNetCore >= 11.3.0",
       "FluentValidation.DependencyInjectionExtensions >= 11.9.2",
-      "MassTransit >= 8.2.4-develop.1872",
-      "MassTransit.EntityFrameworkCore >= 8.2.4-develop.1872",
-      "MassTransit.Hangfire >= 8.2.4-develop.1872",
-      "MassTransit.Kafka >= 8.2.4-develop.1872",
-      "MassTransit.Prometheus >= 8.1.3",
+      "MassTransit >= 8.2.4-develop.1875",
+      "MassTransit.AmazonSQS >= 8.2.4-develop.1875",
+      "MassTransit.EntityFrameworkCore >= 8.2.4-develop.1875",
+      "MassTransit.Kafka >= 8.2.4-develop.1875",
+      "MassTransit.RabbitMQ >= 8.2.4-develop.1875",
       "MediatR >= 12.4.0",
       "Microsoft.AspNetCore.OpenApi >= 9.0.0-preview.6.24328.4",
       "Microsoft.EntityFrameworkCore >= 9.0.0-preview.6.24327.4",
@@ -6777,6 +6612,9 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
+            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Catalog.Contracts\\Catalog.Contracts.csproj": {
+              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Catalog.Contracts\\Catalog.Contracts.csproj"
+            },
             "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Catalog.Infrastructure\\Catalog.Infrastructure.csproj": {
               "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Catalog.Infrastructure\\Catalog.Infrastructure.csproj"
             }
@@ -6800,7 +6638,7 @@
         "dependencies": {
           "Azure.Identity": {
             "target": "Package",
-            "version": "[1.12.0, )"
+            "version": "[1.13.0-beta.1, )"
           },
           "FluentValidation": {
             "target": "Package",
@@ -6816,23 +6654,23 @@
           },
           "MassTransit": {
             "target": "Package",
-            "version": "[8.2.4-develop.1872, )"
+            "version": "[8.2.4-develop.1875, )"
+          },
+          "MassTransit.AmazonSQS": {
+            "target": "Package",
+            "version": "[8.2.4-develop.1875, )"
           },
           "MassTransit.EntityFrameworkCore": {
             "target": "Package",
-            "version": "[8.2.4-develop.1872, )"
-          },
-          "MassTransit.Hangfire": {
-            "target": "Package",
-            "version": "[8.2.4-develop.1872, )"
+            "version": "[8.2.4-develop.1875, )"
           },
           "MassTransit.Kafka": {
             "target": "Package",
-            "version": "[8.2.4-develop.1872, )"
+            "version": "[8.2.4-develop.1875, )"
           },
-          "MassTransit.Prometheus": {
+          "MassTransit.RabbitMQ": {
             "target": "Package",
-            "version": "[8.1.3, )"
+            "version": "[8.2.4-develop.1875, )"
           },
           "MediatR": {
             "target": "Package",

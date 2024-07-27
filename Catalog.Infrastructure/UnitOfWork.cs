@@ -4,7 +4,9 @@ using Catalog.Domain.Aggregates.ItemAggregate;
 using Catalog.Domain.SeedWork;
 using Catalog.Infrastructure.Repositories;
 using MediatR;
-using Microsoft.EntityFrameworkCore.Storage; 
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Data;
 namespace Catalog.Infrastructure;
 
 public class UnitOfWork : IUnitOfWork
@@ -36,7 +38,9 @@ public class UnitOfWork : IUnitOfWork
         _mediator = mediator;
     }
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    { 
+    {
+        await DispatchDomainEventsAsync(cancellationToken);
+
         return await _context.SaveChangesAsync(cancellationToken);
     }
 
@@ -45,9 +49,9 @@ public class UnitOfWork : IUnitOfWork
         _context.Dispose();
     }
 
-    public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
-    {
-        _dbTransactionContext = await _context.Database.BeginTransactionAsync(cancellationToken);
+    public async Task BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)
+    { 
+        _dbTransactionContext = await _context.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
     }
 
     public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
@@ -56,6 +60,8 @@ public class UnitOfWork : IUnitOfWork
         {
             ArgumentNullException.ThrowIfNull(_dbTransactionContext);
 
+            await DispatchDomainEventsAsync(cancellationToken);
+            
             await SaveChangesAsync(cancellationToken);
 
             await _dbTransactionContext.CommitAsync(cancellationToken);
@@ -86,7 +92,7 @@ public class UnitOfWork : IUnitOfWork
         var domainEvents = domainEntities
             .SelectMany(e =>
             { 
-                if (e is null || e.Entity is null || e.Entity.DomainEvents is null)
+                if (e.Entity.DomainEvents is null)
                 {
                     return [];
                 }
@@ -94,7 +100,7 @@ public class UnitOfWork : IUnitOfWork
             })
             .ToList();
 
-        domainEntities.ForEach(e => ((Entity)e.Entity).ClearDomainEvents());
+        domainEntities.ForEach(e => e.Entity.ClearDomainEvents());
 
         foreach (var domainEvent in domainEvents)
         {

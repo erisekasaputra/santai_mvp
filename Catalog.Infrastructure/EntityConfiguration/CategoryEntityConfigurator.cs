@@ -12,8 +12,7 @@ public class CategoryEntityConfigurator : IEntityTypeConfiguration<Category>
 
         builder.HasKey(x => x.Id);
 
-        builder.Property(x => x.Id)
-            .IsRequired()
+        builder.Property(x => x.Id) 
             .HasMaxLength(26);
 
         builder.Property(x => x.Name) 

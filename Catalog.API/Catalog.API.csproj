@@ -7,15 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Azure.Identity" Version="1.12.0" />
+    <PackageReference Include="Azure.Identity" Version="1.13.0-beta.1" />
     <PackageReference Include="FluentValidation" Version="11.9.2" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.2" />
-    <PackageReference Include="MassTransit" Version="8.2.4-develop.1872" />
-    <PackageReference Include="MassTransit.EntityFrameworkCore" Version="8.2.4-develop.1872" />
-    <PackageReference Include="MassTransit.Hangfire" Version="8.2.4-develop.1872" />
-    <PackageReference Include="MassTransit.Kafka" Version="8.2.4-develop.1872" />
-    <PackageReference Include="MassTransit.Prometheus" Version="8.1.3" />
+    <PackageReference Include="MassTransit" Version="8.2.4-develop.1875" />
+    <PackageReference Include="MassTransit.AmazonSQS" Version="8.2.4-develop.1875" />
+     <PackageReference Include="MassTransit.EntityFrameworkCore" Version="8.2.4-develop.1875" />
+     <PackageReference Include="MassTransit.Kafka" Version="8.2.4-develop.1875" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.4-develop.1875" />
     <PackageReference Include="MediatR" Version="12.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-preview.6.24328.4" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0-preview.6.24327.4" />
@@ -45,13 +45,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Catalog.Contracts\Catalog.Contracts.csproj" />
     <ProjectReference Include="..\Catalog.Infrastructure\Catalog.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Background\" />
+    <Folder Include="Infrastructures\Messaging\" />
+    <Folder Include="Infrastructures\Persistence\" />
     <Folder Include="IntegrationEvents\EventHandlers\Incoming\" />
-    <Folder Include="IntegrationEvents\Events\Incoming\" />
   </ItemGroup>
 
 </Project>

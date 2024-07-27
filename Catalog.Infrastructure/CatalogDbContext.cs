@@ -1,21 +1,22 @@
 ﻿using Catalog.Domain.Aggregates.BrandAggregate;
 using Catalog.Domain.Aggregates.CategoryAggregate;
-using Catalog.Domain.Aggregates.ItemAggregate; 
+using Catalog.Domain.Aggregates.ItemAggregate;
+using Catalog.Domain.Aggregates.OwnerReviewAggregate;
 using Catalog.Infrastructure.EntityConfiguration;
-using MediatR;
+using MassTransit; 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Data;
 
 namespace Catalog.Infrastructure;
 
-public class CatalogDbContext(DbContextOptions<CatalogDbContext> options, IMediator mediator) : DbContext(options) 
-{ 
+public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : DbContext(options)
+{
     public DbSet<Item> Items { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Brand> Brands { get; set; }
 
-    private readonly IMediator _mediator = mediator;
+    public DbSet<OwnerReview> OwnerReviews { get; set; } 
 
     private IDbContextTransaction? _currentTransaction;
 
@@ -91,11 +92,19 @@ public class CatalogDbContext(DbContextOptions<CatalogDbContext> options, IMedia
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.AddInboxStateEntity();
+        
+        modelBuilder.AddOutboxStateEntity();
+        
+        modelBuilder.AddOutboxMessageEntity();
+
         modelBuilder.ApplyConfiguration(new ItemEntityConfigurator());
 
         modelBuilder.ApplyConfiguration(new CategoryEntityConfigurator());
 
         modelBuilder.ApplyConfiguration(new BrandEntityConfigurator());
+
+        modelBuilder.ApplyConfiguration(new OwnerReviewEntityConfigurator());
         
         base.OnModelCreating(modelBuilder);
     }  

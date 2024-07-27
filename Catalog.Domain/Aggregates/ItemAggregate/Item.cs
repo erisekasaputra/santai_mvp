@@ -1,43 +1,55 @@
-﻿
-using Catalog.Domain.Aggregates.BrandAggregate;
+﻿using Catalog.Domain.Aggregates.BrandAggregate;
 using Catalog.Domain.Aggregates.CategoryAggregate;
+using Catalog.Domain.Aggregates.OwnerReviewAggregate;
 using Catalog.Domain.Events;
 using Catalog.Domain.SeedWork;
 
 namespace Catalog.Domain.Aggregates.ItemAggregate;
 
 public class Item : Entity, IAggregateRoot
-{
-    public string CategoryId { get; set; }
+{ 
+    public string Name { get; private set; }
 
-    public Category Category { get; set; }
-
-    public string BrandId { get; set; }
-
-    public Brand Brand { get; set; }
-
-    public string Name { get; set; }
-
-    public string Description { get; set; }
+    public string Description { get; private set; }
 
     public decimal LastPrice { get; private set; }
 
     public decimal Price { get; private set; }
 
-    public string ImageUrl { get; set; }
-
-    public DateTime CreatedAt { get; set; }
+    public string ImageUrl { get; private set; } 
 
     public int StockQuantity { get; private set; }
 
-    public int SoldQuantity { get; private set; } 
+    public int SoldQuantity { get; private set; }
 
-    public Item() 
-    {  
-    }
- 
-    public Item(string name, string description, decimal price, string imageUrl, DateTime createdAt, int stockQuantity, int soldQuantity, string categoryId, Category category, string brandId, Brand brand) 
+    public string BrandId { get; private set; }
+
+    public string CategoryId { get; private set; }
+
+    public Brand Brand { get; private set; }
+
+    public Category Category { get; private set; } 
+
+    public DateTime CreatedAt { get; private set; }
+
+    public ICollection<OwnerReview> OwnerReviews { get; set; } 
+
+    public Item()
     {
+
+    }
+      
+    public Item(string name, string description, decimal price, string imageUrl, DateTime createdAt, int stockQuantity, int soldQuantity, string categoryId, Category category, string brandId, Brand brand, ICollection<OwnerReview> ownerReviews) 
+    {
+        ArgumentException.ThrowIfNullOrEmpty(name);
+        ArgumentException.ThrowIfNullOrEmpty(description);
+        ArgumentException.ThrowIfNullOrEmpty(imageUrl);
+        ArgumentException.ThrowIfNullOrEmpty(categoryId);
+        ArgumentNullException.ThrowIfNull(category);
+        ArgumentException.ThrowIfNullOrEmpty(brandId);
+        ArgumentNullException.ThrowIfNull(brand);
+        ArgumentNullException.ThrowIfNull(ownerReviews);
+         
         Name = name;
         Description = description;
         Price = price;
@@ -49,11 +61,17 @@ public class Item : Entity, IAggregateRoot
         Category = category;
         BrandId = brandId;
         Brand = brand;
+        OwnerReviews = ownerReviews;
 
+        RaiseItemCreatedDomainEvent();
+    }
+
+    private void RaiseItemCreatedDomainEvent()
+    {
         this.AddDomainEvent(new ItemCreatedDomainEvent(this));
     }
 
-    public void Update(string name, string description, string imageUrl, string categoryId, Category category, string brandId, Brand brand)
+    public void Update(string name, string description, string imageUrl, string categoryId, Category category, string brandId, Brand brand, List<OwnerReview> ownerReviews)
     {
         ArgumentException.ThrowIfNullOrEmpty(name);
         ArgumentException.ThrowIfNullOrEmpty(description);
@@ -70,6 +88,13 @@ public class Item : Entity, IAggregateRoot
         Category = category;
         BrandId = brandId;
         Brand = brand;
+        OwnerReviews = ownerReviews;
+        this.AddDomainEvent(new ItemUpdatedDomainEvent(this));
+    }
+
+    public void Delete()
+    {
+        this.AddDomainEvent(new ItemDeletedDomainEvent(this.Id));
     }
 
     public void DecreaseStockQuantity(int amount)

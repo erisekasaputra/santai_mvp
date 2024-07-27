@@ -1,5 +1,4 @@
-﻿using MediatR;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using MediatR; 
 
 namespace Catalog.Domain.SeedWork;
 
@@ -8,7 +7,7 @@ public abstract class Entity
     private List<INotification> _domainEvents;
     public IReadOnlyCollection<INotification>? DomainEvents => _domainEvents?.AsReadOnly();
 
-    public string Id { get; protected set; }
+    public string Id { get; set; }
 
     protected Entity()
     {

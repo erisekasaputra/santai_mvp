@@ -60,7 +60,7 @@ public static class CategoryAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.BadRequest();
+            return TypedResults.InternalServerError();
         }
     }
 
@@ -93,7 +93,7 @@ public static class CategoryAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.BadRequest();
+            return TypedResults.InternalServerError();
         }
     }
 
@@ -131,7 +131,7 @@ public static class CategoryAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.BadRequest();
+            return TypedResults.InternalServerError();
         }
     }
 
@@ -168,7 +168,7 @@ public static class CategoryAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.BadRequest();
+            return TypedResults.InternalServerError();
         }
     }
 
@@ -192,7 +192,7 @@ public static class CategoryAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.BadRequest();
+            return TypedResults.InternalServerError();
         }
     }
 }

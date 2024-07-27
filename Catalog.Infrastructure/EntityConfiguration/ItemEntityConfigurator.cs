@@ -21,17 +21,29 @@ public class ItemEntityConfigurator : IEntityTypeConfiguration<Item>
             .HasMaxLength(1000);
 
         builder.Property(b => b.ImageUrl)
-            .HasMaxLength(500); 
+            .HasMaxLength(500);
+
+
+        builder.Property(ci => ci.CategoryId)
+           .IsRequired(false);
+
+        builder.Property(ci => ci.BrandId)
+            .IsRequired(false);  
 
         builder.HasOne(ci => ci.Category)
             .WithMany(ic => ic.Items)
             .HasForeignKey(ci => ci.CategoryId)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.SetNull);
+
+        builder.HasMany(i => i.OwnerReviews)
+            .WithOne(or => or.Item)
+            .HasForeignKey(or => or.ItemId)
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(ci => ci.Brand)
             .WithMany(ic => ic.Items)
             .HasForeignKey(ci => ci.BrandId)
-            .OnDelete(DeleteBehavior.Restrict); 
+            .OnDelete(DeleteBehavior.SetNull);
          
         builder.Property(ci => ci.LastPrice).HasColumnType("decimal(18, 2)");
 

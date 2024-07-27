@@ -24,6 +24,8 @@ public class CreateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
             return Result<CreateItemResponse>.Failure($"Brand with id {request.BrandId} not found.", 404);
         }
 
+        var ownerReviews = request.OwnerReviews.ToList() ?? throw new ArgumentException("Owner reviews can not be null, please provide at least one Key Value pair e.g: [ Performance : 9.3 ]");
+       
         var item = new Item( 
                request.Name,
                request.Description,
@@ -35,7 +37,8 @@ public class CreateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
                category.Id,
                category,
                brand.Id,
-               brand
+               brand, 
+               ownerReviews
            );
 
         var response = await _unitOfWork.Items.CreateItemAsync(item);
@@ -44,9 +47,7 @@ public class CreateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
         {
             return Result<CreateItemResponse>.Failure("We encountered an issue while creating the item. Please try again later or contact support if the problem persists.", 500);
         }
-
-        await _unitOfWork.DispatchDomainEventsAsync(cancellationToken);
-
+         
         var result = await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         if (result <= 0)
