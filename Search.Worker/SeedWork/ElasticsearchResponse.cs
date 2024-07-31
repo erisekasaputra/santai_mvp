@@ -2,5 +2,5 @@
 
 public class ElasticsearchResponse<T>
 {
-    public T? _source { get; set; }
+    public T _source { get; set; }
 }

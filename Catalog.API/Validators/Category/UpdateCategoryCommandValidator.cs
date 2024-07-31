@@ -1,4 +1,4 @@
-﻿using Catalog.API.Commands.Categories.UpdateCategory;
+﻿using Catalog.API.Applications.Commands.Categories.UpdateCategory;
 using FluentValidation;
 
 namespace Catalog.API.Validators.Category;

@@ -1,11 +1,13 @@
-﻿using Catalog.Domain.Aggregates.CategoryAggregate; 
+﻿using Catalog.Domain.Aggregates.CategoryAggregate;
+using Catalog.Infrastructure.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Infrastructure.Repositories;
 
-public class CategoryRepository(CatalogDbContext dbContext) : ICategoryRepository
+public class CategoryRepository(CatalogDbContext dbContext, MetaTableHelper metaTableHelper) : ICategoryRepository
 {
     private readonly CatalogDbContext _context = dbContext; 
+    private readonly MetaTableHelper _metaTableHelper = metaTableHelper;
     public async Task<Category?> GetCategoryByIdAsync(string id)
     {
         return await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);

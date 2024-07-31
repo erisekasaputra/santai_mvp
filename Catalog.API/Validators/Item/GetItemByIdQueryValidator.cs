@@ -1,4 +1,4 @@
-﻿using Catalog.API.Queries.Items.GetItemById;
+﻿using Catalog.API.Applications.Queries.Items.GetItemById;
 using FluentValidation;
 
 namespace Catalog.API.Validators.Item;

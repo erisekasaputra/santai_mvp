@@ -6,8 +6,8 @@ using FluentValidation.AspNetCore;
 using Catalog.API.Services; 
 using Catalog.Domain.SeedWork;
 using Catalog.API.Validators.Item;
-using MassTransit;
-using Catalog.Contracts;
+using MassTransit; 
+using Catalog.Infrastructure.Helpers;
 
 var builder = WebApplication.CreateBuilder(args); 
 
@@ -18,11 +18,11 @@ builder.Services.AddMediatR(builder =>
     builder.RegisterServicesFromAssemblyContaining<Program>();
 });
 
-builder.Logging.ClearProviders();
+builder.Logging.ClearProviders(); 
 
 builder.Logging.AddConsole();
- 
-builder.Logging.AddDebug();
+
+builder.Logging.SetMinimumLevel(LogLevel.Information);
 
 builder.Services.AddFluentValidationAutoValidation();
 
@@ -43,13 +43,15 @@ builder.Services.AddScoped<ApplicationService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); 
 
 builder.Services.AddDbContext<CatalogDbContext>(opt =>
-{
+{ 
     opt.UseSqlServer(builder.Configuration["Database:SqlServer"], optionBuilder =>
     {
         optionBuilder.MigrationsAssembly("Catalog.API");
-        optionBuilder.CommandTimeout(30);
+        optionBuilder.CommandTimeout(15);
     });
 });
+
+builder.Services.AddScoped<MetaTableHelper>();
 
 builder.Services.AddMassTransit(x =>
 {
@@ -58,7 +60,7 @@ builder.Services.AddMassTransit(x =>
         o.DuplicateDetectionWindow = TimeSpan.FromSeconds(30);
         o.QueryDelay = TimeSpan.FromSeconds(1);
         o.QueryTimeout = TimeSpan.FromSeconds(30);
-        o.QueryMessageLimit = 100;
+        o.QueryMessageLimit = 100; 
         o.UseSqlServer();
         o.UseBusOutbox();
     }); 
@@ -69,6 +71,16 @@ builder.Services.AddMassTransit(x =>
         {
             host.Username(builder.Configuration["RabbitMQ:Username"] ?? "user");
             host.Password(builder.Configuration["RabbitMQ:Password"] ?? "user");
+        });
+
+        configure.UseMessageRetry(retryCfg =>
+        {
+            retryCfg.Interval(3, TimeSpan.FromSeconds(2));
+        });
+
+        configure.UseTimeout(timeoutCfg =>
+        {
+            timeoutCfg.Timeout = TimeSpan.FromSeconds(5);
         }); 
 
         configure.ConfigureEndpoints(context);
@@ -76,8 +88,7 @@ builder.Services.AddMassTransit(x =>
 });  
  
 var app = builder.Build();  
-
-// Configure the HTTP request pipeline.
+ 
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
@@ -97,4 +108,5 @@ app.ItemRouter(groupName);
 app.CategoryRouter(groupName); 
 app.BrandRouter(groupName); 
 
-app.Run(); 
+app.Run();
+public partial class Program { }

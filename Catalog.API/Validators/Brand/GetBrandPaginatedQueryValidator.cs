@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Catalog.API.Queries.Brands.GetBrandPaginated;
+using Catalog.API.Applications.Queries.Brands.GetBrandPaginated;
 
 namespace Catalog.API.Validators.Brand;
 

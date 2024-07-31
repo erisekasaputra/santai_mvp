@@ -17,86 +17,67 @@ builder.Services.AddMediatR(configuration =>
     configuration.RegisterServicesFromAssembly(typeof(Program).Assembly);
 });
 
+
 builder.Services.AddMassTransit(x =>
-{     
+{      
     x.AddConsumer<ItemCreatedIntegrationEventConsumer>();
     x.AddConsumer<ItemUpdatedIntegrationEventConsumer>();
-    x.AddConsumer<ItemDeletedIntegrationEventConsumer>();
-
-    x.AddConsumer<FaultItemCreatedEventConsumer>();
-    x.AddConsumer<FaultItemUpdatedEventConsumer>();
-    x.AddConsumer<FaultItemDeletedEventConsumer>();
+    x.AddConsumer<ItemDeletedIntegrationEventConsumer>(); 
+    x.AddConsumer<ItemPriceSetIntegrationEventConsumer>(); 
+    x.AddConsumer<ItemSoldAddedIntegrationEventConsumer>(); 
+    x.AddConsumer<ItemSoldReducedIntegrationEventConsumer>(); 
+    x.AddConsumer<ItemSoldSetIntegrationEventConsumer>(); 
+    x.AddConsumer<ItemStockAddedIntegrationEventConsumer>(); 
+    x.AddConsumer<ItemStockReducedIntegrationEventConsumer>(); 
+    x.AddConsumer<ItemStockSetIntegrationEventConsumer>(); 
     
     x.UsingRabbitMq((context, config) =>
-    {    
+    {
         config.Host(builder.Configuration["RabbitMQ:Host"] ?? "localhost", host =>
         {
             host.Username(builder.Configuration["RabbitMQ:Username"] ?? "user");
             host.Password(builder.Configuration["RabbitMQ:Password"] ?? "user");
-        });  
+        });
 
-        
-        config.ReceiveEndpoint("item-created-integration-event-queue", receiveBuilder =>
-        {   
-            receiveBuilder.ConfigureConsumer<ItemCreatedIntegrationEventConsumer>(context);
+
+        var consumers = new (string QueueName, Type ConsumerType)[]
+        {
+            ("item-created-integration-event-queue", typeof(ItemCreatedIntegrationEventConsumer)),
+            ("item-updated-integration-event-queue", typeof(ItemUpdatedIntegrationEventConsumer)),
+            ("item-deleted-integration-event-queue", typeof(ItemDeletedIntegrationEventConsumer)),
+            ("item-price-set-integration-event-queue", typeof(ItemPriceSetIntegrationEventConsumer)),
+            ("item-sold-added-integration-event-queue", typeof(ItemSoldAddedIntegrationEventConsumer)),
+            ("item-sold-reduced-integration-event-queue", typeof(ItemSoldReducedIntegrationEventConsumer)),
+            ("item-sold-set-integration-event-queue", typeof(ItemSoldSetIntegrationEventConsumer)),
+            ("item-stock-added-integration-event-queue", typeof(ItemStockAddedIntegrationEventConsumer)),
+            ("item-stock-reduced-integration-event-queue", typeof(ItemStockReducedIntegrationEventConsumer)),
+            ("item-stock-set-integration-event-queue", typeof(ItemStockSetIntegrationEventConsumer))
+        };
+
+        foreach(var (queueName , consumerType) in consumers)
+        {
+            config.ReceiveEndpoint(queueName, receiveBuilder =>
+            {
+                ConfigureEndPoint(receiveBuilder, queueName, consumerType);
+            });
+        }
+
+        void ConfigureEndPoint(IReceiveEndpointConfigurator receiveBuilder, string queueName, Type consumerType)
+        {
+            receiveBuilder.ConfigureConsumer(context, consumerType);
 
             receiveBuilder.UseMessageRetry(retry =>
             {
                 retry.Immediate(3);
             });
-             
-            receiveBuilder.UseRateLimit(1000, TimeSpan.FromSeconds(2)); 
-        });
 
-        config.ReceiveEndpoint("item-created-integration-event-queue_error", receiveBuilder =>
-        {
-            receiveBuilder.ConfigureConsumer<FaultItemCreatedEventConsumer>(context);  
-        });
-
-
-        config.ReceiveEndpoint("item-updated-integration-event-queue", receiveBuilder =>
-        {
-            receiveBuilder.ConfigureConsumer<ItemUpdatedIntegrationEventConsumer>(context);
-
-            receiveBuilder.UseMessageRetry(retry =>
+            receiveBuilder.UseDelayedRedelivery(redelivery =>
             {
-                retry.Immediate(3);
-            });
-
-            receiveBuilder.UseRateLimit(1000, TimeSpan.FromSeconds(2));
-        });
-
-        config.ReceiveEndpoint("item-updated-integration-event-queue_error", receiveBuilder =>
-        {
-            receiveBuilder.ConfigureConsumer<FaultItemUpdatedEventConsumer>(context);
-        });
-
-
-        config.ReceiveEndpoint("item-deleted-integration-event-queue", receiveBuilder =>
-        {
-            receiveBuilder.ConfigureConsumer<ItemDeletedIntegrationEventConsumer>(context);
-
-            receiveBuilder.UseMessageRetry(retry =>
-            {
-                retry.Immediate(3);
+                redelivery.Intervals(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(20));
             });
 
             receiveBuilder.UseRateLimit(1000, TimeSpan.FromSeconds(2));
-        });
-
-        config.ReceiveEndpoint("item-deleted-integration-event-queue_error", receiveBuilder =>
-        {
-            receiveBuilder.ConfigureConsumer<FaultItemDeletedEventConsumer>(context);
-        });
-
-
-
-        config.UseDelayedRedelivery(redelivery =>
-        {
-            redelivery.Intervals(TimeSpan.FromSeconds(1), TimeSpan.FromSeconds(10), TimeSpan.FromSeconds(20));
-        });
-
-        config.ReceiveEndpoint();
+        }
     }); 
 });
 

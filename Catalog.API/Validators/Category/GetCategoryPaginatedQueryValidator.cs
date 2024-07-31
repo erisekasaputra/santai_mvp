@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Catalog.API.Queries.Categories.GetCategoryPaginated;
+using Catalog.API.Applications.Queries.Categories.GetCategoryPaginated;
 
 namespace Catalog.API.Validators.Category;
 

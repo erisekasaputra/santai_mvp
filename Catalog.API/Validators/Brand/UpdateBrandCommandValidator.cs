@@ -1,4 +1,4 @@
-﻿using Catalog.API.Commands.Brands.UpdateBrand;
+﻿using Catalog.API.Applications.Commands.Brands.UpdateBrand;
 using FluentValidation;
 
 namespace Catalog.API.Validators.Brand;

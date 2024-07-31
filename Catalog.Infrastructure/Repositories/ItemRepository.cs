@@ -1,12 +1,16 @@
 ﻿using Catalog.Domain.Aggregates.ItemAggregate; 
-using Microsoft.EntityFrameworkCore;
+using Catalog.Infrastructure.Helpers;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore; 
 
 namespace Catalog.Infrastructure.Repositories;
 
-public class ItemRepository(CatalogDbContext context) : IItemRepository
+public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableHelper) : IItemRepository
 {
-    private readonly CatalogDbContext _context = context; 
+    private readonly CatalogDbContext _context = context;
 
+    private readonly MetaTableHelper _metaTableHelper = metaTableHelper;
+     
     public async Task<Item> CreateItemAsync(Item item)
     { 
         var result = await _context.Items.AddAsync(item); 
@@ -48,5 +52,28 @@ public class ItemRepository(CatalogDbContext context) : IItemRepository
     {
         item.Delete();
         _context.Items.Remove(item);
-    } 
+    }
+
+    public async Task<ICollection<Item>> GetItemsWithLockAsync(IEnumerable<string> itemIds)
+    {
+        var tableName = _metaTableHelper.GetTableName<Item>();
+        var itemIdColumn = _metaTableHelper.GetColumnName<Item>(nameof(Item.Id)); 
+
+        var parameterNames = itemIds.Select((id, index) =>
+        {
+            return $"@p{index}";
+
+        }).ToArray();
+
+        var sql = @$"SELECT *
+                        FROM {tableName} WITH (UPDLOCK, ROWLOCK) WHERE {itemIdColumn} IN ({string.Join(", ", parameterNames)})";
+
+        var parameters = itemIds.Select((id, index) =>
+        { 
+            return new SqlParameter($"@p{index}", id);
+
+        }).ToArray();
+         
+        return await _context.Items.FromSqlRaw(sql, parameters).ToListAsync(); 
+    }
 }

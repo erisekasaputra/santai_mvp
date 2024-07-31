@@ -1,4 +1,5 @@
-﻿using Catalog.API.Commands.Items.CreateItem;
+﻿using Catalog.API.Applications.Commands.Items.CreateItem;
+using Catalog.Domain.Aggregates.OwnerReviewAggregate;
 using FluentValidation;
 
 namespace Catalog.API.Validators.Item;
@@ -36,11 +37,18 @@ public class CreateItemCommandValidator : AbstractValidator<CreateItemCommand>
         RuleFor(x => x.BrandId)
             .NotEmpty().WithMessage("Brand ID is required.")
             .Length(26).WithMessage("The length of the brand ID should be 26 characters.");
+
+        When(x => x.OwnerReviews is not null && x.OwnerReviews.Any(), () =>
+        { 
+            RuleForEach(e => e.OwnerReviews).SetValidator(new ItemOwnerReviewsCommandValidator()); 
+        }); 
     }
 
     private bool BeAValidUrl(string url)
     {
         return Uri.TryCreate(url, UriKind.Absolute, out var uriResult)
             && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
-    }
+    } 
 }
+
+

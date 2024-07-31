@@ -5,15 +5,14 @@ using Search.Worker.Applications.Commands.UpdateItem;
 
 namespace Search.Worker.Consumers;
 
-public class ItemUpdatedIntegrationEventConsumer(IMediator mediator) : IConsumer<ItemUpdatedIntegrationEvent>
+internal class ItemUpdatedIntegrationEventConsumer(IMediator mediator) : IConsumer<ItemUpdatedIntegrationEvent>
 {
     private readonly IMediator _mediator = mediator; 
     public async Task Consume(ConsumeContext<ItemUpdatedIntegrationEvent> context)
     { 
-        var itemEvent = context.Message;
-        var command = new UpdateItemCommand(itemEvent.Id, itemEvent.Name, itemEvent.Description, itemEvent.Price, itemEvent.ImageUrl, itemEvent.CreatedAt, itemEvent.StockQuantity, itemEvent.SoldQuantity, itemEvent.CategoryId, itemEvent.CategoryName, itemEvent.BrandId, itemEvent.BrandName);
+        var @event = context.Message;
 
-        Console.WriteLine(itemEvent.Id);
+        var command = new UpdateItemCommand(@event.Id, @event.Name, @event.Description, @event.Price, @event.ImageUrl, @event.CreatedAt, @event.StockQuantity, @event.SoldQuantity, @event.CategoryId, @event.CategoryName, @event.BrandId, @event.BrandName, @event.OwnerReviews!); 
 
         await _mediator.Send(command);
     }

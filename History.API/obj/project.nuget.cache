@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "ZumxOLkabls=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\History.API\\History.API.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\erise\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.0-preview.6.24328.4\\microsoft.aspnetcore.openapi.9.0.0-preview.6.24328.4.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\microsoft.openapi\\1.6.13\\microsoft.openapi.1.6.13.nupkg.sha512"
+  ],
+  "logs": []
+}

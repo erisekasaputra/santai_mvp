@@ -5,15 +5,14 @@ using Search.Worker.Applications.Commands.DeleteItem;
 
 namespace Search.Worker.Consumers;
 
-public class ItemDeletedIntegrationEventConsumer(IMediator mediator) : IConsumer<ItemDeletedIntegrationEvent>
+internal class ItemDeletedIntegrationEventConsumer(IMediator mediator) : IConsumer<ItemDeletedIntegrationEvent>
 {
     private readonly IMediator _mediator = mediator; 
     public async Task Consume(ConsumeContext<ItemDeletedIntegrationEvent> context)
     { 
-        var itemEvent = context.Message;
-        var command = new DeleteItemCommand(itemEvent.Id);
+        var @event = context.Message;
 
-        Console.WriteLine(itemEvent.Id);
+        var command = new DeleteItemCommand(@event.Id); 
 
         await _mediator.Send(command);
     }

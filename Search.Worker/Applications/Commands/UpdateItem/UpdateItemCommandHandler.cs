@@ -1,26 +1,36 @@
-﻿using MediatR;
-using Search.Worker.Applications.Commands.UpdateItem;
+﻿using MediatR; 
 using Search.Worker.Domain.Models;
 using Search.Worker.Domain.Repository; 
 
-namespace Search.Worker.Applications.Commands.CreateItem;
+namespace Search.Worker.Applications.Commands.UpdateItem;
 
 public class UpdateItemCommandHandler(IItemRepository itemRepository) : IRequestHandler<UpdateItemCommand, Unit>
 {
     private readonly IItemRepository _itemRepository = itemRepository;
 
     public async Task<Unit> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
-    {
-        var itemExist = _itemRepository.GetItemById(request.Id, cancellationToken);
+    { 
+        var ownerReviews = request.OwnerReviews?.Select(x => new OwnerReview(x.Title, x.Rating));
 
-        if (itemExist is null)
+        var item = await _itemRepository.GetItemByIdAsync(request.Id, cancellationToken);
+
+        if (item is null)
         {
-            return await Task.FromResult(Unit.Value);
+            return Unit.Value;
         }
 
-        var item = new Item(request.Id, request.Name, request.Description, request.Price, request.ImageUrl, request.CreatedAt, request.StockQuantity, request.SoldQuantity, request.CategoryId, request.CategoryName, request.BrandId, request.BrandName);
+        item.Name = request.Name;
+        item.Description = request.Description;
+        item.Price = request.Price;
+        item.ImageUrl = request.ImageUrl;
+        item.StockQuantity = request.StockQuantity;
+        item.SoldQuantity = request.SoldQuantity;
+        item.CategoryId = request.CategoryId;
+        item.CategoryName = request.CategoryName;
+        item.BrandId = request.BrandId;
+        item.BrandName = request.BrandName; 
 
-        await _itemRepository.CreateItemAsync(item, cancellationToken);
+        await _itemRepository.UpdateItemAsync(item, cancellationToken);
         return Unit.Value;
     }
 }

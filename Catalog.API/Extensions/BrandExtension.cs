@@ -1,4 +1,4 @@
-﻿using Catalog.API.DTOs.BrandDto;
+﻿using Catalog.API.DTOs.Brand;
 using Catalog.Domain.Aggregates.BrandAggregate;
 
 namespace Catalog.API.Extensions;

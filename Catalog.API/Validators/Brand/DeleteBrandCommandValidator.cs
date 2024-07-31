@@ -1,4 +1,4 @@
-﻿using Catalog.API.Commands.Brands.DeleteBrand;
+﻿using Catalog.API.Applications.Commands.Brands.DeleteBrand;
 using FluentValidation;
 
 namespace Catalog.API.Validators.Brand;

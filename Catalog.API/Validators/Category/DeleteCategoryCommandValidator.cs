@@ -1,4 +1,4 @@
-﻿using Catalog.API.Commands.Categories.DeleteCategory;
+﻿using Catalog.API.Applications.Commands.Categories.DeleteCategory;
 using FluentValidation;
 
 namespace Catalog.API.Validators.Category;

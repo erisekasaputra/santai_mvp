@@ -1,11 +1,9 @@
-﻿using Elastic.Clients.Elasticsearch;
-using Search.Worker.Domain.Models;
+﻿using Search.Worker.Domain.Models;
 using Search.Worker.Domain.Repository;
 using Search.Worker.Exceptions;
 using Search.Worker.SeedWork;
 using System.Net;
-using System.Net.Http.Json;
-using System.Threading;
+using System.Net.Http.Json; 
 
 namespace Search.Worker.Infrastructure.Repository;
 
@@ -37,13 +35,11 @@ public class ItemRepository(IHttpClientFactory httpClientFactory) : IItemReposit
 
         // Don't move this line of code on top of above codes
         response.EnsureSuccessStatusCode();
-
-        //return false;
-        await Task.Delay(1000);
+         
         return true;
     }
 
-    public async Task<Item?> GetItemById(string id, CancellationToken cancellationToken = default)
+    public async Task<Item?> GetItemByIdAsync(string id, CancellationToken cancellationToken = default)
     {
         var client = CreateClient();
 

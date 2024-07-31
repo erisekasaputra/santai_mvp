@@ -10,7 +10,7 @@ services:
         environment:
             RABBITMQ_DEFAULT_USER: eris
             RABBITMQ_DEFAULT_PASS: 000328Eris@
-
+        restart: always
     elasticsearch:
         image: docker.elastic.co/elasticsearch/elasticsearch:8.8.1
         container_name: elasticsearch-santai
@@ -23,7 +23,7 @@ services:
             - 9300:9300
         volumes:
             - es_data:/usr/share/elasticsearch/data
-
+        restart: always
     redis:
         image: redis:latest
         container_name: redis-santai
@@ -34,6 +34,19 @@ services:
         container_name: dynamodb-santai
         ports:
             - "8000:8000"
-        
+        restart: always
+    minio:
+        image: minio/minio:latest
+        container_name: minio
+        ports:
+            - "9000:9000"
+            - "9001:9001"
+        environment:
+            MINIO_ACCESS_KEY: 000328Eris@
+            MINIO_SECRET_KEY: 000328Eris@
+        volumes:
+            - ./data:/data
+        command: server /data --console-address ":9001"
+        restart: always
 volumes:
   es_data:

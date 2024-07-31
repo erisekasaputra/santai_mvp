@@ -1,11 +1,13 @@
 ﻿using Catalog.Domain.Aggregates.BrandAggregate;
+using Catalog.Infrastructure.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Infrastructure.Repositories;
 
-public class BrandRepository(CatalogDbContext context) : IBrandRepository
+public class BrandRepository(CatalogDbContext context, MetaTableHelper metaTableHelper) : IBrandRepository
 {
     private readonly CatalogDbContext _context = context; 
+    private readonly MetaTableHelper _metaTableHelper = metaTableHelper; 
 
     public async Task<Brand> CreateBrandAsync(Brand item)
     {  

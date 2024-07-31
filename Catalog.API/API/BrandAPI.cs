@@ -1,10 +1,10 @@
-﻿using Catalog.API.Commands.Brands.CreateBrand;
-using Catalog.API.Commands.Brands.DeleteBrand;
-using Catalog.API.Commands.Brands.UpdateBrand;
-using Catalog.API.DTOs.BrandDto;
-using Catalog.API.Queries.Brands.GetBrandById;
-using Catalog.API.Queries.Brands.GetBrandPaginated;
-using Catalog.API.SeedWorks;
+﻿using Catalog.API.Applications.Commands.Brands.CreateBrand;
+using Catalog.API.Applications.Commands.Brands.DeleteBrand;
+using Catalog.API.Applications.Commands.Brands.UpdateBrand;
+using Catalog.API.Applications.Queries.Brands.GetBrandById;
+using Catalog.API.Applications.Queries.Brands.GetBrandPaginated;
+using Catalog.API.DTOs.Brand;
+using Catalog.API.SeedWork;
 using Catalog.API.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;

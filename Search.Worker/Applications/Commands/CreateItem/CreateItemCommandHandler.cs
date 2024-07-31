@@ -10,14 +10,16 @@ public class CreateItemCommandHandler(IItemRepository itemRepository) : IRequest
 
     public async Task<Unit> Handle(CreateItemCommand request, CancellationToken cancellationToken)
     {
-        var itemExist = _itemRepository.GetItemById(request.Id, cancellationToken);
+        var ownerReviews = request.OwnerReviews?.Select(x => new OwnerReview(x.Title, x.Rating));
 
-        if (itemExist is null)
+        var existingItem = await _itemRepository.GetItemByIdAsync(request.Id, cancellationToken);
+
+        if (existingItem is not null)
         {
-            return await Task.FromResult(Unit.Value);
+            return Unit.Value;
         }
-
-        var item = new Item(request.Id, request.Name, request.Description, request.Price, request.ImageUrl, request.CreatedAt, request.StockQuantity, request.SoldQuantity, request.CategoryId, request.CategoryName, request.BrandId, request.BrandName);
+        
+        var item = new Item(request.Id, request.Name, request.Description, request.Price, request.ImageUrl, request.CreatedAt, request.StockQuantity, request.SoldQuantity, request.CategoryId, request.CategoryName, request.BrandId, request.BrandName, ownerReviews);
 
         await _itemRepository.CreateItemAsync(item, cancellationToken);
         return Unit.Value;

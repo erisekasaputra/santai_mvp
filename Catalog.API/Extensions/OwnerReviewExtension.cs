@@ -1,20 +1,53 @@
-﻿using Catalog.API.DTOs.OwnerReviewDto;
-using Catalog.Domain.Aggregates.ItemAggregate;
+﻿using Catalog.API.DTOs.OwnerReview; 
 using Catalog.Domain.Aggregates.OwnerReviewAggregate;
 
 namespace Catalog.API.Extensions;
 
 public static class OwnerReviewExtension
 {
-    public static IEnumerable<OwnerReview> ToOwnerReviews(this IEnumerable<OwnerReviewDto> ownerReviewsDto)
+    public static IEnumerable<OwnerReview?> ToOwnerReviews(this IEnumerable<OwnerReviewDto> ownerReviewsDto)
     { 
-        foreach(var ownerReview in ownerReviewsDto)
+        if (ownerReviewsDto is null)
+        { 
+            yield break;
+        }
+
+        foreach(var ownerReview in ownerReviewsDto!)
         {
             yield return ownerReview.ToOwnerReview();
         }
     }
-    public static OwnerReview ToOwnerReview(this OwnerReviewDto ownerReview) 
+    public static OwnerReview? ToOwnerReview(this OwnerReviewDto ownerReview) 
     {
+        if (ownerReview is null)
+        {
+            return null;
+        }
+
         return new OwnerReview(ownerReview.Title, ownerReview.Rating);
+    }    
+
+
+    
+    public static IEnumerable<OwnerReviewDto?> ToOwnerReviewsDto(this IEnumerable<OwnerReview> ownerReviewsDto)
+    { 
+        if (ownerReviewsDto is null)
+        { 
+            yield break;
+        }
+
+        foreach(var ownerReview in ownerReviewsDto!)
+        {
+            yield return ownerReview.ToOwnerReviewDto();
+        }
+    }
+    public static OwnerReviewDto? ToOwnerReviewDto(this OwnerReview ownerReview) 
+    {
+        if (ownerReview is null)
+        {
+            return null;
+        }
+
+        return new OwnerReviewDto(ownerReview.Title, ownerReview.Rating);
     }
 }

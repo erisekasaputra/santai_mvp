@@ -12,4 +12,5 @@ public record ItemCreatedIntegrationEvent(
     string CategoryId,
     string CategoryName,
     string BrandId,
-    string BrandName);
+    string BrandName,
+    IEnumerable<OwnerReviewIntegrationEvent>? OwnerReviews);

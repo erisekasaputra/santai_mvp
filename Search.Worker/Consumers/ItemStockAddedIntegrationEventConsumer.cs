@@ -1,0 +1,19 @@
+﻿using Catalog.Contracts;
+using MassTransit;
+using MediatR; 
+using Search.Worker.Applications.Commands.AddStock;
+
+namespace Search.Worker.Consumers;
+
+internal class ItemStockAddedIntegrationEventConsumer(IMediator mediator) : IConsumer<ItemStockAddedIntegrationEvent>
+{
+    private readonly IMediator _mediator = mediator;
+    public async Task Consume(ConsumeContext<ItemStockAddedIntegrationEvent> context)
+    {
+        var @event = context.Message;
+
+        var command = new AddStockCommand(@event.Id, @event.Quantity);
+
+        await _mediator.Send(command);
+    }
+}

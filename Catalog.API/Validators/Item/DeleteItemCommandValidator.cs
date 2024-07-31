@@ -1,4 +1,4 @@
-﻿using Catalog.API.Commands.Items.DeleteItem;
+﻿using Catalog.API.Applications.Commands.Items.DeleteItem;
 using FluentValidation;
 
 namespace Catalog.API.Validators.Item;

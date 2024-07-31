@@ -1,6 +1,5 @@
-﻿using Catalog.API.DTOs.ItemDto; 
-using Catalog.Domain.Aggregates.ItemAggregate;
-using System.Linq;
+﻿using Catalog.API.DTOs.Item; 
+using Catalog.Domain.Aggregates.ItemAggregate; 
 
 namespace Catalog.API.Extensions;
 
@@ -26,7 +25,10 @@ public static class ItemExtension
             item.StockQuantity,
             item.SoldQuantity,
             item.CategoryId,
-            item.Category.Name
+            item.Category.Name,
+            item.BrandId,
+            item.Brand.Name,
+            item.OwnerReviews.ToOwnerReviewsDto()!
         );
     }
 }

@@ -32,4 +32,8 @@
   <ItemGroup>
     <ProjectReference Include="..\Catalog.Contracts\Catalog.Contracts.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Applications\DTOs\" />
+  </ItemGroup>
 </Project>

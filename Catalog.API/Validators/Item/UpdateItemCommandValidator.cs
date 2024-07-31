@@ -1,4 +1,4 @@
-﻿using Catalog.API.Commands.Items.UpdateItem;
+﻿using Catalog.API.Applications.Commands.Items.UpdateItem;
 using FluentValidation;
 
 namespace Catalog.API.Validators.Item;
@@ -40,6 +40,11 @@ public class UpdateItemCommandValidator : AbstractValidator<UpdateItemCommand>
         RuleFor(x => x.BrandId)
             .NotEmpty().WithMessage("Brand ID is required.")
             .Length(26).WithMessage("The length of the brand ID should be 26 characters.");
+
+        When(x => x.OwnerReviews is not null && x.OwnerReviews.Any(), () =>
+        {
+            RuleForEach(e => e.OwnerReviews).SetValidator(new ItemOwnerReviewsCommandValidator());
+        });
     }
 
     private bool BeAValidUrl(string url)

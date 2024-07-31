@@ -1,4 +1,4 @@
-﻿using Catalog.API.Queries.Brands.GetBrandById;
+﻿using Catalog.API.Applications.Queries.Brands.GetBrandById;
 using FluentValidation;
 
 namespace Catalog.API.Validators.Brand;

@@ -2,6 +2,7 @@
 using Catalog.Domain.Aggregates.CategoryAggregate;
 using Catalog.Domain.Aggregates.ItemAggregate;
 using Catalog.Domain.SeedWork;
+using Catalog.Infrastructure.Helpers;
 using Catalog.Infrastructure.Repositories;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -12,12 +13,13 @@ namespace Catalog.Infrastructure;
 public class UnitOfWork : IUnitOfWork
 {
     public readonly CatalogDbContext _context;
+    public readonly MetaTableHelper _metaTableHelper;
     
-    public IItemRepository Items => _itemRepository ??= new ItemRepository(_context);
+    public IItemRepository Items => _itemRepository ??= new ItemRepository(_context, _metaTableHelper);
 
-    public ICategoryRepository Categories => _categoryRepository ??= new CategoryRepository(_context);
+    public ICategoryRepository Categories => _categoryRepository ??= new CategoryRepository(_context, _metaTableHelper);
 
-    public IBrandRepository Brands => _brandRepository ??= new BrandRepository(_context); 
+    public IBrandRepository Brands => _brandRepository ??= new BrandRepository(_context, _metaTableHelper); 
 
     public IItemRepository _itemRepository;
 
@@ -29,12 +31,13 @@ public class UnitOfWork : IUnitOfWork
 
     private readonly IMediator _mediator;
 
-    public UnitOfWork(CatalogDbContext context, IMediator mediator)
+    public UnitOfWork(CatalogDbContext context, IMediator mediator, MetaTableHelper metaTableHelper)
     {
         _context = context;
-        _itemRepository = new ItemRepository(_context);
-        _categoryRepository = new CategoryRepository(_context);
-        _brandRepository = new BrandRepository(_context);
+        _metaTableHelper = metaTableHelper;
+        _itemRepository = new ItemRepository(_context, metaTableHelper);
+        _categoryRepository = new CategoryRepository(_context, metaTableHelper);
+        _brandRepository = new BrandRepository(_context, metaTableHelper);
         _mediator = mediator;
     }
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

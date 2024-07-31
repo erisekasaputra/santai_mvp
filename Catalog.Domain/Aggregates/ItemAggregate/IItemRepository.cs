@@ -11,4 +11,6 @@ public interface IItemRepository
     void UpdateItem(Item item);
 
     void DeleteItem(Item item);
+
+    Task<ICollection<Item>> GetItemsWithLockAsync(IEnumerable<string> itemIds);
 }

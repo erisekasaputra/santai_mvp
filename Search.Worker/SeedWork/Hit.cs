@@ -2,5 +2,5 @@
 
 public class Hit<T>
 {
-    public T? _source { get; set; }
+    public T _source { get; set; }
 }

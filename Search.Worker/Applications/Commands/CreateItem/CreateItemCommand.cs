@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Catalog.Contracts;
+using MediatR;
 
 namespace Search.Worker.Applications.Commands.CreateItem;
 
@@ -14,6 +15,5 @@ public record CreateItemCommand (
     string CategoryId,
     string CategoryName,
     string BrandId,
-    string BrandName) : IRequest<Unit>
-{
-}
+    string BrandName, 
+    IEnumerable<OwnerReviewIntegrationEvent> OwnerReviews) : IRequest<Unit>;

@@ -1,4 +1,4 @@
-﻿using Catalog.API.DTOs.CategoryDto;
+﻿using Catalog.API.DTOs.Category;
 using Catalog.Domain.Aggregates.CategoryAggregate;
 
 namespace Catalog.API.Extensions;

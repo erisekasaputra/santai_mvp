@@ -9,7 +9,7 @@ public class DeleteItemCommandHandler(IItemRepository itemRepository) : IRequest
 
     public async Task<Unit> Handle(DeleteItemCommand request, CancellationToken cancellationToken)
     {
-        var item = await _itemRepository.GetItemById(request.Id, cancellationToken);
+        var item = await _itemRepository.GetItemByIdAsync(request.Id, cancellationToken);
 
         if (item is null)
         {

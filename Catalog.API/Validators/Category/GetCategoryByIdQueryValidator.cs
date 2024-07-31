@@ -1,4 +1,4 @@
-﻿using Catalog.API.Queries.Categories.GetCategoryById;
+﻿using Catalog.API.Applications.Queries.Categories.GetCategoryById;
 using FluentValidation;
 
 namespace Catalog.API.Validators.Category;

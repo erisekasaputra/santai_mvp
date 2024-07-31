@@ -1,10 +1,10 @@
-﻿using Catalog.API.Commands.Categories.CreateCategory;
-using Catalog.API.Commands.Categories.DeleteCategory;
-using Catalog.API.Commands.Categories.UpdateCategory;
-using Catalog.API.DTOs.CategoryDto;
-using Catalog.API.Queries.Categories.GetCategoryById;
-using Catalog.API.Queries.Categories.GetCategoryPaginated;
-using Catalog.API.SeedWorks;
+﻿using Catalog.API.Applications.Commands.Categories.CreateCategory;
+using Catalog.API.Applications.Commands.Categories.DeleteCategory;
+using Catalog.API.Applications.Commands.Categories.UpdateCategory;
+using Catalog.API.Applications.Queries.Categories.GetCategoryById;
+using Catalog.API.Applications.Queries.Categories.GetCategoryPaginated;
+using Catalog.API.DTOs.Category;
+using Catalog.API.SeedWork;
 using Catalog.API.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "UmqVyynv5KY=",
+  "dgSpecHash": "HgWSYzBN5+I=",
   "success": true,
   "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Catalog.API\\Catalog.API.csproj",
   "expectedPackageFiles": [
@@ -78,6 +78,8 @@
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.win32.systemevents\\9.0.0-preview.6.24327.7\\microsoft.win32.systemevents.9.0.0-preview.6.24327.7.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\mono.texttemplating\\3.0.0-preview-0052-g5d0f76c785\\mono.texttemplating.3.0.0-preview-0052-g5d0f76c785.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\polly\\8.4.1\\polly.8.4.1.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\polly.core\\8.4.1\\polly.core.8.4.1.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\rabbitmq.client\\6.8.1\\rabbitmq.client.6.8.1.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\serilog\\4.0.1-dev-02205\\serilog.4.0.1-dev-02205.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\serilog.sinks.periodicbatching\\5.0.1-dev-00860\\serilog.sinks.periodicbatching.5.0.1-dev-00860.nupkg.sha512",

@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Catalog.API.Queries.Items.GetItemPaginated;
+using Catalog.API.Applications.Queries.Items.GetItemPaginated;
 
 namespace Catalog.API.Validators.Item;
 
