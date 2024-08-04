@@ -4,13 +4,11 @@ using Account.Domain.SeedWork;
 
 namespace Account.Domain.Aggregates.LoyaltyAggregate;
 
-public class LoyaltyProgram : Entity
+public class LoyaltyProgram : Entity, IAggregateRoot
 {   
     public Guid LoyaltyUserId { get; private set; }
 
-    public BusinessUser BusinessUser { get; private set; }
-
-    public RegularUser RegularUser { get; private set; }
+    public User User { get; private set; } 
 
     public int LoyaltyPoints { get; private set; }
 
@@ -21,10 +19,11 @@ public class LoyaltyProgram : Entity
 
     }
      
-    public LoyaltyProgram(Guid loyaltyUserId, int loyaltyPoints, LoyaltyTier loyaltyTier)
-    {
-        ArgumentOutOfRangeException.ThrowIfNegative(loyaltyPoints, "Can not set loyalty point into negative number");
-         
+    public LoyaltyProgram(
+        Guid loyaltyUserId,
+        int loyaltyPoints,
+        LoyaltyTier loyaltyTier)
+    {  
         LoyaltyUserId = loyaltyUserId;
         LoyaltyPoints = loyaltyPoints;
         LoyaltyTier = LoyaltyTier.Basic; 

@@ -1,4 +1,7 @@
-﻿using Account.Domain.Enumerations;
+﻿using Account.Domain.Aggregates.LoyaltyAggregate;
+using Account.Domain.Aggregates.ReferralAggregate;
+using Account.Domain.Aggregates.ReferredAggregate;
+using Account.Domain.Enumerations;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects;
@@ -7,6 +10,8 @@ namespace Account.Domain.Aggregates.UserAggregate;
 
 public abstract class User : Entity, IAggregateRoot
 {
+    public Guid IdentityId { get; set; }
+
     public string Username { get; private init; }
 
     public string Email { get; private set; }
@@ -29,12 +34,19 @@ public abstract class User : Entity, IAggregateRoot
 
     public Address Address { get; set; }
 
+    public ReferralProgram ReferralProgram { get; private set; }
+
+    public LoyaltyProgram LoyaltyProgram { get; private set; }
+
+    public ICollection<ReferredProgram> ReferredPrograms { get; set; }
+
     public User()
     {
     }
 
-    public User(string username, string email, string phoneNumber, Address address)
+    public User(Guid identityId, string username, string email, string phoneNumber, Address address, int referralRewardPoint)
     {
+        IdentityId = identityId != default ? identityId : throw new ArgumentNullException(nameof(identityId));
         Username = username ?? throw new ArgumentNullException(nameof(username));
         Email = email ?? throw new ArgumentNullException(nameof(email));
         PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
@@ -47,6 +59,9 @@ public abstract class User : Entity, IAggregateRoot
         NewPhoneNumber = PhoneNumber;
         IsEmailVerified = false;
         IsPhoneNumberVerified = false;
+
+        ReferralProgram = new ReferralProgram(Id, DateTime.UtcNow, referralRewardPoint);
+        LoyaltyProgram = new LoyaltyProgram(Id, 0, Enumerations.LoyaltyTier.Basic);
     }
 
     protected virtual void UpdateEmail(string email)

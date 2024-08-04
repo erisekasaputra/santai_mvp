@@ -2,7 +2,7 @@
 
 public enum ReferralStatus
 {
-    Pending,
-    Converted,
-    Expired
+    Pending = 0,
+    Converted = 1,
+    Expired = 2,
 }

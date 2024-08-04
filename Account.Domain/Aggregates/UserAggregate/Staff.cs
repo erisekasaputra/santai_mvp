@@ -12,21 +12,21 @@ public class Staff : Entity, IAggregateRoot
 
     public string BusinessUserCode { get; private init; }
 
+    public BusinessUser BusinessUser { get; set; } // Only for navigation properties, does not have to be instantiated
+
     public string PhoneNumber { get; private set; }
 
-    private string? NewPhoneNumber { get; set; }
+    public string? NewPhoneNumber { get; private set; }
 
     public bool IsPhoneNumberVerified { get; private set; }
 
     public string Email { get; private set; }
 
-    private string? NewEmail { get; set; }
+    public string? NewEmail { get; private set; }
 
     public bool IsEmailVerified { get; private set; }
 
-    public string Name { get; private set; }
-     
-    public BusinessUser BusinessUser { get; set; } // Only for navigation properties, does not have to be instantiated
+    public string Name { get; private set; } 
 
     public string? DeviceId { get; private set; }
 
@@ -44,19 +44,31 @@ public class Staff : Entity, IAggregateRoot
         string email,
         string phoneNumber,
         string name,
+        Address address,
         string? deviceId)
     {
-        Username = username;
-        Email = email ?? throw new ArgumentNullException( nameof(email));
-        PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
-        Name = name ?? throw new ArgumentNullException(nameof(name));
         BusinessUserId = businessUserId != default ? businessUserId : throw new ArgumentNullException(nameof(businessUserId));
+        
         BusinessUserCode = businessUserCode ?? throw new ArgumentNullException(nameof(businessUserCode));
+        
+        Username = username;
+        
+        Email = email ?? throw new ArgumentNullException( nameof(email));
+        
+        PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
+        
+        Name = name ?? throw new ArgumentNullException(nameof(name));
+        
+        Address = address;
+        
         DeviceId = deviceId ?? null;
 
         NewEmail = email;
+        
         NewPhoneNumber = phoneNumber;
+        
         IsEmailVerified = false;
+        
         IsPhoneNumberVerified = false; 
     }
 

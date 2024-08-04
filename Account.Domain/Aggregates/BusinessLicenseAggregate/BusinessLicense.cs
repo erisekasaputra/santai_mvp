@@ -17,7 +17,7 @@ public class BusinessLicense : Entity, IAggregateRoot
 
     public string Description { get; private set; } 
 
-    public DocumentVerificationStatus VerificationStatus { get; private set; }
+    public VerificationState VerificationStatus { get; private set; }
 
     public BusinessLicense()
     {
@@ -30,29 +30,29 @@ public class BusinessLicense : Entity, IAggregateRoot
         Name = name;
         Description = description;
         LicenseNumber = licenseNumber;
-        VerificationStatus = DocumentVerificationStatus.Waiting;
+        VerificationStatus = VerificationState.Waiting;
         BusinessUser = new();
     }
     public void VerifyDocument()
     {
-        if (!VerificationStatus.Equals(DocumentVerificationStatus.Waiting))
+        if (!VerificationStatus.Equals(VerificationState.Waiting))
         {
-            RaiseVerificationStatusChangedException(DocumentVerificationStatus.Accepted);
+            RaiseVerificationStatusChangedException(VerificationState.Accepted);
         }
 
-        VerificationStatus = DocumentVerificationStatus.Accepted;
+        VerificationStatus = VerificationState.Accepted;
 
         RaiseDocumentAcceptedDomainEvent();
     }
 
     public void RejectDocument()
     {
-        if (!VerificationStatus.Equals(DocumentVerificationStatus.Waiting))
+        if (!VerificationStatus.Equals(VerificationState.Waiting))
         {
-            RaiseVerificationStatusChangedException(DocumentVerificationStatus.Rejected);
+            RaiseVerificationStatusChangedException(VerificationState.Rejected);
         }
 
-        VerificationStatus = DocumentVerificationStatus.Rejected;
+        VerificationStatus = VerificationState.Rejected;
 
         RaiseDocumentRejectedDomainEvent();
     }
@@ -67,7 +67,7 @@ public class BusinessLicense : Entity, IAggregateRoot
         throw new NotImplementedException();
     }
 
-    private void RaiseVerificationStatusChangedException(DocumentVerificationStatus documentVerificationStatus)
+    private void RaiseVerificationStatusChangedException(VerificationState documentVerificationStatus)
     {
         throw new DomainException($"Can not change document verification status from {VerificationStatus} to {documentVerificationStatus}");
     }

@@ -10,9 +10,9 @@ public class PersonalInfo : ValueObject
     public string? LastName { get; set; }
     public DateTime DateOfBirth { get; set; }
     public Gender Gender { get; set; }
-    public string ProfilePictureUrl { get; set; }
+    public string? ProfilePictureUrl { get; set; }
 
-    public PersonalInfo(string firstName, string? middleName, string? lastName, DateTime dateOfBirth, Gender gender, string profilePictureUrl)
+    public PersonalInfo(string firstName, string? middleName, string? lastName, DateTime dateOfBirth, Gender gender, string? profilePictureUrl)
     {
         FirstName = firstName;
         MiddleName = middleName;

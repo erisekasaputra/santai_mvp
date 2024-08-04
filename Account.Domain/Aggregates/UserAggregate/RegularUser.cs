@@ -1,18 +1,13 @@
-﻿using Account.Domain.Aggregates.LoyaltyAggregate;
-using Account.Domain.Exceptions;
+﻿using Account.Domain.Exceptions;
 using Account.Domain.ValueObjects;
 
 namespace Account.Domain.Aggregates.UserAggregate;
 
 public class RegularUser : User
 {
-    public PersonalInfo PersonalInfo { get; private set; }
+    public PersonalInfo PersonalInfo { get; private set; } 
 
-    public ReferralProgram ReferralProgram { get; private set; }
-
-    public LoyaltyProgram LoyaltyProgram { get; private set; }
-
-    public string? DeviceId { get; private set; }
+    public string DeviceId { get; private set; } 
 
     public RegularUser() : base()
     {
@@ -20,17 +15,16 @@ public class RegularUser : User
     }
 
     public RegularUser(
+        Guid identityId,
         string username,
         string email,
         string phoneNumber,
         Address address,
         PersonalInfo personalInfo,
-        string deviceId,
-        int referralRewardPoint) : base(username, email, phoneNumber, address)
+        int referralRewardPoint,
+        string deviceId) : base(identityId, username, email, phoneNumber, address, referralRewardPoint)
     {
-        PersonalInfo = personalInfo ?? throw new ArgumentNullException(nameof(personalInfo));
-        ReferralProgram = new ReferralProgram(Id, DateTime.UtcNow, referralRewardPoint);
-        LoyaltyProgram = new LoyaltyProgram(Id, 0, Enumerations.LoyaltyTier.Basic);
+        PersonalInfo = personalInfo ?? throw new ArgumentNullException(nameof(personalInfo)); 
         DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
 
         RaiseRegularUserCreatedDomainEvent();

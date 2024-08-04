@@ -10,7 +10,11 @@ builder.Services.AddDbContext<AccountDbContext>(options =>
     options.UseSqlServer(builder.Configuration["Database:SqlServer"], action =>
     {
         action.CommandTimeout(TimeSpan.FromSeconds(10).Seconds);
-    });
+
+        action.MigrationsAssembly("Account.API");
+
+        Console.WriteLine(typeof(Program).Assembly.GetName());
+    }); 
 });
 
 var app = builder.Build();

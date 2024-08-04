@@ -1,8 +1,8 @@
 ﻿using Account.Domain.Aggregates.CertificationAggregate;
-using Account.Domain.Aggregates.IdentificationAggregate;
-using Account.Domain.Enumerations;
+using Account.Domain.Aggregates.IdentificationAggregate;  
 using Account.Domain.Exceptions;
-using Account.Domain.ValueObjects; 
+using Account.Domain.ValueObjects;
+using Account.Domain.Enumerations;
 
 namespace Account.Domain.Aggregates.UserAggregate;
 
@@ -12,15 +12,15 @@ public class MechanicUser : User
 
     public IReadOnlyCollection<Certification>? Certifications => _certifications?.AsReadOnly();
 
-    public Identification? DrivingLicense { get; private set; }
+    public ICollection<DrivingLicense>? DrivingLicenses { get; private set; } // Navigation properties
 
-    public Identification? NationalID { get; private set; }
+    public ICollection<NationalIdentity>? NationalIdentities { get; private set; } // Navigation properties
 
     public decimal Rating { get; private set; }
      
-    public bool VerificationStatus { get; private set; }
+    public bool IsVerified { get; private set; }
 
-    public string? DeviceId { get; private set; } 
+    public string DeviceId { get; private set; } 
 
     public MechanicUser() : base()
     {
@@ -28,14 +28,16 @@ public class MechanicUser : User
     } 
 
     public MechanicUser(
+        Guid identityId,
         string username,
         string email,
         string phoneNumber,
         Address address,
-        string deviceId) : base(username, email, phoneNumber, address)
+        int referralRewardPoint,
+        string deviceId) : base(identityId, username, email, phoneNumber, address, referralRewardPoint)
     {  
         Rating = 5;
-        VerificationStatus = false;
+        IsVerified = false;
         DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
 
         RaiseMechanicUserCreatedDomainEvent();
@@ -71,34 +73,38 @@ public class MechanicUser : User
 
     public void SetDrivingLicense(string identificationNumber, string frontSideImageUrl, string backSideImageUrl)
     {
-        if (DrivingLicense is not null)
+        if (DrivingLicenses is not null)
         {
             throw new DomainException("Can not set Driving License once the Driving License is already set");
         } 
 
-        if (VerificationStatus)
+        if (IsVerified)
         {
             throw new DomainException($"Can not set Driving License once the document is verified");
         }
 
-        DrivingLicense = Identification.CreateDrivingLicense(Id, identificationNumber, frontSideImageUrl, backSideImageUrl);
+        DrivingLicenses ??= [];
+
+        DrivingLicenses.Add(new DrivingLicense(Id, identificationNumber, frontSideImageUrl, backSideImageUrl));
 
         RaiseDrivingLicenseSetDomainEvent();
     }  
 
     public void SetNationalID(string identificationNumber, string frontSideImageUrl, string backSideImageUrl)
     {
-        if (NationalID is not null)
+        if (NationalIdentities is not null)
         {
             throw new DomainException("Can not set National ID once the National ID is already set");
         } 
 
-        if (VerificationStatus)
+        if (IsVerified)
         {
             throw new DomainException($"Can not set National ID once the document is verified");
         }
 
-        NationalID = Identification.CreateNationalID(Id, identificationNumber, frontSideImageUrl, backSideImageUrl);
+        NationalIdentities ??= [];
+
+        NationalIdentities.Add(new NationalIdentity(Id, identificationNumber, frontSideImageUrl, backSideImageUrl));
 
         RaiseNationalIDSetDomainEvent();
     } 
@@ -185,43 +191,41 @@ public class MechanicUser : User
 
     public void VerifyDocument()
     {
-        ValidateDocumentPresence();
-        
-        ValidateDocumentVerification();
-
-        VerificationStatus = true;
-    } 
-
-    private void ValidateDocumentPresence()
-    {
-        if (DrivingLicense is null && NationalID is null)
+        if ((DrivingLicenses is null || !DrivingLicenses.Any()) && (NationalIdentities is null || !NationalIdentities.Any()))
         {
-            throw new DomainException("Both driving license and national ID are empty. Please submit valid documents.");
+            throw new DomainException("Both driving license and national identity are empty. Please submit valid documents.");
         }
 
-        if (DrivingLicense is null)
+        if (DrivingLicenses is null || !DrivingLicenses.Any())
         {
             throw new DomainException("Driving license document is empty. Please submit a valid document.");
         }
 
-        if (NationalID is null)
+        if (NationalIdentities is null || !NationalIdentities.Any())
         {
-            throw new DomainException("National ID document is empty. Please submit a valid document.");
-        } 
-    }
-
-    private void ValidateDocumentVerification()
-    {
-        if (DrivingLicense is not null && DrivingLicense.IsVerified == DocumentVerificationStatus.Accepted)
-        {
-            throw new DomainException("The driving license must be verified first.");
+            throw new DomainException("National identity document is empty. Please submit a valid document.");
         }
 
-        if (NationalID is not null && NationalID.IsVerified == DocumentVerificationStatus.Accepted)
+        var verifiedDrivingLicense = DrivingLicenses.FirstOrDefault(x => x.VerificationStatus == VerificationState.Accepted);
+        var verifiedNationalIdentity = NationalIdentities.FirstOrDefault(x => x.VerificationStatus == VerificationState.Accepted);
+
+        if (verifiedDrivingLicense is null && verifiedNationalIdentity is null)
         {
-            throw new DomainException("The national ID must be verified first.");
+            throw new DomainException("Both driving license and national identity are rejected. Please re-submit documents.");
         }
-    }
+
+        if (verifiedDrivingLicense is null)
+        {
+            throw new DomainException("Driving license document is rejected. Please re-submit document.");
+        }
+
+        if (verifiedNationalIdentity is null)
+        {
+            throw new DomainException("National identity document is rejected. Please re-submit document.");
+        }
+
+        IsVerified = true;
+    }  
 
     private void RaiseEmailUpdatedDomainEvent()
     {

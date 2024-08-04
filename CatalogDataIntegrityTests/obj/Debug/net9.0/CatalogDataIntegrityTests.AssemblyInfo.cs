@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("CatalogDataIntegrityTests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+80ac718e5f1c92bf4bd8dbaa52c64aa4bed9c166")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+97a0c9f4e79046377b71b85b90d878bf8e0bcfc8")]
 [assembly: System.Reflection.AssemblyProductAttribute("CatalogDataIntegrityTests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("CatalogDataIntegrityTests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "qUKtFVcNohI=",
+  "dgSpecHash": "aWcPgijJH4Q=",
   "success": true,
-  "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Account.Infrastructure\\Account.Infrastructure.csproj",
+  "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Account.Infrastructure\\Account.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.core\\3.7.304.30\\awssdk.core.3.7.304.30.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.simplenotificationservice\\3.7.302.1\\awssdk.simplenotificationservice.3.7.302.1.nupkg.sha512",
