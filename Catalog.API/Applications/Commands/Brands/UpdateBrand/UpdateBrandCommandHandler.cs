@@ -16,8 +16,7 @@ public class UpdateBrandCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler
             return Result<Unit>.Failure($"Brand with id {request.Id} is not found", 404);
         }
 
-        brand.Name = request.Name;
-        brand.ImageUrl = request.ImageUrl;
+        brand.Update(request.Name, request.ImageUrl); 
 
         _unitOfWork.Brands.UpdateBrand(brand);
 

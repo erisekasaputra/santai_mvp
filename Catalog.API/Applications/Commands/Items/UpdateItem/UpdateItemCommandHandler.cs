@@ -28,12 +28,13 @@ public class UpdateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
             return Result<Unit>.Failure($"Item with id {request.Id} is not found", 404);
         }
 
-        var ownerReviews = request.OwnerReviews.ToOwnerReviews().ToList();
+        if (item.IsDeleted)
+        {
+            return Result<Unit>.Failure($"Item with id {request.Id} is not found or it has been deleted", 404);
+        }
 
-        item.Update(request.Name, request.Description, request.ImageUrl, category.Id, category, brand.Id, brand, ownerReviews!);
-        item.SetPrice(request.Price);
-        item.SetStockQuantity(request.StockQuantity);
-        item.SetSoldQuantity(request.SoldQuantity);
+        var ownerReviews = request.OwnerReviews.ToOwnerReviews().ToList(); 
+        item.Update(request.Name, request.Description, request.ImageUrl, category.Id, category, brand.Id, brand, request.IsActive, ownerReviews!, request.Price, request.StockQuantity, request.SoldQuantity); 
 
         _unitOfWork.Items.UpdateItem(item);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

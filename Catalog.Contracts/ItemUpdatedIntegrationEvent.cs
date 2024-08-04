@@ -1,4 +1,6 @@
-﻿namespace Catalog.Contracts; 
+﻿using MediatR;
+
+namespace Catalog.Contracts; 
 
 public record ItemUpdatedIntegrationEvent(
     string Id,
@@ -9,8 +11,12 @@ public record ItemUpdatedIntegrationEvent(
     DateTime CreatedAt,
     int StockQuantity,
     int SoldQuantity,
-    string CategoryId,
-    string CategoryName,
-    string BrandId,
-    string BrandName,
-    IEnumerable<OwnerReviewIntegrationEvent>? OwnerReviews);
+    string? CategoryId,
+    string? CategoryName,
+    string? CategoryImageUrl,
+    string? BrandId,
+    string? BrandName,
+    string? BrandImageUrl,
+    bool IsActive,
+    bool IsDeleted,
+    IEnumerable<OwnerReviewIntegrationEvent>? OwnerReviews) : INotification;

@@ -10,12 +10,22 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
     private readonly CatalogDbContext _context = context;
 
     private readonly MetaTableHelper _metaTableHelper = metaTableHelper;
-     
+
     public async Task<Item> CreateItemAsync(Item item)
-    { 
-        var result = await _context.Items.AddAsync(item); 
+    {
+        var result = await _context.Items.AddAsync(item);
         return result.Entity;
-    } 
+    }
+
+    public async Task<Item?> RetrieveItemById(string id)
+    {
+        return await _context.Items
+            .Where (x => !x.IsDeleted)
+            .Include(p => p.Category)
+            .Include(p => p.Brand)
+            .Include(p => p.OwnerReviews)
+            .FirstOrDefaultAsync(e => e.Id == id);
+    }
   
     public async Task<Item?> GetItemByIdAsync(string id)
     {
@@ -36,6 +46,7 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
 
         var items = await query.Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
+            .Where(w => !w.IsDeleted)
             .Include(d => d.Category)
             .AsNoTracking()
             .OrderBy(x => x.Name)
@@ -47,12 +58,7 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
     public void UpdateItem(Item item)
     { 
         _context.Items.Update(item);
-    }
-    public void DeleteItem(Item item)
-    {
-        item.Delete();
-        _context.Items.Remove(item);
-    }
+    } 
 
     public async Task<ICollection<Item>> GetItemsWithLockAsync(IEnumerable<string> itemIds)
     {
@@ -66,7 +72,7 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
         }).ToArray();
 
         var sql = @$"SELECT *
-                        FROM {tableName} WITH (UPDLOCK, ROWLOCK) WHERE {itemIdColumn} IN ({string.Join(", ", parameterNames)})";
+                        FROM {tableName} WITH (UPDLOCK, ROWLOCK) WHERE {itemIdColumn} IN ({string.Join(", ", parameterNames)}) AND IsDeleted = 0; ";
 
         var parameters = itemIds.Select((id, index) =>
         { 
@@ -76,4 +82,21 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
          
         return await _context.Items.FromSqlRaw(sql, parameters).ToListAsync(); 
     }
+
+    public async Task MarkBrandIdToNullByDeletingBrandByIdAsync(string brandId)
+    {
+        string? Null = null;
+
+        await _context.Items.Where(x => x.BrandId == brandId)
+            .ExecuteUpdateAsync(u => 
+                                    u.SetProperty(p => p.BrandId, Null));
+    } 
+    public async Task MarkCategoryIdToNullByDeletingCategoryByIdAsync(string categoryId)
+    {
+        string? Null = null;
+
+        await _context.Items.Where(x => x.CategoryId == categoryId)
+            .ExecuteUpdateAsync(u => 
+                                    u.SetProperty(p => p.CategoryId, Null));
+    }  
 }

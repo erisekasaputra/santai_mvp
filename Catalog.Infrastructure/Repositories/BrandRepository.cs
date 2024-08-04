@@ -15,15 +15,12 @@ public class BrandRepository(CatalogDbContext context, MetaTableHelper metaTable
 
         return entry.Entity; 
     }
-
-    public void DeleteBrand(Brand item)
-    {
-        _context.Brands.Remove(item);
-    }
-
+     
     public async Task<Brand?> GetBrandByIdAsync(string id)
     {
-        return await _context.Brands.FirstOrDefaultAsync(x => x.Id == id);    
+        return await _context.Brands
+            .Where(w => !w.IsDeleted)
+            .FirstOrDefaultAsync(x => x.Id == id);    
     }
 
     public async Task<(int TotalCount, int TotalPages, IEnumerable<Brand> Brands)> GetPaginatedBrandsAsync(int pageNumber, int pageSize)
@@ -35,8 +32,9 @@ public class BrandRepository(CatalogDbContext context, MetaTableHelper metaTable
         var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
         var items = await query.Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize) 
-            .AsNoTracking()
+            .Take(pageSize)
+            .Where(w => !w.IsDeleted)
+            .AsNoTracking() 
             .OrderBy(x => x.Name)
             .ToListAsync();
 
@@ -50,6 +48,9 @@ public class BrandRepository(CatalogDbContext context, MetaTableHelper metaTable
 
     public async Task<Brand?> GetBrandByNameAsync(string name)
     {
-        return await _context.Brands.FirstOrDefaultAsync(x => x.Name.ToLower().Trim() == name.ToLower().Trim());
+        return await _context
+            .Brands
+            .Where(w => !w.IsDeleted)
+            .FirstOrDefaultAsync(x => x.Name.ToLower().Trim() == name.ToLower().Trim());
     }
 }

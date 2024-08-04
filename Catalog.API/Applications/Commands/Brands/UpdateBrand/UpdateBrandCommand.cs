@@ -6,4 +6,5 @@ namespace Catalog.API.Applications.Commands.Brands.UpdateBrand;
 public record UpdateBrandCommand(
     string Id,
     string Name,
-    string ImageUrl) : IRequest<Result<Unit>>;
+    string ImageUrl,
+    bool IsActive) : IRequest<Result<Unit>>;

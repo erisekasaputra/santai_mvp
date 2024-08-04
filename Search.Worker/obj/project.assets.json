@@ -160,7 +160,7 @@
           }
         }
       },
-      "Elastic.Clients.Elasticsearch/8.14.6": {
+      "Elastic.Clients.Elasticsearch/8.14.8": {
         "type": "package",
         "dependencies": {
           "Elastic.Transport": "0.4.20"
@@ -2705,6 +2705,9 @@
       "Catalog.Contracts/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "MediatR": "12.4.0"
+        },
         "compile": {
           "bin/placeholder/Catalog.Contracts.dll": {}
         },
@@ -2929,16 +2932,16 @@
         "nuget-icon.png"
       ]
     },
-    "Elastic.Clients.Elasticsearch/8.14.6": {
-      "sha512": "aBRUxxsjFa/2r06AX92THijC643QMKw/tR7YP92WecL2swettSj3pgaSdrM1tnGxp00qVmbYlH/pDn9BOj1pZg==",
+    "Elastic.Clients.Elasticsearch/8.14.8": {
+      "sha512": "RtM1D6M7BdVqTyczfW6YMXxM/izlCpUO47l2HsV+dcUSaWRFiIDqLfnFgkVLneeG0qEebKfxnBUPQv7POAPwJg==",
       "type": "package",
-      "path": "elastic.clients.elasticsearch/8.14.6",
+      "path": "elastic.clients.elasticsearch/8.14.8",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "LICENSE.txt",
         "README.md",
-        "elastic.clients.elasticsearch.8.14.6.nupkg.sha512",
+        "elastic.clients.elasticsearch.8.14.8.nupkg.sha512",
         "elastic.clients.elasticsearch.nuspec",
         "lib/net462/Elastic.Clients.Elasticsearch.dll",
         "lib/net462/Elastic.Clients.Elasticsearch.xml",
@@ -7413,7 +7416,7 @@
       "Azure.Identity >= 1.13.0-beta.1",
       "Catalog.Contracts >= 1.0.0",
       "Elastic.Apm.Elasticsearch >= 1.28.0",
-      "Elastic.Clients.Elasticsearch >= 8.14.6",
+      "Elastic.Clients.Elasticsearch >= 8.14.8",
       "EntityFramework >= 6.5.1",
       "MassTransit >= 8.2.4-develop.1875",
       "MassTransit.AmazonSQS >= 8.2.4-develop.1875",
@@ -7493,7 +7496,7 @@
           },
           "Elastic.Clients.Elasticsearch": {
             "target": "Package",
-            "version": "[8.14.6, )"
+            "version": "[8.14.8, )"
           },
           "EntityFramework": {
             "target": "Package",

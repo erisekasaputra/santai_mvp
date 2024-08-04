@@ -16,8 +16,7 @@ public class UpdateCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHand
             return Result<Unit>.Failure($"Category with id {request.Id} is not found", 404);
         }
 
-        category.Name = request.Name;
-        category.ImageUrl = request.ImageUrl;
+        category.Update(request.Name, request.ImageUrl);
 
         _unitOfWork.Categories.UpdateCategory(category);
 

@@ -7,25 +7,21 @@ namespace Catalog.Infrastructure.Repositories;
 public class CategoryRepository(CatalogDbContext dbContext, MetaTableHelper metaTableHelper) : ICategoryRepository
 {
     private readonly CatalogDbContext _context = dbContext; 
-    private readonly MetaTableHelper _metaTableHelper = metaTableHelper;
-    public async Task<Category?> GetCategoryByIdAsync(string id)
-    {
-        return await _context.Categories.FirstOrDefaultAsync(c => c.Id == id);
-    }
-     
+    private readonly MetaTableHelper _metaTableHelper = metaTableHelper; 
 
     public async Task<Category> CreateCategoryAsync(Category item)
     {
         var entry = await _context.Categories.AddAsync(item);
 
         return entry.Entity;
-    }
+    }  
 
-    public void DeleteCategory(Category item)
+    public async Task<Category?> GetCategoryByIdAsync(string id)
     {
-        _context.Categories.Remove(item);
+        return await _context.Categories
+            .Where(w => !w.IsDeleted)
+            .FirstOrDefaultAsync(c => c.Id == id);
     }
-     
 
     public async Task<(int TotalCount, int TotalPages, IEnumerable<Category> Categories)> GetPaginatedCategoriesAsync(int pageNumber, int pageSize)
     {
@@ -37,6 +33,7 @@ public class CategoryRepository(CatalogDbContext dbContext, MetaTableHelper meta
 
         var items = await query.Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
+            .Where(w => !w.IsDeleted)
             .AsNoTracking()
             .OrderBy(x => x.Name)
             .ToListAsync();
@@ -49,14 +46,11 @@ public class CategoryRepository(CatalogDbContext dbContext, MetaTableHelper meta
         _context.Categories.Update(item);
     }
      
-    /// <summary>
-    /// Returning single record or default for Category data    
-    /// </summary>
-    /// <param name="name">the name will be parsed, trimmed, and to lowered</param>
-    /// <returns></returns>
     public Task<Category?> GetCategoryByNameAsync(string name)
     {
-        var category = _context.Categories.FirstOrDefaultAsync(x => x.Name.ToLower().Trim() == name.ToLower().Trim()); 
+        var category = _context.Categories
+            .Where(w => !w.IsDeleted)
+            .FirstOrDefaultAsync(x => x.Name.ToLower().Trim() == name.ToLower().Trim()); 
         return category;
     }
 }

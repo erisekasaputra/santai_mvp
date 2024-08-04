@@ -2303,6 +2303,9 @@
       "Catalog.Contracts/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "MediatR": "12.4.0"
+        },
         "compile": {
           "bin/placeholder/Catalog.Contracts.dll": {}
         },

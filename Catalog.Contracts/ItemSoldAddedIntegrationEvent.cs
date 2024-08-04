@@ -1,3 +1,5 @@
-﻿namespace Catalog.Contracts;
+﻿using MediatR;
 
-public record ItemSoldAddedIntegrationEvent(string Id, int Quantity);
+namespace Catalog.Contracts;
+
+public record ItemSoldAddedIntegrationEvent(string Id, int Quantity) : INotification;

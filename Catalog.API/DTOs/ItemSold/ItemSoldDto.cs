@@ -1,3 +1,3 @@
 ﻿namespace Catalog.API.DTOs.ItemSold;
 
-public record ItemSoldDto(string ItemId, int QuantitySold);
+public record ItemSoldDto(string ItemId, int Quantity, string Message);

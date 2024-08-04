@@ -1,12 +1,15 @@
-﻿using Catalog.API.Applications.Commands.Items.AddSold;
-using Catalog.API.Applications.Commands.Items.AddStock;
+﻿using Catalog.API.Applications.Commands.Items.ActivateItem;
+using Catalog.API.Applications.Commands.Items.AddItemSoldQuantity;
+using Catalog.API.Applications.Commands.Items.AddItemStockQuantity; 
 using Catalog.API.Applications.Commands.Items.CreateItem;
+using Catalog.API.Applications.Commands.Items.DeactivateItem;
 using Catalog.API.Applications.Commands.Items.DeleteItem;
-using Catalog.API.Applications.Commands.Items.ReduceSold;
-using Catalog.API.Applications.Commands.Items.ReduceStock;
-using Catalog.API.Applications.Commands.Items.SetPrice;
-using Catalog.API.Applications.Commands.Items.SetSold;
-using Catalog.API.Applications.Commands.Items.SetStock;
+using Catalog.API.Applications.Commands.Items.ReduceItemSoldQuantity;
+using Catalog.API.Applications.Commands.Items.ReduceItemStockQuantity; 
+using Catalog.API.Applications.Commands.Items.SetItemPrice;
+using Catalog.API.Applications.Commands.Items.SetItemSoldQuantity;
+using Catalog.API.Applications.Commands.Items.SetItemStockQuantity;
+using Catalog.API.Applications.Commands.Items.UndeleteItem;
 using Catalog.API.Applications.Commands.Items.UpdateItem;
 using Catalog.API.Applications.Queries.Items.GetItemById;
 using Catalog.API.Applications.Queries.Items.GetItemPaginated;
@@ -25,20 +28,25 @@ public static class ItemAPI
 
         app.MapGet("/items/{itemId}", GetItemById);
         app.MapGet("/items", GetPaginatedItem);
-        app.MapPost("/items", CreateNewItem);
-        app.MapPut("/items/{itemId}", UpdateItemById);
-        app.MapDelete("/items/{itemId}", DeleteItemById);
-
-        app.MapPatch("/items/stock/reduce", ReduceStocks);
-        app.MapPatch("/items/stock/increase", IncreaseStocks);
-        app.MapPatch("/items/stock", SetStocks);
         
-        app.MapPatch("/items/sold/reduce", ReduceSolds);
-        app.MapPatch("/items/sold/increase", IncreaseSolds);
-        app.MapPatch("/items/sold", SetSolds);
+        app.MapPost("/items", CreateNewItem);
+        
+        app.MapPut("/items/{itemId}", UpdateItemById);
 
-        app.MapPatch("/items/price", SetPrices);
+        app.MapDelete("/items/{itemId}", DeleteItemById);
+        app.MapPatch("/items/{itemId}/undelete", UndeleteItemById);
 
+        app.MapPatch("/items/{itemId}/activate", SetItemActivateById);
+        app.MapPatch("/items/{itemId}/deactivate", SetItemDeactivateById);
+
+        app.MapPatch("/items/stock/reduce", ReduceItemsStock);
+        app.MapPatch("/items/stock/increase", IncreaseItemsStock);
+        app.MapPatch("/items/stock", SetItemsStock);  
+        app.MapPatch("/items/sold/reduce", ReduceItemsSold);
+        app.MapPatch("/items/sold/increase", IncreaseItemsSold);
+        app.MapPatch("/items/sold", SetItemsSold); 
+        app.MapPatch("/items/price", SetItemsPrice); 
+       
         return app;
     }
     private static async Task<IResult> GetItemById(
@@ -211,8 +219,80 @@ public static class ItemAPI
             return TypedResults.InternalServerError();
         }
     }
+    
+    private static async Task<IResult> UndeleteItemById(string itemId, ApplicationService service, IValidator<UndeleteItemCommand> validator)
+    {
+        try
+        {
+            var command = new UndeleteItemCommand(itemId);
+            var validation = await validator.ValidateAsync(command);
+            if (!validation.IsValid)
+            {
+                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
+                var validationErrors = Result<UndeleteItemCommand>.Failure(errors, 400);
+                return TypedResults.BadRequest(validationErrors);
+            }
 
-    private static async Task<IResult> ReduceStocks(ReduceStockCommand command, ApplicationService service, IValidator<ReduceStockCommand> validator)
+            await service.Mediator.Send(command);
+
+            return TypedResults.NoContent();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
+            return TypedResults.InternalServerError();
+        }
+    }
+    
+    private static async Task<IResult> SetItemActivateById(string itemId, ApplicationService service, IValidator<ActivateItemCommand> validator)
+    {
+        try
+        {
+            var command = new ActivateItemCommand(itemId);
+            var validation = await validator.ValidateAsync(command);
+            if (!validation.IsValid)
+            {
+                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
+                var validationErrors = Result<ActivateItemCommand>.Failure(errors, 400);
+                return TypedResults.BadRequest(validationErrors);
+            }
+
+            await service.Mediator.Send(command);
+
+            return TypedResults.NoContent();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
+            return TypedResults.InternalServerError();
+        }
+    }
+    
+    private static async Task<IResult> SetItemDeactivateById(string itemId, ApplicationService service, IValidator<DeactivateItemCommand> validator)
+    { 
+        try
+        { 
+            var command = new DeactivateItemCommand(itemId);
+            var validation = await validator.ValidateAsync(command);
+            if (!validation.IsValid)
+            { 
+                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
+                var validationErrors = Result<DeactivateItemCommand>.Failure(errors, 400);
+                return TypedResults.BadRequest(validationErrors);
+            }
+
+            await service.Mediator.Send(command);
+
+            return TypedResults.NoContent();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
+            return TypedResults.InternalServerError();
+        }
+    }
+
+    private static async Task<IResult> ReduceItemsStock(ReduceItemStockQuantityCommand command, ApplicationService service, IValidator<ReduceItemStockQuantityCommand> validator)
     {
         try
         { 
@@ -220,7 +300,7 @@ public static class ItemAPI
             if (!validation.IsValid)
             {
                 var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<ReduceStockCommand>.Failure(errors, 400);
+                var validationErrors = Result<ReduceItemStockQuantityCommand>.Failure(errors, 400);
                 return TypedResults.BadRequest(validationErrors);
             }
 
@@ -244,7 +324,7 @@ public static class ItemAPI
         }
     }
     
-    private static async Task<IResult> IncreaseStocks(AddStockCommand command, ApplicationService service, IValidator<AddStockCommand> validator)
+    private static async Task<IResult> IncreaseItemsStock(AddItemStockQuantityCommand command, ApplicationService service, IValidator<AddItemStockQuantityCommand> validator)
     {
         try
         { 
@@ -252,7 +332,7 @@ public static class ItemAPI
             if (!validation.IsValid)
             {
                 var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<AddStockCommand>.Failure(errors, 400);
+                var validationErrors = Result<AddItemStockQuantityCommand>.Failure(errors, 400);
                 return TypedResults.BadRequest(validationErrors);
             }
 
@@ -276,7 +356,7 @@ public static class ItemAPI
         }
     }
     
-    private static async Task<IResult> SetStocks(SetStockCommand command, ApplicationService service, IValidator<SetStockCommand> validator)
+    private static async Task<IResult> SetItemsStock(SetItemStockQuantityCommand command, ApplicationService service, IValidator<SetItemStockQuantityCommand> validator)
     {
         try
         { 
@@ -284,7 +364,7 @@ public static class ItemAPI
             if (!validation.IsValid)
             {
                 var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<SetStockCommand>.Failure(errors, 400);
+                var validationErrors = Result<SetItemStockQuantityCommand>.Failure(errors, 400);
                 return TypedResults.BadRequest(validationErrors);
             }
 
@@ -307,12 +387,9 @@ public static class ItemAPI
             return TypedResults.InternalServerError();
         }
     }
+     
 
-
-
-
-
-    private static async Task<IResult> ReduceSolds(ReduceSoldCommand command, ApplicationService service, IValidator<ReduceSoldCommand> validator)
+    private static async Task<IResult> ReduceItemsSold(ReduceItemSoldQuantityCommand command, ApplicationService service, IValidator<ReduceItemSoldQuantityCommand> validator)
     {
         try
         {
@@ -320,7 +397,7 @@ public static class ItemAPI
             if (!validation.IsValid)
             {
                 var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<ReduceSoldCommand>.Failure(errors, 400);
+                var validationErrors = Result<ReduceItemSoldQuantityCommand>.Failure(errors, 400);
                 return TypedResults.BadRequest(validationErrors);
             }
 
@@ -344,7 +421,7 @@ public static class ItemAPI
         }
     }
 
-    private static async Task<IResult> IncreaseSolds(AddSoldCommand command, ApplicationService service, IValidator<AddSoldCommand> validator)
+    private static async Task<IResult> IncreaseItemsSold(AddItemSoldQuantityCommand command, ApplicationService service, IValidator<AddItemSoldQuantityCommand> validator)
     {
         try
         {
@@ -352,7 +429,7 @@ public static class ItemAPI
             if (!validation.IsValid)
             {
                 var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<AddSoldCommand>.Failure(errors, 400);
+                var validationErrors = Result<AddItemSoldQuantityCommand>.Failure(errors, 400);
                 return TypedResults.BadRequest(validationErrors);
             }
 
@@ -376,7 +453,7 @@ public static class ItemAPI
         }
     }
 
-    private static async Task<IResult> SetSolds(SetSoldCommand command, ApplicationService service, IValidator<SetSoldCommand> validator)
+    private static async Task<IResult> SetItemsSold(SetItemSoldQuantityCommand command, ApplicationService service, IValidator<SetItemSoldQuantityCommand> validator)
     {
         try
         {
@@ -384,7 +461,7 @@ public static class ItemAPI
             if (!validation.IsValid)
             {
                 var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<SetSoldCommand>.Failure(errors, 400);
+                var validationErrors = Result<SetItemSoldQuantityCommand>.Failure(errors, 400);
                 return TypedResults.BadRequest(validationErrors);
             }
 
@@ -408,8 +485,7 @@ public static class ItemAPI
         }
     }
 
-
-    private static async Task<IResult> SetPrices(SetPriceCommand command, ApplicationService service, IValidator<SetPriceCommand> validator)
+    private static async Task<IResult> SetItemsPrice(SetItemPriceCommand command, ApplicationService service, IValidator<SetItemPriceCommand> validator)
     {
         try
         {
@@ -417,7 +493,7 @@ public static class ItemAPI
             if (!validation.IsValid)
             {
                 var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<SetPriceCommand>.Failure(errors, 400);
+                var validationErrors = Result<SetItemPriceCommand>.Failure(errors, 400);
                 return TypedResults.BadRequest(validationErrors);
             }
 

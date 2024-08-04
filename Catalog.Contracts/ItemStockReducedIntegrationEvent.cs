@@ -1,3 +1,5 @@
-﻿namespace Catalog.Contracts;
+﻿using MediatR;
 
-public record ItemStockReducedIntegrationEvent(string Id, int Quantity);
+namespace Catalog.Contracts;
+
+public record ItemStockReducedIntegrationEvent(string Id, int Quantity) : INotification;

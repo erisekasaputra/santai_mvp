@@ -1,7 +1,7 @@
 ﻿using Catalog.Contracts;
 using MassTransit;
 using MediatR;
-using Search.Worker.Applications.Commands.AddSold;
+using Search.Worker.Applications.Commands.AddItemSoldQuantity;
 
 namespace Search.Worker.Consumers;
 
@@ -12,7 +12,7 @@ internal class ItemSoldAddedIntegrationEventConsumer(IMediator mediator) : ICons
     {
         var @event = context.Message;
 
-        var command = new AddSoldCommand(@event.Id, @event.Quantity);
+        var command = new AddItemSoldQuantityCommand(@event.Id, @event.Quantity);
 
         await _mediator.Send(command);
     }

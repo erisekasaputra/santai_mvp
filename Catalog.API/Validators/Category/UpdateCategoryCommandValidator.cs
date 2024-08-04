@@ -14,12 +14,7 @@ public class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCo
         RuleFor(x => x.Name)
            .NotEmpty().WithMessage("Name is required.")
            .Length(2, 50).WithMessage("Name must be between 2 and 50 characters.");
-
-        RuleFor(x => x.Description)
-            .NotEmpty().WithMessage("Description is required.")
-            .MaximumLength(1000).WithMessage("Description cannot exceed 1000 characters.");
-         
-
+          
         RuleFor(x => x.ImageUrl)
             .MaximumLength(500).WithMessage("Image URL cannot exceed 500 characters.")
             .NotEmpty().WithMessage("Image URL is required.")

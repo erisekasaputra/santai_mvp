@@ -20,7 +20,7 @@ public class CreateCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHand
 
         var category = new Category(
                request.Name,
-               request.ImageUrl
+               request.ImageUrl 
            );
 
         var response = await _unitOfWork.Categories.CreateCategoryAsync(category);

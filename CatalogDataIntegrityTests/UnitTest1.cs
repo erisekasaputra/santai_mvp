@@ -32,16 +32,17 @@ namespace CatalogDataIntegrityTests
 
         private async Task<HttpResponseMessage> DeductStockRequest()
         {
-            var request = "/api/v1/catalog/items/stock/deduct";
-            var payload = new
-            {
-                itemStocks = new[]
-                {
-                    new ItemStockDto("01J3NKF5GKP74FJHNBHHV33E0H", 1)
-                }
-            };
+            throw new Exception();
+            //var request = "/api/v1/catalog/items/stock/deduct";
+            //var payload = new
+            //{
+            //    itemStocks = new[]
+            //    {
+            //        new ItemStockDto("01J3NKF5GKP74FJHNBHHV33E0H", 1)
+            //    }
+            //};
 
-            return await _client.PostAsJsonAsync(request, payload);
+            //return await _client.PostAsJsonAsync(request, payload);
         }
 
         [TearDown]

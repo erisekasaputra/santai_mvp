@@ -36,7 +36,7 @@
     "Parameters": [
       {
         "Name": "command",
-        "Type": "Catalog.API.Commands.Brands.CreateBrand.CreateBrandCommand",
+        "Type": "Catalog.API.Applications.Commands.Brands.CreateBrand.CreateBrandCommand",
         "IsRequired": true
       }
     ],
@@ -85,7 +85,7 @@
       },
       {
         "Name": "command",
-        "Type": "Catalog.API.Commands.Brands.UpdateBrand.UpdateBrandCommand",
+        "Type": "Catalog.API.Applications.Commands.Brands.UpdateBrand.UpdateBrandCommand",
         "IsRequired": true
       }
     ],
@@ -156,7 +156,7 @@
     "Parameters": [
       {
         "Name": "command",
-        "Type": "Catalog.API.Commands.Categories.CreateCategory.CreateCategoryCommand",
+        "Type": "Catalog.API.Applications.Commands.Categories.CreateCategory.CreateCategoryCommand",
         "IsRequired": true
       }
     ],
@@ -205,7 +205,7 @@
       },
       {
         "Name": "command",
-        "Type": "Catalog.API.Commands.Categories.UpdateCategory.UpdateCategoryCommand",
+        "Type": "Catalog.API.Applications.Commands.Categories.UpdateCategory.UpdateCategoryCommand",
         "IsRequired": true
       }
     ],
@@ -276,7 +276,7 @@
     "Parameters": [
       {
         "Name": "command",
-        "Type": "Catalog.API.Commands.Items.CreateItem.CreateItemCommand",
+        "Type": "Catalog.API.Applications.Commands.Items.CreateItem.CreateItemCommand",
         "IsRequired": true
       }
     ],
@@ -325,7 +325,7 @@
       },
       {
         "Name": "command",
-        "Type": "Catalog.API.Commands.Items.UpdateItem.UpdateItemCommand",
+        "Type": "Catalog.API.Applications.Commands.Items.UpdateItem.UpdateItemCommand",
         "IsRequired": true
       }
     ],
@@ -361,15 +361,213 @@
   },
   {
     "ContainingType": "Catalog.API.API.ItemAPI",
-    "Method": "DeductStocks",
-    "RelativePath": "api/v1/catalog/items/stock/deduct",
-    "HttpMethod": "POST",
+    "Method": "SetItemActivateById",
+    "RelativePath": "api/v1/catalog/items/{itemId}/activate",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.ItemAPI",
+    "Method": "SetItemDeactivateById",
+    "RelativePath": "api/v1/catalog/items/{itemId}/deactivate",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.ItemAPI",
+    "Method": "UndeleteItemById",
+    "RelativePath": "api/v1/catalog/items/{itemId}/undelete",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "itemId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.ItemAPI",
+    "Method": "SetItemsPrice",
+    "RelativePath": "api/v1/catalog/items/price",
+    "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
     "Parameters": [
       {
         "Name": "command",
-        "Type": "Catalog.API.Commands.Items.DeductStock.DeductStockCommand",
+        "Type": "Catalog.API.Applications.Commands.Items.SetItemPrice.SetItemPriceCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.ItemAPI",
+    "Method": "SetItemsSold",
+    "RelativePath": "api/v1/catalog/items/sold",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "Catalog.API.Applications.Commands.Items.SetItemSoldQuantity.SetItemSoldQuantityCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.ItemAPI",
+    "Method": "IncreaseItemsSold",
+    "RelativePath": "api/v1/catalog/items/sold/increase",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "Catalog.API.Applications.Commands.Items.AddItemSoldQuantity.AddItemSoldQuantityCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.ItemAPI",
+    "Method": "ReduceItemsSold",
+    "RelativePath": "api/v1/catalog/items/sold/reduce",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "Catalog.API.Applications.Commands.Items.ReduceItemSoldQuantity.ReduceItemSoldQuantityCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.ItemAPI",
+    "Method": "SetItemsStock",
+    "RelativePath": "api/v1/catalog/items/stock",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "Catalog.API.Applications.Commands.Items.SetItemStockQuantity.SetItemStockQuantityCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.ItemAPI",
+    "Method": "IncreaseItemsStock",
+    "RelativePath": "api/v1/catalog/items/stock/increase",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "Catalog.API.Applications.Commands.Items.AddItemStockQuantity.AddItemStockQuantityCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Catalog.API.API.ItemAPI",
+    "Method": "ReduceItemsStock",
+    "RelativePath": "api/v1/catalog/items/stock/reduce",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "Catalog.API.Applications.Commands.Items.ReduceItemStockQuantity.ReduceItemStockQuantityCommand",
         "IsRequired": true
       }
     ],

@@ -10,9 +10,5 @@ public interface IBrandRepository
 
     Task<(int TotalCount, int TotalPages, IEnumerable<Brand> Brands)> GetPaginatedBrandsAsync(int pageNumber, int pageSize);
 
-    void UpdateBrand(Brand item);
-
-    void DeleteBrand(Brand item);
-
-
+    void UpdateBrand(Brand item);  
 }

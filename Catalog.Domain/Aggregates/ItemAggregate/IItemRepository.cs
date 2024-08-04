@@ -6,11 +6,15 @@ public interface IItemRepository
 
     Task<Item?> GetItemByIdAsync(string id);
 
+    Task<Item?> RetrieveItemById(string id);
+
     Task<(int TotalCount, int TotalPages, IEnumerable<Item> Items)> GetPaginatedItemsAsync(int pageNumber, int pageSize);
 
-    void UpdateItem(Item item);
-
-    void DeleteItem(Item item);
+    void UpdateItem(Item item); 
 
     Task<ICollection<Item>> GetItemsWithLockAsync(IEnumerable<string> itemIds);
+
+    Task MarkBrandIdToNullByDeletingBrandByIdAsync(string brandId);
+
+    Task MarkCategoryIdToNullByDeletingCategoryByIdAsync(string categoryId);
 }

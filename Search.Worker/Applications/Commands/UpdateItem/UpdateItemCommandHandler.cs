@@ -19,16 +19,7 @@ public class UpdateItemCommandHandler(IItemRepository itemRepository) : IRequest
             return Unit.Value;
         }
 
-        item.Name = request.Name;
-        item.Description = request.Description;
-        item.Price = request.Price;
-        item.ImageUrl = request.ImageUrl;
-        item.StockQuantity = request.StockQuantity;
-        item.SoldQuantity = request.SoldQuantity;
-        item.CategoryId = request.CategoryId;
-        item.CategoryName = request.CategoryName;
-        item.BrandId = request.BrandId;
-        item.BrandName = request.BrandName; 
+        item.Update(request.Name, request.Description, request.Price, request.ImageUrl, request.StockQuantity, request.SoldQuantity, request.CategoryId, request.CategoryName, request.CategoryImageUrl, request.BrandId, request.BrandName, request.BrandImageUrl, request.IsActive, request.IsDeleted, ownerReviews); 
 
         await _itemRepository.UpdateItemAsync(item, cancellationToken);
         return Unit.Value;

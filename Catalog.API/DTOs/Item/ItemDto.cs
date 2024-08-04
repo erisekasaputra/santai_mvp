@@ -14,4 +14,5 @@ public record ItemDto(string Id,
                   string CategoryName,
                   string BrandId,
                   string BrandName,
+                  bool IsActive,
                   IEnumerable<OwnerReviewDto>? OwnerReviews);

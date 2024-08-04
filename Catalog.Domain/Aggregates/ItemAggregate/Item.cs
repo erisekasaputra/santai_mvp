@@ -2,6 +2,7 @@
 using Catalog.Domain.Aggregates.CategoryAggregate;
 using Catalog.Domain.Aggregates.OwnerReviewAggregate;
 using Catalog.Domain.Events;
+using Catalog.Domain.Exceptions;
 using Catalog.Domain.SeedWork; 
 
 namespace Catalog.Domain.Aggregates.ItemAggregate;
@@ -22,15 +23,19 @@ public class Item : Entity, IAggregateRoot
 
     public int SoldQuantity { get; private set; }
 
-    public string BrandId { get; private set; }
+    public string? BrandId { get; set; } 
 
-    public string CategoryId { get; private set; }
+    public string? CategoryId { get; private set; } 
 
-    public Brand Brand { get; private set; }
+    public Brand? Brand { get; private set; }
 
-    public Category Category { get; private set; } 
+    public Category? Category { get; private set; } 
 
     public DateTime CreatedAt { get; private set; }
+
+    public bool IsActive { get; private set; }
+
+    public bool IsDeleted { get; private set; }
 
 
     private readonly IList<OwnerReview> _ownerReviews;
@@ -42,7 +47,7 @@ public class Item : Entity, IAggregateRoot
         _ownerReviews = [];
     }
       
-    public Item(string name, string description, decimal price, string imageUrl, DateTime createdAt, int stockQuantity, int soldQuantity, string categoryId, Category category, string brandId, Brand brand, ICollection<OwnerReview> ownerReviews) : this()
+    public Item(string name, string description, decimal price, string imageUrl, DateTime createdAt, int stockQuantity, int soldQuantity, string categoryId, Category category, string brandId, Brand brand, bool isActive, ICollection<OwnerReview> ownerReviews) : this()
     { 
         ArgumentException.ThrowIfNullOrEmpty(name);
         ArgumentException.ThrowIfNullOrEmpty(description);
@@ -63,6 +68,8 @@ public class Item : Entity, IAggregateRoot
         Category = category;
         BrandId = brandId;
         Brand = brand;
+        IsActive = isActive;
+        IsDeleted = false;
          
         if (ownerReviews is not null)
         {
@@ -70,15 +77,18 @@ public class Item : Entity, IAggregateRoot
             foreach (var ownerReview in filteredOwnerReview)
             {
                 _ownerReviews.Add(ownerReview);
-            } 
+            }
         }
 
         RaiseItemCreatedDomainEvent(this);
-    } 
-      
-
-    public void Update(string name, string description, string imageUrl, string categoryId, Category category, string brandId, Brand brand, ICollection<OwnerReview> ownerReviews)
-    { 
+    }
+    public void Update(string name, string description, string imageUrl, string categoryId, Category category, string brandId, Brand brand, bool isActive, ICollection<OwnerReview> ownerReviews,decimal price, int stockQuantity, int soldQuantity)
+    {
+        if (IsDeleted)
+        {
+            throw new DomainException("Can not update data when the data was deleted");
+        }
+         
         ArgumentException.ThrowIfNullOrEmpty(name);
         ArgumentException.ThrowIfNullOrEmpty(description);
         ArgumentException.ThrowIfNullOrEmpty(imageUrl);
@@ -94,6 +104,10 @@ public class Item : Entity, IAggregateRoot
         Category = category;
         BrandId = brandId;
         Brand = brand;
+        IsActive = isActive;
+        Price = price;
+        StockQuantity = stockQuantity;
+        SoldQuantity = soldQuantity;
 
         _ownerReviews.Clear();
         if (ownerReviews is not null)
@@ -108,22 +122,65 @@ public class Item : Entity, IAggregateRoot
         RaiseItemUpdatedDomainEvent(this);
     }
 
-    public void Delete()
+    public void SetActive()
     {
+        if (IsDeleted)
+        {
+            throw new DomainException("Can not edit data for a deleted item");
+        }
+
+        IsActive = true;
+        RaiseItemActivatedDomainEvent(Id);
+    } 
+
+    public void SetInactive()
+    {
+        if (IsDeleted)
+        {
+            throw new DomainException("Can not edit data for a deleted item");
+        }
+
+        IsActive = false;
+        RaiseItemInactivatedDomainEvent(Id);
+    } 
+   
+    public void SetDelete()
+    {
+        if (IsDeleted)
+        {
+            throw new DomainException("Can not delete data if the data is already deleted");
+        }
+
+        IsActive = false;
+        IsDeleted = true; 
         RaiseItemDeletedDomainEvent(Id);
     }
 
+    public void SetUndeleted()
+    {
+        if (!IsDeleted)
+        {
+            throw new DomainException("Can not set data to undelete when the data is already undeleted");
+        }
+        IsActive = false;
+        IsDeleted = false;
+        RaiseItemUndeletedDomainEvent(Id);
+    } 
+
     public void ReduceStockQuantity(int amount)
     {
+        if (IsDeleted)
+        {
+            throw new DomainException("Can not reduce stock to a deleted item");
+        } 
+
         ArgumentOutOfRangeException.ThrowIfLessThan(StockQuantity, amount, "Stock quantity is insufficient");
         ArgumentOutOfRangeException.ThrowIfLessThan(amount, 1, "Minimum amount for subtracting stock quantity is 1");
 
         StockQuantity -= amount;
 
         RaiseItemStockReducedDomainEvent(Id, amount);
-    }
-
-    
+    } 
 
     public void AddStockQuantity(int amount)
     {
@@ -135,6 +192,11 @@ public class Item : Entity, IAggregateRoot
 
     public void SetStockQuantity(int amount)
     {
+        if (IsDeleted)
+        {
+            throw new DomainException("Can not set stock quantity from a deleted item");
+        }
+
         ArgumentOutOfRangeException.ThrowIfLessThan(amount, 0, "Can not change stock quantity to negative");
         StockQuantity = amount;
 
@@ -142,19 +204,18 @@ public class Item : Entity, IAggregateRoot
     } 
 
     public void ReduceSoldQuantity(int amount)
-    {
+    {  
         ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(SoldQuantity, 0, "Can not subtracting sold quantity below than or equal with zero");
 
         ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(amount, 0, "Can not subtracting sold quantity with below than or equal with zero");
 
-        if (SoldQuantity - amount < 0)
+        if ((SoldQuantity - amount) < 0)
         {
-            SoldQuantity = 0;
-            return;
+            throw new DomainException("Can not reduce sold quantity into negative number");
         }
 
-        SoldQuantity -= amount;
-
+        SoldQuantity -= amount; 
+        
         RaiseItemSoldReducedDomainEvent(Id, amount);
     } 
 
@@ -168,7 +229,13 @@ public class Item : Entity, IAggregateRoot
    
     public void SetSoldQuantity(int amount)
     {
+        if (IsDeleted)
+        {
+            throw new DomainException("Can not set sold quantity from a deleted item");
+        }  
+
         ArgumentOutOfRangeException.ThrowIfLessThan(amount, 0, "Can not change sold quantity to less than zero.");
+        
         SoldQuantity = amount;
 
         RaiseItemSoldSetDomainEvent(Id, amount);
@@ -176,6 +243,11 @@ public class Item : Entity, IAggregateRoot
     
     public void SetPrice(decimal amount)
     {
+        if (IsDeleted)
+        {
+            throw new DomainException("Can not set item price from a deleted item");
+        } 
+
         ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(amount, 0, "Can not set price to less than or equal with zero.");
 
         LastPrice = Price;
@@ -231,5 +303,17 @@ public class Item : Entity, IAggregateRoot
     private void RaiseItemUpdatedDomainEvent(Item item)
     { 
         AddDomainEvent(new ItemUpdatedDomainEvent(item));
+    } 
+    private void RaiseItemInactivatedDomainEvent(string id)
+    {
+        AddDomainEvent(new ItemInactivatedDomainEvent(id));
+    }
+    private void RaiseItemUndeletedDomainEvent(string id)
+    {
+        AddDomainEvent(new ItemUndeletedDomainEvent(id));
+    }
+    private void RaiseItemActivatedDomainEvent(string id)
+    {
+        AddDomainEvent(new ItemActivatedDomainEvent(id));
     }
 }

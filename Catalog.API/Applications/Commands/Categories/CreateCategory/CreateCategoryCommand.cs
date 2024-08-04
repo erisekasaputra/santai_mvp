@@ -6,4 +6,5 @@ namespace Catalog.API.Applications.Commands.Categories.CreateCategory;
 
 public record CreateCategoryCommand(
     string Name,
-    string ImageUrl) : IRequest<Result<CategoryDto>>;
+    string ImageUrl,
+    bool IsActive) : IRequest<Result<CategoryDto>>;

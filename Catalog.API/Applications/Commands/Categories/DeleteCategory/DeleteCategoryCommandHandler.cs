@@ -13,7 +13,10 @@ public class DeleteCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHand
 
         if (item is not null)
         {
-            _unitOfWork.Categories.DeleteCategory(item);
+            item.Delete();
+
+            _unitOfWork.Categories.UpdateCategory(item);
+
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 

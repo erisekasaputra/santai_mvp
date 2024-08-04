@@ -51,10 +51,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Background\" />
     <Folder Include="Infrastructures\Messaging\" />
     <Folder Include="Infrastructures\Persistence\" />
-    <Folder Include="IntegrationEvents\EventHandlers\Incoming\" />
+    <Folder Include="Applications\IntegrationEvents\EventHandlers\Incoming\" />
   </ItemGroup>
 
 </Project>

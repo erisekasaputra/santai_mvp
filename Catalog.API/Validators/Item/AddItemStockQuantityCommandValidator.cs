@@ -1,0 +1,12 @@
+﻿using Catalog.API.Applications.Commands.Items.AddItemStockQuantity;
+using FluentValidation;
+
+namespace Catalog.API.Validators.Item;
+
+public class AddItemStockQuantityCommandValidator : AbstractValidator<AddItemStockQuantityCommand>
+{
+    public AddItemStockQuantityCommandValidator()
+    {
+        RuleForEach(x => x.AddItemStockQuantityRequests).SetValidator(new AddItemStockQuantityRequestValidator());
+    }
+}

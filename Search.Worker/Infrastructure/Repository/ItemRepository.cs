@@ -1,82 +1,162 @@
-﻿using Search.Worker.Domain.Models;
-using Search.Worker.Domain.Repository;
-using Search.Worker.Exceptions;
-using Search.Worker.SeedWork;
-using System.Net;
-using System.Net.Http.Json; 
+﻿using Elastic.Clients.Elasticsearch;
+using Search.Worker.Domain.Models;
+using Search.Worker.Domain.Repository; 
 
 namespace Search.Worker.Infrastructure.Repository;
 
-public class ItemRepository(IHttpClientFactory httpClientFactory) : IItemRepository
+public class ItemRepository(ElasticsearchContext context) : IItemRepository
 {
+    const string _Index = "item";
+    private readonly ElasticsearchContext _context = context;
 
-    private readonly IHttpClientFactory _httpClientFactory = httpClientFactory;
-    
-    private const string _Index = "items"; 
-
-    private HttpClient CreateClient()
-    {
-        return _httpClientFactory.CreateClient("Elasticsearch");
-    }
     public async Task<bool> CreateItemAsync(Item item, CancellationToken cancellationToken = default)
     {
-        var client = CreateClient();
-        var response = await client.PostAsJsonAsync($"{_Index}/_doc/{item.Id}", item, cancellationToken);
+        var response = await _context.Client.IndexAsync(item, index: _Index, cancellationToken);
 
-        if (response.IsSuccessStatusCode)
+        if (response.IsValidResponse)
         {
             return true;
         }
 
-        if (response.StatusCode == HttpStatusCode.Conflict)
-        {
-            throw new ConflictException();
-        }
-
-        // Don't move this line of code on top of above codes
-        response.EnsureSuccessStatusCode();
-         
-        return true;
+        return false;
     }
 
     public async Task<Item?> GetItemByIdAsync(string id, CancellationToken cancellationToken = default)
     {
-        var client = CreateClient();
+        var response = await _context.Client.GetAsync<Item>(id, index => index.Index(_Index), cancellationToken);
 
-        var response = await client.GetAsync($"{_Index}/_doc/{id}", cancellationToken);
-
-        if (response.StatusCode == HttpStatusCode.NotFound)
+        if (response.IsValidResponse)
         {
-            return null;
+            return response.Source;
         }
 
-        // Don't move this line of code on top of above codes 
-        response.EnsureSuccessStatusCode();
-
-        var result = await response.Content.ReadFromJsonAsync<ElasticsearchResponse<Item>>(cancellationToken);
-
-        return result!._source;
+        return null;
     }
 
     public async Task<bool> DeleteItemAsync(Item item, CancellationToken cancellationToken = default)
     {
-        var client = CreateClient();
-        
-        var response = await client.DeleteAsync($"{_Index}/_doc/{item.Id}", cancellationToken); 
+        var response = await _context.Client.DeleteAsync(index:_Index, item.Id, cancellationToken);
 
-        response.EnsureSuccessStatusCode();
+        if (response.IsValidResponse)
+        {
+            return true;
+        }
 
-        return true;
+        return false;
     }
 
     public async Task<bool> UpdateItemAsync(Item item, CancellationToken cancellationToken = default)
+    { 
+        var response = await _context.Client.UpdateAsync<Item, Item>(index: _Index, item.Id, u => u.Doc(item), cancellationToken);
+
+        if ( response.IsValidResponse)
+        { 
+            return true;
+        }
+
+        return false;
+    }
+
+    public async Task<bool> UpdateCategoryByCategoryIdAsync(string Id, string Name, string ImageUrl)
     {
-        var client = CreateClient();
+        var response = await _context.Client.UpdateByQueryAsync<Item>(u => u
+            .Indices(_Index)
+            .Query(q => q
+                .Term(t => t
+                    .Field(f => f.CategoryId!.Suffix("keyword")).Value(Id))
+            )
+            .Script(s => s
+                    .Source("ctx._source.categoryName = params.newCategoryName; ctx._source.categoryImageUrl = params.newCategoryImageUrl")
+                    .Params(p => p
+                            .Add("newCategoryName", Name)
+                            .Add("newCategoryImageUrl", ImageUrl)
+                ) 
+            ) 
+        );
 
-        var response = await client.PostAsJsonAsync($"{_Index}/_doc/{item.Id}",item , cancellationToken); 
-         
-        response.EnsureSuccessStatusCode();
+        if (response.IsValidResponse)
+        { 
+            return true;
+        }
 
-        return true;
+        return false;
+    }
+
+    public async Task<bool> UpdateBrandByBrandIdAsync(string Id, string Name, string ImageUrl)
+    {
+        var response = await _context.Client.UpdateByQueryAsync<Item>(u => u
+            .Indices(_Index)
+            .Query(q => q
+                .Term(t => t
+                    .Field(f => f.BrandId!.Suffix("keyword")).Value(Id))
+            )
+            .Script(s => s
+                    .Source("ctx._source.brandName = params.newBrandName;ctx._source.brandImageUrl=params.newBrandImageUrl")
+                    .Params(p => p
+                            .Add("newBrandName", Name)
+                            .Add("newBrandImageUrl", ImageUrl)
+                )
+            )  
+        );
+
+        if (response.IsValidResponse)
+        { 
+            return true;
+        } 
+
+        return false;
+    }
+
+
+    public async Task<bool> DeleteCategoryByCategoryIdAsync(string Id)
+    {
+        var response = await _context.Client.UpdateByQueryAsync<Item>(u => u
+            .Indices(_Index)
+            .Query(q => q
+                .Term(t => t
+                    .Field(f => f.CategoryId!.Suffix("keyword")).Value(Id))
+            )
+            .Script(s => s
+                    .Source("ctx._source.categoryId = params.newCategoryId; ctx._source.categoryName = params.newCategoryName; ctx._source.categoryImageUrl = params.newCategoryImageUrl")
+                    .Params(p => p
+                            .Add("newCategoryId", string.Empty)
+                            .Add("newCategoryName", string.Empty)
+                            .Add("newCategoryImageUrl", string.Empty)
+                )
+            ) 
+        );
+
+        if (response.IsValidResponse)
+        { 
+            return true;
+        }
+
+        return false;
+    }
+
+    public async Task<bool> DeleteBrandByBrandIdAsync(string Id)
+    {
+        var response = await _context.Client.UpdateByQueryAsync<Item>(u => u
+           .Indices(_Index)
+           .Query(q => q
+               .Term(t => t
+                   .Field(f => f.BrandId!.Suffix("keyword")).Value(Id))
+           )
+           .Script(s => s
+                   .Source("ctx._source.brandId = params.newBrandId; ctx._source.brandName = params.newBrandName; ctx._source.brandImageUrl = params.newBrandImageUrl")
+                   .Params(p => p
+                           .Add("newBrandId", string.Empty)
+                           .Add("newBrandName", string.Empty)
+                           .Add("newBrandImageUrl", string.Empty)
+               )
+           ) 
+        );
+
+        if (response.IsValidResponse)
+        { 
+            return true;
+        }
+
+        return false;
     }
 }

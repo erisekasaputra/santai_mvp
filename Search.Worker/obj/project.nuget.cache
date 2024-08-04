@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "UIRnPj0ukmk=",
+  "dgSpecHash": "kUHXL3XD5Gw=",
   "success": true,
   "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Search.Worker\\Search.Worker.csproj",
   "expectedPackageFiles": [
@@ -13,7 +13,7 @@
     "C:\\Users\\erise\\.nuget\\packages\\confluent.kafka\\2.5.0\\confluent.kafka.2.5.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\elastic.apm\\1.28.0\\elastic.apm.1.28.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\elastic.apm.elasticsearch\\1.28.0\\elastic.apm.elasticsearch.1.28.0.nupkg.sha512",
-    "C:\\Users\\erise\\.nuget\\packages\\elastic.clients.elasticsearch\\8.14.6\\elastic.clients.elasticsearch.8.14.6.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\elastic.clients.elasticsearch\\8.14.8\\elastic.clients.elasticsearch.8.14.8.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\elastic.transport\\0.4.20\\elastic.transport.0.4.20.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\elasticsearch.net\\7.6.0\\elasticsearch.net.7.6.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\entityframework\\6.5.1\\entityframework.6.5.1.nupkg.sha512",

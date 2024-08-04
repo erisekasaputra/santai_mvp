@@ -14,4 +14,5 @@ public record UpdateItemCommand(
     int SoldQuantity,
     string CategoryId,
     string BrandId,
+    bool IsActive,
     IEnumerable<OwnerReviewDto> OwnerReviews) : IRequest<Result<Unit>>;

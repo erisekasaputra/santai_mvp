@@ -107,6 +107,7 @@ public class UnitOfWork : IUnitOfWork
 
         foreach (var domainEvent in domainEvents)
         {
+            Console.WriteLine(domainEvent.GetType());
             await _mediator.Publish(domainEvent, token);
         }
     }

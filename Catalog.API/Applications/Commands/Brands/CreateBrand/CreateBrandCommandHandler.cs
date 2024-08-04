@@ -20,7 +20,7 @@ public class CreateBrandCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler
 
         var brand = new Brand(
                request.Name,
-               request.ImageUrl
+               request.ImageUrl 
            );
 
         var response = await _unitOfWork.Brands.CreateBrandAsync(brand);

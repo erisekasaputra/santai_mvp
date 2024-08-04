@@ -12,7 +12,7 @@ public class GetItemByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<G
 
     public async Task<Result<ItemDto>> Handle(GetItemByIdQuery request, CancellationToken cancellationToken)
     {
-        var result = await _unitOfWork.Items.GetItemByIdAsync(request.Id);
+        var result = await _unitOfWork.Items.RetrieveItemById(request.Id);
 
         if (result is null)
         {

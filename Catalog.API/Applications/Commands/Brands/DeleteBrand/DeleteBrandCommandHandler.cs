@@ -13,7 +13,10 @@ public class DeleteBrandCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler
 
         if (item is not null)
         {
-            _unitOfWork.Brands.DeleteBrand(item);
+            item.Delete();
+
+            _unitOfWork.Brands.UpdateBrand(item);
+
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 

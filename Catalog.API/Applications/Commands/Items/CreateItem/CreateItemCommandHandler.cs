@@ -38,6 +38,7 @@ public class CreateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
                category,
                brand.Id,
                brand,
+               request.IsActive,
                ownerReviews!
            );
 
@@ -62,10 +63,11 @@ public class CreateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
             DateTime.UtcNow,
             response.StockQuantity,
             response.SoldQuantity,
-            response.CategoryId,
-            response.Category.Name,
-            response.Brand.Id,
-            response.Brand.Name,
+            response.Category?.Id ?? string.Empty,
+            response.Category?.Name ?? string.Empty,
+            response.Brand?.Id ?? string.Empty,
+            response.Brand?.Name ?? string.Empty,
+            response.IsActive,
             response.OwnerReviews.ToOwnerReviewsDto()!);
 
         return Result<ItemDto>.SuccessResult(responseDto, [], 201);

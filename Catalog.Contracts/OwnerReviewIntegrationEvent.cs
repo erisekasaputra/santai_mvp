@@ -1,3 +1,5 @@
-﻿namespace Catalog.Contracts;
+﻿using MediatR;
 
-public record OwnerReviewIntegrationEvent(string Title, int Rating);
+namespace Catalog.Contracts;
+
+public record OwnerReviewIntegrationEvent(string Title, int Rating) : INotification;

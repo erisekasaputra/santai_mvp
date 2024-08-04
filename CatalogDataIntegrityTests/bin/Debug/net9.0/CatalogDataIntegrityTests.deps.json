@@ -1997,6 +1997,9 @@
         }
       },
       "Catalog.Contracts/1.0.0": {
+        "dependencies": {
+          "MediatR": "12.4.0"
+        },
         "runtime": {
           "Catalog.Contracts.dll": {
             "assemblyVersion": "1.0.0",

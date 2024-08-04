@@ -6,4 +6,5 @@ namespace Catalog.API.Applications.Commands.Brands.CreateBrand;
 
 public record CreateBrandCommand(
     string Name,
-    string ImageUrl) : IRequest<Result<BrandDto>>;
+    string ImageUrl,
+    bool IsActive) : IRequest<Result<BrandDto>>;

@@ -1,7 +1,7 @@
 ﻿using Catalog.Contracts;
 using MassTransit;
 using MediatR;
-using Search.Worker.Applications.Commands.ReduceSold;
+using Search.Worker.Applications.Commands.ReduceItemSoldQuantity;
 
 namespace Search.Worker.Consumers;
 
@@ -11,8 +11,8 @@ internal class ItemSoldReducedIntegrationEventConsumer(IMediator mediator) : ICo
     public async Task Consume(ConsumeContext<ItemSoldReducedIntegrationEvent> context)
     {
         var @event = context.Message;
-
-        var command = new ReduceSoldCommand(@event.Id, @event.Quantiy);
+         
+        var command = new ReduceItemSoldQuantityCommand(@event.Id, @event.Quantity);
 
         await _mediator.Send(command);
     }

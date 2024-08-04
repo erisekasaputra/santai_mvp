@@ -1,5 +1,4 @@
-﻿using Catalog.API.Applications.Commands.Items.CreateItem;
-using Catalog.Domain.Aggregates.OwnerReviewAggregate;
+﻿using Catalog.API.Applications.Commands.Items.CreateItem; 
 using FluentValidation;
 
 namespace Catalog.API.Validators.Item;

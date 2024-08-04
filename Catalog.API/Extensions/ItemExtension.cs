@@ -24,10 +24,11 @@ public static class ItemExtension
             item.CreatedAt,
             item.StockQuantity,
             item.SoldQuantity,
-            item.CategoryId,
-            item.Category.Name,
-            item.BrandId,
-            item.Brand.Name,
+            item.CategoryId ?? string.Empty,
+            item.Category?.Name ?? string.Empty,
+            item.BrandId ?? string.Empty,
+            item.Brand?.Name ?? string.Empty,
+            item.IsActive,
             item.OwnerReviews.ToOwnerReviewsDto()!
         );
     }

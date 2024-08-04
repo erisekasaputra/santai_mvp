@@ -1,3 +1,5 @@
-﻿namespace Catalog.Contracts;
+﻿using MediatR;
 
-public record ItemPriceSetIntegrationEvent(string Id, decimal Amount);
+namespace Catalog.Contracts;
+
+public record ItemPriceSetIntegrationEvent(string Id, decimal Amount) : INotification;

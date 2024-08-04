@@ -19,7 +19,7 @@ public class CreateItemCommandHandler(IItemRepository itemRepository) : IRequest
             return Unit.Value;
         }
         
-        var item = new Item(request.Id, request.Name, request.Description, request.Price, request.ImageUrl, request.CreatedAt, request.StockQuantity, request.SoldQuantity, request.CategoryId, request.CategoryName, request.BrandId, request.BrandName, ownerReviews);
+        var item = new Item(request.Id, request.Name, request.Description, request.Price, request.ImageUrl, request.CreatedAt, request.StockQuantity, request.SoldQuantity, request.CategoryId, request.CategoryName, request.CategoryImageUrl, request.BrandId, request.BrandName, request.BrandImageUrl, request.IsActive, request.IsDeleted, ownerReviews);
 
         await _itemRepository.CreateItemAsync(item, cancellationToken);
         return Unit.Value;

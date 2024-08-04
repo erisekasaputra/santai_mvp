@@ -1,7 +1,7 @@
 ﻿using Catalog.Contracts;
 using MassTransit;
 using MediatR;
-using Search.Worker.Applications.Commands.SetPrice;
+using Search.Worker.Applications.Commands.SetItemPrice; 
 
 namespace Search.Worker.Consumers;
 
@@ -12,7 +12,7 @@ internal class ItemPriceSetIntegrationEventConsumer(IMediator mediator) : IConsu
     {
         var @event = context.Message;
 
-        var command = new SetPriceCommand(@event.Id, @event.Amount);
+        var command = new SetItemPriceCommand(@event.Id, @event.Amount);
 
         await _mediator.Send(command);
     }

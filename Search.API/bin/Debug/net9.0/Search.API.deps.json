@@ -9,7 +9,7 @@
       "Search.API/1.0.0": {
         "dependencies": {
           "Elastic.Apm.Elasticsearch": "1.28.0",
-          "Elastic.Clients.Elasticsearch": "8.14.6",
+          "Elastic.Clients.Elasticsearch": "8.14.8",
           "MassTransit": "8.2.4-develop.1875",
           "MassTransit.EntityFrameworkCore": "8.2.4-develop.1875",
           "MassTransit.Kafka": "8.2.4-develop.1875",
@@ -54,14 +54,14 @@
           }
         }
       },
-      "Elastic.Clients.Elasticsearch/8.14.6": {
+      "Elastic.Clients.Elasticsearch/8.14.8": {
         "dependencies": {
           "Elastic.Transport": "0.4.20"
         },
         "runtime": {
           "lib/net8.0/Elastic.Clients.Elasticsearch.dll": {
             "assemblyVersion": "8.0.0.0",
-            "fileVersion": "8.14.6.0"
+            "fileVersion": "8.14.8.0"
           }
         }
       },
@@ -539,12 +539,12 @@
       "path": "elastic.apm.elasticsearch/1.28.0",
       "hashPath": "elastic.apm.elasticsearch.1.28.0.nupkg.sha512"
     },
-    "Elastic.Clients.Elasticsearch/8.14.6": {
+    "Elastic.Clients.Elasticsearch/8.14.8": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-aBRUxxsjFa/2r06AX92THijC643QMKw/tR7YP92WecL2swettSj3pgaSdrM1tnGxp00qVmbYlH/pDn9BOj1pZg==",
-      "path": "elastic.clients.elasticsearch/8.14.6",
-      "hashPath": "elastic.clients.elasticsearch.8.14.6.nupkg.sha512"
+      "sha512": "sha512-RtM1D6M7BdVqTyczfW6YMXxM/izlCpUO47l2HsV+dcUSaWRFiIDqLfnFgkVLneeG0qEebKfxnBUPQv7POAPwJg==",
+      "path": "elastic.clients.elasticsearch/8.14.8",
+      "hashPath": "elastic.clients.elasticsearch.8.14.8.nupkg.sha512"
     },
     "Elastic.Transport/0.4.20": {
       "type": "package",

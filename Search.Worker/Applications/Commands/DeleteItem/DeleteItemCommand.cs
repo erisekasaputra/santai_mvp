@@ -2,7 +2,5 @@
 
 namespace Search.Worker.Applications.Commands.DeleteItem;
 
-public record DeleteItemCommand (
-    string Id) : IRequest<Unit>
-{
-}
+public record DeleteItemCommand(
+    string Id) : IRequest<Unit>;

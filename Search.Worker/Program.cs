@@ -1,28 +1,30 @@
-using MassTransit; 
+using MassTransit;
+using Search.Worker.Configurations;
 using Search.Worker.Consumers;
-using Search.Worker.Domain.Repository; 
+using Search.Worker.Domain.Repository;
+using Search.Worker.Infrastructure;
 using Search.Worker.Infrastructure.Repository;
+using System.Configuration;
 
-var builder = Host.CreateApplicationBuilder(args);
-
-builder.Services.AddHttpClient("Elasticsearch", client =>
-{
-    client.BaseAddress = new Uri(builder.Configuration["Elasticsearch:Address"]!);
-    client.DefaultRequestHeaders.Add("Accept", "application/json");
-    client.Timeout = TimeSpan.FromSeconds(5);
-});
+var builder = Host.CreateApplicationBuilder(args); 
 
 builder.Services.AddMediatR(configuration =>
 {
     configuration.RegisterServicesFromAssembly(typeof(Program).Assembly);
 });
 
+builder.Services.Configure<ElasticsearchOptions>(builder.Configuration.GetSection("Elasticsearch"));
+
+builder.Services.AddScoped<ElasticsearchContext>();
 
 builder.Services.AddMassTransit(x =>
 {      
     x.AddConsumer<ItemCreatedIntegrationEventConsumer>();
     x.AddConsumer<ItemUpdatedIntegrationEventConsumer>();
     x.AddConsumer<ItemDeletedIntegrationEventConsumer>(); 
+    x.AddConsumer<ItemUndeletedIntegrationEventConsumer>(); 
+    x.AddConsumer<ItemActivatedIntegrationEventConsumer>(); 
+    x.AddConsumer<ItemInactivatedIntegrationEventConsumer>(); 
     x.AddConsumer<ItemPriceSetIntegrationEventConsumer>(); 
     x.AddConsumer<ItemSoldAddedIntegrationEventConsumer>(); 
     x.AddConsumer<ItemSoldReducedIntegrationEventConsumer>(); 
@@ -30,6 +32,10 @@ builder.Services.AddMassTransit(x =>
     x.AddConsumer<ItemStockAddedIntegrationEventConsumer>(); 
     x.AddConsumer<ItemStockReducedIntegrationEventConsumer>(); 
     x.AddConsumer<ItemStockSetIntegrationEventConsumer>(); 
+    x.AddConsumer<BrandDeletedIntegrationEventConsumer>(); 
+    x.AddConsumer<BrandUpdatedIntegrationEventConsumer>(); 
+    x.AddConsumer<CategoryDeletedIntegrationEventConsumer>(); 
+    x.AddConsumer<CategoryUpdatedIntegrationEventConsumer>(); 
     
     x.UsingRabbitMq((context, config) =>
     {
@@ -37,21 +43,27 @@ builder.Services.AddMassTransit(x =>
         {
             host.Username(builder.Configuration["RabbitMQ:Username"] ?? "user");
             host.Password(builder.Configuration["RabbitMQ:Password"] ?? "user");
-        });
-
+        }); 
 
         var consumers = new (string QueueName, Type ConsumerType)[]
-        {
+        {  
             ("item-created-integration-event-queue", typeof(ItemCreatedIntegrationEventConsumer)),
             ("item-updated-integration-event-queue", typeof(ItemUpdatedIntegrationEventConsumer)),
             ("item-deleted-integration-event-queue", typeof(ItemDeletedIntegrationEventConsumer)),
+            ("item-undeleted-integration-event-queue", typeof(ItemUndeletedIntegrationEventConsumer)),
+            ("item-activated-integration-event-queue", typeof(ItemActivatedIntegrationEventConsumer)),
+            ("item-inactivated-integration-event-queue", typeof(ItemInactivatedIntegrationEventConsumer)),
             ("item-price-set-integration-event-queue", typeof(ItemPriceSetIntegrationEventConsumer)),
             ("item-sold-added-integration-event-queue", typeof(ItemSoldAddedIntegrationEventConsumer)),
             ("item-sold-reduced-integration-event-queue", typeof(ItemSoldReducedIntegrationEventConsumer)),
             ("item-sold-set-integration-event-queue", typeof(ItemSoldSetIntegrationEventConsumer)),
             ("item-stock-added-integration-event-queue", typeof(ItemStockAddedIntegrationEventConsumer)),
             ("item-stock-reduced-integration-event-queue", typeof(ItemStockReducedIntegrationEventConsumer)),
-            ("item-stock-set-integration-event-queue", typeof(ItemStockSetIntegrationEventConsumer))
+            ("item-stock-set-integration-event-queue", typeof(ItemStockSetIntegrationEventConsumer)),
+            ("brand-deleted-integration-event-queue", typeof(BrandDeletedIntegrationEventConsumer)),
+            ("brand-updated-integration-event-queue", typeof(BrandUpdatedIntegrationEventConsumer)),
+            ("category-deleted-integration-event-queue", typeof(CategoryDeletedIntegrationEventConsumer)),
+            ("category-updated-integration-event-queue", typeof(CategoryUpdatedIntegrationEventConsumer))
         };
 
         foreach(var (queueName , consumerType) in consumers)
@@ -68,7 +80,7 @@ builder.Services.AddMassTransit(x =>
 
             receiveBuilder.UseMessageRetry(retry =>
             {
-                retry.Immediate(3);
+                retry.Interval(3, TimeSpan.FromSeconds(2));
             });
 
             receiveBuilder.UseDelayedRedelivery(redelivery =>

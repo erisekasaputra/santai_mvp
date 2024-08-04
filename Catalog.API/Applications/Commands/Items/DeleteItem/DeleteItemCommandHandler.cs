@@ -12,8 +12,10 @@ public class DeleteItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
         var item = await _unitOfWork.Items.GetItemByIdAsync(request.Id);
 
         if (item is not null)
-        {
-            _unitOfWork.Items.DeleteItem(item);
+        {  
+            item.SetDelete();
+
+            _unitOfWork.Items.UpdateItem(item);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }

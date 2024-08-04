@@ -8,14 +8,15 @@ using Catalog.Domain.SeedWork;
 using Catalog.API.Validators.Item;
 using MassTransit; 
 using Catalog.Infrastructure.Helpers;
+using Catalog.Contracts;
 
 var builder = WebApplication.CreateBuilder(args); 
 
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddMediatR(builder =>
-{
-    builder.RegisterServicesFromAssemblyContaining<Program>();
+{ 
+    builder.RegisterServicesFromAssemblies(typeof(Program).Assembly, typeof(ICatalogMakerInterface).Assembly);
 });
 
 builder.Logging.ClearProviders(); 

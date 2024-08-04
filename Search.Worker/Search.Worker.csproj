@@ -10,7 +10,7 @@
   <ItemGroup>
     <PackageReference Include="Azure.Identity" Version="1.13.0-beta.1" />
     <PackageReference Include="Elastic.Apm.Elasticsearch" Version="1.28.0" />
-    <PackageReference Include="Elastic.Clients.Elasticsearch" Version="8.14.6" />
+    <PackageReference Include="Elastic.Clients.Elasticsearch" Version="8.14.8" />
     <PackageReference Include="EntityFramework" Version="6.5.1" />
     <PackageReference Include="MassTransit" Version="8.2.4-develop.1875" />
     <PackageReference Include="MassTransit.AmazonSQS" Version="8.2.4-develop.1875" />
@@ -31,9 +31,5 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Catalog.Contracts\Catalog.Contracts.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Applications\DTOs\" />
   </ItemGroup>
 </Project>
