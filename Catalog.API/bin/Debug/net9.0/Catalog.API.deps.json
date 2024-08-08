@@ -1435,7 +1435,8 @@
       },
       "Account.Domain/1.0.0": {
         "dependencies": {
-          "MediatR": "12.4.0"
+          "MediatR": "12.4.0",
+          "Microsoft.EntityFrameworkCore": "9.0.0-preview.6.24327.4"
         },
         "runtime": {
           "Account.Domain.dll": {

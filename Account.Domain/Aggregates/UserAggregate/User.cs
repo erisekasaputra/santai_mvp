@@ -11,7 +11,7 @@ namespace Account.Domain.Aggregates.UserAggregate;
 
 public abstract class User : Entity, IAggregateRoot
 {
-    public Guid IdentityId { get; private init; }
+    public Guid IdentityId { get; private init; }  
 
     public string Username { get; private init; }
 

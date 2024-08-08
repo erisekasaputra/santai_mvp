@@ -13,7 +13,7 @@ public class BusinessLicenseEntityConfiguration : IEntityTypeConfiguration<Busin
 
         e.HasIndex(p => new { p.LicenseNumber, p.VerificationStatus })
             .IsUnique()
-            .HasFilter(" [VerificationStatus] = 'Accepted' ");
+            .HasFilter("[VerificationStatus] = 'Accepted'");
 
         e.Property(p => p.LicenseNumber)
             .HasMaxLength(50)
@@ -29,8 +29,7 @@ public class BusinessLicenseEntityConfiguration : IEntityTypeConfiguration<Busin
                 v => v.Trim(),
                 v => v.Trim());
 
-        e.Property(p => p.Description)
-           .HasMaxLength(1000)
+        e.Property(p => p.Description) 
            .IsRequired()
            .HasConversion(
                 v => v.Trim(),

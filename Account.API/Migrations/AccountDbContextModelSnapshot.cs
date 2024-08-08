@@ -33,7 +33,6 @@ namespace Account.API.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1000)
                         .HasColumnType("varchar(max)");
 
                     b.Property<string>("LicenseNumber")
@@ -56,7 +55,7 @@ namespace Account.API.Migrations
 
                     b.HasIndex("LicenseNumber", "VerificationStatus")
                         .IsUnique()
-                        .HasFilter(" [VerificationStatus] = 'Accepted' ");
+                        .HasFilter("[VerificationStatus] = 'Accepted'");
 
                     b.ToTable("BusinessLicenses");
                 });

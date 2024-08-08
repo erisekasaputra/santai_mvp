@@ -6,6 +6,7 @@ using Account.Domain.Aggregates.NationalIdentityAggregate;
 using Account.Domain.Aggregates.ReferralAggregate;
 using Account.Domain.Aggregates.ReferredAggregate;
 using Account.Domain.Aggregates.UserAggregate;
+using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace Account.Domain.SeedWork;
@@ -39,4 +40,7 @@ public interface IUnitOfWork
     Task RollbackTransactionAsync(CancellationToken cancellationToken = default);
 
     Task DispatchDomainEventsAsync(CancellationToken token = default);
+
+    void AttachEntity<TEntity>(TEntity entity) where TEntity : class;
+    void SetEntityState<TEntity>(TEntity entity, EntityState state) where TEntity : class;
 }

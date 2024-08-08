@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Account.API.Migrations
 {
     [DbContext(typeof(AccountDbContext))]
-    [Migration("20240808091858_RemoveHasPrincipalKeyV4")]
-    partial class RemoveHasPrincipalKeyV4
+    [Migration("20240808175855_V1")]
+    partial class V1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -36,7 +36,6 @@ namespace Account.API.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasMaxLength(1000)
                         .HasColumnType("varchar(max)");
 
                     b.Property<string>("LicenseNumber")
@@ -59,7 +58,7 @@ namespace Account.API.Migrations
 
                     b.HasIndex("LicenseNumber", "VerificationStatus")
                         .IsUnique()
-                        .HasFilter(" [VerificationStatus] = 'Accepted' ");
+                        .HasFilter("[VerificationStatus] = 'Accepted'");
 
                     b.ToTable("BusinessLicenses");
                 });
@@ -129,9 +128,7 @@ namespace Account.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("LicenseNumber", "VerificationStatus")
+                    b.HasIndex("UserId", "VerificationStatus")
                         .IsUnique()
                         .HasFilter("[VerificationStatus] = 'Accepted' ");
 
@@ -192,9 +189,7 @@ namespace Account.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId");
-
-                    b.HasIndex("IdentityNumber", "VerificationStatus")
+                    b.HasIndex("UserId", "VerificationStatus")
                         .IsUnique()
                         .HasFilter("[VerificationStatus] =  'Accepted' ");
 

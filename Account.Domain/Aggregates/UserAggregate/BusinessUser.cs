@@ -63,25 +63,23 @@ public class BusinessUser : User
         // domain event already published in the parent class
     }
 
-    public (string? ErrorParameter, string? ErrorMessage) AddBusinessLicenses(string licenseNumber, string name, string description)
+    public (BusinessLicense? newBusinessLicense, string? ErrorParameter, string? ErrorMessage) AddBusinessLicenses(string licenseNumber, string name, string description)
     {  
         var licenses = BusinessLicenses?.SingleOrDefault(c => c.LicenseNumber
             .Equals(licenseNumber, StringComparison.CurrentCultureIgnoreCase) && c.VerificationStatus == Enumerations.VerificationState.Accepted);
 
         if (licenses is not null)
         {
-            return ("LicenseNumber", $"License number {licenseNumber} with status 'Accepted' is already registered");
-        }
-
-        BusinessLicenses ??= [];
+            return (null, "LicenseNumber", $"Business license with number {licenseNumber} and status 'Accepted' already registered");
+        } 
 
         var certification = new BusinessLicense(Id, licenseNumber, name, description);
         
-        BusinessLicenses.Add(certification);
+        BusinessLicenses?.Add(certification);
 
         RaiseBusinessLicenseAddedDomainEvent(certification);
 
-        return (null, null);
+        return (certification, null, null);
     }
     
     public void RemoveBusinessLicenses(Guid id)
@@ -97,7 +95,7 @@ public class BusinessUser : User
         RaiseBusinessLicenseRemovedDomainEvent(certification);
     } 
 
-    public (string? ErrorParameter, string? ErrorMessage) AddStaff(string username, string email, string phoneNumber, string name, Address address, string timeZoneId)
+    public (Staff? newStaff, string? ErrorParameter, string? ErrorMessage) AddStaff(string username, string email, string phoneNumber, string name, Address address, string timeZoneId)
     {
         ArgumentNullException.ThrowIfNullOrWhiteSpace(username);
         ArgumentNullException.ThrowIfNullOrWhiteSpace(email);
@@ -110,25 +108,26 @@ public class BusinessUser : User
 
         if (Staffs.Any(x => x.Username.Equals(username, StringComparison.CurrentCultureIgnoreCase)))
         {
-            return ("Username", $"Username: {username} is already registered. Please use a different username.");
+
+            return (null, "Username", $"Username: {username} is already registered. Please use a different username.");
         } 
 
         if (Staffs.Any(x => x.PhoneNumber.Equals(phoneNumber, StringComparison.CurrentCultureIgnoreCase)
             || (x.NewPhoneNumber?.Equals(phoneNumber, StringComparison.CurrentCultureIgnoreCase)) == true))
         {
-            return ("PhoneNumber", $"Phone Number: {phoneNumber} is already registered. Please use a different phone number."); 
+            return (null, "PhoneNumber", $"Phone Number: {phoneNumber} is already registered. Please use a different phone number."); 
         }
 
         if (Staffs.Any(x => x.Email.Equals(email, StringComparison.CurrentCultureIgnoreCase)
             || (x.NewEmail?.Equals(email, StringComparison.CurrentCultureIgnoreCase) == true)))
         {
-            return ("Email", $"Email: {email} is already registered. Please use a different email."); 
+            return (null, "Email", $"Email: {email} is already registered. Please use a different email."); 
         } 
 
         var staff = new Staff(Id, Code, username, email, phoneNumber, name, address, timeZoneId, null); 
         Staffs.Add(staff); 
         RaiseStaffAddedDomainEvent(staff); 
-        return (null, null);
+        return (staff, null, null);
     } 
 
     public void RemoveStaff(Guid id)

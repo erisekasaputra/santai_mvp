@@ -22,14 +22,14 @@ public class UserRepository : IUserRepository
 
     public void UpdateUser(User user)
     {
-        _context.Users.Update(user);   
+        _context.Users.Update(user);
     }
 
     public async Task<BusinessUser?> GetBusinessUserByIdAsync(Guid id)
     {
         return await _context.Users.OfType<BusinessUser>()
-            .Include(x => x.BusinessLicenses) 
-            .Include(x => x.Staffs)
+            .Include(x => x.BusinessLicenses)
+            .Include(x => x.Staffs) 
             .AsSplitQuery()
             .FirstOrDefaultAsync(x => x.Id == id);
     } 

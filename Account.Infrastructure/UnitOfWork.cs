@@ -122,4 +122,14 @@ public class UnitOfWork : IUnitOfWork
     {
         return await _context.SaveChangesAsync(cancellationToken);
     }
+
+    public void AttachEntity<TEntity>(TEntity entity) where TEntity : class
+    {
+        _context.Attach(entity);
+    }
+
+    public void SetEntityState<TEntity>(TEntity entity, EntityState state) where TEntity : class
+    {
+        _context.Entry(entity).State = state;
+    }
 }

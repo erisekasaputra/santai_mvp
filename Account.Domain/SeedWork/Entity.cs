@@ -12,10 +12,10 @@ public abstract class Entity
 
     protected Entity()
     {
-        Id = Guid.NewGuid();
+        Id = Guid.NewGuid();    
         _domainEvents = [];
     }
-
+     
     public void AddDomainEvent(INotification eventItem)
     {
         _domainEvents ??= [];

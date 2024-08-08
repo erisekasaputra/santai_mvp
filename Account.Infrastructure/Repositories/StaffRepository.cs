@@ -14,7 +14,7 @@ public class StaffRepository : IStaffRepository
         _context = context;
     }
 
-    public async Task<IEnumerable<Staff>?> GetByIdsAsNoTrackAsync(params (IdentityParameter, IEnumerable<string>)[] parameters)
+    public async Task<IEnumerable<Staff>?> GetByIdentitiesAsNoTrackAsync(params (IdentityParameter, IEnumerable<string>)[] parameters)
     {
         var asQueryable = _context.Staffs
             .AsNoTracking()
@@ -54,7 +54,7 @@ public class StaffRepository : IStaffRepository
         return await asQueryable.ToListAsync();
     } 
     
-    public async Task<IEnumerable<Staff>?> GetExcludingIdsAsNoTrackAsync(params (IdentityParameter, IEnumerable<(Guid id, string identity)>)[] parameters)
+    public async Task<IEnumerable<Staff>?> GetByIdentitiesExcludingIdsAsNoTrackAsync(params (IdentityParameter, IEnumerable<(Guid id, string identity)>)[] parameters)
     {
         var queryAble = _context.Staffs
             .AsNoTracking()
