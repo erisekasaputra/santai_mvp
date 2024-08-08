@@ -1,16 +1,15 @@
-﻿using Account.Domain.Aggregates.CertificationAggregate;
-using Account.Domain.Aggregates.IdentificationAggregate;  
+﻿using Account.Domain.Aggregates.CertificationAggregate; 
 using Account.Domain.Exceptions;
 using Account.Domain.ValueObjects;
 using Account.Domain.Enumerations;
+using Account.Domain.Aggregates.NationalIdentityAggregate;
+using Account.Domain.Aggregates.DrivingLicenseAggregate;
 
 namespace Account.Domain.Aggregates.UserAggregate;
 
 public class MechanicUser : User
-{
-    private List<Certification>? _certifications;
-
-    public IReadOnlyCollection<Certification>? Certifications => _certifications?.AsReadOnly();
+{  
+    public ICollection<Certification>? Certifications { get; private set; }
 
     public ICollection<DrivingLicense>? DrivingLicenses { get; private set; } // Navigation properties
 
@@ -20,21 +19,21 @@ public class MechanicUser : User
      
     public bool IsVerified { get; private set; }
 
-    public string DeviceId { get; private set; } 
+    public string? DeviceId { get; private set; }  
 
-    public MechanicUser() : base()
+    protected MechanicUser() : base()
     {
-        _certifications = [];
-    } 
+
+    }
 
     public MechanicUser(
         Guid identityId,
         string username,
         string email,
         string phoneNumber,
-        Address address,
-        int referralRewardPoint,
-        string deviceId) : base(identityId, username, email, phoneNumber, address, referralRewardPoint)
+        Address address, 
+        string timeZoneId,
+        string deviceId) : base(identityId, username, email, phoneNumber, address, timeZoneId)
     {  
         Rating = 5;
         IsVerified = false;
@@ -43,28 +42,33 @@ public class MechanicUser : User
         RaiseMechanicUserCreatedDomainEvent();
     }
 
-    protected override void UpdateEmail(string email)
+    public override void AddReferralProgram(int referralRewardPoint, int referralValidDate)
+    {
+        base.AddReferralProgram(referralRewardPoint, referralValidDate);
+    }
+
+    public override void UpdateEmail(string email)
     {
         base.UpdateEmail(email);
 
         RaiseEmailUpdatedDomainEvent();
     }
 
-    protected override void UpdatePhoneNumber(string phoneNumber)
+    public override void UpdatePhoneNumber(string phoneNumber)
     {
         base.UpdatePhoneNumber(phoneNumber);
 
         RaisePhoneNumberUpdatedDomainEvent();
     }
 
-    protected override void VerifyEmail()
+    public override void VerifyEmail()
     {
         base.VerifyEmail();
 
         RaiseEmailVerifiedDomainEvent();
     }
 
-    protected override void VerifyPhoneNumber()
+    public override void VerifyPhoneNumber()
     {
         base.VerifyPhoneNumber();
 
@@ -123,14 +127,14 @@ public class MechanicUser : User
             throw new DomainException($"You certificate with certificate id {certificationId} is expired");
         }
 
-        _certifications ??= [];
+        Certifications ??= [];
 
-        _certifications.Add(new Certification(Id, certificationId, certificationName, validDate, specializations));
+        Certifications.Add(new Certification(Id, certificationId, certificationName, validDate, specializations));
     }
 
     public void RemoveCertification(Guid id)
     {
-        if (_certifications is null)
+        if (Certifications is null)
         {
             return;
         }
@@ -139,7 +143,7 @@ public class MechanicUser : User
 
         if (certification is not null)
         {  
-            _certifications.Remove(certification);
+            Certifications?.Remove(certification);
         }
     }
 

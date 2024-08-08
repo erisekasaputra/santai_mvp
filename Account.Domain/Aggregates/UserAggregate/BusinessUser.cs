@@ -1,34 +1,24 @@
-﻿using Account.Domain.Aggregates.BusinessLicenseAggregate;  
+﻿using Account.Domain.Aggregates.BusinessLicenseAggregate;
+using Account.Domain.Events;
 using Account.Domain.Exceptions;
 using Account.Domain.Extensions;
-using Account.Domain.ValueObjects;
+using Account.Domain.ValueObjects; 
 
 namespace Account.Domain.Aggregates.UserAggregate;
 
 public class BusinessUser : User
 {  
-    public string Code { get; private init; }
-    
-    public string BusinessName { get; private set; }
-    
-    public string ContactPerson { get; private set; }
-    
-    public string? TaxId { get; private set; }
-      
-    public string? WebsiteUrl { get; private set; }
+    public string Code { get; private init; }  
+    public string BusinessName { get; private set; } 
+    public string ContactPerson { get; private set; } 
+    public string? TaxId { get; private set; } 
+    public string? WebsiteUrl { get; private set; } 
+    public string? Description { get; private set; }    
+    public ICollection<Staff>? Staffs { get; private set; } 
+    public ICollection<BusinessLicense>? BusinessLicenses { get; private set; }  
+    protected BusinessUser() : base()
+    { 
 
-    public string? Description { get; private set; }  
-
-    public ICollection<Staff>? Staffs { get; private set; }
-
-    private List<BusinessLicense>? _businessLicenses { get; set; }
-
-    public IReadOnlyCollection<BusinessLicense>? BusinessLicenses => _businessLicenses?.AsReadOnly(); 
-
-    public BusinessUser() : base()
-    {
-        _businessLicenses = [];
-        Staffs = [];
     }
 
     public BusinessUser(
@@ -41,8 +31,8 @@ public class BusinessUser : User
         string? taxId,
         string contactPerson,
         string? websiteUrl,
-        string? description,
-        int referralRewardPoint) : base(identityId, username, email, phoneNumber, address, referralRewardPoint)
+        string? description, 
+        string timeZoneId) : base(identityId, username, email, phoneNumber, address, timeZoneId)
     { 
         Code = UniqueIdGenerator.Generate(Id);
         BusinessName = businessName ?? throw new ArgumentNullException(nameof(businessName));
@@ -50,58 +40,96 @@ public class BusinessUser : User
         ContactPerson = contactPerson ?? throw new ArgumentNullException(nameof(contactPerson));  
         WebsiteUrl = websiteUrl;
         Description = description;
+
+        RaiseBusinessUserCreatedDomainEvent(this);
+    } 
+
+    public void Update(string businessName, string contactPerson, string? taxId, string? websiteUrl, string? description, Address address, string timeZoneId)
+    {
+        BusinessName = businessName ?? throw new ArgumentNullException(nameof(businessName));
+        ContactPerson = contactPerson ?? throw new ArgumentNullException(nameof(contactPerson));
+        TaxId = taxId;
+        WebsiteUrl = websiteUrl;
+        Description = description;
+        Address = address ?? throw new ArgumentNullException(nameof(address));
+        TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId));
+
+        RaiseBusinessUserUpdatedDomainEvent(Id, businessName, contactPerson, taxId, websiteUrl, description, address, timeZoneId);
+    }
+     
+    public override void AddReferralProgram(int referralRewardPoint, int referralValidDate)
+    { 
+        base.AddReferralProgram(referralRewardPoint, referralValidDate); 
+        // domain event already published in the parent class
     }
 
-    public void AddBusinessLicenses(string licenseNumber, string name, string description)
-    {
-        var licenses = BusinessLicenses?.SingleOrDefault(c => c.LicenseNumber == licenseNumber);
+    public (string? ErrorParameter, string? ErrorMessage) AddBusinessLicenses(string licenseNumber, string name, string description)
+    {  
+        var licenses = BusinessLicenses?.SingleOrDefault(c => c.LicenseNumber
+            .Equals(licenseNumber, StringComparison.CurrentCultureIgnoreCase) && c.VerificationStatus == Enumerations.VerificationState.Accepted);
 
         if (licenses is not null)
         {
-            throw new DomainException($"Business license with number {licenseNumber} is already registered");
+            return ("LicenseNumber", $"License number {licenseNumber} with status 'Accepted' is already registered");
         }
 
-        _businessLicenses ??= [];
-        _businessLicenses.Add(new BusinessLicense(Id, licenseNumber, name, description));
+        BusinessLicenses ??= [];
+
+        var certification = new BusinessLicense(Id, licenseNumber, name, description);
+        
+        BusinessLicenses.Add(certification);
+
+        RaiseBusinessLicenseAddedDomainEvent(certification);
+
+        return (null, null);
     }
     
     public void RemoveBusinessLicenses(Guid id)
     {
-        if (_businessLicenses is null)
+        if (BusinessLicenses is null)
         {
             return;
         }
 
-        var certification = BusinessLicenses?.SingleOrDefault(e => e.Id == id);
-
-        if (certification is not null)
-        {
-            _businessLicenses.Remove(certification);
-        }
+        var certification = (BusinessLicenses?.SingleOrDefault(e => e.Id == id)) ?? throw new DomainException($"Business license with id {id} does not exists in the current aggregate");
+        
+        BusinessLicenses?.Remove(certification); 
+        RaiseBusinessLicenseRemovedDomainEvent(certification);
     } 
 
-    public void AddStaff(string username, string email, string phoneNumber, string name, Address address)
+    public (string? ErrorParameter, string? ErrorMessage) AddStaff(string username, string email, string phoneNumber, string name, Address address, string timeZoneId)
     {
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(username);
         ArgumentNullException.ThrowIfNullOrWhiteSpace(email);
         ArgumentNullException.ThrowIfNullOrWhiteSpace(phoneNumber);
         ArgumentNullException.ThrowIfNullOrWhiteSpace(name);
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(timeZoneId);
+        ArgumentNullException.ThrowIfNull(address); 
          
         Staffs ??= [];
 
-        if (Staffs.Any(x => x.PhoneNumber.Trim().Equals(phoneNumber.Trim(), StringComparison.CurrentCultureIgnoreCase)))
+        if (Staffs.Any(x => x.Username.Equals(username, StringComparison.CurrentCultureIgnoreCase)))
         {
-            throw new DomainException($"Phone number {phoneNumber} is already registered. Please use a different phone number.");
+            return ("Username", $"Username: {username} is already registered. Please use a different username.");
+        } 
+
+        if (Staffs.Any(x => x.PhoneNumber.Equals(phoneNumber, StringComparison.CurrentCultureIgnoreCase)
+            || (x.NewPhoneNumber?.Equals(phoneNumber, StringComparison.CurrentCultureIgnoreCase)) == true))
+        {
+            return ("PhoneNumber", $"Phone Number: {phoneNumber} is already registered. Please use a different phone number."); 
         }
 
-        if(Staffs.Any(x => x.Email.Trim().Equals(email.Trim(), StringComparison.CurrentCultureIgnoreCase)))
+        if (Staffs.Any(x => x.Email.Equals(email, StringComparison.CurrentCultureIgnoreCase)
+            || (x.NewEmail?.Equals(email, StringComparison.CurrentCultureIgnoreCase) == true)))
         {
-            throw new DomainException($"Email {email} is already registered. Please use a different email.");
-        }
+            return ("Email", $"Email: {email} is already registered. Please use a different email."); 
+        } 
 
-        var staff = new Staff(Id, Code, username, email, phoneNumber, name, address, null);
-
-        Staffs.Add(staff);
-    }
+        var staff = new Staff(Id, Code, username, email, phoneNumber, name, address, timeZoneId, null); 
+        Staffs.Add(staff); 
+        RaiseStaffAddedDomainEvent(staff); 
+        return (null, null);
+    } 
 
     public void RemoveStaff(Guid id)
     {
@@ -112,9 +140,60 @@ public class BusinessUser : User
 
         var staff = Staffs?.FirstOrDefault(x => x.Id == id);
 
-        if (staff is not null)
-        { 
-            Staffs!.Remove(staff);
+        if (staff is null)
+        {
+            return;
         }
+
+        Staffs!.Remove(staff);
+        RaiseStaffRemovedDomainEvent(staff);
+    }
+
+    public void Delete()
+    {
+        RaiseBusinessUserDeletedDomainEvent();
+    }
+
+    private void RaiseBusinessUserDeletedDomainEvent()
+    {
+        AddDomainEvent(new BusinessUserDeletedDomainEvent(this));
+    }
+
+    private void RaiseBusinessUserUpdatedDomainEvent(Guid id, string businessName, string contactPerson, string? taxId, string? websiteUrl, string? description, Address address, string timeZoneId)
+    {
+        AddDomainEvent(new BusinessUserUpdatedDomainEvent(
+            id,
+            businessName,
+            contactPerson,
+            taxId,
+            websiteUrl,
+            description,
+            address,
+            timeZoneId));
+    }
+
+    private void RaiseBusinessLicenseRemovedDomainEvent(BusinessLicense license)
+    {
+        AddDomainEvent(new BusinessLicenseRemovedDomainEvent(license));
+    }
+
+    private void RaiseBusinessLicenseAddedDomainEvent(BusinessLicense license)
+    {
+        AddDomainEvent(new BusinessLicenseAddedDomainEvent(license));
+    }
+
+    private void RaiseStaffAddedDomainEvent(Staff staff)
+    {
+        AddDomainEvent(new StaffAddedDomainEvent(staff));
+    }
+
+    private void RaiseStaffRemovedDomainEvent(Staff staff)
+    {
+        AddDomainEvent(new StaffRemovedDomainEvent(staff));
+    }
+
+    private void RaiseBusinessUserCreatedDomainEvent(BusinessUser user)
+    {
+        AddDomainEvent(new BusinessUserCreatedDomainEvent(user));
     }
 }

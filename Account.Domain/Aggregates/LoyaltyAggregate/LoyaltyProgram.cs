@@ -1,19 +1,20 @@
 ﻿using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Enumerations;
+using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 
 namespace Account.Domain.Aggregates.LoyaltyAggregate;
 
 public class LoyaltyProgram : Entity, IAggregateRoot
 {   
-    public Guid LoyaltyUserId { get; private set; }
+    public Guid LoyaltyUserId { get; private init; }
 
     public User User { get; private set; } 
 
     public int LoyaltyPoints { get; private set; }
 
     public LoyaltyTier LoyaltyTier { get; private set; } 
-
+     
     public LoyaltyProgram()
     {
 
@@ -21,8 +22,7 @@ public class LoyaltyProgram : Entity, IAggregateRoot
      
     public LoyaltyProgram(
         Guid loyaltyUserId,
-        int loyaltyPoints,
-        LoyaltyTier loyaltyTier)
+        int loyaltyPoints)
     {  
         LoyaltyUserId = loyaltyUserId;
         LoyaltyPoints = loyaltyPoints;
@@ -36,12 +36,21 @@ public class LoyaltyProgram : Entity, IAggregateRoot
 
     public void AddPoint(int point)
     {
-        LoyaltyPoints += point; 
+        LoyaltyPoints += point;
+
+        RaisePointAddedDomainEvent();
     }
 
     public void ReducePoint(int point)
     {
-        LoyaltyPoints -= point; 
+        if ((LoyaltyPoints - point) < 0)
+        {
+            throw new DomainException("Point is not enough");
+        }
+
+        LoyaltyPoints -= point;
+
+        RaisePointReducedDomainEvent();
     }
 
     public void UpdateLoyaltyTier(LoyaltyTier tier)
@@ -62,6 +71,16 @@ public class LoyaltyProgram : Entity, IAggregateRoot
         }
 
         RaiseTierDowngradedDomainEvent(); 
+    }
+
+    private void RaisePointReducedDomainEvent()
+    {
+        throw new NotImplementedException();
+    }
+
+    private void RaisePointAddedDomainEvent()
+    {
+        throw new NotImplementedException();
     }
 
     private void RaiseTierDowngradedDomainEvent()

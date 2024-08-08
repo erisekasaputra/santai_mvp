@@ -1433,6 +1433,17 @@
           }
         }
       },
+      "Account.Domain/1.0.0": {
+        "dependencies": {
+          "MediatR": "12.4.0"
+        },
+        "runtime": {
+          "Account.Domain.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "Catalog.Contracts/1.0.0": {
         "dependencies": {
           "MediatR": "12.4.0"
@@ -1458,6 +1469,7 @@
       },
       "Catalog.Infrastructure/1.0.0": {
         "dependencies": {
+          "Account.Domain": "1.0.0",
           "Azure.Identity": "1.13.0-beta.1",
           "Catalog.Domain": "1.0.0",
           "MassTransit.EntityFrameworkCore": "8.2.4-develop.1875",
@@ -2303,6 +2315,11 @@
       "sha512": "sha512-58eRa3gxKiTNXbGYUCy2T3biFAQehB+yBFKXoBGLjZbhBxbU1VUV5QnMgPNAU7gb2HZy3M6703pcUrC4p4IViA==",
       "path": "ulid/1.3.3",
       "hashPath": "ulid.1.3.3.nupkg.sha512"
+    },
+    "Account.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "Catalog.Contracts/1.0.0": {
       "type": "project",

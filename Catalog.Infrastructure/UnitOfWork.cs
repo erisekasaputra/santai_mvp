@@ -27,7 +27,7 @@ public class UnitOfWork : IUnitOfWork
 
     public IBrandRepository _brandRepository;
 
-    private IDbContextTransaction? _dbTransactionContext;
+    private IDbContextTransaction? _transaction;
 
     private readonly IMediator _mediator;
 
@@ -53,21 +53,28 @@ public class UnitOfWork : IUnitOfWork
     }
 
     public async Task BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)
-    { 
-        _dbTransactionContext = await _context.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
+    {
+        if (_transaction is not null)
+        {
+            throw new InvalidOperationException("Transaction already started.");
+        }
+
+        _transaction = await _context.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
     }
 
     public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
     {
         try
         {
-            ArgumentNullException.ThrowIfNull(_dbTransactionContext);
+            if (_transaction is null)
+            {
+                throw new InvalidOperationException("No transaction started.");
+            }
 
-            await DispatchDomainEventsAsync(cancellationToken);
-            
-            await SaveChangesAsync(cancellationToken);
-
-            await _dbTransactionContext.CommitAsync(cancellationToken);
+            await _context.SaveChangesAsync(cancellationToken);
+            await _transaction.CommitAsync(cancellationToken);
+            _transaction.Dispose();
+            _transaction = null;
         }
         catch (Exception)
         {
@@ -78,9 +85,14 @@ public class UnitOfWork : IUnitOfWork
 
     public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
     {
-        ArgumentNullException.ThrowIfNull(_dbTransactionContext);
+        if (_transaction == null)
+        {
+            throw new InvalidOperationException("No transaction started.");
+        }
 
-        await _dbTransactionContext.RollbackAsync(cancellationToken);
+        await _transaction.RollbackAsync(cancellationToken);
+        _transaction.Dispose();
+        _transaction = null;
     }
 
     public async Task DispatchDomainEventsAsync(CancellationToken token = default)
@@ -106,8 +118,7 @@ public class UnitOfWork : IUnitOfWork
         domainEntities.ForEach(e => e.Entity.ClearDomainEvents());
 
         foreach (var domainEvent in domainEvents)
-        {
-            Console.WriteLine(domainEvent.GetType());
+        { 
             await _mediator.Publish(domainEvent, token);
         }
     }

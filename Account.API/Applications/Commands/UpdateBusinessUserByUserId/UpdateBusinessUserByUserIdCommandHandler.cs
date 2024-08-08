@@ -1,0 +1,49 @@
+﻿using Account.API.Applications.Services;
+using Account.API.Mapper;
+using Account.API.SeedWork;
+using Account.Domain.Exceptions;
+using Account.Domain.SeedWork;
+using MediatR;
+
+namespace Account.API.Applications.Commands.UpdateBusinessUserByUserId;
+
+public class UpdateBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWork, AppService service) : IRequestHandler<UpdateBusinessUserByUserIdCommand, Result>
+{
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    public async Task<Result> Handle(UpdateBusinessUserByUserIdCommand request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var user = await _unitOfWork.Users.GetBusinessUserByIdAsync(request.Id);
+
+            if (user is null)
+            {
+                return Result.Failure($"Business user with ID: {request.Id} is not found", ResponseStatus.NotFound);
+            }
+
+            user.Update(
+                request.BusinessName,
+                request.ContactPerson,
+                request.TaxId,
+                request.WebsiteUrl,
+                request.Description,
+                request.Address.ToAddress(),
+                request.TimeZoneId);
+
+            _unitOfWork.Users.UpdateUser(user); 
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);  
+            
+            return Result.Success(null, ResponseStatus.NoContent);
+        }
+        catch (DomainException ex)
+        {
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message);
+            return Result.Failure("An error has occurred while updating the business user data", ResponseStatus.InternalServerError);
+        }
+    }
+}

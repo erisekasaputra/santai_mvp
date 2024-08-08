@@ -1,0 +1,125 @@
+﻿using Account.Domain.Aggregates.BusinessLicenseAggregate;
+using Account.Domain.Aggregates.CertificationAggregate;
+using Account.Domain.Aggregates.DrivingLicenseAggregate;
+using Account.Domain.Aggregates.LoyaltyAggregate;
+using Account.Domain.Aggregates.NationalIdentityAggregate;
+using Account.Domain.Aggregates.ReferralAggregate;
+using Account.Domain.Aggregates.ReferredAggregate;
+using Account.Domain.Aggregates.UserAggregate;
+using Account.Domain.SeedWork;
+using Account.Infrastructure.Repositories;
+using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
+using System.Data;
+
+namespace Account.Infrastructure;
+
+public class UnitOfWork : IUnitOfWork
+{
+    private readonly AccountDbContext _context;
+    private IDbContextTransaction? _transaction;
+    private readonly IMediator _mediator;
+    public IUserRepository Users { get; }
+    public IBusinessLicenseRepository BusinessLicenses { get; }
+    public ICertificationRepository Certifications { get; }
+    public IDrivingLicenseRepository DrivingLicenses { get; }
+    public INationalIdentityRepository NationalIdentities { get; }
+    public ILoyaltyProgramRepository LoyaltyPrograms { get; }
+    public IReferralProgramRepository ReferralPrograms { get; }
+    public IReferredProgramRepository ReferredPrograms { get; }
+    public IStaffRepository Staffs { get; }
+
+    public UnitOfWork(AccountDbContext context, IMediator mediator)
+    {
+        _context = context;
+        _mediator = mediator;  
+        Users = new UserRepository(context);
+        BusinessLicenses = new BusinessLicenseRepository(context);
+        Certifications = new CertificationRepository(context);
+        DrivingLicenses = new DrivingLicenseRepository(context);   
+        NationalIdentities = new NationalIdentityRepository(context);
+        LoyaltyPrograms = new LoyaltyProgramRepository(context);
+        ReferralPrograms = new ReferralProgramRepository(context);
+        ReferredPrograms = new ReferredProgramRepository(context);
+        Staffs = new StaffRepository(context);
+    }
+
+    public async Task BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)
+    {
+        if (_transaction is not null)
+        {
+            throw new InvalidOperationException("Transaction already started.");
+        }
+
+        _transaction = await _context.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
+    }
+
+    public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            if (_transaction is null)
+            {
+                throw new InvalidOperationException("No transaction started.");
+            }
+
+            await _context.SaveChangesAsync(cancellationToken);
+
+            await _transaction.CommitAsync(cancellationToken);
+            
+            _transaction.Dispose();
+            
+            _transaction = null;
+        }
+        catch (Exception)
+        { 
+            throw;
+        }
+    }
+
+    public async Task DispatchDomainEventsAsync(CancellationToken token = default)
+    {
+        var domainEntities = _context.ChangeTracker
+            .Entries<Entity>()
+            .Where(e => e.Entity is Entity entity &&
+                        entity.DomainEvents is not null &&
+                        entity.DomainEvents.Count > 0)
+            .ToList();
+
+        var domainEvents = domainEntities
+            .SelectMany(e =>
+            {
+                if (e.Entity.DomainEvents is null)
+                {
+                    return [];
+                }
+                return e.Entity.DomainEvents;
+            })
+            .ToList();
+
+        domainEntities.ForEach(e => e.Entity.ClearDomainEvents());
+
+        foreach (var domainEvent in domainEvents)
+        { 
+            await _mediator.Publish(domainEvent, token);
+        }
+    }
+
+    public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
+    {
+        if (_transaction == null)
+        {
+            throw new InvalidOperationException("No transaction started.");
+        }
+
+        await _transaction.RollbackAsync(cancellationToken);
+        _transaction.Dispose();
+        _transaction = null;
+    }
+
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        return await _context.SaveChangesAsync(cancellationToken);
+    }
+}

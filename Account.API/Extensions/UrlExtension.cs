@@ -1,0 +1,15 @@
+﻿using System.Text.RegularExpressions;
+
+namespace Account.API.Extensions;
+
+public static partial class UrlExtension
+{
+    [GeneratedRegex(@"^(https?:\/\/)?([\w\-]+\.)+[a-z]{2,6}(:\d+)?(\/[\w\-\.\/?%&=]*)?$", RegexOptions.IgnoreCase, "en-US")]
+    private static partial Regex UrlRegex();
+
+    public static bool IsValidUrl(string url)
+    {  
+        Regex regex = UrlRegex();
+        return regex.IsMatch(url);  
+    } 
+}

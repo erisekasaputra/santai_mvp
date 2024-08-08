@@ -53,6 +53,10 @@
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.0-preview.6.24328.4, )"
+            },
+            "StackExchange.Redis": {
+              "target": "Package",
+              "version": "[2.8.0, )"
             }
           },
           "imports": [

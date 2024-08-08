@@ -1,5 +1,6 @@
 ﻿using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Enumerations;
+using Account.Domain.Events;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 
@@ -19,20 +20,16 @@ public class BusinessLicense : Entity, IAggregateRoot
 
     public VerificationState VerificationStatus { get; private set; }
 
-    public BusinessLicense()
-    {
-
-    }
-
+   
     public BusinessLicense(Guid businessUserId, string licenseNumber, string name, string description)
     {
         BusinessUserId = businessUserId;
         Name = name;
         Description = description;
         LicenseNumber = licenseNumber;
-        VerificationStatus = VerificationState.Waiting;
-        BusinessUser = new();
+        VerificationStatus = VerificationState.Waiting; 
     }
+
     public void VerifyDocument()
     {
         if (!VerificationStatus.Equals(VerificationState.Waiting))
@@ -59,12 +56,12 @@ public class BusinessLicense : Entity, IAggregateRoot
 
     private void RaiseDocumentAcceptedDomainEvent()
     {
-        throw new NotImplementedException();
+        AddDomainEvent(new BusinessLicenseAcceptedDomainEvent());
     }
 
     private void RaiseDocumentRejectedDomainEvent()
     {
-        throw new NotImplementedException();
+        AddDomainEvent(new BusinessLicenseRejectedDomainEvent());
     }
 
     private void RaiseVerificationStatusChangedException(VerificationState documentVerificationStatus)

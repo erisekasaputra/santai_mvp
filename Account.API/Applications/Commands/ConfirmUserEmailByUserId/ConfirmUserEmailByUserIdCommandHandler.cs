@@ -1,0 +1,41 @@
+﻿using Account.API.Applications.Services;
+using Account.API.SeedWork;
+using Account.Domain.Exceptions;
+using Account.Domain.SeedWork;
+using MediatR;
+
+namespace Account.API.Applications.Commands.ConfirmUserEmailByUserId;
+
+public class ConfirmUserEmailByUserIdCommandHandler(IUnitOfWork unitOfWork, AppService service) : IRequestHandler<ConfirmUserEmailByUserIdCommand, Result>
+{
+    private readonly IUnitOfWork _UnitOfWork = unitOfWork;
+    private readonly AppService _service = service;
+
+    public async Task<Result> Handle(ConfirmUserEmailByUserIdCommand request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var user = await _UnitOfWork.Users.GetUserByIdAsync(request.Id);
+
+            if (user is null)
+            {
+                return Result.Failure($"User with id {request.Id} is not found", ResponseStatus.NotFound);
+            }
+
+            user.VerifyEmail();
+            _UnitOfWork.Users.UpdateUser(user);
+            await _UnitOfWork.SaveChangesAsync(cancellationToken);
+
+            return Result.Success(null, ResponseStatus.NoContent);
+        }
+        catch (DomainException ex)
+        {
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+        }
+        catch (Exception ex)
+        {
+            _service.Logger.LogError(ex.Message);
+            return Result.Failure("An error has occurred while confirming user email", ResponseStatus.InternalServerError);
+        }
+    }
+}

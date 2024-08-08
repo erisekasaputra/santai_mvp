@@ -1,0 +1,3 @@
+﻿namespace Account.Infrastructure;
+
+public interface IAccountInfrastructureMarkerInterface;

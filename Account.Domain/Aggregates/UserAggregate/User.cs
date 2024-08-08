@@ -2,89 +2,107 @@
 using Account.Domain.Aggregates.ReferralAggregate;
 using Account.Domain.Aggregates.ReferredAggregate;
 using Account.Domain.Enumerations;
+using Account.Domain.Events;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
-using Account.Domain.ValueObjects;
+using Account.Domain.ValueObjects; 
 
 namespace Account.Domain.Aggregates.UserAggregate;
 
 public abstract class User : Entity, IAggregateRoot
 {
-    public Guid IdentityId { get; set; }
+    public Guid IdentityId { get; private init; }
 
     public string Username { get; private init; }
 
     public string Email { get; private set; }
 
     public bool IsEmailVerified { get; private set; }
-     
-    private string? NewEmail { get; set; }
 
-    public string PhoneNumber { get; set; }
+    public string? NewEmail { get; private set; }
+
+    public string PhoneNumber { get; private set; }
 
     public bool IsPhoneNumberVerified { get; private set; }
 
-    private string? NewPhoneNumber { get; set; }
+    public string? NewPhoneNumber { get; private set; }
 
-    public DateTime CreatedAt { get; init; }
+    public DateTime CreatedAtUtc { get; private init; }
 
-    public DateTime UpdatedAt { get; set; }
+    public DateTime UpdatedAtUtc { get; private set; }
 
-    public AccountStatus AccountStatus { get; set; }
+    public AccountStatus AccountStatus { get; private set; }
 
-    public Address Address { get; set; }
+    public Address Address { get; protected set; }
+     
+    public ReferralProgram? ReferralProgram { get; protected set; }
 
-    public ReferralProgram ReferralProgram { get; private set; }
+    public LoyaltyProgram? LoyaltyProgram { get; protected set; }
+     
+    public ICollection<ReferredProgram>? ReferredPrograms { get; protected set; }
 
-    public LoyaltyProgram LoyaltyProgram { get; private set; }
+    public string TimeZoneId {  get; set; }  
 
-    public ICollection<ReferredProgram> ReferredPrograms { get; set; }
-
-    public User()
+    protected User()
     {
+
     }
 
-    public User(Guid identityId, string username, string email, string phoneNumber, Address address, int referralRewardPoint)
+    public User(Guid identityId, string username, string email, string phoneNumber, Address address, string timeZoneId)
     {
         IdentityId = identityId != default ? identityId : throw new ArgumentNullException(nameof(identityId));
         Username = username ?? throw new ArgumentNullException(nameof(username));
         Email = email ?? throw new ArgumentNullException(nameof(email));
         PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber));
         Address = address ?? throw new ArgumentNullException(nameof(address));
-        CreatedAt = DateTime.UtcNow;
-        UpdatedAt = DateTime.UtcNow;
+        TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId)); 
+        CreatedAtUtc = DateTime.UtcNow;
+        UpdatedAtUtc = DateTime.UtcNow;
         AccountStatus = AccountStatus.Active;
 
         NewEmail = Email;
         NewPhoneNumber = PhoneNumber;
         IsEmailVerified = false;
-        IsPhoneNumberVerified = false;
-
-        ReferralProgram = new ReferralProgram(Id, DateTime.UtcNow, referralRewardPoint);
-        LoyaltyProgram = new LoyaltyProgram(Id, 0, Enumerations.LoyaltyTier.Basic);
+        IsPhoneNumberVerified = false; 
+         
+        LoyaltyProgram = new LoyaltyProgram(Id, 0); 
     }
 
-    protected virtual void UpdateEmail(string email)
+    public virtual void AddReferralProgram(int referralRewardPoint, int referralValidDate)
+    {
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(referralRewardPoint, 0);
+        ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(referralValidDate, 0); 
+
+        ReferralProgram = new ReferralProgram(Id, DateTime.UtcNow.AddMonths(referralValidDate), referralRewardPoint);
+
+        RaiseReferralProgramAddedDomainEvent(ReferralProgram);
+    } 
+
+    public virtual void UpdateEmail(string email)
     {
         ArgumentNullException.ThrowIfNullOrWhiteSpace(email);
 
         NewEmail = email;
         IsEmailVerified = false;
 
-        UpdatedAt = DateTime.UtcNow;
-    }
+        UpdatedAtUtc = DateTime.UtcNow;
 
-    protected virtual void UpdatePhoneNumber(string phoneNumber)
+        RaiseEmailUpdatedDomainEvent(Id, Email, NewEmail);
+    } 
+
+    public virtual void UpdatePhoneNumber(string phoneNumber)
     {
         ArgumentNullException.ThrowIfNullOrWhiteSpace(phoneNumber);
 
         NewPhoneNumber = phoneNumber;
         IsPhoneNumberVerified = false; 
 
-        UpdatedAt = DateTime.UtcNow;
-    }
+        UpdatedAtUtc = DateTime.UtcNow;
 
-    protected virtual void VerifyEmail()
+        RaisePhoneNumberUpdatedDomainEvent(Id, PhoneNumber, NewPhoneNumber);
+    } 
+
+    public virtual void VerifyEmail()
     {
         if (string.IsNullOrWhiteSpace(NewEmail))
         {
@@ -94,9 +112,11 @@ public abstract class User : Entity, IAggregateRoot
         Email = NewEmail;
         IsEmailVerified = true;
         NewEmail = null;
-    }
 
-    protected virtual void VerifyPhoneNumber()
+        RaiseEmailVerifiedDomainEvent(Id, Email);
+    }  
+
+    public virtual void VerifyPhoneNumber()
     {
         if (string.IsNullOrWhiteSpace(NewPhoneNumber))
         {
@@ -106,5 +126,32 @@ public abstract class User : Entity, IAggregateRoot
         PhoneNumber = NewPhoneNumber;
         IsPhoneNumberVerified = true;
         NewPhoneNumber = null;
+
+        RaisePhoneNumberVerifiedDomainEvent(Id, PhoneNumber);
+    } 
+
+    private void RaiseReferralProgramAddedDomainEvent(ReferralProgram referralProgram)
+    {
+        AddDomainEvent(new ReferralProgramAddedDomainEvent(referralProgram));
+    }
+
+    private void RaiseEmailUpdatedDomainEvent(Guid id, string oldEmail, string newEmail)
+    {
+        AddDomainEvent(new EmailUpdatedDomainEvent(id, oldEmail, newEmail));
+    }
+
+    private void RaisePhoneNumberUpdatedDomainEvent(Guid id, string oldPhoneNumber, string newPhoneNumber)
+    {
+        AddDomainEvent(new PhoneNumberUpdatedDomainEvent(id, oldPhoneNumber, newPhoneNumber));
+    }
+
+    private void RaiseEmailVerifiedDomainEvent(Guid id, string email)
+    {
+        AddDomainEvent(new EmailVerifiedDomainEvent(id, email));
+    }
+
+    private void RaisePhoneNumberVerifiedDomainEvent(Guid id, string phoneNumber)
+    {
+        AddDomainEvent(new PhoneNumberVerifiedDomainEvent(id, phoneNumber));
     }
 }

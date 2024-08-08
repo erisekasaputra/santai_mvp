@@ -2,7 +2,9 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Infrastructure\bin\Debug\net9.0\Catalog.Infrastructure.runtimeconfig.json
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Infrastructure\bin\Debug\net9.0\Catalog.Infrastructure.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Infrastructure\bin\Debug\net9.0\Catalog.Infrastructure.pdb
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Infrastructure\bin\Debug\net9.0\Account.Domain.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Infrastructure\bin\Debug\net9.0\Catalog.Domain.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Infrastructure\bin\Debug\net9.0\Account.Domain.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Infrastructure\bin\Debug\net9.0\Catalog.Domain.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Infrastructure\obj\Debug\net9.0\Catalog.Infrastructure.csproj.AssemblyReference.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Infrastructure\obj\Debug\net9.0\Catalog.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig

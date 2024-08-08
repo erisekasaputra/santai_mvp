@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "0VNEQX9q0ts=",
+  "dgSpecHash": "0boanrni180=",
   "success": true,
-  "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Account.Domain\\Account.Domain.csproj",
+  "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Account.Domain\\Account.Domain.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\erise\\.nuget\\packages\\mediatr\\12.4.0\\mediatr.12.4.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",

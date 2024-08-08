@@ -8,19 +8,24 @@ public class ReferralProgram : Entity, IAggregateRoot
 {
     public string ReferralCode { get; private init; }
 
-    public Guid UserId { get; private set; }
+    public Guid UserId { get; private init; }
 
-    public DateTime ReferralDate { get; private set; }
+    public DateTime ValidDateUtc { get; private init; }
 
     public int RewardPoint { get; private set; }
 
     public User User { get; private set; }   
 
-    public ReferralProgram(Guid userId, DateTime referralDate, int rewardPoint)
+    public ReferralProgram(Guid userId, DateTime validDateUtc, int rewardPoint)
     {   
-        UserId = userId;
-        ReferralCode = UniqueIdGenerator.Generate(userId);
-        ReferralDate = referralDate;
-        RewardPoint = rewardPoint;
+        if (validDateUtc < DateTime.UtcNow)
+        {
+            throw new Exception("Referral valid date can not in the past");
+        }
+
+        UserId = userId != default ? userId : throw new ArgumentNullException(nameof(userId));
+        ReferralCode = UniqueIdGenerator.Generate(userId); 
+        ValidDateUtc = validDateUtc != default ? validDateUtc : throw new ArgumentNullException(nameof(validDateUtc));
+        RewardPoint = rewardPoint > 0 ? rewardPoint : throw new ArgumentOutOfRangeException(nameof(rewardPoint));
     }
 }

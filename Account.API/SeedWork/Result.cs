@@ -1,59 +1,76 @@
 ﻿namespace Account.API.SeedWork;
- 
-public class Result<T>
+
+public class Result
 {
-    public bool Success { get; }
-    public T? Data { get; }
-    public IEnumerable<string> Errors { get; }
-    public int StatusCode { get; }
-    public IEnumerable<string> Links { get; }
+    public bool IsSuccess { get; set; }
+    public object? Data { get; set; }
+    public string? Message { get; set; } 
+    public ResponseStatus ResponseStatus { get; set; }
+    public List<ErrorDetail> Errors { get; set; } = [];
 
-    private Result(bool success, T? data, IEnumerable<string> errors, IEnumerable<string> links, int statusCode)
+    public List<string>? Links { get; set; } = [];
+
+    public static Result Success(object? data, ResponseStatus responseStatus = ResponseStatus.Ok, string message = "")
     {
-        Success = success;
-        Data = data;
-        Errors = errors ?? [];
-        Links = links;
-        StatusCode = statusCode;
+        return new Result
+        { 
+            Data = data,
+            IsSuccess = true,
+            Message = message,
+            ResponseStatus = responseStatus
+        };
     }
 
-    public static Result<T> SuccessResult(T data, IEnumerable<string> links, int statusCode = 200)
+    public static Result Failure(string message, ResponseStatus responseStatus)
     {
-        return new Result<T>(true, data, [], links, statusCode);
+        return new Result
+        { 
+            IsSuccess = false,
+            Message = message,
+            ResponseStatus = responseStatus,
+            Errors = []
+        };
     }
 
-    public static Result<T> Failure(IEnumerable<string> errors, int statusCode = 400)
+    public Result WithError(ErrorDetail errors)
     {
-        return new Result<T>(false, default, errors, [], statusCode);
+        if (IsSuccess)
+        {
+            return this;
+        }
+
+        Errors.Add(errors);
+        return this;
     }
 
-    public static Result<T> Failure(string error, int statusCode = 400)
+    public Result WithErrors(List<ErrorDetail> errors)
     {
-        return Failure([error], statusCode);
+        if (IsSuccess)
+        {
+            return this;
+        }
+
+        Errors.AddRange(errors);
+        return this;
+    }
+    
+    public Result WithLinks(params string?[] links)
+    {
+        var filteredLinks = links.Where(x => !string.IsNullOrWhiteSpace(x));
+        if (filteredLinks is null || !filteredLinks.Any())
+        {
+            return this;
+        }
+
+        Links ??= [];
+        Links.AddRange(filteredLinks!);
+        return this;
     }
 
-    public Result<T> WithData(T data)
-    {
-        return new Result<T>(Success, data, Errors, Links, StatusCode);
-    }
-
-    public Result<T> WithErrors(IEnumerable<string> errors)
-    {
-        return new Result<T>(Success, Data, errors, Links, StatusCode);
-    }
-
-    public Result<T> WithStatusCode(int statusCode)
-    {
-        return new Result<T>(Success, Data, Errors, Links, statusCode);
-    }
-
-    public Result<T> WithLink(IEnumerable<string> links)
-    {
-        return new Result<T>(Success, Data, Errors, links, StatusCode);
-    }
-
-    public Result<T> WithLink(string link)
-    {
-        return WithLink([link]);
+    public bool TryGetData<T>(out T? result) where T : class
+    { 
+        result = Data as T;
+        return result != null;
     }
 }
+

@@ -7,11 +7,11 @@ public class RegularUser : User
 {
     public PersonalInfo PersonalInfo { get; private set; } 
 
-    public string DeviceId { get; private set; } 
+    public string? DeviceId { get; private set; }
 
-    public RegularUser() : base()
+    protected RegularUser() : base()
     {
-        
+
     }
 
     public RegularUser(
@@ -20,9 +20,9 @@ public class RegularUser : User
         string email,
         string phoneNumber,
         Address address,
-        PersonalInfo personalInfo,
-        int referralRewardPoint,
-        string deviceId) : base(identityId, username, email, phoneNumber, address, referralRewardPoint)
+        PersonalInfo personalInfo, 
+        string timeZoneId,
+        string deviceId) : base(identityId, username, email, phoneNumber, address, timeZoneId)
     {
         PersonalInfo = personalInfo ?? throw new ArgumentNullException(nameof(personalInfo)); 
         DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
@@ -30,28 +30,32 @@ public class RegularUser : User
         RaiseRegularUserCreatedDomainEvent();
     }
 
-    protected override void UpdateEmail(string email)
+    public override void AddReferralProgram(int referralRewardPoint, int referralValidDate)
+    {
+        base.AddReferralProgram(referralRewardPoint, referralValidDate);
+    }
+    public override void UpdateEmail(string email)
     {
         base.UpdateEmail(email);
 
         RaiseEmailUpdatedDomainEvent();
-    } 
-    
-    protected override void UpdatePhoneNumber(string phoneNumber)
+    }
+
+    public override void UpdatePhoneNumber(string phoneNumber)
     {
         base.UpdatePhoneNumber(phoneNumber);
 
         RaisePhoneNumberUpdatedDomainEvent();
-    } 
+    }
 
-    protected override void VerifyEmail()
+    public override void VerifyEmail()
     {
         base.VerifyEmail();
 
         RaiseEmailVerifiedDomainEvent();
-    }  
+    }
 
-    protected override void VerifyPhoneNumber()
+    public override void VerifyPhoneNumber()
     {
         base.VerifyPhoneNumber();
 

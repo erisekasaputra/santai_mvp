@@ -4,8 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Catalog.API.Services; 
-using Catalog.Domain.SeedWork;
-using Catalog.API.Validators.Item;
+using Catalog.Domain.SeedWork; 
 using MassTransit; 
 using Catalog.Infrastructure.Helpers;
 using Catalog.Contracts;
@@ -20,39 +19,26 @@ builder.Services.AddMediatR(builder =>
 });
 
 builder.Logging.ClearProviders(); 
-
 builder.Logging.AddConsole();
-
-builder.Logging.SetMinimumLevel(LogLevel.Information);
+builder.Logging.SetMinimumLevel(LogLevel.Information); 
 
 builder.Services.AddFluentValidationAutoValidation();
-
 builder.Services.AddFluentValidationClientsideAdapters();
-
-builder.Services.AddValidatorsFromAssemblyContaining<CreateItemCommandValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<Program>();
 
 builder.Services.AddRouting();
-
 builder.Services.AddOpenApi();
-
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<ApplicationService>();
-
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); 
-
 builder.Services.AddDbContext<CatalogDbContext>(opt =>
-{ 
+{
     opt.UseSqlServer(builder.Configuration["Database:SqlServer"], optionBuilder =>
     {
         optionBuilder.MigrationsAssembly("Catalog.API");
         optionBuilder.CommandTimeout(15);
     });
 });
-
-builder.Services.AddScoped<MetaTableHelper>();
 
 builder.Services.AddMassTransit(x =>
 {
@@ -86,8 +72,12 @@ builder.Services.AddMassTransit(x =>
 
         configure.ConfigureEndpoints(context);
     }); 
-});  
- 
+});
+
+builder.Services.AddScoped<ApplicationService>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+builder.Services.AddScoped<MetaTableHelper>();
+
 var app = builder.Build();  
  
 if (app.Environment.IsDevelopment())
@@ -110,4 +100,5 @@ app.CategoryRouter(groupName);
 app.BrandRouter(groupName); 
 
 app.Run();
+
 public partial class Program { }

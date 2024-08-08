@@ -1973,6 +1973,19 @@
           }
         }
       },
+      "Account.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "MediatR": "12.4.0"
+        },
+        "compile": {
+          "bin/placeholder/Account.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Account.Domain.dll": {}
+        }
+      },
       "Catalog.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
@@ -5537,6 +5550,11 @@
         "ulid.nuspec"
       ]
     },
+    "Account.Domain/1.0.0": {
+      "type": "project",
+      "path": "../Account.Domain/Account.Domain.csproj",
+      "msbuildProject": "../Account.Domain/Account.Domain.csproj"
+    },
     "Catalog.Domain/1.0.0": {
       "type": "project",
       "path": "../Catalog.Domain/Catalog.Domain.csproj",
@@ -5545,6 +5563,7 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
+      "Account.Domain >= 1.0.0",
       "Azure.Identity >= 1.13.0-beta.1",
       "Catalog.Domain >= 1.0.0",
       "MassTransit.EntityFrameworkCore >= 8.2.4-develop.1875",
@@ -5593,6 +5612,9 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
+            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Account.Domain\\Account.Domain.csproj": {
+              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Account.Domain\\Account.Domain.csproj"
+            },
             "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Catalog.Domain\\Catalog.Domain.csproj": {
               "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Catalog.Domain\\Catalog.Domain.csproj"
             }

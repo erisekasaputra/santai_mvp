@@ -32,3 +32,5 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Chat.API\obj\Debug\net9.0\Chat.API.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Chat.API\obj\Debug\net9.0\Chat.API.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Chat.API\obj\Debug\net9.0\ref\Chat.API.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Chat.API\bin\Debug\net9.0\Pipelines.Sockets.Unofficial.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Chat.API\bin\Debug\net9.0\StackExchange.Redis.dll
