@@ -1,4 +1,5 @@
 ﻿using Account.Domain.Enumerations;
+using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 
 namespace Account.Domain.ValueObjects;
@@ -8,18 +9,30 @@ public class PersonalInfo : ValueObject
     public string FirstName { get; set; }
     public string? MiddleName { get; set; }
     public string? LastName { get; set; }
-    public DateTime DateOfBirth { get; set; }
+    public DateTime DateOfBirthUtc { get; set; }
     public Gender Gender { get; set; }
     public string? ProfilePictureUrl { get; set; }
 
-    public PersonalInfo(string firstName, string? middleName, string? lastName, DateTime dateOfBirth, Gender gender, string? profilePictureUrl)
+    public PersonalInfo(string firstName, string? middleName, string? lastName, DateTime dateOfBirthUtc, Gender gender, string? profilePictureUrl)
     {
+        ArgumentNullException.ThrowIfNull(firstName, nameof(firstName));
+
+        if (dateOfBirthUtc >= DateTime.UtcNow) 
+        {
+            throw new DomainException("Can not set bithday in the past");
+        }
+
         FirstName = firstName;
         MiddleName = middleName;
         LastName = lastName;
-        DateOfBirth = dateOfBirth;
+        DateOfBirthUtc = dateOfBirthUtc;
         Gender = gender;
         ProfilePictureUrl = profilePictureUrl;
+    }
+
+    public PersonalInfo()
+    {
+        FirstName = string.Empty;
     }
 
     protected override IEnumerable<object?> GetEqualityComponents()
@@ -27,7 +40,7 @@ public class PersonalInfo : ValueObject
         yield return FirstName;
         yield return MiddleName;
         yield return LastName;
-        yield return DateOfBirth;
+        yield return DateOfBirthUtc;
         yield return Gender;
     }
 }

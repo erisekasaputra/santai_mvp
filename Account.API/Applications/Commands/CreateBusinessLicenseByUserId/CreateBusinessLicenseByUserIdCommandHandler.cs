@@ -33,9 +33,9 @@ public class CreateBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork,
             {
                 var errorDetails = new List<ErrorDetail>();
 
-                if (licenseConflict!.LicenseNumber.Clean() == license.LicenseNumber.Clean())
+                if (licenseConflict!.LicenseNumber == license.LicenseNumber)
                 {
-                    errorDetails.Add(new ErrorDetail("LicenseNumber", $"Can not have multiple license numbers with accepted status"));
+                    errorDetails.Add(new ErrorDetail("LicenseNumber", $"Can not have multiple license numbers {license.LicenseNumber} with 'Accepted' status"));
                 }
 
                 var message = errorDetails.Count switch

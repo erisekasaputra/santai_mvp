@@ -16,9 +16,11 @@ public class BusinessUser : User
     public string? Description { get; private set; }    
     public ICollection<Staff>? Staffs { get; private set; } 
     public ICollection<BusinessLicense>? BusinessLicenses { get; private set; }  
-    protected BusinessUser() : base()
-    { 
-
+    public BusinessUser() : base()
+    {
+        Code = string.Empty;
+        BusinessName = string.Empty;
+        ContactPerson = string.Empty;
     }
 
     public BusinessUser(
@@ -82,17 +84,18 @@ public class BusinessUser : User
         return (certification, null, null);
     }
     
-    public void RemoveBusinessLicenses(Guid id)
+    public BusinessLicense? RemoveBusinessLicenses(Guid id)
     {
         if (BusinessLicenses is null)
         {
-            return;
+            return null;
         }
 
         var certification = (BusinessLicenses?.SingleOrDefault(e => e.Id == id)) ?? throw new DomainException($"Business license with id {id} does not exists in the current aggregate");
         
         BusinessLicenses?.Remove(certification); 
         RaiseBusinessLicenseRemovedDomainEvent(certification);
+        return certification;
     } 
 
     public (Staff? newStaff, string? ErrorParameter, string? ErrorMessage) AddStaff(string username, string email, string phoneNumber, string name, Address address, string timeZoneId)
@@ -130,22 +133,23 @@ public class BusinessUser : User
         return (staff, null, null);
     } 
 
-    public void RemoveStaff(Guid id)
+    public Staff? RemoveStaff(Guid id)
     {
         if (Staffs is null)
         {
-            return;
+            return null;
         }
 
         var staff = Staffs?.FirstOrDefault(x => x.Id == id);
 
         if (staff is null)
         {
-            return;
+            return null;
         }
 
         Staffs!.Remove(staff);
         RaiseStaffRemovedDomainEvent(staff);
+        return staff;
     }
 
     public void Delete()

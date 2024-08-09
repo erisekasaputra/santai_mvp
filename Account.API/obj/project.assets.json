@@ -2,6 +2,24 @@
   "version": 3,
   "targets": {
     "net9.0": {
+      "AspNetCoreRateLimit/5.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Caching.Abstractions": "6.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "6.0.3",
+          "Microsoft.Extensions.Options": "6.0.0",
+          "Newtonsoft.Json": "13.0.2"
+        },
+        "compile": {
+          "lib/net6.0/AspNetCoreRateLimit.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0/AspNetCoreRateLimit.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
       "AWSSDK.CognitoIdentity/3.7.400.2": {
         "type": "package",
         "dependencies": {
@@ -2593,6 +2611,18 @@
     }
   },
   "libraries": {
+    "AspNetCoreRateLimit/5.0.0": {
+      "sha512": "6fq9+o1maGADUmpK/PvcF0DtXW2+7bSkIL7MDIo/agbIHKN8XkMQF4oze60DO731WaQmHmK260hB30FwPzCmEg==",
+      "type": "package",
+      "path": "aspnetcoreratelimit/5.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "aspnetcoreratelimit.5.0.0.nupkg.sha512",
+        "aspnetcoreratelimit.nuspec",
+        "lib/net6.0/AspNetCoreRateLimit.dll"
+      ]
+    },
     "AWSSDK.CognitoIdentity/3.7.400.2": {
       "sha512": "EemaFHBAPWq78q0ZelinYKFGf8Npe4wuYLeudXeWZiqvntxviokMTXagkb6OC2x+zRWb541xV00F73eQzAJw9Q==",
       "type": "package",
@@ -7278,6 +7308,7 @@
       "Account.Contracts >= 1.0.0",
       "Account.Domain >= 1.0.0",
       "Account.Infrastructure >= 1.0.0",
+      "AspNetCoreRateLimit >= 5.0.0",
       "Azure.Identity >= 1.13.0-beta.1",
       "EntityFramework >= 6.5.1",
       "FluentValidation >= 11.9.2",
@@ -7377,6 +7408,10 @@
           "AWSSDK.SecretsManager": {
             "target": "Package",
             "version": "[3.7.400.2, )"
+          },
+          "AspNetCoreRateLimit": {
+            "target": "Package",
+            "version": "[5.0.0, )"
           },
           "Azure.Identity": {
             "target": "Package",

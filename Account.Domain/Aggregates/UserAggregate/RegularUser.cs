@@ -1,4 +1,5 @@
-﻿using Account.Domain.Exceptions;
+﻿using Account.Domain.Events;
+using Account.Domain.Exceptions;
 using Account.Domain.ValueObjects;
 
 namespace Account.Domain.Aggregates.UserAggregate;
@@ -9,9 +10,9 @@ public class RegularUser : User
 
     public string? DeviceId { get; private set; }
 
-    protected RegularUser() : base()
+    public RegularUser() : base()
     {
-
+        PersonalInfo = new PersonalInfo();
     }
 
     public RegularUser(
@@ -19,47 +20,32 @@ public class RegularUser : User
         string username,
         string email,
         string phoneNumber,
-        Address address,
-        PersonalInfo personalInfo, 
+        Address address, 
+        PersonalInfo personalInfo,
         string timeZoneId,
         string deviceId) : base(identityId, username, email, phoneNumber, address, timeZoneId)
-    {
-        PersonalInfo = personalInfo ?? throw new ArgumentNullException(nameof(personalInfo)); 
+    { 
+        PersonalInfo = personalInfo ?? throw new ArgumentNullException(nameof(personalInfo));
         DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
 
-        RaiseRegularUserCreatedDomainEvent();
+        RaiseRegularUserCreatedDomainEvent(this);
+    }
+
+    public void Update(string timeZoneId, Address address, PersonalInfo personalInfo)
+    {
+        TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId));
+        Address = address ?? throw new ArgumentNullException(nameof(address));
+        PersonalInfo = personalInfo ?? throw new ArgumentNullException(nameof(personalInfo));
+    }
+
+    public void Delete()
+    {
+        RaiseRegularUserDeletedDomainEvent(Id);
     }
 
     public override void AddReferralProgram(int referralRewardPoint, int referralValidDate)
     {
         base.AddReferralProgram(referralRewardPoint, referralValidDate);
-    }
-    public override void UpdateEmail(string email)
-    {
-        base.UpdateEmail(email);
-
-        RaiseEmailUpdatedDomainEvent();
-    }
-
-    public override void UpdatePhoneNumber(string phoneNumber)
-    {
-        base.UpdatePhoneNumber(phoneNumber);
-
-        RaisePhoneNumberUpdatedDomainEvent();
-    }
-
-    public override void VerifyEmail()
-    {
-        base.VerifyEmail();
-
-        RaiseEmailVerifiedDomainEvent();
-    }
-
-    public override void VerifyPhoneNumber()
-    {
-        base.VerifyPhoneNumber();
-
-        RaisePhoneNumberVerifiedDomainEvent();
     } 
 
     public void ResetDeviceId()
@@ -71,7 +57,7 @@ public class RegularUser : User
 
         DeviceId = null;
 
-        RaiseDeviceIdResetDomainEvent();
+        RaiseDeviceIdResetDomainEvent(Id);
     }  
 
     public void SetDeviceId(string deviceId)
@@ -83,9 +69,8 @@ public class RegularUser : User
 
         DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
 
-        RaiseDeviceIdSetDomainEvent();
-    } 
-    
+        RaiseDeviceIdSetDomainEvent(Id, deviceId);
+    }  
 
     public void ForceSetDeviceId(string deviceId)
     {
@@ -96,46 +81,31 @@ public class RegularUser : User
 
         DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
 
-        RaiseDeviceIdForcedSetDomainEvent();
+        RaiseDeviceIdForcedSetDomainEvent(Id);
+    }
+     
+    private void RaiseDeviceIdForcedSetDomainEvent(Guid id)
+    {
+        AddDomainEvent(new DeviceIdForcedResetDomainEvent(id));
     }
 
-    private void RaiseEmailUpdatedDomainEvent()
+    private void RaiseDeviceIdSetDomainEvent(Guid id, string deviceId)
     {
-        throw new NotImplementedException();
+        AddDomainEvent(new DeviceIdSetDomainEvent(id, deviceId));
     }
 
-    private void RaisePhoneNumberUpdatedDomainEvent()
+    private void RaiseDeviceIdResetDomainEvent(Guid id)
     {
-        throw new NotImplementedException();
+        AddDomainEvent(new DeviceIdResetDomainEvent(id));
     }
 
-    private void RaiseEmailVerifiedDomainEvent()
+    private void RaiseRegularUserCreatedDomainEvent(RegularUser user)
     {
-        throw new NotImplementedException();
+        AddDomainEvent(new RegularUserCreateDomainEvent(user));
     }
 
-    private void RaisePhoneNumberVerifiedDomainEvent()
+    private void RaiseRegularUserDeletedDomainEvent(Guid id)
     {
-        throw new NotImplementedException();
-    }
-
-    private void RaiseDeviceIdForcedSetDomainEvent()
-    {
-        throw new NotImplementedException();
-    }
-
-    private void RaiseDeviceIdSetDomainEvent()
-    {
-        throw new NotImplementedException();
-    }
-
-    private void RaiseDeviceIdResetDomainEvent()
-    {
-        throw new NotImplementedException();
-    }
-
-    private void RaiseRegularUserCreatedDomainEvent()
-    {
-        throw new NotImplementedException();
+        AddDomainEvent(new RegularUserDeletedDomainEvent(id));
     }
 }

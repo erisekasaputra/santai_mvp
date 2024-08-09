@@ -47,10 +47,7 @@ public class UserRepository : IUserRepository
     }
 
     public async Task<User?> GetByIdentityAsNoTrackAsync(params (IdentityParameter, string)[] identity)
-    {
-        var userQueryable = _context.Users
-            .AsNoTracking().AsQueryable();
-
+    { 
         if (identity is null || identity.Length == 0)
         {
             throw new ArgumentException("Please provide identity type you want to check at least one identity type and value");   
@@ -59,37 +56,29 @@ public class UserRepository : IUserRepository
         var predicate = PredicateBuilder.New<User>(true);
 
         foreach (var (parameter, value) in identity)
-        {
-            var normalizedIdentity = value.Trim().ToLower();
-
+        {  
             switch (parameter)
             {
                 case IdentityParameter.Username:
-                    predicate = predicate.Or(x => x.Username.Trim().ToLower() == normalizedIdentity);
+                    predicate = predicate.Or(x => x.Username == value);
                     break;
                 case IdentityParameter.Email:
-                    predicate = predicate.Or(x => x.Email.Trim().ToLower() == normalizedIdentity
-                    || (x.NewEmail != null && x.NewEmail.Trim().ToLower() == normalizedIdentity));
+                    predicate = predicate.Or(x => x.Email == value
+                    || (x.NewEmail != null && x.NewEmail == value));
                     break;
                 case IdentityParameter.PhoneNumber:
-                    predicate = predicate.Or(x => x.PhoneNumber.Trim().ToLower() == normalizedIdentity
-                    || (x.NewPhoneNumber != null && x.NewPhoneNumber.Trim().ToLower() == normalizedIdentity));
+                    predicate = predicate.Or(x => x.PhoneNumber == value
+                    || (x.NewPhoneNumber != null && x.NewPhoneNumber == value));
                     break;
             }
         }
-
-        userQueryable = userQueryable.Where(predicate);
-
-        return await userQueryable 
-                .FirstOrDefaultAsync();
+         
+        return await _context.Users.AsNoTracking().Where(predicate).FirstOrDefaultAsync();
     }
 
     public async Task<User?> GetExcludingIdentityAsNoTrackAsync(Guid id, params (IdentityParameter, string)[] identity)
-    {
-        var userQueryable = _context.Users
-            .AsNoTracking().AsQueryable();
-
-        if (userQueryable is null || identity.Length == 0)
+    { 
+        if (identity.Length == 0)
         {
             throw new ArgumentException("Please provide identity type you want to check at least one identity type and value");
         }
@@ -97,29 +86,23 @@ public class UserRepository : IUserRepository
         var predicate = PredicateBuilder.New<User>(true);
           
         foreach (var (parameter, value) in identity)
-        {
-            var normalizedIdentity = value.Trim().ToLower();
-
+        { 
             switch (parameter)
             {
                 case IdentityParameter.Username:
-                    predicate = predicate.Or(x => x.Username.Trim().ToLower() == normalizedIdentity);
+                    predicate = predicate.Or(x => x.Username == value);
                     break;
                 case IdentityParameter.Email:
-                    predicate = predicate.Or(x => x.Email.Trim().ToLower() == normalizedIdentity
-                    || (x.NewEmail != null && x.NewEmail.Trim().ToLower() == normalizedIdentity));
+                    predicate = predicate.Or(x => x.Email == value
+                    || (x.NewEmail != null && x.NewEmail == value));
                     break;
                 case IdentityParameter.PhoneNumber:
-                    predicate = predicate.Or(x => x.PhoneNumber.Trim().ToLower() == normalizedIdentity
-                    || (x.NewPhoneNumber != null && x.NewPhoneNumber.Trim().ToLower() == normalizedIdentity));
+                    predicate = predicate.Or(x => x.PhoneNumber == value
+                    || (x.NewPhoneNumber != null && x.NewPhoneNumber == value));
                     break;
             }
         }
-
-        userQueryable = userQueryable.Where(predicate);
-
-        return await userQueryable 
-                .FirstOrDefaultAsync(x => x.Id != id);
+        return await _context.Users.Where(predicate).FirstOrDefaultAsync(x => x.Id != id);
     }
 
     public void DeleteUser(User user)

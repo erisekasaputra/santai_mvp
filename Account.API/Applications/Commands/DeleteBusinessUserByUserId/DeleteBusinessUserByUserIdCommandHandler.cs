@@ -1,4 +1,5 @@
 ﻿using Account.API.Applications.Services;
+using Account.API.Extensions;
 using Account.API.SeedWork;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
@@ -36,7 +37,7 @@ public class DeleteBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWork, Ap
         catch (Exception ex) 
         {
             _service.Logger.LogError(ex.Message);
-            return Result.Failure("An error has occurred while deleting the business user data", ResponseStatus.InternalServerError);
+            return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }
 }

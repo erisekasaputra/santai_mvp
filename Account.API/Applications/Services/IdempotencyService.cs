@@ -20,12 +20,12 @@ public class IdempotencyService : IIdempotencyService
             return await db.KeyExistsAsync(key);
         }
         catch (RedisException) 
-        { 
-            return false;
+        {
+            throw;
         }
         catch (Exception)
         { 
-            return false;
+            throw;
         }
     }
 
@@ -49,12 +49,12 @@ public class IdempotencyService : IIdempotencyService
             return result == 1;
         }
         catch (RedisException)
-        { 
-            return false;
+        {  
+            throw;
         }
         catch (Exception)
-        { 
-            return false;
+        {
+            throw;
         }
     }
 }

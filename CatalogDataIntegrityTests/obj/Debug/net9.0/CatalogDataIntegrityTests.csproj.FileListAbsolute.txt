@@ -520,3 +520,4 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\obj\Debug\net9.0\CatalogDataIntegrityTests.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\obj\Debug\net9.0\CatalogDataIntegrityTests.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\obj\Debug\net9.0\ref\CatalogDataIntegrityTests.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\AspNetCoreRateLimit.dll

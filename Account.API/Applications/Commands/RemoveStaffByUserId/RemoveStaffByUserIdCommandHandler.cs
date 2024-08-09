@@ -1,4 +1,5 @@
 ﻿using Account.API.Applications.Services;
+using Account.API.Extensions;
 using Account.API.SeedWork;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
@@ -19,16 +20,22 @@ public class RemoveStaffByUserIdCommandHandler(IUnitOfWork unitOfWork, AppServic
 
             if (user is null)
             {
-                return Result.Failure($"Business user with id {request.BusinessUserId} is not found", ResponseStatus.NotFound);
+                return Result.Failure($"Business user '{request.BusinessUserId}' not found", ResponseStatus.NotFound);
             }
 
-            user.RemoveStaff(request.StaffId);
-            
+            var deletedStaff = user.RemoveStaff(request.StaffId);
+
+            if (deletedStaff is not null) 
+            {
+                _unitOfWork.AttachEntity(deletedStaff);
+                _unitOfWork.SetEntityState(deletedStaff, Microsoft.EntityFrameworkCore.EntityState.Deleted);
+            }
+
             _unitOfWork.Users.UpdateUser(user);
             
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(null, ResponseStatus.Created);
+            return Result.Success(null, ResponseStatus.NoContent);
         }
         catch (DomainException ex)
         {
@@ -37,7 +44,7 @@ public class RemoveStaffByUserIdCommandHandler(IUnitOfWork unitOfWork, AppServic
         catch (Exception ex)
         {
             _service.Logger.LogError(ex.Message);
-            return Result.Failure("An error has occurred while removing staff from a related business user id", ResponseStatus.InternalServerError);
+            return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         } 
     }
 }

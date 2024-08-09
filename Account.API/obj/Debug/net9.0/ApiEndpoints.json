@@ -2,7 +2,7 @@
   {
     "ContainingType": "Account.API.API.UserApi",
     "Method": "UpdateUserEmailByUserId",
-    "RelativePath": "api/v1/user/{userId}/email",
+    "RelativePath": "api/v1/users/{userId}/email",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
@@ -29,7 +29,7 @@
   {
     "ContainingType": "Account.API.API.UserApi",
     "Method": "ConfirmUserEmailByUserId",
-    "RelativePath": "api/v1/user/{userId}/email/confirm",
+    "RelativePath": "api/v1/users/{userId}/email/confirm",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
@@ -51,7 +51,7 @@
   {
     "ContainingType": "Account.API.API.UserApi",
     "Method": "UpdateUserPhoneNumberByUserId",
-    "RelativePath": "api/v1/user/{userId}/phone-number",
+    "RelativePath": "api/v1/users/{userId}/phone-number",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
@@ -78,7 +78,7 @@
   {
     "ContainingType": "Account.API.API.UserApi",
     "Method": "ConfirmUserPhoneNumberByUserId",
-    "RelativePath": "api/v1/user/{userId}/phone-number/confirm",
+    "RelativePath": "api/v1/users/{userId}/phone-number/confirm",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,

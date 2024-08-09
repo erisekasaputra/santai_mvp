@@ -354,6 +354,23 @@
           "CatalogDataIntegrityTests.dll": {}
         }
       },
+      "AspNetCoreRateLimit/5.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Caching.Abstractions": "9.0.0-preview.6.24327.7",
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.0-preview.6.24327.7",
+          "Microsoft.Extensions.Options": "9.0.0-preview.6.24327.7",
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/net6.0/AspNetCoreRateLimit.dll": {
+            "assemblyVersion": "4.0.2.0",
+            "fileVersion": "4.0.2.0"
+          }
+        },
+        "compile": {
+          "lib/net6.0/AspNetCoreRateLimit.dll": {}
+        }
+      },
       "AWSSDK.Core/3.7.304.30": {
         "runtime": {
           "lib/net8.0/AWSSDK.Core.dll": {
@@ -1974,6 +1991,7 @@
       },
       "Catalog.API/1.0.0": {
         "dependencies": {
+          "AspNetCoreRateLimit": "5.0.0",
           "Azure.Identity": "1.13.0-beta.1",
           "Catalog.Contracts": "1.0.0",
           "Catalog.Infrastructure": "1.0.0",
@@ -3884,6 +3902,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "AspNetCoreRateLimit/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6fq9+o1maGADUmpK/PvcF0DtXW2+7bSkIL7MDIo/agbIHKN8XkMQF4oze60DO731WaQmHmK260hB30FwPzCmEg==",
+      "path": "aspnetcoreratelimit/5.0.0",
+      "hashPath": "aspnetcoreratelimit.5.0.0.nupkg.sha512"
     },
     "AWSSDK.Core/3.7.304.30": {
       "type": "package",

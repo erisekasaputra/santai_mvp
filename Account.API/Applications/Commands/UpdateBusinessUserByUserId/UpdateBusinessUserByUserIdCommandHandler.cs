@@ -1,4 +1,5 @@
 ﻿using Account.API.Applications.Services;
+using Account.API.Extensions;
 using Account.API.Mapper;
 using Account.API.SeedWork;
 using Account.Domain.Exceptions;
@@ -10,6 +11,7 @@ namespace Account.API.Applications.Commands.UpdateBusinessUserByUserId;
 public class UpdateBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWork, AppService service) : IRequestHandler<UpdateBusinessUserByUserIdCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly AppService _service = service; 
     public async Task<Result> Handle(UpdateBusinessUserByUserIdCommand request, CancellationToken cancellationToken)
     {
         try
@@ -18,7 +20,7 @@ public class UpdateBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWork, Ap
 
             if (user is null)
             {
-                return Result.Failure($"Business user with ID: {request.Id} is not found", ResponseStatus.NotFound);
+                return Result.Failure($"Business user with ID: {request.Id} not found", ResponseStatus.NotFound);
             }
 
             user.Update(
@@ -42,8 +44,8 @@ public class UpdateBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWork, Ap
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
-            return Result.Failure("An error has occurred while updating the business user data", ResponseStatus.InternalServerError);
+            _service.Logger.LogError(ex.Message);
+            return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }
 }

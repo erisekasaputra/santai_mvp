@@ -50,7 +50,7 @@ public static class BusinessUserApi
         catch (Exception ex)
         {
             service.Logger.LogError(ex.Message);
-            return TypedResults.InternalServerError("An error occurred while confirming business license");
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -64,14 +64,14 @@ public static class BusinessUserApi
         catch (Exception ex)
         {
             service.Logger.LogError(ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
     private static async Task<IResult> CreateBusinessLicenseBusinessUserById(Guid businessUserId, [FromBody] BusinessLicenseRequestDto request, [FromServices] AppService service, [FromServices] IValidator<BusinessLicenseRequestDto> validator)
     {
         try
-        {
+        { 
             var validate = await validator.ValidateAsync(request);
 
             if (!validate.IsValid)
@@ -87,7 +87,7 @@ public static class BusinessUserApi
         catch (Exception ex)
         {
             service.Logger.LogError(ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -102,7 +102,7 @@ public static class BusinessUserApi
         catch (Exception ex)
         {
             service.Logger.LogError(ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -110,7 +110,7 @@ public static class BusinessUserApi
     private static async Task<IResult> CreateStaffBusinessUserById(Guid businessUserId, [FromBody] StaffRequestDto request, [FromServices] AppService service, [FromServices] IValidator<StaffRequestDto> validator)
     {
         try
-        {
+        { 
             var validate = await validator.ValidateAsync(request);
 
             if (!validate.IsValid)
@@ -126,7 +126,7 @@ public static class BusinessUserApi
         catch (Exception ex)
         {
             service.Logger.LogError(ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -141,7 +141,7 @@ public static class BusinessUserApi
         catch (Exception ex)
         {
             service.Logger.LogError(ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -166,7 +166,7 @@ public static class BusinessUserApi
         catch (Exception ex)
         {
             service.Logger.LogError(ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
     
@@ -176,7 +176,7 @@ public static class BusinessUserApi
         {
             if (businessUserId != request.Id)
             {
-                TypedResults.BadRequest("Business user id does not match");
+                return TypedResults.BadRequest("Business user id does not match");
             }
 
             var validate = await validator.ValidateAsync(request);
@@ -194,7 +194,7 @@ public static class BusinessUserApi
         catch (Exception ex) 
         {
             service.Logger.LogError(ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         } 
     }
     
@@ -210,7 +210,7 @@ public static class BusinessUserApi
         catch (Exception ex)
         {
             service.Logger.LogError(ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         } 
     }
 
@@ -226,7 +226,7 @@ public static class BusinessUserApi
         catch (Exception ex)
         {
             service.Logger.LogError(ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 }

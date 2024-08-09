@@ -50,7 +50,7 @@ public class BusinessUserEntityConfiguration : IEntityTypeConfiguration<Business
             .HasConversion(
                 v => v == null ? null : v.Trim(),
                 v => v == null ? null : v.Trim())
-            .HasColumnType("nvarchar(max)");
+            .HasColumnType("nvarchar(1000)");
 
         e.HasMany(p => p.BusinessLicenses)
             .WithOne(b => b.BusinessUser)

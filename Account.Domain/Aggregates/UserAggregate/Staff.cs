@@ -23,7 +23,16 @@ public class Staff : Entity, IAggregateRoot
     public string TimeZoneId { get; private set; } 
     public Staff()
     {
-
+        Username = string.Empty;
+        BusinessUserCode = string.Empty;
+        PhoneNumber = string.Empty;
+        NewPhoneNumber = string.Empty;
+        Email = string.Empty;
+        NewEmail = string.Empty;
+        Name = string.Empty;
+        TimeZoneId = string.Empty;
+        Address = new Address();
+        BusinessUser = new BusinessUser(); 
     }
 
     public Staff(
@@ -49,7 +58,8 @@ public class Staff : Entity, IAggregateRoot
         NewEmail = email; 
         NewPhoneNumber = phoneNumber;  
         IsEmailVerified = false; 
-        IsPhoneNumberVerified = false; 
+        IsPhoneNumberVerified = false;
+        BusinessUser = new BusinessUser();
     }
 
     public void UpdateAddress(

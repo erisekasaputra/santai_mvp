@@ -43,9 +43,14 @@ public abstract class User : Entity, IAggregateRoot
 
     public string TimeZoneId {  get; set; }  
 
-    protected User()
+    public User()
     {
-
+        Username = string.Empty;
+        Email = string.Empty;
+        PhoneNumber = string.Empty;
+        TimeZoneId = string.Empty;
+        Address = new Address();
+        ReferralProgram = new ReferralProgram();
     }
 
     public User(Guid identityId, string username, string email, string phoneNumber, Address address, string timeZoneId)

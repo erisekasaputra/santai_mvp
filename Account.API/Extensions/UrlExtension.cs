@@ -11,5 +11,14 @@ public static partial class UrlExtension
     {  
         Regex regex = UrlRegex();
         return regex.IsMatch(url);  
-    } 
+    }
+
+    [GeneratedRegex(@"^https?:\/\/.*\.(jpg|jpeg|png)$")]
+    private static partial Regex UrlImageRegex();
+
+    public static bool IsValidImageUrl(string url)
+    {
+        Regex regex = UrlImageRegex();
+        return regex.IsMatch(url);
+    }  
 }

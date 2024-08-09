@@ -23,8 +23,8 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
             .HasMaxLength(20)
             .IsRequired()
             .HasConversion(
-                v => v.Trim().ToLower(),
-                v => v.Trim().ToLower());
+                v => v,
+                v => v);
 
         e.Property(p => p.BusinessUserId)
             .HasMaxLength(50)
@@ -58,15 +58,15 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
             .HasMaxLength(254)
             .IsRequired()
             .HasConversion(
-                v => v.Trim().ToLower(),
-                v => v.Trim().ToLower());
+                v => v,
+                v => v);
 
         e.Property(p => p.NewEmail)
             .HasMaxLength(254)
             .IsRequired(false)
             .HasConversion(
-                v => v == null ? null : v.Trim().ToLower(),
-                v => v == null ? null : v.Trim().ToLower());
+                v => v == null ? null : v,
+                v => v == null ? null : v);
 
         e.Property(p => p.IsEmailVerified)
             .IsRequired();

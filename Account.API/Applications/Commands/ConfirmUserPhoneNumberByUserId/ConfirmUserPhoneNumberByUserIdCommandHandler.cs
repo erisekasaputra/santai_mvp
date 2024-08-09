@@ -1,4 +1,5 @@
 ﻿using Account.API.Applications.Services;
+using Account.API.Extensions;
 using Account.API.SeedWork;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
@@ -19,7 +20,7 @@ public class ConfirmUserPhoneNumberByUserIdCommandHandler(IUnitOfWork unitOfWork
 
             if (user is null)
             {
-                return Result.Failure($"User with id {request.Id} is not found", ResponseStatus.NotFound);
+                return Result.Failure($"User '{request.Id}' not found", ResponseStatus.NotFound);
             }
 
             user.VerifyPhoneNumber();
@@ -37,7 +38,7 @@ public class ConfirmUserPhoneNumberByUserIdCommandHandler(IUnitOfWork unitOfWork
         catch (Exception ex)
         {
             _service.Logger.LogError(ex.Message);
-            return Result.Failure("An error has occurred while confirming phone number", ResponseStatus.InternalServerError);
+            return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }
 }

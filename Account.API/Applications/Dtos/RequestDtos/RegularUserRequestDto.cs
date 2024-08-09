@@ -13,7 +13,7 @@ public class RegularUserRequestDto(
     string DeviceId)
 {
     public Guid IdentityId { get; } = IdentityId;
-    public string Username { get; } = Username.Clean();
+    public string Username { get; } = Username.CleanAndLowering();
     public string Email { get; } = Email.CleanAndLowering();
     public string PhoneNumber { get; } = PhoneNumber.Clean();
     public string TimeZoneId { get; } = TimeZoneId.Clean();

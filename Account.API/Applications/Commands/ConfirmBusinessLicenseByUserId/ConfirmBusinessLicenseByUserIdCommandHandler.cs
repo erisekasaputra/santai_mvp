@@ -1,4 +1,5 @@
 ﻿using Account.API.Applications.Services;
+using Account.API.Extensions;
 using Account.API.SeedWork;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork; 
@@ -19,22 +20,27 @@ public class ConfirmBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork
 
             if (user is null)
             {
-                return Result.Failure($"Business user with id {request.BusinessUserId} is not found", ResponseStatus.NotFound);
+                return Result.Failure($"Business user '{request.BusinessUserId}' not found", ResponseStatus.NotFound);
             }
 
             var license = await _unitOfWork.BusinessLicenses.GetByIdAsync(request.BusinessLicenseId);
 
             if (license is null)
             {
-                return Result.Failure($"Business license with id {request.BusinessLicenseId} is not found", ResponseStatus.NotFound);
+                return Result.Failure($"Business license '{request.BusinessLicenseId}' not found", ResponseStatus.NotFound);
             }
 
             var acceptedLicense = await _unitOfWork.BusinessLicenses.GetAcceptedByNumberAsNoTrackAsync(license.LicenseNumber);
 
-            if (acceptedLicense is not null)
+            if (acceptedLicense is not null && acceptedLicense.Id == request.BusinessLicenseId)
             {
-                return Result.Failure($"Failed to verify the business license because there is already a business license with the status 'Accepted' and the same license number '{license.LicenseNumber}'", ResponseStatus.Conflict);
+                return Result.Failure($"Business license '{acceptedLicense.Id}' already confirmed", ResponseStatus.NoContent);
             }
+
+            if (acceptedLicense is not null)
+            {  
+                return Result.Failure($"Can not have multiple license number '{license.LicenseNumber}' with 'Accepted' status", ResponseStatus.Conflict);
+            } 
 
             license.VerifyDocument();
 
@@ -51,7 +57,7 @@ public class ConfirmBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork
         catch (Exception ex)
         {
             _service.Logger.LogError(ex.Message);
-            return Result.Failure("An error has occurred while rejecting business license", ResponseStatus.InternalServerError);
+            return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }
 }

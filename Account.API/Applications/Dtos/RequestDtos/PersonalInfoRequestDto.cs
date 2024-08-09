@@ -9,12 +9,12 @@ public class PersonalInfoRequestDto(
     string? LastName,
     DateTime DateOfBirth,
     Gender Gender,
-    string? ProfilePicture)
+    string? ProfilePictureUrl)
 {
     public string FirstName { get; } = FirstName.Clean();
     public string? MiddleName { get; } = MiddleName?.Clean();
     public string? LastName { get; } = LastName?.Clean();
     public DateTime DateOfBirth { get; } = DateOfBirth;
     public Gender Gender { get; } = Gender;
-    public string? ProfilePicture { get; } = ProfilePicture?.Clean();
+    public string? ProfilePictureUrl { get; } = ProfilePictureUrl?.Clean();
 }

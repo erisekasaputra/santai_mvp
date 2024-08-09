@@ -10,6 +10,9 @@ public class ReferredProgramEntityConfiguration : IEntityTypeConfiguration<Refer
     {
         e.HasKey(p => p.Id);
 
+        e.HasIndex(p => p.ReferredUserId)
+            .IsUnique();
+
         e.Property(p => p.ReferrerId)
             .IsRequired();
 

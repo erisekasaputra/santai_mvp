@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "t07cGYZUKCk=",
+  "dgSpecHash": "SGo49FdtuZc=",
   "success": true,
   "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Catalog.API\\Catalog.API.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\erise\\.nuget\\packages\\aspnetcoreratelimit\\5.0.0\\aspnetcoreratelimit.5.0.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.core\\3.7.304.30\\awssdk.core.3.7.304.30.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.simplenotificationservice\\3.7.302.1\\awssdk.simplenotificationservice.3.7.302.1.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.sqs\\3.7.301.33\\awssdk.sqs.3.7.301.33.nupkg.sha512",

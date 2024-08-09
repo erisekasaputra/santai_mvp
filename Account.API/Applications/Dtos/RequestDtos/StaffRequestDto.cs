@@ -9,7 +9,7 @@ public class StaffRequestDto(
     AddressRequestDto Address,
     string TimeZoneId)
 {
-    public string Username { get; } = Username.Clean();
+    public string Username { get; } = Username.CleanAndLowering();
     public string PhoneNumber { get; } = PhoneNumber.Clean();
     public string Email { get; } = Email.CleanAndLowering();
     public string Name { get; } = Name.Clean();

@@ -9,7 +9,7 @@ public static partial class StringNormalizer
 
     public static string CleanAndLowering(this string value)
     {
-        return CleaningSpacesAndLowering().Replace(value, " ").Trim().ToLower();
+        return CleaningSpacesAndLowering().Replace(value, " ");
     }
 
     [GeneratedRegex(@"\s+")]

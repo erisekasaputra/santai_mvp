@@ -13,22 +13,20 @@ public class BusinessLicenseRepository : IBusinessLicenseRepository
     }
 
     public async Task<BusinessLicense?> GetAcceptedByNumberAsNoTrackAsync(string licenseNumber)
-    { 
-        string normalizedLicense = licenseNumber.Trim().ToLower();
+    {  
         return await _context.BusinessLicenses.AsNoTracking()
-            .FirstOrDefaultAsync(x => x.LicenseNumber.Trim().ToLower() == normalizedLicense 
-            && x.VerificationStatus == Domain.Enumerations.VerificationState.Accepted);
+            .FirstOrDefaultAsync(x => x.LicenseNumber == licenseNumber
+                && x.VerificationStatus == Domain.Enumerations.VerificationState.Accepted);
     }
 
     public async Task<IEnumerable<BusinessLicense>?> GetAcceptedByNumbersAsNoTrackAsync(IEnumerable<string> licenseNumbers)
-    {
-        var normalizedLicense = licenseNumbers.Select(x => x.Trim().ToLower());
+    { 
         return await _context.BusinessLicenses
             .AsNoTracking()
-            .Where(x => normalizedLicense.Contains(x.LicenseNumber.Trim().ToLower()) && x.VerificationStatus == Domain.Enumerations.VerificationState.Accepted)
+            .Where(x => licenseNumbers.Contains(x.LicenseNumber) 
+                && x.VerificationStatus == Domain.Enumerations.VerificationState.Accepted)
             .ToListAsync();
-    }
-
+    } 
 
     public async Task<BusinessLicense?> GetByIdAsync(Guid id)
     {
@@ -36,12 +34,9 @@ public class BusinessLicenseRepository : IBusinessLicenseRepository
     }
 
     public async Task<IEnumerable<BusinessLicense>?> GetByNumberAsNoTrackAsync(IEnumerable<string> licenseNumbers)
-    {
-        var normalizedLicenses = licenseNumbers.Select(b =>
-                b.Trim().ToLower()).ToList();
-
+    { 
         return await _context.BusinessLicenses.Where(x =>
-            normalizedLicenses.Contains(x.LicenseNumber.Trim().ToLower())
+            licenseNumbers.Contains(x.LicenseNumber)
             && x.VerificationStatus != Domain.Enumerations.VerificationState.Rejected)
                     .AsNoTracking().IgnoreQueryFilters().ToListAsync();
     }

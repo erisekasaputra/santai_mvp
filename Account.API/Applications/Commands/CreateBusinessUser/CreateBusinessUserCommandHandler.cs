@@ -1,8 +1,8 @@
 ﻿using Account.API.Applications.Dtos.RequestDtos;
-using Account.API.Applications.Services;
-using Account.API.Configurations;
+using Account.API.Applications.Services; 
 using Account.API.Extensions;
 using Account.API.Mapper;
+using Account.API.Options;
 using Account.API.SeedWork;
 using Account.Domain.Aggregates.BusinessLicenseAggregate;
 using Account.Domain.Aggregates.ReferredAggregate;
@@ -20,16 +20,14 @@ namespace Account.API.Applications.Commands.CreateBusinessUser;
 
 public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUserCommand, Result>
 {
-    private readonly IUnitOfWork _unitOfWork;
-
-    private readonly IOptionsMonitor<MasterReferralProgram> _optionReferralMaster;
-
+    private readonly IUnitOfWork _unitOfWork; 
+    private readonly IOptionsMonitor<ReferralProgramOption> _referralOptions; 
     private readonly AppService _service;
 
-    public CreateBusinessUserCommandHandler(IUnitOfWork unitOfWork, IOptionsMonitor<MasterReferralProgram> optionReferralMaster, AppService service)
+    public CreateBusinessUserCommandHandler(IUnitOfWork unitOfWork, IOptionsMonitor<ReferralProgramOption> referralOptions, AppService service)
     {
         _unitOfWork = unitOfWork;
-        _optionReferralMaster = optionReferralMaster;
+        _referralOptions = referralOptions;
         _service = service;
     }
 
@@ -37,14 +35,16 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
     {
         try
         {
+            await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
+
             var userConflict = await _unitOfWork.Users.GetByIdentityAsNoTrackAsync(
                 (IdentityParameter.Username, request.Request.Username),
                 (IdentityParameter.Email, request.Request.Email),
                 (IdentityParameter.PhoneNumber, request.Request.PhoneNumber));
 
             if (userConflict is not null)
-            {
-                return UserIdentityConflict(userConflict, request.Request);
+            { 
+                return await RollbackAndReturnFailureAsync(UserIdentityConflict(userConflict, request.Request), cancellationToken); 
             }
 
             var address = new Address(
@@ -56,8 +56,8 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
                 request.Request.Address.PostalCode,
                 request.Request.Address.Country);
 
-            int? referralRewardPoint = _optionReferralMaster.CurrentValue.Point;
-            int? referralValidMonth = _optionReferralMaster.CurrentValue.ValidMonth;
+            int? referralRewardPoint = _referralOptions.CurrentValue.Point;
+            int? referralValidMonth = _referralOptions.CurrentValue.ValidMonth;
 
             var user = new BusinessUser(
                 request.Request.IdentityId,
@@ -85,14 +85,12 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
                 if (referralProgram is null)
                 {
-                    return Result.Failure($"Referral code '{request.Request.ReferralCode}' not found", ResponseStatus.NotFound)
-                        .WithError(new ErrorDetail("ReferralCode", "Referral code not found"));
+                    return await RollbackAndReturnFailureAsync(Result.Failure($"Referral code '{request.Request.ReferralCode}' not found", ResponseStatus.NotFound).WithError(new ErrorDetail("ReferralCode", "Referral code not found")), cancellationToken); 
                 }
 
                 if (referralProgram.ValidDateUtc < DateTime.UtcNow)
                 {
-                    return Result.Failure($"Referral code '{request.Request.ReferralCode}' invalid", ResponseStatus.BadRequest)
-                        .WithError(new ErrorDetail("ReferralCode", "Referral code expired"));
+                    return await RollbackAndReturnFailureAsync(Result.Failure($"Referral code '{request.Request.ReferralCode}' invalid", ResponseStatus.BadRequest).WithError(new ErrorDetail("ReferralCode", "Referral code expired")), cancellationToken);
                 }
 
                 await _unitOfWork.ReferredPrograms.CreateReferredProgramAsync(
@@ -113,7 +111,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
                 if (staffConflictAtRepository?.Any() ?? false)
                 {
-                    return StaffIdentityConflict(staffConflictAtRepository, request.Request.Staffs);
+                    return await RollbackAndReturnFailureAsync(StaffIdentityConflict(staffConflictAtRepository, request.Request.Staffs), cancellationToken); 
                 }
 
 
@@ -143,8 +141,8 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
                 if (staffConflictAtAggregate is not null && staffConflictAtAggregate.Count > 0)
                 {
-                    return Result.Failure("There are conflicts", ResponseStatus.BadRequest)
-                        .WithErrors(staffConflictAtAggregate);
+                    return await RollbackAndReturnFailureAsync(Result.Failure("There are conflicts", ResponseStatus.BadRequest)
+                        .WithErrors(staffConflictAtAggregate), cancellationToken); 
                 }
             }
 
@@ -155,7 +153,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
                 if (licenseConflictAtRepository?.Any() ?? false)
                 {
-                    return BusinessLicenseConflict(licenseConflictAtRepository, request.Request.BusinessLicenses);
+                    return await RollbackAndReturnFailureAsync(BusinessLicenseConflict(licenseConflictAtRepository, request.Request.BusinessLicenses), cancellationToken); 
                 }
 
                 var licenseConflictAggregate = new List<ErrorDetail>();
@@ -182,20 +180,28 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
             var result = await _unitOfWork.Users.CreateUserAsync(user);
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
             return Result.Success(result.ToBusinessUserResponseDto(), ResponseStatus.Created);
         }
         catch (DomainException ex)
         {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             _service.Logger.LogError(ex.Message);
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);
         }
         catch (Exception ex)
         {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             _service.Logger.LogError(ex.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
+    }
+    
+    private async Task<Result> RollbackAndReturnFailureAsync(Result result, CancellationToken cancellationToken)
+    {
+        await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+        return result;
     }
 
     private static Result BusinessLicenseConflict(IEnumerable<BusinessLicense> licenseConflicts, IEnumerable<BusinessLicenseRequestDto> licenseRequest)

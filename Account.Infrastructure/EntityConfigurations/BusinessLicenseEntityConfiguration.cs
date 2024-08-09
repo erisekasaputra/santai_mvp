@@ -29,12 +29,12 @@ public class BusinessLicenseEntityConfiguration : IEntityTypeConfiguration<Busin
                 v => v.Trim(),
                 v => v.Trim());
 
-        e.Property(p => p.Description) 
+        e.Property(p => p.Description)
            .IsRequired()
            .HasConversion(
                 v => v.Trim(),
                 v => v.Trim())
-           .HasColumnType("varchar(max)");
+           .HasColumnType("nvarchar(1000)");
 
         e.Property(p => p.VerificationStatus)
             .HasConversion(

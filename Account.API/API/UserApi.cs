@@ -14,7 +14,7 @@ public static class UserApi
 {
     public static IEndpointRouteBuilder MapUserApi(this IEndpointRouteBuilder route)
     {
-        var app = route.MapGroup("api/v1/user");
+        var app = route.MapGroup("api/v1/users");
 
         app.MapPatch("/{userId}/email", UpdateUserEmailByUserId);
         app.MapPatch("/{userId}/email/confirm", ConfirmUserEmailByUserId);
@@ -29,22 +29,20 @@ public static class UserApi
         // later on , user id is from user claims at authentication level  
         try
         {
-            var validate = await validator.ValidateAsync(request);
-
+            var validate = await validator.ValidateAsync(request); 
             if (!validate.IsValid)
             {
                 var error = validate.Errors;
                 return TypedResults.BadRequest(error);
             }
 
-            var result = await service.Mediator.Send(new UpdateUserEmailByUserIdCommand(userId, request));
-
+            var result = await service.Mediator.Send(new UpdateUserEmailByUserIdCommand(userId, request)); 
             return result.ToIResult();
         }
         catch (Exception ex)
         {
             service.Logger.LogError(ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -53,14 +51,13 @@ public static class UserApi
         // later on , user id is from user claims at authentication level  
         try
         { 
-            var result = await service.Mediator.Send(new ConfirmUserEmailByUserIdCommand(userId));
-
+            var result = await service.Mediator.Send(new ConfirmUserEmailByUserIdCommand(userId)); 
             return result.ToIResult();
         }
         catch (Exception ex)
         {
             service.Logger.LogError(ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -69,22 +66,20 @@ public static class UserApi
         // later on , user id is from user claims at authentication level  
         try
         {
-            var validate = await validator.ValidateAsync(request);
-
+            var validate = await validator.ValidateAsync(request);  
             if (!validate.IsValid)
             {
                 var error = validate.Errors;
                 return TypedResults.BadRequest(error);
             }
 
-            var result = await service.Mediator.Send(new UpdateUserPhoneNumberByUserIdCommand(userId, request));
-
+            var result = await service.Mediator.Send(new UpdateUserPhoneNumberByUserIdCommand(userId, request)); 
             return result.ToIResult();
         }
         catch (Exception ex)
         {
             service.Logger.LogError(ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -93,14 +88,13 @@ public static class UserApi
         // later on , user id is from user claims at authentication level  
         try
         { 
-            var result = await service.Mediator.Send(new ConfirmUserPhoneNumberByUserIdCommand(userId));
-
+            var result = await service.Mediator.Send(new ConfirmUserPhoneNumberByUserIdCommand(userId)); 
             return result.ToIResult();
         }
         catch (Exception ex)
         {
             service.Logger.LogError(ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 }
