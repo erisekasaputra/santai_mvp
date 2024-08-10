@@ -1,6 +1,9 @@
 ﻿
 using Account.API.Applications.Commands.CreateRegularUser;
-using Account.API.Applications.Commands.DeleteRegularUserByUserId;
+using Account.API.Applications.Commands.DeleteRegularUserByUserId; 
+using Account.API.Applications.Commands.ForceSetDeviceIdByUserId;
+using Account.API.Applications.Commands.ResetDeviceIdByUserId;
+using Account.API.Applications.Commands.SetDeviceIdByUserId;
 using Account.API.Applications.Commands.UpdateRegularUserByUserId;
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetRegularUserByUserId;
@@ -22,11 +25,69 @@ public static class RegularUserApi
         app.MapGet("/{userId}", GetRegularUserByUserId);
         app.MapPut("/{userId}", UpdateRegularUserByUserId);
         app.MapDelete("/{userId}", DeleteRegularUserByUserId);
+        app.MapPatch("/{userId}/device-id", SetDeviceIdByUserId);
+        app.MapPatch("/{userId}/device-id/force-set", ForceSetDeviceIdByUserId);
+        app.MapPatch("/{userId}/device-id/reset", ResetDeviceIdByUserId);
 
         return app;
     }
 
-    private static async Task<IResult> DeleteRegularUserByUserId(Guid userId, [FromServices] AppService service)
+    private static async Task<IResult> ForceSetDeviceIdByUserId(
+        Guid userId,
+        [FromBody] ForceSetDeviceIdByUserIdCommand command,
+        [FromServices] AppService service)
+    {
+        try
+        {
+            var result = await service.Mediator.Send(command);
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+    private static async Task<IResult> ResetDeviceIdByUserId(
+        Guid userId,
+        [FromServices] AppService service)
+    {
+        try
+        {
+            var result = await service.Mediator.Send(new ResetDeviceIdByUserIdCommand(userId));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+    private static async Task<IResult> SetDeviceIdByUserId(
+        Guid userId,
+        [FromBody] SetDeviceIdByUserIdCommand command,
+        [FromServices] AppService service)
+    {
+        try
+        {
+            var result = await service.Mediator.Send(command);
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+    private static async Task<IResult> DeleteRegularUserByUserId(
+        Guid userId,
+        [FromServices] AppService service)
     {
         try
         {
@@ -41,7 +102,11 @@ public static class RegularUserApi
         } 
     }
 
-    private static async Task<IResult> UpdateRegularUserByUserId(Guid userId, [FromBody] UpdateRegularUserByUserIdCommand command, [FromServices] AppService service, IValidator<UpdateRegularUserByUserIdCommand> validator)
+    private static async Task<IResult> UpdateRegularUserByUserId(
+        Guid userId,
+        [FromBody] UpdateRegularUserByUserIdCommand command,
+        [FromServices] AppService service,
+        [FromServices] IValidator<UpdateRegularUserByUserIdCommand> validator)
     {
         try
         {
@@ -66,7 +131,9 @@ public static class RegularUserApi
         }
     }
 
-    private static async Task<IResult> GetRegularUserByUserId(Guid userId, [FromServices] AppService service)
+    private static async Task<IResult> GetRegularUserByUserId(
+        Guid userId,
+        [FromServices] AppService service)
     {
         try
         {
@@ -81,7 +148,7 @@ public static class RegularUserApi
         }
     } 
 
-    private static async Task<IResult> CreateRegularUser([FromBody] RegularUserRequestDto request, [FromServices] AppService service, IValidator<RegularUserRequestDto> validator)
+    private static async Task<IResult> CreateRegularUser([FromBody] RegularUserRequestDto request, [FromServices] AppService service, [FromServices] IValidator<RegularUserRequestDto> validator)
     {
         try
         {

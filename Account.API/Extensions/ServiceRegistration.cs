@@ -25,13 +25,13 @@ public static class ServiceRegistration
 
     public static IServiceCollection AddRedisDatabase(this IServiceCollection services)
     {
-        var cacheOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<InMemoryDatabaseOption>>() ?? throw new Exception("Please provide value for database option");
+        var cacheOptions = services.BuildServiceProvider().GetService<IOptions<InMemoryDatabaseOption>>() ?? throw new Exception("Please provide value for database option");
 
         services.AddSingleton<IConnectionMultiplexer>(sp =>
         {
             var configurations = new ConfigurationOptions
             {
-                EndPoints = { cacheOptions.CurrentValue.Host },
+                EndPoints = { cacheOptions.Value.Host },
                 ConnectTimeout = (int)TimeSpan.FromSeconds(10).TotalMilliseconds,
                 SyncTimeout = (int)TimeSpan.FromSeconds(10).TotalMilliseconds,
                 AbortOnConnectFail = false,
@@ -63,14 +63,14 @@ public static class ServiceRegistration
 
     public static IServiceCollection AddSqlDatabaseContext(this IServiceCollection services)
     {
-        var databaseOption = services.BuildServiceProvider().GetService<IOptionsMonitor<DatabaseOption>>() ?? throw new Exception("Please provide value for database option");
+        var databaseOption = services.BuildServiceProvider().GetService<IOptions<DatabaseOption>>() ?? throw new Exception("Please provide value for database option");
 
         services.AddDbContext<AccountDbContext>((serviceProvider, options) =>
         {
 
-            options.UseSqlServer(databaseOption.CurrentValue.ConnectionString, action =>
+            options.UseSqlServer(databaseOption.Value.ConnectionString, action =>
             {
-                action.CommandTimeout(databaseOption.CurrentValue.CommandTimeOut);
+                action.CommandTimeout(databaseOption.Value.CommandTimeOut);
                 action.MigrationsAssembly(typeof(Program).Assembly.GetName().Name);
             });
         });
@@ -80,7 +80,8 @@ public static class ServiceRegistration
 
     public static IServiceCollection AddMassTransitContext(this IServiceCollection services)
     {
-        var messageBusOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<MessageBusOption>>() ?? throw new Exception("Please provide value for message bus options");
+        return services;
+        var messageBusOptions = services.BuildServiceProvider().GetService<IOptions<MessageBusOption>>() ?? throw new Exception("Please provide value for message bus options");
 
         services.AddMassTransit(x =>
         {
@@ -96,10 +97,10 @@ public static class ServiceRegistration
 
             x.UsingRabbitMq((context, configure) =>
             {
-                configure.Host(messageBusOptions.CurrentValue.Host ?? string.Empty, host =>
+                configure.Host(messageBusOptions.Value.Host ?? string.Empty, host =>
                 {
-                    host.Username(messageBusOptions.CurrentValue.Username ?? string.Empty);
-                    host.Password(messageBusOptions.CurrentValue.Password ?? string.Empty);
+                    host.Username(messageBusOptions.Value.Username ?? string.Empty);
+                    host.Password(messageBusOptions.Value.Password ?? string.Empty);
                 });
 
                 configure.UseMessageRetry(retryCfg =>

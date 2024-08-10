@@ -20,9 +20,9 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWor
         try
         { 
             var staff = request.Staff;
-            var user = await _unitOfWork.Users.GetBusinessUserByIdAsync(request.Id);
+            var entity = await _unitOfWork.Users.GetBusinessUserByIdAsync(request.Id);
 
-            if (user is null)
+            if (entity is null)
             {
                 return Result.Failure($"Business user '{request.Id}' not found", ResponseStatus.NotFound);
             }
@@ -63,41 +63,23 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWor
                 return Result.Failure(message, ResponseStatus.BadRequest).WithErrors(errorDetails);
             }
 
-            (Staff? newStaff, string? errorParameter, string? errorMessage) = user.AddStaff(
-                                                                staff.Username,
-                                                                staff.Email,
-                                                                staff.PhoneNumber,
-                                                                staff.Name,
-                                                                staff.Address.ToAddress(),
-                                                                staff.TimeZoneId);
 
-            if (newStaff is null && errorParameter is not null)
-            {
-                return Result.Failure("There is a conflict", ResponseStatus.BadRequest)
-                    .WithError(new ErrorDetail(errorParameter, errorMessage ?? string.Empty));
-            }
+            var newStaff = new Staff(entity.Id, entity.Code, staff.Username, staff.Email, staff.PhoneNumber, staff.Name, staff.Address.ToAddress(), staff.TimeZoneId, null);
 
-            if (newStaff is not null)
-            {
-                _unitOfWork.AttachEntity(newStaff);
-                _unitOfWork.SetEntityState(newStaff, Microsoft.EntityFrameworkCore.EntityState.Added);
-            }
-
-            _unitOfWork.Users.UpdateUser(user);
+            var savedStaff = await _unitOfWork.Staffs.CreateAsync(newStaff);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(null, ResponseStatus.NoContent);
+            return Result.Success(savedStaff, ResponseStatus.Created);
         }
         catch (DomainException ex)
-        {
-            _appService.Logger.LogError(ex.Message);
+        { 
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);
 
         }
         catch (Exception ex)
         {
-            _appService.Logger.LogError(ex.Message);
+            _appService.Logger.LogError(ex.Message, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

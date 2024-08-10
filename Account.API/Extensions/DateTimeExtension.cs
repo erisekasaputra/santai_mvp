@@ -11,7 +11,7 @@ public static class DateTimeExtension
     /// <param name="timeZoneId">The IANA or Windows time zone ID.</param>
     /// <returns>The corresponding UTC DateTime.</returns>
     public static DateTime FromLocalToUtc(this DateTime dateTime, string timeZoneId)
-    {
+    { 
         TimeZoneInfo? timeZone;
 
         try
@@ -43,7 +43,13 @@ public static class DateTimeExtension
             throw new InvalidCastException($"Time zone with id '{timeZoneId}' is invalid");
         }
 
-        return TimeZoneInfo.ConvertTimeToUtc(dateTime, timeZone);
+        DateTime specifiedDateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Unspecified);
+         
+        DateTime utcDateTime = TimeZoneInfo.ConvertTimeToUtc(specifiedDateTime, timeZone);
+
+        utcDateTime = DateTime.SpecifyKind(utcDateTime, DateTimeKind.Utc);
+
+        return utcDateTime;
     }
 
     /// <summary>
@@ -57,32 +63,44 @@ public static class DateTimeExtension
         TimeZoneInfo? timeZone;
 
         try
-        { 
+        {
+            // Konversi IANA time zone ke Windows time zone ID
             string windowsTimeZoneId = TZConvert.IanaToWindows(timeZoneId);
             timeZone = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZoneId);
         }
         catch (TimeZoneNotFoundException)
-        { 
+        {
             try
             {
+                // Jika konversi IANA ke Windows gagal, coba langsung dengan timeZoneId yang diberikan
                 timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
             }
             catch (TimeZoneNotFoundException)
             {
-                throw new InvalidCastException($"Time zone with id '{timeZoneId}' does not exist");
+                throw new InvalidCastException($"Time zone dengan id '{timeZoneId}' tidak ditemukan.");
             }
             catch (InvalidTimeZoneException)
             {
-                throw new InvalidCastException($"Time zone with id '{timeZoneId}' is invalid");
+                throw new InvalidCastException($"Time zone dengan id '{timeZoneId}' tidak valid.");
             }
         }
         catch (InvalidTimeZoneException)
         {
-            throw new InvalidCastException($"Time zone with id '{timeZoneId}' is invalid");
-        } 
+            throw new InvalidCastException($"Time zone dengan id '{timeZoneId}' tidak valid.");
+        }
 
+        // Pastikan DateTime yang diberikan sudah dalam UTC
+        if (dateTime.Kind != DateTimeKind.Utc && dateTime.Kind != DateTimeKind.Unspecified)
+        {
+            throw new ArgumentException("Datetime should be in utc kind.", nameof(dateTime));
+        }
+
+        dateTime = DateTime.SpecifyKind(dateTime, DateTimeKind.Utc);
+
+        // Konversi dari UTC ke zona waktu spesifik
         return TimeZoneInfo.ConvertTimeFromUtc(dateTime, timeZone);
     }
+
 
     /// <summary>
     /// Converts a local DateTime in a specific time zone to another time zone.

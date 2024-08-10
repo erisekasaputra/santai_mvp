@@ -40,9 +40,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
   
-app.UseHsts();
+//app.UseHsts();
 
 app.UseMiddleware<IdempotencyMiddleware>(); 
 
@@ -50,9 +50,7 @@ app.MapBusinessUserApi();
 
 app.MapUserApi();
 
-app.MapRegularUserApi();
-
-app.UseHealthChecks("/health");
+app.MapRegularUserApi(); 
 
 app.Run();
  

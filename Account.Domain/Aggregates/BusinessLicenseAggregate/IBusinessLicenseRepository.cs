@@ -4,9 +4,13 @@ namespace Account.Domain.Aggregates.BusinessLicenseAggregate;
 
 public interface IBusinessLicenseRepository
 {
-    Task<IEnumerable<BusinessLicense>?> GetByNumberAsNoTrackAsync(IEnumerable<string> licenseNumbers);
-    Task<IEnumerable<BusinessLicense>?> GetAcceptedByNumbersAsNoTrackAsync(IEnumerable<string> licenseNumbers);
-    Task<BusinessLicense?> GetAcceptedByNumberAsNoTrackAsync(string licenseNumber); 
+    Task<BusinessLicense?> GetByBusinessUserIdAndBusinessLicenseIdAsync(Guid businessUserId, Guid businessLicenseId);
+    Task<IEnumerable<BusinessLicense>?> GetByLicenseNumberAsNoTrackingAsync(IEnumerable<string> licenseNumbers);
+    Task<IEnumerable<BusinessLicense>?> GetAcceptedStatusByLicenseNumbersAsNoTrackingAsync(IEnumerable<string> licenseNumbers);
+    Task<BusinessLicense?> GetAcceptedStatusByLicenseNumberAsNoTrackingAsync(string licenseNumber); 
     Task<BusinessLicense?> GetByIdAsync(Guid id); 
-    void Update(BusinessLicense license); 
+    Task<BusinessLicense> CreateAsync(BusinessLicense license);
+    Task<bool> GetAnyByIdAsync(Guid id);
+    void Update(BusinessLicense businessLicense);  
+    void Delete(BusinessLicense businessLicense);
 }

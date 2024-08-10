@@ -28,7 +28,7 @@ public static class UserApi
     {
         // later on , user id is from user claims at authentication level  
         try
-        {
+        {  
             var validate = await validator.ValidateAsync(request); 
             if (!validate.IsValid)
             {

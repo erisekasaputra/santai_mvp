@@ -100,7 +100,7 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
         {
             address.Property(ap => ap.AddressLine1)
                 .HasMaxLength(255)
-                .IsRequired()
+                .IsRequired(true)
                 .HasConversion(
                     v => v.Trim(),
                     v => v.Trim());

@@ -16,7 +16,7 @@ public class UpdateUserEmailByUserIdCommandHandler(IUnitOfWork unitOfWork, AppSe
     {
         try
         {
-            var user = await _UnitOfWork.Users.GetUserByIdAsync(request.Id);
+            var user = await _UnitOfWork.Users.GetByIdAsync(request.Id);
 
             if (user is null)
             {
@@ -25,7 +25,7 @@ public class UpdateUserEmailByUserIdCommandHandler(IUnitOfWork unitOfWork, AppSe
 
             user.UpdateEmail(request.Request.Email); 
 
-            _UnitOfWork.Users.UpdateUser(user); 
+            _UnitOfWork.Users.Update(user); 
             
             await _UnitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -37,7 +37,7 @@ public class UpdateUserEmailByUserIdCommandHandler(IUnitOfWork unitOfWork, AppSe
         }
         catch (Exception ex) 
         {
-            _service.Logger.LogError(ex.Message);
+            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

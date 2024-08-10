@@ -15,24 +15,16 @@ public class RemoveBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork,
     public async Task<Result> Handle(RemoveBusinessLicenseByUserIdCommand request, CancellationToken cancellationToken)
     {
         try
-        {
-            var user = await _unitOfWork.Users.GetBusinessUserByIdAsync(request.BusinessUserId);
+        { 
+            var license = await _unitOfWork.BusinessLicenses.GetByBusinessUserIdAndBusinessLicenseIdAsync(request.BusinessUserId, request.BusinessLicenseId);
 
-            if (user is null)
+            if (license is null)
             {
-                return Result.Failure($"Business user with id {request.BusinessUserId} not found", ResponseStatus.NotFound);
-            }
+                return Result.Failure($"Business license '{request.BusinessLicenseId}' with related business user '{request.BusinessUserId}' not found", ResponseStatus.NotFound);
+            } 
 
-            var removedBusinessLicense = user.RemoveBusinessLicenses(request.BusinessLicenseId);
+            _unitOfWork.BusinessLicenses.Delete(license);
 
-            if (removedBusinessLicense is not null)
-            {
-                _unitOfWork.AttachEntity(removedBusinessLicense);
-                _unitOfWork.SetEntityState(removedBusinessLicense, Microsoft.EntityFrameworkCore.EntityState.Deleted);
-            }
-
-            _unitOfWork.Users.UpdateUser(user);
-            
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success(null, ResponseStatus.NoContent);
@@ -43,7 +35,7 @@ public class RemoveBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork,
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message);
+            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

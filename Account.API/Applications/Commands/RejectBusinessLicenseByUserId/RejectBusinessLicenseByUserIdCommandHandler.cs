@@ -15,19 +15,12 @@ public class RejectBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork,
     public async Task<Result> Handle(RejectBusinessLicenseByUserIdCommand request, CancellationToken cancellationToken)
     {
         try
-        {
-            var user = await _unitOfWork.Users.GetBusinessUserByIdAsync(request.BusinessUserId);
-
-            if (user is null)
-            {
-                return Result.Failure($"Business user with id {request.BusinessUserId} not found", ResponseStatus.NotFound);
-            }
-
-            var license = await _unitOfWork.BusinessLicenses.GetByIdAsync(request.BusinessLicenseId);
+        {  
+            var license = await _unitOfWork.BusinessLicenses.GetByBusinessUserIdAndBusinessLicenseIdAsync(request.BusinessUserId, request.BusinessLicenseId);
 
             if (license is null)
             {
-                return Result.Failure($"Business license with id {request.BusinessLicenseId} not found", ResponseStatus.NotFound);
+                return Result.Failure($"Busines user id '{request.BusinessUserId}' and business license '{request.BusinessLicenseId}' did not match any record", ResponseStatus.NotFound);
             }
              
             license.RejectDocument();
@@ -39,12 +32,12 @@ public class RejectBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork,
             return Result.Success(null, ResponseStatus.NoContent);
         }
         catch (DomainException ex)
-        {
+        { 
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message);
+            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

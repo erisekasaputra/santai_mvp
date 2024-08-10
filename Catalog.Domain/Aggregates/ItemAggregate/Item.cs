@@ -44,6 +44,9 @@ public class Item : Entity, IAggregateRoot
 
     public Item()
     {
+        Name = string.Empty;
+        Description = string.Empty;
+        ImageUrl = string.Empty;
         _ownerReviews = [];
     }
       

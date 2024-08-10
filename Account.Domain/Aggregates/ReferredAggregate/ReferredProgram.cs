@@ -39,7 +39,6 @@ public class ReferredProgram : Entity, IAggregateRoot
     }
 
     private void RaisePointConvertedDomainEvent()
-    {
-        throw new NotImplementedException();
+    { 
     }
 }

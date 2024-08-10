@@ -1,5 +1,6 @@
 ﻿using Account.API.Applications.Services;
 using Account.API.Extensions;
+using Account.API.Mapper;
 using Account.API.SeedWork;
 using Account.Domain.SeedWork; 
 using MediatR;
@@ -19,10 +20,10 @@ public class GetRegularUserByUserIdQueryHandler(IUnitOfWork unitOfWork, AppServi
 
             if (user is null)
             {
-                return Result.Failure("User '{request.UserId}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"User '{request.UserId}' not found", ResponseStatus.NotFound);
             }
 
-            return Result.Success(user);
+            return Result.Success(user.ToRegularUserResponseDto());
         }
         catch (Exception ex)
         {

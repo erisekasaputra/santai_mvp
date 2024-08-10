@@ -18,14 +18,14 @@ public class DrivingLicense : Entity, IAggregateRoot
     public string BackSideImageUrl { get; private set; }
 
     public VerificationState VerificationStatus { get; private set; }
-
+ 
     public DrivingLicense(Guid userId, string licenseNumber, string frontSideImageUrl, string backSideImageUrl)
     {
         UserId = userId != default ? userId : throw new InvalidOperationException(nameof(userId));
         LicenseNumber = licenseNumber ?? throw new ArgumentNullException(nameof(licenseNumber));
         FrontSideImageUrl = frontSideImageUrl ?? throw new ArgumentNullException(nameof(frontSideImageUrl));
         BackSideImageUrl = backSideImageUrl ?? throw new ArgumentNullException(nameof(backSideImageUrl));
-        VerificationStatus = VerificationState.Waiting;
+        VerificationStatus = VerificationState.Waiting; 
     }
 
     public void VerifyDocument()

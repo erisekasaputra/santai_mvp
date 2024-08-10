@@ -1,6 +1,7 @@
 ﻿using Account.API.Applications.Services;
 using Account.API.Extensions;
 using Account.API.SeedWork;
+using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using MediatR;
 
@@ -22,14 +23,18 @@ public class DeleteRegularUserByUserIdCommandHandler(IUnitOfWork unitOfWork, App
             }
 
             user.Delete(); 
-            _unitOfWork.Users.DeleteUser(user); 
+            _unitOfWork.Users.Delete(user); 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success(null, ResponseStatus.NoContent);
         }
+        catch (DomainException ex)
+        { 
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest); 
+        }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message);
+            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

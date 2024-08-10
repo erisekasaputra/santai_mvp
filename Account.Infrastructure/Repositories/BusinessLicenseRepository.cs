@@ -12,28 +12,51 @@ public class BusinessLicenseRepository : IBusinessLicenseRepository
         _context = context; 
     }
 
-    public async Task<BusinessLicense?> GetAcceptedByNumberAsNoTrackAsync(string licenseNumber)
+    public async Task<BusinessLicense> CreateAsync(BusinessLicense license)
+    {
+        var entity = await _context.BusinessLicenses.AddAsync(license);
+
+        return entity.Entity;
+    }
+
+    public void Delete(BusinessLicense license)
+    {
+        _context.BusinessLicenses.Remove(license);
+    }
+     
+
+    public async Task<BusinessLicense?> GetAcceptedStatusByLicenseNumberAsNoTrackingAsync(string licenseNumber)
     {  
         return await _context.BusinessLicenses.AsNoTracking()
             .FirstOrDefaultAsync(x => x.LicenseNumber == licenseNumber
                 && x.VerificationStatus == Domain.Enumerations.VerificationState.Accepted);
     }
 
-    public async Task<IEnumerable<BusinessLicense>?> GetAcceptedByNumbersAsNoTrackAsync(IEnumerable<string> licenseNumbers)
+    public async Task<IEnumerable<BusinessLicense>?> GetAcceptedStatusByLicenseNumbersAsNoTrackingAsync(IEnumerable<string> licenseNumbers)
     { 
         return await _context.BusinessLicenses
             .AsNoTracking()
             .Where(x => licenseNumbers.Contains(x.LicenseNumber) 
                 && x.VerificationStatus == Domain.Enumerations.VerificationState.Accepted)
             .ToListAsync();
-    } 
+    }
+
+    public async Task<bool> GetAnyByIdAsync(Guid id)
+    {
+        return await _context.BusinessLicenses.AnyAsync(x => x.Id == id);
+    }
+
+    public async Task<BusinessLicense?> GetByBusinessUserIdAndBusinessLicenseIdAsync(Guid businessUserId, Guid businessLicenseId)
+    {
+        return await _context.BusinessLicenses.FirstOrDefaultAsync(x => x.BusinessUserId == businessUserId && x.Id == businessLicenseId);
+    }
 
     public async Task<BusinessLicense?> GetByIdAsync(Guid id)
     {
         return await _context.BusinessLicenses.FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<IEnumerable<BusinessLicense>?> GetByNumberAsNoTrackAsync(IEnumerable<string> licenseNumbers)
+    public async Task<IEnumerable<BusinessLicense>?> GetByLicenseNumberAsNoTrackingAsync(IEnumerable<string> licenseNumbers)
     { 
         return await _context.BusinessLicenses.Where(x =>
             licenseNumbers.Contains(x.LicenseNumber)

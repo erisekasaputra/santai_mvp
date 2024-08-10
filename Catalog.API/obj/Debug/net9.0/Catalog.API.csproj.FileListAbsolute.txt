@@ -6,6 +6,7 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.API\bin\Debug\net9.0\Catalog.API.runtimeconfig.json
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.API\bin\Debug\net9.0\Catalog.API.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.API\bin\Debug\net9.0\Catalog.API.pdb
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.API\bin\Debug\net9.0\AspNetCoreRateLimit.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.API\bin\Debug\net9.0\AWSSDK.Core.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.API\bin\Debug\net9.0\AWSSDK.SimpleNotificationService.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.API\bin\Debug\net9.0\AWSSDK.SQS.dll
@@ -219,4 +220,3 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.API\obj\Debug\net9.0\Catalog.API.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.API\obj\Debug\net9.0\Catalog.API.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.API\obj\Debug\net9.0\ref\Catalog.API.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.API\bin\Debug\net9.0\AspNetCoreRateLimit.dll

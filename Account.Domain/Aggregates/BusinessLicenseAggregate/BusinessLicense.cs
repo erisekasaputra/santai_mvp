@@ -18,8 +18,12 @@ public class BusinessLicense : Entity, IAggregateRoot
 
     public string Description { get; private set; } 
 
-    public VerificationState VerificationStatus { get; private set; }
+    public VerificationState VerificationStatus { get; private set; } 
 
+    public BusinessLicense()
+    {
+
+    }
    
     public BusinessLicense(Guid businessUserId, string licenseNumber, string name, string description)
     {

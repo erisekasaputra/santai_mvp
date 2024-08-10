@@ -26,9 +26,9 @@ public class CreatePersonalInfoValidation : AbstractValidator<PersonalInfoReques
         RuleFor(x => x.Gender)
             .IsInEnum().WithMessage("Invalid gender.");
 
-        RuleFor(p => p.ProfilePicture)
+        RuleFor(p => p.ProfilePictureUrl)
             .MaximumLength(255).WithMessage("URL path is too long; it must not exceed 255 characters.")
             .Must(UrlExtension.IsValidImageUrl).WithMessage("Profile picture URL must be a valid image URL (jpg, jpeg, png).")
-            .When(x => !string.IsNullOrWhiteSpace(x.ProfilePicture));
+            .When(x => !string.IsNullOrWhiteSpace(x.ProfilePictureUrl));
     } 
 }

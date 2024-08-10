@@ -11,8 +11,7 @@ public class RegularUser : User
     public string? DeviceId { get; private set; }
 
     public RegularUser() : base()
-    {
-        PersonalInfo = new PersonalInfo();
+    { 
     }
 
     public RegularUser(

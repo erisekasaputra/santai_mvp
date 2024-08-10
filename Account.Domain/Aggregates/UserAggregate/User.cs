@@ -35,24 +35,17 @@ public abstract class User : Entity, IAggregateRoot
 
     public Address Address { get; protected set; }
      
-    public ReferralProgram? ReferralProgram { get; protected set; }
+    public ReferralProgram? ReferralProgram { get; private set; }
 
-    public LoyaltyProgram? LoyaltyProgram { get; protected set; }
+    public LoyaltyProgram? LoyaltyProgram { get; private set; }
      
-    public ICollection<ReferredProgram>? ReferredPrograms { get; protected set; }
+    public ICollection<ReferredProgram>? ReferredPrograms { get; private set; }
 
     public string TimeZoneId {  get; set; }  
 
-    public User()
-    {
-        Username = string.Empty;
-        Email = string.Empty;
-        PhoneNumber = string.Empty;
-        TimeZoneId = string.Empty;
-        Address = new Address();
-        ReferralProgram = new ReferralProgram();
-    }
-
+    protected User()
+    { 
+    } 
     public User(Guid identityId, string username, string email, string phoneNumber, Address address, string timeZoneId)
     {
         IdentityId = identityId != default ? identityId : throw new ArgumentNullException(nameof(identityId));

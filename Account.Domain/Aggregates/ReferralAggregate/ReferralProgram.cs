@@ -27,10 +27,5 @@ public class ReferralProgram : Entity, IAggregateRoot
         ReferralCode = UniqueIdGenerator.Generate(userId); 
         ValidDateUtc = validDateUtc != default ? validDateUtc : throw new ArgumentNullException(nameof(validDateUtc));
         RewardPoint = rewardPoint > 0 ? rewardPoint : throw new ArgumentOutOfRangeException(nameof(rewardPoint));
-    }
-
-    public ReferralProgram()
-    {
-        ReferralCode = string.Empty; 
-    }
+    } 
 }

@@ -6,6 +6,7 @@ using Account.API.Options;
 using Account.API.SeedWork;
 using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Enumerations;
+using Account.Domain.Exceptions;
 using Account.Domain.SeedWork; 
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -25,10 +26,11 @@ public class CreateRegularUserCommandHandler(IUnitOfWork unitOfWork, AppService 
             var userRequest = request.Request;
             var personalInfoRequest = userRequest.PersonalInfo;
 
-            var userConflict = await _unitOfWOrk.Users.GetByIdentityAsNoTrackAsync(
+            var userConflict = await _unitOfWOrk.Users.GetByIdentitiesAsNoTrackingAsync(
                     (IdentityParameter.Email, userRequest.Email),    
                     (IdentityParameter.PhoneNumber, userRequest.PhoneNumber),    
-                    (IdentityParameter.Username, userRequest.Username) 
+                    (IdentityParameter.Username, userRequest.Username),
+                    (IdentityParameter.IdentityId, userRequest.IdentityId.ToString())
                 ); 
 
             if (userConflict is not null)
@@ -44,7 +46,7 @@ public class CreateRegularUserCommandHandler(IUnitOfWork unitOfWork, AppService 
                 userRequest.Address.ToAddress(),
                 userRequest.PersonalInfo.ToPersonalInfo(userRequest.TimeZoneId),
                 userRequest.TimeZoneId,
-                userRequest.TimeZoneId);
+                userRequest.DeviceId);
 
             // creating referral program if exists
             int? referralRewardPoint = _referralOptions.CurrentValue.Point;
@@ -54,12 +56,19 @@ public class CreateRegularUserCommandHandler(IUnitOfWork unitOfWork, AppService 
                 user.AddReferralProgram(referralRewardPoint.Value, referralRewardPoint.Value);
             } 
 
-            await _unitOfWOrk.Users.CreateUserAsync(user); 
-            return Result.Success(user, ResponseStatus.Created);
+            var userDto = await _unitOfWOrk.Users.CreateAsync(user);
+
+            await _unitOfWOrk.SaveChangesAsync(cancellationToken);
+
+            return Result.Success(user.ToRegularUserResponseDto(), ResponseStatus.Created);
+        }
+        catch (DomainException ex)
+        { 
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest); 
         }
         catch (Exception ex) 
         {
-            _appService.Logger.LogError(ex.Message);
+            _appService.Logger.LogError(ex.Message, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }
@@ -81,6 +90,11 @@ public class CreateRegularUserCommandHandler(IUnitOfWork unitOfWork, AppService 
         if (user.PhoneNumber == request.PhoneNumber || user.NewPhoneNumber == request.PhoneNumber)
         {
             conflictIdentities.Add(new ErrorDetail(nameof(user.PhoneNumber), $"Phone number: {request.PhoneNumber}"));
+        }
+
+        if (user.IdentityId == request.IdentityId)
+        {
+            conflictIdentities.Add(new ErrorDetail(nameof(user.IdentityId), $"Identity Id: {request.IdentityId}"));
         }
 
         var message = conflictIdentities.Count == 1

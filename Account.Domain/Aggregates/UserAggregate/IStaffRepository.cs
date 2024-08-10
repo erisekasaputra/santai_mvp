@@ -5,5 +5,11 @@ namespace Account.Domain.Aggregates.UserAggregate;
 public interface IStaffRepository
 {
     Task<IEnumerable<Staff>?> GetByIdentitiesAsNoTrackAsync(params (IdentityParameter, IEnumerable<string>)[] parameters);
-    Task<IEnumerable<Staff>?> GetByIdentitiesExcludingIdsAsNoTrackAsync(params (IdentityParameter, IEnumerable<(Guid id, string identity)>)[] parameters);
+    Task<IEnumerable<Staff>?> GetByIdentitiesExcludingIdsAsNoTrackingAsync(params (IdentityParameter, IEnumerable<(Guid id, string identity)>)[] parameters);
+    Task<Staff?> GetByBusinessUserIdAndStaffIdAsync(Guid userId, Guid staffId);
+    Task<Staff> CreateAsync(Staff staff);
+    Task<bool> GetAnyAsync(Guid id);
+    Task<Staff?> GetByIdAsync(Guid id);
+    void Update(Staff staff);
+    void Delete(Staff staff);
 }

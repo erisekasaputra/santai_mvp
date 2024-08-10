@@ -7,12 +7,11 @@ namespace Account.Infrastructure.Repositories;
 
 public class StaffRepository : IStaffRepository
 {
-    private readonly AccountDbContext _context;
-
+    private readonly AccountDbContext _context; 
     public StaffRepository(AccountDbContext context)
     {
         _context = context;
-    }
+    } 
 
     public async Task<IEnumerable<Staff>?> GetByIdentitiesAsNoTrackAsync(params (IdentityParameter, IEnumerable<string>)[] parameters)
     { 
@@ -39,7 +38,7 @@ public class StaffRepository : IStaffRepository
                     case IdentityParameter.PhoneNumber:
                         predicate = predicate.Or(x => (x.PhoneNumber == value) 
                             || (x.NewPhoneNumber != null && x.NewPhoneNumber == value));
-                        break;
+                        break; 
                 }
             } 
         }
@@ -47,7 +46,7 @@ public class StaffRepository : IStaffRepository
         return await _context.Staffs.Where(predicate).AsNoTracking().ToListAsync();
     } 
     
-    public async Task<IEnumerable<Staff>?> GetByIdentitiesExcludingIdsAsNoTrackAsync(params (IdentityParameter, IEnumerable<(Guid id, string identity)>)[] parameters)
+    public async Task<IEnumerable<Staff>?> GetByIdentitiesExcludingIdsAsNoTrackingAsync(params (IdentityParameter, IEnumerable<(Guid id, string identity)>)[] parameters)
     { 
         if (parameters is null || parameters.Length == 0)
         {
@@ -78,5 +77,37 @@ public class StaffRepository : IStaffRepository
         }
 
         return await _context.Staffs.Where(predicate).AsNoTracking().ToListAsync();
+    }
+
+    public Task<Staff?> GetByBusinessUserIdAndStaffIdAsync(Guid userId, Guid staffId)
+    {
+        return _context.Staffs.FirstOrDefaultAsync(x => x.BusinessUserId == userId && x.Id == staffId);
+    }
+     
+
+    public async Task<Staff> CreateAsync(Staff staff)
+    {
+        var entity = await _context.Staffs.AddAsync(staff);
+        return entity.Entity;
+    } 
+
+    public async Task<bool> GetAnyAsync(Guid id)
+    {
+        return await _context.Staffs.AnyAsync(x => x.Id == id);
+    }
+
+    public async Task<Staff?> GetByIdAsync(Guid id)
+    {
+        return await _context.Staffs.FirstOrDefaultAsync(x => x.Id == id);
+    } 
+
+    public void Update(Staff staff)
+    {
+        _context.Staffs.Update(staff);
+    }
+
+    public void Delete(Staff staff)
+    {
+        _context.Remove(staff);
     }
 }

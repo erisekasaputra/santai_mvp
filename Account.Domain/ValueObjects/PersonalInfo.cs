@@ -11,8 +11,13 @@ public class PersonalInfo : ValueObject
     public string? LastName { get; set; }
     public DateTime DateOfBirthUtc { get; set; }
     public Gender Gender { get; set; }
-    public string? ProfilePictureUrl { get; set; }
+    public string? ProfilePictureUrl { get; set; } 
 
+    public PersonalInfo()
+    {
+
+    }
+    
     public PersonalInfo(string firstName, string? middleName, string? lastName, DateTime dateOfBirthUtc, Gender gender, string? profilePictureUrl)
     {
         ArgumentNullException.ThrowIfNull(firstName, nameof(firstName));
@@ -28,13 +33,7 @@ public class PersonalInfo : ValueObject
         DateOfBirthUtc = dateOfBirthUtc;
         Gender = gender;
         ProfilePictureUrl = profilePictureUrl;
-    }
-
-    public PersonalInfo()
-    {
-        FirstName = string.Empty;
-    }
-
+    }  
     protected override IEnumerable<object?> GetEqualityComponents()
     {
         yield return FirstName;

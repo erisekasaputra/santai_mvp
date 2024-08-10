@@ -121,15 +121,5 @@ public class UnitOfWork : IUnitOfWork
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
         return await _context.SaveChangesAsync(cancellationToken);
-    }
-
-    public void AttachEntity<TEntity>(TEntity entity) where TEntity : class
-    {
-        _context.Attach(entity);
-    }
-
-    public void SetEntityState<TEntity>(TEntity entity, EntityState state) where TEntity : class
-    {
-        _context.Entry(entity).State = state;
-    }
+    } 
 }

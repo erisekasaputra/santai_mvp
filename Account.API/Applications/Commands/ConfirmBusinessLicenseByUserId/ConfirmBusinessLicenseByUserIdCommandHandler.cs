@@ -15,26 +15,19 @@ public class ConfirmBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork
     public async Task<Result> Handle(ConfirmBusinessLicenseByUserIdCommand request, CancellationToken cancellationToken)
     {
         try
-        {
-            var user = await _unitOfWork.Users.GetBusinessUserByIdAsync(request.BusinessUserId);
-
-            if (user is null)
-            {
-                return Result.Failure($"Business user '{request.BusinessUserId}' not found", ResponseStatus.NotFound);
-            }
-
-            var license = await _unitOfWork.BusinessLicenses.GetByIdAsync(request.BusinessLicenseId);
+        { 
+            var license = await _unitOfWork.BusinessLicenses.GetByBusinessUserIdAndBusinessLicenseIdAsync(request.BusinessUserId, request.BusinessLicenseId);
 
             if (license is null)
             {
-                return Result.Failure($"Business license '{request.BusinessLicenseId}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"Busines user id '{request.BusinessUserId}' and business license '{request.BusinessLicenseId}' did not match any record", ResponseStatus.NotFound);
             }
 
-            var acceptedLicense = await _unitOfWork.BusinessLicenses.GetAcceptedByNumberAsNoTrackAsync(license.LicenseNumber);
+            var acceptedLicense = await _unitOfWork.BusinessLicenses.GetAcceptedStatusByLicenseNumberAsNoTrackingAsync(license.LicenseNumber);
 
             if (acceptedLicense is not null && acceptedLicense.Id == request.BusinessLicenseId)
             {
-                return Result.Failure($"Business license '{acceptedLicense.Id}' already confirmed", ResponseStatus.NoContent);
+                return Result.Failure($"Business license '{acceptedLicense.Id}' already confirmed", ResponseStatus.Conflict);
             }
 
             if (acceptedLicense is not null)
@@ -56,7 +49,7 @@ public class ConfirmBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message);
+            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

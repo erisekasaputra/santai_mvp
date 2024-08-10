@@ -16,9 +16,8 @@ public class Certification : Entity, IAggregateRoot
 
     public DateTime? ValidDateUtc { get; private set; }
 
-    public ICollection<string>? Specializations { get; private set; } 
-
-
+    public ICollection<string>? Specializations { get; private set; }
+      
     public Certification(Guid mechanicUserId, string certificationId, string certificationName, DateTime? validDateUtc, ICollection<string>? specializations)
     {  
         if (ValidDateUtc != null && validDateUtc < DateTime.UtcNow)
@@ -30,7 +29,7 @@ public class Certification : Entity, IAggregateRoot
         CertificationId = certificationId ?? throw new ArgumentNullException(nameof(certificationId));
         CertificationName = certificationName ?? throw new ArgumentNullException(nameof(certificationName));
         ValidDateUtc = validDateUtc;
-        Specializations = specializations;
+        Specializations = specializations; 
     }
 
     public void Update(string certificationId, string certificationName, DateTime validDateUtc, ICollection<string> specializations)

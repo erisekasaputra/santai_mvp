@@ -11,8 +11,7 @@ using Account.Domain.Enumerations;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+using MediatR;   
 using Microsoft.Extensions.Options;
 using System.Data; 
 
@@ -37,10 +36,11 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
         {
             await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
 
-            var userConflict = await _unitOfWork.Users.GetByIdentityAsNoTrackAsync(
+            var userConflict = await _unitOfWork.Users.GetByIdentitiesAsNoTrackingAsync(
                 (IdentityParameter.Username, request.Request.Username),
                 (IdentityParameter.Email, request.Request.Email),
-                (IdentityParameter.PhoneNumber, request.Request.PhoneNumber));
+                (IdentityParameter.PhoneNumber, request.Request.PhoneNumber),
+                (IdentityParameter.IdentityId, request.Request.IdentityId.ToString()));
 
             if (userConflict is not null)
             { 
@@ -130,13 +130,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
                     if (newStaff is null && errorParameter is not null)
                     {
                         staffConflictAtAggregate.Add(new ErrorDetail(errorParameter, errorMessage ?? string.Empty));
-                    }
-
-                    if (newStaff is not null)
-                    {
-                        _unitOfWork.AttachEntity(newStaff);
-                        _unitOfWork.SetEntityState(newStaff, EntityState.Added);
-                    }
+                    } 
                 }
 
                 if (staffConflictAtAggregate is not null && staffConflictAtAggregate.Count > 0)
@@ -149,7 +143,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
             // Register business license data
             if (request.Request.BusinessLicenses.Any())
             {
-                var licenseConflictAtRepository = await _unitOfWork.BusinessLicenses.GetAcceptedByNumbersAsNoTrackAsync(request.Request.BusinessLicenses.Select(x => x.LicenseNumber));
+                var licenseConflictAtRepository = await _unitOfWork.BusinessLicenses.GetAcceptedStatusByLicenseNumbersAsNoTrackingAsync(request.Request.BusinessLicenses.Select(x => x.LicenseNumber));
 
                 if (licenseConflictAtRepository?.Any() ?? false)
                 {
@@ -168,17 +162,11 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
                     if (newBusinessLicense is null && errorParameter is not null)
                     {
                         licenseConflictAggregate.Add(new(errorParameter, errorMessage ?? string.Empty));
-                    }
-
-                    if (newBusinessLicense is not null)
-                    {
-                        _unitOfWork.AttachEntity(newBusinessLicense);
-                        _unitOfWork.SetEntityState(newBusinessLicense, EntityState.Added);
-                    }
+                    } 
                 }
             }
 
-            var result = await _unitOfWork.Users.CreateUserAsync(user);
+            var result = await _unitOfWork.Users.CreateAsync(user);
 
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
@@ -186,15 +174,12 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
         }
         catch (DomainException ex)
         {
-            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-            _service.Logger.LogError(ex.Message);
-            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
-        }
+            return await RollbackAndReturnFailureAsync(Result.Failure(ex.Message, ResponseStatus.BadRequest), cancellationToken); 
+        } 
         catch (Exception ex)
-        {
-            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-            _service.Logger.LogError(ex.Message);
-            return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
+        {  
+            _service.Logger.LogError(ex.Message, ex.InnerException?.Message); 
+            return await RollbackAndReturnFailureAsync(Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError), cancellationToken);
         }
     }
     
@@ -247,6 +232,11 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
         if (user.PhoneNumber == request.PhoneNumber || user.NewPhoneNumber == request.PhoneNumber)
         {
             conflictIdentities.Add(new ErrorDetail(nameof(user.PhoneNumber), $"Phone number: {request.PhoneNumber}"));
+        }
+
+        if (user.IdentityId == request.IdentityId)
+        {
+            conflictIdentities.Add(new ErrorDetail(nameof(user.IdentityId), $"Identity Id: {request.IdentityId}"));
         }
 
         var message = conflictIdentities.Count == 1

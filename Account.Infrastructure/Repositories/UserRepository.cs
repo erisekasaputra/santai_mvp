@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Account.Infrastructure.Repositories;
 
 public class UserRepository : IUserRepository
-{ 
+{      
     private readonly AccountDbContext _context;
 
     public UserRepository(AccountDbContext context)
@@ -14,13 +14,14 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
-    public async Task<User> CreateUserAsync(User user)
+    public async Task<User> CreateAsync(User user)
     {
         var entry = await _context.Users.AddAsync(user); 
+
         return entry.Entity;
     }
 
-    public void UpdateUser(User user)
+    public void Update(User user)
     {
         _context.Users.Update(user);
     }
@@ -46,7 +47,7 @@ public class UserRepository : IUserRepository
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<User?> GetByIdentityAsNoTrackAsync(params (IdentityParameter, string)[] identity)
+    public async Task<User?> GetByIdentitiesAsNoTrackingAsync(params (IdentityParameter, string)[] identity)
     { 
         if (identity is null || identity.Length == 0)
         {
@@ -70,13 +71,16 @@ public class UserRepository : IUserRepository
                     predicate = predicate.Or(x => x.PhoneNumber == value
                     || (x.NewPhoneNumber != null && x.NewPhoneNumber == value));
                     break;
+                case IdentityParameter.IdentityId:
+                    predicate = predicate.Or(x => x.IdentityId == Guid.Parse(value));
+                    break;
             }
         }
          
         return await _context.Users.AsNoTracking().Where(predicate).FirstOrDefaultAsync();
     }
 
-    public async Task<User?> GetExcludingIdentityAsNoTrackAsync(Guid id, params (IdentityParameter, string)[] identity)
+    public async Task<User?> GetByIdentitiesExcludingIdAsNoTrackingAsync(Guid id, params (IdentityParameter, string)[] identity)
     { 
         if (identity.Length == 0)
         {
@@ -100,18 +104,26 @@ public class UserRepository : IUserRepository
                     predicate = predicate.Or(x => x.PhoneNumber == value
                     || (x.NewPhoneNumber != null && x.NewPhoneNumber == value));
                     break;
+                case IdentityParameter.IdentityId:
+                    predicate = predicate.Or(x => x.IdentityId == Guid.Parse(value));
+                    break;
             }
         }
         return await _context.Users.Where(predicate).FirstOrDefaultAsync(x => x.Id != id);
     }
 
-    public void DeleteUser(User user)
+    public void Delete(User user)
     {
         _context.Users.Remove(user);
     }
 
-    public Task<User?> GetUserByIdAsync(Guid id)
+    public Task<User?> GetByIdAsync(Guid id)
     {
         return _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<bool> GetAnyByIdAsync(Guid id)
+    {
+        return await _context.Users.AnyAsync(x => x.Id == id);
     }
 }

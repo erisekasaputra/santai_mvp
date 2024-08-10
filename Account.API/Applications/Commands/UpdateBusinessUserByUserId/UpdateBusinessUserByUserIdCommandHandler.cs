@@ -32,7 +32,7 @@ public class UpdateBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWork, Ap
                 request.Address.ToAddress(),
                 request.TimeZoneId);
 
-            _unitOfWork.Users.UpdateUser(user); 
+            _unitOfWork.Users.Update(user); 
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);  
             
@@ -44,7 +44,7 @@ public class UpdateBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWork, Ap
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message);
+            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

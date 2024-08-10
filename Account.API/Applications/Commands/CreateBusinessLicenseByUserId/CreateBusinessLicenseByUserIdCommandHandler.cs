@@ -1,5 +1,6 @@
 ﻿using Account.API.Applications.Services;
 using Account.API.Extensions;
+using Account.API.Mapper;
 using Account.API.SeedWork;
 using Account.Domain.Aggregates.BusinessLicenseAggregate;
 using Account.Domain.Exceptions;
@@ -19,15 +20,15 @@ public class CreateBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork,
         try
         { 
             var license = request.Request;
-            var user = await _unitOfWork.Users.GetBusinessUserByIdAsync(request.BusinessUserId);
 
-            if (user is null)
+            var entity = await _unitOfWork.Users.GetAnyByIdAsync(request.BusinessUserId);
+
+            if (entity is false)
             { 
                 return Result.Failure($"Business user '{request.BusinessUserId}' not found", ResponseStatus.NotFound);
-            }
+            } 
 
-
-            var licenseConflict = await _unitOfWork.BusinessLicenses.GetAcceptedByNumberAsNoTrackAsync(license.LicenseNumber);
+            var licenseConflict = await _unitOfWork.BusinessLicenses.GetAcceptedStatusByLicenseNumberAsNoTrackingAsync(license.LicenseNumber);
 
             if (licenseConflict is not null)
             {
@@ -47,36 +48,21 @@ public class CreateBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork,
                 return Result.Failure(message, ResponseStatus.BadRequest).WithErrors(errorDetails);
             }
 
+            var businessLicense = new BusinessLicense(request.BusinessUserId, license.LicenseNumber, license.Name, license.Description);
 
-            (BusinessLicense? newBusinessLicense, string? errorParameter, string? errorMessage) = user.AddBusinessLicenses(license.LicenseNumber, license.Name, license.Description);
+            var createdBusinessLicense = await _unitOfWork.BusinessLicenses.CreateAsync(businessLicense);
 
-            if (newBusinessLicense is null && errorParameter is not null)
-            {
-                return Result.Failure("There is a conflict", ResponseStatus.BadRequest)
-                    .WithError(new ErrorDetail(errorParameter, errorMessage ?? string.Empty)); 
-            }
-
-            if (newBusinessLicense is not null)
-            {
-                _unitOfWork.AttachEntity(newBusinessLicense);
-                _unitOfWork.SetEntityState(newBusinessLicense, EntityState.Added);
-            }  
-             
-
-            _unitOfWork.Users.UpdateUser(user); 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-            return Result.Success(null, ResponseStatus.NoContent);
+            return Result.Success(createdBusinessLicense.ToBusinessLicenseResponseDto(), ResponseStatus.Created);
         }
         catch (DomainException ex)
-        { 
-            _appService.Logger.LogError(ex.Message);
+        {
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);
-
         }
         catch (Exception ex)
         { 
-            _appService.Logger.LogError(ex.Message);
+            _appService.Logger.LogError(ex.Message, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

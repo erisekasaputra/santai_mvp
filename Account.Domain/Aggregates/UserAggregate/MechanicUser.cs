@@ -19,7 +19,7 @@ public class MechanicUser : User
      
     public bool IsVerified { get; private set; }
 
-    public string? DeviceId { get; private set; }  
+    public string? DeviceId { get; private set; }
 
     protected MechanicUser() : base()
     {

@@ -41,6 +41,6 @@ public interface IUnitOfWork
 
     Task DispatchDomainEventsAsync(CancellationToken token = default);
 
-    void AttachEntity<TEntity>(TEntity entity) where TEntity : class;
-    void SetEntityState<TEntity>(TEntity entity, EntityState state) where TEntity : class;
+    //void AttachEntity<TEntity>(TEntity entity) where TEntity : class;
+    //void SetEntityState<TEntity>(TEntity entity, EntityState state) where TEntity : class;
 }

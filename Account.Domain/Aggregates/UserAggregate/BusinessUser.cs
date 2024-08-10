@@ -7,20 +7,17 @@ using Account.Domain.ValueObjects;
 namespace Account.Domain.Aggregates.UserAggregate;
 
 public class BusinessUser : User
-{  
-    public string Code { get; private init; }  
-    public string BusinessName { get; private set; } 
-    public string ContactPerson { get; private set; } 
-    public string? TaxId { get; private set; } 
-    public string? WebsiteUrl { get; private set; } 
-    public string? Description { get; private set; }    
-    public ICollection<Staff>? Staffs { get; private set; } 
-    public ICollection<BusinessLicense>? BusinessLicenses { get; private set; }  
-    public BusinessUser() : base()
-    {
-        Code = string.Empty;
-        BusinessName = string.Empty;
-        ContactPerson = string.Empty;
+{
+    public string Code { get; private init; }
+    public string BusinessName { get; private set; }
+    public string ContactPerson { get; private set; }
+    public string? TaxId { get; private set; }
+    public string? WebsiteUrl { get; private set; }
+    public string? Description { get; private set; }
+    public ICollection<Staff>? Staffs { get; private set; }
+    public ICollection<BusinessLicense>? BusinessLicenses { get; private set; } 
+    protected BusinessUser() : base()
+    { 
     }
 
     public BusinessUser(
@@ -41,8 +38,7 @@ public class BusinessUser : User
         TaxId = taxId;
         ContactPerson = contactPerson ?? throw new ArgumentNullException(nameof(contactPerson));  
         WebsiteUrl = websiteUrl;
-        Description = description;
-
+        Description = description; 
         RaiseBusinessUserCreatedDomainEvent(this);
     } 
 
@@ -66,7 +62,9 @@ public class BusinessUser : User
     }
 
     public (BusinessLicense? newBusinessLicense, string? ErrorParameter, string? ErrorMessage) AddBusinessLicenses(string licenseNumber, string name, string description)
-    {  
+    {
+        BusinessLicenses ??= [];
+
         var licenses = BusinessLicenses?.SingleOrDefault(c => c.LicenseNumber
             .Equals(licenseNumber, StringComparison.CurrentCultureIgnoreCase) && c.VerificationStatus == Enumerations.VerificationState.Accepted);
 
@@ -74,7 +72,6 @@ public class BusinessUser : User
         {
             return (null, "LicenseNumber", $"Business license with number {licenseNumber} and status 'Accepted' already registered");
         } 
-
         var certification = new BusinessLicense(Id, licenseNumber, name, description);
         
         BusinessLicenses?.Add(certification);
@@ -104,14 +101,13 @@ public class BusinessUser : User
         ArgumentNullException.ThrowIfNullOrWhiteSpace(email);
         ArgumentNullException.ThrowIfNullOrWhiteSpace(phoneNumber);
         ArgumentNullException.ThrowIfNullOrWhiteSpace(name);
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(timeZoneId);
-        ArgumentNullException.ThrowIfNull(address); 
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(timeZoneId); 
+        ArgumentNullException.ThrowIfNull(address);  
          
         Staffs ??= [];
 
         if (Staffs.Any(x => x.Username.Equals(username, StringComparison.CurrentCultureIgnoreCase)))
-        {
-
+        { 
             return (null, "Username", $"Username: {username} is already registered. Please use a different username.");
         } 
 

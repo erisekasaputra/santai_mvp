@@ -20,21 +20,13 @@ public class Staff : Entity, IAggregateRoot
     public string Name { get; private set; }  
     public string? DeviceId { get; private set; } 
     public Address Address { get; private set; }  
-    public string TimeZoneId { get; private set; } 
+    public string TimeZoneId { get; private set; }   
+
     public Staff()
     {
-        Username = string.Empty;
-        BusinessUserCode = string.Empty;
-        PhoneNumber = string.Empty;
-        NewPhoneNumber = string.Empty;
-        Email = string.Empty;
-        NewEmail = string.Empty;
-        Name = string.Empty;
-        TimeZoneId = string.Empty;
-        Address = new Address();
-        BusinessUser = new BusinessUser(); 
-    }
-
+        
+    } 
+    
     public Staff(
         Guid businessUserId,
         string businessUserCode,
@@ -45,7 +37,7 @@ public class Staff : Entity, IAggregateRoot
         Address address,
         string timeZoneId,
         string? deviceId)
-    {
+    { 
         BusinessUserId = businessUserId != default ? businessUserId : throw new ArgumentNullException(nameof(businessUserId)); 
         BusinessUserCode = businessUserCode ?? throw new ArgumentNullException(nameof(businessUserCode));  
         Username = username; 
@@ -58,8 +50,7 @@ public class Staff : Entity, IAggregateRoot
         NewEmail = email; 
         NewPhoneNumber = phoneNumber;  
         IsEmailVerified = false; 
-        IsPhoneNumberVerified = false;
-        BusinessUser = new BusinessUser();
+        IsPhoneNumberVerified = false; 
     }
 
     public void UpdateAddress(
@@ -142,7 +133,7 @@ public class Staff : Entity, IAggregateRoot
 
     public void SetDeviceId(string deviceId)
     {
-        if (deviceId is not null)
+        if (DeviceId is not null)
         {
             throw new DomainException("This account is already registered with another device");
         }

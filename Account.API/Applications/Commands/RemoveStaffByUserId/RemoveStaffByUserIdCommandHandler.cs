@@ -15,24 +15,16 @@ public class RemoveStaffByUserIdCommandHandler(IUnitOfWork unitOfWork, AppServic
     public async Task<Result> Handle(RemoveStaffByUserIdCommand request, CancellationToken cancellationToken)
     {
         try
-        {
-            var user = await _unitOfWork.Users.GetBusinessUserByIdAsync(request.BusinessUserId);
+        { 
+            var staff = await _unitOfWork.Staffs.GetByBusinessUserIdAndStaffIdAsync(request.BusinessUserId, request.StaffId);
 
-            if (user is null)
+            if (staff is null)
             {
-                return Result.Failure($"Business user '{request.BusinessUserId}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"Staff '{request.BusinessUserId}' with related business user '{request.BusinessUserId}' not found", ResponseStatus.NotFound);
             }
 
-            var deletedStaff = user.RemoveStaff(request.StaffId);
+            _unitOfWork.Staffs.Delete(staff);
 
-            if (deletedStaff is not null) 
-            {
-                _unitOfWork.AttachEntity(deletedStaff);
-                _unitOfWork.SetEntityState(deletedStaff, Microsoft.EntityFrameworkCore.EntityState.Deleted);
-            }
-
-            _unitOfWork.Users.UpdateUser(user);
-            
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success(null, ResponseStatus.NoContent);
@@ -43,7 +35,7 @@ public class RemoveStaffByUserIdCommandHandler(IUnitOfWork unitOfWork, AppServic
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message);
+            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         } 
     }

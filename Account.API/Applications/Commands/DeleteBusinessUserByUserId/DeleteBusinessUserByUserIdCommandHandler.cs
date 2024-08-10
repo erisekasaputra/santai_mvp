@@ -24,7 +24,7 @@ public class DeleteBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWork, Ap
 
             user.Delete(); 
             
-            _unitOfWork.Users.DeleteUser(user); 
+            _unitOfWork.Users.Delete(user); 
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -36,7 +36,7 @@ public class DeleteBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWork, Ap
         }
         catch (Exception ex) 
         {
-            _service.Logger.LogError(ex.Message);
+            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

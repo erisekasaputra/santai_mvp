@@ -14,12 +14,8 @@ public class LoyaltyProgram : Entity, IAggregateRoot
     public int LoyaltyPoints { get; private set; }
 
     public LoyaltyTier LoyaltyTier { get; private set; } 
-     
-    public LoyaltyProgram()
-    {
-
-    }
-     
+      
+      
     public LoyaltyProgram(
         Guid loyaltyUserId,
         int loyaltyPoints)

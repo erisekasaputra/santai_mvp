@@ -33,7 +33,7 @@ namespace Account.API.Migrations
 
                     b.Property<string>("Description")
                         .IsRequired()
-                        .HasColumnType("varchar(max)");
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("LicenseNumber")
                         .IsRequired()
@@ -249,6 +249,9 @@ namespace Account.API.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ReferredUserId")
+                        .IsUnique();
 
                     b.HasIndex("ReferrerId");
 
@@ -597,7 +600,7 @@ namespace Account.API.Migrations
                         .HasColumnType("nvarchar(254)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("TaxId")
                         .HasMaxLength(50)
@@ -844,7 +847,7 @@ namespace Account.API.Migrations
                             b1.Property<Guid>("RegularUserId")
                                 .HasColumnType("uniqueidentifier");
 
-                            b1.Property<DateTime>("DateOfBirth")
+                            b1.Property<DateTime>("DateOfBirthUtc")
                                 .HasColumnType("datetime2");
 
                             b1.Property<string>("FirstName")

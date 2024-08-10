@@ -19,13 +19,14 @@ public class NationalIdentity : Entity, IAggregateRoot
 
     public VerificationState VerificationStatus { get; private set; }
 
-    public NationalIdentity(Guid userId, string identityNumber, string frontSideImageUrl, string backSideImageUrl)
+    
+    public NationalIdentity(Guid userId, string identityNumber, string frontSideImageUrl, string backSideImageUrl) 
     {
         UserId = userId != default ? userId : throw new InvalidOperationException(nameof(userId));
         IdentityNumber = identityNumber ?? throw new ArgumentNullException(nameof(identityNumber));
         FrontSideImageUrl = frontSideImageUrl ?? throw new ArgumentNullException(nameof(frontSideImageUrl));
         BackSideImageUrl = backSideImageUrl ?? throw new ArgumentNullException(nameof(backSideImageUrl));
-        VerificationStatus = VerificationState.Waiting;
+        VerificationStatus = VerificationState.Waiting; 
     }
 
     public void VerifyDocument()
