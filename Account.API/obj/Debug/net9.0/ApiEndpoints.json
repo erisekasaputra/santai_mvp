@@ -327,6 +327,38 @@
   },
   {
     "ContainingType": "Account.API.API.BusinessUserApi",
+    "Method": "UpdateStaffByStaffId",
+    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}",
+    "HttpMethod": "PUT",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "businessUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "staffId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "command",
+        "Type": "Account.API.Applications.Commands.UpdateStaffByStaffId.UpdateStaffByStaffIdCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.BusinessUserApi",
     "Method": "RemoveStaffBusinessUserById",
     "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}",
     "HttpMethod": "DELETE",
@@ -463,7 +495,7 @@
       },
       {
         "Name": "request",
-        "Type": "Account.API.Applications.Dtos.RequestDtos.PhoneNumberRequestDto",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.EmailRequestDto",
         "IsRequired": true
       }
     ],
@@ -522,7 +554,7 @@
       },
       {
         "Name": "request",
-        "Type": "Account.API.Applications.Dtos.RequestDtos.EmailRequestDto",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.PhoneNumberRequestDto",
         "IsRequired": true
       }
     ],

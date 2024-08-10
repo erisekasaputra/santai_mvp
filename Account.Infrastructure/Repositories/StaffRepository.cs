@@ -62,15 +62,15 @@ public class StaffRepository : IStaffRepository
                 switch (identityParameter)
                 {
                     case IdentityParameter.Username:
-                        predicate = predicate.Or(x => x.Id != id && x.Username == identity);
+                        predicate = predicate.Or(x => (x.Id != id && x.Username == identity));
                         break;
                     case IdentityParameter.Email:
-                        predicate = predicate.Or(x => x.Id != id && (x.Email == identity)
-                            || (x.NewEmail != null && x.NewEmail == identity));
+                        predicate = predicate.Or(x => (x.Id != id && (x.Email == identity))
+                            || (x.Id != id && (x.NewEmail != null && x.NewEmail == identity)));
                         break; 
                     case IdentityParameter.PhoneNumber:
-                        predicate = predicate.Or(x => x.Id != id && (x.PhoneNumber == identity)
-                            || (x.NewPhoneNumber != null && x.NewPhoneNumber == identity));
+                        predicate = predicate.Or(x => (x.Id != id && (x.PhoneNumber == identity))
+                            || (x.Id != id && (x.NewPhoneNumber != null && x.NewPhoneNumber == identity)));
                         break;
                 }
             }
@@ -160,15 +160,15 @@ public class StaffRepository : IStaffRepository
                 switch (identityParameter)
                 {
                     case IdentityParameter.Username:
-                        predicate = predicate.Or(x => x.Id != id && x.Username == identity);
+                        predicate = predicate.Or(x => (x.Id != id && x.Username == identity));
                         break;
                     case IdentityParameter.Email:
-                        predicate = predicate.Or(x => x.Id != id && (x.Email == identity)
-                            || (x.NewEmail != null && x.NewEmail == identity));
+                        predicate = predicate.Or(x => (x.Id != id && (x.Email == identity))
+                            || (x.Id != id && (x.NewEmail != null && x.NewEmail == identity)));
                         break;
                     case IdentityParameter.PhoneNumber:
                         predicate = predicate.Or(x => x.Id != id && (x.PhoneNumber == identity)
-                            || (x.NewPhoneNumber != null && x.NewPhoneNumber == identity));
+                            || (x.Id != id && (x.NewPhoneNumber != null && x.NewPhoneNumber == identity)));
                         break;
                 }
             }

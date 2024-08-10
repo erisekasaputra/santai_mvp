@@ -167,7 +167,9 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
             }
 
             var result = await _unitOfWork.Users.CreateAsync(user);  
+
             await _unitOfWork.CommitTransactionAsync(cancellationToken); 
+            
             return Result.Success(result.ToBusinessUserResponseDto(), ResponseStatus.Created);
         }
         catch (DomainException ex)

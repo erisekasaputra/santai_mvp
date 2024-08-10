@@ -13,6 +13,7 @@ using Account.API.Applications.Commands.ResetDeviceIdByStaffId;
 using Account.API.Applications.Commands.SetDeviceIdByStaffId;
 using Account.API.Applications.Commands.UpdateBusinessUserByUserId;
 using Account.API.Applications.Commands.UpdateStaffByStaffId;
+using Account.API.Applications.Commands.UpdateStaffEmailByStaffId;
 using Account.API.Applications.Commands.UpdateStaffPhoneNumberByStaffId;
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetBusinessUserByUserId;
@@ -33,7 +34,7 @@ public static class BusinessUserApi
         app.MapPut("/{businessUserId}", UpdateBusinessUser);
         app.MapPut("/{businessUserId}/staffs/{staffId}", UpdateStaffByStaffId);
 
-        app.MapPost("/", CreateBusinessUser);//.WithMetadata(new IdempotencyAttribute());
+        app.MapPost("/", CreateBusinessUser).WithMetadata(new IdempotencyAttribute());
         app.MapPost("/{businessUserId}/staffs", CreateStaffBusinessUserById).WithMetadata(new IdempotencyAttribute());
         app.MapPost("/{businessUserId}/business-licenses", CreateBusinessLicenseBusinessUserById).WithMetadata(new IdempotencyAttribute());
 
@@ -72,7 +73,7 @@ public static class BusinessUserApi
         }
     }
 
-    private static async Task<IResult> SetStaffPhoneNumberByStaffId(
+    private static async Task<IResult> SetStaffEmailByStaffId(
         Guid businessUserId,
         Guid staffId,
         [FromBody] EmailRequestDto request,
@@ -88,7 +89,7 @@ public static class BusinessUserApi
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            var result = await service.Mediator.Send(new UpdateStaffPhoneNumberByStaffIdCommand(businessUserId, staffId, request.Email)); 
+            var result = await service.Mediator.Send(new UpdateStaffEmailByStaffIdCommand(businessUserId, staffId, request.Email)); 
             return result.ToIResult();
         }
         catch (Exception ex)
@@ -115,7 +116,7 @@ public static class BusinessUserApi
         }
     }
 
-    private static async Task<IResult> SetStaffEmailByStaffId(
+    private static async Task<IResult> SetStaffPhoneNumberByStaffId(
         Guid businessUserId,
         Guid staffId,
         [FromBody] PhoneNumberRequestDto request,

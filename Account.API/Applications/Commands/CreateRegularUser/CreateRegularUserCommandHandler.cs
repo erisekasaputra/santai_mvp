@@ -60,7 +60,9 @@ public class CreateRegularUserCommandHandler(IUnitOfWork unitOfWork, AppService 
             } 
 
             var userDto = await _unitOfWork.Users.CreateAsync(user); 
-            await _unitOfWork.SaveChangesAsync(cancellationToken); 
+
+            await _unitOfWork.CommitTransactionAsync(cancellationToken); 
+            
             return Result.Success(user.ToRegularUserResponseDto(), ResponseStatus.Created);
         }
         catch (DomainException ex)
