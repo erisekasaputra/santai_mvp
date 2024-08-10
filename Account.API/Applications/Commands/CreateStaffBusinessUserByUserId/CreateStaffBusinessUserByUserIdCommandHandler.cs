@@ -27,7 +27,7 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWor
                 return Result.Failure($"Business user '{request.Id}' not found", ResponseStatus.NotFound);
             }
 
-            var staffConflicts = await _unitOfWork.Staffs.GetByIdentitiesAsNoTrackAsync(
+            var staffConflicts = await _unitOfWork.Staffs.GetByIdentitiesAsNoTrackingAsync(
                     (IdentityParameter.Username, [staff.Username]),
                     (IdentityParameter.Email, [staff.Email]),
                     (IdentityParameter.PhoneNumber, [staff.PhoneNumber])

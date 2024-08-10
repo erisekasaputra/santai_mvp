@@ -126,4 +126,69 @@ public class UserRepository : IUserRepository
     {
         return await _context.Users.AnyAsync(x => x.Id == id);
     }
+
+    public async Task<bool> GetAnyByIdentitiesAsNoTrackingAsync(params (IdentityParameter, string)[] identity)
+    {
+        if (identity is null || identity.Length == 0)
+        {
+            throw new ArgumentException("Please provide identity type you want to check at least one identity type and value");
+        }
+
+        var predicate = PredicateBuilder.New<User>(true);
+
+        foreach (var (parameter, value) in identity)
+        {
+            switch (parameter)
+            {
+                case IdentityParameter.Username:
+                    predicate = predicate.Or(x => x.Username == value);
+                    break;
+                case IdentityParameter.Email:
+                    predicate = predicate.Or(x => x.Email == value
+                    || (x.NewEmail != null && x.NewEmail == value));
+                    break;
+                case IdentityParameter.PhoneNumber:
+                    predicate = predicate.Or(x => x.PhoneNumber == value
+                    || (x.NewPhoneNumber != null && x.NewPhoneNumber == value));
+                    break;
+                case IdentityParameter.IdentityId:
+                    predicate = predicate.Or(x => x.IdentityId == Guid.Parse(value));
+                    break;
+            }
+        }
+
+        return await _context.Users.AsNoTracking().Where(predicate).AnyAsync();
+    }
+
+    public async Task<bool> GetAnyByIdentitiesExcludingIdAsNoTrackingAsync(Guid id, params (IdentityParameter, string)[] identity)
+    {
+        if (identity.Length == 0)
+        {
+            throw new ArgumentException("Please provide identity type you want to check at least one identity type and value");
+        }
+
+        var predicate = PredicateBuilder.New<User>(true);
+
+        foreach (var (parameter, value) in identity)
+        {
+            switch (parameter)
+            {
+                case IdentityParameter.Username:
+                    predicate = predicate.Or(x => x.Username == value);
+                    break;
+                case IdentityParameter.Email:
+                    predicate = predicate.Or(x => x.Email == value
+                    || (x.NewEmail != null && x.NewEmail == value));
+                    break;
+                case IdentityParameter.PhoneNumber:
+                    predicate = predicate.Or(x => x.PhoneNumber == value
+                    || (x.NewPhoneNumber != null && x.NewPhoneNumber == value));
+                    break;
+                case IdentityParameter.IdentityId:
+                    predicate = predicate.Or(x => x.IdentityId == Guid.Parse(value));
+                    break;
+            }
+        }
+        return await _context.Users.Where(predicate).AnyAsync(x => x.Id != id);
+    }
 }

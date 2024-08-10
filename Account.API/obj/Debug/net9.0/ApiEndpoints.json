@@ -121,6 +121,28 @@
   },
   {
     "ContainingType": "Account.API.API.BusinessUserApi",
+    "Method": "GetBusinessUserById",
+    "RelativePath": "api/v1/users/business/{businessUserId}",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "businessUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.BusinessUserApi",
     "Method": "UpdateBusinessUser",
     "RelativePath": "api/v1/users/business/{businessUserId}",
     "HttpMethod": "PUT",
@@ -135,28 +157,6 @@
       {
         "Name": "request",
         "Type": "Account.API.Applications.Commands.UpdateBusinessUserByUserId.UpdateBusinessUserByUserIdCommand",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Account.API.API.BusinessUserApi",
-    "Method": "GetBusinessUserById",
-    "RelativePath": "api/v1/users/business/{businessUserId}",
-    "HttpMethod": "GET",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "businessUserId",
-        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -371,8 +371,8 @@
         "IsRequired": true
       },
       {
-        "Name": "command",
-        "Type": "Account.API.Applications.Commands.SetDeviceIdByStaffId.SetDeviceIdByStaffIdCommand",
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
         "IsRequired": true
       }
     ],
@@ -403,8 +403,8 @@
         "IsRequired": true
       },
       {
-        "Name": "command",
-        "Type": "Account.API.Applications.Commands.ForceSetDeviceIdByStaffId.ForceSetDeviceIdByStaffIdCommand",
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
         "IsRequired": true
       }
     ],
@@ -435,6 +435,140 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.BusinessUserApi",
+    "Method": "SetStaffEmailByStaffId",
+    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/email",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "businessUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "staffId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.PhoneNumberRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.BusinessUserApi",
+    "Method": "ConfirmStaffEmailByStaffId",
+    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/email/confirm",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "businessUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "staffId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.BusinessUserApi",
+    "Method": "SetStaffPhoneNumberByStaffId",
+    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/phone-number",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "businessUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "staffId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.EmailRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.BusinessUserApi",
+    "Method": "ConfirmStaffPhoneNumberByStaffId",
+    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/phone-number/confirm",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "businessUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "staffId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "CreateMechanicUser",
+    "RelativePath": "api/v1/users/mechanic/",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "System.Void",
@@ -550,8 +684,8 @@
         "IsRequired": true
       },
       {
-        "Name": "command",
-        "Type": "Account.API.Applications.Commands.SetDeviceIdByUserId.SetDeviceIdByUserIdCommand",
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
         "IsRequired": true
       }
     ],
@@ -577,8 +711,8 @@
         "IsRequired": true
       },
       {
-        "Name": "command",
-        "Type": "Account.API.Applications.Commands.ForceSetDeviceIdByUserId.ForceSetDeviceIdByUserIdCommand",
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
         "IsRequired": true
       }
     ],

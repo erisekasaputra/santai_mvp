@@ -16,19 +16,15 @@ public class ConfirmUserPhoneNumberByUserIdCommandHandler(IUnitOfWork unitOfWork
     {
         try
         {
-            var user = await _UnitOfWork.Users.GetByIdAsync(request.Id);
-
+            var user = await _UnitOfWork.Users.GetByIdAsync(request.Id); 
             if (user is null)
             {
                 return Result.Failure($"User '{request.Id}' not found", ResponseStatus.NotFound);
             }
 
-            user.VerifyPhoneNumber();
-            
-            _UnitOfWork.Users.Update(user);
-            
-            await _UnitOfWork.SaveChangesAsync(cancellationToken);
-
+            user.VerifyPhoneNumber(); 
+            _UnitOfWork.Users.Update(user); 
+            await _UnitOfWork.SaveChangesAsync(cancellationToken); 
             return Result.Success(null, ResponseStatus.NoContent);
         }
         catch (DomainException ex)

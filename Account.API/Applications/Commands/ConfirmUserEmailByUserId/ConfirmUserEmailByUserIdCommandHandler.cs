@@ -23,12 +23,9 @@ public class ConfirmUserEmailByUserIdCommandHandler(IUnitOfWork unitOfWork, AppS
                 return Result.Failure($"User '{request.Id}' not found", ResponseStatus.NotFound);
             }
 
-            user.VerifyEmail();
-
-            _UnitOfWork.Users.Update(user);
-            
-            await _UnitOfWork.SaveChangesAsync(cancellationToken);
-
+            user.VerifyEmail(); 
+            _UnitOfWork.Users.Update(user); 
+            await _UnitOfWork.SaveChangesAsync(cancellationToken); 
             return Result.Success(null, ResponseStatus.NoContent);
         }
         catch (DomainException ex)

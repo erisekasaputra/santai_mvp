@@ -7,6 +7,7 @@ namespace Account.Domain.Aggregates.UserAggregate;
 
 public class Staff : Entity, IAggregateRoot
 {
+    public Guid IdentityId { get; private init; }    
     public string Username { get; private init; } 
     public Guid BusinessUserId { get; private init; } 
     public string BusinessUserCode { get; private init; } 
@@ -27,7 +28,7 @@ public class Staff : Entity, IAggregateRoot
         
     } 
     
-    public Staff(
+    public Staff( 
         Guid businessUserId,
         string businessUserCode,
         string username,
@@ -37,7 +38,8 @@ public class Staff : Entity, IAggregateRoot
         Address address,
         string timeZoneId,
         string? deviceId)
-    { 
+    {
+        IdentityId = Guid.NewGuid();
         BusinessUserId = businessUserId != default ? businessUserId : throw new ArgumentNullException(nameof(businessUserId)); 
         BusinessUserCode = businessUserCode ?? throw new ArgumentNullException(nameof(businessUserCode));  
         Username = username; 
@@ -53,23 +55,12 @@ public class Staff : Entity, IAggregateRoot
         IsPhoneNumberVerified = false; 
     }
 
-    public void UpdateAddress(
-        string addressLine1,
-        string? addressLine2,
-        string? addressLine3,
-        string city,
-        string state,
-        string postalCode,
-        string country)
-    {   
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(addressLine1);
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(city);
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(state);
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(postalCode);
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(country);
-
-        Address = new Address(addressLine1, addressLine2, addressLine3, city, state, postalCode, country);
-    }
+    public void Update(string name, Address address, string timeZoneId)
+    { 
+        Name = name ?? throw new ArgumentNullException(nameof(name));
+        Address = address ?? throw new ArgumentNullException(nameof(address)); 
+        TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId));
+    } 
 
     public void UpdateEmail(string email)
     {

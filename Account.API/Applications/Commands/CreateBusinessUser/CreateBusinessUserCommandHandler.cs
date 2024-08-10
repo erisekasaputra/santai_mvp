@@ -104,7 +104,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
             // Registering staff data
             if (request.Request.Staffs.Any())
             {
-                var staffConflictAtRepository = await _unitOfWork.Staffs.GetByIdentitiesAsNoTrackAsync(
+                var staffConflictAtRepository = await _unitOfWork.Staffs.GetByIdentitiesAsNoTrackingAsync(
                     (IdentityParameter.Username, request.Request.Staffs.Select(x => x.Username)),
                     (IdentityParameter.Email, request.Request.Staffs.Select(x => x.Email)),
                     (IdentityParameter.PhoneNumber, request.Request.Staffs.Select(x => x.PhoneNumber)));
@@ -166,10 +166,8 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
                 }
             }
 
-            var result = await _unitOfWork.Users.CreateAsync(user);
-
-            await _unitOfWork.CommitTransactionAsync(cancellationToken);
-
+            var result = await _unitOfWork.Users.CreateAsync(user);  
+            await _unitOfWork.CommitTransactionAsync(cancellationToken); 
             return Result.Success(result.ToBusinessUserResponseDto(), ResponseStatus.Created);
         }
         catch (DomainException ex)

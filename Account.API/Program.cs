@@ -50,7 +50,9 @@ app.MapBusinessUserApi();
 
 app.MapUserApi();
 
-app.MapRegularUserApi(); 
+app.MapRegularUserApi();
+
+app.MapMechanicUserApi();
 
 app.Run();
  

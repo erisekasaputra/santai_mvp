@@ -20,7 +20,7 @@ public class UpdateBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWork, Ap
 
             if (user is null)
             {
-                return Result.Failure($"Business user with ID: {request.Id} not found", ResponseStatus.NotFound);
+                return Result.Failure($"Business '{request.Id}' not found", ResponseStatus.NotFound);
             }
 
             user.Update(
@@ -32,8 +32,7 @@ public class UpdateBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWork, Ap
                 request.Address.ToAddress(),
                 request.TimeZoneId);
 
-            _unitOfWork.Users.Update(user); 
-
+            _unitOfWork.Users.Update(user);  
             await _unitOfWork.SaveChangesAsync(cancellationToken);  
             
             return Result.Success(null, ResponseStatus.NoContent);

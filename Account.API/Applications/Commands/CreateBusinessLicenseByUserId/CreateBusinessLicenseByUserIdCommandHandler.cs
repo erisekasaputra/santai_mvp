@@ -19,21 +19,17 @@ public class CreateBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork,
     {
         try
         { 
-            var license = request.Request;
-
-            var entity = await _unitOfWork.Users.GetAnyByIdAsync(request.BusinessUserId);
-
+            var license = request.Request; 
+            var entity = await _unitOfWork.Users.GetAnyByIdAsync(request.BusinessUserId); 
             if (entity is false)
             { 
                 return Result.Failure($"Business user '{request.BusinessUserId}' not found", ResponseStatus.NotFound);
             } 
 
-            var licenseConflict = await _unitOfWork.BusinessLicenses.GetAcceptedStatusByLicenseNumberAsNoTrackingAsync(license.LicenseNumber);
-
+            var licenseConflict = await _unitOfWork.BusinessLicenses.GetAcceptedStatusByLicenseNumberAsNoTrackingAsync(license.LicenseNumber); 
             if (licenseConflict is not null)
             {
-                var errorDetails = new List<ErrorDetail>();
-
+                var errorDetails = new List<ErrorDetail>();  
                 if (licenseConflict!.LicenseNumber == license.LicenseNumber)
                 {
                     errorDetails.Add(new ErrorDetail("LicenseNumber", $"Can not have multiple license numbers {license.LicenseNumber} with 'Accepted' status"));
@@ -48,12 +44,9 @@ public class CreateBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork,
                 return Result.Failure(message, ResponseStatus.BadRequest).WithErrors(errorDetails);
             }
 
-            var businessLicense = new BusinessLicense(request.BusinessUserId, license.LicenseNumber, license.Name, license.Description);
-
-            var createdBusinessLicense = await _unitOfWork.BusinessLicenses.CreateAsync(businessLicense);
-
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-
+            var businessLicense = new BusinessLicense(request.BusinessUserId, license.LicenseNumber, license.Name, license.Description); 
+            var createdBusinessLicense = await _unitOfWork.BusinessLicenses.CreateAsync(businessLicense); 
+            await _unitOfWork.SaveChangesAsync(cancellationToken); 
             return Result.Success(createdBusinessLicense.ToBusinessLicenseResponseDto(), ResponseStatus.Created);
         }
         catch (DomainException ex)

@@ -282,6 +282,9 @@ namespace Account.API.Migrations
                         .HasMaxLength(254)
                         .HasColumnType("nvarchar(254)");
 
+                    b.Property<Guid>("IdentityId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<bool>("IsEmailVerified")
                         .HasColumnType("bit");
 
@@ -321,6 +324,9 @@ namespace Account.API.Migrations
                     b.HasIndex("BusinessUserId");
 
                     b.HasIndex("Email")
+                        .IsUnique();
+
+                    b.HasIndex("IdentityId")
                         .IsUnique();
 
                     b.HasIndex("PhoneNumber")

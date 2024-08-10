@@ -6,20 +6,25 @@ namespace Account.API.Validations.AddressValidations;
 public class AddressValidation : AbstractValidator<AddressRequestDto>
 {
     public AddressValidation()
-    {
+    { 
         RuleFor(x => x.AddressLine1)
-            .NotEmpty().WithMessage("Address line 1 can not empty")
-            .Length(3, 255).WithMessage("Address line 1 must be between 3 and 255 characters long");
-
+            .NotEmpty().WithMessage("Address line 1 is required.")
+            .Length(3, 255).WithMessage("Address line 1 must be between 3 and 255 characters.");
+         
         RuleFor(x => x.AddressLine2)
-            .Length(3, 255).WithMessage("Address line 2 must be between 3 and 255 characters long")
-            .When(x => !string.IsNullOrWhiteSpace(x.AddressLine2));
-
+            .Must((address, addressLine2) =>
+                string.IsNullOrEmpty(addressLine2) || !string.IsNullOrEmpty(address.AddressLine1))
+            .WithMessage("Address line 2 cannot be filled unless address line 1 is filled.")
+            .Length(3, 255).When(x => !string.IsNullOrEmpty(x.AddressLine2))
+            .WithMessage("Address line 2 must be between 3 and 255 characters.");
+         
         RuleFor(x => x.AddressLine3)
-            .Length(3, 255).WithMessage("Address line 3 must be between 3 and 255 characters long")
-            .When(x => !string.IsNullOrWhiteSpace(x.AddressLine3))
-            .When(x => !string.IsNullOrWhiteSpace(x.AddressLine2)).WithMessage("Please complete address line 2 before filling in address line 3.");
-
+            .Must((address, addressLine3) =>
+                string.IsNullOrEmpty(addressLine3) || !string.IsNullOrEmpty(address.AddressLine2))
+            .WithMessage("Address line 3 cannot be filled unless address line 2 is filled.")
+            .Length(3, 255).When(x => !string.IsNullOrEmpty(x.AddressLine3))
+            .WithMessage("Address line 3 must be between 3 and 255 characters.");
+         
         RuleFor(x => x.City)
             .NotEmpty().WithMessage("City can not empty")
             .Length(3, 50).WithMessage("City must be between 3 and 50 characters long");

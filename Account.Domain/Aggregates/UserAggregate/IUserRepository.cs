@@ -13,5 +13,7 @@ public interface IUserRepository
     Task<RegularUser?> GetRegularUserByIdAsync(Guid id);
     Task<MechanicUser?> GetMechanicUserByIdAsync(Guid id); 
     Task<User?> GetByIdentitiesAsNoTrackingAsync(params (IdentityParameter, string)[] identity);
-    Task<User?> GetByIdentitiesExcludingIdAsNoTrackingAsync(Guid id, params (IdentityParameter, string)[] identity); 
+    Task<User?> GetByIdentitiesExcludingIdAsNoTrackingAsync(Guid id, params (IdentityParameter, string)[] identity);
+    Task<bool> GetAnyByIdentitiesAsNoTrackingAsync(params (IdentityParameter, string)[] identity);
+    Task<bool> GetAnyByIdentitiesExcludingIdAsNoTrackingAsync(Guid id, params (IdentityParameter, string)[] identity);
 }

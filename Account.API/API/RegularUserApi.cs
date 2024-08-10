@@ -34,13 +34,19 @@ public static class RegularUserApi
 
     private static async Task<IResult> ForceSetDeviceIdByUserId(
         Guid userId,
-        [FromBody] ForceSetDeviceIdByUserIdCommand command,
-        [FromServices] AppService service)
+        [FromBody] DeviceIdRequestDto request,
+        [FromServices] AppService service,
+        [FromServices] IValidator<DeviceIdRequestDto> validator)
     {
         try
         {
-            var result = await service.Mediator.Send(command);
+            var validationResult = await validator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                return TypedResults.BadRequest(validationResult.Errors);
+            }
 
+            var result = await service.Mediator.Send(new ForceSetDeviceIdByUserIdCommand(userId, request.DeviceId)); 
             return result.ToIResult();
         }
         catch (Exception ex)
@@ -56,8 +62,7 @@ public static class RegularUserApi
     {
         try
         {
-            var result = await service.Mediator.Send(new ResetDeviceIdByUserIdCommand(userId));
-
+            var result = await service.Mediator.Send(new ResetDeviceIdByUserIdCommand(userId)); 
             return result.ToIResult();
         }
         catch (Exception ex)
@@ -69,13 +74,19 @@ public static class RegularUserApi
 
     private static async Task<IResult> SetDeviceIdByUserId(
         Guid userId,
-        [FromBody] SetDeviceIdByUserIdCommand command,
-        [FromServices] AppService service)
+        [FromBody] DeviceIdRequestDto request,
+        [FromServices] AppService service,
+        [FromServices] IValidator<DeviceIdRequestDto> validator)
     {
         try
         {
-            var result = await service.Mediator.Send(command);
+            var validationResult = await validator.ValidateAsync(request);
+            if (!validationResult.IsValid)
+            {
+                return TypedResults.BadRequest(validationResult.Errors);
+            }
 
+            var result = await service.Mediator.Send(new SetDeviceIdByUserIdCommand(userId, request.DeviceId)); 
             return result.ToIResult();
         }
         catch (Exception ex)
@@ -91,8 +102,7 @@ public static class RegularUserApi
     {
         try
         {
-            var result = await service.Mediator.Send(new DeleteRegularUserByUserIdCommand(userId));
-
+            var result = await service.Mediator.Send(new DeleteRegularUserByUserIdCommand(userId)); 
             return result.ToIResult();
         }
         catch (Exception ex)
@@ -110,7 +120,7 @@ public static class RegularUserApi
     {
         try
         {
-            if (userId != command.UserId)
+            if (!userId.Equals(command.UserId))
             {
                 return TypedResults.BadRequest("User id does not match");
             }
@@ -148,7 +158,10 @@ public static class RegularUserApi
         }
     } 
 
-    private static async Task<IResult> CreateRegularUser([FromBody] RegularUserRequestDto request, [FromServices] AppService service, [FromServices] IValidator<RegularUserRequestDto> validator)
+    private static async Task<IResult> CreateRegularUser(
+        [FromBody] RegularUserRequestDto request,
+        [FromServices] AppService service,
+        [FromServices] IValidator<RegularUserRequestDto> validator)
     {
         try
         {

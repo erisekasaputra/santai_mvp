@@ -10,12 +10,13 @@ using Account.Domain.Exceptions;
 using Account.Domain.SeedWork; 
 using MediatR;
 using Microsoft.Extensions.Options;
+using System.Data;
 
 namespace Account.API.Applications.Commands.CreateRegularUser;
 
 public class CreateRegularUserCommandHandler(IUnitOfWork unitOfWork, AppService service, IOptionsMonitor<ReferralProgramOption> referralOptions) : IRequestHandler<CreateRegularUserCommand, Result>
 {
-    private readonly IUnitOfWork _unitOfWOrk = unitOfWork;
+    private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly AppService _appService = service;
     private readonly IOptionsMonitor<ReferralProgramOption> _referralOptions = referralOptions;
 
@@ -23,10 +24,12 @@ public class CreateRegularUserCommandHandler(IUnitOfWork unitOfWork, AppService 
     {
         try
         {
+            await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
+
             var userRequest = request.Request;
             var personalInfoRequest = userRequest.PersonalInfo;
 
-            var userConflict = await _unitOfWOrk.Users.GetByIdentitiesAsNoTrackingAsync(
+            var userConflict = await _unitOfWork.Users.GetByIdentitiesAsNoTrackingAsync(
                     (IdentityParameter.Email, userRequest.Email),    
                     (IdentityParameter.PhoneNumber, userRequest.PhoneNumber),    
                     (IdentityParameter.Username, userRequest.Username),
@@ -35,7 +38,7 @@ public class CreateRegularUserCommandHandler(IUnitOfWork unitOfWork, AppService 
 
             if (userConflict is not null)
             {
-                return UserIdentityConflict(userConflict, userRequest);
+                return await RollbackAndReturnFailureAsync(UserIdentityConflict(userConflict, userRequest), cancellationToken);
             }
 
             var user = new RegularUser(
@@ -56,21 +59,25 @@ public class CreateRegularUserCommandHandler(IUnitOfWork unitOfWork, AppService 
                 user.AddReferralProgram(referralRewardPoint.Value, referralRewardPoint.Value);
             } 
 
-            var userDto = await _unitOfWOrk.Users.CreateAsync(user);
-
-            await _unitOfWOrk.SaveChangesAsync(cancellationToken);
-
+            var userDto = await _unitOfWork.Users.CreateAsync(user); 
+            await _unitOfWork.SaveChangesAsync(cancellationToken); 
             return Result.Success(user.ToRegularUserResponseDto(), ResponseStatus.Created);
         }
         catch (DomainException ex)
-        { 
-            return Result.Failure(ex.Message, ResponseStatus.BadRequest); 
+        {
+            return await RollbackAndReturnFailureAsync(Result.Failure(ex.Message, ResponseStatus.BadRequest), cancellationToken); 
         }
         catch (Exception ex) 
         {
             _appService.Logger.LogError(ex.Message, ex.InnerException?.Message);
-            return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
+            return await RollbackAndReturnFailureAsync(Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError), cancellationToken); 
         }
+    }
+
+    private async Task<Result> RollbackAndReturnFailureAsync(Result result, CancellationToken cancellationToken)
+    {
+        await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+        return result;
     }
 
     private static Result UserIdentityConflict(User user, RegularUserRequestDto request)

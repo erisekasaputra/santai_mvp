@@ -10,6 +10,9 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
     {
         e.HasKey(p => p.Id);
 
+        e.HasIndex(p => p.IdentityId)
+            .IsUnique();
+
         e.HasIndex(p => p.Username)
             .IsUnique();
 

@@ -91,7 +91,7 @@ public abstract class User : Entity, IAggregateRoot
     public virtual void UpdatePhoneNumber(string phoneNumber)
     {
         ArgumentNullException.ThrowIfNullOrWhiteSpace(phoneNumber);
-
+         
         NewPhoneNumber = phoneNumber;
         IsPhoneNumberVerified = false; 
 
