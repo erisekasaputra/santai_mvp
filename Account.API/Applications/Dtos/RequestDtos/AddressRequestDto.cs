@@ -3,19 +3,19 @@
 namespace Account.API.Applications.Dtos.RequestDtos;
 
 public class AddressRequestDto(
-    string AddressLine1,
-    string? AddressLine2,
-    string? AddressLine3,
-    string City,
-    string State,
-    string PostalCode,
-    string Country)
+    string addressLine1,
+    string? addressLine2,
+    string? addressLine3,
+    string city,
+    string state,
+    string postalCode,
+    string country)
 {
-    public string AddressLine1 { get; } = AddressLine1.Clean();
-    public string? AddressLine2 { get; } = AddressLine2?.Clean();
-    public string? AddressLine3 { get; } = AddressLine3?.Clean();
-    public string City { get; } = City.Clean();
-    public string State { get; } = State.Clean();
-    public string PostalCode { get; } = PostalCode.Clean();
-    public string Country { get; } = Country.Clean();
+    public string AddressLine1 { get; set; } = addressLine1.Clean();
+    public string? AddressLine2 { get; set; } = addressLine2?.Clean();
+    public string? AddressLine3 { get; set; } = addressLine3?.Clean();
+    public string City { get; } = city.Clean();
+    public string State { get; } = state.Clean();
+    public string PostalCode { get; } = postalCode.Clean();
+    public string Country { get; } = country.Clean();
 }

@@ -12,11 +12,15 @@ public class Staff : Entity, IAggregateRoot
     public Guid BusinessUserId { get; private init; } 
     public string BusinessUserCode { get; private init; } 
     public BusinessUser BusinessUser { get; set; } // Only for navigation properties, does not have to be instantiated 
-    public string PhoneNumber { get; private set; } 
-    public string? NewPhoneNumber { get; private set; } 
+    public string HashedPhoneNumber { get; private set; } 
+    public string EncryptedPhoneNumber { get; private set; }
+    public string? NewHashedPhoneNumber { get; private set; } 
+    public string? NewEncryptedPhoneNumber { get; private set; }
     public bool IsPhoneNumberVerified { get; private set; }  
-    public string Email { get; private set; } 
-    public string? NewEmail { get; private set; } 
+    public string HashedEmail { get; private set; } 
+    public string EncryptedEmail {  get; private set; } 
+    public string? NewHashedEmail { get; private set; } 
+    public string? NewEncryptedEmail {  get; private set; }
     public bool IsEmailVerified { get; private set; } 
     public string Name { get; private set; }  
     public string? DeviceId { get; private set; } 
@@ -32,8 +36,10 @@ public class Staff : Entity, IAggregateRoot
         Guid businessUserId,
         string businessUserCode,
         string username,
-        string email,
-        string phoneNumber,
+        string hashedEmail,
+        string encryptedEmail,
+        string hashedPhoneNumber,
+        string encryptedPhoneNumber,
         string name,
         Address address,
         string timeZoneId,
@@ -43,14 +49,22 @@ public class Staff : Entity, IAggregateRoot
         BusinessUserId = businessUserId != default ? businessUserId : throw new ArgumentNullException(nameof(businessUserId)); 
         BusinessUserCode = businessUserCode ?? throw new ArgumentNullException(nameof(businessUserCode));  
         Username = username; 
-        Email = email ?? throw new ArgumentNullException( nameof(email)); 
-        PhoneNumber = phoneNumber ?? throw new ArgumentNullException(nameof(phoneNumber)); 
         Name = name ?? throw new ArgumentNullException(nameof(name)); 
         TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId)); 
         Address = address ?? throw new ArgumentNullException(nameof(address));  
-        DeviceId = deviceId ?? null; 
-        NewEmail = email; 
-        NewPhoneNumber = phoneNumber;  
+        DeviceId = deviceId ?? null;
+
+        HashedEmail = hashedEmail ?? throw new ArgumentNullException(nameof(hashedEmail));
+        NewHashedEmail = hashedEmail; 
+        EncryptedEmail = encryptedEmail ?? throw new ArgumentNullException(nameof(encryptedEmail));
+        NewEncryptedEmail = encryptedEmail;
+
+        HashedPhoneNumber = hashedPhoneNumber ?? throw new ArgumentNullException(nameof(hashedPhoneNumber));
+        NewHashedPhoneNumber = hashedPhoneNumber;
+        EncryptedPhoneNumber = encryptedPhoneNumber ?? throw new ArgumentNullException(nameof(hashedPhoneNumber));
+        NewEncryptedPhoneNumber = encryptedPhoneNumber;
+        
+
         IsEmailVerified = false; 
         IsPhoneNumberVerified = false; 
     }
@@ -62,52 +76,53 @@ public class Staff : Entity, IAggregateRoot
         TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId));
     } 
 
-    public void UpdateEmail(string email)
+    public void UpdateEmail(string email, string encryptedEmail)
     {
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(email);
-
-        NewEmail = email;
+        NewHashedEmail = email;
+        NewEncryptedEmail = encryptedEmail;
         IsEmailVerified = false;
 
-        RaiseEmailUpdatedDomainEvent(Id, Email, email);
+        RaiseEmailUpdatedDomainEvent(Id, HashedEmail, email, EncryptedEmail, encryptedEmail);
     }
 
-    public void UpdatePhoneNumber(string phoneNumber)
-    {
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(phoneNumber);
-
-        NewPhoneNumber = phoneNumber;
+    public void UpdatePhoneNumber(string phoneNumber, string encryptedPhoneNumber)
+    { 
+        NewHashedPhoneNumber = phoneNumber;
         IsPhoneNumberVerified = false;
 
-        RaisePhoneNumberUpdatedDomainEvent(Id, PhoneNumber, phoneNumber);
+        RaisePhoneNumberUpdatedDomainEvent(Id, HashedPhoneNumber, phoneNumber, EncryptedPhoneNumber, encryptedPhoneNumber);
     }
 
     public void VerifyEmail()
     {
-        if (string.IsNullOrWhiteSpace(NewEmail))
+        if (string.IsNullOrWhiteSpace(NewHashedEmail) || string.IsNullOrWhiteSpace(NewEncryptedEmail))
         {
             throw new DomainException("New email is not set, can not verify email");
         }
 
-        Email = NewEmail;
+        HashedEmail = NewHashedEmail;
+        EncryptedEmail = NewEncryptedEmail;
         IsEmailVerified = true;
-        NewEmail = null;
+        NewHashedEmail = null;
+        NewEncryptedEmail = null;
 
-        RaiseEmailVerifiedDomainEvent(Id, Email);
+        RaiseEmailVerifiedDomainEvent(Id, HashedEmail, EncryptedEmail);
     }
 
     public void VerifyPhoneNumber()
     {
-        if (string.IsNullOrWhiteSpace(NewPhoneNumber))
+        if (string.IsNullOrWhiteSpace(NewHashedPhoneNumber) || string.IsNullOrWhiteSpace(NewEncryptedPhoneNumber))
         {
             throw new DomainException("New phone number is not set, can not phone number");
         }
 
-        PhoneNumber = NewPhoneNumber;
+        HashedPhoneNumber = NewHashedPhoneNumber;
+        EncryptedPhoneNumber = NewEncryptedPhoneNumber;
         IsPhoneNumberVerified = true;
-        NewPhoneNumber = null;
+        NewHashedPhoneNumber = null;
+        NewEncryptedPhoneNumber = null;
 
-        RaisePhoneNumberVerifiedDomainEvent(Id, PhoneNumber);
+        RaisePhoneNumberVerifiedDomainEvent(Id, HashedPhoneNumber, EncryptedPhoneNumber);
     }
 
     public void ResetDeviceId()
@@ -161,23 +176,23 @@ public class Staff : Entity, IAggregateRoot
         AddDomainEvent(new DeviceIdForcedResetDomainEvent(id));
     }
 
-    private void RaiseEmailUpdatedDomainEvent(Guid id, string oldEmail, string newEmail)
+    private void RaiseEmailUpdatedDomainEvent(Guid id, string oldEmail, string newEmail, string oldEncryptedEmail, string newEncryptedEmail)
     {
-        AddDomainEvent(new EmailUpdatedDomainEvent(id, oldEmail, newEmail));
+        AddDomainEvent(new EmailUpdatedDomainEvent(id, oldEmail, newEmail, oldEncryptedEmail, newEncryptedEmail));
     }
 
-    private void RaisePhoneNumberUpdatedDomainEvent(Guid id, string oldPhoneNumber, string newPhoneNumber)
+    private void RaisePhoneNumberUpdatedDomainEvent(Guid id, string oldPhoneNumber, string newPhoneNumber, string oldEncryptedPhoneNumber, string newEncryptedPhoneNumber)
     {
-        AddDomainEvent(new PhoneNumberUpdatedDomainEvent(id, oldPhoneNumber, newPhoneNumber));
+        AddDomainEvent(new PhoneNumberUpdatedDomainEvent(id, oldPhoneNumber, newPhoneNumber, oldEncryptedPhoneNumber, newEncryptedPhoneNumber));
     }
 
-    private void RaiseEmailVerifiedDomainEvent(Guid id, string email)
+    private void RaiseEmailVerifiedDomainEvent(Guid id, string email, string encryptedEmail)
     {
-        AddDomainEvent(new EmailVerifiedDomainEvent(id, email));
+        AddDomainEvent(new EmailVerifiedDomainEvent(id, email, encryptedEmail));
     }
 
-    private void RaisePhoneNumberVerifiedDomainEvent(Guid id, string phoneNumber)
+    private void RaisePhoneNumberVerifiedDomainEvent(Guid id, string phoneNumber, string encryptedPhoneNumber)
     {
-        AddDomainEvent(new PhoneNumberVerifiedDomainEvent(id, phoneNumber));
+        AddDomainEvent(new PhoneNumberVerifiedDomainEvent(id, phoneNumber, encryptedPhoneNumber));
     }
 }

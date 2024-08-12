@@ -25,7 +25,7 @@ public class BusinessUserCreatedDomainEventHandler : INotificationHandler<Busine
         {
             foreach (Staff b in entity.Staffs)
             {
-                var businessLicense = new StaffEvent(b.Username, b.PhoneNumber, b.Email, b.Name, b.TimeZoneId);
+                var businessLicense = new StaffEvent(b.Username, b.HashedPhoneNumber, b.HashedEmail, b.Name, b.TimeZoneId);
                 staffEvents.Add(businessLicense);
             }
         }
@@ -33,12 +33,12 @@ public class BusinessUserCreatedDomainEventHandler : INotificationHandler<Busine
         var @event = new BusinessUserCreatedIntegrationEvent(
                 entity!.Id,
                 entity.Username,
-                entity.Email,
-                entity.PhoneNumber,
+                entity.HashedEmail,
+                entity.HashedPhoneNumber,
                 entity.TimeZoneId,
                 entity.BusinessName,
-                entity.ContactPerson,
-                entity.TaxId,
+                entity.EncryptedContactPerson,
+                entity.EncryptedTaxId,
                 entity.WebsiteUrl,
                 entity.Description,
                 staffEvents

@@ -15,7 +15,7 @@ public class CertificationEntityConfiguration : IEntityTypeConfiguration<Certifi
             .IsUnique();
 
         e.Property(p => p.CertificationId)
-            .HasMaxLength(50)
+            .HasMaxLength(255)
             .IsRequired()
             .HasConversion(
                 v => v.Trim(),

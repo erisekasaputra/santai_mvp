@@ -2,17 +2,17 @@
 
 namespace Account.API.Applications.Dtos.RequestDtos;
 public class StaffRequestDto(
-    string Username,
-    string PhoneNumber,
-    string Email,
-    string Name,
-    AddressRequestDto Address,
-    string TimeZoneId)
+    string username,
+    string phoneNumber,
+    string email,
+    string name,
+    AddressRequestDto address,
+    string timeZoneId)
 {
-    public string Username { get; } = Username.CleanAndLowering();
-    public string PhoneNumber { get; } = PhoneNumber.Clean();
-    public string Email { get; } = Email.CleanAndLowering();
-    public string Name { get; } = Name.Clean();
-    public AddressRequestDto Address { get; } = Address;
-    public string TimeZoneId { get; } = TimeZoneId.Clean();
+    public string Username { get; } = username.CleanAndLowering();
+    public string PhoneNumber { get; set; } = phoneNumber.Clean();
+    public string Email { get; set; } = email.CleanAndLowering();
+    public string Name { get; } = name.Clean();
+    public AddressRequestDto Address { get; } = address;
+    public string TimeZoneId { get; set; } = timeZoneId.Clean();
 }

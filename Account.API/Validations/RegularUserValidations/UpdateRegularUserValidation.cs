@@ -1,4 +1,4 @@
-﻿using Account.API.Applications.Commands.UpdateRegularUserByUserId; 
+﻿using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Extensions;
 using Account.API.Validations.AddressValidations;
 using Account.API.Validations.PersonalInfoValidations; 
@@ -6,7 +6,7 @@ using FluentValidation;
 
 namespace Account.API.Validations.RegularUserValidations;
 
-public class UpdateRegularUserValidation : AbstractValidator<UpdateRegularUserByUserIdCommand>
+public class UpdateRegularUserValidation : AbstractValidator<UpdateRegularUserRequestDto>
 {
     public UpdateRegularUserValidation()
     {  

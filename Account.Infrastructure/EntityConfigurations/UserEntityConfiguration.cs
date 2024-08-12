@@ -15,19 +15,27 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
 
         e.HasIndex(p => p.Username).IsUnique();
 
-        e.HasIndex(p => p.Email).IsUnique();
+        e.HasIndex(p => p.HashedEmail).IsUnique();
 
-        e.HasIndex(p => p.PhoneNumber).IsUnique();
+        e.HasIndex(p => p.HashedPhoneNumber).IsUnique();
 
         e.Property(p => p.Username).HasMaxLength(20).IsRequired();
           
-        e.Property(p => p.Email).HasMaxLength(254).IsRequired();
+        e.Property(p => p.HashedEmail).HasMaxLength(255).IsRequired();
+        
+        e.Property(p => p.EncryptedEmail).HasMaxLength(255).IsRequired();
 
-        e.Property(p => p.NewEmail).HasMaxLength(254).IsRequired(false);
+        e.Property(p => p.NewHashedEmail).HasMaxLength(255).IsRequired(false);
+        
+        e.Property(p => p.NewEncryptedEmail).HasMaxLength(255).IsRequired(false);
 
-        e.Property(p => p.PhoneNumber).HasMaxLength(20).IsRequired();
+        e.Property(p => p.HashedPhoneNumber).HasMaxLength(255).IsRequired();
+        
+        e.Property(p => p.EncryptedPhoneNumber).HasMaxLength(255).IsRequired();
 
-        e.Property(p => p.NewPhoneNumber).HasMaxLength(20).IsRequired(false);
+        e.Property(p => p.NewHashedPhoneNumber).HasMaxLength(255).IsRequired(false);
+
+        e.Property(p => p.NewEncryptedPhoneNumber).HasMaxLength(255).IsRequired(false);
 
         e.Property(p => p.AccountStatus).HasConversion(
             save => save.ToString(),
@@ -53,11 +61,11 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
 
         e.OwnsOne(p => p.Address, address =>
         {
-            address.Property(ap => ap.AddressLine1).HasMaxLength(255).IsRequired();
+            address.Property(ap => ap.EncryptedAddressLine1).HasMaxLength(255).IsRequired();
 
-            address.Property(ap => ap.AddressLine2).HasMaxLength(255).IsRequired(false);
+            address.Property(ap => ap.EncryptedAddressLine2).HasMaxLength(255).IsRequired(false);
 
-            address.Property(ap => ap.AddressLine3).HasMaxLength(255).IsRequired(false);
+            address.Property(ap => ap.EncryptedAddressLine3).HasMaxLength(255).IsRequired(false);
 
             address.Property(ap => ap.City).HasMaxLength(50).IsRequired();
 

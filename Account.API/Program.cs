@@ -29,6 +29,8 @@ builder.Services.AddSqlDatabaseContext();
 
 builder.Services.AddMassTransitContext();
 
+builder.Services.AddDataEncryption(builder.Configuration);
+
 var app = builder.Build();
  
 if (app.Environment.IsDevelopment())

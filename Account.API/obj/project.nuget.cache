@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "/LZ9yib2lU4=",
+  "dgSpecHash": "q3grgfUU/OA=",
   "success": true,
   "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Account.API\\Account.API.csproj",
   "expectedPackageFiles": [
@@ -8,6 +8,7 @@
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.cognitoidentity\\3.7.400.2\\awssdk.cognitoidentity.3.7.400.2.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.cognitosync\\3.7.400.2\\awssdk.cognitosync.3.7.400.2.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.core\\3.7.400.2\\awssdk.core.3.7.400.2.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\awssdk.extensions.netcore.setup\\3.7.301\\awssdk.extensions.netcore.setup.3.7.301.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.keymanagementservice\\3.7.400.2\\awssdk.keymanagementservice.3.7.400.2.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.secretsmanager\\3.7.400.2\\awssdk.secretsmanager.3.7.400.2.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.securitytoken\\3.7.400.2\\awssdk.securitytoken.3.7.400.2.nupkg.sha512",

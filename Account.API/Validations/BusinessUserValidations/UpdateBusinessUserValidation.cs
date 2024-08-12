@@ -1,11 +1,11 @@
-﻿using Account.API.Applications.Commands.UpdateBusinessUserByUserId;
+﻿using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Extensions;
 using Account.API.Validations.AddressValidations;
 using FluentValidation;
 
 namespace Account.API.Validations.BusinessUserValidations;
 
-public class UpdateBusinessUserValidation : AbstractValidator<UpdateBusinessUserByUserIdCommand>
+public class UpdateBusinessUserValidation : AbstractValidator<UpdateBusinessUserRequestDto>
 {
     public UpdateBusinessUserValidation()
     { 

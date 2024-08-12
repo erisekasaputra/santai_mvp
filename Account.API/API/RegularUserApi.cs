@@ -1,17 +1,16 @@
-﻿
-using Account.API.Applications.Commands.CreateRegularUser;
-using Account.API.Applications.Commands.DeleteRegularUserByUserId; 
-using Account.API.Applications.Commands.ForceSetDeviceIdByUserId;
-using Account.API.Applications.Commands.ResetDeviceIdByUserId;
-using Account.API.Applications.Commands.SetDeviceIdByUserId;
-using Account.API.Applications.Commands.UpdateRegularUserByUserId;
+﻿using Account.API.Applications.Commands.RegularUserCommand.CreateRegularUser;
+using Account.API.Applications.Commands.RegularUserCommand.DeleteRegularUserByUserId;
+using Account.API.Applications.Commands.RegularUserCommand.UpdateRegularUserByUserId;
+using Account.API.Applications.Commands.UserCommand.ForceSetDeviceIdByUserId;
+using Account.API.Applications.Commands.UserCommand.ResetDeviceIdByUserId;
+using Account.API.Applications.Commands.UserCommand.SetDeviceIdByUserId;
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetRegularUserByUserId;
-using Account.API.Applications.Services;
 using Account.API.Extensions;
-using Account.API.SeedWork; 
+using Account.API.SeedWork;
+using Account.API.Services;
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc; 
+using Microsoft.AspNetCore.Mvc;
 
 namespace Account.API.API;
 
@@ -35,7 +34,7 @@ public static class RegularUserApi
     private static async Task<IResult> ForceSetDeviceIdByUserId(
         Guid userId,
         [FromBody] DeviceIdRequestDto request,
-        [FromServices] AppService service,
+        [FromServices] ApplicationService service,
         [FromServices] IValidator<DeviceIdRequestDto> validator)
     {
         try
@@ -58,7 +57,7 @@ public static class RegularUserApi
 
     private static async Task<IResult> ResetDeviceIdByUserId(
         Guid userId,
-        [FromServices] AppService service)
+        [FromServices] ApplicationService service)
     {
         try
         {
@@ -75,7 +74,7 @@ public static class RegularUserApi
     private static async Task<IResult> SetDeviceIdByUserId(
         Guid userId,
         [FromBody] DeviceIdRequestDto request,
-        [FromServices] AppService service,
+        [FromServices] ApplicationService service,
         [FromServices] IValidator<DeviceIdRequestDto> validator)
     {
         try
@@ -98,7 +97,7 @@ public static class RegularUserApi
 
     private static async Task<IResult> DeleteRegularUserByUserId(
         Guid userId,
-        [FromServices] AppService service)
+        [FromServices] ApplicationService service)
     {
         try
         {
@@ -114,24 +113,19 @@ public static class RegularUserApi
 
     private static async Task<IResult> UpdateRegularUserByUserId(
         Guid userId,
-        [FromBody] UpdateRegularUserByUserIdCommand command,
-        [FromServices] AppService service,
-        [FromServices] IValidator<UpdateRegularUserByUserIdCommand> validator)
+        [FromBody] UpdateRegularUserRequestDto request,
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<UpdateRegularUserRequestDto> validator)
     {
         try
-        {
-            if (!userId.Equals(command.UserId))
-            {
-                return TypedResults.BadRequest("User id does not match");
-            }
-
-            var validationResult = await validator.ValidateAsync(command);
+        { 
+            var validationResult = await validator.ValidateAsync(request);
             if (!validationResult.IsValid)
             {
                 return TypedResults.BadRequest(validationResult.Errors);
             }
 
-            var result = await service.Mediator.Send(command);
+            var result = await service.Mediator.Send(new UpdateRegularUserByUserIdCommand(userId, request.TimeZoneId, request.Address, request.PersonalInfo));
             return result.ToIResult();
         }
         catch (Exception ex)
@@ -143,7 +137,7 @@ public static class RegularUserApi
 
     private static async Task<IResult> GetRegularUserByUserId(
         Guid userId,
-        [FromServices] AppService service)
+        [FromServices] ApplicationService service)
     {
         try
         {
@@ -160,7 +154,7 @@ public static class RegularUserApi
 
     private static async Task<IResult> CreateRegularUser(
         [FromBody] RegularUserRequestDto request,
-        [FromServices] AppService service,
+        [FromServices] ApplicationService service,
         [FromServices] IValidator<RegularUserRequestDto> validator)
     {
         try
@@ -171,7 +165,15 @@ public static class RegularUserApi
                 return TypedResults.BadRequest(validationResult.Errors);
             }
 
-            var result = await service.Mediator.Send(new CreateRegularUserCommand(request)); 
+            var result = await service.Mediator.Send(new CreateRegularUserCommand(
+                request.IdentityId,
+                request.Username,
+                request.Email,
+                request.PhoneNumber,
+                request.TimeZoneId,
+                request.Address,
+                request.PersonalInfo,
+                request.DeviceId)); 
             return result.ToIResult();
         }
         catch (Exception ex)

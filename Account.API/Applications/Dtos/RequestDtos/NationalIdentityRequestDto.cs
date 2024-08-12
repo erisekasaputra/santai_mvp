@@ -3,11 +3,11 @@
 namespace Account.API.Applications.Dtos.RequestDtos;
 
 public class NationalIdentityRequestDto(
-    string IdentityNumber,
-    string FrontSideImageUrl,
-    string BackSideImageUrl)
+    string identityNumber,
+    string frontSideImageUrl,
+    string backSideImageUrl)
 {
-    public string IdentityNumber { get; } = IdentityNumber.Clean();
-    public string FrontSideImageUrl { get; } = FrontSideImageUrl.Clean();
-    public string BackSideImageUrl { get; } = BackSideImageUrl.Clean();
+    public string IdentityNumber { get; set; } = identityNumber.Clean();
+    public string FrontSideImageUrl { get; } = frontSideImageUrl.Clean();
+    public string BackSideImageUrl { get; } = backSideImageUrl.Clean();
 }

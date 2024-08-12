@@ -32,12 +32,12 @@ public class StaffRepository : IStaffRepository
                         predicate = predicate.Or(x => x.Username == value);
                         break;
                     case IdentityParameter.Email:
-                        predicate = predicate.Or(x => (x.Email == value) 
-                            || (x.NewEmail != null && x.NewEmail == value));
+                        predicate = predicate.Or(x => (x.HashedEmail == value) 
+                            || (x.NewHashedEmail != null && x.NewHashedEmail == value));
                         break;
                     case IdentityParameter.PhoneNumber:
-                        predicate = predicate.Or(x => (x.PhoneNumber == value) 
-                            || (x.NewPhoneNumber != null && x.NewPhoneNumber == value));
+                        predicate = predicate.Or(x => (x.HashedPhoneNumber == value) 
+                            || (x.NewHashedPhoneNumber != null && x.NewHashedPhoneNumber == value));
                         break; 
                 }
             } 
@@ -65,12 +65,12 @@ public class StaffRepository : IStaffRepository
                         predicate = predicate.Or(x => (x.Id != id && x.Username == identity));
                         break;
                     case IdentityParameter.Email:
-                        predicate = predicate.Or(x => (x.Id != id && (x.Email == identity))
-                            || (x.Id != id && (x.NewEmail != null && x.NewEmail == identity)));
+                        predicate = predicate.Or(x => (x.Id != id && (x.HashedEmail == identity))
+                            || (x.Id != id && (x.NewHashedEmail != null && x.NewHashedEmail == identity)));
                         break; 
                     case IdentityParameter.PhoneNumber:
-                        predicate = predicate.Or(x => (x.Id != id && (x.PhoneNumber == identity))
-                            || (x.Id != id && (x.NewPhoneNumber != null && x.NewPhoneNumber == identity)));
+                        predicate = predicate.Or(x => (x.Id != id && (x.HashedPhoneNumber == identity))
+                            || (x.Id != id && (x.NewHashedPhoneNumber != null && x.NewHashedPhoneNumber == identity)));
                         break;
                 }
             }
@@ -130,12 +130,12 @@ public class StaffRepository : IStaffRepository
                         predicate = predicate.Or(x => x.Username == value);
                         break;
                     case IdentityParameter.Email:
-                        predicate = predicate.Or(x => (x.Email == value)
-                            || (x.NewEmail != null && x.NewEmail == value));
+                        predicate = predicate.Or(x => (x.HashedEmail == value)
+                            || (x.NewHashedEmail != null && x.NewHashedEmail == value));
                         break;
                     case IdentityParameter.PhoneNumber:
-                        predicate = predicate.Or(x => (x.PhoneNumber == value)
-                            || (x.NewPhoneNumber != null && x.NewPhoneNumber == value));
+                        predicate = predicate.Or(x => (x.HashedPhoneNumber == value)
+                            || (x.NewHashedPhoneNumber != null && x.NewHashedPhoneNumber == value));
                         break;
                 }
             }
@@ -163,12 +163,12 @@ public class StaffRepository : IStaffRepository
                         predicate = predicate.Or(x => (x.Id != id && x.Username == identity));
                         break;
                     case IdentityParameter.Email:
-                        predicate = predicate.Or(x => (x.Id != id && (x.Email == identity))
-                            || (x.Id != id && (x.NewEmail != null && x.NewEmail == identity)));
+                        predicate = predicate.Or(x => (x.Id != id && (x.HashedEmail == identity))
+                            || (x.Id != id && (x.NewHashedEmail != null && x.NewHashedEmail == identity)));
                         break;
                     case IdentityParameter.PhoneNumber:
-                        predicate = predicate.Or(x => x.Id != id && (x.PhoneNumber == identity)
-                            || (x.Id != id && (x.NewPhoneNumber != null && x.NewPhoneNumber == identity)));
+                        predicate = predicate.Or(x => x.Id != id && (x.HashedPhoneNumber == identity)
+                            || (x.Id != id && (x.NewHashedPhoneNumber != null && x.NewHashedPhoneNumber == identity)));
                         break;
                 }
             }

@@ -1,10 +1,10 @@
-﻿using Account.API.Applications.Commands.ConfirmUserEmailByUserId;
-using Account.API.Applications.Commands.ConfirmUserPhoneNumberByUserId;
-using Account.API.Applications.Commands.UpdateUserEmailByUserId;
-using Account.API.Applications.Commands.UpdateUserPhoneNumberByUserId;
+﻿using Account.API.Applications.Commands.UserCommand.ConfirmUserEmailByUserId;
+using Account.API.Applications.Commands.UserCommand.ConfirmUserPhoneNumberByUserId;
+using Account.API.Applications.Commands.UserCommand.UpdateUserEmailByUserId;
+using Account.API.Applications.Commands.UserCommand.UpdateUserPhoneNumberByUserId;
 using Account.API.Applications.Dtos.RequestDtos;
-using Account.API.Applications.Services;
-using Account.API.Extensions; 
+using Account.API.Extensions;
+using Account.API.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,7 +24,7 @@ public static class UserApi
         return app;
     } 
 
-    private static async Task<IResult> UpdateUserEmailByUserId(Guid userId, [FromBody] EmailRequestDto request, AppService service, IValidator<EmailRequestDto> validator)
+    private static async Task<IResult> UpdateUserEmailByUserId(Guid userId, [FromBody] EmailRequestDto request, ApplicationService service, IValidator<EmailRequestDto> validator)
     {
         // later on , user id is from user claims at authentication level  
         try
@@ -36,7 +36,7 @@ public static class UserApi
                 return TypedResults.BadRequest(error);
             }
 
-            var result = await service.Mediator.Send(new UpdateUserEmailByUserIdCommand(userId, request)); 
+            var result = await service.Mediator.Send(new UpdateUserEmailByUserIdCommand(userId, request.Email)); 
             return result.ToIResult();
         }
         catch (Exception ex)
@@ -46,7 +46,7 @@ public static class UserApi
         }
     }
 
-    private static async Task<IResult> ConfirmUserEmailByUserId(Guid userId, AppService service, IValidator<EmailRequestDto> validator)
+    private static async Task<IResult> ConfirmUserEmailByUserId(Guid userId, ApplicationService service, IValidator<EmailRequestDto> validator)
     {
         // later on , user id is from user claims at authentication level  
         try
@@ -61,7 +61,7 @@ public static class UserApi
         }
     }
 
-    private static async Task<IResult> UpdateUserPhoneNumberByUserId(Guid userId, [FromBody] PhoneNumberRequestDto request, AppService service, IValidator<PhoneNumberRequestDto> validator)
+    private static async Task<IResult> UpdateUserPhoneNumberByUserId(Guid userId, [FromBody] PhoneNumberRequestDto request, ApplicationService service, IValidator<PhoneNumberRequestDto> validator)
     {
         // later on , user id is from user claims at authentication level  
         try
@@ -73,7 +73,7 @@ public static class UserApi
                 return TypedResults.BadRequest(error);
             }
 
-            var result = await service.Mediator.Send(new UpdateUserPhoneNumberByUserIdCommand(userId, request)); 
+            var result = await service.Mediator.Send(new UpdateUserPhoneNumberByUserIdCommand(userId, request.PhoneNumber)); 
             return result.ToIResult();
         }
         catch (Exception ex)
@@ -83,7 +83,7 @@ public static class UserApi
         }
     }
 
-    private static async Task<IResult> ConfirmUserPhoneNumberByUserId(Guid userId, AppService service)
+    private static async Task<IResult> ConfirmUserPhoneNumberByUserId(Guid userId, ApplicationService service)
     {
         // later on , user id is from user claims at authentication level  
         try

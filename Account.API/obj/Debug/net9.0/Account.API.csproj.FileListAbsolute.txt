@@ -3,9 +3,9 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\obj\Debug\net9.0\Account.API.AssemblyInfoInputs.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\obj\Debug\net9.0\Account.API.AssemblyInfo.cs
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\obj\Debug\net9.0\Account.API.csproj.CoreCompileInputs.cache
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\obj\Debug\net9.0\Account.API.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\obj\Debug\net9.0\Account.API.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\obj\Debug\net9.0\Account.API.sourcelink.json
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\obj\Debug\net9.0\Account.API.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\appsettings.Development.json
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\appsettings.json
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\appsettings.Production.json
@@ -19,6 +19,7 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\AWSSDK.CognitoIdentity.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\AWSSDK.CognitoSync.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\AWSSDK.Core.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\AWSSDK.Extensions.NETCore.Setup.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\AWSSDK.KeyManagementService.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\AWSSDK.SecretsManager.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\AWSSDK.SecurityToken.dll

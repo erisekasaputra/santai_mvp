@@ -11,16 +11,24 @@ public class BusinessLicenseEntityConfiguration : IEntityTypeConfiguration<Busin
     {
         e.HasKey(p => p.Id);
 
-        e.HasIndex(p => new { p.LicenseNumber, p.VerificationStatus })
+        e.HasIndex(p => new { p.HashedLicenseNumber, p.VerificationStatus })
             .IsUnique()
             .HasFilter("[VerificationStatus] = 'Accepted'");
 
-        e.Property(p => p.LicenseNumber)
-            .HasMaxLength(50)
+        e.Property(p => p.HashedLicenseNumber)
+            .HasMaxLength(255)
             .IsRequired()
             .HasConversion(
                 v => v.Trim(), 
                 v => v.Trim());
+
+        e.Property(p => p.EncryptedLicenseNumber)
+           .HasMaxLength(255)
+           .IsRequired()
+           .HasConversion(
+               v => v.Trim(),
+               v => v.Trim());
+
 
         e.Property(p => p.Name)
             .HasMaxLength(100)

@@ -28,7 +28,7 @@ public class BusinessLicenseRepository : IBusinessLicenseRepository
     public async Task<BusinessLicense?> GetAcceptedStatusByLicenseNumberAsNoTrackingAsync(string licenseNumber)
     {  
         return await _context.BusinessLicenses.AsNoTracking()
-            .FirstOrDefaultAsync(x => x.LicenseNumber == licenseNumber
+            .FirstOrDefaultAsync(x => x.HashedLicenseNumber == licenseNumber
                 && x.VerificationStatus == Domain.Enumerations.VerificationState.Accepted);
     }
 
@@ -36,7 +36,7 @@ public class BusinessLicenseRepository : IBusinessLicenseRepository
     { 
         return await _context.BusinessLicenses
             .AsNoTracking()
-            .Where(x => licenseNumbers.Contains(x.LicenseNumber) 
+            .Where(x => licenseNumbers.Contains(x.HashedLicenseNumber) 
                 && x.VerificationStatus == Domain.Enumerations.VerificationState.Accepted)
             .ToListAsync();
     }
@@ -59,7 +59,7 @@ public class BusinessLicenseRepository : IBusinessLicenseRepository
     public async Task<IEnumerable<BusinessLicense>?> GetByLicenseNumberAsNoTrackingAsync(IEnumerable<string> licenseNumbers)
     { 
         return await _context.BusinessLicenses.Where(x =>
-            licenseNumbers.Contains(x.LicenseNumber)
+            licenseNumbers.Contains(x.HashedLicenseNumber)
             && x.VerificationStatus != Domain.Enumerations.VerificationState.Rejected)
                     .AsNoTracking().IgnoreQueryFilters().ToListAsync();
     }

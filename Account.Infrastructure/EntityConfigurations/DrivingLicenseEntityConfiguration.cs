@@ -20,8 +20,15 @@ public class DrivingLicenseEntityConfiguration : IEntityTypeConfiguration<Drivin
                 value => value.ToString(),
                 retrieve => Enum.Parse<VerificationState>(retrieve));
 
-        e.Property(p => p.LicenseNumber)
-            .HasMaxLength(50)
+        e.Property(p => p.HashedLicenseNumber)
+            .HasMaxLength(255)
+            .IsRequired()
+            .HasConversion(
+                v => v.Trim(),
+                v => v.Trim());
+
+        e.Property(p => p.EncryptedLicenseNumber)
+            .HasMaxLength(255)
             .IsRequired()
             .HasConversion(
                 v => v.Trim(),

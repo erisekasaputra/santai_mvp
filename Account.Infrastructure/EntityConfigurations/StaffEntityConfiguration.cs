@@ -16,10 +16,10 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
         e.HasIndex(p => p.Username)
             .IsUnique();
 
-        e.HasIndex(p => p.PhoneNumber)
+        e.HasIndex(p => p.HashedPhoneNumber)
             .IsUnique();
 
-        e.HasIndex(p => p.Email)
+        e.HasIndex(p => p.HashedEmail)
             .IsUnique(); 
 
         e.Property(p => p.Username)
@@ -40,15 +40,29 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
                 v => v.Trim(),
                 v => v.Trim());
 
-        e.Property(p => p.PhoneNumber)
-            .HasMaxLength(20)
+        e.Property(p => p.HashedPhoneNumber)
+            .HasMaxLength(255)
+            .IsRequired()
+            .HasConversion(
+                v => v.Trim(),
+                v => v.Trim()); 
+
+        e.Property(p => p.EncryptedPhoneNumber)
+            .HasMaxLength(255)
             .IsRequired()
             .HasConversion(
                 v => v.Trim(),
                 v => v.Trim());
 
-        e.Property(p => p.NewPhoneNumber)
-            .HasMaxLength(20)
+        e.Property(p => p.NewHashedPhoneNumber)
+            .HasMaxLength(255)
+            .IsRequired(false)
+            .HasConversion(
+                v => v == null ? null : v.Trim(),
+                v => v == null ? null : v.Trim());
+
+        e.Property(p => p.NewEncryptedPhoneNumber)
+            .HasMaxLength(255)
             .IsRequired(false)
             .HasConversion(
                 v => v == null ? null : v.Trim(),
@@ -57,15 +71,30 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
         e.Property(p => p.IsPhoneNumberVerified)
             .IsRequired();
 
-        e.Property(p => p.Email)
-            .HasMaxLength(254)
+        e.Property(p => p.HashedEmail)
+            .HasMaxLength(255)
             .IsRequired()
             .HasConversion(
                 v => v,
                 v => v);
 
-        e.Property(p => p.NewEmail)
-            .HasMaxLength(254)
+        e.Property(p => p.EncryptedEmail)
+         .HasMaxLength(255)
+         .IsRequired()
+         .HasConversion(
+             v => v,
+             v => v);
+
+        e.Property(p => p.NewHashedEmail)
+            .HasMaxLength(255)
+            .IsRequired(false)
+            .HasConversion(
+                v => v == null ? null : v,
+                v => v == null ? null : v);
+
+
+        e.Property(p => p.NewEncryptedEmail)
+            .HasMaxLength(255)
             .IsRequired(false)
             .HasConversion(
                 v => v == null ? null : v,
@@ -101,21 +130,21 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
 
         e.OwnsOne(p => p.Address, address =>
         {
-            address.Property(ap => ap.AddressLine1)
+            address.Property(ap => ap.EncryptedAddressLine1)
                 .HasMaxLength(255)
                 .IsRequired(true)
                 .HasConversion(
                     v => v.Trim(),
                     v => v.Trim());
 
-            address.Property(ap => ap.AddressLine2)
+            address.Property(ap => ap.EncryptedAddressLine2)
                 .HasMaxLength(255)
                 .IsRequired(false)
                 .HasConversion(
                     v => v == null ? null : v.Trim(),
                     v => v == null ? null : v.Trim());
 
-            address.Property(ap => ap.AddressLine3)
+            address.Property(ap => ap.EncryptedAddressLine3)
                 .HasMaxLength(255)
                 .IsRequired(false)
                 .HasConversion(

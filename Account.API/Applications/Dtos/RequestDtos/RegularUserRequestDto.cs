@@ -3,21 +3,21 @@
 namespace Account.API.Applications.Dtos.RequestDtos;
 
 public class RegularUserRequestDto(
-    Guid IdentityId,
-    string Username,
-    string Email,
-    string PhoneNumber,
-    string TimeZoneId,
-    AddressRequestDto Address,
-    PersonalInfoRequestDto PersonalInfo,
-    string DeviceId)
+    Guid identityId,
+    string username,
+    string email,
+    string phoneNumber,
+    string timeZoneId,
+    AddressRequestDto address,
+    PersonalInfoRequestDto personalInfo,
+    string deviceId)
 {
-    public Guid IdentityId { get; } = IdentityId;
-    public string Username { get; } = Username.CleanAndLowering();
-    public string Email { get; } = Email.CleanAndLowering();
-    public string PhoneNumber { get; } = PhoneNumber.Clean();
-    public string TimeZoneId { get; } = TimeZoneId.Clean();
-    public AddressRequestDto Address { get; } = Address;
-    public PersonalInfoRequestDto PersonalInfo { get; } = PersonalInfo;
-    public string DeviceId { get; } = DeviceId.Clean();
+    public Guid IdentityId { get; } = identityId;
+    public string Username { get; } = username.CleanAndLowering();
+    public string Email { get; set; } = email.CleanAndLowering();
+    public string PhoneNumber { get; set; } = phoneNumber.Clean();
+    public string TimeZoneId { get; } = timeZoneId.Clean();
+    public AddressRequestDto Address { get; } = address;
+    public PersonalInfoRequestDto PersonalInfo { get; } = personalInfo;
+    public string DeviceId { get; } = deviceId.Clean();
 }

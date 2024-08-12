@@ -4,17 +4,17 @@ using Account.Domain.Enumerations;
 namespace Account.API.Applications.Dtos.RequestDtos;
 
 public class PersonalInfoRequestDto(
-    string FirstName,
-    string? MiddleName,
-    string? LastName,
-    DateTime DateOfBirth,
-    Gender Gender,
-    string? ProfilePictureUrl)
+    string firstName,
+    string? middleName,
+    string? lastName,
+    DateTime dateOfBirth,
+    Gender gender,
+    string? profilePictureUrl)
 {
-    public string FirstName { get; } = FirstName.Clean();
-    public string? MiddleName { get; } = MiddleName?.Clean();
-    public string? LastName { get; } = LastName?.Clean();
-    public DateTime DateOfBirth { get; } = DateOfBirth;
-    public Gender Gender { get; } = Gender;
-    public string? ProfilePictureUrl { get; } = ProfilePictureUrl?.Clean();
+    public string FirstName { get; } = firstName.Clean();
+    public string? MiddleName { get; } = middleName?.Clean();
+    public string? LastName { get; } = lastName?.Clean();
+    public DateTime DateOfBirth { get; } = dateOfBirth;
+    public Gender Gender { get; } = gender;
+    public string? ProfilePictureUrl { get; } = profilePictureUrl?.Clean();
 }

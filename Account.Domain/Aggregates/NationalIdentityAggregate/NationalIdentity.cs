@@ -11,19 +11,21 @@ public class NationalIdentity : Entity, IAggregateRoot
 
     public MechanicUser MechanicUser { get; private set; }
 
-    public string IdentityNumber { get; private set; }
+    public string HashedIdentityNumber { get; private set; }
+
+    public string EncryptedIdentityNumber { get; private set; }
 
     public string FrontSideImageUrl { get; private set; }
 
     public string BackSideImageUrl { get; private set; }
 
     public VerificationState VerificationStatus { get; private set; }
-
-    
-    public NationalIdentity(Guid userId, string identityNumber, string frontSideImageUrl, string backSideImageUrl) 
+     
+    public NationalIdentity(Guid userId, string hashedIdentityNumber, string encryptedIdentityNumber, string frontSideImageUrl, string backSideImageUrl) 
     {
         UserId = userId != default ? userId : throw new InvalidOperationException(nameof(userId));
-        IdentityNumber = identityNumber ?? throw new ArgumentNullException(nameof(identityNumber));
+        HashedIdentityNumber = hashedIdentityNumber ?? throw new ArgumentNullException(nameof(hashedIdentityNumber));
+        EncryptedIdentityNumber = encryptedIdentityNumber ?? throw new ArgumentNullException(nameof(encryptedIdentityNumber));
         FrontSideImageUrl = frontSideImageUrl ?? throw new ArgumentNullException(nameof(frontSideImageUrl));
         BackSideImageUrl = backSideImageUrl ?? throw new ArgumentNullException(nameof(backSideImageUrl));
         VerificationStatus = VerificationState.Waiting; 

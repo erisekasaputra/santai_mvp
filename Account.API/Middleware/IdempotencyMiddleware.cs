@@ -1,6 +1,6 @@
-﻿using Account.API.Applications.Services;
-using Account.API.Extensions;
-using Account.API.SeedWork; 
+﻿using Account.API.Extensions;
+using Account.API.Infrastructures;
+using Account.API.SeedWork;
 
 namespace Account.API.Middleware;
 

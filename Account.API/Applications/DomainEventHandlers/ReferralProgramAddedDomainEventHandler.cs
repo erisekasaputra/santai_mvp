@@ -1,14 +1,14 @@
-﻿using Account.API.Applications.Services;
+﻿using Account.API.Services;
 using Account.Domain.Aggregates.ReferredAggregate;
 using Account.Domain.Events;
 using Account.Domain.SeedWork;
 using MediatR;
 namespace Account.API.Applications.DomainEventHandlers;
 
-public class ReferralProgramAddedDomainEventHandler(IUnitOfWork unitOfWork, AppService service) : INotificationHandler<ReferralProgramAddedDomainEvent>
+public class ReferralProgramAddedDomainEventHandler(IUnitOfWork unitOfWork, ApplicationService service) : INotificationHandler<ReferralProgramAddedDomainEvent>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly AppService _service = service; 
+    private readonly ApplicationService _service = service; 
 
     public Task Handle(ReferralProgramAddedDomainEvent notification, CancellationToken cancellationToken)
     { 

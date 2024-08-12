@@ -2,4 +2,4 @@
 
 namespace Account.Domain.Events;
 
-public record PhoneNumberVerifiedDomainEvent(Guid Id, string PhoneNumber) : INotification;
+public record PhoneNumberVerifiedDomainEvent(Guid Id, string PhoneNumber, string EncryptedPhoneNumber) : INotification;

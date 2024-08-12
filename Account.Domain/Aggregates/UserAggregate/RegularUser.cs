@@ -18,11 +18,13 @@ public class RegularUser : User
         Guid identityId,
         string username,
         string email,
+        string encryptedEmail,
         string phoneNumber,
+        string encryptedPhoneNumber,
         Address address, 
         PersonalInfo personalInfo,
         string timeZoneId,
-        string deviceId) : base(identityId, username, email, phoneNumber, address, timeZoneId)
+        string deviceId) : base(identityId, username, email, encryptedEmail, phoneNumber, encryptedPhoneNumber, address, timeZoneId)
     { 
         PersonalInfo = personalInfo ?? throw new ArgumentNullException(nameof(personalInfo));
         DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
@@ -35,6 +37,7 @@ public class RegularUser : User
         TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId));
         Address = address ?? throw new ArgumentNullException(nameof(address));
         PersonalInfo = personalInfo ?? throw new ArgumentNullException(nameof(personalInfo));
+        UpdatedAtUtc = DateTime.UtcNow;
     }
 
     public void Delete()

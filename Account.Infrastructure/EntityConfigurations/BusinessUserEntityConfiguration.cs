@@ -24,15 +24,15 @@ public class BusinessUserEntityConfiguration : IEntityTypeConfiguration<Business
                 v => v.Trim(),
                 v => v.Trim());
 
-        e.Property(p => p.ContactPerson)
-            .HasMaxLength(254)
+        e.Property(p => p.EncryptedContactPerson)
+            .HasMaxLength(255)
             .IsRequired()
             .HasConversion(
                 v => v.Trim(),
-                v => v.Trim());
+                v => v.Trim()); 
 
-        e.Property(p => p.TaxId)
-            .HasMaxLength(50)
+        e.Property(p => p.EncryptedTaxId)
+            .HasMaxLength(255)
             .IsRequired(false)
             .HasConversion(
                 v => v == null ? null : v.Trim(),

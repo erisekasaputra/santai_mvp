@@ -156,7 +156,7 @@
       },
       {
         "Name": "request",
-        "Type": "Account.API.Applications.Commands.UpdateBusinessUserByUserId.UpdateBusinessUserByUserIdCommand",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.UpdateBusinessUserRequestDto",
         "IsRequired": true
       }
     ],
@@ -344,8 +344,8 @@
         "IsRequired": true
       },
       {
-        "Name": "command",
-        "Type": "Account.API.Applications.Commands.UpdateStaffByStaffId.UpdateStaffByStaffIdCommand",
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.UpdateStaffRequestDto",
         "IsRequired": true
       }
     ],
@@ -600,7 +600,35 @@
     "HttpMethod": "POST",
     "IsController": false,
     "Order": 0,
-    "Parameters": [],
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.MechanicUserRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "GetMechanicUserById",
+    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicUserId",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": [
       {
         "Type": "System.Void",
@@ -667,8 +695,8 @@
         "IsRequired": true
       },
       {
-        "Name": "command",
-        "Type": "Account.API.Applications.Commands.UpdateRegularUserByUserId.UpdateRegularUserByUserIdCommand",
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.UpdateRegularUserRequestDto",
         "IsRequired": true
       }
     ],

@@ -20,12 +20,19 @@ public class NationalIdentityEntityConfiguration : IEntityTypeConfiguration<Nati
                 value => value.ToString(),
                 retrieve => Enum.Parse<VerificationState>(retrieve));
 
-        e.Property(p => p.IdentityNumber)
-            .HasMaxLength(50)
+        e.Property(p => p.HashedIdentityNumber)
+            .HasMaxLength(255)
             .IsRequired()
             .HasConversion(
                 v => v.Trim(),
                 v => v.Trim());
+
+        e.Property(p => p.EncryptedIdentityNumber)
+           .HasMaxLength(255)
+           .IsRequired()
+           .HasConversion(
+               v => v.Trim(),
+               v => v.Trim());
 
         e.Property(p => p.FrontSideImageUrl)
             .HasMaxLength(255)

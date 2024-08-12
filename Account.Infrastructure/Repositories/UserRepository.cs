@@ -31,6 +31,8 @@ public class UserRepository : IUserRepository
         return await _context.Users.OfType<BusinessUser>()
             .Include(x => x.BusinessLicenses)
             .Include(x => x.Staffs) 
+            .Include(x => x.ReferralProgram)
+            .Include(x => x.LoyaltyProgram) 
             .AsSplitQuery()
             .FirstOrDefaultAsync(x => x.Id == id);
     } 
@@ -38,12 +40,19 @@ public class UserRepository : IUserRepository
     public async Task<RegularUser?> GetRegularUserByIdAsync(Guid id)
     {
         return await _context.Users.OfType<RegularUser>()
+            .Include(x => x.LoyaltyProgram)
+            .Include(x => x.ReferralProgram) 
             .FirstOrDefaultAsync(x => x.Id == id);
     } 
 
     public async Task<MechanicUser?> GetMechanicUserByIdAsync(Guid id)
     {
         return await _context.Users.OfType<MechanicUser>()
+            .Include(x => x.LoyaltyProgram)
+            .Include(x => x.ReferralProgram)
+            .Include(x => x.NationalIdentities)
+            .Include(x => x.DrivingLicenses)
+            .Include(x => x.Certifications) 
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
@@ -64,12 +73,12 @@ public class UserRepository : IUserRepository
                     predicate = predicate.Or(x => x.Username == value);
                     break;
                 case IdentityParameter.Email:
-                    predicate = predicate.Or(x => x.Email == value
-                    || (x.NewEmail != null && x.NewEmail == value));
+                    predicate = predicate.Or(x => x.HashedEmail == value
+                    || (x.NewHashedEmail != null && x.NewHashedEmail == value));
                     break;
                 case IdentityParameter.PhoneNumber:
-                    predicate = predicate.Or(x => x.PhoneNumber == value
-                    || (x.NewPhoneNumber != null && x.NewPhoneNumber == value));
+                    predicate = predicate.Or(x => x.HashedPhoneNumber == value
+                    || (x.NewHashedPhoneNumber != null && x.NewHashedPhoneNumber == value));
                     break;
                 case IdentityParameter.IdentityId:
                     predicate = predicate.Or(x => x.IdentityId == Guid.Parse(value));
@@ -97,12 +106,12 @@ public class UserRepository : IUserRepository
                     predicate = predicate.Or(x => x.Username == value);
                     break;
                 case IdentityParameter.Email:
-                    predicate = predicate.Or(x => x.Email == value
-                    || (x.NewEmail != null && x.NewEmail == value));
+                    predicate = predicate.Or(x => x.HashedEmail == value
+                    || (x.NewHashedEmail != null && x.NewHashedEmail == value));
                     break;
                 case IdentityParameter.PhoneNumber:
-                    predicate = predicate.Or(x => x.PhoneNumber == value
-                    || (x.NewPhoneNumber != null && x.NewPhoneNumber == value));
+                    predicate = predicate.Or(x => x.HashedPhoneNumber == value
+                    || (x.NewHashedPhoneNumber != null && x.NewHashedPhoneNumber == value));
                     break;
                 case IdentityParameter.IdentityId:
                     predicate = predicate.Or(x => x.IdentityId == Guid.Parse(value));
@@ -144,12 +153,12 @@ public class UserRepository : IUserRepository
                     predicate = predicate.Or(x => x.Username == value);
                     break;
                 case IdentityParameter.Email:
-                    predicate = predicate.Or(x => x.Email == value
-                    || (x.NewEmail != null && x.NewEmail == value));
+                    predicate = predicate.Or(x => x.HashedEmail == value
+                    || (x.NewHashedEmail != null && x.NewHashedEmail == value));
                     break;
                 case IdentityParameter.PhoneNumber:
-                    predicate = predicate.Or(x => x.PhoneNumber == value
-                    || (x.NewPhoneNumber != null && x.NewPhoneNumber == value));
+                    predicate = predicate.Or(x => x.HashedPhoneNumber == value
+                    || (x.NewHashedPhoneNumber != null && x.NewHashedPhoneNumber == value));
                     break;
                 case IdentityParameter.IdentityId:
                     predicate = predicate.Or(x => x.IdentityId == Guid.Parse(value));
@@ -177,12 +186,12 @@ public class UserRepository : IUserRepository
                     predicate = predicate.Or(x => x.Username == value);
                     break;
                 case IdentityParameter.Email:
-                    predicate = predicate.Or(x => x.Email == value
-                    || (x.NewEmail != null && x.NewEmail == value));
+                    predicate = predicate.Or(x => x.HashedEmail == value
+                    || (x.NewHashedEmail != null && x.NewHashedEmail == value));
                     break;
                 case IdentityParameter.PhoneNumber:
-                    predicate = predicate.Or(x => x.PhoneNumber == value
-                    || (x.NewPhoneNumber != null && x.NewPhoneNumber == value));
+                    predicate = predicate.Or(x => x.HashedPhoneNumber == value
+                    || (x.NewHashedPhoneNumber != null && x.NewHashedPhoneNumber == value));
                     break;
                 case IdentityParameter.IdentityId:
                     predicate = predicate.Or(x => x.IdentityId == Guid.Parse(value));

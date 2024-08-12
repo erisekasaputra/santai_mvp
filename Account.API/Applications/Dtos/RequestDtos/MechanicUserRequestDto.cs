@@ -3,25 +3,25 @@
 namespace Account.API.Applications.Dtos.RequestDtos;
 
 public class MechanicUserRequestDto(
-    Guid IdentityId,
-    string Username,
-    string Email,
-    string PhoneNumber,
-    string TimeZoneId,
-    AddressRequestDto Address,
-    IEnumerable<CertificationRequestDto> Certifications,
-    DrivingLicenseRequestDto DrivingLicenseRequestDto,
-    NationalIdentityRequestDto NationalIdentityRequestDto,
-    string DeviceId)
+    Guid identityId,
+    string username,
+    string email,
+    string phoneNumber,
+    string timeZoneId,
+    AddressRequestDto address,
+    IEnumerable<CertificationRequestDto> certifications,
+    DrivingLicenseRequestDto drivingLicenseRequestDto,
+    NationalIdentityRequestDto nationalIdentityRequestDto,
+    string deviceId)
 {
-    public Guid IdentityId { get; } = IdentityId;
-    public string Username { get; } = Username.Clean();
-    public string Email { get; } = Email.CleanAndLowering();
-    public string PhoneNumber { get; } = PhoneNumber.Clean();
-    public string TimeZoneId { get; } = TimeZoneId.Clean();
-    public AddressRequestDto Address { get; } = Address;
-    public IEnumerable<CertificationRequestDto> Certifications { get; } = Certifications;
-    public DrivingLicenseRequestDto DrivingLicenseRequestDto { get; } = DrivingLicenseRequestDto;
-    public NationalIdentityRequestDto NationalIdentityRequestDto { get; } = NationalIdentityRequestDto;
-    public string DeviceId { get; } = DeviceId;
+    public Guid IdentityId { get; } = identityId;
+    public string Username { get; } = username.Clean();
+    public string Email { get; set; } = email.CleanAndLowering();
+    public string PhoneNumber { get; set; } = phoneNumber.Clean();
+    public string TimeZoneId { get; } = timeZoneId.Clean();
+    public AddressRequestDto Address { get; } = address;
+    public IEnumerable<CertificationRequestDto> Certifications { get; } = certifications;
+    public DrivingLicenseRequestDto DrivingLicenseRequestDto { get; } = drivingLicenseRequestDto;
+    public NationalIdentityRequestDto NationalIdentityRequestDto { get; } = nationalIdentityRequestDto;
+    public string DeviceId { get; } = deviceId;
 }

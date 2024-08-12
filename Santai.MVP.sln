@@ -25,6 +25,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F4668E0C-7E0A-44E5-BC3D-7CC7A43A9B8F}"
 	ProjectSection(SolutionItems) = preProject
 		docker-compose.yml = docker-compose.yml
+		aws-secret.bat = aws-secret.bat
+		local-secret.bat = local-secret.bat
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Search.Worker", "Search.Worker\Search.Worker.csproj", "{9499922E-5FC0-49AF-A62D-23E8CADC5BE6}"
@@ -101,7 +103,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BaseIntegrationEvent", "Bas
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Account.Contracts", "Account.Contracts\Account.Contracts.csproj", "{624C57F2-A321-4EC6-A1B6-1DE65D43722B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.API", "Identity.API\Identity.API.csproj", "{629EB325-2E58-4ABA-A7C7-33B48C8B3730}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.API", "Identity.API\Identity.API.csproj", "{629EB325-2E58-4ABA-A7C7-33B48C8B3730}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

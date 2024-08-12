@@ -2,8 +2,8 @@
 public record StaffResponseDto(
     Guid Id,
     string Username,
-    string PhoneNumber,
     string Email,
+    string PhoneNumber,
     string Name,
     AddressResponseDto Address,
     string TimeZoneId);

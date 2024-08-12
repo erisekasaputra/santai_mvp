@@ -30,10 +30,12 @@ public class MechanicUser : User
         Guid identityId,
         string username,
         string email,
+        string encryptedEmail,
         string phoneNumber,
+        string encryptedPhoneNumber,
         Address address, 
         string timeZoneId,
-        string deviceId) : base(identityId, username, email, phoneNumber, address, timeZoneId)
+        string deviceId) : base(identityId, username, email, encryptedEmail, phoneNumber, encryptedPhoneNumber, address, timeZoneId)
     {  
         Rating = 5;
         IsVerified = false;
@@ -47,16 +49,16 @@ public class MechanicUser : User
         base.AddReferralProgram(referralRewardPoint, referralValidDate);
     }
 
-    public override void UpdateEmail(string email)
+    public override void UpdateEmail(string email, string encryptedEmail)
     {
-        base.UpdateEmail(email);
+        base.UpdateEmail(email, encryptedEmail);
 
         RaiseEmailUpdatedDomainEvent();
     }
 
-    public override void UpdatePhoneNumber(string phoneNumber)
+    public override void UpdatePhoneNumber(string phoneNumber, string encryptedPhoneNumber)
     {
-        base.UpdatePhoneNumber(phoneNumber);
+        base.UpdatePhoneNumber(phoneNumber, encryptedPhoneNumber);
 
         RaisePhoneNumberUpdatedDomainEvent();
     }
@@ -75,45 +77,45 @@ public class MechanicUser : User
         RaisePhoneNumberVerifiedDomainEvent();
     }
 
-    public void SetDrivingLicense(string identificationNumber, string frontSideImageUrl, string backSideImageUrl)
+    public void SetDrivingLicense(string identificationNumber, string encryptedIdentificationNumber, string frontSideImageUrl, string backSideImageUrl)
     {
         if (DrivingLicenses is not null)
         {
-            throw new DomainException("Can not set Driving License once the Driving License is already set");
+            throw new DomainException("Can not set driving license because it is already set");
         } 
 
         if (IsVerified)
         {
-            throw new DomainException($"Can not set Driving License once the document is verified");
+            throw new DomainException($"Can not set driving license because it is verified");
         }
 
         DrivingLicenses ??= [];
 
-        DrivingLicenses.Add(new DrivingLicense(Id, identificationNumber, frontSideImageUrl, backSideImageUrl));
+        DrivingLicenses.Add(new DrivingLicense(Id, identificationNumber, encryptedIdentificationNumber, frontSideImageUrl, backSideImageUrl));
 
         RaiseDrivingLicenseSetDomainEvent();
     }  
 
-    public void SetNationalID(string identificationNumber, string frontSideImageUrl, string backSideImageUrl)
+    public void SetNationalID(string identificationNumber, string encryptedIdentificationNumber, string frontSideImageUrl, string backSideImageUrl)
     {
         if (NationalIdentities is not null)
         {
-            throw new DomainException("Can not set National ID once the National ID is already set");
+            throw new DomainException("Can not set national id because it is already set");
         } 
 
         if (IsVerified)
         {
-            throw new DomainException($"Can not set National ID once the document is verified");
+            throw new DomainException($"Can not set national id because it is verified");
         }
 
         NationalIdentities ??= [];
 
-        NationalIdentities.Add(new NationalIdentity(Id, identificationNumber, frontSideImageUrl, backSideImageUrl));
+        NationalIdentities.Add(new NationalIdentity(Id, identificationNumber, encryptedIdentificationNumber, frontSideImageUrl, backSideImageUrl));
 
         RaiseNationalIDSetDomainEvent();
     } 
 
-    public void AddCertification(string certificationId, string certificationName, DateTime validDate, ICollection<string> specializations)
+    public void AddCertification(string certificationId, string certificationName, DateTime validDate, ICollection<string>? specializations)
     { 
         var certifications = Certifications?.SingleOrDefault(c => c.CertificationId == certificationId);
 
@@ -195,17 +197,18 @@ public class MechanicUser : User
 
     public void VerifyDocument()
     {
-        if ((DrivingLicenses is null || !DrivingLicenses.Any()) && (NationalIdentities is null || !NationalIdentities.Any()))
+        if ((DrivingLicenses is null || DrivingLicenses.Count == 0) 
+            && (NationalIdentities is null || NationalIdentities.Count == 0))
         {
             throw new DomainException("Both driving license and national identity are empty. Please submit valid documents.");
         }
 
-        if (DrivingLicenses is null || !DrivingLicenses.Any())
+        if (DrivingLicenses is null || DrivingLicenses.Count == 0)
         {
             throw new DomainException("Driving license document is empty. Please submit a valid document.");
         }
 
-        if (NationalIdentities is null || !NationalIdentities.Any())
+        if (NationalIdentities is null || NationalIdentities.Count == 0)
         {
             throw new DomainException("National identity document is empty. Please submit a valid document.");
         }

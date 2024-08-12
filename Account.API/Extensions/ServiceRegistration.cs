@@ -1,13 +1,16 @@
-﻿using Account.API.Applications.Services; 
-using Account.Domain.SeedWork;
+﻿using Account.Domain.SeedWork;
 using Account.Infrastructure;
 using FluentValidation;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.Options;
-using StackExchange.Redis; 
+using StackExchange.Redis;
 using MassTransit;
-using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
 using Account.API.Options;
+using Amazon.KeyManagementService;
+using Account.API.Services;
+using Microsoft.Extensions.DependencyInjection;
+using Account.API.Infrastructures;
 
 namespace Account.API.Extensions;
 
@@ -25,13 +28,13 @@ public static class ServiceRegistration
 
     public static IServiceCollection AddRedisDatabase(this IServiceCollection services)
     {
-        var cacheOptions = services.BuildServiceProvider().GetService<IOptions<InMemoryDatabaseOption>>() ?? throw new Exception("Please provide value for database option");
+        var cacheOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<InMemoryDatabaseOption>>() ?? throw new Exception("Please provide value for database option");
 
         services.AddSingleton<IConnectionMultiplexer>(sp =>
         {
             var configurations = new ConfigurationOptions
             {
-                EndPoints = { cacheOptions.Value.Host },
+                EndPoints = { cacheOptions.CurrentValue.Host },
                 ConnectTimeout = (int)TimeSpan.FromSeconds(10).TotalMilliseconds,
                 SyncTimeout = (int)TimeSpan.FromSeconds(10).TotalMilliseconds,
                 AbortOnConnectFail = false,
@@ -55,7 +58,7 @@ public static class ServiceRegistration
 
     public static IServiceCollection AddApplicationService(this IServiceCollection services)
     {
-        services.AddScoped<AppService>();
+        services.AddScoped<ApplicationService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IIdempotencyService, IdempotencyService>();
         return services;
@@ -63,14 +66,14 @@ public static class ServiceRegistration
 
     public static IServiceCollection AddSqlDatabaseContext(this IServiceCollection services)
     {
-        var databaseOption = services.BuildServiceProvider().GetService<IOptions<DatabaseOption>>() ?? throw new Exception("Please provide value for database option");
+        var databaseOption = services.BuildServiceProvider().GetService<IOptionsMonitor<DatabaseOption>>() ?? throw new Exception("Please provide value for database option");
 
         services.AddDbContext<AccountDbContext>((serviceProvider, options) =>
         {
 
-            options.UseSqlServer(databaseOption.Value.ConnectionString, action =>
+            options.UseSqlServer(databaseOption.CurrentValue.ConnectionString, action =>
             {
-                action.CommandTimeout(databaseOption.Value.CommandTimeOut);
+                action.CommandTimeout(databaseOption.CurrentValue.CommandTimeOut);
                 action.MigrationsAssembly(typeof(Program).Assembly.GetName().Name);
             });
         });
@@ -79,8 +82,7 @@ public static class ServiceRegistration
     }
 
     public static IServiceCollection AddMassTransitContext(this IServiceCollection services)
-    {
-        return services;
+    { 
         var messageBusOptions = services.BuildServiceProvider().GetService<IOptions<MessageBusOption>>() ?? throw new Exception("Please provide value for message bus options");
 
         services.AddMassTransit(x =>
@@ -135,7 +137,37 @@ public static class ServiceRegistration
         builder.Services.Configure<DatabaseOption>(builder.Configuration.GetSection(DatabaseOption.SectionName));
         builder.Services.Configure<InMemoryDatabaseOption>(builder.Configuration.GetSection(InMemoryDatabaseOption.SectionName));
         builder.Services.Configure<MessageBusOption>(builder.Configuration.GetSection(MessageBusOption.SectionName));
+        builder.Services.Configure<KeyManagementServiceOption>(builder.Configuration.GetSection(KeyManagementServiceOption.SectionName));
         
         return builder;
+    }
+
+    public static IServiceCollection AddDataEncryption(this IServiceCollection services, IConfiguration configuration)
+    {
+        // if you want to use aws as key management service, please edit aws-secret.bat inside solutions items based on your key that you got from aws. set execute bat file to the file will be started
+
+        bool production = false;
+        if (production)
+        {
+            services.AddDefaultAWSOptions(configuration.GetAWSOptions()); 
+            services.AddAWSService<IAmazonKeyManagementService>(); 
+            services.AddSingleton<IKeyManagementService>(sp =>
+            {
+                var kmsClient = sp.GetRequiredService<IAmazonKeyManagementService>();
+                var kmsOptions = sp.GetRequiredService<IOptionsMonitor<KeyManagementServiceOption>>();
+                return new CloudKeyManagementService(kmsClient, kmsOptions.CurrentValue.Id);
+            }); 
+        }
+        else
+        { 
+            services.AddSingleton<IKeyManagementService>(sp =>
+            { 
+                var kmsOptions = sp.GetRequiredService<IOptionsMonitor<KeyManagementServiceOption>>();
+                return new LocalKeyManagementService(kmsOptions.CurrentValue.SecretKey);
+            });
+        }
+        services.AddSingleton<IHashService, HashService>();
+
+        return services;
     }
 }

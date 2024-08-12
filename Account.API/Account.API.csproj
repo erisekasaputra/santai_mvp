@@ -1,14 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net9.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <UserSecretsId>658b91a1-a7e9-409c-862f-94a2e08b7814</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="AspNetCoreRateLimit" Version="5.0.0" />
     <PackageReference Include="AWSSDK.CognitoSync" Version="3.7.400.2" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.301" />
     <PackageReference Include="AWSSDK.KeyManagementService" Version="3.7.400.2" />
     <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.400.2" />
     <PackageReference Include="Azure.Identity" Version="1.13.0-beta.1" />
@@ -47,7 +49,7 @@
 
   <ItemGroup>
     <Folder Include="Applications\IntegrationEventHandlers\" />
-    <Folder Include="Infrastructures\" />
+    <Folder Include="Utilities\" />
   </ItemGroup>
 
   <ItemGroup>

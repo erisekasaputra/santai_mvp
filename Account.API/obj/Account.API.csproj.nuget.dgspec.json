@@ -64,6 +64,10 @@
               "target": "Package",
               "version": "[3.7.400.2, )"
             },
+            "AWSSDK.Extensions.NETCore.Setup": {
+              "target": "Package",
+              "version": "[3.7.301, )"
+            },
             "AWSSDK.KeyManagementService": {
               "target": "Package",
               "version": "[3.7.400.2, )"

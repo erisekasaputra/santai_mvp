@@ -11,7 +11,9 @@ public class DrivingLicense : Entity, IAggregateRoot
 
     public MechanicUser MechanicUser { get; private set; }
 
-    public string LicenseNumber { get; private set; } 
+    public string HashedLicenseNumber { get; private set; } 
+
+    public string EncryptedLicenseNumber {  get; private set; } 
 
     public string FrontSideImageUrl { get; private set; }
 
@@ -19,13 +21,14 @@ public class DrivingLicense : Entity, IAggregateRoot
 
     public VerificationState VerificationStatus { get; private set; }
  
-    public DrivingLicense(Guid userId, string licenseNumber, string frontSideImageUrl, string backSideImageUrl)
+    public DrivingLicense(Guid userId, string hashedLicenseNumber, string encryptedLicenseNumber, string frontSideImageUrl, string backSideImageUrl)
     {
         UserId = userId != default ? userId : throw new InvalidOperationException(nameof(userId));
-        LicenseNumber = licenseNumber ?? throw new ArgumentNullException(nameof(licenseNumber));
+        HashedLicenseNumber = hashedLicenseNumber ?? throw new ArgumentNullException(nameof(hashedLicenseNumber));
+        EncryptedLicenseNumber = encryptedLicenseNumber ?? throw new ArgumentNullException(nameof(encryptedLicenseNumber));
         FrontSideImageUrl = frontSideImageUrl ?? throw new ArgumentNullException(nameof(frontSideImageUrl));
         BackSideImageUrl = backSideImageUrl ?? throw new ArgumentNullException(nameof(backSideImageUrl));
-        VerificationStatus = VerificationState.Waiting; 
+        VerificationStatus = VerificationState.Waiting;
     }
 
     public void VerifyDocument()

@@ -71,7 +71,7 @@ public class CreateBusinessUserValidation : AbstractValidator<BusinessUserReques
 
         When(x => x.Staffs is not null && x.Staffs.Any(), () =>
         {
-            RuleForEach(e => e.Staffs).SetValidator(new StaffValidation());
+            RuleForEach(e => e.Staffs).SetValidator(new CreateStaffValidation());
         });
     }
 

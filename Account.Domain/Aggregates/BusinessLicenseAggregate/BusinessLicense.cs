@@ -12,7 +12,9 @@ public class BusinessLicense : Entity, IAggregateRoot
 
     public BusinessUser BusinessUser { get; private set; }
 
-    public string LicenseNumber { get; private set; }
+    public string HashedLicenseNumber { get; private set; }
+
+    public string EncryptedLicenseNumber { get; private set; }
 
     public string Name { get; private set; }
 
@@ -25,12 +27,18 @@ public class BusinessLicense : Entity, IAggregateRoot
 
     }
    
-    public BusinessLicense(Guid businessUserId, string licenseNumber, string name, string description)
+    public BusinessLicense(
+        Guid businessUserId,
+        string hashedLicenseNumber,
+        string encryptedLicenseNumber,
+        string name,
+        string description)
     {
         BusinessUserId = businessUserId;
         Name = name;
         Description = description;
-        LicenseNumber = licenseNumber;
+        HashedLicenseNumber = hashedLicenseNumber;
+        EncryptedLicenseNumber = encryptedLicenseNumber;
         VerificationStatus = VerificationState.Waiting; 
     }
 

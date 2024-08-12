@@ -3,33 +3,33 @@
 namespace Account.API.Applications.Dtos.RequestDtos;
 
 public class BusinessUserRequestDto(
-    Guid IdentityId,
-    string Username,
-    string Email,
-    string PhoneNumber,
-    string TimeZoneId,
-    AddressRequestDto Address,
-    string BusinessName,
-    string ContactPerson,
-    string? TaxId,
-    string? WebsiteUrl,
-    string? BusinessDescription,
-    string? ReferralCode,
-    IEnumerable<BusinessLicenseRequestDto> BusinessLicenses,
-    IEnumerable<StaffRequestDto> Staffs)
+    Guid identityId,
+    string username,
+    string email,
+    string phoneNumber,
+    string timeZoneId,
+    AddressRequestDto address,
+    string businessName,
+    string contactPerson,
+    string? taxId,
+    string? websiteUrl,
+    string? businessDescription,
+    string? referralCode,
+    IEnumerable<BusinessLicenseRequestDto> businessLicenses,
+    IEnumerable<StaffRequestDto> staffs)
 {
-    public Guid IdentityId { get; } = IdentityId;
-    public string Username { get; } = Username.CleanAndLowering();
-    public string Email { get; } = Email.CleanAndLowering();
-    public string PhoneNumber { get; } = PhoneNumber.Clean();
-    public string TimeZoneId { get; } = TimeZoneId.Clean();
-    public AddressRequestDto Address { get; } = Address;
-    public string BusinessName { get; } = BusinessName.Clean();
-    public string ContactPerson { get; } = ContactPerson.Clean();
-    public string? TaxId { get; } = TaxId?.Clean();
-    public string? WebsiteUrl { get; } = WebsiteUrl?.Clean();
-    public string? BusinessDescription { get; } = BusinessDescription?.Clean();
-    public string? ReferralCode { get; } = ReferralCode?.Clean();
-    public IEnumerable<BusinessLicenseRequestDto> BusinessLicenses { get; } = BusinessLicenses;
-    public IEnumerable<StaffRequestDto> Staffs { get; } = Staffs;
+    public Guid IdentityId { get; } = identityId;
+    public string Username { get; } = username.CleanAndLowering();
+    public string Email { get; set; } = email.CleanAndLowering();
+    public string PhoneNumber { get; set; } = phoneNumber.Clean();
+    public string TimeZoneId { get; } = timeZoneId.Clean();
+    public AddressRequestDto Address { get; } = address;
+    public string BusinessName { get; } = businessName.Clean();
+    public string ContactPerson { get; } = contactPerson.Clean();
+    public string? TaxId { get; set; } = taxId?.Clean();
+    public string? WebsiteUrl { get; } = websiteUrl?.Clean();
+    public string? BusinessDescription { get; } = businessDescription?.Clean();
+    public string? ReferralCode { get; } = referralCode?.Clean();
+    public IEnumerable<BusinessLicenseRequestDto> BusinessLicenses { get; } = businessLicenses;
+    public IEnumerable<StaffRequestDto> Staffs { get; } = staffs;
 }

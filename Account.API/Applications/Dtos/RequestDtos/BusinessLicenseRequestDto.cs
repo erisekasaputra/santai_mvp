@@ -3,11 +3,11 @@
 namespace Account.API.Applications.Dtos.RequestDtos;
 
 public class BusinessLicenseRequestDto(
-    string LicenseNumber,
-    string Name,
-    string Description)
+    string licenseNumber,
+    string name,
+    string description)
 {
-    public string LicenseNumber { get; } = LicenseNumber.Clean();
-    public string Name { get; } = Name.Clean();
-    public string Description { get; } = Description.Clean();
+    public string LicenseNumber { get; set; } = licenseNumber.Clean();
+    public string Name { get; } = name.Clean();
+    public string Description { get; } = description.Clean();
 }
