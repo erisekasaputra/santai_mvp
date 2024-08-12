@@ -9,6 +9,9 @@ public static partial class StringNormalizer
 
     public static string CleanAndLowering(this string value)
     {
+        if (string.IsNullOrWhiteSpace(value))
+            return string.Empty;
+
         return CleaningSpacesAndLowering().Replace(value, " ");
     }
 
@@ -16,6 +19,8 @@ public static partial class StringNormalizer
     private static partial Regex CleaningSpaces();
     public static string Clean(this string value)
     {
+        if (string.IsNullOrWhiteSpace(value))
+            return string.Empty;
         return CleaningSpaces().Replace(value, " ").Trim(); 
     } 
 }

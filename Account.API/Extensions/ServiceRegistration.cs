@@ -8,8 +8,7 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Account.API.Options;
 using Amazon.KeyManagementService;
-using Account.API.Services;
-using Microsoft.Extensions.DependencyInjection;
+using Account.API.Services; 
 using Account.API.Infrastructures;
 
 namespace Account.API.Extensions;
@@ -138,6 +137,7 @@ public static class ServiceRegistration
         builder.Services.Configure<InMemoryDatabaseOption>(builder.Configuration.GetSection(InMemoryDatabaseOption.SectionName));
         builder.Services.Configure<MessageBusOption>(builder.Configuration.GetSection(MessageBusOption.SectionName));
         builder.Services.Configure<KeyManagementServiceOption>(builder.Configuration.GetSection(KeyManagementServiceOption.SectionName));
+        builder.Services.Configure<IdempotencyOptions>(builder.Configuration.GetSection(IdempotencyOptions.SectionName));
         
         return builder;
     }

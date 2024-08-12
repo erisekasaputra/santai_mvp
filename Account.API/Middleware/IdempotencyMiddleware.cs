@@ -1,6 +1,7 @@
-﻿using Account.API.Extensions;
-using Account.API.Infrastructures;
+﻿using Account.API.Infrastructures;
+using Account.API.Options;
 using Account.API.SeedWork;
+using Microsoft.Extensions.Options;
 
 namespace Account.API.Middleware;
 
@@ -23,14 +24,22 @@ public class IdempotencyMiddleware
         {
             using var scope = _serviceProvider.CreateScope();
             var idempotencyService = scope.ServiceProvider.GetRequiredService<IIdempotencyService>();
+            var idempotencyOptions = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<IdempotencyOptions>>();
 
             var endPoint = context.GetEndpoint();
 
-            if (endPoint == null)
+            if (endPoint is null)
             {
                 await _next(context);
                 return;
             }
+
+            if (!idempotencyOptions.CurrentValue.IsActive)  
+            {
+                await _next(context);
+                return;
+            }
+
 
             var hasIdempotencyAttribute = endPoint?.Metadata.GetMetadata<IdempotencyAttribute>() != null;
 
@@ -44,7 +53,7 @@ public class IdempotencyMiddleware
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 context.Response.ContentType = "application/json";
-                var errorResponse = new { ErrorMessage = "X-Idempotency-Key Header is required" };
+                var errorResponse = new { ErrorMessage = "Idempotency key is required" };
                 await context.Response.WriteAsJsonAsync(errorResponse);
                 return;
             }
