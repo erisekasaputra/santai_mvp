@@ -10,6 +10,8 @@ using Account.API.Options;
 using Amazon.KeyManagementService;
 using Account.API.Services; 
 using Account.API.Infrastructures;
+using System.Reflection;
+using System;
 
 namespace Account.API.Extensions;
 
@@ -27,17 +29,19 @@ public static class ServiceRegistration
 
     public static IServiceCollection AddRedisDatabase(this IServiceCollection services)
     {
-        var cacheOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<InMemoryDatabaseOption>>() ?? throw new Exception("Please provide value for database option");
+        var cacheOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<InMemoryDatabaseOption>>() 
+            ?? throw new Exception("Please provide value for database option");
 
         services.AddSingleton<IConnectionMultiplexer>(sp =>
         {
             var configurations = new ConfigurationOptions
             {
                 EndPoints = { cacheOptions.CurrentValue.Host },
-                ConnectTimeout = (int)TimeSpan.FromSeconds(10).TotalMilliseconds,
-                SyncTimeout = (int)TimeSpan.FromSeconds(10).TotalMilliseconds,
+                ConnectTimeout = (int)TimeSpan.FromSeconds(cacheOptions.CurrentValue.ConnectTimeout).TotalMilliseconds,
+                SyncTimeout = (int)TimeSpan.FromSeconds(cacheOptions.CurrentValue.SyncTimeout).TotalMilliseconds,
                 AbortOnConnectFail = false,
-                ReconnectRetryPolicy = new ExponentialRetry((int)TimeSpan.FromSeconds(3).TotalMilliseconds)
+                ReconnectRetryPolicy = new ExponentialRetry((int)TimeSpan
+                    .FromSeconds(cacheOptions.CurrentValue.ReconnectRetryPolicy).TotalMilliseconds)
             };
 
             return ConnectionMultiplexer.Connect(configurations);
@@ -65,11 +69,11 @@ public static class ServiceRegistration
 
     public static IServiceCollection AddSqlDatabaseContext(this IServiceCollection services)
     {
-        var databaseOption = services.BuildServiceProvider().GetService<IOptionsMonitor<DatabaseOption>>() ?? throw new Exception("Please provide value for database option");
+        var databaseOption = services.BuildServiceProvider().GetService<IOptionsMonitor<DatabaseOption>>() 
+            ?? throw new Exception("Please provide value for database option");
 
         services.AddDbContext<AccountDbContext>((serviceProvider, options) =>
-        {
-
+        { 
             options.UseSqlServer(databaseOption.CurrentValue.ConnectionString, action =>
             {
                 action.CommandTimeout(databaseOption.CurrentValue.CommandTimeOut);
@@ -82,36 +86,40 @@ public static class ServiceRegistration
 
     public static IServiceCollection AddMassTransitContext(this IServiceCollection services)
     { 
-        var messageBusOptions = services.BuildServiceProvider().GetService<IOptions<MessageBusOption>>() ?? throw new Exception("Please provide value for message bus options");
+        var messageBusOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<MessageBusOption>>() 
+            ?? throw new Exception("Please provide value for message bus options");
 
+        var options = messageBusOptions.CurrentValue;
+         
         services.AddMassTransit(x =>
         {
             x.AddEntityFrameworkOutbox<AccountDbContext>(o =>
             {
-                o.DuplicateDetectionWindow = TimeSpan.FromSeconds(30);
-                o.QueryDelay = TimeSpan.FromSeconds(1);
-                o.QueryTimeout = TimeSpan.FromSeconds(30);
-                o.QueryMessageLimit = 100;
+                o.DuplicateDetectionWindow = TimeSpan.FromSeconds(options.DuplicateDetectionWindows);
+                o.QueryDelay = TimeSpan.FromSeconds(options.QueryDelay);
+                o.QueryTimeout = TimeSpan.FromSeconds(options.QueryTimeout);
+                o.QueryMessageLimit = options.QueryMessageLimit;
                 o.UseSqlServer();
                 o.UseBusOutbox();
             });
 
             x.UsingRabbitMq((context, configure) =>
             {
-                configure.Host(messageBusOptions.Value.Host ?? string.Empty, host =>
+                configure.Host(options.Host ?? string.Empty, host =>
                 {
-                    host.Username(messageBusOptions.Value.Username ?? string.Empty);
-                    host.Password(messageBusOptions.Value.Password ?? string.Empty);
+                    host.Username(options.Username ?? string.Empty);
+                    host.Password(options.Password ?? string.Empty);
                 });
 
                 configure.UseMessageRetry(retryCfg =>
                 {
-                    retryCfg.Interval(3, TimeSpan.FromSeconds(2));
+                    retryCfg.Interval(options.MessageRetryInternal, 
+                        TimeSpan.FromSeconds(options.MessageRetryTimespan));
                 });
 
                 configure.UseTimeout(timeoutCfg =>
                 {
-                    timeoutCfg.Timeout = TimeSpan.FromSeconds(5);
+                    timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout);
                 });
 
                 configure.ConfigureEndpoints(context);

@@ -6,4 +6,12 @@ public class MessageBusOption
     public string Host { get; set; } = string.Empty;
     public string Username { get; set; } = string.Empty;
     public string Password { get; set; } = string.Empty;
+    public int DuplicateDetectionWindows { get; set; }
+    public int QueryDelay { get; set; }
+    public int QueryTimeout { get; set; }
+    public int QueryMessageLimit { get; set; }
+    public int MessageRetryInternal { get; set; }
+    public int MessageRetryTimespan { get; set; }
+    public int MessageTimeout { get; set; } 
+
 }

@@ -32,7 +32,7 @@ public class IdempotencyMiddleware
             {
                 await _next(context);
                 return;
-            }
+            } 
 
             if (!idempotencyOptions.CurrentValue.IsActive)  
             {
