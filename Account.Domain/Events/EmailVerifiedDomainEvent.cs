@@ -2,4 +2,4 @@
 
 namespace Account.Domain.Events;
 
-public record EmailVerifiedDomainEvent(Guid Id, string Email, string EncryptedEmail) : INotification;
+public record EmailVerifiedDomainEvent(Guid Id, string HashedEmail, string EncryptedEmail) : INotification;

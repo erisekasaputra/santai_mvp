@@ -3,8 +3,7 @@ using Account.Contracts.EventEntity;
 using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Events;
 using MassTransit;
-using MediatR;
-using System.Collections.ObjectModel;
+using MediatR; 
 
 namespace Account.API.Applications.DomainEventHandlers;
 
@@ -19,7 +18,7 @@ public class BusinessUserCreatedDomainEventHandler : INotificationHandler<Busine
             return;
         }
 
-        var staffEvents = new Collection<StaffEvent>();
+        var staffEvents = new List<StaffEvent>();
 
         if (entity?.Staffs?.Count > 0)
         {

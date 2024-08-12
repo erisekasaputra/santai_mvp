@@ -5,12 +5,15 @@ using Account.API.Mapper;
 using Account.API.Options;
 using Account.API.SeedWork;
 using Account.API.Services;
+using Account.Domain.Aggregates.CertificationAggregate;
 using Account.Domain.Aggregates.UserAggregate;
+using Account.Domain.Enumerations;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects;
 using MediatR;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options; 
+using System.Data;
 
 namespace Account.API.Applications.Commands.MechanicUserCommand.CreateMechanicUser;
 
@@ -27,32 +30,97 @@ public class CreateMechanicUserCommandHandler(
     private readonly IKeyManagementService _kmsClient = kmsClient;
     private readonly IHashService _hashClient = hashService;
 
+
     public async Task<Result> Handle(CreateMechanicUserCommand request, CancellationToken cancellationToken)
     {
         try
         { 
-            await _unitOfWork.BeginTransactionAsync(System.Data.IsolationLevel.ReadCommitted, cancellationToken);
+            var errors = new List<ErrorDetail>();
 
-            var addressRequest = request.Address;
-
+            await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
+             
             var hashedEmail = await HashAsync(request.Email);
             var hashedPhoneNumber = await HashAsync(request.PhoneNumber);
 
             var encryptedEmail = await EncryptAsync(request.Email);
             var encryptedPhoneNumber = await EncryptAsync(request.PhoneNumber);
 
-            var encryptedAddressLine1 = await EncryptAsync(addressRequest.AddressLine1);
-            var encryptedAddressLine2 = await EncryptNullableAsync(addressRequest.AddressLine2);
-            var encryptedAddressLine3 = await EncryptNullableAsync(addressRequest.AddressLine3);
+            var encryptedAddressLine1 = await EncryptAsync(request.Address.AddressLine1);
+            var encryptedAddressLine2 = await EncryptNullableAsync(request.Address.AddressLine2);
+            var encryptedAddressLine3 = await EncryptNullableAsync(request.Address.AddressLine3);
+
+            var hashedLicenseNumber = await HashAsync(request.DrivingLicense.LicenseNumber);
+            var encryptedLicenseNumber = await EncryptAsync(request.DrivingLicense.LicenseNumber);
+            var hashedIdentityNumber = await HashAsync(request.NationalIdentity.IdentityNumber);
+            var encryptedIdentityNumber = await EncryptAsync(request.NationalIdentity.IdentityNumber);
+
+
+            // get all users that already registered with related request identities such as email, username, phonenumber, and identity id(from identity database)
+            var conflictUsers = await _unitOfWork.Users.GetByIdentitiesAsNoTrackingAsync(
+                (IdentityParameter.Username, request.Username),
+                (IdentityParameter.Email, hashedEmail),
+                (IdentityParameter.PhoneNumber, hashedPhoneNumber),
+                (IdentityParameter.IdentityId, request.IdentityId.ToString()));
+
+
+            // check if user with conlict identities is not null
+            if (conflictUsers is not null)
+            {
+                // if it is not null, rollback the trasaction and get the conflict items 
+                errors.AddRange(UserIdentityConflict(
+                    conflictUsers,
+                    request.IdentityId,
+                    request.Username,
+                    hashedEmail,
+                    hashedPhoneNumber));
+            }
+
+
+            var isNationalIdentityRegistered = await _unitOfWork.NationalIdentities.GetAnyByIdentityNumberAsync(hashedIdentityNumber);  
+            var isDrivingLicenseRegistered = await _unitOfWork.DrivingLicenses.GetAnyByLicenseNumberAsync(hashedLicenseNumber);
+
+            if (isNationalIdentityRegistered || isDrivingLicenseRegistered)
+            {  
+                if (isNationalIdentityRegistered)
+                {
+                    errors.Add(new ("NationalIdentity.IdentityNumber", "National identity already registered"));
+                }
+
+                if (isDrivingLicenseRegistered)
+                {
+                    errors.Add(new("DrivingLicense.LicenseNumber", "License number already registered"));
+                } 
+            }  
+
+            var certificationIds = request.Certifications.Select(x => x.CertificationId);
+            var conflictCertifications = await _unitOfWork.Certifications
+                .GetByCertIdsAsNoTrackingAsync(certificationIds.ToArray());
+
+
+            if (conflictCertifications is not null && conflictCertifications.Any())
+            {
+                errors.AddRange(CertificationConflicts(conflictCertifications, request.Certifications));
+            }
+
+
+            // middleware for returning error if error occured
+            if (errors.Count > 0)
+            {
+                return await RollbackAndReturnFailureAsync(
+                    Result.Failure($"There {(errors.Count <= 1 ? "is" : "are" )} few error(s) that you have to fixed", 
+                    ResponseStatus.BadRequest).WithErrors(errors), cancellationToken);
+            } 
+
 
             var address = new Address(
                     encryptedAddressLine1,
                     encryptedAddressLine2,
                     encryptedAddressLine3,
-                    addressRequest.City,
-                    addressRequest.State,
-                    addressRequest.PostalCode,
-                    addressRequest.Country);
+                    request.Address.City,
+                    request.Address.State,
+                    request.Address.PostalCode,
+                    request.Address.Country);
+
 
             var user = new MechanicUser(
                 request.IdentityId,
@@ -65,60 +133,119 @@ public class CreateMechanicUserCommandHandler(
                 request.TimeZoneId,
                 request.DeviceId);
             
+            
             int? referralRewardPoint = _referralOptions.CurrentValue.Point;
             int? referralValidMonth = _referralOptions.CurrentValue.ValidMonth;
+
 
             // Registering referral program
             if (referralRewardPoint.HasValue && referralValidMonth.HasValue)
             {
                 user.AddReferralProgram(referralRewardPoint.Value, referralRewardPoint.Value);
-            }
+            } 
 
             if (request.Certifications.Any())
             {
                 foreach (var certification in request.Certifications)
-                {
+                {  
                     user.AddCertification(
                         certification.CertificationId,
                         certification.CertificationName,
                         certification.ValidDate.FromLocalToUtc(request.TimeZoneId),
                         certification.Specialization?.ToList());
                 }
-            } 
-            
-            var drivingLicense = request.DrivingLicenseRequestDto;
-            var hashedLicenseNumber = await HashAsync(drivingLicense.LicenseNumber);
-            var encryptedLicenseNumber = await EncryptAsync(drivingLicense.LicenseNumber);
+            }   
+          
             user.SetDrivingLicense(
                 hashedLicenseNumber,
                 encryptedLicenseNumber,
-                drivingLicense.FrontSideImageUrl,
-                drivingLicense.BackSideImageUrl);
+                request.DrivingLicense.FrontSideImageUrl,
+                request.DrivingLicense.BackSideImageUrl); 
 
-            var nationalId = request.NationalIdentityRequestDto;
-            var hashedIdentityNumber = await HashAsync(nationalId.IdentityNumber);
-            var encryptedIdentityNumber = await EncryptAsync(nationalId.IdentityNumber);
             user.SetNationalID(
                 hashedIdentityNumber,
                 encryptedIdentityNumber,
-                nationalId.FrontSideImageUrl,
-                nationalId.BackSideImageUrl);
+                request.NationalIdentity.FrontSideImageUrl,
+                request.NationalIdentity.BackSideImageUrl);
+
 
             await _unitOfWork.Users.CreateAsync(user);
 
             await _unitOfWork.CommitTransactionAsync(cancellationToken);  
 
-            return Result.Success(ToMechanicResponseDto(user, request), ResponseStatus.Created);
+            return Result.Success(ToMechanicResponseDto(user, request), 
+                ResponseStatus.Created);
         }
         catch (DomainException ex)
         {
-            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+            return await RollbackAndReturnFailureAsync(
+                Result.Failure(ex.Message, ResponseStatus.BadRequest), cancellationToken); 
         }
         catch (Exception ex)
         {
             _appService.Logger.LogError(ex.Message, ex.InnerException?.Message);
-            return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
+            return await RollbackAndReturnFailureAsync(
+                Result.Failure(Messages.InternalServerError, ResponseStatus.BadRequest), cancellationToken); 
         }
+    }
+
+    private static List<ErrorDetail> CertificationConflicts(
+      IEnumerable<Certification> conflicts,
+      IEnumerable<CertificationRequestDto> certifications)
+    {
+        var errors = certifications
+        .SelectMany((certification, index) =>
+            conflicts.Any(x => x.CertificationId == certification.CertificationId)
+                ? [ new ErrorDetail($"Certification[{index}].{nameof(certification.CertificationId)}",
+                    "Certificate id already registered") ]
+                : Array.Empty<ErrorDetail>()
+        ).ToList();
+
+        return errors; 
+    }
+
+
+    private static List<ErrorDetail> UserIdentityConflict(
+        User user,
+        Guid identityId,
+        string username,
+        string email,
+        string phoneNumber)
+    {
+        var conflicts = new List<ErrorDetail>();
+
+        if (user.Username == username)
+        {
+            conflicts.Add(new($"User.{nameof(user.Username)}", 
+                "User username already registered"));
+        }
+
+        if (user.HashedEmail == email || user.NewHashedEmail == email)
+        {
+            conflicts.Add(new($"User.{nameof(user.HashedEmail)}", 
+                "User email already registered"));
+        }
+
+        if (user.HashedPhoneNumber == phoneNumber || user.NewHashedPhoneNumber == phoneNumber)
+        {
+            conflicts.Add(new($"User.{nameof(user.HashedPhoneNumber)}", 
+                "User phone number already registered"));
+        }
+
+        if (user.IdentityId == identityId)
+        {
+            conflicts.Add(new($"User.{nameof(user.IdentityId)}", 
+                "Identity id already registered"));
+        }
+
+        return conflicts;
+    }
+
+
+    private async Task<Result> RollbackAndReturnFailureAsync(Result result, CancellationToken cancellationToken)
+    {
+        await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+        return result;
     }
 
     private static MechanicUserResponseDto ToMechanicResponseDto(MechanicUser user, CreateMechanicUserCommand request)
@@ -155,9 +282,9 @@ public class CreateMechanicUserCommandHandler(
         { 
             drivingLicenseResponseDto = new DrivingLicenseResponseDto(
                 drivingLicenseId.Id,
-                request.DrivingLicenseRequestDto.LicenseNumber,
-                request.DrivingLicenseRequestDto.FrontSideImageUrl,
-                request.DrivingLicenseRequestDto.BackSideImageUrl);
+                request.DrivingLicense.LicenseNumber,
+                request.DrivingLicense.FrontSideImageUrl,
+                request.DrivingLicense.BackSideImageUrl);
         }
 
 
@@ -167,16 +294,18 @@ public class CreateMechanicUserCommandHandler(
         {
             nationalIdResponseDto = new NationalIdentityResponseDto(
                 nationalIdentityId.Id,
-                request.NationalIdentityRequestDto.IdentityNumber,
-                request.NationalIdentityRequestDto.FrontSideImageUrl,
-                request.NationalIdentityRequestDto.BackSideImageUrl);
+                request.NationalIdentity.IdentityNumber,
+                request.NationalIdentity.FrontSideImageUrl,
+                request.NationalIdentity.BackSideImageUrl);
         } 
 
         var mechanicResponse = new MechanicUserResponseDto(
+            user.Id,
             user.Username,
             request.Email,
             request.PhoneNumber,
             request.TimeZoneId,
+            user.LoyaltyProgram.ToLoyaltyProgramResponseDto(),
             addressResponseDto,
             certificatonResponseDto,
             drivingLicenseResponseDto,

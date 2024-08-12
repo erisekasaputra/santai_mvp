@@ -26,19 +26,19 @@ public class AddressValidation : AbstractValidator<AddressRequestDto>
             .WithMessage("Address line 3 must be between 3 and 255 characters.");
          
         RuleFor(x => x.City)
-            .NotEmpty().WithMessage("City can not empty")
+            .NotEmpty().WithMessage("City can not be empty")
             .Length(3, 50).WithMessage("City must be between 3 and 50 characters long");
 
         RuleFor(x => x.State)
-            .NotEmpty().WithMessage("State can not empty")
+            .NotEmpty().WithMessage("State can not be empty")
             .Length(3, 50).WithMessage("State must be between 3 and 50 characters long");
 
         RuleFor(x => x.PostalCode)
-            .NotEmpty().WithMessage("Postal code can not empty")
+            .NotEmpty().WithMessage("Postal code can not be empty")
             .Length(3, 20).WithMessage("Postal code must be between 3 and 20 characters long");
 
         RuleFor(x => x.Country)
-            .NotEmpty().WithMessage("Country can not empty")
+            .NotEmpty().WithMessage("Country can not be empty")
             .Length(3, 50).WithMessage("Country must be between 3 and 50 characters long");
     }
 }

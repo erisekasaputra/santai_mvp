@@ -83,12 +83,12 @@ public class RegularUser : User
 
         DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
 
-        RaiseDeviceIdForcedSetDomainEvent(Id);
+        RaiseDeviceIdForcedSetDomainEvent(Id, deviceId);
     }
      
-    private void RaiseDeviceIdForcedSetDomainEvent(Guid id)
+    private void RaiseDeviceIdForcedSetDomainEvent(Guid id, string deviceId)
     {
-        AddDomainEvent(new DeviceIdForcedResetDomainEvent(id));
+        AddDomainEvent(new DeviceIdForcedSetDomainEvent(id, deviceId));
     }
 
     private void RaiseDeviceIdSetDomainEvent(Guid id, string deviceId)

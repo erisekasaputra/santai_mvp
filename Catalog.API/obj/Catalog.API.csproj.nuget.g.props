@@ -19,6 +19,7 @@
     <Import Project="$(NuGetPackageRoot)microsoft.entityframeworkcore\9.0.0-preview.6.24327.4\buildTransitive\net8.0\Microsoft.EntityFrameworkCore.props" Condition="Exists('$(NuGetPackageRoot)microsoft.entityframeworkcore\9.0.0-preview.6.24327.4\buildTransitive\net8.0\Microsoft.EntityFrameworkCore.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.codeanalysis.analyzers\3.3.4\buildTransitive\Microsoft.CodeAnalysis.Analyzers.props" Condition="Exists('$(NuGetPackageRoot)microsoft.codeanalysis.analyzers\3.3.4\buildTransitive\Microsoft.CodeAnalysis.Analyzers.props')" />
     <Import Project="$(NuGetPackageRoot)microsoft.entityframeworkcore.design\9.0.0-preview.6.24327.4\build\net8.0\Microsoft.EntityFrameworkCore.Design.props" Condition="Exists('$(NuGetPackageRoot)microsoft.entityframeworkcore.design\9.0.0-preview.6.24327.4\build\net8.0\Microsoft.EntityFrameworkCore.Design.props')" />
+    <Import Project="$(NuGetPackageRoot)grpc.tools\2.65.0\build\Grpc.Tools.props" Condition="Exists('$(NuGetPackageRoot)grpc.tools\2.65.0\build\Grpc.Tools.props')" />
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <PkgMicrosoft_Extensions_ApiDescription_Server Condition=" '$(PkgMicrosoft_Extensions_ApiDescription_Server)' == '' ">C:\Users\erise\.nuget\packages\microsoft.extensions.apidescription.server\9.0.0-preview.6.24328.4</PkgMicrosoft_Extensions_ApiDescription_Server>
@@ -27,5 +28,6 @@
     <PkgAWSSDK_Core Condition=" '$(PkgAWSSDK_Core)' == '' ">C:\Users\erise\.nuget\packages\awssdk.core\3.7.304.30</PkgAWSSDK_Core>
     <PkgAWSSDK_SQS Condition=" '$(PkgAWSSDK_SQS)' == '' ">C:\Users\erise\.nuget\packages\awssdk.sqs\3.7.301.33</PkgAWSSDK_SQS>
     <PkgAWSSDK_SimpleNotificationService Condition=" '$(PkgAWSSDK_SimpleNotificationService)' == '' ">C:\Users\erise\.nuget\packages\awssdk.simplenotificationservice\3.7.302.1</PkgAWSSDK_SimpleNotificationService>
+    <PkgGrpc_Tools Condition=" '$(PkgGrpc_Tools)' == '' ">C:\Users\erise\.nuget\packages\grpc.tools\2.65.0</PkgGrpc_Tools>
   </PropertyGroup>
 </Project>

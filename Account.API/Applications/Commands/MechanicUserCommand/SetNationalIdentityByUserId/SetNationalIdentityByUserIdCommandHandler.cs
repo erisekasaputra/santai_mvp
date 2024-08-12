@@ -1,0 +1,36 @@
+﻿using Account.API.Options;
+using Account.API.SeedWork;
+using Account.API.Services;
+using Account.Domain.SeedWork;
+using MediatR;
+using Microsoft.Extensions.Options;
+
+namespace Account.API.Applications.Commands.MechanicUserCommand.SetNationalIdentityByUserId;
+
+public class SetNationalIdentityByUserIdCommandHandler : IRequestHandler<SetNationalIdentityByUserIdCommand, Result>
+{
+    private readonly IUnitOfWork _unitOfWork;
+    private readonly IOptionsMonitor<ReferralProgramOption> _referralOptions;
+    private readonly ApplicationService _service;
+    private readonly IKeyManagementService _kmsClient;
+    private readonly IHashService _hashService;
+
+    public SetNationalIdentityByUserIdCommandHandler(
+        IUnitOfWork unitOfWork,
+        IOptionsMonitor<ReferralProgramOption> referralOptions,
+        ApplicationService service,
+        IKeyManagementService kmsClient,
+        IHashService hashService)
+    {
+        _unitOfWork = unitOfWork;
+        _referralOptions = referralOptions;
+        _service = service;
+        _kmsClient = kmsClient;
+        _hashService = hashService;
+    }
+
+    public Task<Result> Handle(SetNationalIdentityByUserIdCommand request, CancellationToken cancellationToken)
+    {
+        throw new NotImplementedException();
+    }
+}

@@ -5,13 +5,13 @@ using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using MediatR;
 
-namespace Account.API.Applications.Commands.UserCommand.ForceSetDeviceIdByUserId;
+namespace Account.API.Applications.Commands.RegularUserCommand.ResetDeviceIdByUserId;
 
-public class ForceSetDeviceIdByUserIdCommandHandler(IUnitOfWork unitOfWork, ApplicationService service) : IRequestHandler<ForceSetDeviceIdByUserIdCommand, Result>
+public class ResetDeviceIdByUserIdCommandHandler(IUnitOfWork unitOfWork, ApplicationService service) : IRequestHandler<ResetDeviceIdByUserIdCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _service = service;
-    public async Task<Result> Handle(ForceSetDeviceIdByUserIdCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(ResetDeviceIdByUserIdCommand request, CancellationToken cancellationToken)
     {
         try
         {
@@ -21,12 +21,12 @@ public class ForceSetDeviceIdByUserIdCommandHandler(IUnitOfWork unitOfWork, Appl
                 return Result.Failure($"User '{request.UserId}' not found", ResponseStatus.NotFound);
             }
 
-            user.ForceSetDeviceId(request.DeviceId);
+            user.ResetDeviceId();
 
             _unitOfWork.Users.Update(user);
-            
+
             await _unitOfWork.SaveChangesAsync(cancellationToken);
-            
+
             return Result.Success(null, ResponseStatus.NoContent);
         }
         catch (DomainException ex)

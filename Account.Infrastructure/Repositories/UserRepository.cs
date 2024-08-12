@@ -1,7 +1,7 @@
 ﻿using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Enumerations; 
-using LinqKit; 
 using Microsoft.EntityFrameworkCore;
+using LinqKit; 
 
 namespace Account.Infrastructure.Repositories;
 

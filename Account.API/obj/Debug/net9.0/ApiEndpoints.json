@@ -625,7 +625,7 @@
     "Parameters": [
       {
         "Name": "mechanicUserId",
-        "Type": "System.String",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],

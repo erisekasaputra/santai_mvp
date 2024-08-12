@@ -11,11 +11,11 @@ public class UpdateRegularUserValidation : AbstractValidator<UpdateRegularUserRe
     public UpdateRegularUserValidation()
     {  
         RuleFor(x => x.Address)
-            .NotNull().WithMessage("Address can not empty")
+            .NotNull().WithMessage("Address can not be empty")
             .SetValidator(new AddressValidation());
 
         RuleFor(x => x.TimeZoneId)
-            .NotEmpty().WithMessage("Time zone can not empty")
+            .NotEmpty().WithMessage("Time zone can not be empty")
             .Length(2, 40).WithMessage("Time zone must be between 2 and 40 characters long")
             .Must(DateTimeExtension.IsTimeZoneExists).WithMessage("Time zone is invalid, please provide valid time zone");
 

@@ -12,7 +12,7 @@ public record CreateMechanicUserCommand(
     string TimeZoneId,
     AddressRequestDto Address,
     IEnumerable<CertificationRequestDto> Certifications,
-    DrivingLicenseRequestDto DrivingLicenseRequestDto,
-    NationalIdentityRequestDto NationalIdentityRequestDto,
+    DrivingLicenseRequestDto DrivingLicense,
+    NationalIdentityRequestDto NationalIdentity,
     string DeviceId
     ) : IRequest<Result>;

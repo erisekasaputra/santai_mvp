@@ -10,11 +10,11 @@ public class UpdateBusinessUserValidation : AbstractValidator<UpdateBusinessUser
     public UpdateBusinessUserValidation()
     { 
         RuleFor(x => x.BusinessName)
-            .NotEmpty().WithMessage("Business name can not empty")
+            .NotEmpty().WithMessage("Business name can not be empty")
             .Length(3, 50).WithMessage("Business name must be between 3 and 50 characters long");
 
         RuleFor(x => x.ContactPerson)
-            .NotEmpty().WithMessage("Contact person can not empty")
+            .NotEmpty().WithMessage("Contact person can not be empty")
             .Length(3, 254).WithMessage("Contact person must be between 3 and 254 characters long");
 
         RuleFor(x => x.TaxId)

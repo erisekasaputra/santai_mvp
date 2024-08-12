@@ -5,6 +5,7 @@ using Account.API.Options;
 using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Aggregates.BusinessLicenseAggregate;
+using Account.Domain.Aggregates.ReferralAggregate;
 using Account.Domain.Aggregates.ReferredAggregate;
 using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Enumerations;
@@ -43,6 +44,8 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
     {
         try
         {
+            var errors = new List<ErrorDetail>();
+
             await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken); 
 
             // hash email to make it secure but still got unique requirement
@@ -83,13 +86,35 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
             if (userConflict is not null)
             {
                 // if it is not null, rollback the trasaction and get the conflict items
-                return await RollbackAndReturnFailureAsync(UserIdentityConflict(
+                errors.AddRange(UserIdentityConflict(
                     userConflict,
                     request.IdentityId,
                     request.Username,
                     hashedEmail,
-                    hashedPhoneNumber), cancellationToken);
+                    hashedPhoneNumber));
             }
+
+
+            ReferralProgram? referralProgram = null;
+
+            // create referred programs when user input the referral code and referral code is valid
+            if (!string.IsNullOrEmpty(request.ReferralCode))
+            {
+                // check is referral code is valid
+                referralProgram = await _unitOfWork.ReferralPrograms.GetByCodeAsync(request.ReferralCode);
+                if (referralProgram is null)
+                {
+                    // if it is not found the rollback transaction and give the error message related the error items
+                    errors.Add(new ErrorDetail("User.ReferralCode", "Referral code not found"));
+                }
+
+                // check is referral program is still valid 
+                if (referralProgram is not null && referralProgram.ValidDateUtc < DateTime.UtcNow)
+                {
+                    errors.Add(new ErrorDetail("User.ReferralCode", "Referral code expired"));
+                }
+            }
+              
 
             // creating new instance of an address object
             var address = new Address(
@@ -128,25 +153,8 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
             }
 
             // create referred programs when user input the referral code and referral code is valid
-            if (!string.IsNullOrEmpty(request.ReferralCode))
-            {
-                // check is referral code is valid
-                var referralProgram = await _unitOfWork.ReferralPrograms.GetByCodeAsync(request.ReferralCode); 
-                if (referralProgram is null)
-                {
-                    // if it is not found the rollback transaction and give the error message related the error items
-                    return await RollbackAndReturnFailureAsync(Result.Failure($"Referral code '{request.ReferralCode}' not found", ResponseStatus.NotFound)
-                        .WithError(new ErrorDetail("User.ReferralCode", "Referral code not found")), cancellationToken);
-                }
-
-                // check is referral program is still valid 
-                if (referralProgram.ValidDateUtc < DateTime.UtcNow)
-                {
-                    // if it is not valid, then rollback transaction and give the error message related the error items
-                    return await RollbackAndReturnFailureAsync(Result.Failure($"Referral code '{request.ReferralCode}' invalid", ResponseStatus.BadRequest)
-                        .WithError(new ErrorDetail("User.ReferralCode", "Referral code expired")), cancellationToken);
-                }
-
+            if (referralProgram is not null && request.ReferralCode is not null)
+            { 
                 // creating the referred programs
                 await _unitOfWork.ReferredPrograms.CreateReferredProgramAsync(
                     new ReferredProgram(
@@ -172,10 +180,9 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
                 if (staffConflictAtRepository?.Any() ?? false)
                 {
                     // if any conflict data then rollback transaction and returning error message
-                    return await RollbackAndReturnFailureAsync(
-                        StaffIdentityConflict(
-                            staffConflictAtRepository,
-                            staffRequests), cancellationToken);
+                    errors.AddRange(StaffIdentityConflict(
+                         staffConflictAtRepository,
+                         staffRequests));
                 }
 
                 // product error objects
@@ -197,8 +204,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
                 if (errorStaffs is not null && errorStaffs.Count > 0)
                 {
-                    return await RollbackAndReturnFailureAsync(Result.Failure("There are conflicts", ResponseStatus.BadRequest)
-                        .WithErrors(errorStaffs), cancellationToken);
+                    errors.AddRange(errorStaffs);    
                 }
             }
 
@@ -212,7 +218,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
                 if (conflictLicenses?.Any() ?? false)
                 {
-                    return await RollbackAndReturnFailureAsync(BusinessLicenseConflict(conflictLicenses, businessLicenseRequests), cancellationToken);
+                    errors.AddRange(BusinessLicenseConflict(conflictLicenses, businessLicenseRequests));
                 }
 
                 var errorLicenses = new List<ErrorDetail>();
@@ -232,9 +238,15 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
                 if (errorLicenses is not null && errorLicenses.Count > 0)
                 {
-                    return await RollbackAndReturnFailureAsync(Result.Failure("There are conflicts", ResponseStatus.BadRequest)
-                        .WithErrors(errorLicenses), cancellationToken);
+                    errors.AddRange(errorLicenses);
                 }
+            }
+
+            if (errors.Count > 0)
+            {
+                return await RollbackAndReturnFailureAsync(
+                    Result.Failure($"There {(errors.Count <= 1 ? "is" : "are")} few error(s) that you have to fixed", 
+                    ResponseStatus.BadRequest).WithErrors(errors), cancellationToken);
             }
 
             await _unitOfWork.Users.CreateAsync(user);
@@ -444,7 +456,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
         return result;
     }
 
-    private static Result BusinessLicenseConflict(
+    private static List<ErrorDetail> BusinessLicenseConflict(
         IEnumerable<BusinessLicense> licenseConflicts,
         IEnumerable<BusinessLicense> licenseRequest)
     {
@@ -466,16 +478,10 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
             indexRequestLicense++;
         }
 
-        var message = errors.Count switch
-        {
-            1 => "There is a conflict",
-            _ => $"There are {errors.Count} conflicts"
-        };
-
-        return Result.Failure(message, ResponseStatus.BadRequest).WithErrors(errors);
+        return errors;
     }
 
-    private static Result UserIdentityConflict(
+    private static List<ErrorDetail> UserIdentityConflict(
         User user,
         Guid identityId,
         string username,
@@ -486,60 +492,62 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
         if (user.Username == username)
         {
-            conflicts.Add(new ($"User.{nameof(user.Username)}", $"User username already registered"));
+            conflicts.Add(new ($"User.{nameof(user.Username)}", 
+                "User username already registered"));
         }
 
         if (user.HashedEmail == email || user.NewHashedEmail == email)
         {
-            conflicts.Add(new ($"User.{nameof(user.HashedEmail)}", $"User email already registered"));
+            conflicts.Add(new ($"User.{nameof(user.HashedEmail)}", 
+                "User email already registered"));
         }
 
         if (user.HashedPhoneNumber == phoneNumber || user.NewHashedPhoneNumber == phoneNumber)
         {
-            conflicts.Add(new ($"User.{nameof(user.HashedPhoneNumber)}", $"User phone number already registered"));
+            conflicts.Add(new ($"User.{nameof(user.HashedPhoneNumber)}", 
+                "User phone number already registered"));
         }
 
         if (user.IdentityId == identityId)
         {
-            conflicts.Add(new ($"User.{nameof(user.IdentityId)}", $"Identity id already registered"));
+            conflicts.Add(new ($"User.{nameof(user.IdentityId)}", 
+                "Identity id already registered"));
         }
 
-        var message = conflicts.Count == 1
-            ? "There is a conflict"
-            : $"There are {conflicts.Count} conflicts";
-
-        return Result.Failure(message, ResponseStatus.BadRequest).WithErrors(conflicts);
+        return conflicts;
     }
 
-    private static Result StaffIdentityConflict(
+    private static List<ErrorDetail> StaffIdentityConflict(
         IEnumerable<Staff> conflicts,
         IEnumerable<Staff> staffs)
     {
         var errors = staffs
-            .SelectMany((staff, index) => new[]
+            .SelectMany((staff, index) =>
             {
-                conflicts.Any(x => x.Username == staff.Username)
-                    ? new ErrorDetail($"Staff[{index}].{nameof(staff.Username)}", 
-                        "Username already registered")
-                    : null,
+                var errorDetails = new List<ErrorDetail>();
 
-                conflicts.Any(x => x.HashedEmail == staff.HashedEmail || x.NewHashedEmail == staff.HashedEmail)
-                    ? new ErrorDetail($"Staff[{index}].{nameof(staff.HashedEmail)}", 
-                        "Email already registered")
-                    : null,
-                
-                conflicts.Any(x => x.HashedPhoneNumber == staff.HashedPhoneNumber || x.NewHashedPhoneNumber == staff.HashedPhoneNumber)
-                    ? new ErrorDetail($"Staff[{index}].{nameof(staff.HashedPhoneNumber)}", 
-                        "Phone number already registered")
-                    : null
-            
-            }).Where(detail => detail != null).ToList();
+                if (conflicts.Any(x => x.Username == staff.Username))
+                {
+                    errorDetails.Add(new ErrorDetail($"Staff[{index}].{nameof(staff.Username)}",
+                        "Username already registered"));
+                }
 
-        var message = errors.Count == 1
-            ? "There is a conflict"
-            : $"There are {errors.Count} conflicts";
+                if (conflicts.Any(x => x.HashedEmail == staff.HashedEmail || x.NewHashedEmail == staff.HashedEmail))
+                {
+                    errorDetails.Add(new ErrorDetail($"Staff[{index}].{nameof(staff.HashedEmail)}",
+                        "Email already registered"));
+                }
 
-        return Result.Failure(message, ResponseStatus.BadRequest).WithErrors(errors!);
+                if (conflicts.Any(x => x.HashedPhoneNumber == staff.HashedPhoneNumber || x.NewHashedPhoneNumber == staff.HashedPhoneNumber))
+                {
+                    errorDetails.Add(new ErrorDetail($"Staff[{index}].{nameof(staff.HashedPhoneNumber)}",
+                        "Phone number already registered"));
+                }
+
+                return errorDetails;
+            }).ToList();
+
+        return errors;
     }
 
     private async Task<string?> EncryptNullableAsync(string? plaintext)

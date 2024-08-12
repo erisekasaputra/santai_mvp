@@ -1,0 +1,2 @@
+obj\Debug\net9.0\Protos/BusinessAccount.cs \
+obj\Debug\net9.0\Protos/BusinessAccountGrpc.cs: Protos/business_account.proto

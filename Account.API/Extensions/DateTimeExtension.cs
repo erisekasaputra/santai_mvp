@@ -1,5 +1,4 @@
-﻿using System;
-using TimeZoneConverter;
+﻿using TimeZoneConverter;
 
 namespace Account.API.Extensions;
 
@@ -52,6 +51,56 @@ public static class DateTimeExtension
         return utcDateTime;
     }
 
+
+    public static DateTime? FromLocalToUtc(this DateTime? dateTime, string timeZoneId)
+    {  
+        if (dateTime is null)
+        {
+            return null;
+        }
+
+        TimeZoneInfo? timeZone;
+
+        try
+        {
+            string windowsTimeZoneId = TZConvert.IanaToWindows(timeZoneId);
+            timeZone = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZoneId);
+        }
+        catch (TimeZoneNotFoundException)
+        {
+            try
+            {
+                timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                throw new InvalidCastException($"Time zone with id '{timeZoneId}' does not exist");
+            }
+            catch (InvalidTimeZoneException)
+            {
+                throw new InvalidCastException($"Time zone with id '{timeZoneId}' is invalid");
+            }
+        }
+        catch (InvalidTimeZoneException)
+        {
+            throw new InvalidCastException($"Time zone with id '{timeZoneId}' is invalid");
+        }
+        catch (Exception)
+        {
+            throw new InvalidCastException($"Time zone with id '{timeZoneId}' is invalid");
+        }
+
+        var nonNullDateTime = (DateTime)dateTime;
+
+        DateTime specifiedDateTime = DateTime.SpecifyKind(nonNullDateTime, DateTimeKind.Unspecified);
+
+        DateTime utcDateTime = TimeZoneInfo.ConvertTimeToUtc(specifiedDateTime, timeZone);
+
+        utcDateTime = DateTime.SpecifyKind(utcDateTime, DateTimeKind.Utc);
+
+        return utcDateTime;
+    }
+
     /// <summary>
     /// Converts a UTC DateTime to a specific time zone.
     /// </summary> 
@@ -59,7 +108,7 @@ public static class DateTimeExtension
     /// <returns>The corresponding local DateTime in the specified time zone.</returns>
 
     public static DateTime FromUtcToLocal(this DateTime dateTime, string timeZoneId)
-    {
+    { 
         TimeZoneInfo? timeZone;
 
         try
@@ -99,6 +148,57 @@ public static class DateTimeExtension
 
         // Konversi dari UTC ke zona waktu spesifik
         return TimeZoneInfo.ConvertTimeFromUtc(dateTime, timeZone);
+    }
+
+
+    public static DateTime? FromUtcToLocal(this DateTime? dateTime, string timeZoneId)
+    {
+        if (dateTime is null)
+        {
+            return null;
+        }
+
+        TimeZoneInfo? timeZone;
+
+        try
+        {
+            // Konversi IANA time zone ke Windows time zone ID
+            string windowsTimeZoneId = TZConvert.IanaToWindows(timeZoneId);
+            timeZone = TimeZoneInfo.FindSystemTimeZoneById(windowsTimeZoneId);
+        }
+        catch (TimeZoneNotFoundException)
+        {
+            try
+            {
+                // Jika konversi IANA ke Windows gagal, coba langsung dengan timeZoneId yang diberikan
+                timeZone = TimeZoneInfo.FindSystemTimeZoneById(timeZoneId);
+            }
+            catch (TimeZoneNotFoundException)
+            {
+                throw new InvalidCastException($"Time zone dengan id '{timeZoneId}' tidak ditemukan.");
+            }
+            catch (InvalidTimeZoneException)
+            {
+                throw new InvalidCastException($"Time zone dengan id '{timeZoneId}' tidak valid.");
+            }
+        }
+        catch (InvalidTimeZoneException)
+        {
+            throw new InvalidCastException($"Time zone dengan id '{timeZoneId}' tidak valid.");
+        }
+
+        var nonNullDateTime = (DateTime) dateTime;
+
+        // Pastikan DateTime yang diberikan sudah dalam UTC
+        if (nonNullDateTime.Kind != DateTimeKind.Utc && nonNullDateTime.Kind != DateTimeKind.Unspecified)
+        {
+            throw new ArgumentException("Datetime should be in utc kind.", nameof(dateTime));
+        }
+
+        dateTime = DateTime.SpecifyKind(nonNullDateTime, DateTimeKind.Utc);
+
+        // Konversi dari UTC ke zona waktu spesifik
+        return TimeZoneInfo.ConvertTimeFromUtc(nonNullDateTime, timeZone);
     }
 
 

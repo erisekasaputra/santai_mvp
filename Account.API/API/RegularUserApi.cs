@@ -1,9 +1,9 @@
 ﻿using Account.API.Applications.Commands.RegularUserCommand.CreateRegularUser;
 using Account.API.Applications.Commands.RegularUserCommand.DeleteRegularUserByUserId;
 using Account.API.Applications.Commands.RegularUserCommand.UpdateRegularUserByUserId;
-using Account.API.Applications.Commands.UserCommand.ForceSetDeviceIdByUserId;
-using Account.API.Applications.Commands.UserCommand.ResetDeviceIdByUserId;
-using Account.API.Applications.Commands.UserCommand.SetDeviceIdByUserId;
+using Account.API.Applications.Commands.RegularUserCommand.ForceSetDeviceIdByUserId;
+using Account.API.Applications.Commands.RegularUserCommand.ResetDeviceIdByUserId;
+using Account.API.Applications.Commands.RegularUserCommand.SetDeviceIdByUserId;
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetRegularUserByUserId;
 using Account.API.Extensions;

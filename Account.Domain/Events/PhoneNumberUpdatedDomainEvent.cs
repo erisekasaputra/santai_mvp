@@ -4,7 +4,7 @@ namespace Account.Domain.Events;
 
 public record PhoneNumberUpdatedDomainEvent(
     Guid Id,
-    string OldPhoneNumber,
-    string NewPhoneNumber,
-    string OldEncryptedPhoneNumber,
-    string NewEncryptedPhoneNumber) : INotification;
+    string HashedPhoneNumber,
+    string? NewHashedPhoneNumber,
+    string EncryptedPhoneNumber,
+    string? NewEncryptedPhoneNumber) : INotification;

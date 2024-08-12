@@ -4,6 +4,7 @@ using Account.Domain.ValueObjects;
 using Account.Domain.Enumerations;
 using Account.Domain.Aggregates.NationalIdentityAggregate;
 using Account.Domain.Aggregates.DrivingLicenseAggregate;
+using Account.Domain.Events;
 
 namespace Account.Domain.Aggregates.UserAggregate;
 
@@ -41,7 +42,13 @@ public class MechanicUser : User
         IsVerified = false;
         DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
 
-        RaiseMechanicUserCreatedDomainEvent();
+        RaiseMechanicUserCreatedDomainEvent(this);
+    }
+
+    public void Update(Address address, string timeZoneId)
+    {
+        Address = address ?? throw new ArgumentNullException(nameof(address));
+        TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId));
     }
 
     public override void AddReferralProgram(int referralRewardPoint, int referralValidDate)
@@ -49,35 +56,31 @@ public class MechanicUser : User
         base.AddReferralProgram(referralRewardPoint, referralValidDate);
     }
 
-    public override void UpdateEmail(string email, string encryptedEmail)
+    public override void UpdateEmail(string hashedEmail, string encryptedEmail)
     {
-        base.UpdateEmail(email, encryptedEmail);
-
-        RaiseEmailUpdatedDomainEvent();
+        base.UpdateEmail(hashedEmail, encryptedEmail); 
     }
 
-    public override void UpdatePhoneNumber(string phoneNumber, string encryptedPhoneNumber)
+    public override void UpdatePhoneNumber(string hashedPhoneNumber, string encryptedPhoneNumber)
     {
-        base.UpdatePhoneNumber(phoneNumber, encryptedPhoneNumber);
-
-        RaisePhoneNumberUpdatedDomainEvent();
+        base.UpdatePhoneNumber(hashedPhoneNumber, encryptedPhoneNumber); 
     }
 
     public override void VerifyEmail()
     {
-        base.VerifyEmail();
-
-        RaiseEmailVerifiedDomainEvent();
+        base.VerifyEmail(); 
     }
 
     public override void VerifyPhoneNumber()
     {
-        base.VerifyPhoneNumber();
-
-        RaisePhoneNumberVerifiedDomainEvent();
+        base.VerifyPhoneNumber(); 
     }
 
-    public void SetDrivingLicense(string identificationNumber, string encryptedIdentificationNumber, string frontSideImageUrl, string backSideImageUrl)
+    public void SetDrivingLicense(
+        string hashedLicenseNumber,
+        string encryptedLicenseNumber,
+        string frontSideImageUrl,
+        string backSideImageUrl)
     {
         if (DrivingLicenses is not null)
         {
@@ -91,12 +94,21 @@ public class MechanicUser : User
 
         DrivingLicenses ??= [];
 
-        DrivingLicenses.Add(new DrivingLicense(Id, identificationNumber, encryptedIdentificationNumber, frontSideImageUrl, backSideImageUrl));
+        DrivingLicenses.Add(new DrivingLicense(
+            Id,
+            hashedLicenseNumber,
+            encryptedLicenseNumber,
+            frontSideImageUrl,
+            backSideImageUrl));
 
         RaiseDrivingLicenseSetDomainEvent();
     }  
 
-    public void SetNationalID(string identificationNumber, string encryptedIdentificationNumber, string frontSideImageUrl, string backSideImageUrl)
+    public void SetNationalID(
+        string hashedIdentificationNumber,
+        string encryptedIdentificationNumber,
+        string frontSideImageUrl,
+        string backSideImageUrl)
     {
         if (NationalIdentities is not null)
         {
@@ -110,28 +122,42 @@ public class MechanicUser : User
 
         NationalIdentities ??= [];
 
-        NationalIdentities.Add(new NationalIdentity(Id, identificationNumber, encryptedIdentificationNumber, frontSideImageUrl, backSideImageUrl));
+        NationalIdentities.Add(new NationalIdentity(
+            Id,
+            hashedIdentificationNumber,
+            encryptedIdentificationNumber,
+            frontSideImageUrl,
+            backSideImageUrl));
 
         RaiseNationalIDSetDomainEvent();
     } 
 
-    public void AddCertification(string certificationId, string certificationName, DateTime validDate, ICollection<string>? specializations)
+    public void AddCertification(
+        string certificationId,
+        string certificationName,
+        DateTime? validDate,
+        ICollection<string>? specializations)
     { 
         var certifications = Certifications?.SingleOrDefault(c => c.CertificationId == certificationId);
 
         if (certifications is not null)
         {
-            throw new DomainException($"Certification with certificate id {certificationId} is already registered");
+            throw new DomainException($"Certificate '{certificationId}' is already registered");
         }
 
-        if (validDate < DateTime.Now)
+        if (validDate is not null && validDate < DateTime.UtcNow)
         {
-            throw new DomainException($"You certificate with certificate id {certificationId} is expired");
+            throw new DomainException($"Certificate '{certificationId}' is expired");
         }
 
         Certifications ??= [];
 
-        Certifications.Add(new Certification(Id, certificationId, certificationName, validDate, specializations));
+        Certifications.Add(new Certification(
+            Id,
+            certificationId,
+            certificationName,
+            validDate,
+            specializations));
     }
 
     public void RemoveCertification(Guid id)
@@ -158,7 +184,7 @@ public class MechanicUser : User
 
         DeviceId = null;
 
-        RaiseDeviceIdResetDomainEvent();
+        RaiseDeviceIdResetDomainEvent(Id);
     }  
 
     public void SetDeviceId(string deviceId)
@@ -170,7 +196,7 @@ public class MechanicUser : User
 
         DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
 
-        RaiseDeviceIdSetDomainEvent();
+        RaiseDeviceIdSetDomainEvent(Id, deviceId);
     }  
 
     public void ForceSetDeviceId(string deviceId)
@@ -182,14 +208,14 @@ public class MechanicUser : User
 
         DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
 
-        RaiseDeviceIdForcedSetDomainEvent();
+        RaiseDeviceIdForcedSetDomainEvent(Id, deviceId);
     } 
 
     public void SetRating(decimal rating)
     {
         if (rating is < (decimal) 0.00 or > (decimal) 5.00)
         {
-            throw new DomainException("Rating must be between 0.0 and 5.0.");
+            throw new DomainException("Rating must be between 0.0 and 5.0");
         }
 
         Rating = rating;
@@ -232,54 +258,33 @@ public class MechanicUser : User
         }
 
         IsVerified = true;
-    }  
+    }   
 
-    private void RaiseEmailUpdatedDomainEvent()
+    private void RaiseMechanicUserCreatedDomainEvent(MechanicUser mechanisUser)
     {
-        throw new NotImplementedException();
-    }
-
-    private void RaisePhoneNumberUpdatedDomainEvent()
-    {
-        throw new NotImplementedException();
-    }
-
-    private void RaiseEmailVerifiedDomainEvent()
-    {
-        throw new NotImplementedException();
-    }
-
-    private void RaisePhoneNumberVerifiedDomainEvent()
-    {
-        throw new NotImplementedException();
-    }
-
-    private void RaiseMechanicUserCreatedDomainEvent()
-    {
-        throw new NotImplementedException();
+        AddDomainEvent(new MechanicUserCreatedDomainEvent(this));
     }
 
     private void RaiseDrivingLicenseSetDomainEvent()
-    {
-        throw new NotImplementedException();
+    { 
     }
+
     private void RaiseNationalIDSetDomainEvent()
-    {
-        throw new NotImplementedException();
+    { 
     }
 
-    private void RaiseDeviceIdResetDomainEvent()
+    private void RaiseDeviceIdResetDomainEvent(Guid id)
     {
-        throw new NotImplementedException();
+        AddDomainEvent(new DeviceIdResetDomainEvent(id));
     }
 
-    private void RaiseDeviceIdSetDomainEvent()
+    private void RaiseDeviceIdSetDomainEvent(Guid id, string deviceId)
     {
-        throw new NotImplementedException();
+        AddDomainEvent(new DeviceIdSetDomainEvent(id, deviceId));
     }
 
-    private void RaiseDeviceIdForcedSetDomainEvent()
+    private void RaiseDeviceIdForcedSetDomainEvent(Guid id, string deviceId)
     {
-        throw new NotImplementedException();
+        AddDomainEvent(new DeviceIdForcedSetDomainEvent(id, deviceId));
     }
 }

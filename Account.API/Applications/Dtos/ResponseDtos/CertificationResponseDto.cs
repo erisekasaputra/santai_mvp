@@ -10,5 +10,5 @@
 public record CertificationResponseDto(
     string CertificationId,
     string CertificationName,
-    DateTime ValidDate,
+    DateTime? ValidDate,
     IEnumerable<string>? Specialization);

@@ -1,11 +1,13 @@
 ﻿namespace Account.API.Applications.Dtos.ResponseDtos;
 
-public record MechanicUserResponseDto( 
+public record MechanicUserResponseDto(
+    Guid Id,
     string Username,
     string Email,
     string PhoneNumber,
     string TimeZoneId,
+    LoyaltyProgramResponseDto LoyaltyProgram,
     AddressResponseDto Address,
-    IEnumerable<CertificationResponseDto> Certifications,
+    IEnumerable<CertificationResponseDto>? Certifications,
     DrivingLicenseResponseDto? DrivingLicense,
     NationalIdentityResponseDto? NationalIdentity);

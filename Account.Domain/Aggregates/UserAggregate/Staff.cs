@@ -158,7 +158,7 @@ public class Staff : Entity, IAggregateRoot
 
         DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
 
-        RaiseDeviceIdForcedSetDomainEvent(Id);
+        RaiseDeviceIdForcedSetDomainEvent(Id, deviceId);
     }
 
     private void RaiseDeviceIdResetDomainEvent(Guid id)
@@ -171,9 +171,9 @@ public class Staff : Entity, IAggregateRoot
         AddDomainEvent(new DeviceIdSetDomainEvent(id, deviceId));
     }
 
-    private void RaiseDeviceIdForcedSetDomainEvent(Guid id)
+    private void RaiseDeviceIdForcedSetDomainEvent(Guid id, string deviceId)
     {
-        AddDomainEvent(new DeviceIdForcedResetDomainEvent(id));
+        AddDomainEvent(new DeviceIdForcedSetDomainEvent(id, deviceId));
     }
 
     private void RaiseEmailUpdatedDomainEvent(Guid id, string oldEmail, string newEmail, string oldEncryptedEmail, string newEncryptedEmail)

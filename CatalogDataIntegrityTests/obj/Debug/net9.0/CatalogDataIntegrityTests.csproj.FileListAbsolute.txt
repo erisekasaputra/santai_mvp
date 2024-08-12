@@ -331,6 +331,13 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\FluentValidation.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\FluentValidation.AspNetCore.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Google.Protobuf.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Grpc.AspNetCore.Server.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Grpc.AspNetCore.Server.ClientFactory.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Grpc.Core.Api.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Grpc.Net.Client.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Grpc.Net.ClientFactory.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Grpc.Net.Common.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Hangfire.Core.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\MassTransit.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\MassTransit.Abstractions.dll
