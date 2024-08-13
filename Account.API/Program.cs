@@ -19,9 +19,9 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddMediatorService();
 
-builder.Services.AddApplicationService();
-
 builder.Services.AddRedisDatabase(); 
+
+builder.Services.AddApplicationService();
 
 builder.Services.AddValidation();
 
@@ -55,6 +55,6 @@ app.MapUserApi();
 app.MapRegularUserApi();
 
 app.MapMechanicUserApi();
-
+ 
 app.Run();
  

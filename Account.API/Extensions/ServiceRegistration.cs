@@ -47,6 +47,8 @@ public static class ServiceRegistration
             return ConnectionMultiplexer.Connect(configurations);
         });
 
+        services.AddDistributedMemoryCache();
+
         return services;
     }
 
@@ -64,6 +66,8 @@ public static class ServiceRegistration
         services.AddScoped<ApplicationService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IIdempotencyService, IdempotencyService>();
+        services.AddSingleton<ICacheService, AccountCacheService>();
+
         return services;
     }
 

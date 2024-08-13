@@ -1,6 +1,8 @@
-﻿using Account.API.Options;
+﻿using Account.API.Extensions;
+using Account.API.Options;
 using Account.API.SeedWork;
 using Account.API.Services;
+using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -31,6 +33,31 @@ public class RejectDrivingLicenseByUserIdCommandHandler : IRequestHandler<Reject
 
     public async Task<Result> Handle(RejectDrivingLicenseByUserIdCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
-    }
+        try
+        {
+            var drivingLicense = await _unitOfWork.DrivingLicenses.GetByUserIdAndIdAsync(request.UserId, request.DrivingLicenseId);
+
+            if (drivingLicense is null)
+            {
+                return Result.Failure($"Driving license '{request.DrivingLicenseId}' not found", ResponseStatus.NotFound);
+            }
+
+            drivingLicense.RejectDocument();
+
+            _unitOfWork.DrivingLicenses.Update(drivingLicense);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            return Result.Success(null, ResponseStatus.NoContent);
+        }
+        catch (DomainException ex)
+        {
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+        }
+        catch (Exception ex)
+        {
+            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
+        }
+    } 
 }

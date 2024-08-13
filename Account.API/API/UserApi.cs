@@ -16,13 +16,20 @@ public static class UserApi
     {
         var app = route.MapGroup("api/v1/users");
 
+        app.MapGet("/", GetPaginatedUser);
+
         app.MapPatch("/{userId}/email", UpdateUserEmailByUserId);
         app.MapPatch("/{userId}/email/confirm", ConfirmUserEmailByUserId);
         app.MapPatch("/{userId}/phone-number", UpdateUserPhoneNumberByUserId);
         app.MapPatch("/{userId}/phone-number/confirm", ConfirmUserPhoneNumberByUserId);
 
         return app;
-    } 
+    }
+
+    private static async Task GetPaginatedUser([AsParameters] PaginatedItemRequestDto request)
+    {
+        throw new NotImplementedException();
+    }
 
     private static async Task<IResult> UpdateUserEmailByUserId(Guid userId, [FromBody] EmailRequestDto request, ApplicationService service, IValidator<EmailRequestDto> validator)
     {

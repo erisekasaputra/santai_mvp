@@ -1,6 +1,8 @@
-﻿using Account.API.Options;
+﻿using Account.API.Extensions;
+using Account.API.Options;
 using Account.API.SeedWork;
 using Account.API.Services;
+using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -31,6 +33,61 @@ public class ConfirmNationalIdentityByUserIdCommandHandler : IRequestHandler<Con
 
     public async Task<Result> Handle(ConfirmNationalIdentityByUserIdCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var license = await _unitOfWork.NationalIdentities.GetByUserIdAndIdAsync(request.UserId, request.NationalIdentityId);
+
+            if (license is null)
+            {
+                return Result.Failure($"National identity '{request.NationalIdentityId}' not found", ResponseStatus.NotFound);
+            }
+
+            var accepted = await _unitOfWork.NationalIdentities.GetAcceptedByUserIdAsync(request.UserId);
+
+            if (accepted is not null && accepted.Id == request.NationalIdentityId)
+            {
+                return Result.Failure($"National identity '{accepted.Id}' already accepted", ResponseStatus.Conflict);
+            }
+
+            if (accepted is not null)
+            {
+                return Result.Failure("Can only have one 'Accepted' national identity for a user", ResponseStatus.Conflict);
+            }
+
+            license.VerifyDocument();
+
+            _unitOfWork.NationalIdentities.Update(license);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            return Result.Success(null, ResponseStatus.NoContent);
+        }
+        catch (DomainException ex)
+        {
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+        }
+        catch (Exception ex)
+        {
+            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
+        }
+    }
+
+    private async Task<string?> EncryptNullableAsync(string? plaintext)
+    {
+        if (string.IsNullOrEmpty(plaintext))
+            return null;
+
+        return await _kmsClient.EncryptAsync(plaintext);
+    }
+
+    private async Task<string> EncryptAsync(string plaintext)
+    {
+        return await _kmsClient.EncryptAsync(plaintext);
+    }
+
+    private async Task<string> HashAsync(string plainText)
+    {
+        return await _hashService.Hash(plainText);
     }
 }

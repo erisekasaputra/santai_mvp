@@ -3,6 +3,7 @@ using Account.API.Extensions;
 using Account.API.Mapper;
 using Account.API.SeedWork;
 using Account.API.Services;
+using Account.API.Utilities;
 using Account.Domain.Aggregates.DrivingLicenseAggregate;
 using Account.Domain.Aggregates.NationalIdentityAggregate;
 using Account.Domain.Enumerations;
@@ -15,16 +16,26 @@ namespace Account.API.Applications.Queries.GetMechanicUserById;
 public class GetMechanicUserByIdQueryHandler(
     IUnitOfWork unitOfWork,
     ApplicationService service,
-    IKeyManagementService kmsClient) : IRequestHandler<GetMechanicUserByIdQuery, Result>
+    IKeyManagementService kmsClient,
+    ICacheService cacheService) : IRequestHandler<GetMechanicUserByIdQuery, Result>
 { 
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _appService = service;
     private readonly IKeyManagementService _kmsClient = kmsClient;
+    private readonly ICacheService _cacheService = cacheService;
 
     public async Task<Result> Handle(GetMechanicUserByIdQuery request, CancellationToken cancellationToken)
     {
         try
         {
+
+            var result = await _cacheService.GetAsync<MechanicUserResponseDto>($"{CacheKey.MechanicUserPrefix}#{request.Id}");
+
+            if (result is not null)
+            {
+                return Result.Success(result, ResponseStatus.Ok);
+            }
+
             var user = await _unitOfWork.Users.GetMechanicUserByIdAsync(request.Id);
             if (user is null)
             {
@@ -59,6 +70,9 @@ public class GetMechanicUserByIdQueryHandler(
                 drivingLicense,
                 nationalIdentity
             );
+
+            await _cacheService
+                .SetAsync($"{CacheKey.MechanicUserPrefix}#{request.Id}", userDto, TimeSpan.FromSeconds(10));
 
             return Result.Success(userDto);
         }

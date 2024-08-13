@@ -2,7 +2,8 @@
 using Account.API.Extensions;
 using Account.API.Mapper;
 using Account.API.SeedWork;
-using Account.API.Services; 
+using Account.API.Services;
+using Account.API.Utilities;
 using Account.Domain.SeedWork;
 using MediatR;
 
@@ -11,19 +12,27 @@ namespace Account.API.Applications.Queries.GetBusinessUserByUserId;
 public class GetBusinessUserByUserIdQueryHandler(
     IUnitOfWork unitOfWork,
     ApplicationService service,
-    IKeyManagementService kmsClient) : IRequestHandler<GetBusinessUserByUserIdQuery, Result>
+    IKeyManagementService kmsClient,
+    ICacheService cacheService) : IRequestHandler<GetBusinessUserByUserIdQuery, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _appService = service;
-    private readonly IKeyManagementService _kmsClient = kmsClient;
-     
+    private readonly IKeyManagementService _kmsClient = kmsClient;  
+    private readonly ICacheService _cacheService = cacheService;
 
     public async Task<Result> Handle(GetBusinessUserByUserIdQuery request, CancellationToken cancellationToken)
     {
         try
         {
-            var user = await _unitOfWork.Users.GetBusinessUserByIdAsync(request.Id);
-         
+            var result = await _cacheService.GetAsync<MechanicUserResponseDto>($"{CacheKey.BusinessUserPrefix}#{request.Id}"); 
+            if (result is not null)
+            {
+                return Result.Success(result, ResponseStatus.Ok);
+            }
+
+
+
+            var user = await _unitOfWork.Users.GetBusinessUserByIdAsync(request.Id); 
             if (user is null)
             {
                 return Result.Failure($"Business user '{request.Id}' is not found", ResponseStatus.NotFound);
@@ -121,7 +130,10 @@ public class GetBusinessUserByUserIdQueryHandler(
                 user.Description,
                 user.LoyaltyProgram.ToLoyaltyProgramResponseDto(),
                 businessLicenseResponses,
-                staffResponses); 
+                staffResponses);
+
+            await _cacheService
+               .SetAsync($"{CacheKey.BusinessUserPrefix}#{request.Id}", userDto, TimeSpan.FromSeconds(10));
 
             return Result.Success(userDto); 
         }

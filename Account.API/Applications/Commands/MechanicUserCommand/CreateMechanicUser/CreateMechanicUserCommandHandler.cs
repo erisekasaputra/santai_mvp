@@ -129,6 +129,7 @@ public class CreateMechanicUserCommandHandler(
                 encryptedEmail,
                 hashedPhoneNumber,
                 encryptedPhoneNumber,
+                request.PersonalInfo.ToPersonalInfo(request.TimeZoneId),
                 address,
                 request.TimeZoneId,
                 request.DeviceId);

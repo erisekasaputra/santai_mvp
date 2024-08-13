@@ -29,6 +29,10 @@ public static class BusinessUserApi
     public static IEndpointRouteBuilder MapBusinessUserApi(this IEndpointRouteBuilder route)
     {
         var app = route.MapGroup("api/v1/users/business");
+        
+        app.MapGet("/", GetPaginatedBusinessUser);
+        app.MapGet("/{businessUserId}/staffs", GetPaginatedStaff);
+        app.MapGet("/{businessUserId}/business-licenses", GetPaginatedBusinessLicense);
 
         app.MapGet("/{businessUserId}", GetBusinessUserById); 
         app.MapPut("/{businessUserId}", UpdateBusinessUser);
@@ -53,6 +57,21 @@ public static class BusinessUserApi
         app.MapDelete("/{businessUserId}/business-licenses/{businessLicenseId}", RemoveBusinessLicenseBusinessUserById);
 
         return route;
+    }
+
+    private static async Task GetPaginatedBusinessLicense(Guid businessUserId, [AsParameters] PaginatedItemRequestDto request)
+    {
+        throw new NotImplementedException();
+    }
+
+    private static async Task GetPaginatedStaff(Guid businessUserId, [AsParameters] PaginatedItemRequestDto request)
+    {
+        throw new NotImplementedException();
+    }
+
+    private static async Task GetPaginatedBusinessUser([AsParameters] PaginatedItemRequestDto request)
+    {
+        throw new NotImplementedException();
     }
 
     private static async Task<IResult> ConfirmStaffPhoneNumberByStaffId(

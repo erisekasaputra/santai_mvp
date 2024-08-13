@@ -8,6 +8,7 @@ public class MechanicUserRequestDto(
     string email,
     string phoneNumber,
     string timeZoneId,
+    PersonalInfoRequestDto personalInfo,
     AddressRequestDto address,
     IEnumerable<CertificationRequestDto> certifications,
     DrivingLicenseRequestDto drivingLicense,
@@ -19,6 +20,7 @@ public class MechanicUserRequestDto(
     public string Email { get; set; } = email.CleanAndLowering();
     public string PhoneNumber { get; set; } = phoneNumber.Clean();
     public string TimeZoneId { get; } = timeZoneId.Clean();
+    public PersonalInfoRequestDto PersonalInfo { get; set; } = personalInfo;
     public AddressRequestDto Address { get; } = address;
     public IEnumerable<CertificationRequestDto> Certifications { get; } = certifications;
     public DrivingLicenseRequestDto DrivingLicense { get; } = drivingLicense;

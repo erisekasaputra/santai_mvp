@@ -1,6 +1,33 @@
 [
   {
     "ContainingType": "Account.API.API.UserApi",
+    "Method": "GetPaginatedUser",
+    "RelativePath": "api/v1/users/",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "PageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.UserApi",
     "Method": "UpdateUserEmailByUserId",
     "RelativePath": "api/v1/users/{userId}/email",
     "HttpMethod": "PATCH",
@@ -99,6 +126,33 @@
   },
   {
     "ContainingType": "Account.API.API.BusinessUserApi",
+    "Method": "GetPaginatedBusinessUser",
+    "RelativePath": "api/v1/users/business/",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "PageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.BusinessUserApi",
     "Method": "CreateBusinessUser",
     "RelativePath": "api/v1/users/business/",
     "HttpMethod": "POST",
@@ -180,6 +234,38 @@
         "Name": "businessUserId",
         "Type": "System.Guid",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.BusinessUserApi",
+    "Method": "GetPaginatedBusinessLicense",
+    "RelativePath": "api/v1/users/business/{businessUserId}/business-licenses",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "businessUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "PageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -288,6 +374,38 @@
         "Name": "businessLicenseId",
         "Type": "System.Guid",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.BusinessUserApi",
+    "Method": "GetPaginatedStaff",
+    "RelativePath": "api/v1/users/business/{businessUserId}/staffs",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "businessUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "PageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -617,6 +735,33 @@
   },
   {
     "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "GetPaginatedMechanicUser",
+    "RelativePath": "api/v1/users/mechanic/",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "PageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
     "Method": "GetMechanicUserById",
     "RelativePath": "api/v1/users/mechanic/{mechanicUserId}",
     "HttpMethod": "GET",
@@ -627,6 +772,445 @@
         "Name": "mechanicUserId",
         "Type": "System.Guid",
         "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "UpdateMechanicUserByUserId",
+    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}",
+    "HttpMethod": "PUT",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.UpdateMechanicRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "DeleteMechanicUserByUserId",
+    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}",
+    "HttpMethod": "DELETE",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "GetPaginatedCertificationsByMechanicUserId",
+    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/certifications",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "PageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "SetDeviceIdByUserId",
+    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/device-id",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "ForceSetDeviceIdByUserId",
+    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/device-id/force-set",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "ResetDeviceIdByUserId",
+    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/device-id/reset",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "GetDrivingLicenseByMechanicUserId",
+    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/driving-license",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "SetDrivingLicenseByUserId",
+    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/driving-license",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.DrivingLicenseRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "ConfirmDrivingLicenseByUserId",
+    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/driving-license/{drivingLicenseId}/confirm",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "drivingLicenseId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "RejectDrivingLicenseByUserId",
+    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/driving-license/{drivingLicenseId}/reject",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "drivingLicenseId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "GetNationalIdentityByMechanicUserId",
+    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/national-identity",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "SetNationalIdentityByUserId",
+    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/national-identity",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.NationalIdentityRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "ConfirmNationalIdentityByUserId",
+    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/national-identity/{nationalIdentityId}/confirm",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "nationalIdentityId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "RejectNationalIdentityByUserId",
+    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/national-identity/{nationalIdentityId}/reject",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "nationalIdentityId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "SetRating",
+    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/rating",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.SetRatingRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "VerifyMechanicUserByUserId",
+    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/verify",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.RegularUserApi",
+    "Method": "GetPaginatedRegularUser",
+    "RelativePath": "api/v1/users/regular/",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "PageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": [
@@ -662,13 +1246,13 @@
   {
     "ContainingType": "Account.API.API.RegularUserApi",
     "Method": "GetRegularUserByUserId",
-    "RelativePath": "api/v1/users/regular/{userId}",
+    "RelativePath": "api/v1/users/regular/{regularUserId}",
     "HttpMethod": "GET",
     "IsController": false,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userId",
+        "Name": "regularUserId",
         "Type": "System.Guid",
         "IsRequired": true
       }
@@ -684,13 +1268,13 @@
   {
     "ContainingType": "Account.API.API.RegularUserApi",
     "Method": "UpdateRegularUserByUserId",
-    "RelativePath": "api/v1/users/regular/{userId}",
+    "RelativePath": "api/v1/users/regular/{regularUserId}",
     "HttpMethod": "PUT",
     "IsController": false,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userId",
+        "Name": "regularUserId",
         "Type": "System.Guid",
         "IsRequired": true
       },
@@ -711,13 +1295,13 @@
   {
     "ContainingType": "Account.API.API.RegularUserApi",
     "Method": "DeleteRegularUserByUserId",
-    "RelativePath": "api/v1/users/regular/{userId}",
+    "RelativePath": "api/v1/users/regular/{regularUserId}",
     "HttpMethod": "DELETE",
     "IsController": false,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userId",
+        "Name": "regularUserId",
         "Type": "System.Guid",
         "IsRequired": true
       }
@@ -733,13 +1317,13 @@
   {
     "ContainingType": "Account.API.API.RegularUserApi",
     "Method": "SetDeviceIdByUserId",
-    "RelativePath": "api/v1/users/regular/{userId}/device-id",
+    "RelativePath": "api/v1/users/regular/{regularUserId}/device-id",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userId",
+        "Name": "regularUserId",
         "Type": "System.Guid",
         "IsRequired": true
       },
@@ -760,13 +1344,13 @@
   {
     "ContainingType": "Account.API.API.RegularUserApi",
     "Method": "ForceSetDeviceIdByUserId",
-    "RelativePath": "api/v1/users/regular/{userId}/device-id/force-set",
+    "RelativePath": "api/v1/users/regular/{regularUserId}/device-id/force-set",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userId",
+        "Name": "regularUserId",
         "Type": "System.Guid",
         "IsRequired": true
       },
@@ -787,13 +1371,13 @@
   {
     "ContainingType": "Account.API.API.RegularUserApi",
     "Method": "ResetDeviceIdByUserId",
-    "RelativePath": "api/v1/users/regular/{userId}/device-id/reset",
+    "RelativePath": "api/v1/users/regular/{regularUserId}/device-id/reset",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userId",
+        "Name": "regularUserId",
         "Type": "System.Guid",
         "IsRequired": true
       }

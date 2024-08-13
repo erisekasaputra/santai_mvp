@@ -1,6 +1,9 @@
-﻿using Account.API.Options;
+﻿using Account.API.Extensions;
+using Account.API.Options;
 using Account.API.SeedWork;
 using Account.API.Services;
+using Account.Domain.Aggregates.DrivingLicenseAggregate;
+using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Options;
@@ -31,6 +34,76 @@ public class SetDrivingLicenseByUserIdCommandHandler : IRequestHandler<SetDrivin
 
     public async Task<Result> Handle(SetDrivingLicenseByUserIdCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        try
+        { 
+            var mechanicUser = await _unitOfWork.Users.GetMechanicUserByIdAsync(request.UserId);
+
+            if (mechanicUser is null)
+            {
+                return Result.Failure($"Mechanic user '{request.UserId}' not found", ResponseStatus.NotFound);
+            }  
+
+            var accepted = await _unitOfWork.DrivingLicenses.GetAcceptedByUserIdAsync(request.UserId);
+
+            if (accepted is not null && accepted.UserId == request.UserId)
+            {
+                return Result.Failure($"Driving license '{accepted.Id}' already accepted", ResponseStatus.Conflict);
+            }
+
+            if (accepted is not null)
+            {
+                return Result.Failure($"Can only have one 'Accepted' driving license for a user", ResponseStatus.Conflict);
+            }
+
+            var hashedLicenseNumber = await HashAsync(request.LicenseNumber);
+            var encryptedLicenseNumber = await EncryptAsync(request.LicenseNumber); 
+
+            var registeredToOtherUser = await _unitOfWork.DrivingLicenses.GetAnyByLicenseNumberExcludingUserIdAsync(request.UserId, hashedLicenseNumber);
+            
+            if (registeredToOtherUser)
+            { 
+                return Result.Failure($"Driving license number already used by other user", ResponseStatus.Conflict);
+            }
+
+            var drivingLicense = new DrivingLicense(
+                request.UserId,
+                hashedLicenseNumber,
+                encryptedLicenseNumber,
+                request.FrontSideImageUrl,
+                request.BackSideImageUrl);
+
+            await _unitOfWork.DrivingLicenses.CreateAsync(drivingLicense);
+
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+
+            return Result.Success(null, ResponseStatus.NoContent);
+        }
+        catch (DomainException ex)
+        {
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+        }
+        catch (Exception ex)
+        {
+            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
+        }
+    }
+
+    private async Task<string?> EncryptNullableAsync(string? plaintext)
+    {
+        if (string.IsNullOrEmpty(plaintext))
+            return null;
+
+        return await _kmsClient.EncryptAsync(plaintext);
+    }
+
+    private async Task<string> EncryptAsync(string plaintext)
+    {
+        return await _kmsClient.EncryptAsync(plaintext);
+    }
+
+    private async Task<string> HashAsync(string plainText)
+    {
+        return await _hashService.Hash(plainText);
     }
 }

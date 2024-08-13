@@ -3,7 +3,7 @@ using Account.API.Extensions;
 using Account.API.Validations.AddressValidations;
 using FluentValidation;
 
-namespace Account.API.Validations.StaffValidations;
+namespace Account.API.Validations.UserValidation;
 
 public class UpdateStaffValidation : AbstractValidator<UpdateStaffRequestDto>
 {

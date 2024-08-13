@@ -11,19 +11,15 @@ using Account.API.Applications.Commands.MechanicUserCommand.SetDrivingLicenseByU
 using Account.API.Applications.Commands.MechanicUserCommand.SetNationalIdentityByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.SetRatingByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.UpdateMechanicUserByUserId;
-using Account.API.Applications.Commands.MechanicUserCommand.VerifyMechanicUserByUserId;
-using Account.API.Applications.Commands.StaffCommand.ForceSetDeviceIdByStaffId;
+using Account.API.Applications.Commands.MechanicUserCommand.VerifyMechanicUserByUserId; 
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetMechanicUserById;
 using Account.API.Extensions;
 using Account.API.Options;
-using Account.API.Services;
-using Account.Domain.Aggregates.DrivingLicenseAggregate;
-using Account.Domain.Aggregates.NationalIdentityAggregate;
+using Account.API.Services; 
 using FluentValidation; 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options; 
-
+using Microsoft.Extensions.Options;
 namespace Account.API.API;
 
 public static class MechanicUserApi
@@ -34,7 +30,11 @@ public static class MechanicUserApi
 
         app.MapPost("/", CreateMechanicUser);
 
-        app.MapGet("/{mechanicUserId}", GetMechanicUserById);
+        app.MapGet("/{mechanicUserId}", GetMechanicUserById); 
+        app.MapGet("/", GetPaginatedMechanicUser);
+        app.MapGet("/{mechanicUserId}/certifications", GetPaginatedCertificationsByMechanicUserId); 
+        app.MapGet("/{mechanicUserId}/driving-license", GetDrivingLicenseByMechanicUserId); 
+        app.MapGet("/{mechanicUserId}/national-identity", GetNationalIdentityByMechanicUserId); 
 
         app.MapPatch("/{mechanicUserId}/rating", SetRating);
         app.MapPatch("/{mechanicUserId}/verify", VerifyMechanicUserByUserId);
@@ -58,6 +58,26 @@ public static class MechanicUserApi
         return app;
     }
 
+    private static async Task GetNationalIdentityByMechanicUserId(Guid mechanicUserId)
+    {
+        throw new NotImplementedException();
+    }
+
+    private static async Task GetDrivingLicenseByMechanicUserId(Guid mechanicUserId)
+    {
+        throw new NotImplementedException();
+    }
+
+    private static async Task GetPaginatedCertificationsByMechanicUserId(Guid mechanicUserId, [AsParameters] PaginatedItemRequestDto request)
+    {
+        throw new NotImplementedException();
+    }
+
+    private static async Task GetPaginatedMechanicUser([AsParameters] PaginatedItemRequestDto request)
+    {
+        throw new NotImplementedException();
+    }
+
     private static async Task<IResult> DeleteMechanicUserByUserId(
         Guid mechanicUserId,
         [FromServices] ApplicationService service)
@@ -78,12 +98,21 @@ public static class MechanicUserApi
     private static async Task<IResult> UpdateMechanicUserByUserId(
         Guid mechanicUserId,
         [FromBody] UpdateMechanicRequestDto request,
-        [FromServices] ApplicationService service)
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<UpdateMechanicRequestDto> validator)
     {
         try
         {
+            var validation = await validator.ValidateAsync(request);
+
+            if (!validation.IsValid)
+            {
+                return TypedResults.BadRequest(validation.Errors);
+            }
+
             var result = await service.Mediator.Send(new UpdateMechanicUserByUserIdCommand(
                 mechanicUserId,
+                request.PersonalInfo,
                 request.Address,
                 request.TimeZoneId));
 
@@ -99,10 +128,18 @@ public static class MechanicUserApi
     private static async Task<IResult> SetNationalIdentityByUserId(
         Guid mechanicUserId,
         [FromBody] NationalIdentityRequestDto request,
-        [FromServices] ApplicationService service)
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<NationalIdentityRequestDto> validator)
     {
         try
         {
+            var validation = await validator.ValidateAsync(request);
+
+            if (!validation.IsValid)
+            {
+                return TypedResults.BadRequest(validation.Errors);
+            }
+
             var result = await service.Mediator.Send(new SetNationalIdentityByUserIdCommand(
                 mechanicUserId,
                 request.IdentityNumber,
@@ -121,10 +158,18 @@ public static class MechanicUserApi
     private static async Task<IResult> SetDrivingLicenseByUserId(
         Guid mechanicUserId,
         [FromBody] DrivingLicenseRequestDto request,
-        [FromServices] ApplicationService service)
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<DrivingLicenseRequestDto> validator)
     {
         try
         {
+            var validation = await validator.ValidateAsync(request);
+
+            if (!validation.IsValid)
+            {
+                return TypedResults.BadRequest(validation.Errors);
+            }
+
             var result = await service.Mediator.Send(new SetDrivingLicenseByUserIdCommand(
                 mechanicUserId,
                 request.LicenseNumber,
@@ -143,10 +188,18 @@ public static class MechanicUserApi
     private static async Task<IResult> ForceSetDeviceIdByUserId(
         Guid mechanicUserId,
         [FromBody] DeviceIdRequestDto request,
-        [FromServices] ApplicationService service)
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<DeviceIdRequestDto> validator)
     {
         try
         {
+            var validation = await validator.ValidateAsync(request);
+
+            if (!validation.IsValid)
+            {
+                return TypedResults.BadRequest(validation.Errors);
+            }
+
             var result = await service.Mediator.Send(new ForceSetDeviceIdByMechanicUserIdCommand(
                 mechanicUserId,
                 request.DeviceId));
@@ -180,10 +233,18 @@ public static class MechanicUserApi
     private static async Task<IResult> SetDeviceIdByUserId(
         Guid mechanicUserId,
         [FromBody] DeviceIdRequestDto request,
-        [FromServices] ApplicationService service)
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<DeviceIdRequestDto> validator)
     {
         try
         {
+            var validation = await validator.ValidateAsync(request);
+
+            if (!validation.IsValid)
+            {
+                return TypedResults.BadRequest(validation.Errors);
+            }
+
             var result = await service.Mediator.Send(new SetDeviceIdByMechanicUserIdCommand(
                 mechanicUserId,
                 request.DeviceId));
@@ -357,6 +418,7 @@ public static class MechanicUserApi
                 request.Email,
                 request.PhoneNumber,
                 request.TimeZoneId,
+                request.PersonalInfo,
                 request.Address,
                 request.Certifications,
                 request.DrivingLicense,
