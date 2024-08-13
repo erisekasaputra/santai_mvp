@@ -204,6 +204,7 @@ public static class RegularUserApi
                 request.Email,
                 request.PhoneNumber,
                 request.TimeZoneId,
+                request.ReferralCode,
                 request.Address,
                 request.PersonalInfo,
                 request.DeviceId)); 

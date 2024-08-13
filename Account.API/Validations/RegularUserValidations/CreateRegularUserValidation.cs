@@ -39,6 +39,10 @@ public class CreateRegularUserValidation : AbstractValidator<RegularUserRequestD
             .Length(2, 40).WithMessage("Time zone must be between 2 and 40 characters long")
             .Must(DateTimeExtension.IsTimeZoneExists).WithMessage("Time zone is invalid, please provide valid time zone");
 
+        RuleFor(x => x.ReferralCode)
+            .Length(6).WithMessage("Referral code must be in 6 characters long")
+            .When(x => !string.IsNullOrWhiteSpace(x.ReferralCode));
+
         RuleFor(x => x.DeviceId)
            .NotEmpty().WithMessage("Device id can not be empty")
            .Length(1, 255).WithMessage("The device must be between 1 and 255 characters long");

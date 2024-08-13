@@ -4,6 +4,7 @@ namespace Account.Domain.Aggregates.BusinessLicenseAggregate;
 
 public interface IBusinessLicenseRepository
 {
+    Task<(int TotalCount, int TotalPages, IEnumerable<BusinessLicense> BusinessLicenses)> GetPaginatedBusinessLicenseByUserId(Guid userId, int pageNumber, int pageSize);
     Task<BusinessLicense?> GetByBusinessUserIdAndBusinessLicenseIdAsync(Guid businessUserId, Guid businessLicenseId);
     Task<IEnumerable<BusinessLicense>?> GetByLicenseNumberAsNoTrackingAsync(IEnumerable<string> licenseNumbers);
     Task<IEnumerable<BusinessLicense>?> GetAcceptedStatusByLicenseNumbersAsNoTrackingAsync(IEnumerable<string> licenseNumbers);

@@ -17,7 +17,7 @@ public static class CertificationMapperExtension
         {
             yield return certification.ToCertificationResponseDto(timeZoneId);
         }
-    }
+    } 
 
     public static CertificationResponseDto ToCertificationResponseDto(this Certification certifications, string timeZoneId)
     {

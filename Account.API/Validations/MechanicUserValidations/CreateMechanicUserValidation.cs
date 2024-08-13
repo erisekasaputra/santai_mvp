@@ -40,6 +40,10 @@ public class CreateMechanicUserValidation : AbstractValidator<MechanicUserReques
            .Length(2, 40).WithMessage("Time zone must be between 2 and 40 characters long")
            .Must(DateTimeExtension.IsTimeZoneExists).WithMessage("Time zone {PropertyValue} is invalid, please provide valid time zone");
 
+        RuleFor(x => x.ReferralCode)
+           .Length(6).WithMessage("Referral code must be in 6 characters long")
+           .When(x => !string.IsNullOrWhiteSpace(x.ReferralCode));
+
         RuleFor(e => e.NationalIdentity)
             .NotNull().WithMessage("Please fill the national identity")
             .SetValidator(new CreateNationalIdentityValidation());

@@ -10,6 +10,7 @@ public record CreateMechanicUserCommand(
     string Email,
     string PhoneNumber,
     string TimeZoneId,
+    string? ReferralCode,
     PersonalInfoRequestDto PersonalInfo,
     AddressRequestDto Address,
     IEnumerable<CertificationRequestDto> Certifications,

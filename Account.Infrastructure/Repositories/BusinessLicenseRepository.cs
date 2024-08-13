@@ -1,4 +1,6 @@
 ﻿using Account.Domain.Aggregates.BusinessLicenseAggregate;
+using Account.Domain.Aggregates.UserAggregate;
+using Account.Domain.Enumerations;
 using Microsoft.EntityFrameworkCore;
 
 namespace Account.Infrastructure.Repositories;
@@ -62,6 +64,24 @@ public class BusinessLicenseRepository : IBusinessLicenseRepository
             licenseNumbers.Contains(x.HashedLicenseNumber)
             && x.VerificationStatus != Domain.Enumerations.VerificationState.Rejected)
                     .AsNoTracking().IgnoreQueryFilters().ToListAsync();
+    }
+
+    public async Task<(int TotalCount, int TotalPages, IEnumerable<BusinessLicense> BusinessLicenses)> GetPaginatedBusinessLicenseByUserId(Guid userId, int pageNumber, int pageSize)
+    {
+        var query = _context.BusinessLicenses.AsQueryable();
+
+        var totalCount = await query.CountAsync();
+
+        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+        var items = await query.Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .AsNoTracking()  
+            .Where(x => x.BusinessUserId == userId)
+            .OrderBy(x => x.Name)
+            .ToListAsync();
+
+        return (totalCount, totalPages, items);
     }
 
     public void Update(BusinessLicense license)

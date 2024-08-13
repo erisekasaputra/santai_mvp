@@ -1,33 +1,6 @@
 [
   {
     "ContainingType": "Account.API.API.UserApi",
-    "Method": "GetPaginatedUser",
-    "RelativePath": "api/v1/users/",
-    "HttpMethod": "GET",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "PageNumber",
-        "Type": "System.Int32",
-        "IsRequired": false
-      },
-      {
-        "Name": "PageSize",
-        "Type": "System.Int32",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Account.API.API.UserApi",
     "Method": "UpdateUserEmailByUserId",
     "RelativePath": "api/v1/users/{userId}/email",
     "HttpMethod": "PATCH",

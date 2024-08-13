@@ -8,6 +8,7 @@ public class RegularUserRequestDto(
     string email,
     string phoneNumber,
     string timeZoneId,
+    string? referralCode,
     AddressRequestDto address,
     PersonalInfoRequestDto personalInfo,
     string deviceId)
@@ -17,6 +18,7 @@ public class RegularUserRequestDto(
     public string Email { get; set; } = email.CleanAndLowering();
     public string PhoneNumber { get; set; } = phoneNumber.Clean();
     public string TimeZoneId { get; } = timeZoneId.Clean();
+    public string? ReferralCode { get; } = referralCode?.Clean();
     public AddressRequestDto Address { get; } = address;
     public PersonalInfoRequestDto PersonalInfo { get; } = personalInfo;
     public string DeviceId { get; } = deviceId.Clean();

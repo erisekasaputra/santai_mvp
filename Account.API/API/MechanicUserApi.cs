@@ -13,10 +13,14 @@ using Account.API.Applications.Commands.MechanicUserCommand.SetRatingByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.UpdateMechanicUserByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.VerifyMechanicUserByUserId; 
 using Account.API.Applications.Dtos.RequestDtos;
+using Account.API.Applications.Queries.GetDrivingLicenseByMechanicUserId;
 using Account.API.Applications.Queries.GetMechanicUserById;
+using Account.API.Applications.Queries.GetNationalIdentityByMechanicUserId;
+using Account.API.Applications.Queries.GetPaginatedMechanicCertificationByUserId;
+using Account.API.Applications.Queries.GetPaginatedMechanicUser;
 using Account.API.Extensions;
 using Account.API.Options;
-using Account.API.Services; 
+using Account.API.Services;
 using FluentValidation; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -30,8 +34,8 @@ public static class MechanicUserApi
 
         app.MapPost("/", CreateMechanicUser);
 
-        app.MapGet("/{mechanicUserId}", GetMechanicUserById); 
         app.MapGet("/", GetPaginatedMechanicUser);
+        app.MapGet("/{mechanicUserId}", GetMechanicUserById); 
         app.MapGet("/{mechanicUserId}/certifications", GetPaginatedCertificationsByMechanicUserId); 
         app.MapGet("/{mechanicUserId}/driving-license", GetDrivingLicenseByMechanicUserId); 
         app.MapGet("/{mechanicUserId}/national-identity", GetNationalIdentityByMechanicUserId); 
@@ -58,24 +62,78 @@ public static class MechanicUserApi
         return app;
     }
 
-    private static async Task GetNationalIdentityByMechanicUserId(Guid mechanicUserId)
+    private static async Task<IResult> GetNationalIdentityByMechanicUserId(
+        Guid mechanicUserId, 
+        [FromServices] ApplicationService service)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var result = await service.Mediator.Send(new GetNationalIdentityByMechanicUserIdQuery(mechanicUserId));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
     }
 
-    private static async Task GetDrivingLicenseByMechanicUserId(Guid mechanicUserId)
+    private static async Task<IResult> GetDrivingLicenseByMechanicUserId(
+        Guid mechanicUserId,
+        [FromServices] ApplicationService service)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var result = await service.Mediator.Send(new GetDrivingLicenseByMechanicUserIdQuery(mechanicUserId));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
     }
 
-    private static async Task GetPaginatedCertificationsByMechanicUserId(Guid mechanicUserId, [AsParameters] PaginatedItemRequestDto request)
+    private static async Task<IResult> GetPaginatedCertificationsByMechanicUserId(
+        Guid mechanicUserId, 
+        [AsParameters] PaginatedItemRequestDto request,
+        [FromServices] ApplicationService service)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var result = await service.Mediator.Send(new GetPaginatedMechanicCertificationByUserIdQuery(
+                mechanicUserId,
+                request.PageNumber,
+                request.PageSize));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
     }
 
-    private static async Task GetPaginatedMechanicUser([AsParameters] PaginatedItemRequestDto request)
+    private static async Task<IResult> GetPaginatedMechanicUser(
+        [AsParameters] PaginatedItemRequestDto request,
+        [FromServices] ApplicationService service)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var result = await service.Mediator.Send(new GetPaginatedMechanicUserQuery(
+                request.PageNumber,
+                request.PageSize));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
     }
 
     private static async Task<IResult> DeleteMechanicUserByUserId(
@@ -345,24 +403,8 @@ public static class MechanicUserApi
             service.Logger.LogError(ex.Message, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    } 
+     
     private static async Task<IResult> SetRating(
         Guid mechanicUserId, SetRatingRequestDto request,
         [FromServices] ApplicationService service)
@@ -418,6 +460,7 @@ public static class MechanicUserApi
                 request.Email,
                 request.PhoneNumber,
                 request.TimeZoneId,
+                request.ReferralCode,
                 request.PersonalInfo,
                 request.Address,
                 request.Certifications,

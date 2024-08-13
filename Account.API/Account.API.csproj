@@ -51,8 +51,6 @@
 
   <ItemGroup>
     <Folder Include="Applications\IntegrationEventHandlers\" />
-    <Folder Include="Applications\Queries\GetPaginatedBusinessUser\" />
-    <Folder Include="Applications\Queries\GetPaginatedMechanicUser\" />
     <Folder Include="Protos\" />
     <Folder Include="Services\ApplicationService\" />
     <Folder Include="Services\KeyManagementService\" />

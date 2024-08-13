@@ -10,6 +10,7 @@ public record CreateRegularUserCommand(
     string Email,
     string PhoneNumber,
     string TimeZoneId,
+    string? ReferralCode,
     AddressRequestDto Address,
     PersonalInfoRequestDto PersonalInfo,
     string DeviceId) : IRequest<Result>;

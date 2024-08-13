@@ -6,11 +6,14 @@ using Account.API.Options;
 using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Aggregates.CertificationAggregate;
+using Account.Domain.Aggregates.ReferralAggregate;
+using Account.Domain.Aggregates.ReferredAggregate;
 using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Enumerations;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects;
+using MassTransit.AmazonSqsTransport;
 using MediatR;
 using Microsoft.Extensions.Options; 
 using System.Data;
@@ -102,6 +105,26 @@ public class CreateMechanicUserCommandHandler(
                 errors.AddRange(CertificationConflicts(conflictCertifications, request.Certifications));
             }
 
+            ReferralProgram? referralProgram = null;
+
+            // create referred programs when user input the referral code and referral code is valid
+            if (!string.IsNullOrEmpty(request.ReferralCode))
+            {
+                // check is referral code is valid
+                referralProgram = await _unitOfWork.ReferralPrograms.GetByCodeAsync(request.ReferralCode);
+                if (referralProgram is null)
+                {
+                    errors.Add(new ErrorDetail("MechanicUser.ReferralCode", "Referral code is invalid")); 
+                }
+
+                // check is referral program is still valid 
+                if (referralProgram is not null && referralProgram.ValidDateUtc < DateTime.UtcNow)
+                {
+                    errors.Add(new ErrorDetail("MechanicUser.ReferralCode", "Referral code is expired")); 
+                }  
+            }
+
+
 
             // middleware for returning error if error occured
             if (errors.Count > 0)
@@ -169,6 +192,16 @@ public class CreateMechanicUserCommandHandler(
                 request.NationalIdentity.FrontSideImageUrl,
                 request.NationalIdentity.BackSideImageUrl);
 
+            if (referralProgram is not null && request.ReferralCode is not null)
+            {
+                // creating the referred programs
+                await _unitOfWork.ReferredPrograms.CreateReferredProgramAsync(
+                    new ReferredProgram(
+                        referralProgram.UserId,
+                        user.Id,
+                        request.ReferralCode,
+                        DateTime.UtcNow));
+            }
 
             await _unitOfWork.Users.CreateAsync(user);
 

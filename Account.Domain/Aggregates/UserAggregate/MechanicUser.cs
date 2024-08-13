@@ -10,6 +10,8 @@ namespace Account.Domain.Aggregates.UserAggregate;
 
 public class MechanicUser : User
 {  
+    public PersonalInfo PersonalInfo { get; private set; }
+
     public ICollection<Certification>? Certifications { get; private set; }
 
     public ICollection<DrivingLicense>? DrivingLicenses { get; private set; } // Navigation properties
@@ -34,10 +36,12 @@ public class MechanicUser : User
         string encryptedEmail,
         string phoneNumber,
         string encryptedPhoneNumber,
+        PersonalInfo personalInfo,
         Address address, 
         string timeZoneId,
         string deviceId) : base(identityId, username, email, encryptedEmail, phoneNumber, encryptedPhoneNumber, address, timeZoneId)
     {  
+        PersonalInfo = personalInfo;
         Rating = 5;
         IsVerified = false;
         DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
@@ -45,8 +49,9 @@ public class MechanicUser : User
         RaiseMechanicUserCreatedDomainEvent(this);
     }
 
-    public void Update(Address address, string timeZoneId)
+    public void Update(PersonalInfo personalInfo, Address address, string timeZoneId)
     {
+        PersonalInfo = personalInfo;
         Address = address ?? throw new ArgumentNullException(nameof(address));
         TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId));
     }
@@ -76,13 +81,18 @@ public class MechanicUser : User
         base.VerifyPhoneNumber(); 
     }
 
+    public void Delete()
+    {
+        AddDomainEvent(new MechanicUserDeletedEvent(Id));
+    }
+
     public void SetDrivingLicense(
         string hashedLicenseNumber,
         string encryptedLicenseNumber,
         string frontSideImageUrl,
         string backSideImageUrl)
     {
-        if (DrivingLicenses is not null)
+        if (DrivingLicenses is not null && DrivingLicenses.Count > 0)
         {
             throw new DomainException("Can not set driving license because it is already set");
         } 
@@ -110,7 +120,7 @@ public class MechanicUser : User
         string frontSideImageUrl,
         string backSideImageUrl)
     {
-        if (NationalIdentities is not null)
+        if (NationalIdentities is not null && NationalIdentities.Count > 0)
         {
             throw new DomainException("Can not set national id because it is already set");
         } 
@@ -239,30 +249,52 @@ public class MechanicUser : User
             throw new DomainException("National identity document is empty. Please submit a valid document.");
         }
 
-        var verifiedDrivingLicense = DrivingLicenses.FirstOrDefault(x => x.VerificationStatus == VerificationState.Accepted);
-        var verifiedNationalIdentity = NationalIdentities.FirstOrDefault(x => x.VerificationStatus == VerificationState.Accepted);
+        var verifiedDrivingLicense = DrivingLicenses.FirstOrDefault(x => x.VerificationStatus == VerificationState.Accepted || x.VerificationStatus == VerificationState.Waiting);
+        var verifiedNationalIdentity = NationalIdentities.FirstOrDefault(x => x.VerificationStatus == VerificationState.Accepted || x.VerificationStatus == VerificationState.Waiting);
 
         if (verifiedDrivingLicense is null && verifiedNationalIdentity is null)
         {
-            throw new DomainException("Both driving license and national identity are rejected. Please re-submit documents.");
+            throw new DomainException("Both of national identity and driving license are rejected.");
         }
 
         if (verifiedDrivingLicense is null)
         {
-            throw new DomainException("Driving license document is rejected. Please re-submit document.");
+            throw new DomainException("Driving license is rejected.");
         }
 
         if (verifiedNationalIdentity is null)
         {
-            throw new DomainException("National identity document is rejected. Please re-submit document.");
+            throw new DomainException("National identity is rejected.");
+        }
+
+        if (verifiedDrivingLicense.VerificationStatus == VerificationState.Waiting && verifiedNationalIdentity.VerificationStatus == VerificationState.Waiting)
+        {
+            throw new DomainException("Both of national identity and driving license are waiting for verification.");
+        }
+
+        if (verifiedDrivingLicense.VerificationStatus == VerificationState.Waiting)
+        {
+            throw new DomainException("Driving license is waiting for verification.");
+        }
+
+        if (verifiedNationalIdentity.VerificationStatus == VerificationState.Waiting)
+        {
+            throw new DomainException("National identity is waiting for verification.");
         }
 
         IsVerified = true;
-    }   
+
+        RaiseMechanicDocumentVerifiedDomainEvent(this);
+    }
+
+    private void RaiseMechanicDocumentVerifiedDomainEvent(MechanicUser user)
+    {
+        AddDomainEvent(new MechanicDocumentVerifiedDomainEvent(user));
+    }
 
     private void RaiseMechanicUserCreatedDomainEvent(MechanicUser mechanisUser)
     {
-        AddDomainEvent(new MechanicUserCreatedDomainEvent(this));
+        AddDomainEvent(new MechanicUserCreatedDomainEvent(mechanisUser));
     }
 
     private void RaiseDrivingLicenseSetDomainEvent()

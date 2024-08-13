@@ -1,21 +1,90 @@
-﻿using Account.API.SeedWork;
+﻿using Account.API.Applications.Dtos.ResponseDtos;
+using Account.API.Extensions;
+using Account.API.Mapper;
+using Account.API.SeedWork;
+using Account.API.Services;
+using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.SeedWork;
+using Amazon.SQS.Model;
 using MediatR;
 
 namespace Account.API.Applications.Queries.GetPaginatedRegularUser;
 
-public class GetPaginatedRegularUserQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetPaginatedRegularUserQuery, Result>
+public class GetPaginatedRegularUserQueryHandler(
+    IUnitOfWork unitOfWork,
+    IKeyManagementService kmsClient,
+    ApplicationService service,
+    ICacheService cacheService) : IRequestHandler<GetPaginatedRegularUserQuery, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
+    private readonly IKeyManagementService _kmsClient = kmsClient;
+    private readonly ICacheService _cacheService = cacheService;
+    private readonly ApplicationService _appService = service;
     public async Task<Result> Handle(GetPaginatedRegularUserQuery request, CancellationToken cancellationToken)
     {
-        var (TotalCount, TotalPages, Brands) = await _unitOfWork.Users.GetPaginatedRegularUser(request.PageNumber, request.PageSize);
-
-        if (Brands is null)
+        try
         {
-            return Result.Failure("Regular user data is empty", ResponseStatus.NotFound);
-        }
+            var (totalCount, totalPages, users) = await _unitOfWork.Users.GetPaginatedRegularUser(request.PageNumber, request.PageSize);
 
-        return Result.Failure(null, ResponseStatus.BadRequest);
+            if (users is null)
+            {
+                return Result.Failure("Regular user data is empty", ResponseStatus.NotFound);
+            }
+
+            var userResponseDto = await ToRegularUserResponseDto(users);
+
+            var response = new PaginatedItemReponseDto<RegularUserResponseDto>(request.PageNumber, request.PageSize, totalCount, totalPages, userResponseDto);
+
+            return Result.Success(response, ResponseStatus.Ok);
+        }
+        catch (Exception ex)
+        {
+            _appService.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
+        }
+    }
+
+    private async Task<IEnumerable<RegularUserResponseDto>> ToRegularUserResponseDto(IEnumerable<RegularUser> users)
+    { 
+        var responses = new List<RegularUserResponseDto>();
+        foreach (var user in users)
+        {
+            var decryptedEmail = await DecryptAsync(user.EncryptedEmail);
+            var decryptedPhoneNumber = await DecryptAsync(user.EncryptedPhoneNumber);
+            var decryptedAddressLine1 = await DecryptAsync(user.Address.EncryptedAddressLine1);
+            var decryptedAddressLine2 = await DecryptNullableAsync(user.Address.EncryptedAddressLine2);
+            var decryptedAddressLine3 = await DecryptNullableAsync(user.Address.EncryptedAddressLine3);
+
+            var address = new AddressResponseDto(
+                decryptedAddressLine1,
+                decryptedAddressLine2,
+                decryptedAddressLine3,
+                user.Address.City,
+                user.Address.State,
+                user.Address.PostalCode,
+                user.Address.Country);
+
+            responses.Add(new RegularUserResponseDto(
+                    user.Id,
+                    user.Username,
+                    decryptedEmail,
+                    decryptedPhoneNumber,
+                    user.TimeZoneId,
+                    address,
+                    user.PersonalInfo.ToPersonalInfoResponseDto(user.TimeZoneId)));
+        }
+        return responses;
+    }
+
+    private async Task<string> DecryptAsync(string cipherText)
+    {
+        return await _kmsClient.DecryptAsync(cipherText);
+    }
+
+    private async Task<string?> DecryptNullableAsync(string? cipherText)
+    {
+        if (string.IsNullOrWhiteSpace(cipherText)) { return null; }
+
+        return await _kmsClient.DecryptAsync(cipherText);
     }
 }

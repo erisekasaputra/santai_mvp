@@ -1,7 +1,7 @@
 ﻿using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Enumerations; 
 using Microsoft.EntityFrameworkCore;
-using LinqKit; 
+using LinqKit;
 
 namespace Account.Infrastructure.Repositories;
 
@@ -22,7 +22,7 @@ public class UserRepository : IUserRepository
     }
 
     public void Update(User user)
-    {
+    {   
         _context.Users.Update(user);
     }
 
@@ -199,5 +199,69 @@ public class UserRepository : IUserRepository
             }
         }
         return await _context.Users.Where(predicate).AnyAsync(x => x.Id != id);
+    }
+
+    public async Task<(int TotalCount, int TotalPages, IEnumerable<RegularUser> Brands)> GetPaginatedRegularUser(int pageNumber, int pageSize)
+    {
+        var query = _context.Users.AsQueryable();
+
+        var totalCount = await query.CountAsync();
+
+        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+        var items = await query.Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize) 
+            .AsNoTracking()
+            .OfType<RegularUser>()
+            .Include(x => x.ReferralProgram)
+            .Include(x => x.LoyaltyProgram)
+            .OrderByDescending(x => x.AccountStatus == AccountStatus.Active) 
+            .OrderBy(x => x.PersonalInfo.FirstName)
+            .ToListAsync();
+
+        return (totalCount, totalPages, items);
+    }
+
+    public async Task<(int TotalCount, int TotalPages, IEnumerable<BusinessUser> Brands)> GetPaginatedBusinessUser(int pageNumber, int pageSize)
+    {
+        var query = _context.Users.AsQueryable();
+
+        var totalCount = await query.CountAsync();
+
+        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+        var items = await query.Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .AsNoTracking()
+            .OfType<BusinessUser>()
+            .Include(x => x.ReferralProgram)
+            .Include(x => x.LoyaltyProgram)  
+            .OrderByDescending(x => x.AccountStatus == AccountStatus.Active)
+            .OrderBy(x => x.BusinessName)       
+            .ToListAsync();
+
+        return (totalCount, totalPages, items);
+    }
+
+    public async Task<(int TotalCount, int TotalPages, IEnumerable<MechanicUser> Brands)> GetPaginatedMechanicUser(int pageNumber, int pageSize)
+    {
+        var query = _context.Users.AsQueryable();
+
+        var totalCount = await query.CountAsync();
+
+        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+        var items = await query.Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .AsNoTracking()
+            .OfType<MechanicUser>()
+            .Include(x => x.ReferralProgram)
+            .Include(x => x.LoyaltyProgram)  
+            .OrderByDescending(x => x.AccountStatus == AccountStatus.Active)
+            .OrderByDescending(x => x.IsVerified)
+            .OrderBy(x => x.PersonalInfo.FirstName)
+            .ToListAsync();
+
+        return (totalCount, totalPages, items);
     }
 }

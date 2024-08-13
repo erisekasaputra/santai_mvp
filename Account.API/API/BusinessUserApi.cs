@@ -17,9 +17,12 @@ using Account.API.Applications.Commands.StaffCommand.UpdateStaffEmailByStaffId;
 using Account.API.Applications.Commands.StaffCommand.UpdateStaffPhoneNumberByStaffId;
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetBusinessUserByUserId;
+using Account.API.Applications.Queries.GetPaginatedBusinessLicenseByUserId;
+using Account.API.Applications.Queries.GetPaginatedBusinessUser;
+using Account.API.Applications.Queries.GetPaginatedStaffByUserId;
 using Account.API.Extensions;
 using Account.API.SeedWork;
-using Account.API.Services;
+using Account.API.Services; 
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 namespace Account.API.API;
@@ -59,19 +62,65 @@ public static class BusinessUserApi
         return route;
     }
 
-    private static async Task GetPaginatedBusinessLicense(Guid businessUserId, [AsParameters] PaginatedItemRequestDto request)
+    private static async Task<IResult> GetPaginatedBusinessLicense(
+        Guid businessUserId, 
+        [AsParameters] PaginatedItemRequestDto request,
+        [FromServices] ApplicationService service)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var result = await service.Mediator.Send(new GetPaginatedBusinessLicenseByUserIdQuery(
+                businessUserId,
+                request.PageNumber,
+                request.PageSize));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
     }
 
-    private static async Task GetPaginatedStaff(Guid businessUserId, [AsParameters] PaginatedItemRequestDto request)
+    private static async Task<IResult> GetPaginatedStaff(
+        Guid businessUserId, 
+        [AsParameters] PaginatedItemRequestDto request,
+        [FromServices] ApplicationService service)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var result = await service.Mediator.Send(new GetPaginatedStaffByUserIdQuery(
+                businessUserId, 
+                request.PageNumber, 
+                request.PageSize));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
     }
 
-    private static async Task GetPaginatedBusinessUser([AsParameters] PaginatedItemRequestDto request)
+    private static async Task<IResult> GetPaginatedBusinessUser(
+        [AsParameters] PaginatedItemRequestDto request,
+        [FromServices] ApplicationService service)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var result = await service.Mediator.Send(new GetPaginatedBusinessUserQuery(
+                request.PageNumber, 
+                request.PageSize));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        } 
     }
 
     private static async Task<IResult> ConfirmStaffPhoneNumberByStaffId(

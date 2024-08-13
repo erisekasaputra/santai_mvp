@@ -8,6 +8,7 @@ public class MechanicUserRequestDto(
     string email,
     string phoneNumber,
     string timeZoneId,
+    string? referralCode,
     PersonalInfoRequestDto personalInfo,
     AddressRequestDto address,
     IEnumerable<CertificationRequestDto> certifications,
@@ -20,6 +21,7 @@ public class MechanicUserRequestDto(
     public string Email { get; set; } = email.CleanAndLowering();
     public string PhoneNumber { get; set; } = phoneNumber.Clean();
     public string TimeZoneId { get; } = timeZoneId.Clean();
+    public string? ReferralCode { get; } = referralCode?.Clean();
     public PersonalInfoRequestDto PersonalInfo { get; set; } = personalInfo;
     public AddressRequestDto Address { get; } = address;
     public IEnumerable<CertificationRequestDto> Certifications { get; } = certifications;

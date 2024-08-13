@@ -3,7 +3,8 @@ using Account.API.Extensions;
 using Account.API.Mapper;
 using Account.API.Options;
 using Account.API.SeedWork;
-using Account.API.Services;
+using Account.API.Services; 
+using Account.Domain.Aggregates.ReferredAggregate;
 using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Enumerations;
 using Account.Domain.Exceptions;
@@ -11,7 +12,7 @@ using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Options;
-using System.Data;
+using System.Data; 
 
 namespace Account.API.Applications.Commands.RegularUserCommand.CreateRegularUser;
 
@@ -71,6 +72,7 @@ public class CreateRegularUserCommandHandler(
                     hashedPhoneNumber,
                     request.IdentityId), cancellationToken);
             } 
+             
 
             var user = new RegularUser(
                 request.IdentityId,
@@ -90,6 +92,33 @@ public class CreateRegularUserCommandHandler(
             if (referralRewardPoint.HasValue && referralValidMonth.HasValue)
             {
                 user.AddReferralProgram(referralRewardPoint.Value, referralRewardPoint.Value);
+            }
+
+            // create referred programs when user input the referral code and referral code is valid
+            if (!string.IsNullOrEmpty(request.ReferralCode))
+            {
+                // check is referral code is valid
+                var referralProgram = await _unitOfWork.ReferralPrograms.GetByCodeAsync(request.ReferralCode);
+                if (referralProgram is null)
+                {
+                    return await RollbackAndReturnFailureAsync(
+                        Result.Failure("Referral code is invalid", ResponseStatus.BadRequest), cancellationToken);
+                }
+
+                // check is referral program is still valid 
+                if (referralProgram.ValidDateUtc < DateTime.UtcNow)
+                {
+                    return await RollbackAndReturnFailureAsync(
+                        Result.Failure("Referral code is expired", ResponseStatus.BadRequest), cancellationToken);
+                }
+
+                // creating the referred programs
+                await _unitOfWork.ReferredPrograms.CreateReferredProgramAsync(
+                    new ReferredProgram(
+                        referralProgram.UserId,
+                        user.Id,
+                        request.ReferralCode,
+                        DateTime.UtcNow));
             }
 
             await _unitOfWork.Users.CreateAsync(user);

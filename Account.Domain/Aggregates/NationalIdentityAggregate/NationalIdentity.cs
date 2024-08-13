@@ -56,12 +56,10 @@ public class NationalIdentity : Entity, IAggregateRoot
     }
 
     private void RaiseDocumentAcceptedDomainEvent()
-    {
-        throw new NotImplementedException();
+    { 
     }
 
     private void RaiseDocumentRejectedDomainEvent()
-    {
-        throw new NotImplementedException();
+    { 
     }
 }

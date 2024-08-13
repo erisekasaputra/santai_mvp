@@ -2,6 +2,8 @@
 
 public interface ICertificationRepository
 { 
+    Task<(int TotalCount, int TotalPages, IEnumerable<Certification> Certifications)> GetPaginatedCertificationByUserId(Guid userId, int pageNumber, int pageSize);
+
     Task<IEnumerable<Certification>?> GetByCertIdsAsNoTrackingAsync(params string[] id);
 
     Task<IEnumerable<Certification>?> GetByCertIdsAsExcludingIdsNoTrackingAsync(params (Guid, string)[] identities);

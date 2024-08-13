@@ -1,4 +1,6 @@
 ﻿using Account.Domain.Aggregates.CertificationAggregate;
+using Account.Domain.Aggregates.UserAggregate;
+using Account.Domain.Enumerations;
 using LinqKit;
 using Microsoft.EntityFrameworkCore;
 
@@ -65,6 +67,24 @@ public class CertificationRepository : ICertificationRepository
     public async Task<Certification?> GetByIdAsync(Guid id)
     {
         return await _context.Certifications.FirstOrDefaultAsync(x => x.Id == id);
+    }
+
+    public async Task<(int TotalCount, int TotalPages, IEnumerable<Certification> Certifications)> GetPaginatedCertificationByUserId(Guid userId, int pageNumber, int pageSize)
+    {
+        var query = _context.Certifications.AsQueryable();
+
+        var totalCount = await query.CountAsync();
+
+        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+        var items = await query.Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .AsNoTracking() 
+            .Where(x => x.MechanicUserId == userId)
+            .OrderBy(x => x.CertificationName)
+            .ToListAsync();
+
+        return (totalCount, totalPages, items);
     }
 
     public void Update(Certification certification)
