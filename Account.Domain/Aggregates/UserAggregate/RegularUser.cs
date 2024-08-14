@@ -5,11 +5,11 @@ using Account.Domain.ValueObjects;
 namespace Account.Domain.Aggregates.UserAggregate;
 
 public class RegularUser : User
-{
+{  
     public PersonalInfo PersonalInfo { get; private set; } 
 
     public string? DeviceId { get; private set; }
-
+       
     public RegularUser() : base()
     { 
     }

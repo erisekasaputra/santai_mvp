@@ -1,5 +1,4 @@
-﻿using Account.Domain.Aggregates.UserAggregate;
-using Account.Domain.Enumerations;
+﻿using Account.Domain.Aggregates.UserAggregate; 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -10,7 +9,8 @@ public class RegularUserEntityConfiguration : IEntityTypeConfiguration<RegularUs
     public void Configure(EntityTypeBuilder<RegularUser> e)
     {
         e.Property(p => p.DeviceId)
-                .HasMaxLength(255).IsRequired(false);
+            .HasMaxLength(255)
+            .IsRequired(false); 
 
         e.OwnsOne(p => p.PersonalInfo, personalInfo =>
         {
@@ -36,9 +36,7 @@ public class RegularUserEntityConfiguration : IEntityTypeConfiguration<RegularUs
                     v => v == null ? null : v.Trim());
 
             personalInfo.Property(i => i.Gender)
-                .HasConversion(
-                    save => save.ToString(),
-                    retrieve => Enum.Parse<Gender>(retrieve))
+                .HasConversion<string>()
                 .IsRequired();
 
             personalInfo.Property(i => i.ProfilePictureUrl)

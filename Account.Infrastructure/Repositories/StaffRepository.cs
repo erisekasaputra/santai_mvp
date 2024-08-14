@@ -197,4 +197,28 @@ public class StaffRepository : IStaffRepository
 
         return (totalCount, totalPages, items);
     }
+
+    public async Task<string?> GetTimeZoneById(Guid id)
+    {
+        return await _context.Staffs
+            .Where(x => x.Id == id)
+            .Select(x => x.TimeZoneId)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<string?> GetEmailById(Guid id)
+    {
+        return await _context.Staffs
+           .Where(x => x.Id == id)
+           .Select(x => x.EncryptedEmail)
+           .FirstOrDefaultAsync();
+    }
+
+    public async Task<string?> GetPhoneNumberById(Guid id)
+    {
+        return await _context.Staffs
+           .Where(x => x.Id == id)
+           .Select(x => x.EncryptedPhoneNumber)
+           .FirstOrDefaultAsync();
+    }
 }

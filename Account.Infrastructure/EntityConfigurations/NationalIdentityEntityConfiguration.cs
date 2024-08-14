@@ -16,9 +16,7 @@ public class NationalIdentityEntityConfiguration : IEntityTypeConfiguration<Nati
             .HasFilter("[VerificationStatus] =  'Accepted' ");
 
         e.Property(p => p.VerificationStatus)
-            .HasConversion(
-                value => value.ToString(),
-                retrieve => Enum.Parse<VerificationState>(retrieve));
+            .HasConversion<string>();
 
         e.Property(p => p.HashedIdentityNumber)
             .HasMaxLength(255)

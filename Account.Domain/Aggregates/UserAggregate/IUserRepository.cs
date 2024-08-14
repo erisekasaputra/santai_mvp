@@ -1,10 +1,9 @@
-﻿using Account.Domain.Enumerations;
-using Microsoft.EntityFrameworkCore;
+﻿using Account.Domain.Enumerations;  
 
 namespace Account.Domain.Aggregates.UserAggregate;
 
 public interface IUserRepository
-{ 
+{
     Task<User?> GetByIdAsync(Guid id);
     Task<User> CreateAsync(User user);
     void Update(User user);
@@ -20,4 +19,8 @@ public interface IUserRepository
     Task<(int TotalCount, int TotalPages, IEnumerable<RegularUser> Brands)> GetPaginatedRegularUser(int pageNumber, int pageSize);
     Task<(int TotalCount, int TotalPages, IEnumerable<BusinessUser> Brands)> GetPaginatedBusinessUser(int pageNumber, int pageSize);
     Task<(int TotalCount, int TotalPages, IEnumerable<MechanicUser> Brands)> GetPaginatedMechanicUser(int pageNumber, int pageSize);
+    Task<string?> GetTimeZoneById(Guid id);
+    Task<string?> GetEmailById(Guid id);
+    Task<string?> GetPhoneNumberById(Guid id);    
+    Task<UserType?> GetUserTypeById(Guid id);
 }

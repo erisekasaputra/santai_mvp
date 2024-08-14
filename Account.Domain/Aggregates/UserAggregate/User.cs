@@ -1,4 +1,5 @@
-﻿using Account.Domain.Aggregates.LoyaltyAggregate;
+﻿using Account.Domain.Aggregates.FleetAggregate;
+using Account.Domain.Aggregates.LoyaltyAggregate;
 using Account.Domain.Aggregates.ReferralAggregate;
 using Account.Domain.Aggregates.ReferredAggregate;
 using Account.Domain.Enumerations;
@@ -47,7 +48,9 @@ public abstract class User : Entity, IAggregateRoot
 
     public ReferralProgram? ReferralProgram { get; private set; }
      
-    public ICollection<ReferredProgram>? ReferredPrograms { get; private set; }
+    public ICollection<ReferredProgram>? ReferredPrograms { get; private set; } 
+
+    public ICollection<Fleet> Fleets { get; private set; }
 
     public string TimeZoneId {  get; set; }   
 
@@ -96,7 +99,7 @@ public abstract class User : Entity, IAggregateRoot
         ReferralProgram = new ReferralProgram(Id, DateTime.UtcNow.AddMonths(referralValidDate), referralRewardPoint);
 
         RaiseReferralProgramAddedDomainEvent(ReferralProgram);
-    } 
+    }   
 
     public virtual void UpdateEmail(string email, string encryptedEmail)
     {

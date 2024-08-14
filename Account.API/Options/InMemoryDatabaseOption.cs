@@ -9,4 +9,5 @@ public class InMemoryDatabaseOption
     public int ConnectTimeout { get; set; }
     public int SyncTimeout { get; set; }
     public int ReconnectRetryPolicy { get; set; }
+    public int CacheLifeTime { get; set; }
 }

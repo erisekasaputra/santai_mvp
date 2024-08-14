@@ -38,10 +38,8 @@ public static class BrandAPI
             var validation = await validator.ValidateAsync(query);
 
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<BrandDto>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            {  
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(query);
@@ -71,10 +69,8 @@ public static class BrandAPI
             var validation = await validator.ValidateAsync(brandPaginatedQuery);
 
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<BrandDto>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(brandPaginatedQuery);
@@ -106,10 +102,8 @@ public static class BrandAPI
         {
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<CreateBrandCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(command);
@@ -146,10 +140,8 @@ public static class BrandAPI
 
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<UpdateBrandCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(command);
@@ -179,10 +171,8 @@ public static class BrandAPI
             var command = new DeleteBrandCommand(brandId);
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<DeleteBrandCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             await service.Mediator.Send(command);

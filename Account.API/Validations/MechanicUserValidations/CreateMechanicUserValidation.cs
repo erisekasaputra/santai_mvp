@@ -3,7 +3,8 @@ using Account.API.Extensions;
 using Account.API.Validations.AddressValidations; 
 using Account.API.Validations.CertificationValidations;
 using Account.API.Validations.DrivingLicenseValidations;
-using Account.API.Validations.NationalIdentityValidations; 
+using Account.API.Validations.NationalIdentityValidations;
+using Account.API.Validations.PersonalInfoValidations;
 using FluentValidation;
 
 namespace Account.API.Validations.MechanicUserValidations;
@@ -51,6 +52,10 @@ public class CreateMechanicUserValidation : AbstractValidator<MechanicUserReques
         RuleFor(e => e.DrivingLicense)
             .NotNull().WithMessage("Please fill the driving license")
             .SetValidator(new CreateDrivingLicenseValidation());
+
+        RuleFor(x => x.PersonalInfo)
+            .NotNull().WithMessage("Personal info can not be null")
+            .SetValidator(new CreatePersonalInfoValidation());
 
         When(x => x.Certifications is not null && x.Certifications.Any(), () =>
         {

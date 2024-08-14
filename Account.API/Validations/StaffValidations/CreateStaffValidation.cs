@@ -37,5 +37,6 @@ public class CreateStaffValidation : AbstractValidator<StaffRequestDto>
         RuleFor(x => x.Address)
             .NotNull().WithMessage("Address can not be empty")
             .SetValidator(new AddressValidation()); 
+
     }
 }

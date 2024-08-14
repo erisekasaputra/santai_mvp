@@ -51,11 +51,10 @@
 
   <ItemGroup>
     <Folder Include="Applications\IntegrationEventHandlers\" />
+    <Folder Include="Applications\Queries\GetEmailByUserId\" />
+    <Folder Include="Applications\Queries\GetPhoneNumberByUserId\" />
+    <Folder Include="Applications\Queries\GetTimeZoneByUserId\" />
     <Folder Include="Protos\" />
-    <Folder Include="Services\ApplicationService\" />
-    <Folder Include="Services\KeyManagementService\" />
-    <Folder Include="Services\HashService\" />
-    <Folder Include="Services\Interfaces\" />
   </ItemGroup>
 
   <ItemGroup>

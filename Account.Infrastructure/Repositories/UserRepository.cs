@@ -14,6 +14,22 @@ public class UserRepository : IUserRepository
         _context = context;
     }
 
+    public async Task<UserType?> GetUserTypeById(Guid id)
+    {
+        var user = await _context.Users.Where(x => x.Id == id)
+            .Select(u => new
+            {  
+                UserType = EF.Property<string>(u, "UserType")
+            }).FirstOrDefaultAsync();
+
+        if (user == null)
+        {
+            return null;
+        } 
+
+        return Enum.Parse<UserType>(user.UserType);
+    }
+
     public async Task<User> CreateAsync(User user)
     {
         var entry = await _context.Users.AddAsync(user); 
@@ -264,4 +280,28 @@ public class UserRepository : IUserRepository
 
         return (totalCount, totalPages, items);
     }
+
+    public async Task<string?> GetTimeZoneById(Guid id)
+    {
+        return await _context.Users
+            .Where(x => x.Id == id)
+            .Select(x => x.TimeZoneId)
+            .FirstOrDefaultAsync();
+    }
+
+    public async Task<string?> GetEmailById(Guid id)
+    {
+        return await _context.Users
+           .Where(x => x.Id == id)
+           .Select(x => x.EncryptedEmail)
+           .FirstOrDefaultAsync();
+    }
+
+    public async Task<string?> GetPhoneNumberById(Guid id)
+    {
+        return await _context.Users
+           .Where(x => x.Id == id)
+           .Select(x => x.EncryptedPhoneNumber)
+           .FirstOrDefaultAsync();
+    }  
 }

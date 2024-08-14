@@ -19,6 +19,10 @@ public class ReferredProgramEntityConfiguration : IEntityTypeConfiguration<Refer
         e.Property(p => p.ReferredUserId)
             .IsRequired();
 
+        e.Property(v => v.ReferredDateUtc)
+            .HasColumnType("datetime2")
+            .IsRequired();
+
         e.Property(p => p.ReferralCode)
             .HasMaxLength(6)
             .IsRequired()
@@ -27,9 +31,7 @@ public class ReferredProgramEntityConfiguration : IEntityTypeConfiguration<Refer
                 v => v.Trim());
 
         e.Property(p => p.Status)
-            .HasConversion(
-                value => value.ToString(),
-                retrieve => Enum.Parse<ReferralStatus>(retrieve))
+            .HasConversion<string>()
             .IsRequired();
 
         e.HasOne(p => p.User)

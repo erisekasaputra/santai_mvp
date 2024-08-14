@@ -1,9 +1,7 @@
-﻿using Account.Domain.Aggregates.LoyaltyAggregate;
-using Account.Domain.Aggregates.ReferralAggregate;
+﻿ 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Account.Domain.Aggregates.UserAggregate;
-using Account.Domain.Enumerations;
+using Account.Domain.Aggregates.UserAggregate; 
 
 namespace Account.Infrastructure.EntityConfigurations;
 
@@ -37,27 +35,18 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
 
         e.Property(p => p.NewEncryptedPhoneNumber).HasMaxLength(255).IsRequired(false);
 
-        e.Property(p => p.AccountStatus).HasConversion(
-            save => save.ToString(),
-            retrieve => Enum.Parse<AccountStatus>(retrieve));
+        e.Property(v => v.CreatedAtUtc)
+            .HasColumnType("datetime2")
+            .IsRequired();
+
+        e.Property(v => v.UpdatedAtUtc)
+            .HasColumnType("datetime2")
+            .IsRequired();
+
+        e.Property(p => p.AccountStatus).HasConversion<string>();
 
         e.Property(p => p.TimeZoneId)
-            .HasMaxLength(40).IsRequired();
-
-        e.HasOne(p => p.LoyaltyProgram)
-            .WithOne(p => p.User)
-            .HasForeignKey<LoyaltyProgram>(p => p.LoyaltyUserId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        e.HasOne(p => p.ReferralProgram)
-            .WithOne(p => p.User)
-            .HasForeignKey<ReferralProgram>(p => p.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        e.HasMany(p => p.ReferredPrograms)
-            .WithOne(p => p.User)
-            .HasForeignKey(p => p.ReferrerId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .HasMaxLength(40).IsRequired(); 
 
         e.OwnsOne(p => p.Address, address =>
         {
@@ -75,7 +64,7 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<User>
 
             address.Property(ap => ap.Country).HasMaxLength(50);
         });
-
+         
         e.Ignore(p => p.DomainEvents);
     }
 }

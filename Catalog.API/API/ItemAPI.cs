@@ -130,10 +130,8 @@ public static class ItemAPI
         {
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<CreateItemCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(command);
@@ -170,10 +168,8 @@ public static class ItemAPI
 
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<UpdateItemCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(command);
@@ -203,10 +199,8 @@ public static class ItemAPI
             var command = new DeleteItemCommand(itemId);
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<DeleteItemCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             await service.Mediator.Send(command);
@@ -227,10 +221,8 @@ public static class ItemAPI
             var command = new UndeleteItemCommand(itemId);
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<UndeleteItemCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             await service.Mediator.Send(command);
@@ -251,10 +243,8 @@ public static class ItemAPI
             var command = new ActivateItemCommand(itemId);
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<ActivateItemCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             await service.Mediator.Send(command);
@@ -275,10 +265,8 @@ public static class ItemAPI
             var command = new DeactivateItemCommand(itemId);
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            { 
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<DeactivateItemCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            {  
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             await service.Mediator.Send(command);
@@ -298,10 +286,8 @@ public static class ItemAPI
         { 
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<ReduceItemStockQuantityCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(command);
@@ -330,10 +316,8 @@ public static class ItemAPI
         { 
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<AddItemStockQuantityCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(command);
@@ -362,10 +346,8 @@ public static class ItemAPI
         { 
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<SetItemStockQuantityCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(command);
@@ -395,10 +377,8 @@ public static class ItemAPI
         {
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<ReduceItemSoldQuantityCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(command);
@@ -427,10 +407,8 @@ public static class ItemAPI
         {
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<AddItemSoldQuantityCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(command);
@@ -459,10 +437,8 @@ public static class ItemAPI
         {
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<SetItemSoldQuantityCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(command);
@@ -491,10 +467,8 @@ public static class ItemAPI
         {
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<SetItemPriceCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(command);

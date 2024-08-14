@@ -16,9 +16,7 @@ public class DrivingLicenseEntityConfiguration : IEntityTypeConfiguration<Drivin
             .HasFilter("[VerificationStatus] = 'Accepted' ");
 
         e.Property(p => p.VerificationStatus)
-            .HasConversion(
-                value => value.ToString(),
-                retrieve => Enum.Parse<VerificationState>(retrieve));
+            .HasConversion<string>();
 
         e.Property(p => p.HashedLicenseNumber)
             .HasMaxLength(255)

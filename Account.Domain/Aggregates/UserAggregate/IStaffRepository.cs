@@ -13,6 +13,9 @@ public interface IStaffRepository
     Task<Staff> CreateAsync(Staff staff);
     Task<bool> GetAnyAsync(Guid id);
     Task<Staff?> GetByIdAsync(Guid id);
+    Task<string?> GetTimeZoneById(Guid id);
+    Task<string?> GetEmailById(Guid id);
+    Task<string?> GetPhoneNumberById(Guid id);
     void Update(Staff staff);
-    void Delete(Staff staff);
+    void Delete(Staff staff); 
 }

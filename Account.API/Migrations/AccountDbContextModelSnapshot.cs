@@ -142,6 +142,129 @@ namespace Account.API.Migrations
                     b.ToTable("DrivingLicenses");
                 });
 
+            modelBuilder.Entity("Account.Domain.Aggregates.FleetAggregate.Fleet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Color")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("EncryptedChassisNumber")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("EncryptedEngineNumber")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("EncryptedInsuranceNumber")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("EncryptedRegistrationNumber")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("FuelType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("HashedChassisNumber")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("HashedEngineNumber")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("HashedInsuranceNumber")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("HashedRegistrationNumber")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("ImageUrl")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsInsuranceValid")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTime>("LastInspectionDateUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Make")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("OdometerReading")
+                        .HasColumnType("int");
+
+                    b.Property<string>("OwnershipStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("RegistrationDateUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("StaffId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TransmissionType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UsageStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("VehicleType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("YearOfManufacture")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HashedChassisNumber")
+                        .IsUnique();
+
+                    b.HasIndex("HashedEngineNumber")
+                        .IsUnique();
+
+                    b.HasIndex("HashedRegistrationNumber")
+                        .IsUnique();
+
+                    b.HasIndex("StaffId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Fleets");
+                });
+
             modelBuilder.Entity("Account.Domain.Aggregates.LoyaltyAggregate.LoyaltyProgram", b =>
                 {
                     b.Property<Guid>("Id")
@@ -741,6 +864,49 @@ namespace Account.API.Migrations
                     b.Navigation("MechanicUser");
                 });
 
+            modelBuilder.Entity("Account.Domain.Aggregates.FleetAggregate.Fleet", b =>
+                {
+                    b.HasOne("Account.Domain.Aggregates.UserAggregate.Staff", "Staff")
+                        .WithMany("Fleets")
+                        .HasForeignKey("StaffId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Account.Domain.Aggregates.UserAggregate.User", "User")
+                        .WithMany("Fleets")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.ClientCascade);
+
+                    b.OwnsOne("Account.Domain.Aggregates.FleetAggregate.Owner", "Owner", b1 =>
+                        {
+                            b1.Property<Guid>("FleetId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("EncryptedOwnerAddress")
+                                .IsRequired()
+                                .HasMaxLength(255)
+                                .HasColumnType("nvarchar(255)");
+
+                            b1.Property<string>("EncryptedOwnerName")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
+
+                            b1.HasKey("FleetId");
+
+                            b1.ToTable("Fleets");
+
+                            b1.WithOwner()
+                                .HasForeignKey("FleetId");
+                        });
+
+                    b.Navigation("Owner")
+                        .IsRequired();
+
+                    b.Navigation("Staff");
+
+                    b.Navigation("User");
+                });
+
             modelBuilder.Entity("Account.Domain.Aggregates.LoyaltyAggregate.LoyaltyProgram", b =>
                 {
                     b.HasOne("Account.Domain.Aggregates.UserAggregate.User", "User")
@@ -897,6 +1063,57 @@ namespace Account.API.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.MechanicUser", b =>
+                {
+                    b.OwnsOne("Account.Domain.ValueObjects.PersonalInfo", "PersonalInfo", b1 =>
+                        {
+                            b1.Property<Guid>("MechanicUserId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<DateTime>("DateOfBirthUtc")
+                                .ValueGeneratedOnUpdateSometimes()
+                                .HasColumnType("datetime2");
+
+                            b1.Property<string>("FirstName")
+                                .IsRequired()
+                                .ValueGeneratedOnUpdateSometimes()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
+
+                            b1.Property<string>("Gender")
+                                .IsRequired()
+                                .ValueGeneratedOnUpdateSometimes()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<string>("LastName")
+                                .IsRequired()
+                                .ValueGeneratedOnUpdateSometimes()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
+
+                            b1.Property<string>("MiddleName")
+                                .IsRequired()
+                                .ValueGeneratedOnUpdateSometimes()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
+
+                            b1.Property<string>("ProfilePictureUrl")
+                                .ValueGeneratedOnUpdateSometimes()
+                                .HasMaxLength(255)
+                                .HasColumnType("nvarchar(255)");
+
+                            b1.HasKey("MechanicUserId");
+
+                            b1.ToTable("Users");
+
+                            b1.WithOwner()
+                                .HasForeignKey("MechanicUserId");
+                        });
+
+                    b.Navigation("PersonalInfo")
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.RegularUser", b =>
                 {
                     b.OwnsOne("Account.Domain.ValueObjects.PersonalInfo", "PersonalInfo", b1 =>
@@ -905,28 +1122,34 @@ namespace Account.API.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<DateTime>("DateOfBirthUtc")
+                                .ValueGeneratedOnUpdateSometimes()
                                 .HasColumnType("datetime2");
 
                             b1.Property<string>("FirstName")
                                 .IsRequired()
+                                .ValueGeneratedOnUpdateSometimes()
                                 .HasMaxLength(50)
                                 .HasColumnType("nvarchar(50)");
 
                             b1.Property<string>("Gender")
                                 .IsRequired()
+                                .ValueGeneratedOnUpdateSometimes()
                                 .HasColumnType("nvarchar(max)");
 
                             b1.Property<string>("LastName")
                                 .IsRequired()
+                                .ValueGeneratedOnUpdateSometimes()
                                 .HasMaxLength(50)
                                 .HasColumnType("nvarchar(50)");
 
                             b1.Property<string>("MiddleName")
                                 .IsRequired()
+                                .ValueGeneratedOnUpdateSometimes()
                                 .HasMaxLength(50)
                                 .HasColumnType("nvarchar(50)");
 
                             b1.Property<string>("ProfilePictureUrl")
+                                .ValueGeneratedOnUpdateSometimes()
                                 .HasMaxLength(255)
                                 .HasColumnType("nvarchar(255)");
 
@@ -942,8 +1165,15 @@ namespace Account.API.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.Staff", b =>
+                {
+                    b.Navigation("Fleets");
+                });
+
             modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.User", b =>
                 {
+                    b.Navigation("Fleets");
+
                     b.Navigation("LoyaltyProgram")
                         .IsRequired();
 

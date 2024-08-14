@@ -73,17 +73,11 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
 
         e.Property(p => p.HashedEmail)
             .HasMaxLength(255)
-            .IsRequired()
-            .HasConversion(
-                v => v,
-                v => v);
+            .IsRequired();
 
         e.Property(p => p.EncryptedEmail)
          .HasMaxLength(255)
-         .IsRequired()
-         .HasConversion(
-             v => v,
-             v => v);
+         .IsRequired();
 
         e.Property(p => p.NewHashedEmail)
             .HasMaxLength(255)
@@ -121,12 +115,7 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
             .IsRequired()
             .HasConversion(
                 v => v.Trim(),
-                v => v.Trim());
-
-        e.HasOne(s => s.BusinessUser)
-            .WithMany(b => b.Staffs)
-            .HasForeignKey(s => s.BusinessUserId)
-            .OnDelete(DeleteBehavior.Cascade);
+                v => v.Trim());  
 
         e.OwnsOne(p => p.Address, address =>
         {
@@ -178,6 +167,11 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
                     v => v.Trim(),
                     v => v.Trim());
         });
+         
+        e.HasMany(s => s.Fleets)
+            .WithOne(f => f.Staff)
+            .HasForeignKey(f => f.StaffId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         e.Ignore(p => p.DomainEvents);
     }

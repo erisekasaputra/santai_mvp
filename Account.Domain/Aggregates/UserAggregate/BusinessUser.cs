@@ -1,4 +1,4 @@
-﻿using Account.Domain.Aggregates.BusinessLicenseAggregate;
+﻿using Account.Domain.Aggregates.BusinessLicenseAggregate; 
 using Account.Domain.Enumerations;
 using Account.Domain.Events; 
 using Account.Domain.Extensions;

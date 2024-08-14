@@ -17,22 +17,7 @@ public class MechanicUserEntityConfiguration : IEntityTypeConfiguration<Mechanic
             .IsRequired(false)
             .HasConversion(
                 v => v == null ? null : v.Trim(),
-                v => v == null ? null : v.Trim());
-
-        e.HasMany(p => p.DrivingLicenses)
-            .WithOne(p => p.MechanicUser)
-            .HasForeignKey(p => p.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        e.HasMany(p => p.NationalIdentities)
-            .WithOne(p => p.MechanicUser)
-            .HasForeignKey(p => p.UserId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        e.HasMany(p => p.Certifications)
-            .WithOne(p => p.MechanicUser)
-            .HasForeignKey(p => p.MechanicUserId)
-            .OnDelete(DeleteBehavior.Cascade);
+                v => v == null ? null : v.Trim()); 
 
         e.OwnsOne(p => p.PersonalInfo, personalInfo =>
         {
@@ -69,6 +54,6 @@ public class MechanicUserEntityConfiguration : IEntityTypeConfiguration<Mechanic
                 .HasConversion(
                     v => v == null ? null : v.Trim(),
                     v => v == null ? null : v.Trim());
-        });
+        }); 
     }
 }

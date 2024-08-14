@@ -1,6 +1,7 @@
 ﻿using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Extensions;
-using Account.API.Validations.AddressValidations; 
+using Account.API.Validations.AddressValidations;
+using Account.API.Validations.PersonalInfoValidations;
 using FluentValidation;
 
 namespace Account.API.Validations.MechanicUserValidations;
@@ -12,6 +13,10 @@ public class UpdateMechanicUserValidation : AbstractValidator<UpdateMechanicRequ
         RuleFor(x => x.Address)
             .NotNull().WithMessage("Address can not be empty")
             .SetValidator(new AddressValidation());
+
+        RuleFor(x => x.PersonalInfo)
+           .NotNull().WithMessage("Personal info can not be null")
+           .SetValidator(new CreatePersonalInfoValidation());
 
         RuleFor(x => x.TimeZoneId)
            .NotEmpty().WithMessage("Time zone can not be empty")

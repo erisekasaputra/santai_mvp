@@ -12,9 +12,7 @@ public class LoyaltyProgramEntityConfiguration : IEntityTypeConfiguration<Loyalt
         e.HasKey(p => p.Id);
 
         e.Property(p => p.LoyaltyTier)
-            .HasConversion(
-                save => save.ToString(),
-                retrieve => Enum.Parse<LoyaltyTier>(retrieve));
+            .HasConversion<string>();
 
         e.HasOne(p => p.User)
             .WithOne(u => u.LoyaltyProgram)

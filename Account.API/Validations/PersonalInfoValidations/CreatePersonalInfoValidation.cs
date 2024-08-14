@@ -24,6 +24,7 @@ public class CreatePersonalInfoValidation : AbstractValidator<PersonalInfoReques
             .When(x => !string.IsNullOrWhiteSpace(x.LastName)); 
 
         RuleFor(x => x.Gender)
+            .NotEmpty().WithMessage("Gender is empty")
             .IsInEnum().WithMessage("Invalid gender.");
 
         RuleFor(p => p.ProfilePictureUrl)

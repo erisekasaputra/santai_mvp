@@ -2,8 +2,8 @@
 
 public enum IdentityParameter
 {
-    Username,
-    Email,
-    PhoneNumber,
-    IdentityId
+    Username = 1,
+    Email = 2,
+    PhoneNumber = 3,
+    IdentityId = 4
 } 

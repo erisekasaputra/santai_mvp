@@ -21,6 +21,10 @@ public class CertificationEntityConfiguration : IEntityTypeConfiguration<Certifi
                 v => v.Trim(),
                 v => v.Trim());
 
+        e.Property(p => p.ValidDateUtc)
+            .HasColumnType("datetime2")
+            .IsRequired(false);
+
         e.Property(p => p.CertificationName)
             .HasMaxLength(100)
             .IsRequired()

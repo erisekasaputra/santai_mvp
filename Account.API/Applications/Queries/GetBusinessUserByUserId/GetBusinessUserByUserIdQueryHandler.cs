@@ -1,11 +1,13 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
 using Account.API.Extensions;
 using Account.API.Mapper;
+using Account.API.Options;
 using Account.API.SeedWork;
 using Account.API.Services;
 using Account.API.Utilities;
 using Account.Domain.SeedWork;
 using MediatR;
+using Microsoft.Extensions.Options;
 
 namespace Account.API.Applications.Queries.GetBusinessUserByUserId;
 
@@ -13,13 +15,14 @@ public class GetBusinessUserByUserIdQueryHandler(
     IUnitOfWork unitOfWork,
     ApplicationService service,
     IKeyManagementService kmsClient,
-    ICacheService cacheService) : IRequestHandler<GetBusinessUserByUserIdQuery, Result>
+    ICacheService cacheService,
+    IOptionsMonitor<InMemoryDatabaseOption> cacheOption) : IRequestHandler<GetBusinessUserByUserIdQuery, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _appService = service;
     private readonly IKeyManagementService _kmsClient = kmsClient;  
-    private readonly ICacheService _cacheService = cacheService;
-
+    private readonly ICacheService _cacheService = cacheService; 
+    private readonly IOptionsMonitor<InMemoryDatabaseOption> _cacheOptions = cacheOption;
     public async Task<Result> Handle(GetBusinessUserByUserIdQuery request, CancellationToken cancellationToken)
     {
         try
@@ -29,9 +32,7 @@ public class GetBusinessUserByUserIdQueryHandler(
             {
                 return Result.Success(result, ResponseStatus.Ok);
             }
-
-
-
+             
             var user = await _unitOfWork.Users.GetBusinessUserByIdAsync(request.Id); 
             if (user is null)
             {
@@ -133,7 +134,7 @@ public class GetBusinessUserByUserIdQueryHandler(
                 staffResponses);
 
             await _cacheService
-               .SetAsync($"{CacheKey.BusinessUserPrefix}#{request.Id}", userDto, TimeSpan.FromSeconds(10));
+               .SetAsync($"{CacheKey.BusinessUserPrefix}#{request.Id}", userDto, TimeSpan.FromSeconds(_cacheOptions.CurrentValue.CacheLifeTime));
 
             return Result.Success(userDto); 
         }

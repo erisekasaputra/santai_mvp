@@ -38,10 +38,8 @@ public static class CategoryAPI
             var validation = await validator.ValidateAsync(query);
 
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<CategoryDto>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(query);
@@ -71,10 +69,8 @@ public static class CategoryAPI
             var validation = await validator.ValidateAsync(itemPaginatedQuery);
 
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<CategoryDto>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(itemPaginatedQuery);
@@ -106,10 +102,8 @@ public static class CategoryAPI
         {
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<CreateCategoryCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(command);
@@ -146,10 +140,8 @@ public static class CategoryAPI
 
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<UpdateCategoryCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(command);
@@ -179,10 +171,8 @@ public static class CategoryAPI
             var command = new DeleteCategoryCommand(categoryId);
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<DeleteCategoryCommand>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             await service.Mediator.Send(command);

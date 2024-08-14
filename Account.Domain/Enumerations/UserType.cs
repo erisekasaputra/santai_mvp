@@ -2,7 +2,7 @@
 
 public enum UserType
 {
-    UserRegular,
-    USerBusiness,
-    Mechanic
-}
+    RegularUser = 1,
+    BusinessUser = 2,
+    MechanicUser = 3
+} 

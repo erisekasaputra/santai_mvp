@@ -1,6 +1,7 @@
 ﻿using Account.Domain.Aggregates.BusinessLicenseAggregate;
 using Account.Domain.Aggregates.CertificationAggregate;
 using Account.Domain.Aggregates.DrivingLicenseAggregate;
+using Account.Domain.Aggregates.FleetAggregate;
 using Account.Domain.Aggregates.LoyaltyAggregate;
 using Account.Domain.Aggregates.NationalIdentityAggregate;
 using Account.Domain.Aggregates.ReferralAggregate;
@@ -24,6 +25,7 @@ public class AccountDbContext : DbContext
     public DbSet<ReferredProgram> ReferredPrograms { get; set; }
     public DbSet<Certification> Certifications { get; set; }
     public DbSet<Staff> Staffs { get; set; }
+    public DbSet<Fleet> Fleets { get; set; }
 
     private IDbContextTransaction? _currentTransaction;
 

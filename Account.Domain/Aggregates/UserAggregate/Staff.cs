@@ -1,4 +1,5 @@
-﻿using Account.Domain.Events;
+﻿using Account.Domain.Aggregates.FleetAggregate;
+using Account.Domain.Events;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects; 
@@ -25,8 +26,8 @@ public class Staff : Entity, IAggregateRoot
     public string Name { get; private set; }  
     public string? DeviceId { get; private set; } 
     public Address Address { get; private set; }  
-    public string TimeZoneId { get; private set; }   
-
+    public string TimeZoneId { get; private set; } 
+    public ICollection<Fleet>? Fleets { get; private set; } 
     public Staff()
     {
         

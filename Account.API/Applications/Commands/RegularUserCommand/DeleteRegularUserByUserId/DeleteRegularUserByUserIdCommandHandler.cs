@@ -4,6 +4,7 @@ using Account.API.Services;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using MediatR;
+using System.Data;
 
 namespace Account.API.Applications.Commands.RegularUserCommand.DeleteRegularUserByUserId;
 
@@ -15,26 +16,35 @@ public class DeleteRegularUserByUserIdCommandHandler(IUnitOfWork unitOfWork, App
     {
         try
         {
+            await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
+
             var user = await _unitOfWork.Users.GetRegularUserByIdAsync(request.UserId);
+
             if (user is null)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
                 return Result.Failure($"User {request.UserId} not found", ResponseStatus.NotFound);
             }
+
+            await _unitOfWork.Fleets.DeleteByUserId(request.UserId);
 
             user.Delete();
 
             _unitOfWork.Users.Delete(user);
             
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await _unitOfWork.CommitTransactionAsync(cancellationToken);
             
             return Result.Success(null, ResponseStatus.NoContent);
         }
         catch (DomainException ex)
         {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);
         }
         catch (Exception ex)
         {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }

@@ -8,8 +8,18 @@ using Catalog.Domain.SeedWork;
 using MassTransit; 
 using Catalog.Infrastructure.Helpers;
 using Catalog.Contracts;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http.Json;
 
-var builder = WebApplication.CreateBuilder(args); 
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.Converters
+        .Add(new JsonStringEnumConverter(
+            namingPolicy: System.Text.Json.JsonNamingPolicy.CamelCase,
+            allowIntegerValues: true));
+});
 
 builder.Services.AddHttpContextAccessor();
 

@@ -45,10 +45,7 @@ public class BusinessLicenseEntityConfiguration : IEntityTypeConfiguration<Busin
            .HasColumnType("nvarchar(1000)");
 
         e.Property(p => p.VerificationStatus)
-            .HasConversion(
-                save => save.ToString(),
-                retrieve => Enum.Parse<VerificationState>(retrieve)
-            );
+            .HasConversion<string>();
 
         e.HasOne(p => p.BusinessUser)
             .WithMany(p => p.BusinessLicenses)

@@ -1,12 +1,14 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
 using Account.API.Extensions;
 using Account.API.Mapper;
+using Account.API.Options;
 using Account.API.SeedWork;
 using Account.API.Services;
 using Account.API.Utilities;
 using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.SeedWork;
 using MediatR;
+using Microsoft.Extensions.Options;
 
 namespace Account.API.Applications.Queries.GetRegularUserByUserId;
 
@@ -14,12 +16,14 @@ public class GetRegularUserByUserIdQueryHandler(
     IUnitOfWork unitOfWork,
     ApplicationService service,
     IKeyManagementService kmsClient,
-    ICacheService cacheService) : IRequestHandler<GetRegularUserByUserIdQuery, Result>
+    ICacheService cacheService,
+    IOptionsMonitor<InMemoryDatabaseOption> cacheOption) : IRequestHandler<GetRegularUserByUserIdQuery, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _service = service;
     private readonly IKeyManagementService _kmsClient = kmsClient;
     private readonly ICacheService _cacheService = cacheService;
+    private readonly IOptionsMonitor<InMemoryDatabaseOption> _cacheOptions = cacheOption;
 
     public async Task<Result> Handle(GetRegularUserByUserIdQuery request, CancellationToken cancellationToken)
     {
@@ -42,7 +46,7 @@ public class GetRegularUserByUserIdQueryHandler(
             var userDto = await ToRegularUserResponseDto(user);
 
             await _cacheService
-              .SetAsync($"{CacheKey.RegularUserPrefix}#{request.UserId}", userDto, TimeSpan.FromSeconds(10));
+              .SetAsync($"{CacheKey.RegularUserPrefix}#{request.UserId}", userDto, TimeSpan.FromSeconds(_cacheOptions.CurrentValue.CacheLifeTime));
 
             return Result.Success(userDto);
         }

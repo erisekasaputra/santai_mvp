@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\build\Vehicle.API.props" />
-</Project>

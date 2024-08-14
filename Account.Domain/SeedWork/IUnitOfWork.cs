@@ -1,12 +1,12 @@
 ﻿using Account.Domain.Aggregates.BusinessLicenseAggregate;
 using Account.Domain.Aggregates.CertificationAggregate;
 using Account.Domain.Aggregates.DrivingLicenseAggregate;
+using Account.Domain.Aggregates.FleetAggregate;
 using Account.Domain.Aggregates.LoyaltyAggregate;
 using Account.Domain.Aggregates.NationalIdentityAggregate;
 using Account.Domain.Aggregates.ReferralAggregate;
 using Account.Domain.Aggregates.ReferredAggregate;
-using Account.Domain.Aggregates.UserAggregate;
-using Microsoft.EntityFrameworkCore;
+using Account.Domain.Aggregates.UserAggregate; 
 using System.Data;
 
 namespace Account.Domain.SeedWork;
@@ -30,6 +30,8 @@ public interface IUnitOfWork
     IReferredProgramRepository ReferredPrograms { get; }
 
     IStaffRepository Staffs { get; }
+
+    IFleetRepository Fleets { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 

@@ -1,6 +1,7 @@
 ﻿using Account.API.Infrastructures;
 using Account.API.Options;
 using Account.API.SeedWork;
+using Account.API.Utilities;
 using Microsoft.Extensions.Options;
 
 namespace Account.API.Middleware;
@@ -21,7 +22,7 @@ public class IdempotencyMiddleware
     public async Task InvokeAsync(HttpContext context)
     { 
         try
-        {
+        { 
             using var scope = _serviceProvider.CreateScope();
             var idempotencyService = scope.ServiceProvider.GetRequiredService<IIdempotencyService>();
             var idempotencyOptions = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<IdempotencyOptions>>();
@@ -58,7 +59,9 @@ public class IdempotencyMiddleware
                 return;
             }
 
-            if (await idempotencyService.CheckIdempotencyKeyAsync(idempotencyKey.ToString()))
+            var appendedIdempotencyKey = CacheKey.AccountPrefix + idempotencyKey;
+
+            if (await idempotencyService.CheckIdempotencyKeyAsync(appendedIdempotencyKey))
             {
                 context.Response.StatusCode = StatusCodes.Status409Conflict;
                 context.Response.ContentType = "application/json";
@@ -71,7 +74,7 @@ public class IdempotencyMiddleware
 
             if (context.Response.StatusCode is >= 200 and <= 299)
             {
-                await idempotencyService.SetIdempotencyKeyAsync(idempotencyKey.ToString(), TimeSpan.FromDays(1));
+                await idempotencyService.SetIdempotencyKeyAsync(appendedIdempotencyKey, TimeSpan.FromDays(1));
             }
         }
         catch (Exception ex)

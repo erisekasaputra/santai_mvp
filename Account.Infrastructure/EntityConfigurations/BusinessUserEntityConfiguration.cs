@@ -51,15 +51,50 @@ public class BusinessUserEntityConfiguration : IEntityTypeConfiguration<Business
                 v => v == null ? null : v.Trim(),
                 v => v == null ? null : v.Trim())
             .HasColumnType("nvarchar(1000)");
-
-        e.HasMany(p => p.BusinessLicenses)
-            .WithOne(b => b.BusinessUser)
-            .HasForeignKey(f => f.BusinessUserId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        e.HasMany(p => p.Staffs)
+         
+        e.HasMany(b => b.Staffs)
             .WithOne(s => s.BusinessUser)
-            .HasForeignKey(s => s.BusinessUserId) 
-            .OnDelete(DeleteBehavior.Cascade); 
+            .HasForeignKey(s => s.BusinessUserId)
+            .OnDelete(DeleteBehavior.Cascade);   
     }
 }
+
+
+//abstract class User
+//{ 
+
+//}
+
+
+
+//class RegularUser : User
+//{
+//    ICollection<Fleet> Fleets { get; set; }
+//}
+
+//class BusinessUser : User
+//{
+//    ICollection<Staff> Staffs { get; set; }
+//    ICollection<Fleet> Fleets { get; set; }
+//}
+
+//class Staff
+//{
+//    int BusinessUserId { get; set; }
+//    BusinessUser BusinessUser { get; set; }
+//    ICollection<Fleet> Fleets
+//}
+
+//class Fleet
+//{
+//    int? RegularUserId { get; set; } 
+
+//    RegularUser? RegularUser { get; set; }
+
+//    int? BusinessUserId { get; set; }   
+//    public BusinessUser? BusinessUser { get; set; }
+
+//    int? StaffId { get; set; }
+
+//    public Staff? Staff { get; set; }
+//}
