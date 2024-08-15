@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions;
-using Account.API.Options;
+﻿using Account.API.Options;
 using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Aggregates.NationalIdentityAggregate;
@@ -40,7 +39,8 @@ public class SetNationalIdentityByUserIdCommandHandler : IRequestHandler<SetNati
 
             if (mechanicUser is null)
             {
-                return Result.Failure($"Mechanic user '{request.UserId}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound)
+                     .WithError(new("MechanicUser.Id", "Mechanic user not found"));
             }
 
 
@@ -48,12 +48,14 @@ public class SetNationalIdentityByUserIdCommandHandler : IRequestHandler<SetNati
 
             if (accepted is not null && accepted.UserId == request.UserId)
             {
-                return Result.Failure($"National identity '{accepted.Id}' already accepted", ResponseStatus.Conflict);
+                return Result.Failure($"National identity already accepted", ResponseStatus.Conflict) 
+                     .WithError(new("NationalIdentity.Id", "Conflict national identity"));
             }
 
             if (accepted is not null)
             {
-                return Result.Failure($"Can only have one 'Accepted' national identity for a user", ResponseStatus.Conflict);
+                return Result.Failure($"Can only have one 'Accepted' national identity for a user", ResponseStatus.Conflict)
+                     .WithError(new("NationalIdentity.Id", "Conflict national identity"));
             }
 
 
@@ -65,7 +67,8 @@ public class SetNationalIdentityByUserIdCommandHandler : IRequestHandler<SetNati
 
             if (registeredToOtherUser)
             {
-                return Result.Failure($"National identity number already used by other user", ResponseStatus.Conflict);
+                return Result.Failure($"National identity number already used by other user", ResponseStatus.Conflict)
+                     .WithError(new("NationalIdentity.Id", "Conflict national identity"));
             } 
 
             var nationalIdentity = new NationalIdentity(

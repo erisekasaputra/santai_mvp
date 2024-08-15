@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions;
-using Account.API.Options;
+﻿using Account.API.Options;
 using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Exceptions;
@@ -39,7 +38,8 @@ public class RejectDrivingLicenseByUserIdCommandHandler : IRequestHandler<Reject
 
             if (drivingLicense is null)
             {
-                return Result.Failure($"Driving license '{request.DrivingLicenseId}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"Driving license not found", ResponseStatus.NotFound)
+                     .WithError(new("DrivingLicense.Id", "Driving license not found"));
             }
 
             drivingLicense.RejectDocument();

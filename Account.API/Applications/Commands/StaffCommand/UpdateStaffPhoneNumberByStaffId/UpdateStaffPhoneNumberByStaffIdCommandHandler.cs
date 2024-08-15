@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions;
-using Account.API.SeedWork;
+﻿using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Enumerations;
 using Account.Domain.Exceptions;
@@ -27,7 +26,8 @@ public class UpdateStaffPhoneNumberByStaffIdCommandHandler(
             
             if (staff is null)
             {
-                return Result.Failure($"User '{request.StaffId}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"Staff not found", ResponseStatus.NotFound)
+                    .WithError(new("Staff.Id", "User not found"));
             }
 
             var hashedPhoneNumber = await _hashClient.Hash(request.PhoneNumber);

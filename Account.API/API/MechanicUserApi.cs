@@ -11,17 +11,19 @@ using Account.API.Applications.Commands.MechanicUserCommand.SetDrivingLicenseByU
 using Account.API.Applications.Commands.MechanicUserCommand.SetNationalIdentityByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.SetRatingByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.UpdateMechanicUserByUserId;
-using Account.API.Applications.Commands.MechanicUserCommand.VerifyMechanicUserByUserId; 
+using Account.API.Applications.Commands.MechanicUserCommand.VerifyMechanicUserByUserId;
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetDrivingLicenseByMechanicUserId;
 using Account.API.Applications.Queries.GetMechanicUserById;
 using Account.API.Applications.Queries.GetNationalIdentityByMechanicUserId;
 using Account.API.Applications.Queries.GetPaginatedMechanicCertificationByUserId;
 using Account.API.Applications.Queries.GetPaginatedMechanicUser;
+using Account.API.CustomAttributes;
 using Account.API.Extensions;
 using Account.API.Options;
+using Account.API.SeedWork;
 using Account.API.Services;
-using FluentValidation; 
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 namespace Account.API.API;
@@ -32,13 +34,13 @@ public static class MechanicUserApi
     {
         var app = builder.MapGroup("api/v1/users/mechanic"); 
 
-        app.MapPost("/", CreateMechanicUser);
+        app.MapPost("/", CreateMechanicUser).WithMetadata(new IdempotencyAttribute(nameof(CreateMechanicUser)));
 
         app.MapGet("/", GetPaginatedMechanicUser);
-        app.MapGet("/{mechanicUserId}", GetMechanicUserById); 
+        app.MapGet("/{mechanicUserId}", GetMechanicUserById).CacheOutput(); 
         app.MapGet("/{mechanicUserId}/certifications", GetPaginatedCertificationsByMechanicUserId); 
-        app.MapGet("/{mechanicUserId}/driving-license", GetDrivingLicenseByMechanicUserId); 
-        app.MapGet("/{mechanicUserId}/national-identity", GetNationalIdentityByMechanicUserId); 
+        app.MapGet("/{mechanicUserId}/driving-license", GetDrivingLicenseByMechanicUserId).CacheOutput(); 
+        app.MapGet("/{mechanicUserId}/national-identity", GetNationalIdentityByMechanicUserId).CacheOutput();
 
         app.MapPatch("/{mechanicUserId}/rating", SetRating);
         app.MapPatch("/{mechanicUserId}/verify", VerifyMechanicUserByUserId);

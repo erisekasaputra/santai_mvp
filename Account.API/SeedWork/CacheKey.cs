@@ -1,4 +1,4 @@
-﻿namespace Account.API.Utilities;
+﻿namespace Account.API.SeedWork;
 
 public class CacheKey
 {

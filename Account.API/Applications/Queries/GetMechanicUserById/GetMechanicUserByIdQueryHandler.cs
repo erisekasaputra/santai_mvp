@@ -1,5 +1,5 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Extensions;
+using Account.API.Infrastructures;
 using Account.API.Mapper;
 using Account.API.Options;
 using Account.API.SeedWork;
@@ -31,15 +31,7 @@ public class GetMechanicUserByIdQueryHandler(
     public async Task<Result> Handle(GetMechanicUserByIdQuery request, CancellationToken cancellationToken)
     {
         try
-        {
-
-            var result = await _cacheService.GetAsync<MechanicUserResponseDto>($"{CacheKey.MechanicUserPrefix}#{request.Id}");
-
-            if (result is not null)
-            {
-                return Result.Success(result, ResponseStatus.Ok);
-            }
-
+        {  
             var user = await _unitOfWork.Users.GetMechanicUserByIdAsync(request.Id);
             if (user is null)
             {
@@ -74,10 +66,7 @@ public class GetMechanicUserByIdQueryHandler(
                 drivingLicense,
                 nationalIdentity
             );
-
-            await _cacheService
-                .SetAsync($"{CacheKey.MechanicUserPrefix}#{request.Id}", userDto, TimeSpan.FromSeconds(_cacheOptions.CurrentValue.CacheLifeTime));
-
+             
             return Result.Success(userDto);
         }
         catch (Exception ex)

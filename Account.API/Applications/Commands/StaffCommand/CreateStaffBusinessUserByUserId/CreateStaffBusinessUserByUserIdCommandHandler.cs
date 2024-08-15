@@ -1,5 +1,4 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Extensions; 
 using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Aggregates.UserAggregate;
@@ -7,7 +6,7 @@ using Account.Domain.Enumerations;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects;
-using MediatR; 
+using MediatR;
 
 namespace Account.API.Applications.Commands.StaffCommand.CreateStaffBusinessUserByUserId;
 
@@ -29,7 +28,8 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
             var entity = await _unitOfWork.Users.GetBusinessUserByIdAsync(request.Id);
             if (entity is null)
             {
-                return Result.Failure($"Business user '{request.Id}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"Business user not found", ResponseStatus.NotFound)
+                    .WithError(new("BusinessUser.Id", "User not found"));
             } 
 
             var addressRequest = request.Address;

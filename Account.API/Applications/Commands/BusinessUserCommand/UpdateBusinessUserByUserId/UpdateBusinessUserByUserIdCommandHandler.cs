@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions; 
-using Account.API.SeedWork;
+﻿using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
@@ -23,7 +22,8 @@ public class UpdateBusinessUserByUserIdCommandHandler(
             var user = await _unitOfWork.Users.GetBusinessUserByIdAsync(request.Id);
             if (user is null)
             {
-                return Result.Failure($"Business '{request.Id}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"Business user not found", ResponseStatus.NotFound)
+                    .WithError(new("BusinessUser.Id", "Business user not found"));
             }
 
             var encryptedAddressLine1 = await EncryptAsync(request.Address.AddressLine1);

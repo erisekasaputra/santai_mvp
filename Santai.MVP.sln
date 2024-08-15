@@ -27,6 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		aws-secret.bat = aws-secret.bat
 		docker-compose.yml = docker-compose.yml
 		local-secret.bat = local-secret.bat
+		minio-credential.bat = minio-credential.bat
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Search.Worker", "Search.Worker\Search.Worker.csproj", "{9499922E-5FC0-49AF-A62D-23E8CADC5BE6}"

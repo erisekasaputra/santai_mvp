@@ -1,9 +1,8 @@
-﻿using Account.API.Extensions;
-using Account.API.Options;
+﻿using Account.API.Options;
 using Account.API.SeedWork;
-using Account.API.Services; 
+using Account.API.Services;
 using Account.Domain.Exceptions;
-using Account.Domain.SeedWork; 
+using Account.Domain.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Options;
 
@@ -76,7 +75,7 @@ public class AssignFleetsToStaffCommandHandler : IRequestHandler<AssignFleetsToS
                 errors.AddRange(
                     request.FleetIds
                         .Where(x => !fleetIds.Contains(x))
-                        .Select((fleetId, index) => new ErrorDetail($"Fleet[{index}].{index}", "Fleet not found")));
+                        .Select((fleetId, index) => new ErrorDetail($"Fleet[{index}].Id", "Fleet not found")));
 
                 return Result.Failure($"{notFoundFleet} fleet(s) {(notFoundFleet <= 1 ? "was" : "were")} not found", ResponseStatus.BadRequest)
                     .WithErrors(errors);

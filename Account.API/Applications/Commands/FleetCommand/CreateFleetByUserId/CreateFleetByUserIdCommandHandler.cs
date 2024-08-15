@@ -6,7 +6,7 @@ using Account.API.Services;
 using Account.Domain.Aggregates.FleetAggregate;
 using Account.Domain.Enumerations;
 using Account.Domain.Exceptions;
-using Account.Domain.SeedWork; 
+using Account.Domain.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Options;
 using System.Data;
@@ -59,7 +59,8 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
              
             if (timeZoneId is null) 
             {
-                return Result.Failure("User not found", ResponseStatus.NotFound);
+                return await RollbackAndReturnFailureAsync(Result.Failure("User not found", ResponseStatus.NotFound)
+                    .WithError(new("User.Id", "User user not found")), cancellationToken); 
             }
 
             var conflict = await _unitOfWork.Fleets.GetByIdentityAsync(
@@ -124,13 +125,15 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
             if (userType is null)
             {
                 return await RollbackAndReturnFailureAsync(
-                    Result.Failure("User not found", ResponseStatus.NotFound), cancellationToken);
+                    Result.Failure("User not found", ResponseStatus.NotFound)
+                        .WithError(new("User.Id", "User not found")), cancellationToken);
             }
 
             if (userType == UserType.MechanicUser)
             {
                 return await RollbackAndReturnFailureAsync(
-                    Result.Failure("Can not create fleet to mechanic user", ResponseStatus.BadRequest), cancellationToken); 
+                    Result.Failure("Can not create fleet to mechanic user", ResponseStatus.BadRequest)
+                        .WithError(new("User.Id", "User type of mechanic user")), cancellationToken); 
             }
              
 

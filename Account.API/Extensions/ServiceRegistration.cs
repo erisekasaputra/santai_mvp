@@ -8,10 +8,11 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Account.API.Options;
 using Amazon.KeyManagementService;
-using Account.API.Services; 
-using Account.API.Infrastructures;
-using System.Reflection;
-using System;
+using Account.API.Services;
+using Account.API.Infrastructures; 
+using Account.API.Middleware;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Http.Json;  
 
 namespace Account.API.Extensions;
 
@@ -47,7 +48,24 @@ public static class ServiceRegistration
             return ConnectionMultiplexer.Connect(configurations);
         });
 
-        services.AddDistributedMemoryCache();
+        services.AddStackExchangeRedisCache(options =>
+        {
+            options.ConfigurationOptions = new ConfigurationOptions 
+            {
+
+                EndPoints = { cacheOptions.CurrentValue.Host },
+                ConnectTimeout = (int)TimeSpan.FromSeconds(cacheOptions.CurrentValue.ConnectTimeout).TotalMilliseconds,
+                SyncTimeout = (int)TimeSpan.FromSeconds(cacheOptions.CurrentValue.SyncTimeout).TotalMilliseconds,
+                AbortOnConnectFail = false,
+                ReconnectRetryPolicy = new ExponentialRetry((int)TimeSpan
+                    .FromSeconds(cacheOptions.CurrentValue.ReconnectRetryPolicy).TotalMilliseconds)
+            }; 
+        });
+
+        services.AddOutputCache(policy =>
+        { 
+            policy.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(cacheOptions.CurrentValue.CacheLifeTime); 
+        }); 
 
         return services;
     }
@@ -64,8 +82,7 @@ public static class ServiceRegistration
     public static IServiceCollection AddApplicationService(this IServiceCollection services)
     {
         services.AddScoped<ApplicationService>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<IIdempotencyService, IdempotencyService>();
+        services.AddScoped<IUnitOfWork, UnitOfWork>(); 
         services.AddSingleton<ICacheService, AccountCacheService>();
 
         return services;
@@ -181,5 +198,18 @@ public static class ServiceRegistration
         services.AddSingleton<IHashService, HashService>();
 
         return services;
+    }
+
+    public static IServiceCollection AddJsonEnumConverterBehavior(this IServiceCollection builder)
+    {
+        builder.Configure<JsonOptions>(options =>
+        {
+            options.SerializerOptions.Converters
+                .Add(new JsonStringEnumConverter(
+                    namingPolicy: System.Text.Json.JsonNamingPolicy.CamelCase,
+                    allowIntegerValues: true));
+        }); 
+
+        return builder;
     }
 }

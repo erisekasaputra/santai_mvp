@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions;
-using Account.API.Options;
+﻿using Account.API.Options;
 using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Exceptions;
@@ -39,19 +38,22 @@ public class ConfirmNationalIdentityByUserIdCommandHandler : IRequestHandler<Con
 
             if (license is null)
             {
-                return Result.Failure($"National identity '{request.NationalIdentityId}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"National identity not found", ResponseStatus.NotFound)
+                    .WithError(new("NationalIdentity.Id", "National identity not found"));
             }
 
             var accepted = await _unitOfWork.NationalIdentities.GetAcceptedByUserIdAsync(request.UserId);
 
             if (accepted is not null && accepted.Id == request.NationalIdentityId)
             {
-                return Result.Failure($"National identity '{accepted.Id}' already accepted", ResponseStatus.Conflict);
+                return Result.Failure($"National identity already accepted", ResponseStatus.Conflict)
+                    .WithError(new("NationalIdentity.Id", "Conflict national identity")); ;
             }
 
             if (accepted is not null)
             {
-                return Result.Failure("Can only have one 'Accepted' national identity for a user", ResponseStatus.Conflict);
+                return Result.Failure("Can only have one 'Accepted' national identity for a user", ResponseStatus.Conflict)
+                    .WithError(new("NationalIdentity.Id", "Conflict national identity"));
             }
 
             license.VerifyDocument();

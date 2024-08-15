@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions;
-using Account.API.SeedWork;
+﻿using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
@@ -20,19 +19,22 @@ public class ConfirmBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork
 
             if (license is null)
             {
-                return Result.Failure($"Busines user id '{request.BusinessUserId}' and business license '{request.BusinessLicenseId}' did not match any record", ResponseStatus.NotFound);
+                return Result.Failure($"Business license not found", ResponseStatus.NotFound)
+                    .WithError(new ("BusinessLicense.LicenseNumber", "Business license not found"));
             }
 
             var acceptedLicense = await _unitOfWork.BusinessLicenses.GetAcceptedStatusByLicenseNumberAsNoTrackingAsync(license.HashedLicenseNumber);
 
             if (acceptedLicense is not null && acceptedLicense.Id == request.BusinessLicenseId)
             {
-                return Result.Failure($"Business license '{acceptedLicense.Id}' already confirmed", ResponseStatus.Conflict);
+                return Result.Failure($"Business license '{acceptedLicense.Id}' already confirmed", ResponseStatus.Conflict)
+                    .WithError(new ("BusinessLicense.LicenseNumber", "Business license is confirmed"));
             }
 
             if (acceptedLicense is not null)
             {
-                return Result.Failure($"Can not have multiple license number with 'Accepted' status", ResponseStatus.Conflict);
+                return Result.Failure($"Conflict business license", ResponseStatus.Conflict)
+                    .WithError(new("BusinessLicense.LicenseNumber", "Can not have multiple license number with 'Accepted' status"));
             }
 
             license.VerifyDocument();

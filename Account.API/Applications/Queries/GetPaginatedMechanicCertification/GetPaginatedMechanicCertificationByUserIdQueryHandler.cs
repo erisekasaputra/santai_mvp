@@ -1,9 +1,9 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Extensions;
+using Account.API.Infrastructures;
 using Account.API.Mapper;
 using Account.API.SeedWork;
 using Account.API.Services;
-using Account.Domain.Aggregates.CertificationAggregate; 
+using Account.Domain.Aggregates.CertificationAggregate;
 using Account.Domain.SeedWork;
 using MediatR;
 

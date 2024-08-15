@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions;
-using Account.API.SeedWork;
+﻿using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
@@ -20,7 +19,8 @@ public class RemoveBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork,
 
             if (license is null)
             {
-                return Result.Failure($"Business license '{request.BusinessLicenseId}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"Business license not found", ResponseStatus.NotFound)
+                    .WithError(new("BusinessLicense.Id", "Business license not found"));
             }
 
             _unitOfWork.BusinessLicenses.Delete(license);

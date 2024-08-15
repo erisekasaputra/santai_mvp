@@ -4,10 +4,14 @@ using Account.API.Applications.Commands.UserCommand.ConfirmUserPhoneNumberByUser
 using Account.API.Applications.Commands.UserCommand.UpdateUserEmailByUserId;
 using Account.API.Applications.Commands.UserCommand.UpdateUserPhoneNumberByUserId;
 using Account.API.Applications.Dtos.RequestDtos;
+using Account.API.Applications.Queries.GetEmailByUserId;
+using Account.API.Applications.Queries.GetPhoneNumberByUserId;
+using Account.API.Applications.Queries.GetTimeZoneByUserId;
 using Account.API.Extensions;
+using Account.API.SeedWork;
 using Account.API.Services;
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc; 
+using Microsoft.AspNetCore.Mvc;
 
 namespace Account.API.API;
 
@@ -22,8 +26,63 @@ public static class UserApi
         app.MapPatch("/{userId}/phone-number", UpdateUserPhoneNumberByUserId);
         app.MapPatch("/{userId}/phone-number/confirm", ConfirmUserPhoneNumberByUserId);
         app.MapPatch("/{userId}/staff/{staffId}/fleets", AssignFleetsToStaff);
-         
+
+        app.MapGet("/{userId}/email", GetEmailByUserId).CacheOutput();
+        app.MapGet("/{userId}/phone-number", GetPhoneNumberByUserId).CacheOutput();
+        app.MapGet("/{userId}/time-zone", GetTimeZoneByUserId).CacheOutput();
+
         return app;
+    }
+
+    private static async Task<IResult> GetTimeZoneByUserId(
+        Guid userId,
+        [FromServices] ApplicationService service)
+    { 
+        try
+        {
+            var result = await service.Mediator.Send(new GetTimeZoneByUserIdQuery(userId));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+    private static async Task<IResult> GetPhoneNumberByUserId(
+        Guid userId, 
+        [FromServices] ApplicationService service)
+    { 
+        try
+        {
+            var result = await service.Mediator.Send(new GetPhoneNumberByUserIdQuery(userId));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+    private static async Task<IResult> GetEmailByUserId(
+        Guid userId, 
+        [FromServices] ApplicationService service)
+    { 
+        try
+        {
+            var result = await service.Mediator.Send(new GetEmailByUserIdQuery(userId));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
     }
 
     private static async Task<IResult> AssignFleetsToStaff(

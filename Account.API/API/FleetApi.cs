@@ -1,14 +1,16 @@
 ﻿
 using Account.API.Applications.Commands.FleetCommand.CreateFleetByUserId;
 using Account.API.Applications.Commands.FleetCommand.DeleteFleetByIdByUserId;
-using Account.API.Applications.Commands.FleetCommand.UpdateFleetByUserId; 
+using Account.API.Applications.Commands.FleetCommand.UpdateFleetByUserId;
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetFleetByIdByUserId;
 using Account.API.Applications.Queries.GetPaginatedFleetByUserId;
+using Account.API.CustomAttributes;
 using Account.API.Extensions;
-using Account.API.Services; 
+using Account.API.SeedWork;
+using Account.API.Services;
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc; 
+using Microsoft.AspNetCore.Mvc;
 
 namespace Account.API.API;
 
@@ -18,10 +20,14 @@ public static class FleetApi
     {
         var app = builder.MapGroup("api/v1/users/{userId}/fleet"); 
 
+        app.MapPost("/", CreateFleetByUserId)
+            .WithMetadata(new IdempotencyAttribute(nameof(CreateFleetByUserId))); 
+
         app.MapGet("/", GetPaginatedFleetByUserId); 
-        app.MapGet("/{fleetId}", GetFleetByIdByUserId); 
-        app.MapPost("/", CreateFleetByUserId); 
+        app.MapGet("/{fleetId}", GetFleetByIdByUserId).CacheOutput(); 
+
         app.MapDelete("/{fleetId}", DeleteFleetByIdByUserId); 
+        
         app.MapPut("/{fleetId}", UpdateFleetByUserId); 
 
         return builder; 
@@ -32,7 +38,7 @@ public static class FleetApi
         Guid fleetId,
         [FromBody] UpdateFleetRequestDto request,
         [FromServices] ApplicationService service,
-        [FromService] IValidator<UpdateFleetRequestDto> validator)
+        [FromServices] IValidator<UpdateFleetRequestDto> validator)
     {
         // later on , user id is from user claims at authentication level  
         try
@@ -101,7 +107,7 @@ public static class FleetApi
         Guid userId,
         [FromBody] CreateFleetRequestDto request,
         [FromServices] ApplicationService service,
-        [FromService] IValidator<CreateFleetRequestDto> validator)
+        [FromServices] IValidator<CreateFleetRequestDto> validator)
     {
         // later on , user id is from user claims at authentication level  
         try

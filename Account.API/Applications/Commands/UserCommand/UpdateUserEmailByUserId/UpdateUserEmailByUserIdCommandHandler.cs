@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions;
-using Account.API.SeedWork;
+﻿using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Enumerations;
 using Account.Domain.Exceptions;
@@ -26,7 +25,8 @@ public class UpdateUserEmailByUserIdCommandHandler(
             var user = await _unitOfWork.Users.GetByIdAsync(request.Id);
             if (user is null)
             {
-                return Result.Failure($"User with id {request.Id} not found", ResponseStatus.NotFound);
+                return Result.Failure($"User not found", ResponseStatus.NotFound)
+                    .WithError(new("User.Id", "User not found"));
             }
 
             var hashedEmail = await _hashClient.Hash(request.Email);

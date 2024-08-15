@@ -7,11 +7,12 @@ using Account.API.Applications.Commands.RegularUserCommand.SetDeviceIdByUserId;
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetRegularUserByUserId;
 using Account.API.Extensions;
-using Account.API.SeedWork;
 using Account.API.Services;
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc; 
+using Microsoft.AspNetCore.Mvc;
 using Account.API.Applications.Queries.GetPaginatedRegularUser;
+using Account.API.CustomAttributes;
+using Account.API.SeedWork;
 
 namespace Account.API.API;
 
@@ -21,10 +22,11 @@ public static class RegularUserApi
     {
         var app = builder.MapGroup("api/v1/users/regular");
 
-        app.MapGet("/{regularUserId}", GetRegularUserByUserId);
+        app.MapGet("/{regularUserId}", GetRegularUserByUserId).CacheOutput();
         app.MapGet("/", GetPaginatedRegularUser);
 
-        app.MapPost("/", CreateRegularUser).WithMetadata(new IdempotencyAttribute());
+        app.MapPost("/", CreateRegularUser)
+            .WithMetadata(new IdempotencyAttribute(nameof(CreateRegularUser)));
         
         app.MapPut("/{regularUserId}", UpdateRegularUserByUserId);
         

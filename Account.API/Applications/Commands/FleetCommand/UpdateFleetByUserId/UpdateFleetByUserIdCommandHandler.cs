@@ -2,7 +2,7 @@
 using Account.API.Extensions;
 using Account.API.Options;
 using Account.API.SeedWork;
-using Account.API.Services; 
+using Account.API.Services;
 using Account.Domain.Enumerations;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
@@ -58,7 +58,8 @@ public class UpdateFleetByUserIdCommandHandler : IRequestHandler<UpdateFleetByUs
 
             if (timeZoneId is null)
             {
-                return Result.Failure("User not found", ResponseStatus.NotFound);
+                return await RollbackAndReturnFailureAsync(Result.Failure("User not found", ResponseStatus.NotFound)
+                    .WithError(new("User.Id", "User not found")), cancellationToken);
             }
               
 

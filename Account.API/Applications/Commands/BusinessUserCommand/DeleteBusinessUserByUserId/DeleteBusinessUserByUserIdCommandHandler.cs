@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions;
-using Account.API.SeedWork;
+﻿using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;

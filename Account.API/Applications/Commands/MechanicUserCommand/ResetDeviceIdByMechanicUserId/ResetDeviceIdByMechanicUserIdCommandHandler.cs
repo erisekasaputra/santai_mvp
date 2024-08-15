@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions;
-using Account.API.Options;
+﻿using Account.API.Options;
 using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Exceptions;
@@ -39,7 +38,8 @@ public class ResetDeviceIdByMechanicUserIdCommandHandler : IRequestHandler<Reset
 
             if (mechanicUser is null)
             {
-                return Result.Failure($"Mechanic user '{request.UserId}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound)
+                     .WithError(new("MechanicUser.Id", "Mechanic user not found")); 
             }
 
             mechanicUser.ResetDeviceId();

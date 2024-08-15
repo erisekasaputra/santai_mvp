@@ -32,3 +32,13 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\FileHub.API\obj\Debug\net9.0\FileHub.API.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\FileHub.API\obj\Debug\net9.0\FileHub.API.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\FileHub.API\obj\Debug\net9.0\ref\FileHub.API.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\FileHub.API\bin\Debug\net9.0\appsettings.Production.json
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\FileHub.API\bin\Debug\net9.0\AWSSDK.Core.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\FileHub.API\bin\Debug\net9.0\AWSSDK.S3.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\FileHub.API\bin\Debug\net9.0\CommunityToolkit.HighPerformance.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\FileHub.API\bin\Debug\net9.0\Microsoft.AspNetCore.Mvc.Versioning.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\FileHub.API\bin\Debug\net9.0\Minio.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\FileHub.API\bin\Debug\net9.0\System.IO.Hashing.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\FileHub.API\bin\Debug\net9.0\System.Reactive.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\FileHub.API\bin\Debug\net9.0\Pipelines.Sockets.Unofficial.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\FileHub.API\bin\Debug\net9.0\StackExchange.Redis.dll

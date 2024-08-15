@@ -37,10 +37,11 @@ services:
             - "9000:9000"
             - "9001:9001"
         environment:
-            MINIO_ACCESS_KEY: 000328Eris@
-            MINIO_SECRET_KEY: 000328Eris@
+            MINIO_ROOT_USER: erisekasaputra28
+            MINIO_ROOT_PASSWORD: 000328Eris@
         volumes:
-            - ./data:/data
+            - minio-data:/data
+            - minio-config:/root/.minio
         command: server /data --console-address ":9001"
         restart: always
     redis:
@@ -49,9 +50,12 @@ services:
         ports:
             - "6379:6379"
         networks:
-            - redis-network
+            - redis-network 
+            
 volumes:
     es_data:
+    minio-data:
+    minio-config:
 
 networks:
     redis-network:

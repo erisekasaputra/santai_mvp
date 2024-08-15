@@ -1,6 +1,6 @@
-﻿using Account.API.Infrastructures;
+﻿using Account.API.CustomAttributes;
+using Account.API.Infrastructures;
 using Account.API.Options;
-using Account.API.SeedWork;
 using Account.API.Utilities;
 using Microsoft.Extensions.Options;
 
@@ -24,7 +24,7 @@ public class IdempotencyMiddleware
         try
         { 
             using var scope = _serviceProvider.CreateScope();
-            var idempotencyService = scope.ServiceProvider.GetRequiredService<IIdempotencyService>();
+            var cacheService = scope.ServiceProvider.GetRequiredService<ICacheService>();
             var idempotencyOptions = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<IdempotencyOptions>>();
 
             var endPoint = context.GetEndpoint();
@@ -41,8 +41,11 @@ public class IdempotencyMiddleware
                 return;
             }
 
+            var attribute = endPoint?.Metadata.GetMetadata<IdempotencyAttribute>();
 
-            var hasIdempotencyAttribute = endPoint?.Metadata.GetMetadata<IdempotencyAttribute>() != null;
+            var hasIdempotencyAttribute =  attribute is not null;
+
+            var resourceName = attribute?.Name;
 
             if (!hasIdempotencyAttribute)
             {
@@ -50,7 +53,7 @@ public class IdempotencyMiddleware
                 return;
             }
 
-            if (!context.Request.Headers.TryGetValue("X-Idempotency-Key", out var key) || !Guid.TryParse(key, out var idempotencyKey))
+            if (!context.Request.Headers.TryGetValue("X-Idempotency-Key", out var key) || !Guid.TryParse(key, out var idempotencyKeyHeader))
             {
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 context.Response.ContentType = "application/json";
@@ -59,9 +62,9 @@ public class IdempotencyMiddleware
                 return;
             }
 
-            var appendedIdempotencyKey = CacheKey.AccountPrefix + idempotencyKey;
+            var idempotencyKey = $"{resourceName}#{idempotencyKeyHeader}";
 
-            if (await idempotencyService.CheckIdempotencyKeyAsync(appendedIdempotencyKey))
+            if (await cacheService.CheckIdempotencyKeyAsync(idempotencyKey))
             {
                 context.Response.StatusCode = StatusCodes.Status409Conflict;
                 context.Response.ContentType = "application/json";
@@ -74,7 +77,8 @@ public class IdempotencyMiddleware
 
             if (context.Response.StatusCode is >= 200 and <= 299)
             {
-                await idempotencyService.SetIdempotencyKeyAsync(appendedIdempotencyKey, TimeSpan.FromDays(1));
+                await cacheService.SetIdempotencyKeyAsync(
+                    idempotencyKey, TimeSpan.FromSeconds(idempotencyOptions.CurrentValue.TTL));
             }
         }
         catch (Exception ex)

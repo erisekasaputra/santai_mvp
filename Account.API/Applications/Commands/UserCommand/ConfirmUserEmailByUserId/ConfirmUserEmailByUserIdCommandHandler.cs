@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions;
-using Account.API.SeedWork;
+﻿using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
@@ -20,7 +19,8 @@ public class ConfirmUserEmailByUserIdCommandHandler(IUnitOfWork unitOfWork, Appl
 
             if (user is null)
             {
-                return Result.Failure($"User '{request.Id}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"User not found", ResponseStatus.NotFound)
+                    .WithError(new("User.Id", "User not found"));
             }
 
             user.VerifyEmail();

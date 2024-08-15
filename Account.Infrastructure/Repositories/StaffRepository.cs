@@ -177,7 +177,7 @@ public class StaffRepository : IStaffRepository
         return await _context.Staffs.Where(predicate).AsNoTracking().AnyAsync();
     }
 
-    public async Task<(int TotalCount, int TotalPages, IEnumerable<Staff> Staffs)> GetPaginatedStaffByUserId(
+    public async Task<(int TotalCount, int TotalPages, IEnumerable<Staff> Staffs)> GetPaginatedStaffByUserIdAsync(
         Guid userId,
         int pageNumber,
         int pageSize)
@@ -198,27 +198,35 @@ public class StaffRepository : IStaffRepository
         return (totalCount, totalPages, items);
     }
 
-    public async Task<string?> GetTimeZoneById(Guid id)
+    public async Task<string?> GetTimeZoneByUserIdAndIdAsync(Guid userId, Guid staffId)
     {
         return await _context.Staffs
-            .Where(x => x.Id == id)
+            .Where(x => x.Id == staffId && x.BusinessUserId == userId)
             .Select(x => x.TimeZoneId)
             .FirstOrDefaultAsync();
     }
 
-    public async Task<string?> GetEmailById(Guid id)
+    public async Task<string?> GetEmailByUserIdAndIdAsync(Guid userId, Guid staffId)
     {
         return await _context.Staffs
-           .Where(x => x.Id == id)
+           .Where(x => x.Id == staffId && x.BusinessUserId == userId)
            .Select(x => x.EncryptedEmail)
            .FirstOrDefaultAsync();
     }
 
-    public async Task<string?> GetPhoneNumberById(Guid id)
+    public async Task<string?> GetPhoneNumberByUserIdAndIdAsync(Guid userId, Guid staffId)
     {
         return await _context.Staffs
-           .Where(x => x.Id == id)
+           .Where(x => x.Id == staffId && x.BusinessUserId == userId)
            .Select(x => x.EncryptedPhoneNumber)
+           .FirstOrDefaultAsync();
+    }
+     
+    public async Task<string?> GetDeviceIdByUserAndByIdAsync(Guid userId, Guid staffId)
+    {
+        return await _context.Staffs
+           .Where(x => x.Id == staffId && x.BusinessUserId == userId)
+           .Select(x => x.DeviceId)
            .FirstOrDefaultAsync();
     }
 }

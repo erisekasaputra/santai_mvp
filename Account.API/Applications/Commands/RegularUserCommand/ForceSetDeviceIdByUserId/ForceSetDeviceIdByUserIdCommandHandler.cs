@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions;
-using Account.API.SeedWork;
+﻿using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
@@ -18,7 +17,8 @@ public class ForceSetDeviceIdByUserIdCommandHandler(IUnitOfWork unitOfWork, Appl
             var user = await _unitOfWork.Users.GetRegularUserByIdAsync(request.UserId);
             if (user is null)
             {
-                return Result.Failure($"User '{request.UserId}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"Regular user not found", ResponseStatus.NotFound)
+                    .WithError(new("RegularUser.Id", "Regular user not found"));
             }
 
             user.ForceSetDeviceId(request.DeviceId);

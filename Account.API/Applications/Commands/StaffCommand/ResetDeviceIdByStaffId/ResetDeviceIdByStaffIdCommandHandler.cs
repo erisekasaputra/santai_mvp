@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions;
-using Account.API.SeedWork;
+﻿using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
@@ -18,7 +17,8 @@ public class ResetDeviceIdByStaffIdCommandHandler(IUnitOfWork unitOfWork, Applic
             var staff = await _unitOfWork.Staffs.GetByBusinessUserIdAndStaffIdAsync(request.UserId, request.StaffId);
             if (staff is null)
             {
-                return Result.Failure($"Staff '{request.StaffId}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"Staff not found", ResponseStatus.NotFound)
+                    .WithError(new("Staff.Id", "User not found"));
             }
 
             staff.ResetDeviceId();

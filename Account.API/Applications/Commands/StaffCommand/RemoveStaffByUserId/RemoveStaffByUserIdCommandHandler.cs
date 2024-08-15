@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions;
-using Account.API.SeedWork;
+﻿using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
@@ -19,7 +18,8 @@ public class RemoveStaffByUserIdCommandHandler(IUnitOfWork unitOfWork, Applicati
             var staff = await _unitOfWork.Staffs.GetByBusinessUserIdAndStaffIdAsync(request.BusinessUserId, request.StaffId);
             if (staff is null)
             {
-                return Result.Failure($"Staff '{request.BusinessUserId}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"Staff not found", ResponseStatus.NotFound)
+                    .WithError(new("Staff.Id", "User not found"));
             }
 
             _unitOfWork.Staffs.Delete(staff);

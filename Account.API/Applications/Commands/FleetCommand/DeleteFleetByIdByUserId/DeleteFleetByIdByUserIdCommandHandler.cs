@@ -1,5 +1,4 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Extensions;
 using Account.API.Options;
 using Account.API.SeedWork;
 using Account.API.Services;
@@ -42,7 +41,8 @@ public class DeleteFleetByIdByUserIdCommandHandler : IRequestHandler<DeleteFleet
 
             if (fleet is null)
             {
-                return Result.Failure($"Fleet not found", ResponseStatus.NotFound);
+                return Result.Failure($"Fleet not found", ResponseStatus.NotFound)
+                    .WithError(new("Fleet.Id", "Fleet not found")); ;
             } 
 
             _unitOfWork.Fleets.Delete(fleet);

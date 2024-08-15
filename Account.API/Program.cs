@@ -1,18 +1,9 @@
 using Account.API.API;  
 using Account.API.Extensions;
-using Account.API.Middleware;
-using Microsoft.AspNetCore.Http.Json;
-using System.Text.Json.Serialization;
-
+using Account.API.Middleware; 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.Configure<JsonOptions>(options =>
-{
-    options.SerializerOptions.Converters
-        .Add(new JsonStringEnumConverter(
-            namingPolicy: System.Text.Json.JsonNamingPolicy.CamelCase, 
-            allowIntegerValues: true));
-});
+builder.Services.AddJsonEnumConverterBehavior();
 
 builder.AddOptionConfiguration();
 
@@ -58,6 +49,8 @@ if (app.Environment.IsDevelopment())
 
 app.UseMiddleware<IdempotencyMiddleware>(); 
 
+app.UseOutputCache();
+
 app.MapBusinessUserApi();
 
 app.MapUserApi();
@@ -66,7 +59,7 @@ app.MapRegularUserApi();
 
 app.MapMechanicUserApi();
 
-app.MapFleetApi(); 
+app.MapFleetApi();  
 
 app.Run();
  

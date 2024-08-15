@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions;
-using Account.API.Options;
+﻿using Account.API.Options;
 using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Exceptions;
@@ -39,19 +38,22 @@ public class ConfirmDrivingLicenseByUserIdCommandHandler : IRequestHandler<Confi
 
             if (license is null)
             {
-                return Result.Failure($"Driving license '{request.DrivingLicenseId}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"Driving license not found", ResponseStatus.NotFound)
+                    .WithError(new("DrivingLicense.Id", "Driving license not found"));
             }
              
             var accepted = await _unitOfWork.DrivingLicenses.GetAcceptedByUserIdAsync(request.UserId);
 
             if (accepted is not null && accepted.Id == request.DrivingLicenseId)
             {
-                return Result.Failure($"Driving license '{accepted.Id}' already accepted", ResponseStatus.Conflict);
+                return Result.Failure($"Driving license already accepted", ResponseStatus.Conflict)
+                    .WithError(new("DrivingLicense.Id", "Conflict driving license"));
             }
 
             if (accepted is not null)
             {
-                return Result.Failure($"Can only have one 'Accepted' driving license for a user", ResponseStatus.Conflict);
+                return Result.Failure($"Can only have one 'Accepted' driving license for a user", ResponseStatus.Conflict)
+                    .WithError(new("DrivingLicense.Id", "Conflict driving license"));
             }
 
             license.VerifyDocument();

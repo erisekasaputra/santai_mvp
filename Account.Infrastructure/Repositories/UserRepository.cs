@@ -303,5 +303,23 @@ public class UserRepository : IUserRepository
            .Where(x => x.Id == id)
            .Select(x => x.EncryptedPhoneNumber)
            .FirstOrDefaultAsync();
-    }  
+    }
+
+    public async Task<string?> GetDeviceIdByMechanicUserId(Guid id)
+    {
+        return await _context.Users
+           .OfType<MechanicUser>()
+           .Where(x => x.Id == id)
+           .Select(x => x.DeviceId)
+           .FirstOrDefaultAsync();
+    }
+
+    public async Task<string?> GetDeviceIdByRegularUserId(Guid id)
+    {
+        return await _context.Users
+           .OfType<RegularUser>()
+           .Where(x => x.Id == id)
+           .Select(x => x.DeviceId)
+           .FirstOrDefaultAsync();
+    }
 }

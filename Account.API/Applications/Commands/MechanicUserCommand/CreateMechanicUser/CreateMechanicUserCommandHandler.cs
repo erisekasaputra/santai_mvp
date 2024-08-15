@@ -15,7 +15,7 @@ using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects;
 using MassTransit.AmazonSqsTransport;
 using MediatR;
-using Microsoft.Extensions.Options; 
+using Microsoft.Extensions.Options;
 using System.Data;
 
 namespace Account.API.Applications.Commands.MechanicUserCommand.CreateMechanicUser;
@@ -250,25 +250,25 @@ public class CreateMechanicUserCommandHandler(
 
         if (user.Username == username)
         {
-            conflicts.Add(new($"User.{nameof(user.Username)}", 
+            conflicts.Add(new($"MechanicUser.{nameof(user.Username)}", 
                 "User username already registered"));
         }
 
         if (user.HashedEmail == email || user.NewHashedEmail == email)
         {
-            conflicts.Add(new($"User.{nameof(user.HashedEmail)}", 
+            conflicts.Add(new($"MechanicUser.{nameof(user.HashedEmail)}", 
                 "User email already registered"));
         }
 
         if (user.HashedPhoneNumber == phoneNumber || user.NewHashedPhoneNumber == phoneNumber)
         {
-            conflicts.Add(new($"User.{nameof(user.HashedPhoneNumber)}", 
+            conflicts.Add(new($"MechanicUser.{nameof(user.HashedPhoneNumber)}", 
                 "User phone number already registered"));
         }
 
         if (user.IdentityId == identityId)
         {
-            conflicts.Add(new($"User.{nameof(user.IdentityId)}", 
+            conflicts.Add(new($"MechanicUser.{nameof(user.IdentityId)}", 
                 "Identity id already registered"));
         }
 

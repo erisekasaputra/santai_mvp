@@ -1,5 +1,5 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Extensions; 
+using Account.API.Infrastructures;
 using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Aggregates.UserAggregate;
@@ -22,7 +22,10 @@ public class GetPaginatedStaffByUserIdQueryHandler(
     {
         try
         {
-            (int totalCount, int totalPages, IEnumerable<Staff> staffs) = await _unitOfWork.Staffs.GetPaginatedStaffByUserId(request.UserId, request.PageNumber, request.PageSize);
+            (int totalCount, int totalPages, IEnumerable<Staff> staffs) = await _unitOfWork.Staffs.GetPaginatedStaffByUserIdAsync(
+                request.UserId, 
+                request.PageNumber, 
+                request.PageSize);
 
             if (staffs is null)
             {

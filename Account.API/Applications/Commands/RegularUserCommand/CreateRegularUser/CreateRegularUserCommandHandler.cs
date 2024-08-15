@@ -1,9 +1,8 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Extensions;
 using Account.API.Mapper;
 using Account.API.Options;
 using Account.API.SeedWork;
-using Account.API.Services; 
+using Account.API.Services;
 using Account.Domain.Aggregates.ReferredAggregate;
 using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Enumerations;
@@ -12,7 +11,7 @@ using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Options;
-using System.Data; 
+using System.Data;
 
 namespace Account.API.Applications.Commands.RegularUserCommand.CreateRegularUser;
 
@@ -102,14 +101,16 @@ public class CreateRegularUserCommandHandler(
                 if (referralProgram is null)
                 {
                     return await RollbackAndReturnFailureAsync(
-                        Result.Failure("Referral code is invalid", ResponseStatus.BadRequest), cancellationToken);
+                        Result.Failure("Referral code is invalid", ResponseStatus.BadRequest)
+                            .WithError(new("RegularUser.ReferralCode", "Referral code is invalid")), cancellationToken);
                 }
 
                 // check is referral program is still valid 
                 if (referralProgram.ValidDateUtc < DateTime.UtcNow)
                 {
                     return await RollbackAndReturnFailureAsync(
-                        Result.Failure("Referral code is expired", ResponseStatus.BadRequest), cancellationToken);
+                        Result.Failure("Referral code is expired", ResponseStatus.BadRequest)
+                            .WithError(new("RegularUser.ReferralCode", "Referral code is expired")), cancellationToken);
                 }
 
                 // creating the referred programs
@@ -181,25 +182,25 @@ public class CreateRegularUserCommandHandler(
 
         if (user.Username == username)
         {
-            conflictIdentities.Add(new ($"User.{nameof(user.Username)}", 
+            conflictIdentities.Add(new ($"RegularUser.{nameof(user.Username)}", 
                 "Username already registered"));
         }
 
         if (user.HashedEmail == hashedEmail || user.NewHashedEmail == hashedEmail)
         {
-            conflictIdentities.Add(new ($"User.{nameof(user.HashedEmail)}", 
+            conflictIdentities.Add(new ($"RegularUser.{nameof(user.HashedEmail)}", 
                 "Email already registered"));
         }
 
         if (user.HashedPhoneNumber == hashedPhoneNumber || user.NewHashedPhoneNumber == hashedPhoneNumber)
         {
-            conflictIdentities.Add(new ($"User.{nameof(user.HashedPhoneNumber)}", 
+            conflictIdentities.Add(new ($"RegularUser.{nameof(user.HashedPhoneNumber)}", 
                 "Phone number already registered"));
         }
 
         if (user.IdentityId == identityId)
         {
-            conflictIdentities.Add(new ($"User.{nameof(user.IdentityId)}", 
+            conflictIdentities.Add(new ($"RegularUser.{nameof(user.IdentityId)}", 
                 "Identity id already registered"));
         }
 

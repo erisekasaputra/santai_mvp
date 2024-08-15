@@ -1,12 +1,12 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Account.API.Extensions;
+namespace Account.API.Utilities;
 
 public static class UniqueIdGenerator
-{ 
+{
     public static string Generate(Guid id, int length = 6)
-    { 
+    {
         string referrerIdString = id.ToString();
 
         using var sha256 = SHA256.Create();

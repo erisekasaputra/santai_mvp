@@ -17,12 +17,18 @@ using Account.API.Applications.Commands.StaffCommand.UpdateStaffEmailByStaffId;
 using Account.API.Applications.Commands.StaffCommand.UpdateStaffPhoneNumberByStaffId;
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetBusinessUserByUserId;
+using Account.API.Applications.Queries.GetDeviceIdByStaffId;
+using Account.API.Applications.Queries.GetEmailByStaffId;
 using Account.API.Applications.Queries.GetPaginatedBusinessLicenseByUserId;
 using Account.API.Applications.Queries.GetPaginatedBusinessUser;
 using Account.API.Applications.Queries.GetPaginatedStaffByUserId;
+using Account.API.Applications.Queries.GetPhoneNumberByStaffId;
+using Account.API.Applications.Queries.GetStaffByUserIdAndStaffId;
+using Account.API.Applications.Queries.GetTimeZoneByStaffId;
+using Account.API.CustomAttributes;
 using Account.API.Extensions;
 using Account.API.SeedWork;
-using Account.API.Services; 
+using Account.API.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 namespace Account.API.API;
@@ -37,13 +43,28 @@ public static class BusinessUserApi
         app.MapGet("/{businessUserId}/staffs", GetPaginatedStaff);
         app.MapGet("/{businessUserId}/business-licenses", GetPaginatedBusinessLicense);
 
-        app.MapGet("/{businessUserId}", GetBusinessUserById); 
+        app.MapGet("/{businessUserId}", GetBusinessUserById)
+            .CacheOutput();
+        app.MapGet("/{businessUserId}/staffs/{staffId}", GetStaffByUserIdAndStaffId)
+            .CacheOutput();    
+        app.MapGet("/{businessUserId}/staffs/{staffId}/email", GetEmailByStaffId)
+            .CacheOutput();
+        app.MapGet("/{businessUserId}/staffs/{staffId}/phone-number", GetPhoneNumberByStaffId)
+            .CacheOutput();
+        app.MapGet("/{businessUserId}/staffs/{staffId}/time-zone", GetTimeZoneByStaffId)
+            .CacheOutput();
+        app.MapGet("/{businessUserId}/staffs/{staffId}/device-id", GetDeviceIdByStaffId)
+            .CacheOutput();
+
         app.MapPut("/{businessUserId}", UpdateBusinessUser);
         app.MapPut("/{businessUserId}/staffs/{staffId}", UpdateStaffByStaffId);
 
-        app.MapPost("/", CreateBusinessUser).WithMetadata(new IdempotencyAttribute());
-        app.MapPost("/{businessUserId}/staffs", CreateStaffBusinessUserById).WithMetadata(new IdempotencyAttribute());
-        app.MapPost("/{businessUserId}/business-licenses", CreateBusinessLicenseBusinessUserById).WithMetadata(new IdempotencyAttribute()); 
+        app.MapPost("/", CreateBusinessUser)
+            .WithMetadata(new IdempotencyAttribute(nameof(CreateBusinessUser)));
+        app.MapPost("/{businessUserId}/staffs", CreateStaffBusinessUserById)
+            .WithMetadata(new IdempotencyAttribute(nameof(CreateStaffBusinessUserById)));
+        app.MapPost("/{businessUserId}/business-licenses", CreateBusinessLicenseBusinessUserById)
+            .WithMetadata(new IdempotencyAttribute(nameof(CreateBusinessLicenseBusinessUserById))); 
      
         app.MapPatch("/{businessUserId}/staffs/{staffId}/device-id", SetDeviceIdByStaffId);
         app.MapPatch("/{businessUserId}/staffs/{staffId}/device-id/reset", ResetDeviceIdByStaffId);
@@ -60,6 +81,98 @@ public static class BusinessUserApi
         app.MapDelete("/{businessUserId}/business-licenses/{businessLicenseId}", RemoveBusinessLicenseBusinessUserById);
 
         return route;
+    }
+
+    private static async Task<IResult> GetDeviceIdByStaffId(
+        Guid businessUserId,
+        Guid staffId,
+        [FromServices] ApplicationService service)
+    {
+        try
+        {
+            var result = await service.Mediator.Send(new GetDeviceIdByStaffIdQuery(businessUserId, staffId));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+    private static async Task<IResult> GetTimeZoneByStaffId(
+        Guid businessUserId,
+        Guid staffId,
+        [FromServices] ApplicationService service)
+    {
+        try
+        {
+            var result = await service.Mediator.Send(new GetTimeZoneByStaffIdQuery(businessUserId, staffId));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+    private static async Task<IResult> GetPhoneNumberByStaffId(
+        Guid businessUserId,
+        Guid staffId,
+        [FromServices] ApplicationService service)
+    {
+        try
+        {
+            var result = await service.Mediator.Send(new GetPhoneNumberByStaffIdQuery(businessUserId, staffId));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+    private static async Task<IResult> GetEmailByStaffId(
+        Guid businessUserId,
+        Guid staffId,
+        [FromServices] ApplicationService service)
+    {
+        try
+        {
+            var result = await service.Mediator.Send(new GetEmailByStaffIdQuery(businessUserId, staffId));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    } 
+
+
+
+    private static async Task<IResult> GetStaffByUserIdAndStaffId(
+        Guid businessUserId, 
+        Guid staffId,
+        [FromServices] ApplicationService service)
+    {
+        try
+        {
+            var result = await service.Mediator.Send(new GetStaffByUserIdAndStaffIdQuery(businessUserId, staffId));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
     }
 
     private static async Task<IResult> GetPaginatedBusinessLicense(

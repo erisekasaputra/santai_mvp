@@ -1,4 +1,4 @@
-﻿namespace Account.API.Extensions;
+﻿namespace Account.API.SeedWork;
 
 public class Messages
 {

@@ -28,6 +28,28 @@
   },
   {
     "ContainingType": "Account.API.API.UserApi",
+    "Method": "GetEmailByUserId",
+    "RelativePath": "api/v1/users/{userId}/email",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.UserApi",
     "Method": "ConfirmUserEmailByUserId",
     "RelativePath": "api/v1/users/{userId}/email/confirm",
     "HttpMethod": "PATCH",
@@ -37,6 +59,33 @@
       {
         "Name": "userId",
         "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.FleetApi",
+    "Method": "CreateFleetByUserId",
+    "RelativePath": "api/v1/users/{userId}/fleet/",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.CreateFleetRequestDto",
         "IsRequired": true
       }
     ],
@@ -70,33 +119,6 @@
         "Name": "PageSize",
         "Type": "System.Int32",
         "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Account.API.API.FleetApi",
-    "Method": "CreateFleetByUserId",
-    "RelativePath": "api/v1/users/{userId}/fleet/",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Account.API.Applications.Dtos.RequestDtos.CreateFleetRequestDto",
-        "IsRequired": true
       }
     ],
     "ReturnTypes": [
@@ -222,6 +244,28 @@
   },
   {
     "ContainingType": "Account.API.API.UserApi",
+    "Method": "GetPhoneNumberByUserId",
+    "RelativePath": "api/v1/users/{userId}/phone-number",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.UserApi",
     "Method": "ConfirmUserPhoneNumberByUserId",
     "RelativePath": "api/v1/users/{userId}/phone-number/confirm",
     "HttpMethod": "PATCH",
@@ -263,6 +307,28 @@
       {
         "Name": "request",
         "Type": "Account.API.Applications.Dtos.RequestDtos.AssignFleetsToStaffRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.UserApi",
+    "Method": "GetTimeZoneByUserId",
+    "RelativePath": "api/v1/users/{userId}/time-zone",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -595,6 +661,33 @@
   },
   {
     "ContainingType": "Account.API.API.BusinessUserApi",
+    "Method": "GetStaffByUserIdAndStaffId",
+    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "businessUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "staffId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.BusinessUserApi",
     "Method": "UpdateStaffByStaffId",
     "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}",
     "HttpMethod": "PUT",
@@ -630,6 +723,33 @@
     "Method": "RemoveStaffBusinessUserById",
     "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}",
     "HttpMethod": "DELETE",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "businessUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "staffId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.BusinessUserApi",
+    "Method": "GetDeviceIdByStaffId",
+    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/device-id",
+    "HttpMethod": "GET",
     "IsController": false,
     "Order": 0,
     "Parameters": [
@@ -745,6 +865,33 @@
   },
   {
     "ContainingType": "Account.API.API.BusinessUserApi",
+    "Method": "GetEmailByStaffId",
+    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/email",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "businessUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "staffId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.BusinessUserApi",
     "Method": "SetStaffEmailByStaffId",
     "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/email",
     "HttpMethod": "PATCH",
@@ -804,6 +951,33 @@
   },
   {
     "ContainingType": "Account.API.API.BusinessUserApi",
+    "Method": "GetPhoneNumberByStaffId",
+    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/phone-number",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "businessUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "staffId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.BusinessUserApi",
     "Method": "SetStaffPhoneNumberByStaffId",
     "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/phone-number",
     "HttpMethod": "PATCH",
@@ -839,6 +1013,33 @@
     "Method": "ConfirmStaffPhoneNumberByStaffId",
     "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/phone-number/confirm",
     "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "businessUserId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "staffId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.BusinessUserApi",
+    "Method": "GetTimeZoneByStaffId",
+    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/time-zone",
+    "HttpMethod": "GET",
     "IsController": false,
     "Order": 0,
     "Parameters": [

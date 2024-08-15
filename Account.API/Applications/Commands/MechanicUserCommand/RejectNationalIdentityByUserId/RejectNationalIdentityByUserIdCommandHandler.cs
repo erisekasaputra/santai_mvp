@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions;
-using Account.API.Options;
+﻿using Account.API.Options;
 using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Exceptions;
@@ -39,7 +38,8 @@ public class RejectNationalIdentityByUserIdCommandHandler : IRequestHandler<Reje
 
             if (nationalIdentity is null)
             {
-                return Result.Failure($"National identity '{request.NationalIdentiyId}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"National identity not found", ResponseStatus.NotFound)
+                     .WithError(new("NationalIdentity.Id", "National identity not found"));
             }
 
             nationalIdentity.RejectDocument();

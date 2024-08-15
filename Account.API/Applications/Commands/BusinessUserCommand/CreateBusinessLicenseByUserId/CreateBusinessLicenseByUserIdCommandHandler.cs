@@ -1,5 +1,4 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Extensions; 
 using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Aggregates.BusinessLicenseAggregate;
@@ -27,7 +26,8 @@ public class CreateBusinessLicenseByUserIdCommandHandler(
             var entity = await _unitOfWork.Users.GetAnyByIdAsync(request.BusinessUserId);
             if (entity is false)
             {
-                return Result.Failure($"Business user '{request.BusinessUserId}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"Business user not found", ResponseStatus.NotFound)
+                    .WithError(new ("BusinessUser.Id", "Business user id not found"));
             }
 
             var hashedLicenseNumber = await _hashClient.Hash(request.LicenseNumber);

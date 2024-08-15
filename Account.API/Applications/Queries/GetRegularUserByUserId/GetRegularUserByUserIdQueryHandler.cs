@@ -1,5 +1,5 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Extensions;
+using Account.API.Infrastructures;
 using Account.API.Mapper;
 using Account.API.Options;
 using Account.API.SeedWork;
@@ -28,14 +28,7 @@ public class GetRegularUserByUserIdQueryHandler(
     public async Task<Result> Handle(GetRegularUserByUserIdQuery request, CancellationToken cancellationToken)
     {
         try
-        {
-            var result = await _cacheService.GetAsync<RegularUserResponseDto>($"{CacheKey.RegularUserPrefix}#{request.UserId}");
-            if (result is not null)
-            {
-                return Result.Success(result, ResponseStatus.Ok);
-            }
-
-
+        { 
             var user = await _unitOfWork.Users.GetRegularUserByIdAsync(request.UserId);
 
             if (user is null)
@@ -44,10 +37,7 @@ public class GetRegularUserByUserIdQueryHandler(
             }
 
             var userDto = await ToRegularUserResponseDto(user);
-
-            await _cacheService
-              .SetAsync($"{CacheKey.RegularUserPrefix}#{request.UserId}", userDto, TimeSpan.FromSeconds(_cacheOptions.CurrentValue.CacheLifeTime));
-
+             
             return Result.Success(userDto);
         }
         catch (Exception ex)

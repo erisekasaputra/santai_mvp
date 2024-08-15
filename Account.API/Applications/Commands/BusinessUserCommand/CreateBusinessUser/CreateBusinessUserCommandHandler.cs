@@ -1,6 +1,5 @@
 ﻿using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Extensions; 
 using Account.API.Options;
 using Account.API.SeedWork;
 using Account.API.Services;
@@ -14,7 +13,7 @@ using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Options;
-using System.Data; 
+using System.Data;
 
 namespace Account.API.Applications.Commands.BusinessUserCommand.CreateBusinessUser;
 
@@ -105,13 +104,13 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
                 if (referralProgram is null)
                 {
                     // if it is not found the rollback transaction and give the error message related the error items
-                    errors.Add(new ErrorDetail("User.ReferralCode", "Referral code not found"));
+                    errors.Add(new ErrorDetail("BusinessUser.ReferralCode", "Referral code not found"));
                 }
 
                 // check is referral program is still valid 
                 if (referralProgram is not null && referralProgram.ValidDateUtc < DateTime.UtcNow)
                 {
-                    errors.Add(new ErrorDetail("User.ReferralCode", "Referral code expired"));
+                    errors.Add(new ErrorDetail("BusinessUser.ReferralCode", "Referral code expired"));
                 }
             }
               
@@ -492,25 +491,25 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
         if (user.Username == username)
         {
-            conflicts.Add(new ($"User.{nameof(user.Username)}", 
+            conflicts.Add(new ($"BusinessUser.{nameof(user.Username)}", 
                 "User username already registered"));
         }
 
         if (user.HashedEmail == email || user.NewHashedEmail == email)
         {
-            conflicts.Add(new ($"User.{nameof(user.HashedEmail)}", 
+            conflicts.Add(new ($"BusinessUser.{nameof(user.HashedEmail)}", 
                 "User email already registered"));
         }
 
         if (user.HashedPhoneNumber == phoneNumber || user.NewHashedPhoneNumber == phoneNumber)
         {
-            conflicts.Add(new ($"User.{nameof(user.HashedPhoneNumber)}", 
+            conflicts.Add(new ($"BusinessUser.{nameof(user.HashedPhoneNumber)}", 
                 "User phone number already registered"));
         }
 
         if (user.IdentityId == identityId)
         {
-            conflicts.Add(new ($"User.{nameof(user.IdentityId)}", 
+            conflicts.Add(new ($"BusinessUser.{nameof(user.IdentityId)}", 
                 "Identity id already registered"));
         }
 

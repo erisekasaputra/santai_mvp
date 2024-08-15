@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions;
-using Account.API.Options;
+﻿using Account.API.Options;
 using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Aggregates.DrivingLicenseAggregate;
@@ -40,19 +39,22 @@ public class SetDrivingLicenseByUserIdCommandHandler : IRequestHandler<SetDrivin
 
             if (mechanicUser is null)
             {
-                return Result.Failure($"Mechanic user '{request.UserId}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound)
+                     .WithError(new("MechanicUser.Id", "Mechanic user not found"));
             }  
 
             var accepted = await _unitOfWork.DrivingLicenses.GetAcceptedByUserIdAsync(request.UserId);
 
             if (accepted is not null && accepted.UserId == request.UserId)
             {
-                return Result.Failure($"Driving license '{accepted.Id}' already accepted", ResponseStatus.Conflict);
+                return Result.Failure($"Driving license already accepted", ResponseStatus.Conflict)
+                     .WithError(new("DrivingLicense.Id", "Conflict driving license"));
             }
 
             if (accepted is not null)
             {
-                return Result.Failure($"Can only have one 'Accepted' driving license for a user", ResponseStatus.Conflict);
+                return Result.Failure($"Can only have one 'Accepted' driving license for a user", ResponseStatus.Conflict)
+                     .WithError(new("DrivingLicense.Id", "Conflict driving license"));
             }
 
             var hashedLicenseNumber = await HashAsync(request.LicenseNumber);
@@ -62,7 +64,8 @@ public class SetDrivingLicenseByUserIdCommandHandler : IRequestHandler<SetDrivin
             
             if (registeredToOtherUser)
             { 
-                return Result.Failure($"Driving license number already used by other user", ResponseStatus.Conflict);
+                return Result.Failure($"Driving license number already used by other user", ResponseStatus.Conflict)
+                     .WithError(new("DrivingLicense.Id", "Driving license conflict"));
             }
 
             var drivingLicense = new DrivingLicense(

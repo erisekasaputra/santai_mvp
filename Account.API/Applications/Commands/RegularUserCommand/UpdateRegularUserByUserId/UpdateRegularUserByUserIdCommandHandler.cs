@@ -1,5 +1,4 @@
-﻿using Account.API.Extensions;
-using Account.API.Mapper;
+﻿using Account.API.Mapper;
 using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Exceptions;
@@ -25,7 +24,8 @@ public class UpdateRegularUserByUserIdCommandHandler(
             var user = await _unitOfWork.Users.GetRegularUserByIdAsync(request.UserId);
             if (user is null)
             {
-                return Result.Failure($"User {request.UserId} not found", ResponseStatus.NotFound);
+                return Result.Failure($"Regular user not found", ResponseStatus.NotFound)
+                    .WithError(new("RegularUser.Id", "User not found"));
             }
 
             var encryptedAddressLine1 = await EncryptAsync(request.Address.AddressLine1);

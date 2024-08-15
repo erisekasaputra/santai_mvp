@@ -1,8 +1,7 @@
-﻿using Account.API.Extensions;
-using Account.API.SeedWork;
+﻿using Account.API.SeedWork;
 using Account.API.Services;
 using Account.Domain.Exceptions;
-using Account.Domain.SeedWork; 
+using Account.Domain.SeedWork;
 using MediatR;
 
 namespace Account.API.Applications.Commands.MechanicUserCommand.SetRatingByUserId;
@@ -22,7 +21,8 @@ public class SetRatingByUserIdCommandHandler(
             var user = await _unitOfWork.Users.GetMechanicUserByIdAsync(request.UserId);
             if (user is null)
             {
-                return Result.Failure($"User '{request.UserId}' not found", ResponseStatus.NotFound);
+                return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound) 
+                     .WithError(new("MechanicUser.Id", "Mechanic user not found"));
             }
             
             user.SetRating(request.Rating);
