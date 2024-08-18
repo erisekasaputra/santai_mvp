@@ -1,6 +1,7 @@
 using Account.API.API;  
 using Account.API.Extensions;
 using Account.API.Middleware; 
+
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddJsonEnumConverterBehavior();
@@ -33,7 +34,9 @@ builder.Services.AddMassTransitContext();
 builder.Services.AddDataEncryption(builder.Configuration); 
 
 var app = builder.Build();
- 
+
+builder.Configuration.AddEnvironmentVariables();
+
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -43,9 +46,9 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-//app.UseHttpsRedirection();
-  
-//app.UseHsts();
+app.UseHttpsRedirection();
+
+app.UseHsts();
 
 app.UseMiddleware<IdempotencyMiddleware>(); 
 

@@ -2,5 +2,5 @@
 
 public static class ObjectPrefix
 {
-    public const string UserImageProfilePrefix = "user/profile-picture/";
+    public const string ImageResource = "images/";
 }

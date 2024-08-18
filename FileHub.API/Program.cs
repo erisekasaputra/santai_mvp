@@ -43,12 +43,21 @@ builder.Services.AddRateLimiter(options =>
     options.AddTokenBucketLimiter("FileUploadRateLimiterPolicy", configureOptions =>
     {
         configureOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        configureOptions.TokenLimit = 500;
+        configureOptions.QueueLimit = 50;
+        configureOptions.TokensPerPeriod = 500;
+        configureOptions.ReplenishmentPeriod = TimeSpan.FromSeconds(1);
+    });
+
+    options.AddTokenBucketLimiter("FileReadRateLimiting", configureOptions =>
+    {
+        configureOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
         configureOptions.TokenLimit = 1000;
         configureOptions.QueueLimit = 100;
         configureOptions.TokensPerPeriod = 1000;
         configureOptions.ReplenishmentPeriod = TimeSpan.FromSeconds(1);
     });
-     
+
 });
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
@@ -81,8 +90,7 @@ app.UseHsts();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-}
-
+} 
 
 app.MapControllers();
 

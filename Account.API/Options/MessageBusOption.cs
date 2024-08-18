@@ -10,7 +10,7 @@ public class MessageBusOption
     public int QueryDelay { get; set; }
     public int QueryTimeout { get; set; }
     public int QueryMessageLimit { get; set; }
-    public int MessageRetryInternal { get; set; }
+    public int MessageRetryInterval { get; set; }
     public int MessageRetryTimespan { get; set; }
     public int MessageTimeout { get; set; } 
 

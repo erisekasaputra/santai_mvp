@@ -6,7 +6,7 @@ namespace Search.Worker.Infrastructure.Repository;
 
 public class ItemRepository(ElasticsearchContext context) : IItemRepository
 {
-    const string _Index = "item";
+    const string _Index = "items";
     private readonly ElasticsearchContext _context = context;
 
     public async Task<bool> CreateItemAsync(Item item, CancellationToken cancellationToken = default)

@@ -1,17 +1,12 @@
 [
   {
     "ContainingType": "FileHub.API.Controllers.FilesController",
-    "Method": "SaveUserProfilePicture",
-    "RelativePath": "api/v1/Files/user/{userId}/profile-picture",
+    "Method": "SavePrivateImages",
+    "RelativePath": "api/v1/Files/images/private",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
-      {
-        "Name": "userId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
       {
         "Name": "file",
         "Type": "Microsoft.AspNetCore.Http.IFormFile",
@@ -23,7 +18,39 @@
   {
     "ContainingType": "FileHub.API.Controllers.FilesController",
     "Method": "Get",
-    "RelativePath": "api/v1/Files/user/profile-picture/{resourceName}",
+    "RelativePath": "api/v1/Files/images/private/{resourceName}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "resourceName",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FileHub.API.Controllers.FilesController",
+    "Method": "SavePublicImages",
+    "RelativePath": "api/v1/Files/images/public",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "file",
+        "Type": "Microsoft.AspNetCore.Http.IFormFile",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "FileHub.API.Controllers.FilesController",
+    "Method": "GetPublicResourceUrl",
+    "RelativePath": "api/v1/Files/images/public/{resourceName}/url",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

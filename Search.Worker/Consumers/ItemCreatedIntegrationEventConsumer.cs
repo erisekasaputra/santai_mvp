@@ -14,6 +14,6 @@ internal class ItemCreatedIntegrationEventConsumer(IMediator mediator) : IConsum
 
         var command = new CreateItemCommand(@event.Id, @event.Name, @event.Description, @event.Price, @event.ImageUrl, @event.CreatedAt, @event.StockQuantity, @event.SoldQuantity, @event.CategoryId, @event.CategoryName, @event.CategoryImageUrl, @event.BrandId, @event.BrandName, @event.BrandImageUrl, @event.IsActive, @event.IsDeleted, @event.OwnerReviews!); 
 
-        await _mediator.Send(command);
+        await _mediator.Send(command); 
     }
 }

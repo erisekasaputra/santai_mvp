@@ -1,0 +1,7 @@
+{
+  "policies": {
+    "default": {
+      "allow": [ "GenerateKey", "DecryptKey", "EncryptKey" ]
+    }
+  }
+}

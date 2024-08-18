@@ -28,35 +28,37 @@ public class FilesController
         _fileValidation = fileValidation;
         _cacheService = cacheService;
     }
-     
 
-    [HttpPost("user/{userId}/profile-picture")]
+
+    [HttpPost("images/private")]
     [EnableRateLimiting("FileUploadRateLimiterPolicy")]
-    public async Task<IResult> SaveUserProfilePicture(Guid userId, IFormFile file)
+    public async Task<IResult> SavePrivateImages(IFormFile file)
     {
         try
         {
-            if (file is null || userId == Guid.Empty)
+            if (file is null)
             {
                 return await Task.FromResult(TypedResults.BadRequest("Invalid request parameter"));
             }
 
             if (!_fileValidation.IsValidImage(file))
-            { 
+            {
                 return await Task.FromResult(TypedResults.BadRequest("Invalid file type. Only image files are allowed."));
             }
 
-            if (!await _storageService.IsBucketExistsAsync())
+            if (!await _storageService.IsBucketPrivateExistsAsync())
             {
-                await _storageService.CreateBucketAsync();
+                _logger.LogError("Private bucket does not configured yet");
+                return await Task.FromResult(TypedResults.InternalServerError(Messages.InternalServerError));
             }
 
-            var newFileName = UrlBuilder.Build(userId.ToString(), "_", Guid.NewGuid().ToString(), Path.GetExtension(file.FileName));
-            var objectName = UrlBuilder.Build(ObjectPrefix.UserImageProfilePrefix, newFileName);
+            var newFileName = UrlBuilder.Build(Guid.NewGuid().ToString(), Path.GetExtension(file.FileName));
+            var objectName = UrlBuilder.Build(ObjectPrefix.ImageResource, newFileName);
 
-            await _storageService.UploadFileAsync(objectName, file);
+            await _storageService.UploadFilePrivateAsync(objectName, file);
 
-            return TypedResults.Created(string.Empty, new {
+            return TypedResults.Created(string.Empty, new
+            {
                 ResourceName = newFileName
             });
         }
@@ -68,12 +70,61 @@ public class FilesController
     }
 
 
-    [HttpGet("user/profile-picture/{resourceName}")]
+    [HttpPost("images/public")]
     [EnableRateLimiting("FileUploadRateLimiterPolicy")]
+    public async Task<IResult> SavePublicImages(IFormFile file)
+    {
+        try
+        {
+            if (file is null)
+            {
+                return await Task.FromResult(TypedResults.BadRequest("Invalid request parameter"));
+            }
+
+            if (!_fileValidation.IsValidImage(file))
+            {
+                return await Task.FromResult(TypedResults.BadRequest("Invalid file type. Only image files are allowed."));
+            }
+
+            if (!await _storageService.IsBucketPublicExistsAsync())
+            {
+                _logger.LogError("Public bucket does not configured yet");
+                return await Task.FromResult(TypedResults.InternalServerError(Messages.InternalServerError));
+            }
+
+            var newFileName = UrlBuilder.Build(Guid.NewGuid().ToString(), Path.GetExtension(file.FileName));
+            var objectName = UrlBuilder.Build(ObjectPrefix.ImageResource, newFileName);
+
+            await _storageService.UploadFilePublicAsync(objectName, file);
+
+            return TypedResults.Created(string.Empty, new
+            {
+                ResourceName = newFileName
+            });
+        }
+        catch (MinioException ex)
+        {
+            _logger.LogError(ex.Message, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+
+    [HttpGet("images/private/{resourceName}")]
+    [EnableRateLimiting("FileReadRateLimiting")]
     public async Task<IResult> Get(string resourceName)
     {
         try
         {
+            var type = Path.GetExtension(resourceName);
+            var objectName = UrlBuilder.Build(ObjectPrefix.ImageResource, resourceName);
+
+            var cache = await _cacheService.GetAsync<byte[]>(objectName);
+            if (cache is not null)
+            {
+                return TypedResults.File(cache, ContentType.GetContentType(type), resourceName);
+            }
+
             if (string.IsNullOrEmpty(resourceName))
             {
                 return TypedResults.BadRequest(
@@ -81,11 +132,7 @@ public class FilesController
                     .WithError(new("ResourceName", "Object url must not empty")));
             }
 
-            var type = Path.GetExtension(resourceName);
-
-            var objectName = UrlBuilder.Build(ObjectPrefix.UserImageProfilePrefix, resourceName);
-
-            var bytes = await _storageService.GetFileAsync(objectName);
+            var bytes = await _storageService.GetFilePrivateAsync(objectName);
 
             if (bytes is null)
             {
@@ -94,9 +141,28 @@ public class FilesController
                     .WithError(new("ResourceName", "Object resource not found")));
             }
 
+            await _cacheService.SetAsync<byte[]>(objectName, bytes, TimeSpan.FromMinutes(5));
+
             return TypedResults.File(bytes, ContentType.GetContentType(type), resourceName);
         }
-        catch (Exception ex) 
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+    [HttpGet("images/public/{resourceName}/url")]
+    public async Task<IResult> GetPublicResourceUrl(string resourceName)
+    {
+        try
+        {
+            return TypedResults.Ok(new 
+            { 
+                Url = await _storageService.GeneratePublicObjectUrl(UrlBuilder.Build(ObjectPrefix.ImageResource, resourceName))
+            });  
+        }
+        catch (Exception ex)
         {
             _logger.LogError(ex.Message, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);

@@ -87,6 +87,7 @@ builder.Services.AddMassTransit(x =>
 builder.Services.AddScoped<ApplicationService>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<MetaTableHelper>();
+builder.Configuration.AddEnvironmentVariables();
 
 var app = builder.Build();  
  

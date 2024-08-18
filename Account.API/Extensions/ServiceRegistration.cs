@@ -134,7 +134,7 @@ public static class ServiceRegistration
 
                 configure.UseMessageRetry(retryCfg =>
                 {
-                    retryCfg.Interval(options.MessageRetryInternal, 
+                    retryCfg.Interval(options.MessageRetryInterval, 
                         TimeSpan.FromSeconds(options.MessageRetryTimespan));
                 });
 
