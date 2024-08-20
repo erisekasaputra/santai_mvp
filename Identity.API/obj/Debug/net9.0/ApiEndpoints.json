@@ -70,6 +70,22 @@
   },
   {
     "ContainingType": "Identity.API.Controllers.AuthController",
+    "Method": "Logout",
+    "RelativePath": "api/v1/Auth/logout",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Identity.API.Dto.RefreshTokenRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Identity.API.Controllers.AuthController",
     "Method": "SendOtp",
     "RelativePath": "api/v1/Auth/otp",
     "HttpMethod": "POST",
@@ -91,16 +107,6 @@
   },
   {
     "ContainingType": "Identity.API.Controllers.AuthController",
-    "Method": "GetResource",
-    "RelativePath": "api/v1/Auth/protected-resource",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Identity.API.Controllers.AuthController",
     "Method": "RefreshToken",
     "RelativePath": "api/v1/Auth/refresh-token",
     "HttpMethod": "POST",
@@ -117,8 +123,18 @@
   },
   {
     "ContainingType": "Identity.API.Controllers.AuthController",
+    "Method": "GetResource",
+    "RelativePath": "api/v1/Auth/register/business",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Identity.API.Controllers.AuthController",
     "Method": "CreateIdentity",
-    "RelativePath": "api/v1/Auth/register",
+    "RelativePath": "api/v1/Auth/register/user",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -163,6 +179,22 @@
       {
         "Name": "request",
         "Type": "Identity.API.Dto.VerifyPhoneNumberRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Identity.API.Controllers.AuthController",
+    "Method": "VerifyToken",
+    "RelativePath": "api/v1/Auth/verify/token",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Identity.API.Dto.RefreshTokenRequest",
         "IsRequired": true
       }
     ],

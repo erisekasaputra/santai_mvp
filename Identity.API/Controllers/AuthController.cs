@@ -263,12 +263,19 @@ public class AuthController : ControllerBase
                 }
 
 
-                var claims = await _userManager.GetClaimsAsync(user);
 
-                if (claims is null || claims.Count == 0)
+                var claims = await _userManager.GetClaimsAsync(user);
+                if (claims is null || !claims.Any())
                 {
-                    await UserDeletion(user);
-                    return TypedResults.Unauthorized();
+                    _logger.LogWarning("User claims are missing or invalid for user ID: {UserId}", user.Id);
+                    return TypedResults.InternalServerError(Messages.AccountError);
+                }
+
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles is null || !roles.Any())
+                {
+                    _logger.LogWarning("User roles are missing or invalid for user ID: {UserId}", user.Id);
+                    return TypedResults.InternalServerError(Messages.AccountError);
                 }
 
 
@@ -299,17 +306,8 @@ public class AuthController : ControllerBase
                         RequestId = requestId
                     }); 
                 }
+                 
 
-
-
-                var userClaims = await _userManager.GetClaimsAsync(user);
-
-                if (!userClaims.Any())
-                { 
-                    await UserDeletion(user);
-
-                    return TypedResults.Unauthorized();
-                } 
 
                 (Guid newRequestId, string newOtpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyLogin);
 
@@ -438,20 +436,22 @@ public class AuthController : ControllerBase
                 {
                     return TypedResults.Unauthorized();
                 }
-
-
-
+                 
 
                 var claims = await _userManager.GetClaimsAsync(user);
-
-                if (claims is null || claims.Count == 0)
+                if (claims is null || !claims.Any())
                 {
-                    await UserDeletion(user);
-
-                    _logger.LogError("User {0} has user data but does not have user claim and user roles", user.Id);
-
-                    return TypedResults.InternalServerError(Messages.InternalServerError);
+                    _logger.LogWarning("User claims are missing or invalid for user ID: {UserId}", user.Id);
+                    return TypedResults.InternalServerError(Messages.AccountError);
                 }
+
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles is null || !roles.Any())
+                {
+                    _logger.LogWarning("User roles are missing or invalid for user ID: {UserId}", user.Id);
+                    return TypedResults.InternalServerError(Messages.AccountError);
+                }
+
 
                 (Guid newRequestId, string newOtpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyLogin);
 
@@ -571,15 +571,20 @@ public class AuthController : ControllerBase
 
 
                 var claims = await _userManager.GetClaimsAsync(user);
-
-                if (claims is null || claims.Count == 0)
+                if (claims is null || !claims.Any())
                 {
-                    await UserDeletion(user);
+                    _logger.LogWarning("User claims are missing or invalid for user ID: {UserId}", user.Id);
+                    return TypedResults.InternalServerError(Messages.AccountError);
+                }
 
-                    _logger.LogError("User {0} has user data but does not have user claim and user roles", user.Id);
-                    
-                    return TypedResults.InternalServerError(Messages.InternalServerError);
-                } 
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles is null || !roles.Any())
+                {
+                    _logger.LogWarning("User roles are missing or invalid for user ID: {UserId}", user.Id);
+                    return TypedResults.InternalServerError(Messages.AccountError);
+                }
+
+
 
                 (Guid newRequestId, string newOtpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyLogin);
 
@@ -665,13 +670,22 @@ public class AuthController : ControllerBase
                             _logger.LogError("User with id {0} has email but the phone number is empty", userByEmailClaim.Id);
                             return TypedResults.InternalServerError(Messages.AccountError);
                         }
+                        
 
-                        var userClaims = await _userManager.GetClaimsAsync(userByEmailClaim);
-                        if (userClaims is null)
+                        var claims = await _userManager.GetClaimsAsync(userByEmailClaim);
+                        if (claims is null || !claims.Any())
                         {
-                            await UserDeletion(userByEmailClaim);
+                            _logger.LogWarning("User claims are missing or invalid for user ID: {UserId}", userByEmailClaim.Id);
                             return TypedResults.InternalServerError(Messages.AccountError);
                         }
+
+                        var roles = await _userManager.GetRolesAsync(userByEmailClaim);
+                        if (roles is null || !roles.Any())
+                        {
+                            _logger.LogWarning("User roles are missing or invalid for user ID: {UserId}", userByEmailClaim.Id);
+                            return TypedResults.InternalServerError(Messages.AccountError);
+                        }
+
 
                         if (!userByEmailClaim.PhoneNumber.Equals(request.PhoneNumber))
                         {
@@ -854,11 +868,18 @@ public class AuthController : ControllerBase
 
             var claims = await _userManager.GetClaimsAsync(user);  
             if (claims is null || !claims.Any())
-            {
-                await UserDeletion(user);
-                return TypedResults.Unauthorized();
+            { 
+                _logger.LogWarning("User claims are missing or invalid for user ID: {UserId}", user.Id);
+                return TypedResults.InternalServerError(Messages.AccountError);
             } 
-             
+
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles is null || !roles.Any())
+            {
+                _logger.LogWarning("User roles are missing or invalid for user ID: {UserId}", user.Id);
+                return TypedResults.InternalServerError(Messages.AccountError);
+            }
+
 
             var claimsIdentity = new ClaimsIdentity(claims); 
             var accessToken = _tokenService.GenerateAccessToken(claimsIdentity); 
@@ -1118,23 +1139,7 @@ public class AuthController : ControllerBase
         } 
 
         return await _userManager.AddClaimsAsync(user, claims);
-    } 
-
-    private async Task UserDeletion(ApplicationUser user)
-    {
-        var roles = await _userManager.GetRolesAsync(user);
-
-        var userLoginInfos = await _userManager.GetLoginsAsync(user);
-
-        await _userManager.DeleteAsync(user);
-        await _userManager.RemovePasswordAsync(user); 
-        await _userManager.RemoveFromRolesAsync(user, roles);
-
-        foreach(var userLoginInfo in userLoginInfos)
-        {
-            await _userManager.RemoveLoginAsync(user, userLoginInfo.LoginProvider, userLoginInfo.ProviderKey);  
-        }
-    }
+    }  
 
     [Authorize(Policy = "Administrator")]
     [HttpPost("register/business")]

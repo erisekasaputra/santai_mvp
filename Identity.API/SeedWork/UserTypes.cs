@@ -12,7 +12,7 @@ public class UserTypes
 
     private static readonly List<string> _allowed = [RegularUserRole, MechanicUserRole];
 
-    private static readonly List<string> allTypes = [RegularUserRole, MechanicUserRole, AdministratorRole, StaffUserRole];
+    private static readonly List<string> allTypes = [RegularUserRole, MechanicUserRole, AdministratorRole, StaffUserRole, BusinessUserRole];
     public static ReadOnlyCollection<string> AllTypes() => allTypes.AsReadOnly();
     public static ReadOnlyCollection<string> AllowedTypes() => _allowed.AsReadOnly();
 }
