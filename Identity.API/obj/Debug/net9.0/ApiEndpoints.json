@@ -39,6 +39,22 @@
   {
     "ContainingType": "Identity.API.Controllers.AuthController",
     "Method": "InternalLoginUser",
+    "RelativePath": "api/v1/Auth/login/staff",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Identity.API.Dto.LoginStaffRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Identity.API.Controllers.AuthController",
+    "Method": "InternalLoginUser",
     "RelativePath": "api/v1/Auth/login/user",
     "HttpMethod": "POST",
     "IsController": true,
@@ -54,7 +70,7 @@
   },
   {
     "ContainingType": "Identity.API.Controllers.AuthController",
-    "Method": "SendOtpForVerifyPhoneNumber",
+    "Method": "SendOtp",
     "RelativePath": "api/v1/Auth/otp",
     "HttpMethod": "POST",
     "IsController": true,

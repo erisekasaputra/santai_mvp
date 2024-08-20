@@ -12,7 +12,7 @@ public class SeedDatabase
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-        string[] roleNames = [.. UserTypes.AllTypes().Values];
+        string[] roleNames = [.. UserTypes.AllTypes()];
 
         foreach (var roleName in roleNames)
         {
@@ -42,6 +42,7 @@ public class SeedDatabase
                     PhoneNumber = phoneNumber,
                     PhoneNumberConfirmed = true,
                     EmailConfirmed = true,
+                    UserType = UserTypes.AdministratorRole
                 };
                 await userManager.CreateAsync(user, password);
 
@@ -56,8 +57,8 @@ public class SeedDatabase
 
                 foreach (var keyValue in UserTypes.AllTypes())
                 {
-                    await userManager.AddToRoleAsync(user, keyValue.Value);
-                    claims.Add(new Claim(ClaimTypes.Role, keyValue.Value));
+                    await userManager.AddToRoleAsync(user, keyValue);
+                    claims.Add(new Claim(ClaimTypes.Role, keyValue));
                 }
 
                 await userManager.AddClaimsAsync(user, claims);

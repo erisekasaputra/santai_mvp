@@ -7,10 +7,12 @@ using Identity.API.Infrastructure;
 using Identity.API.Middleware;
 using Identity.API.SeedWork;
 using Identity.API.Service;
-using MassTransit; 
+using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
@@ -64,7 +66,17 @@ builder.Services.AddSingleton<ITokenService, JwtTokenService>();
  
 builder.Services.AddSingleton<IJwtTokenValidator, JwtTokenValidator>();
 
-builder.Services.AddSingleton<IGoogleTokenValidator, GoogleTokenValidator>();
+if(builder.Environment.IsDevelopment())
+{
+    builder.Services.AddSingleton<IGoogleTokenValidator, MockGoogleTokenValidator>();
+}
+
+if(builder.Environment.IsProduction())
+{
+    builder.Services.AddSingleton<IGoogleTokenValidator, GoogleTokenValidator>();
+}
+
+
 
 builder.Services.AddSingleton<IOtpService, OtpService>();
 
@@ -156,41 +168,39 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 6;
 })
-.AddEntityFrameworkStores<ApplicationDbContext>()
-.AddDefaultTokenProviders()
+.AddEntityFrameworkStores<ApplicationDbContext>() 
 .AddSignInManager<SignInManager<ApplicationUser>>()
 .AddPasswordValidator<PasswordValidator<ApplicationUser>>()
 .AddRoleManager<RoleManager<IdentityRole>>()
 .AddRoles<IdentityRole>()
+.AddDefaultTokenProviders()
 .AddClaimsPrincipalFactory<ApplicationClaims>();
 
-builder.Services.AddAuthentication()
-    .AddJwtBearer(options =>
-    {
-        var secretKey = Encoding.UTF8.GetBytes(jwtOption?.SecretKey ?? throw new Exception("Secret key for jwt can not be empty"));
+builder.Services.AddAuthentication(authOption =>
+{
+    authOption.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    authOption.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    var secretKey = Encoding.UTF8.GetBytes(jwtOption?.SecretKey ?? throw new Exception("Secret key for jwt can not be empty"));
 
-        options.TokenValidationParameters = new TokenValidationParameters()
-        {
-            ValidateIssuer = true,
-            ValidateAudience = true,
-            ValidateLifetime = true,
-            ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtOption?.Issuer ?? throw new Exception("Issuer can not be null"),
-            ValidAudience = jwtOption?.Audience ?? throw new Exception("Audience can not be null"),
-            IssuerSigningKey = new SymmetricSecurityKey(secretKey)
-        };
-    })
-    .AddGoogle(googleOption =>
+    options.TokenValidationParameters = new TokenValidationParameters()
     {
-        googleOption.ClientId = googleOptions?.ClientId ?? throw new Exception("Google client id can not be null");
-        googleOption.ClientSecret = googleOptions?.ClientSecret ?? throw new Exception("Google client secret can not be null");
-    });
-   
-    //.AddFacebook(facebookOption =>
-    //{
-    //    facebookOption.AppId = facebookOptions?.AppId ?? throw new Exception("Facebook app id can not be null");
-    //    facebookOption.AppSecret = facebookOptions?.AppSecret ?? throw new Exception("Facebook app secret can not be null");
-    //});
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
+        ValidIssuer = jwtOption?.Issuer ?? throw new Exception("Issuer can not be null"),
+        ValidAudience = jwtOption?.Audience ?? throw new Exception("Audience can not be null"),
+        IssuerSigningKey = new SymmetricSecurityKey(secretKey)
+    };
+})
+.AddGoogle(googleOption =>
+{
+    googleOption.ClientId = googleOptions?.ClientId ?? throw new Exception("Google client id can not be null");
+    googleOption.ClientSecret = googleOptions?.ClientSecret ?? throw new Exception("Google client secret can not be null");
+});
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
@@ -213,9 +223,9 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("Administrator", policy => 
+    options.AddPolicy("RegularUserPolicy", policy => 
     {
-        policy.RequireRole("Administrator");
+        policy.RequireRole("RegularUser");
     });
 }); 
 

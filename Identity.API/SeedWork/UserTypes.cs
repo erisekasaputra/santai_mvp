@@ -4,22 +4,15 @@ namespace Identity.API.SeedWork;
 
 public class UserTypes
 {
-    public const string AdministratorRole = "administrator";
-    public const string RegularUserRole = "regular-user";
-    public const string BusinessUserRole = "business-user";
-    public const string MechanicUserRole = "mechanic-user";
-    public const string StaffUserRole = "staff-user";
-
-    private static Dictionary<string, string> _allTypes = new()
-    {
-        { AdministratorRole, "Administrator" },
-        { RegularUserRole, "RegularUser" },
-        { BusinessUserRole, "BusinessUser" },
-        { StaffUserRole, "StaffUser" },
-        { MechanicUserRole, "MechanicUser" }
-    };
+    public const string AdministratorRole = "Administrator";
+    public const string RegularUserRole = "RegularUser";
+    public const string BusinessUserRole = "BusinessUser";
+    public const string MechanicUserRole = "MechanicUser";
+    public const string StaffUserRole = "StaffUser"; 
 
     private static readonly List<string> _allowed = [RegularUserRole, MechanicUserRole];
-    public static ReadOnlyDictionary<string, string> AllTypes() => _allTypes.AsReadOnly(); 
+
+    private static readonly List<string> allTypes = [RegularUserRole, MechanicUserRole, AdministratorRole, StaffUserRole];
+    public static ReadOnlyCollection<string> AllTypes() => allTypes.AsReadOnly();
     public static ReadOnlyCollection<string> AllowedTypes() => _allowed.AsReadOnly();
 }
