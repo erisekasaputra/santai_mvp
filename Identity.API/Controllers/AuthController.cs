@@ -347,90 +347,7 @@ public class AuthController : ControllerBase
                 return TypedResults.InternalServerError(Messages.InternalServerError);
             }
         }); 
-    }
-
-    //[HttpPost("otp/send")]
-    //public async Task<IResult> SendOtp()
-
-    [HttpPatch("verify/login")]
-    public async Task<IResult> VerifyLogin(
-        [FromBody] VerifyLoginRequest request, 
-        IValidator<VerifyLoginRequest> validator)
-    { 
-        var strategy = _dbContext.Database.CreateExecutionStrategy();
-
-        return await strategy.ExecuteAsync<IResult>(async () =>
-        {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
-            try
-            {
-                var validation = await validator.ValidateAsync(request);
-
-                if (!validation.IsValid)
-                {
-                    return TypedResults.BadRequest(validation.Errors);
-                }
-
-                var isOtpValid = await _otpService.IsOtpValidAsync(request.PhoneNumber, request.Token);
-
-                if (!isOtpValid)
-                {
-                    return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 400)
-                            .WithError(new("Credentials", "OTP or phone number is invalid")));
-                }
-
-                var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber);
-
-                if (user is null)
-                {
-                    return TypedResults.Unauthorized();
-                }
-
-
-                var claims = await _userManager.GetClaimsAsync(user);
-
-                if (claims is null)
-                {
-                    await _userManager.DeleteAsync(user);
-                    return TypedResults.Unauthorized();
-                }
-
-                var accessToken = _tokenService.GenerateAccessToken(new ClaimsIdentity(claims));
-
-                var refreshToken = await _tokenService.GenerateRefreshTokenAsync(user.Id);
-
-                await _otpService.RemoveOtpAsync(request.PhoneNumber);
-
-                string redirectTo = user.IsAccountRegistered ? _homePageActionName : _createAccountActionName;
-
-                await transaction.CommitAsync();
-
-                return TypedResults.Accepted(redirectTo,
-                new
-                {
-                    AccessToken = accessToken,
-                    RefreshToken = refreshToken,
-                    User = new
-                    {
-                        Sub = user.Id,
-                        Username = user.UserName,
-                        PhoneNumber = user.PhoneNumber,
-                        Email = user.Email, 
-                        UserType = user.UserType,
-                        BusinessCode = user.BusinessCode
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Messages.InternalServerError);
-            }
-        }); 
-    }
-
-
+    }  
 
 
     [HttpPost("login/staff")]
@@ -694,55 +611,7 @@ public class AuthController : ControllerBase
                 return TypedResults.InternalServerError(Messages.InternalServerError);
             }
         }); 
-    }
-
-
-
-    [HttpPatch("verify/phone-number")]
-    public async Task<IResult> VerifyPhoneNumber(
-        [FromBody] VerifyPhoneNumberRequest request,
-        [FromServices] IValidator<VerifyPhoneNumberRequest> validator)
-    {
-        try
-        {
-            var validation = await validator.ValidateAsync(request); 
-            if (!validation.IsValid) 
-            {
-                return TypedResults.BadRequest(validation.Errors);
-            }
-
-
-
-            var user = await _userManager.FindByNameAsync(request.PhoneNumber); 
-            if (user is null)
-            {
-                return TypedResults.Unauthorized();
-            } 
-
-            if (user.PhoneNumberConfirmed)
-            {
-                return TypedResults.NoContent();
-            }
-
-
-            var changeResult = await _userManager.ChangePhoneNumberAsync(user, request.PhoneNumber, request.Token); 
-            if (!changeResult.Succeeded)
-            {
-                var errors = changeResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description)); 
-                return TypedResults.InternalServerError(
-                   Result.Failure("An error has occured", 500)
-                      .WithErrors(errors.ToList()));
-            } 
-
-            return TypedResults.NoContent();
-        }
-        catch (Exception ex) 
-        {
-            _logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
     } 
-
    
 
     [HttpPost("register/user")]
@@ -947,20 +816,37 @@ public class AuthController : ControllerBase
             if (string.IsNullOrWhiteSpace(refreshTokenRequest.RefreshToken))
             {
                 return TypedResults.BadRequest(Result.Failure("Refresh token must not be null", 400));
+            } 
+
+            if (_httpContext is null)
+            {
+                _logger.LogError("Http context is null");
+                return TypedResults.InternalServerError(Messages.InternalServerError);
             }
 
-            if (await _tokenService.IsRefreshTokenBlacklisted(refreshTokenRequest.RefreshToken))
+            var bearer = _httpContext.GetBearerToken();
+
+            if (bearer is null)
+            {
+                return TypedResults.BadRequest(Result.Failure("Access token must not be null", 400));
+            }
+             
+
+            if (await _tokenService.IsRefreshTokenBlacklisted(refreshTokenRequest.RefreshToken) || await _tokenService.IsAccessTokenBlacklisted(bearer))
             {
                 return TypedResults.Unauthorized();
             }
 
-            var newRefreshToken = await _tokenService.RotateRefreshTokenAsync(refreshTokenRequest.RefreshToken); 
-            if (newRefreshToken is null)
+            var refreshToken = await _tokenService.RotateRefreshTokenAsync(refreshTokenRequest.RefreshToken); 
+            if (refreshToken is null)
             {
                 return TypedResults.Unauthorized();
             }
 
-            var user = await _userManager.FindByIdAsync(newRefreshToken.UserId); 
+            await _tokenService.BlackListRefreshTokenAsync(refreshTokenRequest.RefreshToken);
+            await _tokenService.BlackListAccessTokenAsync(bearer);
+
+            var user = await _userManager.FindByIdAsync(refreshToken.UserId); 
             if (user is null)
             {
                 return TypedResults.Unauthorized();
@@ -976,10 +862,11 @@ public class AuthController : ControllerBase
 
             var claimsIdentity = new ClaimsIdentity(claims); 
             var accessToken = _tokenService.GenerateAccessToken(claimsIdentity); 
+
             return TypedResults.Ok(new
             {
                 Token = accessToken,
-                RefreshToken = newRefreshToken.Token,
+                RefreshToken = refreshToken.Token,
                 User = new
                 {
                     Sub = user.Id,
@@ -1001,6 +888,170 @@ public class AuthController : ControllerBase
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
+     
+    [HttpPost("verify/token")]
+    public async Task<IResult> VerifyToken([FromBody] RefreshTokenRequest request)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(request.RefreshToken))
+            {
+                return TypedResults.BadRequest(Result.Failure("Refresh token must not null", 400));
+            }
+
+            if (_httpContext is null)
+            {
+                _logger.LogError("Http context is null");
+                return TypedResults.InternalServerError(Messages.InternalServerError);
+            }
+
+            var bearer = _httpContext.GetBearerToken();
+
+            if (bearer is null)
+            {
+                return TypedResults.BadRequest(Result.Failure("Access token must not be null", 400));
+            }
+
+            var isAccessTokenBlocked = await _tokenService.IsAccessTokenBlacklisted(bearer);
+            var isRefreshTokenBlocked = await _tokenService.IsRefreshTokenBlacklisted(request.RefreshToken);
+
+            return isAccessTokenBlocked || isRefreshTokenBlocked ? TypedResults.Forbid() : TypedResults.Ok();
+        }
+        catch(Exception ex)
+        {
+            _logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        } 
+    }
+
+
+
+    [HttpPatch("verify/login")]
+    public async Task<IResult> VerifyLogin(
+        [FromBody] VerifyLoginRequest request,
+        IValidator<VerifyLoginRequest> validator)
+    {
+        var strategy = _dbContext.Database.CreateExecutionStrategy();
+
+        return await strategy.ExecuteAsync<IResult>(async () =>
+        {
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            try
+            {
+                var validation = await validator.ValidateAsync(request);
+
+                if (!validation.IsValid)
+                {
+                    return TypedResults.BadRequest(validation.Errors);
+                }
+
+                var isOtpValid = await _otpService.IsOtpValidAsync(request.PhoneNumber, request.Token);
+
+                if (!isOtpValid)
+                {
+                    return TypedResults.BadRequest(
+                        Result.Failure("An error has occured", 400)
+                            .WithError(new("Credentials", "OTP or phone number is invalid")));
+                }
+
+                var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber);
+
+                if (user is null)
+                {
+                    return TypedResults.Unauthorized();
+                }
+
+
+                var claims = await _userManager.GetClaimsAsync(user);
+
+                if (claims is null)
+                {
+                    await _userManager.DeleteAsync(user);
+                    return TypedResults.Unauthorized();
+                }
+
+                var accessToken = _tokenService.GenerateAccessToken(new ClaimsIdentity(claims));
+
+                var refreshToken = await _tokenService.GenerateRefreshTokenAsync(user.Id);
+
+                await _otpService.RemoveOtpAsync(request.PhoneNumber);
+
+                string redirectTo = user.IsAccountRegistered ? _homePageActionName : _createAccountActionName;
+
+                await transaction.CommitAsync();
+
+                return TypedResults.Accepted(redirectTo,
+                new
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken,
+                    User = new
+                    {
+                        Sub = user.Id,
+                        Username = user.UserName,
+                        PhoneNumber = user.PhoneNumber,
+                        Email = user.Email,
+                        UserType = user.UserType,
+                        BusinessCode = user.BusinessCode
+                    }
+                });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message, ex.InnerException?.Message);
+                return TypedResults.InternalServerError(Messages.InternalServerError);
+            }
+        });
+    }
+
+
+
+
+    [HttpPatch("verify/phone-number")]
+    public async Task<IResult> VerifyPhoneNumber(
+        [FromBody] VerifyPhoneNumberRequest request,
+        [FromServices] IValidator<VerifyPhoneNumberRequest> validator)
+    {
+        try
+        {
+            var validation = await validator.ValidateAsync(request);
+            if (!validation.IsValid)
+            {
+                return TypedResults.BadRequest(validation.Errors);
+            }
+
+
+
+            var user = await _userManager.FindByNameAsync(request.PhoneNumber);
+            if (user is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            if (user.PhoneNumberConfirmed)
+            {
+                return TypedResults.NoContent();
+            }
+
+
+            var changeResult = await _userManager.ChangePhoneNumberAsync(user, request.PhoneNumber, request.Token);
+            if (!changeResult.Succeeded)
+            {
+                var errors = changeResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
+                return TypedResults.InternalServerError(
+                   Result.Failure("An error has occured", 500)
+                      .WithErrors(errors.ToList()));
+            }
+
+            return TypedResults.NoContent();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
 
 
     [Authorize]
