@@ -29,7 +29,7 @@ public class JwtTokenService : ITokenService
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = claims,
-            Expires = DateTime.UtcNow.AddHours(1),
+            Expires = DateTime.UtcNow.AddHours(_jwtConfigs.CurrentValue.TotalSecondsAccessTokenLifetime),
             Issuer = _jwtConfigs.CurrentValue.Issuer,
             Audience = _jwtConfigs.CurrentValue.Audience,
             SigningCredentials = credentials,
@@ -44,7 +44,7 @@ public class JwtTokenService : ITokenService
     public async Task<RefreshToken> GenerateRefreshTokenAsync(string userId)
     {
         var newToken = SecretGenerator.GenerateRandomSecret();  
-        var tokenExpiry = DateTime.UtcNow.AddMonths(1);
+        var tokenExpiry = DateTime.UtcNow.AddDays(_jwtConfigs.CurrentValue.TotalDaysRefreshTokenLifetime);
 
 
         var hashedRefreshToken = new RefreshToken()
@@ -55,7 +55,7 @@ public class JwtTokenService : ITokenService
         };
 
         var key = CacheKey.RefreshTokenCacheKey(newToken.HashToken());
-        await _cacheService.SetAsync(key, hashedRefreshToken, TimeSpan.FromDays(30));
+        await _cacheService.SetAsync(key, hashedRefreshToken, TimeSpan.FromDays(_jwtConfigs.CurrentValue.TotalDaysRefreshTokenLifetime));
 
 
 
@@ -115,4 +115,28 @@ public class JwtTokenService : ITokenService
         return (storedRefreshToken.ExpiryDateUtc > DateTime.UtcNow);
     }
 
+    public async Task<bool> BlackListRefreshTokenAsync(string refreshToken)
+    {
+        return await _cacheService.SetAsync(
+            CacheKey.BlackListRefreshTokenKey(refreshToken), 
+                new { Blacklisted = true }, 
+                TimeSpan.FromDays(_jwtConfigs.CurrentValue.TotalDaysRefreshTokenLifetime));
+    }
+
+    public async Task<bool> BlackListAccessTokenAsync(string accessToken)
+    {
+        return await _cacheService.SetAsync(
+            CacheKey.BlackListAccessTokenKey(accessToken), accessToken,
+                TimeSpan.FromSeconds(_jwtConfigs.CurrentValue.TotalSecondsAccessTokenLifetime));
+    }
+
+    public async Task<bool> IsRefreshTokenBlacklisted(string refreshToken)
+    {
+        return await _cacheService.GetAsync<string>(CacheKey.BlackListRefreshTokenKey(refreshToken)) is not null;
+    }
+
+    public async Task<bool> IsAccessTokenBlacklisted(string accessToken)
+    {
+        return await _cacheService.GetAsync<string>(CacheKey.BlackListAccessTokenKey(accessToken)) is not null;
+    }
 }

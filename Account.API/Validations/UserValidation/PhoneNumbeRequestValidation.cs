@@ -10,6 +10,6 @@ public class PhoneNumbeRequestValidation : AbstractValidator<PhoneNumberRequestD
     {
         RuleFor(x => x.PhoneNumber)
             .NotEmpty().WithMessage("Phone number can not be empty")
-            .Must(PhoneNumberExtension.IsValidPhoneNumber).WithMessage("Phone number format is invalid");
+            .Must(PhoneNumberExtension.IsValidPhoneNumber).WithMessage("Phone number must consist of number only and start with '+'");
     }
 }

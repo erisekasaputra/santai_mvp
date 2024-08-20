@@ -44,7 +44,7 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
             var errors = new List<ErrorDetail>();
 
             var encryptedRegistrationNumber = await EncryptAsync(request.RegistrationNumber);
-            var encryptedEngineNumber = await EncryptAsync(request.EngineNumber); 
+            var encryptedEngineNumber = await EncryptAsync(request.EngineNumber);
             var encryptedChassisNumber = await EncryptAsync(request.ChassisNumber);
             var encryptedInsuranceNumber = await EncryptAsync(request.InsuranceNumber);
             var encryptedOwnerName = await EncryptAsync(request.OwnerName);
@@ -56,11 +56,11 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
             var hashedInsuranceNumber = await HashAsync(request.InsuranceNumber);
 
             var timeZoneId = await _unitOfWork.Users.GetTimeZoneById(request.UserId);
-             
-            if (timeZoneId is null) 
+
+            if (timeZoneId is null)
             {
                 return await RollbackAndReturnFailureAsync(Result.Failure("User not found", ResponseStatus.NotFound)
-                    .WithError(new("User.Id", "User user not found")), cancellationToken); 
+                    .WithError(new("User.Id", "User user not found")), cancellationToken);
             }
 
             var conflict = await _unitOfWork.Fleets.GetByIdentityAsync(
@@ -72,28 +72,28 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
             {
                 if (conflict.HashedChassisNumber == hashedChassisNumber)
                 {
-                    errors.Add(new ("Fleet.ChassisNumber", "Chassis number already registered"));
+                    errors.Add(new("Fleet.ChassisNumber", "Chassis number already registered"));
                 }
 
                 if (conflict.HashedEngineNumber == hashedEngineNumber)
-                {  
+                {
                     errors.Add(new("Fleet.EngineNumber", "Engine number already registered"));
                 }
 
                 if (conflict.HashedRegistrationNumber == hashedRegistrationNumber)
                 {
-                    errors.Add(new("Fleet.RegistrationNumber", "Registration number already registered")); 
+                    errors.Add(new("Fleet.RegistrationNumber", "Registration number already registered"));
                 }
             }
 
-            if (errors.Count > 0) 
-            { 
+            if (errors.Count > 0)
+            {
                 return await RollbackAndReturnFailureAsync(
                     Result.Failure($"There {(errors.Count <= 1 ? "is" : "are")} error(s) need to be fixed",
                     ResponseStatus.BadRequest).WithErrors(errors), cancellationToken);
             }
 
-            var fleet = new Fleet( 
+            var fleet = new Fleet(
                 request.UserId,
                 hashedRegistrationNumber,
                 encryptedRegistrationNumber,
@@ -120,7 +120,7 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
                 request.ImageUrl);
 
 
-            var userType = await _unitOfWork.Users.GetUserTypeById(request.UserId); 
+            var userType = await _unitOfWork.Users.GetUserTypeById(request.UserId);
 
             if (userType is null)
             {
@@ -133,9 +133,9 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
             {
                 return await RollbackAndReturnFailureAsync(
                     Result.Failure("Can not create fleet to mechanic user", ResponseStatus.BadRequest)
-                        .WithError(new("User.Id", "User type of mechanic user")), cancellationToken); 
+                        .WithError(new("User.Id", "User type of mechanic user")), cancellationToken);
             }
-             
+
 
             var response = new FleetResponseDto(
                 fleet.Id,
@@ -179,12 +179,14 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
                 cancellationToken);
         }
     }
+     
     private async Task<Result> RollbackAndReturnFailureAsync(Result result, CancellationToken cancellationToken)
     {
         await _unitOfWork.RollbackTransactionAsync(cancellationToken);
 
         return result;
     }
+
 
     private async Task<string?> EncryptNullableAsync(string? plaintext)
     {

@@ -28,7 +28,7 @@ public class CreateBusinessUserValidation : AbstractValidator<BusinessUserReques
         RuleFor(x => x.PhoneNumber)
             .NotEmpty().WithMessage("Phone number can not be empty")
             .Length(3, 20).WithMessage("Phone number must be between 3 and 20 characters long")
-            .Must(PhoneNumberExtension.IsValidPhoneNumber).WithMessage("Phone number can have number only");
+            .Must(PhoneNumberExtension.IsValidPhoneNumber).WithMessage("Phone number must consist of number only and start with '+'");
 
         RuleFor(x => x.Address)
             .NotNull().WithMessage("Address can not be empty")

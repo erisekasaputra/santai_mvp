@@ -95,9 +95,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Identity", "Identity", "{86
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.API", "Identity.API\Identity.API.csproj", "{C7CBC7CF-8D51-41B5-8739-1A85841257BD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NotificationService", "NotificationService\NotificationService.csproj", "{AF8E5F64-70FE-4AAD-B31C-86B294F5FA7D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NotificationService", "NotificationService\NotificationService.csproj", "{AF8E5F64-70FE-4AAD-B31C-86B294F5FA7D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Identity.Contracts", "Identity.Contracts\Identity.Contracts.csproj", "{E9F3F7CF-8876-458A-8DF9-6729AE00FAD4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Contracts", "Identity.Contracts\Identity.Contracts.csproj", "{E9F3F7CF-8876-458A-8DF9-6729AE00FAD4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SantaiClaimType", "SantaiClaimType\SantaiClaimType.csproj", "{EF3C5A0C-4C97-4160-A8E1-21EC3FF155A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -201,6 +203,10 @@ Global
 		{E9F3F7CF-8876-458A-8DF9-6729AE00FAD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9F3F7CF-8876-458A-8DF9-6729AE00FAD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9F3F7CF-8876-458A-8DF9-6729AE00FAD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF3C5A0C-4C97-4160-A8E1-21EC3FF155A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF3C5A0C-4C97-4160-A8E1-21EC3FF155A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF3C5A0C-4C97-4160-A8E1-21EC3FF155A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF3C5A0C-4C97-4160-A8E1-21EC3FF155A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -244,6 +250,7 @@ Global
 		{C7CBC7CF-8D51-41B5-8739-1A85841257BD} = {862B5D1C-51B4-45B0-913C-D8C8A298D72C}
 		{AF8E5F64-70FE-4AAD-B31C-86B294F5FA7D} = {EA0A980C-DD48-47CF-927C-9B337D93B449}
 		{E9F3F7CF-8876-458A-8DF9-6729AE00FAD4} = {44935FC9-F5AD-4EF1-A244-1F54CF0B62D1}
+		{EF3C5A0C-4C97-4160-A8E1-21EC3FF155A2} = {44935FC9-F5AD-4EF1-A244-1F54CF0B62D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3F012C31-7F5E-479A-A242-C16A92A8448D}

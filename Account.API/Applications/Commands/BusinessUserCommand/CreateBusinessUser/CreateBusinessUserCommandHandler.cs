@@ -407,9 +407,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
             newStaffs.Add(new Staff(
                 businessUserId,
                 code,
-                staff.Username,
-                hashedEmail,
-                encryptedEmail,
+                staff.Username, 
                 hashedPhoneNumber,
                 encryptedPhoneNumber,
                 staff.Name,

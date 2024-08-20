@@ -16,7 +16,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using SantaiClaimType;
+using SantaiClaimType; 
+using System.Data;
 using System.IdentityModel.Tokens.Jwt; 
 using System.Security.Claims; 
 namespace Identity.API.Controllers;
@@ -47,6 +48,7 @@ public class AuthController : ControllerBase
     private readonly IMediator _mediator;
     private readonly ApplicationDbContext _dbContext;
     private readonly IOtpService _otpService;
+    private readonly HttpContext? _httpContext;
 
     public AuthController(
         RoleManager<IdentityRole> roleManager,
@@ -58,7 +60,8 @@ public class AuthController : ControllerBase
         ILogger<AuthController> logger,
         IMediator mediator,
         ApplicationDbContext dbContext,
-        IOtpService otpService)
+        IOtpService otpService, 
+        IHttpContextAccessor httpContextAccessor)
     {
         _roleManager = roleManager;
         _signInManager = signInManager;
@@ -70,6 +73,7 @@ public class AuthController : ControllerBase
         _mediator = mediator;
         _dbContext = dbContext;
         _otpService = otpService;
+        _httpContext = httpContextAccessor.HttpContext;
     }
 
 
@@ -741,7 +745,7 @@ public class AuthController : ControllerBase
 
    
 
-    [HttpPost("register")]
+    [HttpPost("register/user")]
     public async Task<IResult> CreateIdentity(
         [AsParameters] string userType, 
         [FromBody] RegisterUserRequest request)
@@ -893,7 +897,7 @@ public class AuthController : ControllerBase
                           .WithErrors(errors.ToList()));
                 }
 
-                var addClaimsResult = await AddClaimsToDatabase(newUser, userType, null, userType);
+                var addClaimsResult = await AddClaimsToDatabase(newUser);
                 if (!addClaimsResult.Succeeded)
                 {
                     var errors = addClaimsResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
@@ -924,7 +928,7 @@ public class AuthController : ControllerBase
                     OtpRequestToken = otpRequestToken,
                     RequestId = requestId
                 });
-            }
+            } 
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.InnerException?.Message);
@@ -935,11 +939,21 @@ public class AuthController : ControllerBase
 
 
 
-    [HttpPost("refresh-token")] 
+    [HttpPost("refresh-token")]
     public async Task<IResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
     {
         try 
         {
+            if (string.IsNullOrWhiteSpace(refreshTokenRequest.RefreshToken))
+            {
+                return TypedResults.BadRequest(Result.Failure("Refresh token must not be null", 400));
+            }
+
+            if (await _tokenService.IsRefreshTokenBlacklisted(refreshTokenRequest.RefreshToken))
+            {
+                return TypedResults.Unauthorized();
+            }
+
             var newRefreshToken = await _tokenService.RotateRefreshTokenAsync(refreshTokenRequest.RefreshToken); 
             if (newRefreshToken is null)
             {
@@ -950,8 +964,7 @@ public class AuthController : ControllerBase
             if (user is null)
             {
                 return TypedResults.Unauthorized();
-            }
-
+            } 
 
             var claims = await _userManager.GetClaimsAsync(user);  
             if (claims is null || !claims.Any())
@@ -988,17 +1001,59 @@ public class AuthController : ControllerBase
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
-     
-     
 
-    private async Task<IdentityResult> AddClaimsToDatabase(ApplicationUser user, string userType, string? businessCode, params string[] roles)
+
+    [Authorize]
+    [HttpPost("logout")]
+    public async Task<IResult> Logout([FromBody] RefreshTokenRequest request)
     {
+        try
+        {
+            if (string.IsNullOrEmpty(request.RefreshToken))
+            {
+                return TypedResults.BadRequest(Result.Failure("Refresh token must not null", 400));
+            }
+
+            if (_httpContext is null)
+            {
+                _logger.LogError("Http context is null");
+                return TypedResults.InternalServerError(Messages.InternalServerError);
+            }
+
+            var bearer = _httpContext.GetBearerToken();
+
+            if (bearer is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            await _tokenService.BlackListRefreshTokenAsync(request.RefreshToken);
+            await _tokenService.BlackListAccessTokenAsync(bearer);
+
+            return TypedResults.NoContent();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+
+    private async Task<IdentityResult> AddClaimsToDatabase(ApplicationUser user)
+    {
+        if(user.PhoneNumber is null)
+        {
+            throw new ArgumentNullException(user.PhoneNumber);
+        }
+
         var claims = new List<Claim>()
         {
             new (JwtRegisteredClaimNames.Sub, user.Id),
-            new (ClaimTypes.Name, user.PhoneNumber!),
-            new (ClaimTypes.MobilePhone, user.PhoneNumber!),
-            new (SantaiClaimTypes.UserType, userType)
+            new (ClaimTypes.Name, user.PhoneNumber),
+            new (ClaimTypes.MobilePhone, user.PhoneNumber),
+            new (SantaiClaimTypes.UserType, user.UserType),
+            new (ClaimTypes.Role, user.UserType)
         };
 
         if (!string.IsNullOrWhiteSpace(user.Email))
@@ -1006,18 +1061,10 @@ public class AuthController : ControllerBase
             claims.Add(new Claim(ClaimTypes.Email, user.Email));
         }
 
-        if (!string.IsNullOrWhiteSpace(businessCode))
+        if (!string.IsNullOrWhiteSpace(user.BusinessCode))
         {
-            claims.Add(new Claim(SantaiClaimTypes.BusinessCode, businessCode));
-        }
-
-        if (roles.Length > 0) 
-        {
-            foreach(var role in roles)
-            { 
-                claims.Add(new Claim(ClaimTypes.Role, role));
-            }
-        }
+            claims.Add(new Claim(SantaiClaimTypes.BusinessCode, user.BusinessCode));
+        } 
 
         return await _userManager.AddClaimsAsync(user, claims);
     } 
@@ -1038,12 +1085,11 @@ public class AuthController : ControllerBase
         }
     }
 
-    [Authorize(Policy = "RegularUserPolicy")]
-    [HttpGet("protected-resource")]
+    [Authorize(Policy = "Administrator")]
+    [HttpPost("register/business")]
     public IResult GetResource()
     {
-        var roles = User.FindFirstValue(ClaimTypes.Role);
-        return TypedResults.Ok(roles);
-         
+        var roles = User.FindFirstValue(ClaimTypes.MobilePhone);
+        return TypedResults.Ok(roles); 
     }
 }

@@ -146,9 +146,7 @@ public class BusinessUser : User
         var staff = new Staff(
             Id,
             Code,
-            username,
-            hashedEmail,
-            encryptedEmail,
+            username, 
             hashedPhoneNumber,
             encryptedPhoneNumber,
             name,

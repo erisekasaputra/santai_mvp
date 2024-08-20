@@ -12,5 +12,7 @@ dotnet user-secrets set "Jwt:SecretKey" "tP56kzHlfp+IUY/nhdOFbOsRjOSEbTVv6sexU/J
 REM Set the google client secret 
 dotnet user-secrets set "Google:ClientSecret" "get-from-google-sso-generator"
 
+dotnet user-secrets set "Facebook:AppSecret" "get-from-google-sso-generator"
+
 echo User secrets initialized and secret key set.
 pause

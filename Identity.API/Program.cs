@@ -11,8 +11,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.EntityFrameworkCore; 
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
@@ -20,7 +19,9 @@ using System.Text;
 using System.Threading.RateLimiting;  
 
 
-var builder = WebApplication.CreateBuilder(args); 
+var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<GlobalExceptionMiddleware>();
 builder.Configuration.AddEnvironmentVariables();
@@ -194,7 +195,7 @@ builder.Services.AddAuthentication(authOption =>
         ValidIssuer = jwtOption?.Issuer ?? throw new Exception("Issuer can not be null"),
         ValidAudience = jwtOption?.Audience ?? throw new Exception("Audience can not be null"),
         IssuerSigningKey = new SymmetricSecurityKey(secretKey)
-    };
+    }; 
 })
 .AddGoogle(googleOption =>
 {
@@ -225,7 +226,7 @@ builder.Services.AddAuthorization(options =>
 {
     options.AddPolicy("RegularUserPolicy", policy => 
     {
-        policy.RequireRole("RegularUser");
+        policy.RequireRole("RegularUser"); 
     });
 }); 
 

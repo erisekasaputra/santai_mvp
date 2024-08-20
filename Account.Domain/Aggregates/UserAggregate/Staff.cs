@@ -18,8 +18,8 @@ public class Staff : Entity, IAggregateRoot
     public string? NewHashedPhoneNumber { get; private set; } 
     public string? NewEncryptedPhoneNumber { get; private set; }
     public bool IsPhoneNumberVerified { get; private set; }  
-    public string HashedEmail { get; private set; } 
-    public string EncryptedEmail {  get; private set; } 
+    public string? HashedEmail { get; private set; } 
+    public string? EncryptedEmail {  get; private set; } 
     public string? NewHashedEmail { get; private set; } 
     public string? NewEncryptedEmail {  get; private set; }
     public bool IsEmailVerified { get; private set; } 
@@ -36,9 +36,7 @@ public class Staff : Entity, IAggregateRoot
     public Staff( 
         Guid businessUserId,
         string businessUserCode,
-        string username,
-        string hashedEmail,
-        string encryptedEmail,
+        string username, 
         string hashedPhoneNumber,
         string encryptedPhoneNumber,
         string name,
@@ -53,18 +51,12 @@ public class Staff : Entity, IAggregateRoot
         Name = name ?? throw new ArgumentNullException(nameof(name)); 
         TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId)); 
         Address = address ?? throw new ArgumentNullException(nameof(address));  
-        DeviceId = deviceId ?? null;
-
-        HashedEmail = hashedEmail ?? throw new ArgumentNullException(nameof(hashedEmail));
-        NewHashedEmail = hashedEmail; 
-        EncryptedEmail = encryptedEmail ?? throw new ArgumentNullException(nameof(encryptedEmail));
-        NewEncryptedEmail = encryptedEmail;
+        DeviceId = deviceId ?? null; 
 
         HashedPhoneNumber = hashedPhoneNumber ?? throw new ArgumentNullException(nameof(hashedPhoneNumber));
         NewHashedPhoneNumber = hashedPhoneNumber;
         EncryptedPhoneNumber = encryptedPhoneNumber ?? throw new ArgumentNullException(nameof(hashedPhoneNumber));
-        NewEncryptedPhoneNumber = encryptedPhoneNumber;
-        
+        NewEncryptedPhoneNumber = encryptedPhoneNumber; 
 
         IsEmailVerified = false; 
         IsPhoneNumberVerified = false; 

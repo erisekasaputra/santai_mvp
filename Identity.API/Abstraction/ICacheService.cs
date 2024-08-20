@@ -6,5 +6,5 @@ public interface ICacheService
     Task<bool> SetAsync<T>(string key, T value, TimeSpan expiration);
     Task<bool> CheckIdempotencyKeyAsync(string key);
     Task<bool> SetIdempotencyKeyAsync(string key, TimeSpan ttl); 
-    Task<bool> DeleteAsync(string key);
+    Task<bool> DeleteAsync(string key); 
 }

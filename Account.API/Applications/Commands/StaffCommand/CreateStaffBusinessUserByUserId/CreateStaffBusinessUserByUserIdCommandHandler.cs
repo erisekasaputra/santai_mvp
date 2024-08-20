@@ -92,9 +92,7 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
             var newStaff = new Staff(
                 entity.Id,
                 entity.Code,
-                request.Username,
-                hashedEmail,
-                encryptedEmail,
+                request.Username, 
                 hashedPhoneNumber,
                 encryptedPhoneNumber,
                 request.Name,
