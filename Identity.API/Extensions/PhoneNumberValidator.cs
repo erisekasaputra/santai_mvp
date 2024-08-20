@@ -5,7 +5,7 @@ namespace Identity.API.Extensions;
 public partial class PhoneNumberValidator
 {
 
-    [GeneratedRegex(@"^\+?\d+$")]
+    [GeneratedRegex("^\\+[1-9]\\d{1,14}$")]
     private static partial Regex PhoneNumberRegex();
     public static bool IsValid(string value)
     {

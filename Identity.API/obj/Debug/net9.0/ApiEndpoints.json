@@ -11,9 +11,25 @@
         "Name": "userType",
         "Type": "System.String",
         "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Identity.API.Controllers.AuthController",
+    "Method": "GoogleSignInCallBack",
+    "RelativePath": "api/v1/Auth/google-signin/callback",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userType",
+        "Type": "System.String",
+        "IsRequired": false
       },
       {
-        "Name": "model",
+        "Name": "request",
         "Type": "Identity.API.Dto.GoogleSignInRequest",
         "IsRequired": true
       }
@@ -29,11 +45,42 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "model",
+        "Name": "request",
         "Type": "Identity.API.Dto.LoginUserRequest",
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Identity.API.Controllers.AuthController",
+    "Method": "SendOtpForVerifyPhoneNumber",
+    "RelativePath": "api/v1/Auth/otp",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "otpProviderType",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "request",
+        "Type": "Identity.API.Dto.SendOtpRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Identity.API.Controllers.AuthController",
+    "Method": "GetResource",
+    "RelativePath": "api/v1/Auth/protected-resource",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {
@@ -54,7 +101,7 @@
   },
   {
     "ContainingType": "Identity.API.Controllers.AuthController",
-    "Method": "RegisterNewRegularUser",
+    "Method": "CreateIdentity",
     "RelativePath": "api/v1/Auth/register",
     "HttpMethod": "POST",
     "IsController": true,
@@ -66,7 +113,7 @@
         "IsRequired": false
       },
       {
-        "Name": "model",
+        "Name": "request",
         "Type": "Identity.API.Dto.RegisterUserRequest",
         "IsRequired": true
       }

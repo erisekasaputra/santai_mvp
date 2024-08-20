@@ -1,4 +1,5 @@
 ﻿using Identity.API.Domain.Entities;
+using Identity.API.Enumerations;
 
 namespace Identity.API.Abstraction;
 
@@ -9,4 +10,7 @@ public interface IOtpService
     Task<Otp?> GetOtpAsync(string phoneNumber);
     Task<bool> IsOtpValidAsync(string phoneNumber, string token);
     Task<bool> RemoveOtpAsync(string phoneNumber);
+    Task<(Guid requestId, string token)> GenerateRequestOtpAsync(string phoneNumber, OtpRequestFor otpRequestFor);
+    bool IsGenerateRequestOtpValidAsync(RequestOtp requestOtp, string token);
+    Task<RequestOtp?> GetRequestOtpAsync(Guid requestId);
 }

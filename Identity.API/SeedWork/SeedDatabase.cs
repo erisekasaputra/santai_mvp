@@ -1,5 +1,7 @@
 ﻿using Identity.API.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace Identity.API.SeedWork;
 
@@ -20,17 +22,46 @@ public class SeedDatabase
                 await roleManager.CreateAsync(new IdentityRole(roleName));
             }
         }
+        
+        const string phoneNumber = "+6285791387558";
+        const string email = "erisekasaputra282000@gmail.com";
+        const string password = "000328Eris@";
          
-        var user = await userManager.FindByEmailAsync("erisekasaputra282000@gmail.com");
-        if (user == null)
+        var user = await userManager.FindByNameAsync(phoneNumber); 
+
+        if (user is null)
         {
-            user = new ApplicationUser()
+            user = await userManager.FindByEmailAsync(email);
+
+            if (user is null)
             {
-                UserName = "erisekasaputra282000@gmail.com",
-                Email = "erisekasaputra282000@gmail.com"
-            };
-            await userManager.CreateAsync(user, "000328Eris@");
-        }
-        await userManager.AddToRoleAsync(user, "Administrator");
+                user = new ApplicationUser()
+                {
+                    UserName = phoneNumber,
+                    Email = email,
+                    PhoneNumber = phoneNumber,
+                    PhoneNumberConfirmed = true,
+                    EmailConfirmed = true,
+                };
+                await userManager.CreateAsync(user, password);
+
+
+                var claims = new List<Claim>()
+                {
+                    new (JwtRegisteredClaimNames.Sub, user.Id),
+                    new (JwtRegisteredClaimNames.Email, user.Email),
+                    new (ClaimTypes.Name, user.UserName),
+                    new (ClaimTypes.MobilePhone, user.PhoneNumber), 
+                }; 
+
+                foreach (var keyValue in UserTypes.AllTypes())
+                {
+                    await userManager.AddToRoleAsync(user, keyValue.Value);
+                    claims.Add(new Claim(ClaimTypes.Role, keyValue.Value));
+                }
+
+                await userManager.AddClaimsAsync(user, claims);
+            } 
+        }  
     }
 }

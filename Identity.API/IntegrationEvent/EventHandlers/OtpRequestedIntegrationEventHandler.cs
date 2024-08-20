@@ -17,7 +17,7 @@ public class OtpRequestedIntegrationEventHandler : INotificationHandler<OtpReque
 
     public async Task Handle(OtpRequestedDomainEvent notification, CancellationToken cancellationToken)
     {
-        var integrationEvent = new OtpRequestedIntegrationEvent(notification.PhoneNumber, notification.Token);
+        var integrationEvent = new OtpRequestedIntegrationEvent(notification.Address, notification.Token, notification.Provider);
 
         await _publisher.Publish(integrationEvent, cancellationToken);  
     }

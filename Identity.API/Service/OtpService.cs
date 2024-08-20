@@ -1,10 +1,10 @@
 ﻿using Identity.API.Abstraction;
 using Identity.API.Configs;
-using Identity.API.Domain.Entities; 
+using Identity.API.Domain.Entities;
+using Identity.API.Enumerations;
 using Identity.API.SeedWork;
 using Identity.API.Utilities;
-using Microsoft.Extensions.Options;
-using System;
+using Microsoft.Extensions.Options; 
 
 namespace Identity.API.Service;
 
@@ -62,9 +62,27 @@ public class OtpService : IOtpService
 
         await _cacheService.DeleteAsync(CacheKey.OtpCacheKey(phoneNumber.HashToken()));
 
-        await _cacheService.SetAsync(CacheKey.OtpCacheKey(phoneNumber.HashToken()), otpObject, TimeSpan.FromHours(2));
+        await _cacheService.SetAsync(CacheKey.OtpCacheKey(phoneNumber.HashToken()), otpObject, TimeSpan.FromHours(1));
 
         return (otp, lockingTime);
+    }
+
+    public async Task<(Guid requestId, string token)> GenerateRequestOtpAsync(string phoneNumber, OtpRequestFor otpRequestFor)
+    {
+        var id = Guid.NewGuid();
+
+        var secret = SecretGenerator.GenerateRandomSecret();
+
+        var otpRequest = new RequestOtp()
+        {  
+            Token = secret.HashToken(),
+            PhoneNumber = phoneNumber,
+            OtpRequestFor = otpRequestFor,
+        }; 
+
+        await _cacheService.SetAsync(CacheKey.RequestOtpCacheKey(id.ToString().HashToken()), otpRequest, TimeSpan.FromHours(1));
+
+        return (id, secret);
     }
 
     public async Task<Otp?> GetOtpAsync(string phoneNumber)
@@ -72,6 +90,18 @@ public class OtpService : IOtpService
         var otp = await _cacheService.GetAsync<Otp>(CacheKey.OtpCacheKey(phoneNumber.HashToken()));
 
         return otp;
+    }
+
+
+    public async Task<RequestOtp?> GetRequestOtpAsync(Guid requestId)
+    {
+        return await _cacheService.GetAsync<RequestOtp>(CacheKey.RequestOtpCacheKey(requestId.ToString().HashToken()));
+    }
+
+
+    public bool IsGenerateRequestOtpValidAsync(RequestOtp requestOtp, string token)
+    {  
+        return (requestOtp is not null && requestOtp.Token == token.HashToken());
     }
 
     public async Task<bool> IsOtpValidAsync(string phoneNumber, string token)

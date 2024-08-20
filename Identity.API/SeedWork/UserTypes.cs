@@ -20,7 +20,6 @@ public class UserTypes
     };
 
     private static readonly List<string> _allowed = [RegularUserRole, MechanicUserRole];
-    public static ReadOnlyDictionary<string, string> AllTypes() => _allTypes.AsReadOnly();
-
+    public static ReadOnlyDictionary<string, string> AllTypes() => _allTypes.AsReadOnly(); 
     public static ReadOnlyCollection<string> AllowedTypes() => _allowed.AsReadOnly();
 }

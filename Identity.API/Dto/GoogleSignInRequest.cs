@@ -2,5 +2,5 @@
 
 public class GoogleSignInRequest
 {
-    public required string GoogleToken { get; set; }
+    public required string GoogleIdToken { get; set; }
 }

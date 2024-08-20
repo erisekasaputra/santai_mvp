@@ -1,8 +1,7 @@
-﻿using System.Security.Claims;
-
+﻿using Google.Apis.Auth; 
 namespace Identity.API.Abstraction;
 
 public interface IGoogleTokenValidator
 {
-    Task<ClaimsPrincipal> ValidateAsync(string token);
+    Task<GoogleJsonWebSignature.Payload> ValidateAsync(string idToken);
 }

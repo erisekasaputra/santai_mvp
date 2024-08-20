@@ -32,17 +32,31 @@ builder.Services.AddMediatR(configure =>
     configure.RegisterServicesFromAssemblyContaining<Program>();
 });
 
+builder.Services.AddRateLimiter(options =>
+{
+    options.AddTokenBucketLimiter("AuthenticationRateRimiterPolicy", configureOptions =>
+    {
+        configureOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
+        configureOptions.TokenLimit = 500;
+        configureOptions.QueueLimit = 50;
+        configureOptions.TokensPerPeriod = 500;
+        configureOptions.ReplenishmentPeriod = TimeSpan.FromSeconds(1);
+    });
+});
+
 builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection(JwtConfig.SectionName));
 builder.Services.Configure<GoogleConfig>(builder.Configuration.GetSection(GoogleConfig.SectionName));
 builder.Services.Configure<DatabaseConfig>(builder.Configuration.GetSection(DatabaseConfig.SectionName));
 builder.Services.Configure<CacheConfig>(builder.Configuration.GetSection(CacheConfig.SectionName));
 builder.Services.Configure<OtpConfig>(builder.Configuration.GetSection(OtpConfig.SectionName));
+builder.Services.Configure<FacebookConfig>(builder.Configuration.GetSection(FacebookConfig.SectionName));
 
 var jwtOption = builder.Configuration.GetSection(JwtConfig.SectionName).Get<JwtConfig>();
 var googleOptions = builder.Configuration.GetSection(GoogleConfig.SectionName).Get<GoogleConfig>(); 
 var databaseOptions = builder.Configuration.GetSection(DatabaseConfig.SectionName).Get<DatabaseConfig>(); 
 var eventBusOptions = builder.Configuration.GetSection(EventBusConfig.SectionName).Get<EventBusConfig>();
 var otpOptions = builder.Configuration.GetSection(OtpConfig.SectionName).Get<OtpConfig>();
+var facebookOptions = builder.Configuration.GetSection(FacebookConfig.SectionName).Get<FacebookConfig>();
 
 builder.Services.AddSingleton<ITokenService, JwtTokenService>();
 
@@ -53,7 +67,9 @@ builder.Services.AddSingleton<IJwtTokenValidator, JwtTokenValidator>();
 builder.Services.AddSingleton<IGoogleTokenValidator, GoogleTokenValidator>();
 
 builder.Services.AddSingleton<IOtpService, OtpService>();
- 
+
+builder.Services.AddSingleton<ICacheService, CacheService>();
+
 builder.Services.AddControllers();
 
 builder.Services.AddHttpContextAccessor();
@@ -115,12 +131,20 @@ builder.Services.AddMassTransit(x =>
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(
-        databaseOptions?.ConnectionString ?? throw new Exception("Database connection string can not be empty"));
+    var databaseOption = databaseOptions ?? throw new Exception("Database connection string can not be empty"); 
+    
+    options.UseSqlServer(databaseOption.ConnectionString, optionBuilder =>
+    {
+        optionBuilder.CommandTimeout(databaseOption.CommandTimeout);
+        optionBuilder.EnableRetryOnFailure(
+            maxRetryCount: databaseOption.MaxRetryCount, 
+            maxRetryDelay: TimeSpan.FromSeconds(databaseOption.MaxRetryDelay), 
+            errorNumbersToAdd: null);
+    });
 });
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
-{ 
+{  
     options.SignIn.RequireConfirmedPhoneNumber = true;
     options.SignIn.RequireConfirmedEmail = false;
     options.SignIn.RequireConfirmedAccount = false;
@@ -141,26 +165,32 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 .AddClaimsPrincipalFactory<ApplicationClaims>();
 
 builder.Services.AddAuthentication()
-    .AddGoogle(options =>
-    {
-        options.ClientId = googleOptions?.ClientId ?? throw new Exception();
-        options.ClientSecret = googleOptions?.ClientSecret ?? throw new Exception();
-    })
     .AddJwtBearer(options =>
     {
         var secretKey = Encoding.UTF8.GetBytes(jwtOption?.SecretKey ?? throw new Exception("Secret key for jwt can not be empty"));
 
         options.TokenValidationParameters = new TokenValidationParameters()
-        { 
+        {
             ValidateIssuer = true,
             ValidateAudience = true,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            ValidIssuer = jwtOption?.Issuer ?? throw new Exception("Issuer can not be null"), 
+            ValidIssuer = jwtOption?.Issuer ?? throw new Exception("Issuer can not be null"),
             ValidAudience = jwtOption?.Audience ?? throw new Exception("Audience can not be null"),
             IssuerSigningKey = new SymmetricSecurityKey(secretKey)
         };
+    })
+    .AddGoogle(googleOption =>
+    {
+        googleOption.ClientId = googleOptions?.ClientId ?? throw new Exception("Google client id can not be null");
+        googleOption.ClientSecret = googleOptions?.ClientSecret ?? throw new Exception("Google client secret can not be null");
     });
+   
+    //.AddFacebook(facebookOption =>
+    //{
+    //    facebookOption.AppId = facebookOptions?.AppId ?? throw new Exception("Facebook app id can not be null");
+    //    facebookOption.AppSecret = facebookOptions?.AppSecret ?? throw new Exception("Facebook app secret can not be null");
+    //});
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
@@ -179,23 +209,15 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
     return ConnectionMultiplexer.Connect(configurations);
 });
 
-builder.Services.AddSingleton<ICacheService, CacheService>();
+ 
 
-builder.Services.AddAuthorization();
-
-
-builder.Services.AddRateLimiter(options =>
+builder.Services.AddAuthorization(options =>
 {
-    options.AddTokenBucketLimiter("AuthenticationRateRimiterPolicy", configureOptions =>
+    options.AddPolicy("Administrator", policy => 
     {
-        configureOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
-        configureOptions.TokenLimit = 500;
-        configureOptions.QueueLimit = 50;
-        configureOptions.TokensPerPeriod = 500;
-        configureOptions.ReplenishmentPeriod = TimeSpan.FromSeconds(1);
-    }); 
-});
-
+        policy.RequireRole("Administrator");
+    });
+}); 
 
 var app = builder.Build();
 
