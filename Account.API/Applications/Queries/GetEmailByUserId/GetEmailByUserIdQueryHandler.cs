@@ -24,7 +24,7 @@ public class GetEmailByUserIdQueryHandler(
     {
         try
         {
-            var email = await _unitOfWork.Users.GetEmailById(request.UserId);
+            var email = await _unitOfWork.BaseUsers.GetEmailById(request.UserId);
 
             if (email is null)
             {

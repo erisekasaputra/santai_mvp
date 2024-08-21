@@ -34,7 +34,7 @@ public class ResetDeviceIdByMechanicUserIdCommandHandler : IRequestHandler<Reset
     {
         try
         {
-            var mechanicUser = await _unitOfWork.Users.GetMechanicUserByIdAsync(request.UserId);
+            var mechanicUser = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.UserId);
 
             if (mechanicUser is null)
             {
@@ -44,7 +44,7 @@ public class ResetDeviceIdByMechanicUserIdCommandHandler : IRequestHandler<Reset
 
             mechanicUser.ResetDeviceId();
 
-            _unitOfWork.Users.Update(mechanicUser);
+            _unitOfWork.BaseUsers.Update(mechanicUser);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -56,7 +56,7 @@ public class ResetDeviceIdByMechanicUserIdCommandHandler : IRequestHandler<Reset
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _service.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

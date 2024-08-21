@@ -29,7 +29,7 @@ public class GetRegularUserByUserIdQueryHandler(
     {
         try
         { 
-            var user = await _unitOfWork.Users.GetRegularUserByIdAsync(request.UserId);
+            var user = await _unitOfWork.BaseUsers.GetRegularUserByIdAsync(request.UserId);
 
             if (user is null)
             {
@@ -49,7 +49,7 @@ public class GetRegularUserByUserIdQueryHandler(
 
     private async Task<RegularUserResponseDto> ToRegularUserResponseDto(RegularUser user)
     {
-        var decryptedEmail = await DecryptAsync(user.EncryptedEmail);
+        var decryptedEmail = await DecryptNullableAsync(user.EncryptedEmail);
         var decryptedPhoneNumber = await DecryptAsync(user.EncryptedPhoneNumber);
         var decryptedAddressLine1 = await DecryptAsync(user.Address.EncryptedAddressLine1);
         var decryptedAddressLine2 = await DecryptNullableAsync(user.Address.EncryptedAddressLine2);
@@ -65,8 +65,7 @@ public class GetRegularUserByUserIdQueryHandler(
             user.Address.Country);
 
         return new RegularUserResponseDto(
-                user.Id, 
-                user.Username,
+                user.Id,  
                 decryptedEmail,
                 decryptedPhoneNumber,
                 user.TimeZoneId,

@@ -25,7 +25,7 @@ public class GetPhoneNumberByUserIdQueryHandler(
         try
         {
 
-            var phoneNumber = await _unitOfWork.Users.GetPhoneNumberById(request.UserId);
+            var phoneNumber = await _unitOfWork.BaseUsers.GetPhoneNumberById(request.UserId);
 
             if (phoneNumber is null)
             {

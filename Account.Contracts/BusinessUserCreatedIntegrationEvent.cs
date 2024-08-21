@@ -4,9 +4,8 @@ using MediatR;
 namespace Account.Contracts;
 
 public record BusinessUserCreatedIntegrationEvent(
-    Guid UserId,
-    string Username,
-    string Email,
+    Guid UserId, 
+    string? Email,
     string PhoneNumber,
     string TimeZoneId, 
     string BusinessName,

@@ -4,7 +4,7 @@ namespace Account.API.Extensions;
 
 public static partial class PhoneNumberExtension
 {
-    [GeneratedRegex("^\\+[1-9]\\d{1,14}$", RegexOptions.IgnoreCase, "en-US")]
+    [GeneratedRegex("^\\+[1-9]\\d{1,14}$")]
     private static partial Regex PhoneNumberRegex();
 
     public static bool IsValidPhoneNumber(string phoneNumber)

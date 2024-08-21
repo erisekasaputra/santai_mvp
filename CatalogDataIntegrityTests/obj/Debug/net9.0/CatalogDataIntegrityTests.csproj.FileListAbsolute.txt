@@ -510,11 +510,13 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Catalog.Contracts.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Catalog.Domain.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Catalog.Infrastructure.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Identity.Contracts.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Catalog.API.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Account.Domain.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Catalog.Contracts.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Catalog.Domain.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Catalog.Infrastructure.pdb
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\bin\Debug\net9.0\Identity.Contracts.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\obj\Debug\net9.0\CatalogDataIntegrityTests.csproj.AssemblyReference.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\obj\Debug\net9.0\MvcTestingAppManifest.json
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\CatalogDataIntegrityTests\obj\Debug\net9.0\CatalogDataIntegrityTests.GeneratedMSBuildEditorConfig.editorconfig

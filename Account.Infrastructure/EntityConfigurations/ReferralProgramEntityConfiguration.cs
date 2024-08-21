@@ -24,7 +24,7 @@ public class ReferralProgramEntityConfiguration : IEntityTypeConfiguration<Refer
              .HasColumnType("datetime2")
              .IsRequired();
 
-        e.HasOne(p => p.User)
+        e.HasOne(p => p.BaseUser)
             .WithOne(u => u.ReferralProgram)
             .HasForeignKey<ReferralProgram>(p => p.UserId)
             .OnDelete(DeleteBehavior.Cascade);

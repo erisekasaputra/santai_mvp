@@ -32,7 +32,7 @@ public class GetStaffByUserIdAndStaffIdQueryHandler(
                 return Result.Failure($"User '{request.StaffId}' not found", ResponseStatus.NotFound);
             }
 
-            var decryptedEmail = await DecryptAsync(staff.EncryptedEmail);
+            var decryptedEmail = await DecryptNullableAsync(staff.EncryptedEmail);
             var decryptedPhoneNumber = await DecryptAsync(staff.EncryptedPhoneNumber);
 
             var decryptedAddressLine1 = await DecryptAsync(staff.Address.EncryptedAddressLine1);
@@ -50,8 +50,7 @@ public class GetStaffByUserIdAndStaffIdQueryHandler(
                 staff.Address.Country);
 
             var staffDto = new StaffResponseDto(
-                    staff.Id,
-                    staff.Username,
+                    staff.Id, 
                     decryptedEmail,
                     decryptedPhoneNumber,
                     staff.Name,

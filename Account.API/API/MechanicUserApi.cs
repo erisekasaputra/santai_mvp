@@ -76,7 +76,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -93,7 +93,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -114,7 +114,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -133,7 +133,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -180,7 +180,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -210,7 +210,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -240,7 +240,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -268,7 +268,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -285,7 +285,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -313,7 +313,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -331,7 +331,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -349,7 +349,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -367,7 +367,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -385,7 +385,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -402,7 +402,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     } 
@@ -419,7 +419,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -438,7 +438,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -457,8 +457,7 @@ public static class MechanicUserApi
             }
 
             var result = await service.Mediator.Send(new CreateMechanicUserCommand(
-                request.IdentityId,
-                request.Username,
+                request.IdentityId, 
                 request.Email,
                 request.PhoneNumber,
                 request.TimeZoneId,
@@ -474,7 +473,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex) 
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }

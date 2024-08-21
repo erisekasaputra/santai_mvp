@@ -15,7 +15,7 @@ public class ConfirmUserPhoneNumberByUserIdCommandHandler(IUnitOfWork unitOfWork
     {
         try
         {
-            var user = await _UnitOfWork.Users.GetByIdAsync(request.Id);
+            var user = await _UnitOfWork.BaseUsers.GetByIdAsync(request.Id);
             if (user is null)
             {
                 return Result.Failure($"User not found", ResponseStatus.NotFound)
@@ -24,7 +24,7 @@ public class ConfirmUserPhoneNumberByUserIdCommandHandler(IUnitOfWork unitOfWork
 
             user.VerifyPhoneNumber();
 
-            _UnitOfWork.Users.Update(user);
+            _UnitOfWork.BaseUsers.Update(user);
             
             await _UnitOfWork.SaveChangesAsync(cancellationToken);
             
@@ -36,7 +36,7 @@ public class ConfirmUserPhoneNumberByUserIdCommandHandler(IUnitOfWork unitOfWork
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _service.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

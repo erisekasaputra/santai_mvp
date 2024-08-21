@@ -46,7 +46,7 @@ public static class UserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -63,7 +63,7 @@ public static class UserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -80,7 +80,7 @@ public static class UserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -101,7 +101,7 @@ public static class UserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -127,7 +127,7 @@ public static class UserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -142,7 +142,7 @@ public static class UserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -164,7 +164,7 @@ public static class UserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -179,7 +179,7 @@ public static class UserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }

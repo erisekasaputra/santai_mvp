@@ -1,8 +1,7 @@
 ﻿namespace Account.API.Applications.Dtos.ResponseDtos;
 public record StaffResponseDto(
-    Guid Id,
-    string Username,
-    string Email,
+    Guid Id, 
+    string? Email,
     string PhoneNumber,
     string Name,
     AddressResponseDto Address,

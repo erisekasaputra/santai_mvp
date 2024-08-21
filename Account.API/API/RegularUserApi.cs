@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Mvc;
 using Account.API.Applications.Queries.GetPaginatedRegularUser;
 using Account.API.CustomAttributes;
 using Account.API.SeedWork;
+using Account.API.Infrastructures;
+using Identity.Contracts;
 
 namespace Account.API.API;
 
@@ -22,47 +24,72 @@ public static class RegularUserApi
     {
         var app = builder.MapGroup("api/v1/users/regular");
 
-        app.MapGet("/{regularUserId}", GetRegularUserByUserId).CacheOutput();
-        app.MapGet("/", GetPaginatedRegularUser);
+        app.MapGet("/{regularUserId}", GetRegularUserByUserId).CacheOutput()
+            .RequireAuthorization("RegularUserPolicy", "AdministratorPolicy");
+
+        app.MapGet("/", GetPaginatedRegularUser)
+            .RequireAuthorization("AdministratorPolicy");
 
         app.MapPost("/", CreateRegularUser)
-            .WithMetadata(new IdempotencyAttribute(nameof(CreateRegularUser)));
+            .WithMetadata(new IdempotencyAttribute(nameof(CreateRegularUser)))
+            .RequireAuthorization("RegularUserPolicy");
         
-        app.MapPut("/{regularUserId}", UpdateRegularUserByUserId);
+        app.MapPut("/{regularUserId}", UpdateRegularUserByUserId)
+            .RequireAuthorization("RegularUserPolicy");
         
-        app.MapPatch("/{regularUserId}/device-id", SetDeviceIdByUserId);
-        app.MapPatch("/{regularUserId}/device-id/force-set", ForceSetDeviceIdByUserId);
-        app.MapPatch("/{regularUserId}/device-id/reset", ResetDeviceIdByUserId);
-        app.MapDelete("/{regularUserId}", DeleteRegularUserByUserId);
+        app.MapPatch("/{regularUserId}/device-id", SetDeviceIdByUserId)
+            .RequireAuthorization("RegularUserPolicy");
+
+        app.MapPatch("/device-id/force-set", ForceSetDeviceIdByUserId)
+            .RequireAuthorization("RegularUserPolicy");
+
+        app.MapPatch("/{regularUserId}/device-id/reset", ResetDeviceIdByUserId) 
+            .RequireAuthorization("RegularUserPolicy");
+
+        app.MapDelete("/{regularUserId}", DeleteRegularUserByUserId)
+            .RequireAuthorization("AdministratorPolicy");
 
         return app;
     }
 
     private static async Task<IResult> GetPaginatedRegularUser(
         [AsParameters] PaginatedItemRequestDto request,
-        [FromServices] ApplicationService service)
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
     {
         try
-        { 
+        {
+            var userClaim = userInfoService.GetUserInfoAsync();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
             var result = await service.Mediator.Send(new GetPaginatedRegularUserQuery(request.PageNumber, request.PageSize));
 
             return result.ToIResult();
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
-    private static async Task<IResult> ForceSetDeviceIdByUserId(
-        Guid regularUserId,
+    private static async Task<IResult> ForceSetDeviceIdByUserId( 
         [FromBody] DeviceIdRequestDto request,
         [FromServices] ApplicationService service,
-        [FromServices] IValidator<DeviceIdRequestDto> validator)
+        [FromServices] IValidator<DeviceIdRequestDto> validator,
+        [FromServices] IUserInfoService userInfoService)
     {
         try
         {
+            var userClaim = userInfoService.GetUserInfoAsync(); 
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
             var validationResult = await validator.ValidateAsync(request);
             if (!validationResult.IsValid)
             {
@@ -70,42 +97,54 @@ public static class RegularUserApi
             }
 
             var result = await service.Mediator.Send(new ForceSetDeviceIdByUserIdCommand(
-                regularUserId,
+                userClaim.Sub,
                 request.DeviceId)); 
 
             return result.ToIResult();
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
-    private static async Task<IResult> ResetDeviceIdByUserId(
-        Guid regularUserId,
-        [FromServices] ApplicationService service)
+    private static async Task<IResult> ResetDeviceIdByUserId( 
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
     {
         try
         {
-            var result = await service.Mediator.Send(new ResetDeviceIdByUserIdCommand(regularUserId)); 
+            var userClaim = userInfoService.GetUserInfoAsync();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            var result = await service.Mediator.Send(new ResetDeviceIdByUserIdCommand(userClaim.Sub)); 
             return result.ToIResult();
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
-    private static async Task<IResult> SetDeviceIdByUserId(
-        Guid regularUserId,
+    private static async Task<IResult> SetDeviceIdByUserId( 
         [FromBody] DeviceIdRequestDto request,
         [FromServices] ApplicationService service,
-        [FromServices] IValidator<DeviceIdRequestDto> validator)
+        [FromServices] IValidator<DeviceIdRequestDto> validator,
+        [FromServices] IUserInfoService userInfoService)
     {
         try
         {
+            var userClaim = userInfoService.GetUserInfoAsync();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
             var validationResult = await validator.ValidateAsync(request);
             if (!validationResult.IsValid)
             {
@@ -113,42 +152,55 @@ public static class RegularUserApi
             }
 
             var result = await service.Mediator.Send(new SetDeviceIdByUserIdCommand(
-                regularUserId,
+                userClaim.Sub,
                 request.DeviceId)); 
 
             return result.ToIResult();
         }
         catch (Exception ex)
-        {
-            service.Logger.LogError(ex.Message);
+        { 
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
     private static async Task<IResult> DeleteRegularUserByUserId(
         Guid regularUserId,
-        [FromServices] ApplicationService service)
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
     {
         try
         {
+            var userClaim = userInfoService.GetUserInfoAsync();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
             var result = await service.Mediator.Send(new DeleteRegularUserByUserIdCommand(regularUserId)); 
             return result.ToIResult();
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         } 
     }
 
-    private static async Task<IResult> UpdateRegularUserByUserId(
-        Guid regularUserId,
+    private static async Task<IResult> UpdateRegularUserByUserId( 
         [FromBody] UpdateRegularUserRequestDto request,
         [FromServices] ApplicationService service,
-        [FromServices] IValidator<UpdateRegularUserRequestDto> validator)
+        [FromServices] IValidator<UpdateRegularUserRequestDto> validator,
+        [FromServices] IUserInfoService userInfoService)
     {
         try
-        { 
+        {
+            var userClaim = userInfoService.GetUserInfoAsync();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized(); 
+            }
+
             var validationResult = await validator.ValidateAsync(request);
             if (!validationResult.IsValid)
             {
@@ -156,7 +208,7 @@ public static class RegularUserApi
             }
 
             var result = await service.Mediator.Send(new UpdateRegularUserByUserIdCommand(
-                regularUserId,
+                userClaim.Sub,
                 request.TimeZoneId,
                 request.Address,
                 request.PersonalInfo));
@@ -165,24 +217,36 @@ public static class RegularUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
     private static async Task<IResult> GetRegularUserByUserId(
         Guid regularUserId,
-        [FromServices] ApplicationService service)
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
     {
         try
         {
+            var userClaim = userInfoService.GetUserInfoAsync();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            if (userClaim.CurrentUserType != UserType.Administrator && regularUserId != userClaim.Sub)
+            { 
+                return TypedResults.BadRequest();
+            }
+
             var result = await service.Mediator.Send(new GetRegularUserByUserIdQuery(regularUserId));
 
             return result.ToIResult();
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     } 
@@ -190,10 +254,17 @@ public static class RegularUserApi
     private static async Task<IResult> CreateRegularUser(
         [FromBody] RegularUserRequestDto request,
         [FromServices] ApplicationService service,
-        [FromServices] IValidator<RegularUserRequestDto> validator)
+        [FromServices] IValidator<RegularUserRequestDto> validator,
+        [FromServices] IUserInfoService userInfoService)
     {
         try
         {
+            var userClaim = userInfoService.GetUserInfoAsync();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
             var validationResult = await validator.ValidateAsync(request);
             if (!validationResult.IsValid)
             {
@@ -201,10 +272,9 @@ public static class RegularUserApi
             }
 
             var result = await service.Mediator.Send(new CreateRegularUserCommand(
-                request.IdentityId,
-                request.Username,
-                request.Email,
-                request.PhoneNumber,
+                userClaim.Sub,
+                userClaim.Email,
+                userClaim.PhoneNumber,
                 request.TimeZoneId,
                 request.ReferralCode,
                 request.Address,
@@ -214,7 +284,7 @@ public static class RegularUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }

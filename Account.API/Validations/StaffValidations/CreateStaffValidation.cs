@@ -8,21 +8,16 @@ namespace Account.API.Validations.StaffValidations;
 public class CreateStaffValidation : AbstractValidator<StaffRequestDto>
 {
     public CreateStaffValidation()
-    {
-        RuleFor(x => x.Username)
-            .NotEmpty().WithMessage("Username can not be empty")
-            .Length(3, 20).WithMessage("The username must be between 3 and 20 characters long")
-            .Must(UsernameExtension.IsValidUsername).WithMessage("The username must contain only lowercase and numbers");
-
+    { 
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name can not be empty")
             .Length(3, 50).WithMessage("The name must be between 3 and 50 characters long")
             .Must(NameExtension.IsValidName).WithMessage("The name must contain only alphabet and can not have multiple spaces (only single space on each separated name), e.g: 'Michael John Doe'");
 
         RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Username can not be empty")
-            .Length(5, 254).WithMessage("The username must be between 3 and 254 characters long")
-            .EmailAddress().WithMessage("Email format is invalid");
+           .Length(3, 254).WithMessage("The email must be between 3 and 254 characters long")
+           .EmailAddress().WithMessage("Email format is invalid")
+           .When(x => !string.IsNullOrWhiteSpace(x.Email));
 
         RuleFor(x => x.PhoneNumber)
             .NotEmpty().WithMessage("Phone number can not be empty")

@@ -99,7 +99,7 @@ public class AssignFleetsToStaffCommandHandler : IRequestHandler<AssignFleetsToS
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _service.Logger.LogError(ex, ex.InnerException?.Message);
             return await RollbackAndReturnFailureAsync(
                 Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError),
                 cancellationToken);

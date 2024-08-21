@@ -2119,6 +2119,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
+          "Identity.Contracts": "1.0.0",
           "MediatR": "12.4.0",
           "Microsoft.EntityFrameworkCore": "8.0.7"
         },
@@ -2127,6 +2128,16 @@
         },
         "runtime": {
           "bin/placeholder/Account.Domain.dll": {}
+        }
+      },
+      "Identity.Contracts/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/Identity.Contracts.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Identity.Contracts.dll": {}
         }
       }
     }
@@ -6166,6 +6177,11 @@
       "type": "project",
       "path": "../Account.Domain/Account.Domain.csproj",
       "msbuildProject": "../Account.Domain/Account.Domain.csproj"
+    },
+    "Identity.Contracts/1.0.0": {
+      "type": "project",
+      "path": "../Identity.Contracts/Identity.Contracts.csproj",
+      "msbuildProject": "../Identity.Contracts/Identity.Contracts.csproj"
     }
   },
   "projectFileDependencyGroups": {

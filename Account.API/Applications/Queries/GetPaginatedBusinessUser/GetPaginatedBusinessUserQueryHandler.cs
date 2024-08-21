@@ -23,7 +23,7 @@ public class GetPaginatedBusinessUserQueryHandler(
     {
         try
         {  
-            (int totalCount, int totalPages, IEnumerable<BusinessUser> businessUsers) = await _unitOfWork.Users.GetPaginatedBusinessUser(request.PageNumber, request.PageSize);
+            (int totalCount, int totalPages, IEnumerable<BusinessUser> businessUsers) = await _unitOfWork.BaseUsers.GetPaginatedBusinessUser(request.PageNumber, request.PageSize);
 
             if (businessUsers is null)
             {
@@ -34,7 +34,7 @@ public class GetPaginatedBusinessUserQueryHandler(
 
             foreach (var user in businessUsers) 
             {
-                var decryptedEmail = await DecryptAsync(user.EncryptedEmail);
+                var decryptedEmail = await DecryptNullableAsync(user.EncryptedEmail);
                 var decryptedPhoneNumber = await DecryptAsync(user.EncryptedPhoneNumber);
                 var decryptedContactPerson = await DecryptAsync(user.EncryptedContactPerson);
                 var decryptedTaxId = await DecryptNullableAsync(user.EncryptedTaxId);
@@ -84,7 +84,7 @@ public class GetPaginatedBusinessUserQueryHandler(
                     foreach (var staff in user.Staffs)
                     {
                         var decryptedStaffPhoneNumber = await DecryptAsync(staff.EncryptedPhoneNumber);
-                        var decryptedStaffEmail = await DecryptAsync(staff.EncryptedEmail);
+                        var decryptedStaffEmail = await DecryptNullableAsync(staff.EncryptedEmail);
 
                         var decryptedStaffAddressLine1 = await DecryptAsync(staff.Address.EncryptedAddressLine1);
                         var decryptedStaffAddressLine2 = await DecryptNullableAsync(staff.Address.EncryptedAddressLine2);
@@ -101,8 +101,7 @@ public class GetPaginatedBusinessUserQueryHandler(
                         );
 
                         staffResponses.Add(new StaffResponseDto(
-                                staff.Id,
-                                staff.Username,
+                                staff.Id, 
                                 decryptedStaffEmail,
                                 decryptedStaffPhoneNumber,
                                 staff.Name,
@@ -113,8 +112,7 @@ public class GetPaginatedBusinessUserQueryHandler(
                 }
 
                 businessUserResponses.Add(new BusinessUserResponseDto(
-                    user.Id,
-                    user.Username,
+                    user.Id, 
                     decryptedEmail,
                     decryptedPhoneNumber,
                     user.TimeZoneId,

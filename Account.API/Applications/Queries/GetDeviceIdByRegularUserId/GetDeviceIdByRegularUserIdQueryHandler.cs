@@ -25,7 +25,7 @@ public class GetDeviceIdByRegularUserIdQueryHandler(
     {
         try
         {
-            var deviceId = await _unitOfWork.Users.GetDeviceIdByRegularUserId(request.UserId);
+            var deviceId = await _unitOfWork.BaseUsers.GetDeviceIdByRegularUserId(request.UserId);
 
             if (deviceId is null)
             {

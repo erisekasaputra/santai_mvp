@@ -9,6 +9,7 @@ using Identity.API.SeedWork;
 using Identity.API.Service;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.EntityFrameworkCore; 
@@ -16,10 +17,24 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.RateLimiting;  
 
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter(
+        namingPolicy: System.Text.Json.JsonNamingPolicy.CamelCase,
+        allowIntegerValues: true));
+});
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
 
 builder.Services.AddHttpContextAccessor();
 
@@ -53,6 +68,7 @@ builder.Services.Configure<DatabaseConfig>(builder.Configuration.GetSection(Data
 builder.Services.Configure<CacheConfig>(builder.Configuration.GetSection(CacheConfig.SectionName));
 builder.Services.Configure<OtpConfig>(builder.Configuration.GetSection(OtpConfig.SectionName));
 builder.Services.Configure<FacebookConfig>(builder.Configuration.GetSection(FacebookConfig.SectionName));
+builder.Services.Configure<IdempotencyConfig>(builder.Configuration.GetSection(IdempotencyConfig.SectionName));
 
 var jwtOption = builder.Configuration.GetSection(JwtConfig.SectionName).Get<JwtConfig>();
 var googleOptions = builder.Configuration.GetSection(GoogleConfig.SectionName).Get<GoogleConfig>(); 
@@ -60,6 +76,8 @@ var databaseOptions = builder.Configuration.GetSection(DatabaseConfig.SectionNam
 var eventBusOptions = builder.Configuration.GetSection(EventBusConfig.SectionName).Get<EventBusConfig>();
 var otpOptions = builder.Configuration.GetSection(OtpConfig.SectionName).Get<OtpConfig>();
 var facebookOptions = builder.Configuration.GetSection(FacebookConfig.SectionName).Get<FacebookConfig>();
+
+builder.Services.AddSingleton<ActionMethodService>();
 
 builder.Services.AddSingleton<ITokenService, JwtTokenService>();
 
@@ -75,8 +93,7 @@ if(builder.Environment.IsDevelopment())
 if(builder.Environment.IsProduction())
 {
     builder.Services.AddSingleton<IGoogleTokenValidator, GoogleTokenValidator>();
-}
-
+} 
 
 
 builder.Services.AddSingleton<IOtpService, OtpService>();
@@ -168,10 +185,10 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
     options.Password.RequiredLength = 6;
+    options.Password.RequireNonAlphanumeric = true;
 })
 .AddEntityFrameworkStores<ApplicationDbContext>() 
-.AddSignInManager<SignInManager<ApplicationUser>>()
-.AddPasswordValidator<PasswordValidator<ApplicationUser>>()
+.AddSignInManager<SignInManager<ApplicationUser>>() 
 .AddRoleManager<RoleManager<IdentityRole>>()
 .AddRoles<IdentityRole>()
 .AddDefaultTokenProviders()
@@ -239,6 +256,7 @@ using (var scope = app.Services.CreateScope())
 }
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
+//app.UseMiddleware<IdempotencyMiddleware>();
 
 app.UseRateLimiter();
 

@@ -1,4 +1,6 @@
 ﻿using Identity.API.Domain.Entities;
+using Identity.API.Enumerations;
+using Identity.Contracts;
 using Microsoft.AspNetCore.Identity;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -12,14 +14,14 @@ public class SeedDatabase
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
 
-        string[] roleNames = [.. UserTypes.AllTypes()];
+        UserType[] roleNames = [.. GetUserTypeConfiguration.GetAll];
 
         foreach (var roleName in roleNames)
         {
-            var roleExist = await roleManager.RoleExistsAsync(roleName);
+            var roleExist = await roleManager.RoleExistsAsync(roleName.ToString());
             if (!roleExist)
             {
-                await roleManager.CreateAsync(new IdentityRole(roleName));
+                await roleManager.CreateAsync(new IdentityRole(roleName.ToString()));
             }
         }
         
@@ -42,7 +44,7 @@ public class SeedDatabase
                     PhoneNumber = phoneNumber,
                     PhoneNumberConfirmed = true,
                     EmailConfirmed = true,
-                    UserType = UserTypes.AdministratorRole
+                    UserType = UserType.Administrator 
                 };
                 await userManager.CreateAsync(user, password);
 
@@ -55,10 +57,10 @@ public class SeedDatabase
                     new (ClaimTypes.MobilePhone, user.PhoneNumber), 
                 }; 
 
-                foreach (var keyValue in UserTypes.AllTypes())
+                foreach (var userType in GetUserTypeConfiguration.GetAll)
                 {
-                    await userManager.AddToRoleAsync(user, keyValue);
-                    claims.Add(new Claim(ClaimTypes.Role, keyValue));
+                    await userManager.AddToRoleAsync(user, userType.ToString());
+                    claims.Add(new Claim(ClaimTypes.Role, userType.ToString()));
                 }
 
                 await userManager.AddClaimsAsync(user, claims);

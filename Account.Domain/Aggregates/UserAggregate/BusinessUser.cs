@@ -6,7 +6,7 @@ using Account.Domain.ValueObjects;
 
 namespace Account.Domain.Aggregates.UserAggregate;
 
-public class BusinessUser : User
+public class BusinessUser : BaseUser
 {
     public string Code { get; private init; }
     public string BusinessName { get; private set; }
@@ -20,11 +20,9 @@ public class BusinessUser : User
     { 
     }
 
-    public BusinessUser(
-        Guid identityId,
-        string username,
-        string email,
-        string encryptedEmail,
+    public BusinessUser(  
+        string? email,
+        string? encryptedEmail,
         string phoneNumber,
         string encryptedPhoneNumber,
         Address address,
@@ -33,8 +31,8 @@ public class BusinessUser : User
         string encryptedContactPerson,
         string? websiteUrl,
         string? description, 
-        string timeZoneId) : base(identityId, username, email, encryptedEmail, phoneNumber, encryptedPhoneNumber, address, timeZoneId)
-    { 
+        string timeZoneId) : base(email, encryptedEmail, phoneNumber, encryptedPhoneNumber, address, timeZoneId)
+    {  
         Code = UniqueIdGenerator.Generate(Id);
         BusinessName = businessName ?? throw new ArgumentNullException(nameof(businessName));
         EncryptedTaxId = encryptedTaxId;
@@ -125,12 +123,7 @@ public class BusinessUser : User
     { 
         ArgumentNullException.ThrowIfNull(address);  
          
-        Staffs ??= [];
-
-        if (Staffs.Any(x => x.Username == username))
-        { 
-            return (null, "Staff.Username", $"Username is already registered");
-        } 
+        Staffs ??= []; 
 
         if (Staffs.Any(x => x.HashedPhoneNumber == hashedPhoneNumber || x.NewHashedPhoneNumber == hashedPhoneNumber))
         {
@@ -146,7 +139,8 @@ public class BusinessUser : User
         var staff = new Staff(
             Id,
             Code,
-            username, 
+            hashedEmail,
+            encryptedEmail,
             hashedPhoneNumber,
             encryptedPhoneNumber,
             name,
@@ -165,12 +159,7 @@ public class BusinessUser : User
     { 
         ArgumentNullException.ThrowIfNull(staff.Address);
 
-        Staffs ??= [];
-
-        if (Staffs.Any(x => x.Username == staff.Username))
-        {
-            return (null, "Staff.Username", $"Username is already registered");
-        }
+        Staffs ??= []; 
 
         if (Staffs.Any(x => x.HashedPhoneNumber == staff.HashedPhoneNumber || x.NewHashedPhoneNumber == staff.HashedPhoneNumber))
         {

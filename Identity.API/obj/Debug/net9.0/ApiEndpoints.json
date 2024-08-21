@@ -1,16 +1,16 @@
 [
   {
     "ContainingType": "Identity.API.Controllers.AuthController",
-    "Method": "GoogleSignIn",
-    "RelativePath": "api/v1/Auth/google-signin",
+    "Method": "ForgotPassword",
+    "RelativePath": "api/v1/Auth/forgot-password",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userType",
-        "Type": "System.String",
-        "IsRequired": false
+        "Name": "request",
+        "Type": "Identity.API.Dto.ForgotPasswordRequest",
+        "IsRequired": true
       }
     ],
     "ReturnTypes": []
@@ -24,11 +24,6 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "userType",
-        "Type": "System.String",
-        "IsRequired": false
-      },
-      {
         "Name": "request",
         "Type": "Identity.API.Dto.GoogleSignInRequest",
         "IsRequired": true
@@ -38,7 +33,7 @@
   },
   {
     "ContainingType": "Identity.API.Controllers.AuthController",
-    "Method": "InternalLoginUser",
+    "Method": "LoginStaff",
     "RelativePath": "api/v1/Auth/login/staff",
     "HttpMethod": "POST",
     "IsController": true,
@@ -54,7 +49,7 @@
   },
   {
     "ContainingType": "Identity.API.Controllers.AuthController",
-    "Method": "InternalLoginUser",
+    "Method": "LoginUser",
     "RelativePath": "api/v1/Auth/login/user",
     "HttpMethod": "POST",
     "IsController": true,
@@ -92,11 +87,6 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [
-      {
-        "Name": "otpProviderType",
-        "Type": "System.String",
-        "IsRequired": false
-      },
       {
         "Name": "request",
         "Type": "Identity.API.Dto.SendOtpRequest",
@@ -139,11 +129,6 @@
     "IsController": true,
     "Order": 0,
     "Parameters": [
-      {
-        "Name": "userType",
-        "Type": "System.String",
-        "IsRequired": false
-      },
       {
         "Name": "request",
         "Type": "Identity.API.Dto.RegisterUserRequest",

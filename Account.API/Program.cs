@@ -17,6 +17,8 @@ if (builder.Environment.IsDevelopment())
     builder.Services.AddSwaggerGen(); 
 }
 
+builder.Services.AddAuth();
+
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddMediatorService();

@@ -23,13 +23,13 @@ public class GetBusinessUserByUserIdQueryHandler(
     {
         try
         { 
-            var user = await _unitOfWork.Users.GetBusinessUserByIdAsync(request.Id); 
+            var user = await _unitOfWork.BaseUsers.GetBusinessUserByIdAsync(request.Id); 
             if (user is null)
             {
                 return Result.Failure($"Business user '{request.Id}' is not found", ResponseStatus.NotFound);
             }
 
-            var decryptedEmail = await DecryptAsync(user.EncryptedEmail);
+            var decryptedEmail = await DecryptNullableAsync(user.EncryptedEmail);
             var decryptedPhoneNumber = await DecryptAsync(user.EncryptedPhoneNumber);
             var decryptedContactPerson = await DecryptAsync(user.EncryptedContactPerson);
             var decryptedTaxId = await DecryptNullableAsync(user.EncryptedTaxId);
@@ -79,7 +79,7 @@ public class GetBusinessUserByUserIdQueryHandler(
                 foreach (var staff in user.Staffs)
                 {
                     var decryptedStaffPhoneNumber = await DecryptAsync(staff.EncryptedPhoneNumber); 
-                    var decryptedStaffEmail = await DecryptAsync(staff.EncryptedEmail);
+                    var decryptedStaffEmail = await DecryptNullableAsync(staff.EncryptedEmail);
 
                     var decryptedStaffAddressLine1 = await DecryptAsync(staff.Address.EncryptedAddressLine1); 
                     var decryptedStaffAddressLine2 = await DecryptNullableAsync(staff.Address.EncryptedAddressLine2); 
@@ -96,8 +96,7 @@ public class GetBusinessUserByUserIdQueryHandler(
                     ); 
 
                     staffResponses.Add(new StaffResponseDto( 
-                            staff.Id,
-                            staff.Username,
+                            staff.Id, 
                             decryptedStaffEmail,
                             decryptedStaffPhoneNumber,
                             staff.Name,
@@ -108,8 +107,7 @@ public class GetBusinessUserByUserIdQueryHandler(
             }
 
             var userDto = new BusinessUserResponseDto(
-                user.Id,
-                user.Username,
+                user.Id, 
                 decryptedEmail,
                 decryptedPhoneNumber,
                 user.TimeZoneId,

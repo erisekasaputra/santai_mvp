@@ -7,6 +7,7 @@ using Account.Domain.Aggregates.FleetAggregate;
 using Account.Domain.Enumerations;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
+using Identity.Contracts;
 using MediatR;
 using Microsoft.Extensions.Options;
 using System.Data;
@@ -55,7 +56,7 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
             var hashedChassisNumber = await HashAsync(request.ChassisNumber);
             var hashedInsuranceNumber = await HashAsync(request.InsuranceNumber);
 
-            var timeZoneId = await _unitOfWork.Users.GetTimeZoneById(request.UserId);
+            var timeZoneId = await _unitOfWork.BaseUsers.GetTimeZoneById(request.UserId);
 
             if (timeZoneId is null)
             {
@@ -120,7 +121,7 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
                 request.ImageUrl);
 
 
-            var userType = await _unitOfWork.Users.GetUserTypeById(request.UserId);
+            var userType = await _unitOfWork.BaseUsers.GetUserTypeById(request.UserId);
 
             if (userType is null)
             {
@@ -173,7 +174,7 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _service.Logger.LogError(ex, ex.InnerException?.Message);
             return await RollbackAndReturnFailureAsync(
                 Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError),
                 cancellationToken);

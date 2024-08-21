@@ -36,10 +36,10 @@ public class CreateRegularUserCommandHandler(
 
             var addressRequest = request.Address;
 
-            var hashedEmail = await HashAsync(request.Email);
+            var hashedEmail = await HashNullableAsync(request.Email);
             var hashedPhoneNumber = await HashAsync(request.PhoneNumber);
 
-            var encryptedEmail = await EncryptAsync(request.Email);
+            var encryptedEmail = await EncryptNullableAsync(request.Email);
             var encryptedPhoneNumber = await EncryptAsync(request.PhoneNumber);
 
             var encryptedAddressLine1 = await EncryptAsync(addressRequest.AddressLine1);
@@ -55,18 +55,15 @@ public class CreateRegularUserCommandHandler(
                   addressRequest.PostalCode,
                   addressRequest.Country);
 
-            var conflicts = await _unitOfWork.Users.GetByIdentitiesAsNoTrackingAsync(
+            var conflicts = await _unitOfWork.BaseUsers.GetByIdentitiesAsNoTrackingAsync(
                     (IdentityParameter.Email, hashedEmail),
-                    (IdentityParameter.PhoneNumber, hashedPhoneNumber),
-                    (IdentityParameter.Username, request.Username),
-                    (IdentityParameter.IdentityId, request.IdentityId.ToString())
+                    (IdentityParameter.PhoneNumber, hashedPhoneNumber)
                 );
 
             if (conflicts is not null)
             {
                 return await RollbackAndReturnFailureAsync(UserIdentityConflict(
-                    conflicts,
-                    request.Username,
+                    conflicts, 
                     hashedEmail,
                     hashedPhoneNumber,
                     request.IdentityId), cancellationToken);
@@ -74,8 +71,7 @@ public class CreateRegularUserCommandHandler(
              
 
             var user = new RegularUser(
-                request.IdentityId,
-                request.Username,
+                request.IdentityId, 
                 hashedEmail,
                 encryptedEmail,
                 hashedPhoneNumber,
@@ -122,7 +118,7 @@ public class CreateRegularUserCommandHandler(
                         DateTime.UtcNow));
             }
 
-            await _unitOfWork.Users.CreateAsync(user);
+            await _unitOfWork.BaseUsers.CreateAsync(user);
 
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
             
@@ -134,7 +130,7 @@ public class CreateRegularUserCommandHandler(
         }
         catch (Exception ex)
         {
-            _appService.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _appService.Logger.LogError(ex, ex.InnerException?.Message);
             return await RollbackAndReturnFailureAsync(Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError), cancellationToken);
         }
     }
@@ -159,8 +155,7 @@ public class CreateRegularUserCommandHandler(
             request.PersonalInfo.ProfilePictureUrl); 
 
         var regularUserResponseDto = new RegularUserResponseDto(
-            user.Id,
-            user.Username,
+            user.Id, 
             request.Email,
             request.PhoneNumber,
             user.TimeZoneId,
@@ -176,33 +171,24 @@ public class CreateRegularUserCommandHandler(
         return result;
     }
 
-    private static Result UserIdentityConflict(User user, string username, string hashedEmail, string hashedPhoneNumber, Guid identityId)
+    private static Result UserIdentityConflict(BaseUser user, string? hashedEmail, string hashedPhoneNumber, Guid identityId)
     {
-        var conflictIdentities = new List<ErrorDetail>();
+        var conflictIdentities = new List<ErrorDetail>(); 
 
-        if (user.Username == username)
+        if (!string.IsNullOrWhiteSpace(hashedEmail))
         {
-            conflictIdentities.Add(new ($"RegularUser.{nameof(user.Username)}", 
-                "Username already registered"));
-        }
-
-        if (user.HashedEmail == hashedEmail || user.NewHashedEmail == hashedEmail)
-        {
-            conflictIdentities.Add(new ($"RegularUser.{nameof(user.HashedEmail)}", 
-                "Email already registered"));
+            if (user.HashedEmail == hashedEmail || user.NewHashedEmail == hashedEmail)
+            {
+                conflictIdentities.Add(new ($"RegularUser.{nameof(user.HashedEmail)}", 
+                    "Email already registered"));
+            } 
         }
 
         if (user.HashedPhoneNumber == hashedPhoneNumber || user.NewHashedPhoneNumber == hashedPhoneNumber)
         {
             conflictIdentities.Add(new ($"RegularUser.{nameof(user.HashedPhoneNumber)}", 
                 "Phone number already registered"));
-        }
-
-        if (user.IdentityId == identityId)
-        {
-            conflictIdentities.Add(new ($"RegularUser.{nameof(user.IdentityId)}", 
-                "Identity id already registered"));
-        }
+        } 
 
         var message = conflictIdentities.Count == 1
             ? "There is a conflict"
@@ -227,4 +213,10 @@ public class CreateRegularUserCommandHandler(
     {
         return await _hashClient.Hash(value);
     }
+    private async Task<string?> HashNullableAsync(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value)) return null;
+
+        return await _hashClient.Hash(value);
+    }  
 }

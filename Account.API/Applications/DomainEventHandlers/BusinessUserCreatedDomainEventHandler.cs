@@ -24,14 +24,18 @@ public class BusinessUserCreatedDomainEventHandler : INotificationHandler<Busine
         {
             foreach (Staff b in entity.Staffs)
             {
-                var businessLicense = new StaffEvent(b.Username, b.HashedPhoneNumber, b.HashedEmail, b.Name, b.TimeZoneId);
+                var businessLicense = new StaffEvent(b.HashedPhoneNumber, b.HashedEmail, b.Name, b.TimeZoneId);
                 staffEvents.Add(businessLicense);
             }
         }
 
+        if (entity is null)
+        {
+            return;
+        }
+
         var @event = new BusinessUserCreatedIntegrationEvent(
-                entity!.Id,
-                entity.Username,
+                entity.Id, 
                 entity.HashedEmail,
                 entity.HashedPhoneNumber,
                 entity.TimeZoneId,

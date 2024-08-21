@@ -13,7 +13,7 @@ namespace Account.Domain.SeedWork;
 
 public interface IUnitOfWork
 {
-    IUserRepository Users { get; }
+    IUserRepository BaseUsers { get; }
 
     IBusinessLicenseRepository BusinessLicenses { get; }
 

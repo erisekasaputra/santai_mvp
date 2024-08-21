@@ -12,7 +12,10 @@ using Account.API.Services;
 using Account.API.Infrastructures; 
 using Account.API.Middleware;
 using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Http.Json;  
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Account.API.Extensions;
 
@@ -81,6 +84,7 @@ public static class ServiceRegistration
 
     public static IServiceCollection AddApplicationService(this IServiceCollection services)
     {
+        services.AddScoped<IUserInfoService, UserService>();
         services.AddScoped<ApplicationService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>(); 
         services.AddSingleton<ICacheService, AccountCacheService>();
@@ -167,6 +171,7 @@ public static class ServiceRegistration
         builder.Services.Configure<MessageBusOption>(builder.Configuration.GetSection(MessageBusOption.SectionName));
         builder.Services.Configure<KeyManagementServiceOption>(builder.Configuration.GetSection(KeyManagementServiceOption.SectionName));
         builder.Services.Configure<IdempotencyOptions>(builder.Configuration.GetSection(IdempotencyOptions.SectionName));
+        builder.Services.Configure<JwtOption>(builder.Configuration.GetSection(JwtOption.SectionName));
         
         return builder;
     }
@@ -208,8 +213,73 @@ public static class ServiceRegistration
                 .Add(new JsonStringEnumConverter(
                     namingPolicy: System.Text.Json.JsonNamingPolicy.CamelCase,
                     allowIntegerValues: true));
-        }); 
+        });
+
+        builder.AddControllers()
+        .AddJsonOptions(options =>
+        {
+            options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+        });
 
         return builder;
     }
+
+    public static IServiceCollection AddAuth(this IServiceCollection services)
+    {
+        var jwtOption = services.BuildServiceProvider().GetService<IOptionsMonitor<JwtOption>>()
+           ?? throw new Exception("Please provide value for message bus options");
+
+        var jwt = jwtOption.CurrentValue;
+
+        services.AddAuthentication(authOption =>
+        {
+            authOption.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            authOption.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        })
+        .AddJwtBearer(options =>
+        {
+            var secretKey = Encoding.UTF8.GetBytes(jwt?.SecretKey ?? throw new Exception("Secret key for jwt can not be empty"));
+
+            options.TokenValidationParameters = new TokenValidationParameters()
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                ValidIssuer = jwt?.Issuer ?? throw new Exception("Issuer can not be null"),
+                ValidAudience = jwt?.Audience ?? throw new Exception("Audience can not be null"),
+                IssuerSigningKey = new SymmetricSecurityKey(secretKey)
+            };
+        });
+
+        services.AddAuthorization(options =>
+        {
+            options.AddPolicy("RegularUserPolicy", policy =>
+            {
+                policy.RequireRole("RegularUser");
+            });
+
+            options.AddPolicy("BusinessUserPolicy", policy =>
+            {
+                policy.RequireRole("BusinessUser");
+            });
+
+            options.AddPolicy("StaffUserPolicy", policy =>
+            {
+                policy.RequireRole("StaffUser");
+            });
+
+            options.AddPolicy("MechanicUserPolicy", policy =>
+            {
+                policy.RequireRole("MechanicUser");
+            });
+
+            options.AddPolicy("AdministratorPolicy", policy =>
+            {
+                policy.RequireRole("Administrator");
+            });
+        });
+
+        return services;
+    } 
 }

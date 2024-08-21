@@ -37,7 +37,7 @@ public class GetPaginatedStaffByUserIdQueryHandler(
             foreach (var staff in staffs)
             { 
                 var decryptedStaffPhoneNumber = await DecryptAsync(staff.EncryptedPhoneNumber);
-                var decryptedStaffEmail = await DecryptAsync(staff.EncryptedEmail);
+                var decryptedStaffEmail = await DecryptNullableAsync(staff.EncryptedEmail);
 
                 var decryptedStaffAddressLine1 = await DecryptAsync(staff.Address.EncryptedAddressLine1);
                 var decryptedStaffAddressLine2 = await DecryptNullableAsync(staff.Address.EncryptedAddressLine2);
@@ -54,8 +54,7 @@ public class GetPaginatedStaffByUserIdQueryHandler(
                 );
 
                 staffResponses.Add(new StaffResponseDto(
-                        staff.Id,
-                        staff.Username,
+                        staff.Id, 
                         decryptedStaffEmail,
                         decryptedStaffPhoneNumber,
                         staff.Name,

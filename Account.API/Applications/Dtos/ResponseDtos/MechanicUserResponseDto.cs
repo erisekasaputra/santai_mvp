@@ -1,9 +1,8 @@
 ﻿namespace Account.API.Applications.Dtos.ResponseDtos;
 
 public record MechanicUserResponseDto(
-    Guid Id,
-    string Username,
-    string Email,
+    Guid Id, 
+    string? Email,
     string PhoneNumber,
     string TimeZoneId,
     LoyaltyProgramResponseDto LoyaltyProgram,

@@ -36,7 +36,7 @@ public class DeleteMechanicUserByUserIdCommandHandler : IRequestHandler<DeleteMe
     {
         try
         {
-            var mechanicUser = await _unitOfWork.Users.GetMechanicUserByIdAsync(request.UserId);
+            var mechanicUser = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.UserId);
 
             if (mechanicUser is null)
             {
@@ -46,7 +46,7 @@ public class DeleteMechanicUserByUserIdCommandHandler : IRequestHandler<DeleteMe
 
             mechanicUser.Delete();
 
-            _unitOfWork.Users.Delete(mechanicUser);
+            _unitOfWork.BaseUsers.Delete(mechanicUser);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -58,7 +58,7 @@ public class DeleteMechanicUserByUserIdCommandHandler : IRequestHandler<DeleteMe
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _service.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     } 

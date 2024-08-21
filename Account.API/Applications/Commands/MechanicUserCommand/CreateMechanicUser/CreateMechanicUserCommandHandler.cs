@@ -12,8 +12,7 @@ using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Enumerations;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
-using Account.Domain.ValueObjects;
-using MassTransit.AmazonSqsTransport;
+using Account.Domain.ValueObjects; 
 using MediatR;
 using Microsoft.Extensions.Options;
 using System.Data;
@@ -42,10 +41,10 @@ public class CreateMechanicUserCommandHandler(
 
             await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
              
-            var hashedEmail = await HashAsync(request.Email);
+            var hashedEmail = await HashNullableAsync(request.Email);
             var hashedPhoneNumber = await HashAsync(request.PhoneNumber);
 
-            var encryptedEmail = await EncryptAsync(request.Email);
+            var encryptedEmail = await EncryptNullableAsync(request.Email);
             var encryptedPhoneNumber = await EncryptAsync(request.PhoneNumber);
 
             var encryptedAddressLine1 = await EncryptAsync(request.Address.AddressLine1);
@@ -59,11 +58,9 @@ public class CreateMechanicUserCommandHandler(
 
 
             // get all users that already registered with related request identities such as email, username, phonenumber, and identity id(from identity database)
-            var conflictUsers = await _unitOfWork.Users.GetByIdentitiesAsNoTrackingAsync(
-                (IdentityParameter.Username, request.Username),
+            var conflictUsers = await _unitOfWork.BaseUsers.GetByIdentitiesAsNoTrackingAsync( 
                 (IdentityParameter.Email, hashedEmail),
-                (IdentityParameter.PhoneNumber, hashedPhoneNumber),
-                (IdentityParameter.IdentityId, request.IdentityId.ToString()));
+                (IdentityParameter.PhoneNumber, hashedPhoneNumber));
 
 
             // check if user with conlict identities is not null
@@ -72,8 +69,7 @@ public class CreateMechanicUserCommandHandler(
                 // if it is not null, rollback the trasaction and get the conflict items 
                 errors.AddRange(UserIdentityConflict(
                     conflictUsers,
-                    request.IdentityId,
-                    request.Username,
+                    request.IdentityId, 
                     hashedEmail,
                     hashedPhoneNumber));
             }
@@ -146,8 +142,7 @@ public class CreateMechanicUserCommandHandler(
 
 
             var user = new MechanicUser(
-                request.IdentityId,
-                request.Username,
+                request.IdentityId, 
                 hashedEmail,
                 encryptedEmail,
                 hashedPhoneNumber,
@@ -203,7 +198,7 @@ public class CreateMechanicUserCommandHandler(
                         DateTime.UtcNow));
             }
 
-            await _unitOfWork.Users.CreateAsync(user);
+            await _unitOfWork.BaseUsers.CreateAsync(user);
 
             await _unitOfWork.CommitTransactionAsync(cancellationToken);  
 
@@ -217,7 +212,7 @@ public class CreateMechanicUserCommandHandler(
         }
         catch (Exception ex)
         {
-            _appService.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _appService.Logger.LogError(ex, ex.InnerException?.Message);
             return await RollbackAndReturnFailureAsync(
                 Result.Failure(Messages.InternalServerError, ResponseStatus.BadRequest), cancellationToken); 
         }
@@ -240,36 +235,26 @@ public class CreateMechanicUserCommandHandler(
 
 
     private static List<ErrorDetail> UserIdentityConflict(
-        User user,
-        Guid identityId,
-        string username,
-        string email,
+        BaseUser user,
+        Guid identityId, 
+        string? email,
         string phoneNumber)
     {
-        var conflicts = new List<ErrorDetail>();
-
-        if (user.Username == username)
+        var conflicts = new List<ErrorDetail>(); 
+        
+        if (!string.IsNullOrWhiteSpace(email))
         {
-            conflicts.Add(new($"MechanicUser.{nameof(user.Username)}", 
-                "User username already registered"));
-        }
-
-        if (user.HashedEmail == email || user.NewHashedEmail == email)
-        {
-            conflicts.Add(new($"MechanicUser.{nameof(user.HashedEmail)}", 
-                "User email already registered"));
+            if (user.HashedEmail == email || user.NewHashedEmail == email)
+            {
+                conflicts.Add(new($"MechanicUser.{nameof(user.HashedEmail)}", 
+                    "User email already registered"));
+            } 
         }
 
         if (user.HashedPhoneNumber == phoneNumber || user.NewHashedPhoneNumber == phoneNumber)
         {
-            conflicts.Add(new($"MechanicUser.{nameof(user.HashedPhoneNumber)}", 
+            conflicts.Add(new($"MechanicUser.{nameof(user.HashedPhoneNumber)}",
                 "User phone number already registered"));
-        }
-
-        if (user.IdentityId == identityId)
-        {
-            conflicts.Add(new($"MechanicUser.{nameof(user.IdentityId)}", 
-                "Identity id already registered"));
         }
 
         return conflicts;
@@ -334,8 +319,7 @@ public class CreateMechanicUserCommandHandler(
         } 
 
         var mechanicResponse = new MechanicUserResponseDto(
-            user.Id,
-            user.Username,
+            user.Id, 
             request.Email,
             request.PhoneNumber,
             request.TimeZoneId,
@@ -362,6 +346,13 @@ public class CreateMechanicUserCommandHandler(
 
     private async Task<string> HashAsync(string value)
     {
+        return await _hashClient.Hash(value);
+    }
+
+    private async Task<string?> HashNullableAsync(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value)) return null;
+
         return await _hashClient.Hash(value);
     }
 }

@@ -27,7 +27,7 @@ public class GetPaginatedMechanicUserQueryHandler(
     {
         try
         {
-            var (totalCount, totalPages, users) = await _unitOfWork.Users.GetPaginatedMechanicUser(request.PageNumber, request.PageSize);
+            var (totalCount, totalPages, users) = await _unitOfWork.BaseUsers.GetPaginatedMechanicUser(request.PageNumber, request.PageSize);
 
             if (users is null)
             {
@@ -75,9 +75,8 @@ public class GetPaginatedMechanicUserQueryHandler(
                 , cancellationToken);
 
             responses.Add(new MechanicUserResponseDto(
-                user.Id,
-                user.Username,
-                await DecryptAsync(user.EncryptedEmail),
+                user.Id, 
+                await DecryptNullableAsync(user.EncryptedEmail),
                 await DecryptAsync(user.EncryptedPhoneNumber),
                 user.TimeZoneId,
                 user.LoyaltyProgram.ToLoyaltyProgramResponseDto(),

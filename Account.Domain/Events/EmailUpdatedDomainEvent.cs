@@ -4,7 +4,7 @@ namespace Account.Domain.Events;
 
 public record EmailUpdatedDomainEvent(
     Guid Id,
-    string HashedEmail,
+    string? HashedEmail,
     string NewHashedEmail,
-    string EncryptedEmail,
+    string? EncryptedEmail,
     string NewEncryptedEmail) : INotification;

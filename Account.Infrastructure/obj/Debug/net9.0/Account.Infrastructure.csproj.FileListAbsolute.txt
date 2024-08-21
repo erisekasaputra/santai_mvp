@@ -3,7 +3,9 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\bin\Debug\net9.0\Account.Infrastructure.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\bin\Debug\net9.0\Account.Infrastructure.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\bin\Debug\net9.0\Account.Domain.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\bin\Debug\net9.0\Identity.Contracts.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\bin\Debug\net9.0\Account.Domain.pdb
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\bin\Debug\net9.0\Identity.Contracts.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.csproj.AssemblyReference.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.AssemblyInfoInputs.cache

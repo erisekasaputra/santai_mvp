@@ -10,7 +10,7 @@ public class Fleet : Entity, IAggregateRoot
 {
     public Guid? UserId { get; private set; }
 
-    public User? User { get; private set; } 
+    public BaseUser? BaseUser { get; private set; } 
 
     public Guid? StaffId { get; private set; }
 

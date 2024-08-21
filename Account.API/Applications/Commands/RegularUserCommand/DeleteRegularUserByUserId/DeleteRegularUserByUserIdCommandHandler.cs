@@ -17,7 +17,7 @@ public class DeleteRegularUserByUserIdCommandHandler(IUnitOfWork unitOfWork, App
         {
             await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
 
-            var user = await _unitOfWork.Users.GetRegularUserByIdAsync(request.UserId);
+            var user = await _unitOfWork.BaseUsers.GetRegularUserByIdAsync(request.UserId);
 
             if (user is null)
             {
@@ -30,7 +30,7 @@ public class DeleteRegularUserByUserIdCommandHandler(IUnitOfWork unitOfWork, App
 
             user.Delete();
 
-            _unitOfWork.Users.Delete(user);
+            _unitOfWork.BaseUsers.Delete(user);
             
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
             
@@ -44,7 +44,7 @@ public class DeleteRegularUserByUserIdCommandHandler(IUnitOfWork unitOfWork, App
         catch (Exception ex)
         {
             await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _service.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

@@ -1,7 +1,6 @@
 ﻿using Account.API.CustomAttributes;
 using Account.API.Infrastructures;
-using Account.API.Options;
-using Account.API.Utilities;
+using Account.API.Options; 
 using Microsoft.Extensions.Options;
 
 namespace Account.API.Middleware;

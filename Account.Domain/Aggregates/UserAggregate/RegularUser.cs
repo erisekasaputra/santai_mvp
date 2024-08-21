@@ -4,7 +4,7 @@ using Account.Domain.ValueObjects;
 
 namespace Account.Domain.Aggregates.UserAggregate;
 
-public class RegularUser : User
+public class RegularUser : BaseUser
 {  
     public PersonalInfo PersonalInfo { get; private set; } 
 
@@ -15,17 +15,17 @@ public class RegularUser : User
     }
 
     public RegularUser(
-        Guid identityId,
-        string username,
-        string email,
-        string encryptedEmail,
+        Guid identityId, 
+        string? email,
+        string? encryptedEmail,
         string phoneNumber,
         string encryptedPhoneNumber,
         Address address, 
         PersonalInfo personalInfo,
         string timeZoneId,
-        string deviceId) : base(identityId, username, email, encryptedEmail, phoneNumber, encryptedPhoneNumber, address, timeZoneId)
+        string deviceId) : base(email, encryptedEmail, phoneNumber, encryptedPhoneNumber, address, timeZoneId)
     { 
+        Id = identityId;
         PersonalInfo = personalInfo ?? throw new ArgumentNullException(nameof(personalInfo));
         DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
 

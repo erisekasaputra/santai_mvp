@@ -7,9 +7,7 @@ using Account.Domain.ValueObjects;
 namespace Account.Domain.Aggregates.UserAggregate;
 
 public class Staff : Entity, IAggregateRoot
-{
-    public Guid IdentityId { get; private init; }    
-    public string Username { get; private init; } 
+{ 
     public Guid BusinessUserId { get; private init; } 
     public string BusinessUserCode { get; private init; } 
     public BusinessUser BusinessUser { get; set; } // Only for navigation properties, does not have to be instantiated 
@@ -36,18 +34,17 @@ public class Staff : Entity, IAggregateRoot
     public Staff( 
         Guid businessUserId,
         string businessUserCode,
-        string username, 
+        string? hashedEmail,
+        string? encryptedEmail,
         string hashedPhoneNumber,
         string encryptedPhoneNumber,
         string name,
         Address address,
         string timeZoneId,
         string? deviceId)
-    {
-        IdentityId = Guid.NewGuid();
+    { 
         BusinessUserId = businessUserId != default ? businessUserId : throw new ArgumentNullException(nameof(businessUserId)); 
-        BusinessUserCode = businessUserCode ?? throw new ArgumentNullException(nameof(businessUserCode));  
-        Username = username; 
+        BusinessUserCode = businessUserCode ?? throw new ArgumentNullException(nameof(businessUserCode));   
         Name = name ?? throw new ArgumentNullException(nameof(name)); 
         TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId)); 
         Address = address ?? throw new ArgumentNullException(nameof(address));  
@@ -57,6 +54,12 @@ public class Staff : Entity, IAggregateRoot
         NewHashedPhoneNumber = hashedPhoneNumber;
         EncryptedPhoneNumber = encryptedPhoneNumber ?? throw new ArgumentNullException(nameof(hashedPhoneNumber));
         NewEncryptedPhoneNumber = encryptedPhoneNumber; 
+
+        if (hashedEmail is not null)
+        {
+            HashedEmail = hashedEmail;
+            EncryptedEmail = encryptedEmail;
+        }
 
         IsEmailVerified = false; 
         IsPhoneNumberVerified = false; 
@@ -169,7 +172,7 @@ public class Staff : Entity, IAggregateRoot
         AddDomainEvent(new DeviceIdForcedSetDomainEvent(id, deviceId));
     }
 
-    private void RaiseEmailUpdatedDomainEvent(Guid id, string oldEmail, string newEmail, string oldEncryptedEmail, string newEncryptedEmail)
+    private void RaiseEmailUpdatedDomainEvent(Guid id, string? oldEmail, string newEmail, string? oldEncryptedEmail, string newEncryptedEmail)
     {
         AddDomainEvent(new EmailUpdatedDomainEvent(id, oldEmail, newEmail, oldEncryptedEmail, newEncryptedEmail));
     }

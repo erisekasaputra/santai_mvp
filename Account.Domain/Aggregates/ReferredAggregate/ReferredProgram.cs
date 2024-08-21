@@ -16,7 +16,7 @@ public class ReferredProgram : Entity, IAggregateRoot
 
     public ReferralStatus Status { get; private set; }
 
-    public User User { get; private set; } // navigation properties
+    public BaseUser BaseUser { get; private set; } // navigation properties
 
     public ReferredProgram(Guid referrerId, Guid referredUserId, string referralCode, DateTime referredDateUtc)
     { 

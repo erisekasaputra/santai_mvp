@@ -25,7 +25,7 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
     {
         try
         {
-            var entity = await _unitOfWork.Users.GetBusinessUserByIdAsync(request.Id);
+            var entity = await _unitOfWork.BaseUsers.GetBusinessUserByIdAsync(request.Id);
             if (entity is null)
             {
                 return Result.Failure($"Business user not found", ResponseStatus.NotFound)
@@ -34,10 +34,10 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
 
             var addressRequest = request.Address;
 
-            var hashedEmail = await HashAsync(request.Email);
+            var hashedEmail = await HashNullableAsync(request.Email);
             var hashedPhoneNumber = await HashAsync(request.PhoneNumber);
 
-            var encryptedEmail = await EncryptAsync(request.Email);
+            var encryptedEmail = await EncryptNullableAsync(request.Email);
             var encryptedPhoneNumber = await EncryptAsync(request.PhoneNumber);
 
             var encryptedAddressLine1 = await EncryptAsync(addressRequest.AddressLine1);
@@ -53,8 +53,7 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
               addressRequest.PostalCode,
               addressRequest.Country);
 
-            var conflicts = await _unitOfWork.Staffs.GetByIdentitiesAsNoTrackingAsync(
-                    (IdentityParameter.Username, [request.Username]),
+            var conflicts = await _unitOfWork.Staffs.GetByIdentitiesAsNoTrackingAsync( 
                     (IdentityParameter.Email, [hashedEmail]),
                     (IdentityParameter.PhoneNumber, [hashedPhoneNumber])
                 );
@@ -62,12 +61,7 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
             if (conflicts is not null && conflicts.Any())
             {
                 var errorDetails = new List<ErrorDetail>();
-                var conflict = conflicts.First();
-
-                if (conflict.Username == request.Username)
-                {
-                    errorDetails.Add(new ("Staff.Username", "Username already registered"));
-                }
+                var conflict = conflicts.First(); 
 
                 if (conflict.HashedEmail == hashedEmail || conflict.NewHashedEmail == hashedEmail)
                 {
@@ -92,7 +86,8 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
             var newStaff = new Staff(
                 entity.Id,
                 entity.Code,
-                request.Username, 
+                hashedEmail,
+                encryptedEmail,
                 hashedPhoneNumber,
                 encryptedPhoneNumber,
                 request.Name,
@@ -113,7 +108,7 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
         }
         catch (Exception ex)
         {
-            _appService.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _appService.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }
@@ -130,8 +125,7 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
             request.Address.Country);
 
         var staffResponseDto = new StaffResponseDto(
-                staff.Id, 
-                staff.Username,
+                staff.Id,  
                 request.Email,
                 request.PhoneNumber,
                 request.Name,
@@ -156,6 +150,16 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
 
     private async Task<string> HashAsync(string value)
     {
+        return await _hashClient.Hash(value);
+    }
+
+    private async Task<string?> HashNullableAsync(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return null;
+        }
+
         return await _hashClient.Hash(value);
     }
 }

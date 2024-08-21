@@ -12,26 +12,7 @@ namespace Account.API.Validations.MechanicUserValidations;
 public class CreateMechanicUserValidation : AbstractValidator<MechanicUserRequestDto>
 {
     public CreateMechanicUserValidation()
-    {
-        RuleFor(x => x.IdentityId)
-            .NotEmpty().WithMessage("Identity Id can not be null")
-            .Must(MustValidGuid).WithMessage("Guid is not valid");
-          
-        RuleFor(x => x.Username)
-            .NotEmpty().WithMessage("Username can not be empty")
-            .Length(3, 20).WithMessage("The username must be between 3 and 20 characters long")
-            .Must(UsernameExtension.IsValidUsername).WithMessage("The username must contain only lowercase and numbers");
-
-        RuleFor(x => x.Email)
-            .NotEmpty().WithMessage("Username can not be empty")
-            .Length(5, 254).WithMessage("The username must be between 3 and 254 characters long")
-            .EmailAddress().WithMessage("Email format is invalid");
-
-        RuleFor(x => x.PhoneNumber)
-            .NotEmpty().WithMessage("Phone number can not be empty")
-            .Length(3, 20).WithMessage("Phone number must be between 3 and 20 characters long")
-            .Must(PhoneNumberExtension.IsValidPhoneNumber).WithMessage("Phone number must consist of number only and start with '+'");
-
+    {  
         RuleFor(x => x.Address)
             .NotNull().WithMessage("Address can not be empty")
             .SetValidator(new AddressValidation());
@@ -66,6 +47,6 @@ public class CreateMechanicUserValidation : AbstractValidator<MechanicUserReques
 
     private bool MustValidGuid(Guid id)
     {
-        return id != Guid.Empty;
+        return id != Guid.Empty && id != default;
     }
 }

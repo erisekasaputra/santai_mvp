@@ -10,15 +10,11 @@ using Account.Domain.ValueObjects;
 
 namespace Account.Domain.Aggregates.UserAggregate;
 
-public abstract class User : Entity, IAggregateRoot
-{
-    public Guid IdentityId { get; private init; }  
+public abstract class BaseUser : Entity, IAggregateRoot
+{     
+    public string? HashedEmail { get; private set; }
 
-    public string Username { get; private init; }
-
-    public string HashedEmail { get; private set; }
-
-    public string EncryptedEmail { get; private set; }
+    public string? EncryptedEmail { get; private set; }
 
     public bool IsEmailVerified { get; private set; }
 
@@ -54,36 +50,36 @@ public abstract class User : Entity, IAggregateRoot
 
     public string TimeZoneId {  get; set; }   
 
-    protected User()
+    protected BaseUser()
     { 
     } 
-    public User(
-        Guid identityId,
-        string username,
-        string hashedEmail,
-        string encryptedEmail,
+
+    public BaseUser(  
+        string? hashedEmail,
+        string? encryptedEmail,
         string hashedPhoneNumber,
         string encryptedPhoneNumber,
         Address address,
         string timeZoneId)
-    {
-        IdentityId = identityId != default ? identityId : throw new ArgumentNullException(nameof(identityId));
-        Username = username ?? throw new ArgumentNullException(nameof(username));
-        HashedEmail = hashedEmail ?? throw new ArgumentNullException(nameof(hashedEmail));
-        EncryptedEmail = encryptedEmail ?? throw new ArgumentNullException(nameof(encryptedEmail));
+    {  
+        HashedEmail = hashedEmail;
+        EncryptedEmail = encryptedEmail;
         HashedPhoneNumber = hashedPhoneNumber ?? throw new ArgumentNullException(nameof(hashedPhoneNumber));
         EncryptedPhoneNumber = encryptedPhoneNumber ?? throw new ArgumentNullException(nameof(encryptedPhoneNumber));
         Address = address ?? throw new ArgumentNullException(nameof(address));
         TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId)); 
         CreatedAtUtc = DateTime.UtcNow;
         UpdatedAtUtc = DateTime.UtcNow;
-        AccountStatus = AccountStatus.Active;
+        AccountStatus = AccountStatus.Active; 
 
-        NewHashedEmail = hashedEmail;
+        NewEncryptedPhoneNumber = encryptedPhoneNumber;
         NewHashedPhoneNumber = hashedPhoneNumber;
 
-        NewEncryptedEmail = encryptedEmail;
-        NewEncryptedPhoneNumber = encryptedPhoneNumber;
+        if (hashedEmail is not null)
+        {
+            NewHashedEmail = hashedEmail;
+            NewEncryptedEmail = encryptedEmail;
+        } 
         
         IsEmailVerified = false;
         IsPhoneNumberVerified = false; 
@@ -105,10 +101,8 @@ public abstract class User : Entity, IAggregateRoot
     {
         NewHashedEmail = email;
         NewEncryptedEmail = encryptedEmail;
-        IsEmailVerified = false;
-
+        IsEmailVerified = false; 
         UpdatedAtUtc = DateTime.UtcNow;
-
         RaiseEmailUpdatedDomainEvent(Id, HashedEmail, email, EncryptedEmail, encryptedEmail);
     } 
 
@@ -116,10 +110,8 @@ public abstract class User : Entity, IAggregateRoot
     {
         NewHashedPhoneNumber = phoneNumber;
         NewEncryptedPhoneNumber = encryptedPhoneNumber;
-        IsPhoneNumberVerified = false; 
-
-        UpdatedAtUtc = DateTime.UtcNow;
-
+        IsPhoneNumberVerified = false;    
+        UpdatedAtUtc = DateTime.UtcNow; 
         RaisePhoneNumberUpdatedDomainEvent(Id, HashedPhoneNumber, phoneNumber, EncryptedPhoneNumber, encryptedPhoneNumber);
     } 
 
@@ -160,7 +152,7 @@ public abstract class User : Entity, IAggregateRoot
         AddDomainEvent(new ReferralProgramAddedDomainEvent(referralProgram));
     }
 
-    private void RaiseEmailUpdatedDomainEvent(Guid id, string oldEmail, string newEmail, string oldEncryptedEmail, string newEncryptedEmail)
+    private void RaiseEmailUpdatedDomainEvent(Guid id, string? oldEmail, string newEmail, string? oldEncryptedEmail, string newEncryptedEmail)
     {
         AddDomainEvent(new EmailUpdatedDomainEvent(id, oldEmail, newEmail, oldEncryptedEmail, newEncryptedEmail));
     }

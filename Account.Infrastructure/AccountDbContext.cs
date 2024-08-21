@@ -16,7 +16,7 @@ namespace Account.Infrastructure;
 
 public class AccountDbContext : DbContext
 {
-    public DbSet<User> Users { get; set; }
+    public DbSet<BaseUser> BaseUsers { get; set; }
     public DbSet<BusinessLicense> BusinessLicenses { get; set; }
     public DbSet<DrivingLicense> DrivingLicenses { get; set; }
     public DbSet<NationalIdentity> NationalIdentities { get; set; }
@@ -99,7 +99,7 @@ public class AccountDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<User>()
+        modelBuilder.Entity<BaseUser>()
             .HasDiscriminator<string>("UserType")
             .HasValue<BusinessUser>("BusinessUser")
             .HasValue<RegularUser>("RegularUser")

@@ -23,7 +23,7 @@ public class GetPaginatedRegularUserQueryHandler(
     {
         try
         {
-            var (totalCount, totalPages, users) = await _unitOfWork.Users.GetPaginatedRegularUser(request.PageNumber, request.PageSize);
+            var (totalCount, totalPages, users) = await _unitOfWork.BaseUsers.GetPaginatedRegularUser(request.PageNumber, request.PageSize);
 
             if (users is null)
             {
@@ -48,7 +48,7 @@ public class GetPaginatedRegularUserQueryHandler(
         var responses = new List<RegularUserResponseDto>();
         foreach (var user in users)
         {
-            var decryptedEmail = await DecryptAsync(user.EncryptedEmail);
+            var decryptedEmail = await DecryptNullableAsync(user.EncryptedEmail);
             var decryptedPhoneNumber = await DecryptAsync(user.EncryptedPhoneNumber);
             var decryptedAddressLine1 = await DecryptAsync(user.Address.EncryptedAddressLine1);
             var decryptedAddressLine2 = await DecryptNullableAsync(user.Address.EncryptedAddressLine2);
@@ -64,8 +64,7 @@ public class GetPaginatedRegularUserQueryHandler(
                 user.Address.Country);
 
             responses.Add(new RegularUserResponseDto(
-                    user.Id,
-                    user.Username,
+                    user.Id, 
                     decryptedEmail,
                     decryptedPhoneNumber,
                     user.TimeZoneId,

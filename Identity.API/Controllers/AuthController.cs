@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Google.Apis.Auth;
 using Identity.API.Abstraction;
+using Identity.API.CustomAttributes;
 using Identity.API.Domain.Entities;
 using Identity.API.Domain.Events;
 using Identity.API.Dto;
@@ -8,7 +9,9 @@ using Identity.API.Enumerations;
 using Identity.API.Extensions;
 using Identity.API.Infrastructure;
 using Identity.API.SeedWork;
+using Identity.API.Service;
 using Identity.Contracts;
+using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authorization;
@@ -16,10 +19,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using SantaiClaimType; 
+using SantaiClaimType;
+using System.ComponentModel.DataAnnotations;
 using System.Data;
-using System.IdentityModel.Tokens.Jwt; 
-using System.Security.Claims; 
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 namespace Identity.API.Controllers;
 
 
@@ -37,6 +41,8 @@ public class AuthController : ControllerBase
     private const string _verifyLoginActionName = "VerifyLogin";
     private const string _homePageActionName = "Homepage";  
     private const string _sendOtpActionName = "SendOtp";
+    private const string _staffLoginActionName = "LoginStaff";
+    private const string _userLoginActionName = "LoginUser";
 
     private readonly RoleManager<IdentityRole> _roleManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
@@ -49,6 +55,7 @@ public class AuthController : ControllerBase
     private readonly ApplicationDbContext _dbContext;
     private readonly IOtpService _otpService;
     private readonly HttpContext? _httpContext;
+    private readonly ActionMethodService _actionMethodService;
 
     public AuthController(
         RoleManager<IdentityRole> roleManager,
@@ -61,7 +68,8 @@ public class AuthController : ControllerBase
         IMediator mediator,
         ApplicationDbContext dbContext,
         IOtpService otpService, 
-        IHttpContextAccessor httpContextAccessor)
+        IHttpContextAccessor httpContextAccessor,
+        ActionMethodService actionMethodService)
     {
         _roleManager = roleManager;
         _signInManager = signInManager;
@@ -74,33 +82,32 @@ public class AuthController : ControllerBase
         _dbContext = dbContext;
         _otpService = otpService;
         _httpContext = httpContextAccessor.HttpContext;
+        _actionMethodService = actionMethodService;
     }
 
 
-    [HttpPost("google-signin")]
-    public async Task<IResult> GoogleSignIn([AsParameters] string userType)
-    { 
-        if (!UserTypes.AllTypes().Contains(userType))
-        {
-            return TypedResults.BadRequest(Result.Failure($"Unknown user type {userType}", 400));
-        }
+    //[HttpPost("google-signin")]
+    //public async Task<IResult> GoogleSignIn([AsParameters] string userType)
+    //{ 
+    //    if (!UserTypeConfig.AllTypes().Contains(userType))
+    //    {
+    //        return TypedResults.BadRequest(Result.Failure($"Unknown user type {userType}", 400));
+    //    }
 
-        var parameters = new
-        {
-            userType = userType
-        };
+    //    var parameters = new
+    //    {
+    //        userType = userType
+    //    };
 
-        var properties = _signInManager.ConfigureExternalAuthenticationProperties(
-            GoogleDefaults.AuthenticationScheme, 
-            Url.Action(_googleSigninCallbackActionName, _controllerName, parameters, Request.Scheme));
+    //    var properties = _signInManager.ConfigureExternalAuthenticationProperties(
+    //        GoogleDefaults.AuthenticationScheme, 
+    //        Url.Action(_googleSigninCallbackActionName, _controllerName, parameters, Request.Scheme));
 
-        return await Task.FromResult(TypedResults.Challenge(properties, [GoogleDefaults.AuthenticationScheme]));
-    }
+    //    return await Task.FromResult(TypedResults.Challenge(properties, [GoogleDefaults.AuthenticationScheme]));
+    //}
 
     [HttpPost("otp")]
-    public async Task<IResult> SendOtp(
-        [AsParameters] string otpProviderType,
-        [FromBody] SendOtpRequest request)
+    public async Task<IResult> SendOtp([FromBody] SendOtpRequest request)
     {
         var strategy = _dbContext.Database.CreateExecutionStrategy();
 
@@ -108,10 +115,11 @@ public class AuthController : ControllerBase
         {
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
             try
-            {  
-                if (!OtpProviderType.AllowedProviderType.Contains(otpProviderType))
+            {   
+
+                if (!AllowedOtpProviderType.GetAll.Contains(request.ProviderType))
                 {
-                    return TypedResults.BadRequest(Result.Failure($"Unknown otp provider type '{otpProviderType}'", 400));
+                    return TypedResults.BadRequest(Result.Failure($"Unknown otp provider type '{request.ProviderType}'", 400));
                 }
 
                 var requestOtp = await _otpService.GetRequestOtpAsync(request.RequestOtpId);
@@ -133,7 +141,24 @@ public class AuthController : ControllerBase
                     return TypedResults.Unauthorized();
                 }
 
-                string phoneNumber = user.PhoneNumber ?? throw new ArgumentNullException(user.PhoneNumber, $"User {user.Id} is registered but the phone number is empty");
+                var claims = await _userManager.GetClaimsAsync(user);
+
+                if (claims is null)
+                {
+                    _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
+                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                }
+
+                var roles = await _userManager.GetRolesAsync(user);
+
+                if (roles is null)
+                {
+                    _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
+                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                }
+
+                string phoneNumber = user.PhoneNumber 
+                    ?? throw new ArgumentNullException(user.PhoneNumber, $"User {user.Id} is registered but the phone number is empty");
 
                 if (requestOtp.OtpRequestFor == OtpRequestFor.VerifyPhoneNumber)
                 {
@@ -144,7 +169,7 @@ public class AuthController : ControllerBase
 
                     var otpToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber!);
 
-                    await _mediator.Publish(new OtpRequestedDomainEvent(user.PhoneNumber!, otpToken, otpProviderType));
+                    await _mediator.Publish(new OtpRequestedDomainEvent(user.PhoneNumber!, otpToken, request.ProviderType));
 
                     await _dbContext.SaveChangesAsync();
 
@@ -161,7 +186,13 @@ public class AuthController : ControllerBase
                             UserType = user.UserType,
                             BusinessCode = user.BusinessCode
                         },
-                        Link = Url.Action(_verifyPhoneActionName, _controllerName)
+                        
+                        Next = new
+                        {
+                            Link = Url.Action(_verifyPhoneActionName, _controllerName),
+                            Action = _verifyPhoneActionName,
+                            Method = _actionMethodService.GetHttpMethodByActionName(_verifyPhoneActionName, _controllerName)
+                        }
                     }); 
                 }
 
@@ -170,7 +201,7 @@ public class AuthController : ControllerBase
                     (var otp, var remainingTime) = await _otpService.GenerateOtpAsync(user.PhoneNumber!);
                     if (otp is not null)
                     {
-                        await _mediator.Publish(new OtpRequestedDomainEvent(user.PhoneNumber!, otp, otpProviderType));
+                        await _mediator.Publish(new OtpRequestedDomainEvent(user.PhoneNumber!, otp, request.ProviderType));
                     }
 
                     await _dbContext.SaveChangesAsync();
@@ -188,32 +219,34 @@ public class AuthController : ControllerBase
                             UserType = user.UserType,
                             BusinessCode = user.BusinessCode
                         },
-                        Link = Url.Action(_verifyLoginActionName, _controllerName),
-                        RemainingLockingOtp = remainingTime
+                        Next = new
+                        {
+                            Link = Url.Action(_verifyLoginActionName, _controllerName),
+                            Action = _verifyLoginActionName,
+                            Method = _actionMethodService.GetHttpMethodByActionName(_verifyLoginActionName, _controllerName)
+                        }
                     });
                 }
 
                 _logger.LogError("Otp request for {0} not found", requestOtp.OtpRequestFor.ToString());
-                return TypedResults.InternalServerError(Messages.InternalServerError);
+                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
             }
             catch (ArgumentNullException ex)
             {
                 _logger.LogError(ex, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Messages.AccountError);
+                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Messages.InternalServerError);
+                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
             }
         });    
     } 
 
 
     [HttpPost("google-signin/callback")]
-    public async Task<IResult> GoogleSignInCallBack(
-        [AsParameters] string userType,
-        [FromBody] GoogleSignInRequest request)
+    public async Task<IResult> GoogleSignInCallBack([FromBody] GoogleSignInRequest request)
     {
         var strategy = _dbContext.Database.CreateExecutionStrategy();
 
@@ -221,14 +254,7 @@ public class AuthController : ControllerBase
         {
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
             try
-            {
-                if (!UserTypes.AllTypes().Contains(userType))
-                {
-                    return TypedResults.BadRequest(
-                        Result.Failure($"Unknown user type {userType}", 400));
-                }
-
-
+            {  
                 var payload = await _googleTokenValidator.ValidateAsync(request.GoogleIdToken);
 
                 if (payload is null)
@@ -240,42 +266,37 @@ public class AuthController : ControllerBase
 
                 // if user does not exist in the database, then give the CreateIdentity instruction for Regular and Mechanic user only, otherwise need to register from administrator
                 var user = await _userManager.FindByEmailAsync(payload.Email);
-
-                if (user is null && !UserTypes.AllowedTypes().Contains(userType))
-                {
-                    return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 500)
-                            .WithError(new("UserType", $"User with type of '{userType}' must registered from Santai administrator")));
-                }
-
+                 
                 // if user does not exist in the database, then give the CreateIdentity instruction
                 if (user is null)
-                {
-                    var parameters = new { userType = userType };
-
-                    return TypedResults.Accepted(_createIdentityActionName,
+                { 
+                    return TypedResults.NotFound(
                     new
                     {
                         GoogleIdToken = request.GoogleIdToken,
-                        Link = Url.Action(_createIdentityActionName, _controllerName, parameters, Request.Scheme),
-                        UserTypes = UserTypes.AllowedTypes()
+                        Next = new
+                        { 
+                            Link = Url.Action(_createIdentityActionName, _controllerName),
+                            Action = _createIdentityActionName,
+                            Method = _actionMethodService.GetHttpMethodByActionName(_createIdentityActionName, _controllerName),
+                            AllowedUserTypes = GetUserTypeConfiguration.AllowedUserRegisterBySelf 
+                        }
                     });
-                }
-
-
+                } 
 
                 var claims = await _userManager.GetClaimsAsync(user);
                 if (claims is null || !claims.Any())
                 {
-                    _logger.LogWarning("User claims are missing or invalid for user ID: {UserId}", user.Id);
-                    return TypedResults.InternalServerError(Messages.AccountError);
+                    _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
+                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
                 }
 
                 var roles = await _userManager.GetRolesAsync(user);
+
                 if (roles is null || !roles.Any())
                 {
-                    _logger.LogWarning("User roles are missing or invalid for user ID: {UserId}", user.Id);
-                    return TypedResults.InternalServerError(Messages.AccountError);
+                    _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
+                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
                 }
 
 
@@ -286,9 +307,7 @@ public class AuthController : ControllerBase
                     (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyPhoneNumber);
 
                     await _dbContext.SaveChangesAsync(); 
-                    await transaction.CommitAsync(); 
-
-                    var paramsOtpType1 = new { otpProviderType = "" };
+                    await transaction.CommitAsync();  
 
                     return TypedResults.Accepted(_sendOtpActionName, new
                     {
@@ -301,9 +320,15 @@ public class AuthController : ControllerBase
                             UserType = user.UserType,
                             BusinessCode = user.BusinessCode
                         },
-                        Link = Url.Action(_sendOtpActionName, _controllerName, paramsOtpType1, Request.Scheme),
-                        OtpRequestToken = otpRequestToken,
-                        RequestId = requestId
+                        Next = new
+                        {
+                            Link = Url.Action(_sendOtpActionName, _controllerName),
+                            Action = _sendOtpActionName,
+                            Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                            OtpRequestToken = otpRequestToken,
+                            RequestId = requestId,
+                            OtpProviderTypes = AllowedOtpProviderType.GetAll 
+                        }
                     }); 
                 }
                  
@@ -313,10 +338,7 @@ public class AuthController : ControllerBase
 
                 await _dbContext.SaveChangesAsync();
 
-                await transaction.CommitAsync();
-
-
-                var paramsOtpType2 = new { otpProviderType = "" };
+                await transaction.CommitAsync(); 
 
                 return TypedResults.Accepted(_sendOtpActionName, new
                 {
@@ -325,31 +347,37 @@ public class AuthController : ControllerBase
                         Sub = user.Id,
                         Username = user.UserName,
                         PhoneNumber = phoneNumber,
-                        Email = user.Email, 
+                        Email = user.Email,
                         UserType = user.UserType,
                         BusinessCode = user.BusinessCode
                     },
-                    Link = Url.Action(_sendOtpActionName, _controllerName, paramsOtpType2, Request.Scheme),
-                    OtpRequestToken = newOtpRequestToken,
-                    RequestId = newRequestId
+                    Next = new
+                    { 
+                        Link = Url.Action(_sendOtpActionName, _controllerName),
+                        Action = _sendOtpActionName,
+                        Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                        OtpRequestToken = newOtpRequestToken,
+                        RequestId = newRequestId,
+                        OtpProviderTypes = AllowedOtpProviderType.GetAll
+                    }
                 }); 
             }
             catch (ArgumentNullException ex)
             {
                 _logger.LogError(ex, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Messages.AccountError); 
+                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500)); 
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Messages.InternalServerError);
+                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
             }
         }); 
     }  
 
 
     [HttpPost("login/staff")]
-    public async Task<IResult> InternalLoginUser(
+    public async Task<IResult> LoginStaff(
         [FromBody] LoginStaffRequest request,
         [FromServices] IValidator<LoginStaffRequest> validator)
     {
@@ -384,21 +412,21 @@ public class AuthController : ControllerBase
                 {
                     return TypedResults.BadRequest(
                         Result.Failure("An error has occured", 400)
-                            .WithError(new("Credentials", "We couldn't find an account with the given details")));
+                            .WithError(new("Credentials", "We couldn't find your account")));
                 }
 
-                if (user.UserType is not UserTypes.StaffUserRole || string.IsNullOrWhiteSpace(request.BusinessCode))
+                if (user.UserType is not UserType.StaffUser || string.IsNullOrWhiteSpace(request.BusinessCode))
                 {
                     return TypedResults.BadRequest(
                         Result.Failure("An error has occured", 400)
-                            .WithError(new("Credentials", "We couldn't find an account with the given details")));
+                            .WithError(new("Credentials", "We couldn't find your account")));
                 }
 
                 if (!request.BusinessCode.Equals(user.BusinessCode, StringComparison.CurrentCultureIgnoreCase))
                 {
                     return TypedResults.BadRequest(
                         Result.Failure("An error has occured", 400)
-                            .WithError(new("Credentials", "We couldn't find an account with the given details")));
+                            .WithError(new("Credentials", "We couldn't find your account")));
                 }
 
                 if (!user.PhoneNumberConfirmed)
@@ -407,10 +435,7 @@ public class AuthController : ControllerBase
 
                     await _dbContext.SaveChangesAsync();
 
-                    await transaction.CommitAsync();
-
-
-                    var paramsOtpType1 = new { otpProviderType = "" };
+                    await transaction.CommitAsync(); 
 
                     return TypedResults.Accepted(_sendOtpActionName, new
                     {
@@ -423,9 +448,15 @@ public class AuthController : ControllerBase
                             BusinessCode = user.BusinessCode,
                             UserTypes = user.UserType
                         },
-                        Link = Url.Action(_sendOtpActionName, _controllerName, paramsOtpType1, Request.Scheme),
-                        OtpRequestToken = otpRequestToken,
-                        RequestId = requestId
+                        Next = new
+                        { 
+                            Link = Url.Action(_sendOtpActionName, _controllerName),
+                            Action = _sendOtpActionName,
+                            Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                            OtpRequestToken = otpRequestToken,
+                            RequestId = requestId,
+                            OtpProviderTypes = AllowedOtpProviderType.GetAll
+                        }
                     });
                 }
 
@@ -439,17 +470,19 @@ public class AuthController : ControllerBase
                  
 
                 var claims = await _userManager.GetClaimsAsync(user);
+
                 if (claims is null || !claims.Any())
                 {
                     _logger.LogWarning("User claims are missing or invalid for user ID: {UserId}", user.Id);
-                    return TypedResults.InternalServerError(Messages.AccountError);
+                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
                 }
 
                 var roles = await _userManager.GetRolesAsync(user);
+
                 if (roles is null || !roles.Any())
                 {
                     _logger.LogWarning("User roles are missing or invalid for user ID: {UserId}", user.Id);
-                    return TypedResults.InternalServerError(Messages.AccountError);
+                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
                 }
 
 
@@ -457,9 +490,7 @@ public class AuthController : ControllerBase
 
                 await _dbContext.SaveChangesAsync();
 
-                await transaction.CommitAsync();
-
-                var paramsOtpType2 = new { otpProviderType = "" };
+                await transaction.CommitAsync(); 
 
                 return TypedResults.Accepted(_sendOtpActionName, new
                 {
@@ -472,22 +503,27 @@ public class AuthController : ControllerBase
                         UserType = user.UserType,
                         BusinessCode = user.BusinessCode
                     },
-                    Link = Url.Action(_sendOtpActionName, _controllerName, paramsOtpType2, Request.Scheme),
-                    OtpRequestToken = newOtpRequestToken,
-                    RequestId = newRequestId
+                    Next = new {
+                        Link = Url.Action(_sendOtpActionName, _controllerName),
+                        Action = _sendOtpActionName,
+                        Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                        OtpRequestToken = newOtpRequestToken,
+                        RequestId = newRequestId,
+                        OtpProviderTypes = AllowedOtpProviderType.GetAll
+                    }
                 });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Messages.InternalServerError);
+                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
             }
         });
     }
 
 
     [HttpPost("login/user")]
-    public async Task<IResult> InternalLoginUser(
+    public async Task<IResult> LoginUser(
         [FromBody] LoginUserRequest request,
         [FromServices] IValidator<LoginUserRequest> validator)
     {
@@ -522,14 +558,22 @@ public class AuthController : ControllerBase
                 {
                     return TypedResults.BadRequest(
                         Result.Failure("An error has occured", 400)
-                            .WithError(new("Credentials", "We couldn't find an account with the given details")));
+                            .WithError(new("Credentials", "We couldn't find your account")));
                 }
-                 
-                if (user.UserType == UserTypes.StaffUserRole)
+
+                if (user.UserType == UserType.StaffUser)
                 {
-                    return TypedResults.BadRequest(
-                        Result.Failure("Staff must login via Staff Login page", 400));
+                    return TypedResults.Ok(new
+                    {
+                        Next = new
+                        {
+                            Link = Url.Action(_staffLoginActionName, _controllerName),
+                            Action = _staffLoginActionName,
+                            Method = _actionMethodService.GetHttpMethodByActionName(_staffLoginActionName, _controllerName)
+                        }
+                    });
                 }
+            
 
                 if (!user.PhoneNumberConfirmed)
                 {
@@ -537,10 +581,7 @@ public class AuthController : ControllerBase
                      
                     await _dbContext.SaveChangesAsync();
 
-                    await transaction.CommitAsync();
-
-
-                    var paramsOtpType1 = new { otpProviderType = "" };
+                    await transaction.CommitAsync(); 
 
                     return TypedResults.Accepted(_sendOtpActionName, new
                     {
@@ -553,9 +594,14 @@ public class AuthController : ControllerBase
                             UserType = user.UserType,
                             BusinessCode = user.BusinessCode
                         },
-                        Link = Url.Action(_sendOtpActionName, _controllerName, paramsOtpType1),
-                        OtpRequestToken = otpRequestToken,
-                        RequestId = requestId  
+                        Next = new {
+                            Link = Url.Action(_sendOtpActionName, _controllerName),
+                            Action = _sendOtpActionName,
+                            Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName), 
+                            OtpRequestToken = otpRequestToken,
+                            RequestId = requestId,
+                            OtpProviderTypes = AllowedOtpProviderType.GetAll
+                        }
                     });
                 }
 
@@ -571,17 +617,19 @@ public class AuthController : ControllerBase
 
 
                 var claims = await _userManager.GetClaimsAsync(user);
+
                 if (claims is null || !claims.Any())
                 {
-                    _logger.LogWarning("User claims are missing or invalid for user ID: {UserId}", user.Id);
-                    return TypedResults.InternalServerError(Messages.AccountError);
+                    _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
+                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
                 }
 
                 var roles = await _userManager.GetRolesAsync(user);
+
                 if (roles is null || !roles.Any())
                 {
-                    _logger.LogWarning("User roles are missing or invalid for user ID: {UserId}", user.Id);
-                    return TypedResults.InternalServerError(Messages.AccountError);
+                    _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
+                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
                 }
 
 
@@ -590,10 +638,8 @@ public class AuthController : ControllerBase
 
                 await _dbContext.SaveChangesAsync();
 
-                await transaction.CommitAsync();
-
-                var paramsOtpType2 = new { otpProviderType = "" };
-
+                await transaction.CommitAsync(); 
+                  
                 return TypedResults.Accepted(_sendOtpActionName, new
                 {
                     User = new
@@ -604,25 +650,30 @@ public class AuthController : ControllerBase
                         Email = user.Email,
                         UserType = user.UserType,
                         BusinessCode = user.BusinessCode
-                    },
-                    Link = Url.Action(_sendOtpActionName, _controllerName, paramsOtpType2, Request.Scheme),
-                    OtpRequestToken = newOtpRequestToken,
-                    RequestId = newRequestId
+                    }, 
+
+                    Next = new
+                    {
+                        Link = Url.Action(_sendOtpActionName, _controllerName),
+                        Action = _sendOtpActionName,
+                        Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                        OtpRequestToken = newOtpRequestToken,
+                        RequestId = newRequestId,
+                        OtpProviderTypes = AllowedOtpProviderType.GetAll
+                    }
                 });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Messages.InternalServerError);
+                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
             }
         }); 
-    } 
-   
+    }
 
-    [HttpPost("register/user")]
-    public async Task<IResult> CreateIdentity(
-        [AsParameters] string userType, 
-        [FromBody] RegisterUserRequest request)
+    [HttpPost("register")]
+    [Idempotency(nameof(CreateIdentity))]
+    public async Task<IResult> CreateIdentity([FromBody] RegisterUserRequest request)
     {
         var strategy = _dbContext.Database.CreateExecutionStrategy();
 
@@ -631,18 +682,12 @@ public class AuthController : ControllerBase
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
             try
             {
-                if (!UserTypes.AllowedTypes().Contains(userType))
+                if (!GetUserTypeConfiguration.AllowedUserRegisterBySelf.Contains(request.UserType))
                 {
                     return TypedResults.BadRequest(
                         Result.Failure("An error has occured", 500)
-                            .WithError(new("UserType", $"Unknown user type {userType}")));
-                }
-
-                if (!UserTypes.AllTypes().Contains(userType))
-                {
-                    _logger.LogError("User type {0} does not exists in the list of user types", userType);
-                    return TypedResults.InternalServerError(Messages.InternalServerError);
-                }
+                            .WithError(new("UserType", $"Unknown user type {request.UserType}")));
+                } 
 
                 var phoneNumber = request.PhoneNumber.NormalizePhoneNumber(request.RegionCode);
 
@@ -667,23 +712,25 @@ public class AuthController : ControllerBase
                     {
                         if (userByEmailClaim.PhoneNumber is null)
                         {
-                            _logger.LogError("User with id {0} has email but the phone number is empty", userByEmailClaim.Id);
-                            return TypedResults.InternalServerError(Messages.AccountError);
+                            _logger.LogWarning("User with id {Id} has email but the phone number is empty", userByEmailClaim.Id);
+                            return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
                         }
                         
 
                         var claims = await _userManager.GetClaimsAsync(userByEmailClaim);
+
                         if (claims is null || !claims.Any())
                         {
-                            _logger.LogWarning("User claims are missing or invalid for user ID: {UserId}", userByEmailClaim.Id);
-                            return TypedResults.InternalServerError(Messages.AccountError);
+                            _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", userByEmailClaim.Id);
+                            return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
                         }
 
                         var roles = await _userManager.GetRolesAsync(userByEmailClaim);
+
                         if (roles is null || !roles.Any())
                         {
-                            _logger.LogWarning("User roles are missing or invalid for user ID: {UserId}", userByEmailClaim.Id);
-                            return TypedResults.InternalServerError(Messages.AccountError);
+                            _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", userByEmailClaim.Id);
+                            return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
                         }
 
 
@@ -697,9 +744,7 @@ public class AuthController : ControllerBase
                             (Guid newRequestId, string newOtpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyPhoneNumber);
 
                             await _dbContext.SaveChangesAsync();
-                            await transaction.CommitAsync(); 
-
-                            var paramsOtpType1 = new { otpProviderType = "" };
+                            await transaction.CommitAsync();  
 
                             return TypedResults.Accepted(_sendOtpActionName, new
                             {
@@ -712,16 +757,26 @@ public class AuthController : ControllerBase
                                     UserType = userByEmailClaim.UserType,
                                     BusinessCode = userByEmailClaim.BusinessCode
                                 },
-                                Link = Url.Action(_sendOtpActionName, _controllerName, paramsOtpType1, Request.Scheme),
-                                OtpRequestToken = newOtpRequestToken,
-                                RequestId = newRequestId
+                                Next = new
+                                {
+                                    Link = Url.Action(_sendOtpActionName, _controllerName),
+                                    Action = _sendOtpActionName,
+                                    Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                                    OtpRequestToken = newOtpRequestToken,
+                                    RequestId = newRequestId,
+                                    OtpProviderTypes = AllowedOtpProviderType.GetAll
+                                } 
                             });
-                        }
+                        } 
+
+                        await _mediator.Publish(new EmailAssignedToAUserDomainEvent(Guid.Parse(userByEmailClaim.Id), userByEmailClaim.Email!));
 
                         await _dbContext.SaveChangesAsync();
                         await transaction.CommitAsync();
 
-                        return TypedResults.Created(Url.Action(_verifyLoginActionName), new
+                        var actionName = userByEmailClaim.UserType == UserType.StaffUser ? _staffLoginActionName : _userLoginActionName;
+
+                        return TypedResults.Ok(new
                         {
                             User = new
                             {
@@ -731,6 +786,12 @@ public class AuthController : ControllerBase
                                 Email = userByEmailClaim.Email,
                                 UserTypes = userByEmailClaim.UserType,
                                 BusinessCode = userByEmailClaim.BusinessCode
+                            },
+                            Next = new
+                            {
+                                Link = Url.Action(actionName, _controllerName),
+                                Action = actionName,
+                                Method = _actionMethodService.GetHttpMethodByActionName(actionName, _controllerName)
                             }
                         });
                     }
@@ -750,7 +811,7 @@ public class AuthController : ControllerBase
                     PhoneNumber = phoneNumber,
                     UserName = phoneNumber,
                     Email = payload?.Email, 
-                    UserType = userType
+                    UserType = request.UserType
                 };
 
                 var addUserResult = await _userManager.CreateAsync(newUser, request.Password);
@@ -759,7 +820,7 @@ public class AuthController : ControllerBase
                 {
                     var errors = addUserResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
                     return TypedResults.InternalServerError(
-                       Result.Failure("An error has occurred", 500)
+                       Result.Failure(Messages.InternalServerError, 500)
                           .WithErrors(errors.ToList()));
                 }
 
@@ -771,12 +832,12 @@ public class AuthController : ControllerBase
                     await _userManager.UpdateAsync(newUser);
                 }
 
-                var assignRoleResult = await _userManager.AddToRoleAsync(newUser, userType);
+                var assignRoleResult = await _userManager.AddToRoleAsync(newUser, request.UserType.ToString());
                 if (!assignRoleResult.Succeeded)
                 {
                     var errors = assignRoleResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
                     return TypedResults.InternalServerError(
-                       Result.Failure("An error has occurred", 500)
+                       Result.Failure(Messages.InternalServerError, 500)
                           .WithErrors(errors.ToList()));
                 }
 
@@ -785,16 +846,14 @@ public class AuthController : ControllerBase
                 {
                     var errors = addClaimsResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
                     return TypedResults.InternalServerError(
-                       Result.Failure("An error has occurred", 500)
+                       Result.Failure(Messages.InternalServerError, 500)
                           .WithErrors(errors.ToList()));
                 }
 
                 (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyPhoneNumber);
 
                 await _dbContext.SaveChangesAsync();
-                await transaction.CommitAsync(); 
-
-                var paramsOtpType2 = new { otpProviderType = "" };
+                await transaction.CommitAsync();  
 
                 return TypedResults.Accepted(_sendOtpActionName, new
                 {
@@ -807,15 +866,21 @@ public class AuthController : ControllerBase
                         UserType = newUser.UserType,
                         BusinessCode = newUser.BusinessCode
                     },
-                    Link = Url.Action(_sendOtpActionName, _controllerName, paramsOtpType2, Request.Scheme),
-                    OtpRequestToken = otpRequestToken,
-                    RequestId = requestId
+                    Next = new
+                    {
+                        Link = Url.Action(_sendOtpActionName, _controllerName),
+                        Action = _sendOtpActionName,
+                        Method =  _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                        OtpRequestToken = otpRequestToken,
+                        RequestId = requestId,
+                        OtpProviderTypes = AllowedOtpProviderType.GetAll
+                    } 
                 });
             } 
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Messages.InternalServerError);
+                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
             }
         }); 
     }  
@@ -835,7 +900,7 @@ public class AuthController : ControllerBase
             if (_httpContext is null)
             {
                 _logger.LogError("Http context is null");
-                return TypedResults.InternalServerError(Messages.InternalServerError);
+                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
             }
 
             var bearer = _httpContext.GetBearerToken();
@@ -861,23 +926,26 @@ public class AuthController : ControllerBase
             await _tokenService.BlackListAccessTokenAsync(bearer);
 
             var user = await _userManager.FindByIdAsync(refreshToken.UserId); 
+
             if (user is null)
             {
                 return TypedResults.Unauthorized();
             } 
 
             var claims = await _userManager.GetClaimsAsync(user);  
+
             if (claims is null || !claims.Any())
             { 
-                _logger.LogWarning("User claims are missing or invalid for user ID: {UserId}", user.Id);
-                return TypedResults.InternalServerError(Messages.AccountError);
+                _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
+                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
             } 
 
             var roles = await _userManager.GetRolesAsync(user);
+
             if (roles is null || !roles.Any())
             {
-                _logger.LogWarning("User roles are missing or invalid for user ID: {UserId}", user.Id);
-                return TypedResults.InternalServerError(Messages.AccountError);
+                _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
+                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
             }
 
 
@@ -906,9 +974,40 @@ public class AuthController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
+            return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
         }
     }
+
+
+    [HttpPost("forgot-password")]
+    public async Task<IResult> ForgotPassword( 
+        [FromBody] ForgotPasswordRequest request)
+    {
+        try
+        { 
+            if (request.OtpProviderType == OtpProviderType.Sms)
+            { 
+            }
+
+            if (request.OtpProviderType == OtpProviderType.Whatsapp)
+            {
+
+            }
+
+            if (request.OtpProviderType == OtpProviderType.Email)
+            {
+
+            }
+
+            return await Task.FromResult(TypedResults.Ok());
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+        } 
+    }
+
      
     [HttpPost("verify/token")]
     public async Task<IResult> VerifyToken([FromBody] RefreshTokenRequest request)
@@ -923,7 +1022,7 @@ public class AuthController : ControllerBase
             if (_httpContext is null)
             {
                 _logger.LogError("Http context is null");
-                return TypedResults.InternalServerError(Messages.InternalServerError);
+                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
             }
 
             var bearer = _httpContext.GetBearerToken();
@@ -941,7 +1040,7 @@ public class AuthController : ControllerBase
         catch(Exception ex)
         {
             _logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
+            return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
         } 
     }
 
@@ -983,12 +1082,20 @@ public class AuthController : ControllerBase
                 }
 
 
-                var claims = await _userManager.GetClaimsAsync(user);
-
+                var claims = await _userManager.GetClaimsAsync(user); 
+                
                 if (claims is null)
                 {
-                    await _userManager.DeleteAsync(user);
-                    return TypedResults.Unauthorized();
+                    _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id); 
+                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                }
+
+                var roles = await _userManager.GetRolesAsync(user);
+
+                if (roles is null || !roles.Any())
+                {
+                    _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
+                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
                 }
 
                 var accessToken = _tokenService.GenerateAccessToken(new ClaimsIdentity(claims));
@@ -1001,7 +1108,7 @@ public class AuthController : ControllerBase
 
                 await transaction.CommitAsync();
 
-                return TypedResults.Accepted(redirectTo,
+                return TypedResults.Ok(
                 new
                 {
                     AccessToken = accessToken,
@@ -1014,13 +1121,17 @@ public class AuthController : ControllerBase
                         Email = user.Email,
                         UserType = user.UserType,
                         BusinessCode = user.BusinessCode
+                    },
+                    Next = new
+                    {
+                        Action = redirectTo
                     }
                 });
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Messages.InternalServerError);
+                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
             }
         });
     }
@@ -1033,44 +1144,66 @@ public class AuthController : ControllerBase
         [FromBody] VerifyPhoneNumberRequest request,
         [FromServices] IValidator<VerifyPhoneNumberRequest> validator)
     {
-        try
+        var strategy = _dbContext.Database.CreateExecutionStrategy();
+
+        return await strategy.ExecuteAsync<IResult>(async () =>
         {
-            var validation = await validator.ValidateAsync(request);
-            if (!validation.IsValid)
+            var transaction = await _dbContext.Database.BeginTransactionAsync();
+            try
             {
-                return TypedResults.BadRequest(validation.Errors);
-            }
+                var validation = await validator.ValidateAsync(request);
+
+                if (!validation.IsValid)
+                {
+                    return TypedResults.BadRequest(validation.Errors);
+                }
+
+                var user = await _userManager.FindByNameAsync(request.PhoneNumber);
 
 
+                if (user is null)
+                {
+                    return TypedResults.Unauthorized();
+                }
 
-            var user = await _userManager.FindByNameAsync(request.PhoneNumber);
-            if (user is null)
-            {
-                return TypedResults.Unauthorized();
-            }
+                if (string.IsNullOrWhiteSpace(user.PhoneNumber))
+                {
+                    _logger.LogWarning("User phone number is missing or invalid for user ID: {Id}", user.Id);
+                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                }
 
-            if (user.PhoneNumberConfirmed)
-            {
+                if (user.PhoneNumberConfirmed)
+                {
+                    return TypedResults.NoContent();
+                }
+
+
+                var changeResult = await _userManager.ChangePhoneNumberAsync(user, request.PhoneNumber, request.Token);
+
+                if (!changeResult.Succeeded)
+                {
+                    var errors = changeResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
+                    return TypedResults.InternalServerError(
+                       Result.Failure(Messages.InternalServerError, 500)
+                          .WithErrors(errors.ToList()));
+                }
+
+                await _mediator.Publish(new PhoneNumberConfirmedDomainEvent(Guid.Parse(user.Id), user.PhoneNumber));
+
+                await _dbContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
                 return TypedResults.NoContent();
             }
-
-
-            var changeResult = await _userManager.ChangePhoneNumberAsync(user, request.PhoneNumber, request.Token);
-            if (!changeResult.Succeeded)
+            catch (Exception ex)
             {
-                var errors = changeResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
+                _logger.LogError(ex, ex.InnerException?.Message);
                 return TypedResults.InternalServerError(
-                   Result.Failure("An error has occured", 500)
-                      .WithErrors(errors.ToList()));
-            }
+                    Result.Failure(Messages.InternalServerError, 500));
+            } 
+        });
 
-            return TypedResults.NoContent();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
     }
 
 
@@ -1089,7 +1222,8 @@ public class AuthController : ControllerBase
             if (_httpContext is null)
             {
                 _logger.LogError("Http context is null");
-                return TypedResults.InternalServerError(Messages.InternalServerError);
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.InternalServerError, 500));
             }
 
             var bearer = _httpContext.GetBearerToken();
@@ -1107,7 +1241,7 @@ public class AuthController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
+            return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
         }
     }
 
@@ -1124,8 +1258,8 @@ public class AuthController : ControllerBase
             new (JwtRegisteredClaimNames.Sub, user.Id),
             new (ClaimTypes.Name, user.PhoneNumber),
             new (ClaimTypes.MobilePhone, user.PhoneNumber),
-            new (SantaiClaimTypes.UserType, user.UserType),
-            new (ClaimTypes.Role, user.UserType)
+            new (SantaiClaimTypes.UserType, user.UserType.ToString()),
+            new (ClaimTypes.Role, user.UserType.ToString())
         };
 
         if (!string.IsNullOrWhiteSpace(user.Email))

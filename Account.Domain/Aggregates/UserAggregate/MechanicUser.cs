@@ -8,7 +8,7 @@ using Account.Domain.Events;
 
 namespace Account.Domain.Aggregates.UserAggregate;
 
-public class MechanicUser : User
+public class MechanicUser : BaseUser
 {  
     public PersonalInfo PersonalInfo { get; private set; }
 
@@ -30,17 +30,17 @@ public class MechanicUser : User
     }
 
     public MechanicUser(
-        Guid identityId,
-        string username,
-        string email,
-        string encryptedEmail,
+        Guid identityId, 
+        string? email,
+        string? encryptedEmail,
         string phoneNumber,
         string encryptedPhoneNumber,
         PersonalInfo personalInfo,
         Address address, 
         string timeZoneId,
-        string deviceId) : base(identityId, username, email, encryptedEmail, phoneNumber, encryptedPhoneNumber, address, timeZoneId)
+        string deviceId) : base(email, encryptedEmail, phoneNumber, encryptedPhoneNumber, address, timeZoneId)
     {  
+        Id = identityId;
         PersonalInfo = personalInfo;
         Rating = 5;
         IsVerified = false;

@@ -1,8 +1,6 @@
-﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Options;
+﻿using Account.API.Options;
 using Account.API.SeedWork;
-using Account.API.Services;
-using Account.Domain.Enumerations;
+using Account.API.Services; 
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using MediatR;
@@ -57,7 +55,7 @@ public class DeleteFleetByIdByUserIdCommandHandler : IRequestHandler<DeleteFleet
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _service.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

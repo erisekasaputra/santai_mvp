@@ -9,7 +9,7 @@ public class LoyaltyProgram : Entity, IAggregateRoot
 {   
     public Guid LoyaltyUserId { get; private init; }
 
-    public User User { get; private set; } 
+    public BaseUser BaseUser { get; private set; } 
 
     public int LoyaltyPoints { get; private set; }
 

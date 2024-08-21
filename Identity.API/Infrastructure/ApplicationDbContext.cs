@@ -1,4 +1,5 @@
-﻿using Identity.API.Domain.Entities;
+﻿using Identity.API.Domain.Entities; 
+using Identity.Contracts;
 using MassTransit; 
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;  
@@ -15,7 +16,14 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     protected override void OnModelCreating(ModelBuilder builder)
     { 
-        base.OnModelCreating(builder);
+        base.OnModelCreating(builder); 
+         
+        builder.Entity<ApplicationUser>()
+            .Property(u => u.UserType)
+            .HasConversion(
+                v => v.ToString(),
+                v => Enum.Parse<UserType>(v) 
+            );
 
         builder.AddInboxStateEntity();
         builder.AddOutboxMessageEntity();

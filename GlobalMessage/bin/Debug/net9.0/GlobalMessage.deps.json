@@ -1,0 +1,23 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "GlobalMessage/1.0.0": {
+        "runtime": {
+          "GlobalMessage.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "GlobalMessage/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

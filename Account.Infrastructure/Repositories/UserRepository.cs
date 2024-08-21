@@ -2,6 +2,7 @@
 using Account.Domain.Enumerations; 
 using Microsoft.EntityFrameworkCore;
 using LinqKit;
+using Identity.Contracts;
 
 namespace Account.Infrastructure.Repositories;
 
@@ -16,7 +17,7 @@ public class UserRepository : IUserRepository
 
     public async Task<UserType?> GetUserTypeById(Guid id)
     {
-        var user = await _context.Users.Where(x => x.Id == id)
+        var user = await _context.BaseUsers.Where(x => x.Id == id)
             .Select(u => new
             {  
                 UserType = EF.Property<string>(u, "UserType")
@@ -30,21 +31,21 @@ public class UserRepository : IUserRepository
         return Enum.Parse<UserType>(user.UserType);
     }
 
-    public async Task<User> CreateAsync(User user)
+    public async Task<BaseUser> CreateAsync(BaseUser user)
     {
-        var entry = await _context.Users.AddAsync(user); 
+        var entry = await _context.BaseUsers.AddAsync(user); 
 
         return entry.Entity;
     }
 
-    public void Update(User user)
+    public void Update(BaseUser user)
     {   
-        _context.Users.Update(user);
+        _context.BaseUsers.Update(user);
     }
 
     public async Task<BusinessUser?> GetBusinessUserByIdAsync(Guid id)
     {
-        return await _context.Users.OfType<BusinessUser>()
+        return await _context.BaseUsers.OfType<BusinessUser>()
             .Include(x => x.BusinessLicenses)
             .Include(x => x.Staffs) 
             .Include(x => x.ReferralProgram)
@@ -55,7 +56,7 @@ public class UserRepository : IUserRepository
     
     public async Task<RegularUser?> GetRegularUserByIdAsync(Guid id)
     {
-        return await _context.Users.OfType<RegularUser>()
+        return await _context.BaseUsers.OfType<RegularUser>()
             .Include(x => x.LoyaltyProgram)
             .Include(x => x.ReferralProgram) 
             .FirstOrDefaultAsync(x => x.Id == id);
@@ -63,7 +64,7 @@ public class UserRepository : IUserRepository
 
     public async Task<MechanicUser?> GetMechanicUserByIdAsync(Guid id)
     {
-        return await _context.Users.OfType<MechanicUser>()
+        return await _context.BaseUsers.OfType<MechanicUser>()
             .Include(x => x.LoyaltyProgram)
             .Include(x => x.ReferralProgram)
             .Include(x => x.NationalIdentities)
@@ -72,154 +73,142 @@ public class UserRepository : IUserRepository
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
-    public async Task<User?> GetByIdentitiesAsNoTrackingAsync(params (IdentityParameter, string)[] identity)
+    public async Task<BaseUser?> GetByIdentitiesAsNoTrackingAsync(params (IdentityParameter, string?)[] identity)
     { 
         if (identity is null || identity.Length == 0)
         {
             throw new ArgumentException("Please provide identity type you want to check at least one identity type and value");   
         }
 
-        var predicate = PredicateBuilder.New<User>(true);
+        var predicate = PredicateBuilder.New<BaseUser>(true);
 
         foreach (var (parameter, value) in identity)
         {  
             switch (parameter)
-            {
-                case IdentityParameter.Username:
-                    predicate = predicate.Or(x => x.Username == value);
-                    break;
+            { 
                 case IdentityParameter.Email:
-                    predicate = predicate.Or(x => x.HashedEmail == value
-                    || (x.NewHashedEmail != null && x.NewHashedEmail == value));
+                    if (!string.IsNullOrWhiteSpace(value))
+                    {
+                        predicate = predicate.Or(x => x.HashedEmail == value
+                        || (x.NewHashedEmail != null && x.NewHashedEmail == value));
+                    }
                     break;
                 case IdentityParameter.PhoneNumber:
                     predicate = predicate.Or(x => x.HashedPhoneNumber == value
                     || (x.NewHashedPhoneNumber != null && x.NewHashedPhoneNumber == value));
-                    break;
-                case IdentityParameter.IdentityId:
-                    predicate = predicate.Or(x => x.IdentityId == Guid.Parse(value));
-                    break;
+                    break; 
             }
         }
          
-        return await _context.Users.AsNoTracking().Where(predicate).FirstOrDefaultAsync();
+        return await _context.BaseUsers.AsNoTracking().Where(predicate).FirstOrDefaultAsync();
     }
 
-    public async Task<User?> GetByIdentitiesExcludingIdAsNoTrackingAsync(Guid id, params (IdentityParameter, string)[] identity)
+    public async Task<BaseUser?> GetByIdentitiesExcludingIdAsNoTrackingAsync(Guid id, params (IdentityParameter, string?)[] identity)
     { 
         if (identity.Length == 0)
         {
             throw new ArgumentException("Please provide identity type you want to check at least one identity type and value");
         }
 
-        var predicate = PredicateBuilder.New<User>(true);
+        var predicate = PredicateBuilder.New<BaseUser>(true);
           
         foreach (var (parameter, value) in identity)
         { 
             switch (parameter)
-            {
-                case IdentityParameter.Username:
-                    predicate = predicate.Or(x => x.Username == value);
-                    break;
+            { 
                 case IdentityParameter.Email:
-                    predicate = predicate.Or(x => x.HashedEmail == value
-                    || (x.NewHashedEmail != null && x.NewHashedEmail == value));
+                    if (!string.IsNullOrWhiteSpace(value))
+                    {
+                        predicate = predicate.Or(x => x.HashedEmail == value
+                        || (x.NewHashedEmail != null && x.NewHashedEmail == value));
+                    }
                     break;
                 case IdentityParameter.PhoneNumber:
                     predicate = predicate.Or(x => x.HashedPhoneNumber == value
                     || (x.NewHashedPhoneNumber != null && x.NewHashedPhoneNumber == value));
-                    break;
-                case IdentityParameter.IdentityId:
-                    predicate = predicate.Or(x => x.IdentityId == Guid.Parse(value));
-                    break;
+                    break; 
             }
         }
-        return await _context.Users.Where(predicate).FirstOrDefaultAsync(x => x.Id != id);
+        return await _context.BaseUsers.Where(predicate).FirstOrDefaultAsync(x => x.Id != id);
     }
 
-    public void Delete(User user)
+    public void Delete(BaseUser user)
     {
-        _context.Users.Remove(user);
+        _context.BaseUsers.Remove(user);
     }
 
-    public Task<User?> GetByIdAsync(Guid id)
+    public Task<BaseUser?> GetByIdAsync(Guid id)
     {
-        return _context.Users.FirstOrDefaultAsync(x => x.Id == id);
+        return _context.BaseUsers.FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<bool> GetAnyByIdAsync(Guid id)
     {
-        return await _context.Users.AnyAsync(x => x.Id == id);
+        return await _context.BaseUsers.AnyAsync(x => x.Id == id);
     }
 
-    public async Task<bool> GetAnyByIdentitiesAsNoTrackingAsync(params (IdentityParameter, string)[] identity)
+    public async Task<bool> GetAnyByIdentitiesAsNoTrackingAsync(params (IdentityParameter, string?)[] identity)
     {
         if (identity is null || identity.Length == 0)
         {
             throw new ArgumentException("Please provide identity type you want to check at least one identity type and value");
         }
 
-        var predicate = PredicateBuilder.New<User>(true);
+        var predicate = PredicateBuilder.New<BaseUser>(true);
 
         foreach (var (parameter, value) in identity)
         {
             switch (parameter)
-            {
-                case IdentityParameter.Username:
-                    predicate = predicate.Or(x => x.Username == value);
-                    break;
+            { 
                 case IdentityParameter.Email:
-                    predicate = predicate.Or(x => x.HashedEmail == value
-                    || (x.NewHashedEmail != null && x.NewHashedEmail == value));
+                    if (!string.IsNullOrEmpty(value))
+                    {
+                        predicate = predicate.Or(x => x.HashedEmail == value
+                        || (x.NewHashedEmail != null && x.NewHashedEmail == value));
+                    }
                     break;
                 case IdentityParameter.PhoneNumber:
                     predicate = predicate.Or(x => x.HashedPhoneNumber == value
                     || (x.NewHashedPhoneNumber != null && x.NewHashedPhoneNumber == value));
-                    break;
-                case IdentityParameter.IdentityId:
-                    predicate = predicate.Or(x => x.IdentityId == Guid.Parse(value));
-                    break;
+                    break; 
             }
         }
 
-        return await _context.Users.AsNoTracking().Where(predicate).AnyAsync();
+        return await _context.BaseUsers.AsNoTracking().Where(predicate).AnyAsync();
     }
 
-    public async Task<bool> GetAnyByIdentitiesExcludingIdAsNoTrackingAsync(Guid id, params (IdentityParameter, string)[] identity)
+    public async Task<bool> GetAnyByIdentitiesExcludingIdAsNoTrackingAsync(Guid id, params (IdentityParameter, string?)[] identity)
     {
         if (identity.Length == 0)
         {
             throw new ArgumentException("Please provide identity type you want to check at least one identity type and value");
         }
 
-        var predicate = PredicateBuilder.New<User>(true);
+        var predicate = PredicateBuilder.New<BaseUser>(true);
 
         foreach (var (parameter, value) in identity)
         {
             switch (parameter)
-            {
-                case IdentityParameter.Username:
-                    predicate = predicate.Or(x => x.Username == value);
-                    break;
+            { 
                 case IdentityParameter.Email:
-                    predicate = predicate.Or(x => x.HashedEmail == value
-                    || (x.NewHashedEmail != null && x.NewHashedEmail == value));
+                    if (!string.IsNullOrEmpty(value))
+                    { 
+                        predicate = predicate.Or(x => x.HashedEmail == value
+                        || (x.NewHashedEmail != null && x.NewHashedEmail == value));
+                    }
                     break;
                 case IdentityParameter.PhoneNumber:
                     predicate = predicate.Or(x => x.HashedPhoneNumber == value
                     || (x.NewHashedPhoneNumber != null && x.NewHashedPhoneNumber == value));
-                    break;
-                case IdentityParameter.IdentityId:
-                    predicate = predicate.Or(x => x.IdentityId == Guid.Parse(value));
-                    break;
+                    break; 
             }
         }
-        return await _context.Users.Where(predicate).AnyAsync(x => x.Id != id);
+        return await _context.BaseUsers.Where(predicate).AnyAsync(x => x.Id != id);
     }
 
     public async Task<(int TotalCount, int TotalPages, IEnumerable<RegularUser> Brands)> GetPaginatedRegularUser(int pageNumber, int pageSize)
     {
-        var query = _context.Users.AsQueryable();
+        var query = _context.BaseUsers.AsQueryable();
 
         var totalCount = await query.CountAsync();
 
@@ -240,7 +229,7 @@ public class UserRepository : IUserRepository
 
     public async Task<(int TotalCount, int TotalPages, IEnumerable<BusinessUser> Brands)> GetPaginatedBusinessUser(int pageNumber, int pageSize)
     {
-        var query = _context.Users.AsQueryable();
+        var query = _context.BaseUsers.AsQueryable();
 
         var totalCount = await query.CountAsync();
 
@@ -261,7 +250,7 @@ public class UserRepository : IUserRepository
 
     public async Task<(int TotalCount, int TotalPages, IEnumerable<MechanicUser> Brands)> GetPaginatedMechanicUser(int pageNumber, int pageSize)
     {
-        var query = _context.Users.AsQueryable();
+        var query = _context.BaseUsers.AsQueryable();
 
         var totalCount = await query.CountAsync();
 
@@ -283,7 +272,7 @@ public class UserRepository : IUserRepository
 
     public async Task<string?> GetTimeZoneById(Guid id)
     {
-        return await _context.Users
+        return await _context.BaseUsers 
             .Where(x => x.Id == id)
             .Select(x => x.TimeZoneId)
             .FirstOrDefaultAsync();
@@ -291,7 +280,7 @@ public class UserRepository : IUserRepository
 
     public async Task<string?> GetEmailById(Guid id)
     {
-        return await _context.Users
+        return await _context.BaseUsers
            .Where(x => x.Id == id)
            .Select(x => x.EncryptedEmail)
            .FirstOrDefaultAsync();
@@ -299,7 +288,7 @@ public class UserRepository : IUserRepository
 
     public async Task<string?> GetPhoneNumberById(Guid id)
     {
-        return await _context.Users
+        return await _context.BaseUsers
            .Where(x => x.Id == id)
            .Select(x => x.EncryptedPhoneNumber)
            .FirstOrDefaultAsync();
@@ -307,7 +296,7 @@ public class UserRepository : IUserRepository
 
     public async Task<string?> GetDeviceIdByMechanicUserId(Guid id)
     {
-        return await _context.Users
+        return await _context.BaseUsers
            .OfType<MechanicUser>()
            .Where(x => x.Id == id)
            .Select(x => x.DeviceId)
@@ -316,7 +305,7 @@ public class UserRepository : IUserRepository
 
     public async Task<string?> GetDeviceIdByRegularUserId(Guid id)
     {
-        return await _context.Users
+        return await _context.BaseUsers
            .OfType<RegularUser>()
            .Where(x => x.Id == id)
            .Select(x => x.DeviceId)

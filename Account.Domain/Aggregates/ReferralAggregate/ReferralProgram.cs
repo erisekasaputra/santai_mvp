@@ -14,7 +14,7 @@ public class ReferralProgram : Entity, IAggregateRoot
 
     public int RewardPoint { get; private set; }
 
-    public User User { get; private set; }
+    public BaseUser BaseUser { get; private set; }
 
     public ReferralProgram(Guid userId, DateTime validDateUtc, int rewardPoint)
     {   

@@ -32,7 +32,7 @@ public class GetMechanicUserByIdQueryHandler(
     {
         try
         {  
-            var user = await _unitOfWork.Users.GetMechanicUserByIdAsync(request.Id);
+            var user = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.Id);
             if (user is null)
             {
                 return Result.Failure($"Mechanic user '{request.Id}' not found", ResponseStatus.NotFound);
@@ -55,9 +55,8 @@ public class GetMechanicUserByIdQueryHandler(
                 , cancellationToken);
 
             var userDto = new MechanicUserResponseDto(
-                user.Id,
-                user.Username,
-                await DecryptAsync(user.EncryptedEmail),
+                user.Id, 
+                await DecryptNullableAsync(user.EncryptedEmail),
                 await DecryptAsync(user.EncryptedPhoneNumber),
                 user.TimeZoneId,
                 user.LoyaltyProgram.ToLoyaltyProgramResponseDto(),

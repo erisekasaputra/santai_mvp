@@ -14,7 +14,7 @@ public class ForceSetDeviceIdByUserIdCommandHandler(IUnitOfWork unitOfWork, Appl
     {
         try
         {
-            var user = await _unitOfWork.Users.GetRegularUserByIdAsync(request.UserId);
+            var user = await _unitOfWork.BaseUsers.GetRegularUserByIdAsync(request.UserId);
             if (user is null)
             {
                 return Result.Failure($"Regular user not found", ResponseStatus.NotFound)
@@ -23,7 +23,7 @@ public class ForceSetDeviceIdByUserIdCommandHandler(IUnitOfWork unitOfWork, Appl
 
             user.ForceSetDeviceId(request.DeviceId);
 
-            _unitOfWork.Users.Update(user);
+            _unitOfWork.BaseUsers.Update(user);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
@@ -35,7 +35,7 @@ public class ForceSetDeviceIdByUserIdCommandHandler(IUnitOfWork unitOfWork, Appl
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _service.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

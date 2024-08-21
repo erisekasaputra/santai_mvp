@@ -8,6 +8,7 @@
     ".NETCoreApp,Version=v9.0": {
       "Account.Domain/1.0.0": {
         "dependencies": {
+          "Identity.Contracts": "1.0.0",
           "MediatR": "12.4.0",
           "Microsoft.EntityFrameworkCore": "8.0.7"
         },
@@ -146,6 +147,14 @@
             "fileVersion": "8.0.23.53103"
           }
         }
+      },
+      "Identity.Contracts/1.0.0": {
+        "runtime": {
+          "Identity.Contracts.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
       }
     }
   },
@@ -245,6 +254,11 @@
       "sha512": "sha512-bXJEZrW9ny8vjMF1JV253WeLhpEVzFo1lyaZu1vQ4ZxWUlVvknZ/+ftFgVheLubb4eZPSwwxBeqS1JkCOjxd8g==",
       "path": "microsoft.extensions.primitives/8.0.0",
       "hashPath": "microsoft.extensions.primitives.8.0.0.nupkg.sha512"
+    },
+    "Identity.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     }
   }
 }

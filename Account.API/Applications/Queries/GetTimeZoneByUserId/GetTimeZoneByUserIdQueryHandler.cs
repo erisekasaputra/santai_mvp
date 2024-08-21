@@ -25,7 +25,7 @@ public class GetTimeZoneByUserIdQueryHandler(
     {
         try
         {
-            var timeZoneId = await _unitOfWork.Users.GetTimeZoneById(request.UserId);
+            var timeZoneId = await _unitOfWork.BaseUsers.GetTimeZoneById(request.UserId);
 
             if (timeZoneId is null)
             {

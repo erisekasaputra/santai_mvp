@@ -3,5 +3,6 @@
 public enum OtpRequestFor
 {
     VerifyPhoneNumber,
-    VerifyLogin
+    VerifyLogin,
+    ForgotPassword
 }

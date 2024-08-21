@@ -13,7 +13,7 @@ public class StaffRepository : IStaffRepository
         _context = context;
     } 
 
-    public async Task<IEnumerable<Staff>?> GetByIdentitiesAsNoTrackingAsync(params (IdentityParameter, IEnumerable<string>)[] parameters)
+    public async Task<IEnumerable<Staff>?> GetByIdentitiesAsNoTrackingAsync(params (IdentityParameter, IEnumerable<string?>)[] parameters)
     { 
         if (parameters is null || parameters.Length == 0)
         {
@@ -27,10 +27,7 @@ public class StaffRepository : IStaffRepository
             foreach(var value in values)
             { 
                 switch (identityParameter)
-                {
-                    case IdentityParameter.Username:
-                        predicate = predicate.Or(x => x.Username == value);
-                        break;
+                { 
                     case IdentityParameter.Email:
                         predicate = predicate.Or(x => (x.HashedEmail == value) 
                             || (x.NewHashedEmail != null && x.NewHashedEmail == value));
@@ -60,10 +57,7 @@ public class StaffRepository : IStaffRepository
             foreach (var (id, identity) in values)
             {  
                 switch (identityParameter)
-                {
-                    case IdentityParameter.Username:
-                        predicate = predicate.Or(x => (x.Id != id && x.Username == identity));
-                        break;
+                { 
                     case IdentityParameter.Email:
                         predicate = predicate.Or(x => (x.Id != id && (x.HashedEmail == identity))
                             || (x.Id != id && (x.NewHashedEmail != null && x.NewHashedEmail == identity)));
@@ -125,10 +119,7 @@ public class StaffRepository : IStaffRepository
             foreach (var value in values)
             {
                 switch (identityParameter)
-                {
-                    case IdentityParameter.Username:
-                        predicate = predicate.Or(x => x.Username == value);
-                        break;
+                { 
                     case IdentityParameter.Email:
                         predicate = predicate.Or(x => (x.HashedEmail == value)
                             || (x.NewHashedEmail != null && x.NewHashedEmail == value));
@@ -158,10 +149,7 @@ public class StaffRepository : IStaffRepository
             foreach (var (id, identity) in values)
             {
                 switch (identityParameter)
-                {
-                    case IdentityParameter.Username:
-                        predicate = predicate.Or(x => (x.Id != id && x.Username == identity));
-                        break;
+                { 
                     case IdentityParameter.Email:
                         predicate = predicate.Or(x => (x.Id != id && (x.HashedEmail == identity))
                             || (x.Id != id && (x.NewHashedEmail != null && x.NewHashedEmail == identity)));

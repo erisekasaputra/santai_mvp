@@ -8,26 +8,13 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
 {
     public void Configure(EntityTypeBuilder<Staff> e)
     {
-        e.HasKey(p => p.Id);
-
-        e.HasIndex(p => p.IdentityId)
-            .IsUnique();
-
-        e.HasIndex(p => p.Username)
-            .IsUnique();
+        e.HasKey(p => p.Id); 
 
         e.HasIndex(p => p.HashedPhoneNumber)
             .IsUnique();
 
         e.HasIndex(p => p.HashedEmail)
-            .IsUnique(); 
-
-        e.Property(p => p.Username)
-            .HasMaxLength(20)
-            .IsRequired()
-            .HasConversion(
-                v => v,
-                v => v);
+            .IsUnique();  
 
         e.Property(p => p.BusinessUserId)
             .HasMaxLength(50)

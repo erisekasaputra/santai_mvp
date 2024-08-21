@@ -114,7 +114,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -132,7 +132,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -150,7 +150,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     } 
@@ -170,7 +170,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -191,7 +191,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -212,7 +212,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -231,7 +231,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         } 
     }
@@ -248,7 +248,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -274,7 +274,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -291,7 +291,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -316,7 +316,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     } 
@@ -341,7 +341,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -358,7 +358,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -385,7 +385,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -402,7 +402,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -419,7 +419,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -444,7 +444,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -461,7 +461,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -483,8 +483,7 @@ public static class BusinessUserApi
             }
 
             var result = await service.Mediator.Send(new CreateStaffBusinessUserByUserIdCommand(
-                businessUserId,
-                request.Username,
+                businessUserId, 
                 request.PhoneNumber,
                 request.Email,
                 request.Name,
@@ -495,7 +494,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -513,7 +512,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -534,9 +533,7 @@ public static class BusinessUserApi
                 return TypedResults.BadRequest(error);
             }
 
-            var result = await service.Mediator.Send(new CreateBusinessUserCommand(
-                request.IdentityId,
-                request.Username,
+            var result = await service.Mediator.Send(new CreateBusinessUserCommand( 
                 request.Email,
                 request.PhoneNumber,
                 request.TimeZoneId,
@@ -554,7 +551,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -580,7 +577,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -613,7 +610,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex) 
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         } 
     }
@@ -648,7 +645,7 @@ public static class BusinessUserApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }

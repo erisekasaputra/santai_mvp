@@ -24,7 +24,7 @@ public class GetPaginatedFleetByUserIdQueryHandler(
     {
         try
         {
-            var timeZone = await _unitOfWork.Users.GetTimeZoneById(request.UserId);
+            var timeZone = await _unitOfWork.BaseUsers.GetTimeZoneById(request.UserId);
 
             if (timeZone == null) 
             {

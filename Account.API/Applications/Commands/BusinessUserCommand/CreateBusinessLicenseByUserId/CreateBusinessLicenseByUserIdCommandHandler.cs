@@ -23,7 +23,7 @@ public class CreateBusinessLicenseByUserIdCommandHandler(
     {
         try
         { 
-            var entity = await _unitOfWork.Users.GetAnyByIdAsync(request.BusinessUserId);
+            var entity = await _unitOfWork.BaseUsers.GetAnyByIdAsync(request.BusinessUserId);
             if (entity is false)
             {
                 return Result.Failure($"Business user not found", ResponseStatus.NotFound)
@@ -64,7 +64,7 @@ public class CreateBusinessLicenseByUserIdCommandHandler(
         }
         catch (Exception ex)
         {
-            _appService.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _appService.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

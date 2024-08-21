@@ -24,7 +24,7 @@ public class GetPaginatedMechanicCertificationByUserIdQueryHandler(
     {
         try
         {
-            var mechanicUser = await _unitOfWork.Users.GetMechanicUserByIdAsync(request.UserId);
+            var mechanicUser = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.UserId);
 
             if (mechanicUser is null)
             {

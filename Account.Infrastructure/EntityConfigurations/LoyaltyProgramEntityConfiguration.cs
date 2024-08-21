@@ -14,7 +14,7 @@ public class LoyaltyProgramEntityConfiguration : IEntityTypeConfiguration<Loyalt
         e.Property(p => p.LoyaltyTier)
             .HasConversion<string>();
 
-        e.HasOne(p => p.User)
+        e.HasOne(p => p.BaseUser)
             .WithOne(u => u.LoyaltyProgram)
             .HasForeignKey<LoyaltyProgram>(p => p.LoyaltyUserId)
             .OnDelete(DeleteBehavior.Cascade);

@@ -54,7 +54,7 @@ public class UpdateFleetByUserIdCommandHandler : IRequestHandler<UpdateFleetByUs
             var hashedChassisNumber = await HashAsync(request.ChassisNumber);
             var hashedInsuranceNumber = await HashAsync(request.InsuranceNumber);
 
-            var timeZoneId = await _unitOfWork.Users.GetTimeZoneById(request.UserId);
+            var timeZoneId = await _unitOfWork.BaseUsers.GetTimeZoneById(request.UserId);
 
             if (timeZoneId is null)
             {
@@ -163,7 +163,7 @@ public class UpdateFleetByUserIdCommandHandler : IRequestHandler<UpdateFleetByUs
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _service.Logger.LogError(ex, ex.InnerException?.Message);
             return await RollbackAndReturnFailureAsync(
                 Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError),
                 cancellationToken);

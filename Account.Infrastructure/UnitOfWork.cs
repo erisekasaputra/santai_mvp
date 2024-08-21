@@ -21,7 +21,7 @@ public class UnitOfWork : IUnitOfWork
     private readonly AccountDbContext _context;
     private IDbContextTransaction? _transaction;
     private readonly IMediator _mediator;
-    public IUserRepository Users { get; }
+    public IUserRepository BaseUsers { get; }
     public IBusinessLicenseRepository BusinessLicenses { get; }
     public ICertificationRepository Certifications { get; }
     public IDrivingLicenseRepository DrivingLicenses { get; }
@@ -36,8 +36,8 @@ public class UnitOfWork : IUnitOfWork
     public UnitOfWork(AccountDbContext context, IMediator mediator)
     {
         _context = context;
-        _mediator = mediator;  
-        Users = new UserRepository(context);
+        _mediator = mediator;
+        BaseUsers = new UserRepository(context);
         BusinessLicenses = new BusinessLicenseRepository(context);
         Certifications = new CertificationRepository(context);
         DrivingLicenses = new DrivingLicenseRepository(context);   

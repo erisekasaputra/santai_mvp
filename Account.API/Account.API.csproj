@@ -25,6 +25,7 @@
     <PackageReference Include="MassTransit.EntityFrameworkCore" Version="8.2.4-develop.1891" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.4-develop.1891" />
     <PackageReference Include="MediatR" Version="12.4.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-preview.6.24328.4" />
     <PackageReference Include="Microsoft.AspNetCore.OutputCaching.StackExchangeRedis" Version="9.0.0-preview.7.24406.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0-preview.6.24327.4" />
@@ -60,6 +61,7 @@
     <ProjectReference Include="..\Account.Contracts\Account.Contracts.csproj" />
     <ProjectReference Include="..\Account.Domain\Account.Domain.csproj" />
     <ProjectReference Include="..\Account.Infrastructure\Account.Infrastructure.csproj" />
+    <ProjectReference Include="..\SantaiClaimType\SantaiClaimType.csproj" />
   </ItemGroup>
 	
   <ItemGroup>

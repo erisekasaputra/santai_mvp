@@ -17,7 +17,7 @@ public class DeleteBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWork, Ap
         {
             await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
 
-            var user = await _unitOfWork.Users.GetBusinessUserByIdAsync(request.Id);
+            var user = await _unitOfWork.BaseUsers.GetBusinessUserByIdAsync(request.Id);
             if (user is null)
             {
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
@@ -29,7 +29,7 @@ public class DeleteBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWork, Ap
 
             user.Delete();
              
-            _unitOfWork.Users.Delete(user);
+            _unitOfWork.BaseUsers.Delete(user);
             
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
             
@@ -43,7 +43,7 @@ public class DeleteBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWork, Ap
         catch (Exception ex)
         {
             await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _service.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

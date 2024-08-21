@@ -56,7 +56,7 @@ public class RejectDrivingLicenseByUserIdCommandHandler : IRequestHandler<Reject
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _service.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     } 

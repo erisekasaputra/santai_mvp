@@ -78,7 +78,7 @@ public static class FleetApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -98,7 +98,7 @@ public static class FleetApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -146,7 +146,7 @@ public static class FleetApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -165,7 +165,7 @@ public static class FleetApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
@@ -184,7 +184,7 @@ public static class FleetApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.Message);
+            service.Logger.LogError(ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }

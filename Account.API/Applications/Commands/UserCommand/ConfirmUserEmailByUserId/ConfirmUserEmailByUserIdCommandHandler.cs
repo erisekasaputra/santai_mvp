@@ -15,7 +15,7 @@ public class ConfirmUserEmailByUserIdCommandHandler(IUnitOfWork unitOfWork, Appl
     {
         try
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(request.Id);
+            var user = await _unitOfWork.BaseUsers.GetByIdAsync(request.Id);
 
             if (user is null)
             {
@@ -25,7 +25,7 @@ public class ConfirmUserEmailByUserIdCommandHandler(IUnitOfWork unitOfWork, Appl
 
             user.VerifyEmail();
             
-            _unitOfWork.Users.Update(user);
+            _unitOfWork.BaseUsers.Update(user);
 
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             
@@ -37,7 +37,7 @@ public class ConfirmUserEmailByUserIdCommandHandler(IUnitOfWork unitOfWork, Appl
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _service.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

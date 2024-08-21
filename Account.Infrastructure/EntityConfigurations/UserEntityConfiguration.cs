@@ -5,19 +5,15 @@ using Account.Domain.Aggregates.UserAggregate;
 
 namespace Account.Infrastructure.EntityConfigurations;
 
-public class UserEntityConfiguration : IEntityTypeConfiguration<User>
+public class UserEntityConfiguration : IEntityTypeConfiguration<BaseUser>
 {
-    public void Configure(EntityTypeBuilder<User> e)
+    public void Configure(EntityTypeBuilder<BaseUser> e)
     {
         e.HasKey(e => e.Id);
-
-        e.HasIndex(p => p.Username).IsUnique();
-
+          
         e.HasIndex(p => p.HashedEmail).IsUnique();
 
-        e.HasIndex(p => p.HashedPhoneNumber).IsUnique();
-
-        e.Property(p => p.Username).HasMaxLength(20).IsRequired();
+        e.HasIndex(p => p.HashedPhoneNumber).IsUnique(); 
           
         e.Property(p => p.HashedEmail).HasMaxLength(255).IsRequired();
         

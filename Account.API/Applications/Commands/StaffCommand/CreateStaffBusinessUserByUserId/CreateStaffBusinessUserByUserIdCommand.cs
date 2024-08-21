@@ -5,10 +5,9 @@ using MediatR;
 namespace Account.API.Applications.Commands.StaffCommand.CreateStaffBusinessUserByUserId;
 
 public record CreateStaffBusinessUserByUserIdCommand(
-    Guid Id,
-    string Username,
+    Guid Id, 
     string PhoneNumber,
-    string Email,
+    string? Email,
     string Name,
     AddressRequestDto Address,
     string TimeZoneId) : IRequest<Result>;

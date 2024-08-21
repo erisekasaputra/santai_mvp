@@ -22,7 +22,7 @@ public class UpdateUserPhoneNumberByUserIdCommandHandler(
     {
         try
         {
-            var user = await _unitOfWork.Users.GetByIdAsync(request.Id);
+            var user = await _unitOfWork.BaseUsers.GetByIdAsync(request.Id);
             
             if (user is null)
             {
@@ -33,7 +33,7 @@ public class UpdateUserPhoneNumberByUserIdCommandHandler(
             var hashedPhoneNumber = await _hashClient.Hash(request.PhoneNumber);
             var encryptedPhoneNumber = await _kmsClient.EncryptAsync(request.PhoneNumber);
 
-            var conflict = await _unitOfWork.Users
+            var conflict = await _unitOfWork.BaseUsers
                 .GetAnyByIdentitiesExcludingIdAsNoTrackingAsync(request.Id, (IdentityParameter.PhoneNumber, hashedPhoneNumber));
             
             if (conflict)
@@ -44,7 +44,7 @@ public class UpdateUserPhoneNumberByUserIdCommandHandler(
 
             user.UpdatePhoneNumber(hashedPhoneNumber, encryptedPhoneNumber);
             
-            _unitOfWork.Users.Update(user);
+            _unitOfWork.BaseUsers.Update(user);
             
             await _unitOfWork.SaveChangesAsync(cancellationToken);
             
@@ -56,7 +56,7 @@ public class UpdateUserPhoneNumberByUserIdCommandHandler(
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _service.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

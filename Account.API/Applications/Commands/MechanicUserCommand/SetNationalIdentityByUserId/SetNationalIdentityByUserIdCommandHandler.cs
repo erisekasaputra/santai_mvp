@@ -35,7 +35,7 @@ public class SetNationalIdentityByUserIdCommandHandler : IRequestHandler<SetNati
     {
         try
         {
-            var mechanicUser = await _unitOfWork.Users.GetMechanicUserByIdAsync(request.UserId);
+            var mechanicUser = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.UserId);
 
             if (mechanicUser is null)
             {
@@ -90,7 +90,7 @@ public class SetNationalIdentityByUserIdCommandHandler : IRequestHandler<SetNati
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex.Message, ex.InnerException?.Message);
+            _service.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

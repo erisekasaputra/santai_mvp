@@ -2,10 +2,8 @@
 
 namespace Account.API.Applications.Dtos.RequestDtos;
 
-public class BusinessUserRequestDto(
-    Guid identityId,
-    string username,
-    string email,
+public class BusinessUserRequestDto( 
+    string? email,
     string phoneNumber,
     string timeZoneId,
     AddressRequestDto address,
@@ -17,10 +15,8 @@ public class BusinessUserRequestDto(
     string? referralCode,
     IEnumerable<BusinessLicenseRequestDto> businessLicenses,
     IEnumerable<StaffRequestDto> staffs)
-{
-    public Guid IdentityId { get; } = identityId;
-    public string Username { get; } = username.CleanAndLowering();
-    public string Email { get; set; } = email.CleanAndLowering();
+{ 
+    public string? Email { get; set; } = email?.CleanAndLowering();
     public string PhoneNumber { get; set; } = phoneNumber.Clean();
     public string TimeZoneId { get; } = timeZoneId.Clean();
     public AddressRequestDto Address { get; } = address;

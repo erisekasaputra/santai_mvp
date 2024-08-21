@@ -2087,6 +2087,7 @@
       },
       "Account.Domain/1.0.0": {
         "dependencies": {
+          "Identity.Contracts": "1.0.0",
           "MediatR": "12.4.0",
           "Microsoft.EntityFrameworkCore": "9.0.0-preview.6.24327.4"
         },
@@ -2194,6 +2195,17 @@
         },
         "compile": {
           "Catalog.Infrastructure.dll": {}
+        }
+      },
+      "Identity.Contracts/1.0.0": {
+        "runtime": {
+          "Identity.Contracts.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        },
+        "compile": {
+          "Identity.Contracts.dll": {}
         }
       },
       "Microsoft.AspNetCore.Antiforgery/9.0.0.0": {
@@ -4940,6 +4952,11 @@
       "sha512": ""
     },
     "Catalog.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Identity.Contracts/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

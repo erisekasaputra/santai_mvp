@@ -34,7 +34,7 @@ public class ReferredProgramEntityConfiguration : IEntityTypeConfiguration<Refer
             .HasConversion<string>()
             .IsRequired();
 
-        e.HasOne(p => p.User)
+        e.HasOne(p => p.BaseUser)
             .WithMany(p => p.ReferredPrograms)
             .HasForeignKey(p => p.ReferrerId)
             .OnDelete(DeleteBehavior.Cascade);
