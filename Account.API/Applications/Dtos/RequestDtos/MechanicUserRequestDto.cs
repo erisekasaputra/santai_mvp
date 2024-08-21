@@ -3,9 +3,6 @@
 namespace Account.API.Applications.Dtos.RequestDtos;
 
 public class MechanicUserRequestDto(
-    Guid identityId, 
-    string? email,
-    string phoneNumber,
     string timeZoneId,
     string? referralCode,
     PersonalInfoRequestDto personalInfo,
@@ -14,10 +11,7 @@ public class MechanicUserRequestDto(
     DrivingLicenseRequestDto drivingLicense,
     NationalIdentityRequestDto nationalIdentity,
     string deviceId)
-{
-    public Guid IdentityId { get; } = identityId; 
-    public string? Email { get; set; } = email?.CleanAndLowering();
-    public string PhoneNumber { get; set; } = phoneNumber.Clean();
+{  
     public string TimeZoneId { get; } = timeZoneId.Clean();
     public string? ReferralCode { get; } = referralCode?.Clean();
     public PersonalInfoRequestDto PersonalInfo { get; set; } = personalInfo;

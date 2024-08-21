@@ -39,46 +39,98 @@ public static class BusinessUserApi
     {
         var app = route.MapGroup("api/v1/users/business");
         
-        app.MapGet("/", GetPaginatedBusinessUser);
-        app.MapGet("/{businessUserId}/staffs", GetPaginatedStaff);
-        app.MapGet("/{businessUserId}/business-licenses", GetPaginatedBusinessLicense);
+        app.MapGet("/", GetPaginatedBusinessUser)
+            .RequireAuthorization(PolicyName.AdministratorPolicy);
+
+        app.MapGet("/{businessUserId}/staffs", GetPaginatedStaff) 
+            .RequireAuthorization(PolicyName.AdministratorPolicy, PolicyName.BusinessUserPolicy);
+
+        app.MapGet("/{businessUserId}/business-licenses", GetPaginatedBusinessLicense)
+            .RequireAuthorization(PolicyName.AdministratorPolicy, PolicyName.BusinessUserPolicy);
 
         app.MapGet("/{businessUserId}", GetBusinessUserById)
-            .CacheOutput();
-        app.MapGet("/{businessUserId}/staffs/{staffId}", GetStaffByUserIdAndStaffId)
-            .CacheOutput();    
-        app.MapGet("/{businessUserId}/staffs/{staffId}/email", GetEmailByStaffId)
-            .CacheOutput();
-        app.MapGet("/{businessUserId}/staffs/{staffId}/phone-number", GetPhoneNumberByStaffId)
-            .CacheOutput();
-        app.MapGet("/{businessUserId}/staffs/{staffId}/time-zone", GetTimeZoneByStaffId)
-            .CacheOutput();
-        app.MapGet("/{businessUserId}/staffs/{staffId}/device-id", GetDeviceIdByStaffId)
-            .CacheOutput();
+            .CacheOutput()
+            .RequireAuthorization(PolicyName.AdministratorPolicy, PolicyName.BusinessUserPolicy);
 
-        app.MapPut("/{businessUserId}", UpdateBusinessUser);
-        app.MapPut("/{businessUserId}/staffs/{staffId}", UpdateStaffByStaffId);
+        app.MapGet("/{businessUserId}/staffs/{staffId}", GetStaffByUserIdAndStaffId)
+            .CacheOutput()
+            .RequireAuthorization(PolicyName.AdministratorPolicy, PolicyName.BusinessUserPolicy, PolicyName.StaffUserPolicy);
+
+
+
+        app.MapGet("/{businessUserId}/staffs/{staffId}/email", GetEmailByStaffId)
+            .CacheOutput()
+            .RequireAuthorization(PolicyName.StaffUserPolicy);
+
+        app.MapGet("/{businessUserId}/staffs/{staffId}/phone-number", GetPhoneNumberByStaffId)
+            .CacheOutput()
+            .RequireAuthorization(PolicyName.StaffUserPolicy);
+
+        app.MapGet("/{businessUserId}/staffs/{staffId}/time-zone", GetTimeZoneByStaffId)
+            .CacheOutput()
+            .RequireAuthorization(PolicyName.StaffUserPolicy);
+
+        app.MapGet("/{businessUserId}/staffs/{staffId}/device-id", GetDeviceIdByStaffId)
+            .CacheOutput()
+            .RequireAuthorization(PolicyName.StaffUserPolicy);
+
+
+        app.MapPut("/{businessUserId}", UpdateBusinessUser)
+            .RequireAuthorization(PolicyName.AdministratorPolicy, PolicyName.BusinessUserPolicy);
+
+        app.MapPut("/{businessUserId}/staffs/{staffId}", UpdateStaffByStaffId)
+            .RequireAuthorization(PolicyName.AdministratorPolicy, PolicyName.BusinessUserPolicy);
+
 
         app.MapPost("/", CreateBusinessUser)
-            .WithMetadata(new IdempotencyAttribute(nameof(CreateBusinessUser)));
+            .WithMetadata(new IdempotencyAttribute(nameof(CreateBusinessUser)))
+            .RequireAuthorization(PolicyName.AdministratorPolicy);
+
         app.MapPost("/{businessUserId}/staffs", CreateStaffBusinessUserById)
-            .WithMetadata(new IdempotencyAttribute(nameof(CreateStaffBusinessUserById)));
+            .WithMetadata(new IdempotencyAttribute(nameof(CreateStaffBusinessUserById)))
+            .RequireAuthorization(PolicyName.BusinessUserPolicy, PolicyName.AdministratorPolicy);
+
         app.MapPost("/{businessUserId}/business-licenses", CreateBusinessLicenseBusinessUserById)
-            .WithMetadata(new IdempotencyAttribute(nameof(CreateBusinessLicenseBusinessUserById))); 
-     
-        app.MapPatch("/{businessUserId}/staffs/{staffId}/device-id", SetDeviceIdByStaffId);
-        app.MapPatch("/{businessUserId}/staffs/{staffId}/device-id/reset", ResetDeviceIdByStaffId);
-        app.MapPatch("/{businessUserId}/staffs/{staffId}/device-id/force-set", ForceSetDeviceIdByStaffId); 
-        app.MapPatch("/{businessUserId}/staffs/{staffId}/email", SetStaffEmailByStaffId);
-        app.MapPatch("/{businessUserId}/staffs/{staffId}/email/confirm", ConfirmStaffEmailByStaffId);
-        app.MapPatch("/{businessUserId}/staffs/{staffId}/phone-number", SetStaffPhoneNumberByStaffId);
-        app.MapPatch("/{businessUserId}/staffs/{staffId}/phone-number/confirm", ConfirmStaffPhoneNumberByStaffId); 
-        app.MapPatch("/{businessUserId}/business-licenses/{businessLicenseId}/reject", RejectBusinessLicenseByUserId); 
-        app.MapPatch("/{businessUserId}/business-licenses/{businessLicenseId}/confirm", ConfirmBusinessLicenseByUserId);
-          
-        app.MapDelete("/{businessUserId}", DeleteBusinessUserById);
-        app.MapDelete("/{businessUserId}/staffs/{staffId}", RemoveStaffBusinessUserById);
-        app.MapDelete("/{businessUserId}/business-licenses/{businessLicenseId}", RemoveBusinessLicenseBusinessUserById);
+            .WithMetadata(new IdempotencyAttribute(nameof(CreateBusinessLicenseBusinessUserById)))
+            .RequireAuthorization(PolicyName.BusinessUserPolicy);
+
+
+        app.MapPatch("/{businessUserId}/staffs/{staffId}/device-id", SetDeviceIdByStaffId)
+            .RequireAuthorization(PolicyName.StaffUserPolicy);
+
+        app.MapPatch("/{businessUserId}/staffs/{staffId}/device-id/reset", ResetDeviceIdByStaffId)
+            .RequireAuthorization(PolicyName.StaffUserPolicy, PolicyName.AdministratorPolicy);
+
+        app.MapPatch("/{businessUserId}/staffs/{staffId}/device-id/force-set", ForceSetDeviceIdByStaffId)
+            .RequireAuthorization(PolicyName.StaffUserPolicy, PolicyName.AdministratorPolicy);
+
+        app.MapPatch("/{businessUserId}/staffs/{staffId}/email", SetStaffEmailByStaffId)
+            .RequireAuthorization(PolicyName.StaffUserPolicy);
+
+        app.MapPatch("/{businessUserId}/staffs/{staffId}/email/confirm", ConfirmStaffEmailByStaffId)
+            .RequireAuthorization(PolicyName.StaffUserPolicy);
+
+        app.MapPatch("/{businessUserId}/staffs/{staffId}/phone-number", SetStaffPhoneNumberByStaffId)
+            .RequireAuthorization(PolicyName.StaffUserPolicy);
+
+        app.MapPatch("/{businessUserId}/staffs/{staffId}/phone-number/confirm", ConfirmStaffPhoneNumberByStaffId)
+            .RequireAuthorization(PolicyName.StaffUserPolicy);
+
+        app.MapPatch("/{businessUserId}/business-licenses/{businessLicenseId}/reject", RejectBusinessLicenseByUserId)
+            .RequireAuthorization(PolicyName.AdministratorPolicy);
+
+        app.MapPatch("/{businessUserId}/business-licenses/{businessLicenseId}/confirm", ConfirmBusinessLicenseByUserId)
+            .RequireAuthorization(PolicyName.AdministratorPolicy);
+
+
+        app.MapDelete("/{businessUserId}", DeleteBusinessUserById)
+            .RequireAuthorization(PolicyName.AdministratorPolicy);
+
+        app.MapDelete("/{businessUserId}/staffs/{staffId}", RemoveStaffBusinessUserById)
+            .RequireAuthorization(PolicyName.AdministratorPolicy, PolicyName.BusinessUserPolicy);
+
+        app.MapDelete("/{businessUserId}/business-licenses/{businessLicenseId}", RemoveBusinessLicenseBusinessUserById)
+            .RequireAuthorization(PolicyName.AdministratorPolicy, PolicyName.BusinessUserPolicy);
 
         return route;
     }

@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
+using Account.API.SeedWork;
+using Identity.Contracts;
 
 namespace Account.API.Extensions;
 
@@ -254,29 +256,29 @@ public static class ServiceRegistration
 
         services.AddAuthorization(options =>
         {
-            options.AddPolicy("RegularUserPolicy", policy =>
+            options.AddPolicy(PolicyName.RegularUserPolicy, policy =>
             {
-                policy.RequireRole("RegularUser");
+                policy.RequireRole(UserType.RegularUser.ToString());
             });
 
-            options.AddPolicy("BusinessUserPolicy", policy =>
+            options.AddPolicy(PolicyName.BusinessUserPolicy, policy =>
             {
-                policy.RequireRole("BusinessUser");
+                policy.RequireRole(UserType.BusinessUser.ToString());
             });
 
-            options.AddPolicy("StaffUserPolicy", policy =>
+            options.AddPolicy(PolicyName.StaffUserPolicy, policy =>
             {
-                policy.RequireRole("StaffUser");
+                policy.RequireRole(UserType.StaffUser.ToString());
             });
 
-            options.AddPolicy("MechanicUserPolicy", policy =>
+            options.AddPolicy(PolicyName.MechanicUserPolicy, policy =>
             {
-                policy.RequireRole("MechanicUser");
+                policy.RequireRole(UserType.MechanicUser.ToString());
             });
 
-            options.AddPolicy("AdministratorPolicy", policy =>
+            options.AddPolicy(PolicyName.AdministratorPolicy, policy =>
             {
-                policy.RequireRole("Administrator");
+                policy.RequireRole(UserType.Administrator.ToString());
             });
         });
 

@@ -25,29 +25,29 @@ public static class RegularUserApi
         var app = builder.MapGroup("api/v1/users/regular");
 
         app.MapGet("/{regularUserId}", GetRegularUserByUserId).CacheOutput()
-            .RequireAuthorization("RegularUserPolicy", "AdministratorPolicy");
+            .RequireAuthorization(PolicyName.RegularUserPolicy, PolicyName.AdministratorPolicy);
 
         app.MapGet("/", GetPaginatedRegularUser)
-            .RequireAuthorization("AdministratorPolicy");
+            .RequireAuthorization(PolicyName.AdministratorPolicy);
 
         app.MapPost("/", CreateRegularUser)
             .WithMetadata(new IdempotencyAttribute(nameof(CreateRegularUser)))
-            .RequireAuthorization("RegularUserPolicy");
+            .RequireAuthorization(PolicyName.RegularUserPolicy);
         
-        app.MapPut("/{regularUserId}", UpdateRegularUserByUserId)
-            .RequireAuthorization("RegularUserPolicy");
+        app.MapPut("/", UpdateRegularUserByUserId)
+            .RequireAuthorization(PolicyName.RegularUserPolicy);
         
-        app.MapPatch("/{regularUserId}/device-id", SetDeviceIdByUserId)
-            .RequireAuthorization("RegularUserPolicy");
+        app.MapPatch("/device-id", SetDeviceIdByUserId)
+            .RequireAuthorization(PolicyName.RegularUserPolicy);
 
         app.MapPatch("/device-id/force-set", ForceSetDeviceIdByUserId)
-            .RequireAuthorization("RegularUserPolicy");
+            .RequireAuthorization(PolicyName.RegularUserPolicy);
 
-        app.MapPatch("/{regularUserId}/device-id/reset", ResetDeviceIdByUserId) 
-            .RequireAuthorization("RegularUserPolicy");
+        app.MapPatch("/device-id/reset", ResetDeviceIdByUserId) 
+            .RequireAuthorization(PolicyName.RegularUserPolicy);
 
         app.MapDelete("/{regularUserId}", DeleteRegularUserByUserId)
-            .RequireAuthorization("AdministratorPolicy");
+            .RequireAuthorization(PolicyName.AdministratorPolicy);
 
         return app;
     }
