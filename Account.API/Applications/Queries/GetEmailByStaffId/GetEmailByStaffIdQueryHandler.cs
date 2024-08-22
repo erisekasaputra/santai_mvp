@@ -24,7 +24,7 @@ public class GetEmailByStaffIdQueryHandler(
     {
         try
         {
-            var email = await _unitOfWork.Staffs.GetEmailByUserIdAndIdAsync(request.UserId, request.StaffId);
+            var email = await _unitOfWork.Staffs.GetEmailByIdAsync(request.StaffId);
 
             if (email is null)
             {

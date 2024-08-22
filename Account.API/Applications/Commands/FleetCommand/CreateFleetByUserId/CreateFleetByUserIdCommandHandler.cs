@@ -7,7 +7,7 @@ using Account.Domain.Aggregates.FleetAggregate;
 using Account.Domain.Enumerations;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
-using Identity.Contracts;
+using Identity.Contracts.Enumerations;
 using MediatR;
 using Microsoft.Extensions.Options;
 using System.Data;

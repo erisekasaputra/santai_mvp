@@ -1,7 +1,11 @@
-﻿using Identity.API.Domain.Entities;
+﻿using Identity.API.Configs;
+using Identity.API.Domain.Entities;
 using Identity.API.Enumerations;
-using Identity.Contracts;
+using Identity.Contracts.Enumerations;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Options;
+using SantaiClaimType;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -13,6 +17,7 @@ public class SeedDatabase
     {
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var googleOption = serviceProvider.GetRequiredService<IOptionsMonitor<GoogleConfig>>();
 
         UserType[] roleNames = [.. GetUserTypeConfiguration.GetAll];
 
@@ -46,25 +51,26 @@ public class SeedDatabase
                     EmailConfirmed = true,
                     UserType = UserType.Administrator 
                 };
+
                 await userManager.CreateAsync(user, password);
+                await userManager.AddToRoleAsync(user, UserType.Administrator.ToString());
 
 
+                var userInfoLogin = new UserLoginInfo("google", googleOption.CurrentValue.ClientId, "google");
+                await userManager.AddLoginAsync(user, userInfoLogin); 
+                
                 var claims = new List<Claim>()
                 {
-                    new (JwtRegisteredClaimNames.Sub, user.Id),
-                    new (JwtRegisteredClaimNames.Email, user.Email),
+                    new (JwtRegisteredClaimNames.Sub, user.Id), 
+                    new (ClaimTypes.Email, user.Email),
                     new (ClaimTypes.Name, user.UserName),
                     new (ClaimTypes.MobilePhone, user.PhoneNumber), 
-                }; 
-
-                foreach (var userType in GetUserTypeConfiguration.GetAll)
-                {
-                    await userManager.AddToRoleAsync(user, userType.ToString());
-                    claims.Add(new Claim(ClaimTypes.Role, userType.ToString()));
-                }
+                    new (ClaimTypes.Role, user.UserType.ToString()),
+                    new (SantaiClaimTypes.UserType, user.UserType.ToString())
+                };  
 
                 await userManager.AddClaimsAsync(user, claims);
             } 
         }  
-    }
+    } 
 }

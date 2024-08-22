@@ -25,7 +25,7 @@ public class GetPhoneNumberByStaffIdQueryHandler(
 
         try
         {
-            var phoneNumber = await _unitOfWork.Staffs.GetPhoneNumberByUserIdAndIdAsync(request.UserId, request.StaffId);
+            var phoneNumber = await _unitOfWork.Staffs.GetPhoneNumberByIdAsync(request.StaffId);
 
             if (phoneNumber is null)
             {

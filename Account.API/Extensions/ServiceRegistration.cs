@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Account.API.Options;
 using Amazon.KeyManagementService;
 using Account.API.Services;
-using Account.API.Infrastructures; 
+using Account.API.Infrastructures;
 using Account.API.Middleware;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Json;
@@ -17,7 +17,9 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using Account.API.SeedWork;
-using Identity.Contracts;
+using Identity.Contracts.Enumerations;
+using Polly;
+using Account.API.Consumers;
 
 namespace Account.API.Extensions;
 
@@ -27,7 +29,7 @@ public static class ServiceRegistration
     {
         services.AddMediatR(e =>
         {
-            e.RegisterServicesFromAssemblyContaining<Program>();
+            e.RegisterServicesFromAssemblyContaining<IAccountMarkerInterface>();
         });
 
         return services;
@@ -79,7 +81,7 @@ public static class ServiceRegistration
     {
         services.AddFluentValidationAutoValidation();
         services.AddFluentValidationClientsideAdapters();
-        services.AddValidatorsFromAssemblyContaining<Program>();
+        services.AddValidatorsFromAssemblyContaining<IAccountMarkerInterface>();
 
         return services;
     }
@@ -104,7 +106,7 @@ public static class ServiceRegistration
             options.UseSqlServer(databaseOption.CurrentValue.ConnectionString, action =>
             {
                 action.CommandTimeout(databaseOption.CurrentValue.CommandTimeOut);
-                action.MigrationsAssembly(typeof(Program).Assembly.GetName().Name);
+                action.MigrationsAssembly(typeof(IAccountMarkerInterface).Assembly.GetName().Name);
             });
         });
 
@@ -130,8 +132,10 @@ public static class ServiceRegistration
                 o.UseBusOutbox();
             });
 
+            x.AddConsumersFromNamespaceContaining<IAccountMarkerInterface>(); 
+
             x.UsingRabbitMq((context, configure) =>
-            {
+            {  
                 configure.Host(options.Host ?? string.Empty, host =>
                 {
                     host.Username(options.Username ?? string.Empty);
@@ -149,8 +153,42 @@ public static class ServiceRegistration
                     timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout);
                 });
 
-                configure.ConfigureEndpoints(context);
+                configure.ConfigureEndpoints(context); 
+
+
+                var consumers = new (string QueueName, Type ConsumerType)[]
+                {
+                    ("identity-email-assigned-to-a-user-integration-event-queue", typeof(IdentityEmailAssignedToAUserIntegrationEventConsumer)),
+                    ("identity-phone-number-confirmed-integration-event-queue", typeof(IdentityPhoneNumberConfirmedIntegrationEventConsumer)) 
+                };
+
+                foreach (var (queueName, consumerType) in consumers)
+                {
+                    configure.ReceiveEndpoint(queueName, receiveBuilder =>
+                    {
+                        ConfigureEndPoint(receiveBuilder, queueName, consumerType);
+                    });
+                }
+
+                void ConfigureEndPoint(IReceiveEndpointConfigurator receiveBuilder, string queueName, Type consumerType)
+                {
+                    receiveBuilder.ConfigureConsumer(context, consumerType);
+
+                    receiveBuilder.UseMessageRetry(retry =>
+                    {
+                        retry.Interval(options.MessageRetryInterval, TimeSpan.FromSeconds(options.MessageRetryTimespan));
+                    });
+
+                    receiveBuilder.UseDelayedRedelivery(redelivery =>
+                    {
+                        redelivery.Intervals(TimeSpan.FromSeconds(options.DelayedRedeliveryInternval));
+                    });
+
+                    receiveBuilder.UseRateLimit(1000, TimeSpan.FromSeconds(2));
+                }
             });
+
+
         });
 
         return services;

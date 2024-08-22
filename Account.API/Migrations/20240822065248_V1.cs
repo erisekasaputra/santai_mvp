@@ -12,6 +12,55 @@ namespace Account.API.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
+                name: "BaseUsers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    HashedEmail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    EncryptedEmail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    IsEmailVerified = table.Column<bool>(type: "bit", nullable: false),
+                    NewHashedEmail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    NewEncryptedEmail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    HashedPhoneNumber = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    EncryptedPhoneNumber = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    IsPhoneNumberVerified = table.Column<bool>(type: "bit", nullable: false),
+                    NewHashedPhoneNumber = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    NewEncryptedPhoneNumber = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AccountStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Address_EncryptedAddressLine1 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
+                    Address_EncryptedAddressLine2 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    Address_EncryptedAddressLine3 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    Address_City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Address_State = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Address_PostalCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Address_Country = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    TimeZoneId = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
+                    UserType = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
+                    Code = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: true),
+                    BusinessName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    EncryptedContactPerson = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    EncryptedTaxId = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    WebsiteUrl = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    Description = table.Column<string>(type: "nvarchar(1000)", nullable: true),
+                    PersonalInfo_FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    PersonalInfo_MiddleName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    PersonalInfo_LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    PersonalInfo_DateOfBirthUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    PersonalInfo_Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PersonalInfo_ProfilePictureUrl = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    Rating = table.Column<decimal>(type: "decimal(5,2)", nullable: true),
+                    IsVerified = table.Column<bool>(type: "bit", nullable: true),
+                    DeviceId = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    RegularUser_DeviceId = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BaseUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "InboxState",
                 columns: table => new
                 {
@@ -83,57 +132,6 @@ namespace Account.API.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IdentityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    HashedEmail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    EncryptedEmail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    IsEmailVerified = table.Column<bool>(type: "bit", nullable: false),
-                    NewHashedEmail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    NewEncryptedEmail = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    HashedPhoneNumber = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    EncryptedPhoneNumber = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    IsPhoneNumberVerified = table.Column<bool>(type: "bit", nullable: false),
-                    NewHashedPhoneNumber = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    NewEncryptedPhoneNumber = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    CreatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedAtUtc = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    AccountStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address_EncryptedAddressLine1 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Address_EncryptedAddressLine2 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Address_EncryptedAddressLine3 = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Address_City = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Address_State = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Address_PostalCode = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    Address_Country = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    TimeZoneId = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false),
-                    UserType = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: false),
-                    Code = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: true),
-                    BusinessName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    EncryptedContactPerson = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    EncryptedTaxId = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    WebsiteUrl = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(1000)", nullable: true),
-                    PersonalInfo_FirstName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    PersonalInfo_MiddleName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    PersonalInfo_LastName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    PersonalInfo_DateOfBirthUtc = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    PersonalInfo_Gender = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    PersonalInfo_ProfilePictureUrl = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Rating = table.Column<decimal>(type: "decimal(5,2)", nullable: true),
-                    IsVerified = table.Column<bool>(type: "bit", nullable: true),
-                    MechanicUser_DeviceId = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    DeviceId = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "BusinessLicenses",
                 columns: table => new
                 {
@@ -149,9 +147,9 @@ namespace Account.API.Migrations
                 {
                     table.PrimaryKey("PK_BusinessLicenses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BusinessLicenses_Users_BusinessUserId",
+                        name: "FK_BusinessLicenses_BaseUsers_BusinessUserId",
                         column: x => x.BusinessUserId,
-                        principalTable: "Users",
+                        principalTable: "BaseUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -171,9 +169,9 @@ namespace Account.API.Migrations
                 {
                     table.PrimaryKey("PK_Certifications", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Certifications_Users_MechanicUserId",
+                        name: "FK_Certifications_BaseUsers_MechanicUserId",
                         column: x => x.MechanicUserId,
-                        principalTable: "Users",
+                        principalTable: "BaseUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -194,9 +192,9 @@ namespace Account.API.Migrations
                 {
                     table.PrimaryKey("PK_DrivingLicenses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DrivingLicenses_Users_UserId",
+                        name: "FK_DrivingLicenses_BaseUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "BaseUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -214,9 +212,9 @@ namespace Account.API.Migrations
                 {
                     table.PrimaryKey("PK_LoyaltyPrograms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_LoyaltyPrograms_Users_LoyaltyUserId",
+                        name: "FK_LoyaltyPrograms_BaseUsers_LoyaltyUserId",
                         column: x => x.LoyaltyUserId,
-                        principalTable: "Users",
+                        principalTable: "BaseUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -237,9 +235,9 @@ namespace Account.API.Migrations
                 {
                     table.PrimaryKey("PK_NationalIdentities", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_NationalIdentities_Users_UserId",
+                        name: "FK_NationalIdentities_BaseUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "BaseUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -258,9 +256,9 @@ namespace Account.API.Migrations
                 {
                     table.PrimaryKey("PK_ReferralPrograms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ReferralPrograms_Users_UserId",
+                        name: "FK_ReferralPrograms_BaseUsers_UserId",
                         column: x => x.UserId,
-                        principalTable: "Users",
+                        principalTable: "BaseUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -280,9 +278,9 @@ namespace Account.API.Migrations
                 {
                     table.PrimaryKey("PK_ReferredPrograms", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ReferredPrograms_Users_ReferrerId",
+                        name: "FK_ReferredPrograms_BaseUsers_ReferrerId",
                         column: x => x.ReferrerId,
-                        principalTable: "Users",
+                        principalTable: "BaseUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -292,8 +290,6 @@ namespace Account.API.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IdentityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Username = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     BusinessUserId = table.Column<Guid>(type: "uniqueidentifier", maxLength: 50, nullable: false),
                     BusinessUserCode = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: false),
                     HashedPhoneNumber = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
@@ -321,9 +317,9 @@ namespace Account.API.Migrations
                 {
                     table.PrimaryKey("PK_Staffs", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Staffs_Users_BusinessUserId",
+                        name: "FK_Staffs_BaseUsers_BusinessUserId",
                         column: x => x.BusinessUserId,
-                        principalTable: "Users",
+                        principalTable: "BaseUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -334,6 +330,7 @@ namespace Account.API.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    BaseUserId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     StaffId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
                     HashedRegistrationNumber = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     EncryptedRegistrationNumber = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
@@ -364,17 +361,36 @@ namespace Account.API.Migrations
                 {
                     table.PrimaryKey("PK_Fleets", x => x.Id);
                     table.ForeignKey(
+                        name: "FK_Fleets_BaseUsers_BaseUserId",
+                        column: x => x.BaseUserId,
+                        principalTable: "BaseUsers",
+                        principalColumn: "Id");
+                    table.ForeignKey(
                         name: "FK_Fleets_Staffs_StaffId",
                         column: x => x.StaffId,
                         principalTable: "Staffs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_Fleets_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaseUsers_Code",
+                table: "BaseUsers",
+                column: "Code",
+                unique: true,
+                filter: "[Code] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaseUsers_HashedEmail",
+                table: "BaseUsers",
+                column: "HashedEmail",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BaseUsers_HashedPhoneNumber",
+                table: "BaseUsers",
+                column: "HashedPhoneNumber",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_BusinessLicenses_BusinessUserId",
@@ -407,6 +423,11 @@ namespace Account.API.Migrations
                 filter: "[VerificationStatus] = 'Accepted' ");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Fleets_BaseUserId",
+                table: "Fleets",
+                column: "BaseUserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Fleets_HashedChassisNumber",
                 table: "Fleets",
                 column: "HashedChassisNumber",
@@ -428,11 +449,6 @@ namespace Account.API.Migrations
                 name: "IX_Fleets_StaffId",
                 table: "Fleets",
                 column: "StaffId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Fleets_UserId",
-                table: "Fleets",
-                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_InboxState_Delivered",
@@ -520,43 +536,6 @@ namespace Account.API.Migrations
                 table: "Staffs",
                 column: "HashedPhoneNumber",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Staffs_IdentityId",
-                table: "Staffs",
-                column: "IdentityId",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Staffs_Username",
-                table: "Staffs",
-                column: "Username",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Code",
-                table: "Users",
-                column: "Code",
-                unique: true,
-                filter: "[Code] IS NOT NULL");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_HashedEmail",
-                table: "Users",
-                column: "HashedEmail",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_HashedPhoneNumber",
-                table: "Users",
-                column: "HashedPhoneNumber",
-                unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_Username",
-                table: "Users",
-                column: "Username",
-                unique: true);
         }
 
         /// <inheritdoc />
@@ -599,7 +578,7 @@ namespace Account.API.Migrations
                 name: "Staffs");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "BaseUsers");
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using Identity.Contracts;
+﻿using Identity.Contracts.Enumerations;
 using MediatR;
 
 namespace Identity.API.Domain.Events;

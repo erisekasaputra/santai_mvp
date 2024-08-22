@@ -18,25 +18,25 @@ builder.Services.Configure<ElasticsearchOptions>(builder.Configuration.GetSectio
 builder.Services.AddScoped<ElasticsearchContext>();
 
 builder.Services.AddMassTransit(x =>
-{      
+{
     x.AddConsumer<ItemCreatedIntegrationEventConsumer>();
     x.AddConsumer<ItemUpdatedIntegrationEventConsumer>();
-    x.AddConsumer<ItemDeletedIntegrationEventConsumer>(); 
-    x.AddConsumer<ItemUndeletedIntegrationEventConsumer>(); 
-    x.AddConsumer<ItemActivatedIntegrationEventConsumer>(); 
-    x.AddConsumer<ItemInactivatedIntegrationEventConsumer>(); 
-    x.AddConsumer<ItemPriceSetIntegrationEventConsumer>(); 
-    x.AddConsumer<ItemSoldAddedIntegrationEventConsumer>(); 
-    x.AddConsumer<ItemSoldReducedIntegrationEventConsumer>(); 
-    x.AddConsumer<ItemSoldSetIntegrationEventConsumer>(); 
-    x.AddConsumer<ItemStockAddedIntegrationEventConsumer>(); 
-    x.AddConsumer<ItemStockReducedIntegrationEventConsumer>(); 
-    x.AddConsumer<ItemStockSetIntegrationEventConsumer>(); 
-    x.AddConsumer<BrandDeletedIntegrationEventConsumer>(); 
-    x.AddConsumer<BrandUpdatedIntegrationEventConsumer>(); 
-    x.AddConsumer<CategoryDeletedIntegrationEventConsumer>(); 
-    x.AddConsumer<CategoryUpdatedIntegrationEventConsumer>(); 
-    
+    x.AddConsumer<ItemDeletedIntegrationEventConsumer>();
+    x.AddConsumer<ItemUndeletedIntegrationEventConsumer>();
+    x.AddConsumer<ItemActivatedIntegrationEventConsumer>();
+    x.AddConsumer<ItemInactivatedIntegrationEventConsumer>();
+    x.AddConsumer<ItemPriceSetIntegrationEventConsumer>();
+    x.AddConsumer<ItemSoldAddedIntegrationEventConsumer>();
+    x.AddConsumer<ItemSoldReducedIntegrationEventConsumer>();
+    x.AddConsumer<ItemSoldSetIntegrationEventConsumer>();
+    x.AddConsumer<ItemStockAddedIntegrationEventConsumer>();
+    x.AddConsumer<ItemStockReducedIntegrationEventConsumer>();
+    x.AddConsumer<ItemStockSetIntegrationEventConsumer>();
+    x.AddConsumer<BrandDeletedIntegrationEventConsumer>();
+    x.AddConsumer<BrandUpdatedIntegrationEventConsumer>();
+    x.AddConsumer<CategoryDeletedIntegrationEventConsumer>();
+    x.AddConsumer<CategoryUpdatedIntegrationEventConsumer>();
+
     x.UsingRabbitMq((context, config) =>
     {
         config.Host(builder.Configuration["RabbitMQ:Host"] ?? "localhost", host =>

@@ -1,8 +1,8 @@
-﻿using Identity.API.Domain.Entities; 
-using Identity.Contracts;
-using MassTransit; 
+﻿using Identity.API.Domain.Entities;
+using Identity.Contracts.Enumerations;
+using MassTransit;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;  
+using Microsoft.EntityFrameworkCore;
 
 namespace Identity.API.Infrastructure;
 
@@ -16,14 +16,19 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
     protected override void OnModelCreating(ModelBuilder builder)
     { 
-        base.OnModelCreating(builder); 
-         
-        builder.Entity<ApplicationUser>()
-            .Property(u => u.UserType)
-            .HasConversion(
-                v => v.ToString(),
-                v => Enum.Parse<UserType>(v) 
-            );
+        base.OnModelCreating(builder);
+
+        builder.Entity<ApplicationUser>(options =>
+        {
+            options.Property(u => u.UserType)
+                .HasConversion(
+                    v => v.ToString(),
+                    v => Enum.Parse<UserType>(v)
+                );
+
+            options.HasIndex(u => u.PhoneNumber)
+                .IsUnique();
+        });
 
         builder.AddInboxStateEntity();
         builder.AddOutboxMessageEntity();

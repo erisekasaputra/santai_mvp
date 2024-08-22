@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Account.API.Applications.Queries.GetDeviceIdByStaffId;
 
-public record GetDeviceIdByStaffIdQuery(Guid UserId, Guid StaffId) : IRequest<Result>;
+public record GetDeviceIdByStaffIdQuery(Guid StaffId) : IRequest<Result>;

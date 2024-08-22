@@ -37,6 +37,10 @@ builder.Services.AddDataEncryption(builder.Configuration);
 
 var app = builder.Build();
 
+app.UseAuthentication();
+
+app.UseAuthorization();
+
 builder.Configuration.AddEnvironmentVariables();
 
 if (app.Environment.IsDevelopment())

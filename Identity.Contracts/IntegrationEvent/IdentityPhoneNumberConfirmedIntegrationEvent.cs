@@ -1,4 +1,4 @@
-﻿namespace Identity.Contracts;
+﻿namespace Identity.Contracts.IntegrationEvent;
 
 public class IdentityPhoneNumberConfirmedIntegrationEvent
 {
@@ -9,5 +9,5 @@ public class IdentityPhoneNumberConfirmedIntegrationEvent
     {
         Id = id;
         PhoneNumber = phoneNumber;
-    }
+    } 
 }

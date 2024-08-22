@@ -1,4 +1,4 @@
-﻿using Identity.Contracts;
+﻿using Identity.Contracts.Enumerations;
 using Microsoft.AspNetCore.Identity;
 
 namespace Identity.API.Domain.Entities;

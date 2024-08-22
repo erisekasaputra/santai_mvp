@@ -113,19 +113,23 @@
             },
             "MassTransit": {
               "target": "Package",
-              "version": "[8.2.4-develop.1891, )"
+              "version": "[8.2.5-develop.1942, )"
+            },
+            "MassTransit.Abstractions": {
+              "target": "Package",
+              "version": "[8.2.5-develop.1942, )"
             },
             "MassTransit.AmazonSQS": {
               "target": "Package",
-              "version": "[8.2.4-develop.1891, )"
+              "version": "[8.2.5-develop.1942, )"
             },
             "MassTransit.EntityFrameworkCore": {
               "target": "Package",
-              "version": "[8.2.4-develop.1891, )"
+              "version": "[8.2.5-develop.1942, )"
             },
             "MassTransit.RabbitMQ": {
               "target": "Package",
-              "version": "[8.2.4-develop.1891, )"
+              "version": "[8.2.5-develop.1942, )"
             },
             "MediatR": {
               "target": "Package",

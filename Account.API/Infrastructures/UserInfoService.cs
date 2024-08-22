@@ -1,5 +1,5 @@
 ﻿using Account.API.Model;
-using Identity.Contracts;
+using Identity.Contracts.Enumerations;
 using SantaiClaimType;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -20,13 +20,11 @@ public class UserService : IUserInfoService
         var httpContext = _httpContextAccessor.HttpContext;
 
         if (httpContext != null && httpContext.User.Identity?.IsAuthenticated == true)
-        {
-             
-            var sub = httpContext.User.FindFirstValue(JwtRegisteredClaimNames.Sub); 
+        { 
+            var sub = httpContext.User.FindFirstValue(ClaimTypes.NameIdentifier); 
             var phoneNumber = httpContext.User.FindFirstValue(ClaimTypes.MobilePhone); 
             var email = httpContext.User.FindFirstValue(ClaimTypes.Email); 
-            var businessCode = httpContext.User.FindFirstValue(SantaiClaimTypes.BusinessCode);
-
+            var businessCode = httpContext.User.FindFirstValue(SantaiClaimTypes.BusinessCode); 
             var rawUserType = httpContext.User.FindFirstValue(SantaiClaimTypes.UserType);
 
             if (string.IsNullOrWhiteSpace(rawUserType))
@@ -36,7 +34,12 @@ public class UserService : IUserInfoService
 
             var userType = Enum.Parse<UserType>(rawUserType);
 
-            if (sub == default || string.IsNullOrWhiteSpace(phoneNumber) || string.IsNullOrWhiteSpace(businessCode))
+            if (sub == default || string.IsNullOrWhiteSpace(phoneNumber))
+            {
+                return null;
+            }
+
+            if (userType == UserType.StaffUser && string.IsNullOrWhiteSpace(businessCode)) 
             {
                 return null;
             }

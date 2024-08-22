@@ -20,10 +20,11 @@
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.2" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.65.0" />
     <PackageReference Include="Grpc.AspNetCore.Server" Version="2.65.0" />
-    <PackageReference Include="MassTransit" Version="8.2.4-develop.1891" />
-    <PackageReference Include="MassTransit.AmazonSQS" Version="8.2.4-develop.1891" />
-    <PackageReference Include="MassTransit.EntityFrameworkCore" Version="8.2.4-develop.1891" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.4-develop.1891" />
+    <PackageReference Include="MassTransit" Version="8.2.5-develop.1942" />
+    <PackageReference Include="MassTransit.Abstractions" Version="8.2.5-develop.1942" />
+    <PackageReference Include="MassTransit.AmazonSQS" Version="8.2.5-develop.1942" />
+    <PackageReference Include="MassTransit.EntityFrameworkCore" Version="8.2.5-develop.1942" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.5-develop.1942" />
     <PackageReference Include="MediatR" Version="12.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-preview.6.24328.4" />
@@ -53,7 +54,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Applications\IntegrationEventHandlers\" />
+    <Folder Include="Applications\DomainEventHandlers\" />
     <Folder Include="Protos\" />
   </ItemGroup>
 

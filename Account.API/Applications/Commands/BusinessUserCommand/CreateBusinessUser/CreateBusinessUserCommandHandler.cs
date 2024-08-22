@@ -162,7 +162,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
             // if staff request has data then will true and check the related identity is registered or not
             if (staffRequests is not null && staffRequests.Any())
-            {
+            { 
                 // get registered identity from database
                 var staffConflictAtRepository = await _unitOfWork.Staffs.GetByIdentitiesAsNoTrackingAsync( 
                     (IdentityParameter.Email, staffRequests.Select(x => x.HashedEmail)),

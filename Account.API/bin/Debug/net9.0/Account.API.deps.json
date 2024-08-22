@@ -23,10 +23,11 @@
           "FluentValidation.DependencyInjectionExtensions": "11.9.2",
           "Grpc.AspNetCore": "2.65.0",
           "Grpc.AspNetCore.Server": "2.65.0",
-          "MassTransit": "8.2.4-develop.1891",
-          "MassTransit.AmazonSQS": "8.2.4-develop.1891",
-          "MassTransit.EntityFrameworkCore": "8.2.4-develop.1891",
-          "MassTransit.RabbitMQ": "8.2.4-develop.1891",
+          "MassTransit": "8.2.5-develop.1942",
+          "MassTransit.Abstractions": "8.2.5-develop.1942",
+          "MassTransit.AmazonSQS": "8.2.5-develop.1942",
+          "MassTransit.EntityFrameworkCore": "8.2.5-develop.1942",
+          "MassTransit.RabbitMQ": "8.2.5-develop.1942",
           "MediatR": "12.4.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "8.0.8",
           "Microsoft.AspNetCore.OpenApi": "9.0.0-preview.6.24328.4",
@@ -69,7 +70,7 @@
       },
       "AWSSDK.CognitoIdentity/3.7.400.2": {
         "dependencies": {
-          "AWSSDK.Core": "3.7.400.2",
+          "AWSSDK.Core": "3.7.400.3",
           "AWSSDK.SecurityToken": "3.7.400.2"
         },
         "runtime": {
@@ -82,7 +83,7 @@
       "AWSSDK.CognitoSync/3.7.400.2": {
         "dependencies": {
           "AWSSDK.CognitoIdentity": "3.7.400.2",
-          "AWSSDK.Core": "3.7.400.2"
+          "AWSSDK.Core": "3.7.400.3"
         },
         "runtime": {
           "lib/net8.0/AWSSDK.CognitoSync.dll": {
@@ -91,17 +92,17 @@
           }
         }
       },
-      "AWSSDK.Core/3.7.400.2": {
+      "AWSSDK.Core/3.7.400.3": {
         "runtime": {
           "lib/net8.0/AWSSDK.Core.dll": {
             "assemblyVersion": "3.3.0.0",
-            "fileVersion": "3.7.400.2"
+            "fileVersion": "3.7.400.3"
           }
         }
       },
       "AWSSDK.Extensions.NETCore.Setup/3.7.301": {
         "dependencies": {
-          "AWSSDK.Core": "3.7.400.2",
+          "AWSSDK.Core": "3.7.400.3",
           "Microsoft.Extensions.Configuration.Abstractions": "9.0.0-preview.6.24327.7",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-preview.7.24405.7",
           "Microsoft.Extensions.Logging.Abstractions": "9.0.0-preview.7.24405.7"
@@ -115,7 +116,7 @@
       },
       "AWSSDK.KeyManagementService/3.7.400.2": {
         "dependencies": {
-          "AWSSDK.Core": "3.7.400.2"
+          "AWSSDK.Core": "3.7.400.3"
         },
         "runtime": {
           "lib/net8.0/AWSSDK.KeyManagementService.dll": {
@@ -126,7 +127,7 @@
       },
       "AWSSDK.SecretsManager/3.7.400.2": {
         "dependencies": {
-          "AWSSDK.Core": "3.7.400.2"
+          "AWSSDK.Core": "3.7.400.3"
         },
         "runtime": {
           "lib/net8.0/AWSSDK.SecretsManager.dll": {
@@ -137,7 +138,7 @@
       },
       "AWSSDK.SecurityToken/3.7.400.2": {
         "dependencies": {
-          "AWSSDK.Core": "3.7.400.2"
+          "AWSSDK.Core": "3.7.400.3"
         },
         "runtime": {
           "lib/net8.0/AWSSDK.SecurityToken.dll": {
@@ -146,25 +147,25 @@
           }
         }
       },
-      "AWSSDK.SimpleNotificationService/3.7.302.1": {
+      "AWSSDK.SimpleNotificationService/3.7.400.3": {
         "dependencies": {
-          "AWSSDK.Core": "3.7.400.2"
+          "AWSSDK.Core": "3.7.400.3"
         },
         "runtime": {
           "lib/net8.0/AWSSDK.SimpleNotificationService.dll": {
             "assemblyVersion": "3.3.0.0",
-            "fileVersion": "3.7.302.1"
+            "fileVersion": "3.7.400.3"
           }
         }
       },
-      "AWSSDK.SQS/3.7.301.33": {
+      "AWSSDK.SQS/3.7.400.3": {
         "dependencies": {
-          "AWSSDK.Core": "3.7.400.2"
+          "AWSSDK.Core": "3.7.400.3"
         },
         "runtime": {
           "lib/net8.0/AWSSDK.SQS.dll": {
             "assemblyVersion": "3.3.0.0",
-            "fileVersion": "3.7.301.33"
+            "fileVersion": "3.7.400.3"
           }
         }
       },
@@ -377,9 +378,9 @@
           }
         }
       },
-      "MassTransit/8.2.4-develop.1891": {
+      "MassTransit/8.2.5-develop.1942": {
         "dependencies": {
-          "MassTransit.Abstractions": "8.2.4-develop.1891",
+          "MassTransit.Abstractions": "8.2.5-develop.1942",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-preview.7.24405.7",
           "Microsoft.Extensions.Diagnostics.HealthChecks": "8.0.0",
           "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
@@ -388,53 +389,53 @@
         },
         "runtime": {
           "lib/net8.0/MassTransit.dll": {
-            "assemblyVersion": "8.2.4.0",
-            "fileVersion": "8.2.4.0"
+            "assemblyVersion": "8.2.5.0",
+            "fileVersion": "8.2.5.0"
           }
         }
       },
-      "MassTransit.Abstractions/8.2.4-develop.1891": {
+      "MassTransit.Abstractions/8.2.5-develop.1942": {
         "runtime": {
           "lib/net8.0/MassTransit.Abstractions.dll": {
-            "assemblyVersion": "8.2.4.0",
-            "fileVersion": "8.2.4.0"
+            "assemblyVersion": "8.2.5.0",
+            "fileVersion": "8.2.5.0"
           }
         }
       },
-      "MassTransit.AmazonSQS/8.2.4-develop.1891": {
+      "MassTransit.AmazonSQS/8.2.5-develop.1942": {
         "dependencies": {
-          "AWSSDK.SQS": "3.7.301.33",
-          "AWSSDK.SimpleNotificationService": "3.7.302.1",
-          "MassTransit": "8.2.4-develop.1891"
+          "AWSSDK.SQS": "3.7.400.3",
+          "AWSSDK.SimpleNotificationService": "3.7.400.3",
+          "MassTransit": "8.2.5-develop.1942"
         },
         "runtime": {
           "lib/net8.0/MassTransit.AmazonSqsTransport.dll": {
-            "assemblyVersion": "8.2.4.0",
-            "fileVersion": "8.2.4.0"
+            "assemblyVersion": "8.2.5.0",
+            "fileVersion": "8.2.5.0"
           }
         }
       },
-      "MassTransit.EntityFrameworkCore/8.2.4-develop.1891": {
+      "MassTransit.EntityFrameworkCore/8.2.5-develop.1942": {
         "dependencies": {
-          "MassTransit": "8.2.4-develop.1891",
+          "MassTransit": "8.2.5-develop.1942",
           "Microsoft.EntityFrameworkCore.Relational": "9.0.0-preview.6.24327.4"
         },
         "runtime": {
           "lib/net8.0/MassTransit.EntityFrameworkCoreIntegration.dll": {
-            "assemblyVersion": "8.2.4.0",
-            "fileVersion": "8.2.4.0"
+            "assemblyVersion": "8.2.5.0",
+            "fileVersion": "8.2.5.0"
           }
         }
       },
-      "MassTransit.RabbitMQ/8.2.4-develop.1891": {
+      "MassTransit.RabbitMQ/8.2.5-develop.1942": {
         "dependencies": {
-          "MassTransit": "8.2.4-develop.1891",
+          "MassTransit": "8.2.5-develop.1942",
           "RabbitMQ.Client": "6.8.1"
         },
         "runtime": {
           "lib/net8.0/MassTransit.RabbitMqTransport.dll": {
-            "assemblyVersion": "8.2.4.0",
-            "fileVersion": "8.2.4.0"
+            "assemblyVersion": "8.2.5.0",
+            "fileVersion": "8.2.5.0"
           }
         }
       },
@@ -1753,10 +1754,10 @@
           "Azure.Identity": "1.13.0-beta.1",
           "EntityFramework": "6.5.1",
           "LinqKit": "1.3.0",
-          "MassTransit": "8.2.4-develop.1891",
-          "MassTransit.AmazonSQS": "8.2.4-develop.1891",
-          "MassTransit.EntityFrameworkCore": "8.2.4-develop.1891",
-          "MassTransit.RabbitMQ": "8.2.4-develop.1891",
+          "MassTransit": "8.2.5-develop.1942",
+          "MassTransit.AmazonSQS": "8.2.5-develop.1942",
+          "MassTransit.EntityFrameworkCore": "8.2.5-develop.1942",
+          "MassTransit.RabbitMQ": "8.2.5-develop.1942",
           "MediatR": "12.4.0",
           "Microsoft.EntityFrameworkCore": "9.0.0-preview.6.24327.4",
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.0-preview.6.24327.4",
@@ -1817,12 +1818,12 @@
       "path": "awssdk.cognitosync/3.7.400.2",
       "hashPath": "awssdk.cognitosync.3.7.400.2.nupkg.sha512"
     },
-    "AWSSDK.Core/3.7.400.2": {
+    "AWSSDK.Core/3.7.400.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Hq2GvaU4GMNJOrZfq5K5to9pXgmUvgKs2ITbLmVCs1/DtFThv8hQUmnzzONbxb0n3b7mj7Ztlp0gF6PuuSq+5A==",
-      "path": "awssdk.core/3.7.400.2",
-      "hashPath": "awssdk.core.3.7.400.2.nupkg.sha512"
+      "sha512": "sha512-Sw88+Hdw1OsA0++zImHbYJa7FA6OznFhtbB9wJjrAA5O4i/LOhqu1Zh7YjLBL4n1hkicbHSAlPmHP6Kgw70Xkg==",
+      "path": "awssdk.core/3.7.400.3",
+      "hashPath": "awssdk.core.3.7.400.3.nupkg.sha512"
     },
     "AWSSDK.Extensions.NETCore.Setup/3.7.301": {
       "type": "package",
@@ -1852,19 +1853,19 @@
       "path": "awssdk.securitytoken/3.7.400.2",
       "hashPath": "awssdk.securitytoken.3.7.400.2.nupkg.sha512"
     },
-    "AWSSDK.SimpleNotificationService/3.7.302.1": {
+    "AWSSDK.SimpleNotificationService/3.7.400.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-c/9ncl/v+g6dpZm+sNQazGgTcf9UAObcxxbKpHEP94s7KxjQJzM3WrN5ySxS/VJK93PnmMnp8kweB2Sxw7GYGg==",
-      "path": "awssdk.simplenotificationservice/3.7.302.1",
-      "hashPath": "awssdk.simplenotificationservice.3.7.302.1.nupkg.sha512"
+      "sha512": "sha512-cYgE/vI1dc3yFMTspclGnp2+FbbYLtSiB/9ECTI0ShcRVWH3BripL7Zj52hKqB3TY70O/MViBNzqKyt10ToHtg==",
+      "path": "awssdk.simplenotificationservice/3.7.400.3",
+      "hashPath": "awssdk.simplenotificationservice.3.7.400.3.nupkg.sha512"
     },
-    "AWSSDK.SQS/3.7.301.33": {
+    "AWSSDK.SQS/3.7.400.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-vQnxWjrVoAt2TifJv9CTDles6CZLgnF7gGb5CsJZcpOuRnGtGGatr/lCmsJjRMKyc3qFNPwHa4glXKDNbgUh8g==",
-      "path": "awssdk.sqs/3.7.301.33",
-      "hashPath": "awssdk.sqs.3.7.301.33.nupkg.sha512"
+      "sha512": "sha512-ZrHblBY1U1MWK75ZicZ3Gy/DBSy0o6/Ua39M+IwlkUaTsGbtcoGurXkOKD7Kbirxk/pNjYXpeI4mXMxz7RoRsQ==",
+      "path": "awssdk.sqs/3.7.400.3",
+      "hashPath": "awssdk.sqs.3.7.400.3.nupkg.sha512"
     },
     "Azure.Core/1.41.0": {
       "type": "package",
@@ -1999,40 +2000,40 @@
       "path": "linqkit.core/1.2.5",
       "hashPath": "linqkit.core.1.2.5.nupkg.sha512"
     },
-    "MassTransit/8.2.4-develop.1891": {
+    "MassTransit/8.2.5-develop.1942": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-PS1ZoaDQzD+/hq9I5y/UBA1zdJyjLjmh5/5yUk+1jXBq01ZVuo6PgFRapM5BFmS+lDh+BZWRZxFwloTkdEouFw==",
-      "path": "masstransit/8.2.4-develop.1891",
-      "hashPath": "masstransit.8.2.4-develop.1891.nupkg.sha512"
+      "sha512": "sha512-IFKsPFKFIrHOxPjJGnuc0b+taA94Kew5hFzHfd4fm8eC8/oxGJ8ythZhykR/L8yfG9i5wRhQlNdxW9xSjL5k8g==",
+      "path": "masstransit/8.2.5-develop.1942",
+      "hashPath": "masstransit.8.2.5-develop.1942.nupkg.sha512"
     },
-    "MassTransit.Abstractions/8.2.4-develop.1891": {
+    "MassTransit.Abstractions/8.2.5-develop.1942": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-CaWMQ/Vbb2yfNlRyFrOtOOVsXFZqOSRl/Tvod5GIXYrWf7m+7oPqHfIlJb65Us3sOlNtcvLec3WEiiTJmZarOg==",
-      "path": "masstransit.abstractions/8.2.4-develop.1891",
-      "hashPath": "masstransit.abstractions.8.2.4-develop.1891.nupkg.sha512"
+      "sha512": "sha512-a4Q8DianQSTX4inHd3HLenoVc7se6U/aa0gMtCQzUpauiqzvE+s3GLzidosPTzXw5n0JWmNZqYWd/C5KsxrQKw==",
+      "path": "masstransit.abstractions/8.2.5-develop.1942",
+      "hashPath": "masstransit.abstractions.8.2.5-develop.1942.nupkg.sha512"
     },
-    "MassTransit.AmazonSQS/8.2.4-develop.1891": {
+    "MassTransit.AmazonSQS/8.2.5-develop.1942": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-AsuOr/wAFxbDe2RMntPEoFMOEjhBMFNrOjKsPNsAZEDJS3sE4t9ZdJ64RWLPLyt6FYg576A5KU8ZXiaVrboshA==",
-      "path": "masstransit.amazonsqs/8.2.4-develop.1891",
-      "hashPath": "masstransit.amazonsqs.8.2.4-develop.1891.nupkg.sha512"
+      "sha512": "sha512-3/fLOoEoKu+1RC/L3ykzE31ZkLIWJ4N0Q7aIgFHgzIjVJln0VwH20ukFgKfMoMPYYeo3L7QNHKrsMvBdI1bXjA==",
+      "path": "masstransit.amazonsqs/8.2.5-develop.1942",
+      "hashPath": "masstransit.amazonsqs.8.2.5-develop.1942.nupkg.sha512"
     },
-    "MassTransit.EntityFrameworkCore/8.2.4-develop.1891": {
+    "MassTransit.EntityFrameworkCore/8.2.5-develop.1942": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-M7e/3izZRezocbAWF+UD1OId1h5HVbS9XujkaAm/3zJWVGquChQOyA5ksXVKHW3gB1DcpEppHo66QQdrLr1P9w==",
-      "path": "masstransit.entityframeworkcore/8.2.4-develop.1891",
-      "hashPath": "masstransit.entityframeworkcore.8.2.4-develop.1891.nupkg.sha512"
+      "sha512": "sha512-VW+NWafM/Z8gDYgNmTOfKoygY4GFu0yahe7r/hs0Q1Y984JwqB4FHAIVnY7okCgfy4HwndjFRFSGeUhPIyFxWg==",
+      "path": "masstransit.entityframeworkcore/8.2.5-develop.1942",
+      "hashPath": "masstransit.entityframeworkcore.8.2.5-develop.1942.nupkg.sha512"
     },
-    "MassTransit.RabbitMQ/8.2.4-develop.1891": {
+    "MassTransit.RabbitMQ/8.2.5-develop.1942": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-QdBJXJcnSnnifXhrtTFBBqI526KkA76D8SWcqq/YnDi5vixYTyLpEObL18HXXoTE2AR/lYkxVq0fDWrNOxu1jw==",
-      "path": "masstransit.rabbitmq/8.2.4-develop.1891",
-      "hashPath": "masstransit.rabbitmq.8.2.4-develop.1891.nupkg.sha512"
+      "sha512": "sha512-9Z8O+iAZmO0kaER7GcpaRlivJxCn6k06xW+yJ55M/uCoTvhZd8Lxa1Hm9xHf8Li0+stigVTXlSCgVqdLyoU+6g==",
+      "path": "masstransit.rabbitmq/8.2.5-develop.1942",
+      "hashPath": "masstransit.rabbitmq.8.2.5-develop.1942.nupkg.sha512"
     },
     "MediatR/12.4.0": {
       "type": "package",

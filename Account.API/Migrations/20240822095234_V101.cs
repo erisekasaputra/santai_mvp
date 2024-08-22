@@ -5,7 +5,7 @@
 namespace Account.API.Migrations
 {
     /// <inheritdoc />
-    public partial class V6 : Migration
+    public partial class V101 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

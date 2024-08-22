@@ -10,7 +10,7 @@ using Identity.API.Extensions;
 using Identity.API.Infrastructure;
 using Identity.API.SeedWork;
 using Identity.API.Service;
-using Identity.Contracts;
+using Identity.Contracts.Enumerations;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Authentication.Google;
@@ -117,19 +117,19 @@ public class AuthController : ControllerBase
             try
             {   
 
-                if (!AllowedOtpProviderType.GetAll.Contains(request.ProviderType))
+                if (!AllowedOtpProviderType.GetAll.Contains(request.OtpProviderType))
                 {
-                    return TypedResults.BadRequest(Result.Failure($"Unknown otp provider type '{request.ProviderType}'", 400));
+                    return TypedResults.BadRequest(Result.Failure($"Unknown otp provider type '{request.OtpProviderType}'", 400));
                 }
 
-                var requestOtp = await _otpService.GetRequestOtpAsync(request.RequestOtpId);
+                var requestOtp = await _otpService.GetRequestOtpAsync(request.OtpRequestId);
 
                 if (requestOtp is null)
                 {
                     return TypedResults.Unauthorized();
                 }
 
-                if (!_otpService.IsGenerateRequestOtpValidAsync(requestOtp, request.RequestOtpToken))
+                if (!_otpService.IsGenerateRequestOtpValidAsync(requestOtp, request.OtpRequestToken))
                 {
                     return TypedResults.Unauthorized();
                 }
@@ -169,7 +169,7 @@ public class AuthController : ControllerBase
 
                     var otpToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber!);
 
-                    await _mediator.Publish(new OtpRequestedDomainEvent(user.PhoneNumber!, otpToken, request.ProviderType));
+                    await _mediator.Publish(new OtpRequestedDomainEvent(user.PhoneNumber!, otpToken, request.OtpProviderType));
 
                     await _dbContext.SaveChangesAsync();
 
@@ -201,7 +201,7 @@ public class AuthController : ControllerBase
                     (var otp, var remainingTime) = await _otpService.GenerateOtpAsync(user.PhoneNumber!);
                     if (otp is not null)
                     {
-                        await _mediator.Publish(new OtpRequestedDomainEvent(user.PhoneNumber!, otp, request.ProviderType));
+                        await _mediator.Publish(new OtpRequestedDomainEvent(user.PhoneNumber!, otp, request.OtpProviderType));
                     }
 
                     await _dbContext.SaveChangesAsync();
@@ -326,7 +326,7 @@ public class AuthController : ControllerBase
                             Action = _sendOtpActionName,
                             Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
                             OtpRequestToken = otpRequestToken,
-                            RequestId = requestId,
+                            OtpRequestId = requestId,
                             OtpProviderTypes = AllowedOtpProviderType.GetAll 
                         }
                     }); 
@@ -357,7 +357,7 @@ public class AuthController : ControllerBase
                         Action = _sendOtpActionName,
                         Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
                         OtpRequestToken = newOtpRequestToken,
-                        RequestId = newRequestId,
+                        OtpRequestId = newRequestId,
                         OtpProviderTypes = AllowedOtpProviderType.GetAll
                     }
                 }); 
@@ -454,7 +454,7 @@ public class AuthController : ControllerBase
                             Action = _sendOtpActionName,
                             Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
                             OtpRequestToken = otpRequestToken,
-                            RequestId = requestId,
+                            OtpRequestId = requestId,
                             OtpProviderTypes = AllowedOtpProviderType.GetAll
                         }
                     });
@@ -508,7 +508,7 @@ public class AuthController : ControllerBase
                         Action = _sendOtpActionName,
                         Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
                         OtpRequestToken = newOtpRequestToken,
-                        RequestId = newRequestId,
+                        OtpRequestId = newRequestId,
                         OtpProviderTypes = AllowedOtpProviderType.GetAll
                     }
                 });
@@ -599,7 +599,7 @@ public class AuthController : ControllerBase
                             Action = _sendOtpActionName,
                             Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName), 
                             OtpRequestToken = otpRequestToken,
-                            RequestId = requestId,
+                            OtpRequestId = requestId,
                             OtpProviderTypes = AllowedOtpProviderType.GetAll
                         }
                     });
@@ -658,7 +658,7 @@ public class AuthController : ControllerBase
                         Action = _sendOtpActionName,
                         Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
                         OtpRequestToken = newOtpRequestToken,
-                        RequestId = newRequestId,
+                        OtpRequestId = newRequestId,
                         OtpProviderTypes = AllowedOtpProviderType.GetAll
                     }
                 });
@@ -763,37 +763,13 @@ public class AuthController : ControllerBase
                                     Action = _sendOtpActionName,
                                     Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
                                     OtpRequestToken = newOtpRequestToken,
-                                    RequestId = newRequestId,
+                                    OtpRequestId = newRequestId,
                                     OtpProviderTypes = AllowedOtpProviderType.GetAll
                                 } 
                             });
-                        } 
+                        }   
 
-                        await _mediator.Publish(new EmailAssignedToAUserDomainEvent(Guid.Parse(userByEmailClaim.Id), userByEmailClaim.Email!));
-
-                        await _dbContext.SaveChangesAsync();
-                        await transaction.CommitAsync();
-
-                        var actionName = userByEmailClaim.UserType == UserType.StaffUser ? _staffLoginActionName : _userLoginActionName;
-
-                        return TypedResults.Ok(new
-                        {
-                            User = new
-                            {
-                                Sub = userByEmailClaim.Id,
-                                Username = userByEmailClaim.UserName,
-                                PhoneNumber = userByEmailClaim.PhoneNumber,
-                                Email = userByEmailClaim.Email,
-                                UserTypes = userByEmailClaim.UserType,
-                                BusinessCode = userByEmailClaim.BusinessCode
-                            },
-                            Next = new
-                            {
-                                Link = Url.Action(actionName, _controllerName),
-                                Action = actionName,
-                                Method = _actionMethodService.GetHttpMethodByActionName(actionName, _controllerName)
-                            }
-                        });
+                        return TypedResults.Conflict(Result.Failure("Email is already in use", 409));
                     }
                 }
 
@@ -824,8 +800,10 @@ public class AuthController : ControllerBase
                           .WithErrors(errors.ToList()));
                 }
 
-                if (payload?.Email != null)
+                if (payload?.Email is not null)
                 {
+                    await _mediator.Publish(new EmailAssignedToAUserDomainEvent(Guid.Parse(newUser.Id), payload.Email));
+
                     var userInfoLogin = new UserLoginInfo("google", payload.Subject, "google");
                     await _userManager.AddLoginAsync(newUser, userInfoLogin);
                     newUser.EmailConfirmed = true;
@@ -872,7 +850,7 @@ public class AuthController : ControllerBase
                         Action = _sendOtpActionName,
                         Method =  _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
                         OtpRequestToken = otpRequestToken,
-                        RequestId = requestId,
+                        OtpRequestId = requestId,
                         OtpProviderTypes = AllowedOtpProviderType.GetAll
                     } 
                 });
@@ -1084,7 +1062,7 @@ public class AuthController : ControllerBase
 
                 var claims = await _userManager.GetClaimsAsync(user); 
                 
-                if (claims is null)
+                if (claims is null || !claims.Any())
                 {
                     _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id); 
                     return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
@@ -1273,13 +1251,5 @@ public class AuthController : ControllerBase
         } 
 
         return await _userManager.AddClaimsAsync(user, claims);
-    }  
-
-    [Authorize(Policy = "Administrator")]
-    [HttpPost("register/business")]
-    public IResult GetResource()
-    {
-        var roles = User.FindFirstValue(ClaimTypes.MobilePhone);
-        return TypedResults.Ok(roles); 
-    }
+    }   
 }

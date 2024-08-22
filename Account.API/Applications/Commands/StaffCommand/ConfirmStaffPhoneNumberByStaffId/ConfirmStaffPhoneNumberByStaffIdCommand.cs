@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Account.API.Applications.Commands.StaffCommand.ConfirmStaffPhoneNumberByStaffId;
 
-public record ConfirmStaffPhoneNumberByStaffIdCommand(Guid BusinessUserId, Guid StaffId) : IRequest<Result>;
+public record ConfirmStaffPhoneNumberByStaffIdCommand(Guid StaffId) : IRequest<Result>;

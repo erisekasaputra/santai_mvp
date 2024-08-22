@@ -14,7 +14,7 @@ using Account.API.Applications.Queries.GetPaginatedRegularUser;
 using Account.API.CustomAttributes;
 using Account.API.SeedWork;
 using Account.API.Infrastructures;
-using Identity.Contracts;
+using Identity.Contracts.Enumerations;
 
 namespace Account.API.API;
 
@@ -237,7 +237,7 @@ public static class RegularUserApi
 
             if (userClaim.CurrentUserType != UserType.Administrator && regularUserId != userClaim.Sub)
             { 
-                return TypedResults.BadRequest();
+                return TypedResults.Forbid();
             }
 
             var result = await service.Mediator.Send(new GetRegularUserByUserIdQuery(regularUserId));

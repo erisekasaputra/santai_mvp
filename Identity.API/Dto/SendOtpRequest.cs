@@ -1,10 +1,10 @@
-﻿using Identity.Contracts;
+﻿using Identity.Contracts.Enumerations;
 
 namespace Identity.API.Dto;
 
 public class SendOtpRequest
 {
-    public Guid RequestOtpId { get; set; } 
-    public string RequestOtpToken { get; set; } = string.Empty;  
-    public OtpProviderType ProviderType { get; set; }
+    public Guid OtpRequestId { get; set; } 
+    public string OtpRequestToken { get; set; } = string.Empty;  
+    public OtpProviderType OtpProviderType { get; set; }
 }

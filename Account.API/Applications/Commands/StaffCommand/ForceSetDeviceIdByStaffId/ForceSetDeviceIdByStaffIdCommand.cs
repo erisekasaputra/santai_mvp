@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Account.API.Applications.Commands.StaffCommand.ForceSetDeviceIdByStaffId;
 
-public record ForceSetDeviceIdByStaffIdCommand(Guid UserId, Guid StaffId, string DeviceId) : IRequest<Result>;
+public record ForceSetDeviceIdByStaffIdCommand(Guid StaffId, string DeviceId) : IRequest<Result>;

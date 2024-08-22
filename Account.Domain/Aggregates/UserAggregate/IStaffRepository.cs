@@ -13,10 +13,10 @@ public interface IStaffRepository
     Task<Staff> CreateAsync(Staff staff);
     Task<bool> GetAnyAsync(Guid id);
     Task<Staff?> GetByIdAsync(Guid id);
-    Task<string?> GetTimeZoneByUserIdAndIdAsync(Guid userId, Guid staffId);
-    Task<string?> GetEmailByUserIdAndIdAsync(Guid userId, Guid staffId);
-    Task<string?> GetPhoneNumberByUserIdAndIdAsync(Guid userId, Guid staffId); 
-    Task<string?> GetDeviceIdByUserAndByIdAsync(Guid userId, Guid staffId);
+    Task<string?> GetTimeZoneByIdAsync(Guid staffId);
+    Task<string?> GetEmailByIdAsync(Guid staffId);
+    Task<string?> GetPhoneNumberByIdAsync(Guid staffId); 
+    Task<string?> GetDeviceIdByIdAsync(Guid staffId);
     void Update(Staff staff);
     void Delete(Staff staff); 
 }

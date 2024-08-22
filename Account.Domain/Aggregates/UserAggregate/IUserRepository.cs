@@ -1,5 +1,5 @@
 ﻿using Account.Domain.Enumerations;
-using Identity.Contracts;
+using Identity.Contracts.Enumerations;
 
 namespace Account.Domain.Aggregates.UserAggregate;
 

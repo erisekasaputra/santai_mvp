@@ -113,18 +113,8 @@
   },
   {
     "ContainingType": "Identity.API.Controllers.AuthController",
-    "Method": "GetResource",
-    "RelativePath": "api/v1/Auth/register/business",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Identity.API.Controllers.AuthController",
     "Method": "CreateIdentity",
-    "RelativePath": "api/v1/Auth/register/user",
+    "RelativePath": "api/v1/Auth/register",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
@@ -135,6 +125,16 @@
         "IsRequired": true
       }
     ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Identity.API.Controllers.AuthController",
+    "Method": "GetResource",
+    "RelativePath": "api/v1/Auth/register/business",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
     "ReturnTypes": []
   },
   {

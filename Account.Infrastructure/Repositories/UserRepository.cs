@@ -1,8 +1,8 @@
 ﻿using Account.Domain.Aggregates.UserAggregate;
-using Account.Domain.Enumerations; 
+using Account.Domain.Enumerations;
 using Microsoft.EntityFrameworkCore;
 using LinqKit;
-using Identity.Contracts;
+using Identity.Contracts.Enumerations;
 
 namespace Account.Infrastructure.Repositories;
 

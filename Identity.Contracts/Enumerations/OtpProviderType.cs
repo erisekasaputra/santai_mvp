@@ -1,17 +1,17 @@
-﻿namespace Identity.Contracts;
+﻿namespace Identity.Contracts.Enumerations;
 
 public enum OtpProviderType
-{ 
+{
     Sms,
     Whatsapp,
     Email
 }
 
 public static class AllowedOtpProviderType
-{ 
+{
     public static List<OtpProviderType> GetAll
     {
-        get 
+        get
         {
             return [OtpProviderType.Sms, OtpProviderType.Whatsapp];
         }

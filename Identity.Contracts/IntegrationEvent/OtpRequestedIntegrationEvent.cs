@@ -1,4 +1,6 @@
-﻿namespace Identity.Contracts;
+﻿using Identity.Contracts.Enumerations;
+
+namespace Identity.Contracts;
 
 public class OtpRequestedIntegrationEvent
 {
@@ -11,5 +13,5 @@ public class OtpRequestedIntegrationEvent
         PhoneNumber = phoneNumber;
         Token = token;
         Provider = provider;    
-    }
+    }  
 }

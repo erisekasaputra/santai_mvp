@@ -747,76 +747,12 @@
   },
   {
     "ContainingType": "Account.API.API.BusinessUserApi",
-    "Method": "GetDeviceIdByStaffId",
-    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/device-id",
-    "HttpMethod": "GET",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "businessUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "staffId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Account.API.API.BusinessUserApi",
-    "Method": "SetDeviceIdByStaffId",
-    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/device-id",
-    "HttpMethod": "PATCH",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "businessUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "staffId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Account.API.API.BusinessUserApi",
     "Method": "ForceSetDeviceIdByStaffId",
-    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/device-id/force-set",
+    "RelativePath": "api/v1/users/business/staffs/{staffId}/device-id/force-set",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
     "Parameters": [
-      {
-        "Name": "businessUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
       {
         "Name": "staffId",
         "Type": "System.Guid",
@@ -839,19 +775,52 @@
   {
     "ContainingType": "Account.API.API.BusinessUserApi",
     "Method": "ResetDeviceIdByStaffId",
-    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/device-id/reset",
+    "RelativePath": "api/v1/users/business/staffs/{staffId}/device-id/reset",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "businessUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
         "Name": "staffId",
         "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.BusinessUserApi",
+    "Method": "GetDeviceIdByStaffId",
+    "RelativePath": "api/v1/users/business/staffs/device-id",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.BusinessUserApi",
+    "Method": "SetDeviceIdByStaffId",
+    "RelativePath": "api/v1/users/business/staffs/device-id",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
         "IsRequired": true
       }
     ],
@@ -866,22 +835,11 @@
   {
     "ContainingType": "Account.API.API.BusinessUserApi",
     "Method": "GetEmailByStaffId",
-    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/email",
+    "RelativePath": "api/v1/users/business/staffs/email",
     "HttpMethod": "GET",
     "IsController": false,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "businessUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "staffId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "System.Void",
@@ -893,21 +851,11 @@
   {
     "ContainingType": "Account.API.API.BusinessUserApi",
     "Method": "SetStaffEmailByStaffId",
-    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/email",
+    "RelativePath": "api/v1/users/business/staffs/email",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
     "Parameters": [
-      {
-        "Name": "businessUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "staffId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
       {
         "Name": "request",
         "Type": "Account.API.Applications.Dtos.RequestDtos.EmailRequestDto",
@@ -925,22 +873,11 @@
   {
     "ContainingType": "Account.API.API.BusinessUserApi",
     "Method": "ConfirmStaffEmailByStaffId",
-    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/email/confirm",
+    "RelativePath": "api/v1/users/business/staffs/email/confirm",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "businessUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "staffId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "System.Void",
@@ -952,22 +889,11 @@
   {
     "ContainingType": "Account.API.API.BusinessUserApi",
     "Method": "GetPhoneNumberByStaffId",
-    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/phone-number",
+    "RelativePath": "api/v1/users/business/staffs/phone-number",
     "HttpMethod": "GET",
     "IsController": false,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "businessUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "staffId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "System.Void",
@@ -979,21 +905,11 @@
   {
     "ContainingType": "Account.API.API.BusinessUserApi",
     "Method": "SetStaffPhoneNumberByStaffId",
-    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/phone-number",
+    "RelativePath": "api/v1/users/business/staffs/phone-number",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
     "Parameters": [
-      {
-        "Name": "businessUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "staffId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
       {
         "Name": "request",
         "Type": "Account.API.Applications.Dtos.RequestDtos.PhoneNumberRequestDto",
@@ -1011,22 +927,11 @@
   {
     "ContainingType": "Account.API.API.BusinessUserApi",
     "Method": "ConfirmStaffPhoneNumberByStaffId",
-    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/phone-number/confirm",
+    "RelativePath": "api/v1/users/business/staffs/phone-number/confirm",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "businessUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "staffId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "System.Void",
@@ -1038,22 +943,11 @@
   {
     "ContainingType": "Account.API.API.BusinessUserApi",
     "Method": "GetTimeZoneByStaffId",
-    "RelativePath": "api/v1/users/business/{businessUserId}/staffs/{staffId}/time-zone",
+    "RelativePath": "api/v1/users/business/staffs/time-zone",
     "HttpMethod": "GET",
     "IsController": false,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "businessUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "staffId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "System.Void",
@@ -1113,15 +1007,15 @@
   },
   {
     "ContainingType": "Account.API.API.MechanicUserApi",
-    "Method": "GetMechanicUserById",
-    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}",
-    "HttpMethod": "GET",
+    "Method": "UpdateMechanicUserByUserId",
+    "RelativePath": "api/v1/users/mechanic/",
+    "HttpMethod": "PUT",
     "IsController": false,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "mechanicUserId",
-        "Type": "System.Guid",
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.UpdateMechanicRequestDto",
         "IsRequired": true
       }
     ],
@@ -1135,20 +1029,15 @@
   },
   {
     "ContainingType": "Account.API.API.MechanicUserApi",
-    "Method": "UpdateMechanicUserByUserId",
+    "Method": "GetMechanicUserById",
     "RelativePath": "api/v1/users/mechanic/{mechanicUserId}",
-    "HttpMethod": "PUT",
+    "HttpMethod": "GET",
     "IsController": false,
     "Order": 0,
     "Parameters": [
       {
         "Name": "mechanicUserId",
         "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Account.API.Applications.Dtos.RequestDtos.UpdateMechanicRequestDto",
         "IsRequired": true
       }
     ],
@@ -1204,33 +1093,6 @@
         "Name": "PageSize",
         "Type": "System.Int32",
         "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Account.API.API.MechanicUserApi",
-    "Method": "SetDeviceIdByUserId",
-    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/device-id",
-    "HttpMethod": "PATCH",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "mechanicUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
-        "IsRequired": true
       }
     ],
     "ReturnTypes": [
@@ -1314,33 +1176,6 @@
   },
   {
     "ContainingType": "Account.API.API.MechanicUserApi",
-    "Method": "SetDrivingLicenseByUserId",
-    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/driving-license",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "mechanicUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Account.API.Applications.Dtos.RequestDtos.DrivingLicenseRequestDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Account.API.API.MechanicUserApi",
     "Method": "ConfirmDrivingLicenseByUserId",
     "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/driving-license/{drivingLicenseId}/confirm",
     "HttpMethod": "PATCH",
@@ -1404,33 +1239,6 @@
       {
         "Name": "mechanicUserId",
         "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Account.API.API.MechanicUserApi",
-    "Method": "SetNationalIdentityByUserId",
-    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/national-identity",
-    "HttpMethod": "POST",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "mechanicUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Account.API.Applications.Dtos.RequestDtos.NationalIdentityRequestDto",
         "IsRequired": true
       }
     ],
@@ -1546,6 +1354,72 @@
     ]
   },
   {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "SetDeviceIdByUserId",
+    "RelativePath": "api/v1/users/mechanic/device-id",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "SetDrivingLicenseByUserId",
+    "RelativePath": "api/v1/users/mechanic/driving-license",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.DrivingLicenseRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "SetNationalIdentityByUserId",
+    "RelativePath": "api/v1/users/mechanic/national-identity",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.NationalIdentityRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "Account.API.API.RegularUserApi",
     "Method": "GetPaginatedRegularUser",
     "RelativePath": "api/v1/users/regular/",
@@ -1596,15 +1470,15 @@
   },
   {
     "ContainingType": "Account.API.API.RegularUserApi",
-    "Method": "GetRegularUserByUserId",
-    "RelativePath": "api/v1/users/regular/{regularUserId}",
-    "HttpMethod": "GET",
+    "Method": "UpdateRegularUserByUserId",
+    "RelativePath": "api/v1/users/regular/",
+    "HttpMethod": "PUT",
     "IsController": false,
     "Order": 0,
     "Parameters": [
       {
-        "Name": "regularUserId",
-        "Type": "System.Guid",
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.UpdateRegularUserRequestDto",
         "IsRequired": true
       }
     ],
@@ -1618,20 +1492,15 @@
   },
   {
     "ContainingType": "Account.API.API.RegularUserApi",
-    "Method": "UpdateRegularUserByUserId",
+    "Method": "GetRegularUserByUserId",
     "RelativePath": "api/v1/users/regular/{regularUserId}",
-    "HttpMethod": "PUT",
+    "HttpMethod": "GET",
     "IsController": false,
     "Order": 0,
     "Parameters": [
       {
         "Name": "regularUserId",
         "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Account.API.Applications.Dtos.RequestDtos.UpdateRegularUserRequestDto",
         "IsRequired": true
       }
     ],
@@ -1668,16 +1537,11 @@
   {
     "ContainingType": "Account.API.API.RegularUserApi",
     "Method": "SetDeviceIdByUserId",
-    "RelativePath": "api/v1/users/regular/{regularUserId}/device-id",
+    "RelativePath": "api/v1/users/regular/device-id",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
     "Parameters": [
-      {
-        "Name": "regularUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
       {
         "Name": "request",
         "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
@@ -1695,16 +1559,11 @@
   {
     "ContainingType": "Account.API.API.RegularUserApi",
     "Method": "ForceSetDeviceIdByUserId",
-    "RelativePath": "api/v1/users/regular/{regularUserId}/device-id/force-set",
+    "RelativePath": "api/v1/users/regular/device-id/force-set",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
     "Parameters": [
-      {
-        "Name": "regularUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
       {
         "Name": "request",
         "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
@@ -1722,17 +1581,11 @@
   {
     "ContainingType": "Account.API.API.RegularUserApi",
     "Method": "ResetDeviceIdByUserId",
-    "RelativePath": "api/v1/users/regular/{regularUserId}/device-id/reset",
+    "RelativePath": "api/v1/users/regular/device-id/reset",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
-    "Parameters": [
-      {
-        "Name": "regularUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
+    "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "System.Void",

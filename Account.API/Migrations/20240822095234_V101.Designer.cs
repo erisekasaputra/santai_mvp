@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Account.API.Migrations
 {
     [DbContext(typeof(AccountDbContext))]
-    [Migration("20240814173731_V5")]
-    partial class V5
+    [Migration("20240822095234_V101")]
+    partial class V101
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -151,6 +151,9 @@ namespace Account.API.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("BaseUserId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("Color")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -252,6 +255,8 @@ namespace Account.API.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BaseUserId");
+
                     b.HasIndex("HashedChassisNumber")
                         .IsUnique();
 
@@ -262,8 +267,6 @@ namespace Account.API.Migrations
                         .IsUnique();
 
                     b.HasIndex("StaffId");
-
-                    b.HasIndex("UserId");
 
                     b.ToTable("Fleets");
                 });
@@ -399,6 +402,89 @@ namespace Account.API.Migrations
                     b.ToTable("ReferredPrograms");
                 });
 
+            modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.BaseUser", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AccountStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("EncryptedEmail")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("EncryptedPhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("HashedEmail")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("HashedPhoneNumber")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<bool>("IsEmailVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPhoneNumberVerified")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("NewEncryptedEmail")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("NewEncryptedPhoneNumber")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("NewHashedEmail")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("NewHashedPhoneNumber")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("TimeZoneId")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
+
+                    b.Property<DateTime>("UpdatedAtUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserType")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("nvarchar(13)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("HashedEmail")
+                        .IsUnique();
+
+                    b.HasIndex("HashedPhoneNumber")
+                        .IsUnique();
+
+                    b.ToTable("BaseUsers");
+
+                    b.HasDiscriminator<string>("UserType").HasValue("BaseUser");
+
+                    b.UseTphMappingStrategy();
+                });
+
             modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.Staff", b =>
                 {
                     b.Property<Guid>("Id")
@@ -438,9 +524,6 @@ namespace Account.API.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<Guid>("IdentityId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<bool>("IsEmailVerified")
                         .HasColumnType("bit");
 
@@ -473,11 +556,6 @@ namespace Account.API.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("BusinessUserId");
@@ -488,107 +566,7 @@ namespace Account.API.Migrations
                     b.HasIndex("HashedPhoneNumber")
                         .IsUnique();
 
-                    b.HasIndex("IdentityId")
-                        .IsUnique();
-
-                    b.HasIndex("Username")
-                        .IsUnique();
-
                     b.ToTable("Staffs");
-                });
-
-            modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("AccountStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime>("CreatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("EncryptedEmail")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("EncryptedPhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("HashedEmail")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("HashedPhoneNumber")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<Guid>("IdentityId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool>("IsEmailVerified")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsPhoneNumberVerified")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("NewEncryptedEmail")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("NewEncryptedPhoneNumber")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("NewHashedEmail")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("NewHashedPhoneNumber")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("TimeZoneId")
-                        .IsRequired()
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
-
-                    b.Property<DateTime>("UpdatedAtUtc")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("UserType")
-                        .IsRequired()
-                        .HasMaxLength(13)
-                        .HasColumnType("nvarchar(13)");
-
-                    b.Property<string>("Username")
-                        .IsRequired()
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("HashedEmail")
-                        .IsUnique();
-
-                    b.HasIndex("HashedPhoneNumber")
-                        .IsUnique();
-
-                    b.HasIndex("Username")
-                        .IsUnique();
-
-                    b.ToTable("Users");
-
-                    b.HasDiscriminator<string>("UserType").HasValue("User");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.InboxState", b =>
@@ -765,7 +743,7 @@ namespace Account.API.Migrations
 
             modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.BusinessUser", b =>
                 {
-                    b.HasBaseType("Account.Domain.Aggregates.UserAggregate.User");
+                    b.HasBaseType("Account.Domain.Aggregates.UserAggregate.BaseUser");
 
                     b.Property<string>("BusinessName")
                         .IsRequired()
@@ -802,7 +780,7 @@ namespace Account.API.Migrations
 
             modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.MechanicUser", b =>
                 {
-                    b.HasBaseType("Account.Domain.Aggregates.UserAggregate.User");
+                    b.HasBaseType("Account.Domain.Aggregates.UserAggregate.BaseUser");
 
                     b.Property<string>("DeviceId")
                         .HasMaxLength(255)
@@ -814,22 +792,22 @@ namespace Account.API.Migrations
                     b.Property<decimal>("Rating")
                         .HasColumnType("decimal(5, 2)");
 
-                    b.ToTable("Users", t =>
-                        {
-                            t.Property("DeviceId")
-                                .HasColumnName("MechanicUser_DeviceId");
-                        });
-
                     b.HasDiscriminator().HasValue("MechanicUser");
                 });
 
             modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.RegularUser", b =>
                 {
-                    b.HasBaseType("Account.Domain.Aggregates.UserAggregate.User");
+                    b.HasBaseType("Account.Domain.Aggregates.UserAggregate.BaseUser");
 
                     b.Property<string>("DeviceId")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
+
+                    b.ToTable("BaseUsers", t =>
+                        {
+                            t.Property("DeviceId")
+                                .HasColumnName("RegularUser_DeviceId");
+                        });
 
                     b.HasDiscriminator().HasValue("RegularUser");
                 });
@@ -869,15 +847,14 @@ namespace Account.API.Migrations
 
             modelBuilder.Entity("Account.Domain.Aggregates.FleetAggregate.Fleet", b =>
                 {
+                    b.HasOne("Account.Domain.Aggregates.UserAggregate.BaseUser", "BaseUser")
+                        .WithMany("Fleets")
+                        .HasForeignKey("BaseUserId");
+
                     b.HasOne("Account.Domain.Aggregates.UserAggregate.Staff", "Staff")
                         .WithMany("Fleets")
                         .HasForeignKey("StaffId")
                         .OnDelete(DeleteBehavior.SetNull);
-
-                    b.HasOne("Account.Domain.Aggregates.UserAggregate.User", "User")
-                        .WithMany("Fleets")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction);
 
                     b.OwnsOne("Account.Domain.Aggregates.FleetAggregate.Owner", "Owner", b1 =>
                         {
@@ -902,23 +879,23 @@ namespace Account.API.Migrations
                                 .HasForeignKey("FleetId");
                         });
 
+                    b.Navigation("BaseUser");
+
                     b.Navigation("Owner")
                         .IsRequired();
 
                     b.Navigation("Staff");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Account.Domain.Aggregates.LoyaltyAggregate.LoyaltyProgram", b =>
                 {
-                    b.HasOne("Account.Domain.Aggregates.UserAggregate.User", "User")
+                    b.HasOne("Account.Domain.Aggregates.UserAggregate.BaseUser", "BaseUser")
                         .WithOne("LoyaltyProgram")
                         .HasForeignKey("Account.Domain.Aggregates.LoyaltyAggregate.LoyaltyProgram", "LoyaltyUserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("BaseUser");
                 });
 
             modelBuilder.Entity("Account.Domain.Aggregates.NationalIdentityAggregate.NationalIdentity", b =>
@@ -934,24 +911,76 @@ namespace Account.API.Migrations
 
             modelBuilder.Entity("Account.Domain.Aggregates.ReferralAggregate.ReferralProgram", b =>
                 {
-                    b.HasOne("Account.Domain.Aggregates.UserAggregate.User", "User")
+                    b.HasOne("Account.Domain.Aggregates.UserAggregate.BaseUser", "BaseUser")
                         .WithOne("ReferralProgram")
                         .HasForeignKey("Account.Domain.Aggregates.ReferralAggregate.ReferralProgram", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("BaseUser");
                 });
 
             modelBuilder.Entity("Account.Domain.Aggregates.ReferredAggregate.ReferredProgram", b =>
                 {
-                    b.HasOne("Account.Domain.Aggregates.UserAggregate.User", "User")
+                    b.HasOne("Account.Domain.Aggregates.UserAggregate.BaseUser", "BaseUser")
                         .WithMany("ReferredPrograms")
                         .HasForeignKey("ReferrerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("User");
+                    b.Navigation("BaseUser");
+                });
+
+            modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.BaseUser", b =>
+                {
+                    b.OwnsOne("Account.Domain.ValueObjects.Address", "Address", b1 =>
+                        {
+                            b1.Property<Guid>("BaseUserId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("City")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
+
+                            b1.Property<string>("Country")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
+
+                            b1.Property<string>("EncryptedAddressLine1")
+                                .IsRequired()
+                                .HasMaxLength(255)
+                                .HasColumnType("nvarchar(255)");
+
+                            b1.Property<string>("EncryptedAddressLine2")
+                                .HasMaxLength(255)
+                                .HasColumnType("nvarchar(255)");
+
+                            b1.Property<string>("EncryptedAddressLine3")
+                                .HasMaxLength(255)
+                                .HasColumnType("nvarchar(255)");
+
+                            b1.Property<string>("PostalCode")
+                                .IsRequired()
+                                .HasMaxLength(20)
+                                .HasColumnType("nvarchar(20)");
+
+                            b1.Property<string>("State")
+                                .IsRequired()
+                                .HasMaxLength(50)
+                                .HasColumnType("nvarchar(50)");
+
+                            b1.HasKey("BaseUserId");
+
+                            b1.ToTable("BaseUsers");
+
+                            b1.WithOwner()
+                                .HasForeignKey("BaseUserId");
+                        });
+
+                    b.Navigation("Address")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.Staff", b =>
@@ -1014,58 +1043,6 @@ namespace Account.API.Migrations
                     b.Navigation("BusinessUser");
                 });
 
-            modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.User", b =>
-                {
-                    b.OwnsOne("Account.Domain.ValueObjects.Address", "Address", b1 =>
-                        {
-                            b1.Property<Guid>("UserId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("City")
-                                .IsRequired()
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
-
-                            b1.Property<string>("Country")
-                                .IsRequired()
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
-
-                            b1.Property<string>("EncryptedAddressLine1")
-                                .IsRequired()
-                                .HasMaxLength(255)
-                                .HasColumnType("nvarchar(255)");
-
-                            b1.Property<string>("EncryptedAddressLine2")
-                                .HasMaxLength(255)
-                                .HasColumnType("nvarchar(255)");
-
-                            b1.Property<string>("EncryptedAddressLine3")
-                                .HasMaxLength(255)
-                                .HasColumnType("nvarchar(255)");
-
-                            b1.Property<string>("PostalCode")
-                                .IsRequired()
-                                .HasMaxLength(20)
-                                .HasColumnType("nvarchar(20)");
-
-                            b1.Property<string>("State")
-                                .IsRequired()
-                                .HasMaxLength(50)
-                                .HasColumnType("nvarchar(50)");
-
-                            b1.HasKey("UserId");
-
-                            b1.ToTable("Users");
-
-                            b1.WithOwner()
-                                .HasForeignKey("UserId");
-                        });
-
-                    b.Navigation("Address")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.MechanicUser", b =>
                 {
                     b.OwnsOne("Account.Domain.ValueObjects.PersonalInfo", "PersonalInfo", b1 =>
@@ -1107,7 +1084,7 @@ namespace Account.API.Migrations
 
                             b1.HasKey("MechanicUserId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("BaseUsers");
 
                             b1.WithOwner()
                                 .HasForeignKey("MechanicUserId");
@@ -1158,7 +1135,7 @@ namespace Account.API.Migrations
 
                             b1.HasKey("RegularUserId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("BaseUsers");
 
                             b1.WithOwner()
                                 .HasForeignKey("RegularUserId");
@@ -1168,12 +1145,7 @@ namespace Account.API.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.Staff", b =>
-                {
-                    b.Navigation("Fleets");
-                });
-
-            modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.User", b =>
+            modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.BaseUser", b =>
                 {
                     b.Navigation("Fleets");
 
@@ -1183,6 +1155,11 @@ namespace Account.API.Migrations
                     b.Navigation("ReferralProgram");
 
                     b.Navigation("ReferredPrograms");
+                });
+
+            modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.Staff", b =>
+                {
+                    b.Navigation("Fleets");
                 });
 
             modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.BusinessUser", b =>

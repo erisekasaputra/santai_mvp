@@ -1,7 +1,9 @@
 using FluentValidation;
 using FluentValidation.AspNetCore;
+using Identity.API;
 using Identity.API.Abstraction;
 using Identity.API.Configs;
+using Identity.API.Consumers;
 using Identity.API.Domain.Entities;
 using Identity.API.Infrastructure;
 using Identity.API.Middleware;
@@ -43,11 +45,11 @@ builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
-builder.Services.AddValidatorsFromAssemblyContaining<Program>();
+builder.Services.AddValidatorsFromAssemblyContaining<IIdentityMarkerInterface>();
 
 builder.Services.AddMediatR(configure =>
 {  
-    configure.RegisterServicesFromAssemblyContaining<Program>();
+    configure.RegisterServicesFromAssemblyContaining<IIdentityMarkerInterface>();
 });
 
 builder.Services.AddRateLimiter(options =>
@@ -66,16 +68,14 @@ builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection(JwtConfig
 builder.Services.Configure<GoogleConfig>(builder.Configuration.GetSection(GoogleConfig.SectionName));
 builder.Services.Configure<DatabaseConfig>(builder.Configuration.GetSection(DatabaseConfig.SectionName));
 builder.Services.Configure<CacheConfig>(builder.Configuration.GetSection(CacheConfig.SectionName));
-builder.Services.Configure<OtpConfig>(builder.Configuration.GetSection(OtpConfig.SectionName));
-builder.Services.Configure<FacebookConfig>(builder.Configuration.GetSection(FacebookConfig.SectionName));
+builder.Services.Configure<OtpConfig>(builder.Configuration.GetSection(OtpConfig.SectionName)); 
 builder.Services.Configure<IdempotencyConfig>(builder.Configuration.GetSection(IdempotencyConfig.SectionName));
 
 var jwtOption = builder.Configuration.GetSection(JwtConfig.SectionName).Get<JwtConfig>();
 var googleOptions = builder.Configuration.GetSection(GoogleConfig.SectionName).Get<GoogleConfig>(); 
 var databaseOptions = builder.Configuration.GetSection(DatabaseConfig.SectionName).Get<DatabaseConfig>(); 
 var eventBusOptions = builder.Configuration.GetSection(EventBusConfig.SectionName).Get<EventBusConfig>();
-var otpOptions = builder.Configuration.GetSection(OtpConfig.SectionName).Get<OtpConfig>();
-var facebookOptions = builder.Configuration.GetSection(FacebookConfig.SectionName).Get<FacebookConfig>();
+var otpOptions = builder.Configuration.GetSection(OtpConfig.SectionName).Get<OtpConfig>(); 
 
 builder.Services.AddSingleton<ActionMethodService>();
 
@@ -107,6 +107,8 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddRouting();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer(); 
+builder.Services.AddSwaggerGen();
+
 
 builder.Logging.ClearProviders();
 builder.Logging.AddConsole();
@@ -119,13 +121,29 @@ builder.Services.Configure<DataProtectionTokenProviderOptions>(options =>
     options.TokenLifespan = TimeSpan.FromSeconds(otpOptions.LockTimeSecond);
 });
 
+builder.Services.AddDbContext<ApplicationDbContext>(options =>
+{
+    var databaseOption = databaseOptions ?? throw new Exception("Database connection string can not be empty");
+
+    options.UseSqlServer(databaseOption.ConnectionString, optionBuilder =>
+    {
+        optionBuilder.CommandTimeout(databaseOption.CommandTimeout);
+        optionBuilder.EnableRetryOnFailure(
+            maxRetryCount: databaseOption.MaxRetryCount,
+            maxRetryDelay: TimeSpan.FromSeconds(databaseOption.MaxRetryDelay),
+            errorNumbersToAdd: null);
+    });
+});
+
 
 builder.Services.AddMassTransit(x =>
 {
     if (eventBusOptions is null)
     {
         throw new Exception("Event bus options has not been set");
-    } 
+    }
+
+    x.AddConsumersFromNamespaceContaining<BusinessUserCreatedIntegrationEventConsumer>();
 
     x.AddEntityFrameworkOutbox<ApplicationDbContext>(o =>
     {
@@ -133,7 +151,7 @@ builder.Services.AddMassTransit(x =>
         o.QueryDelay = TimeSpan.FromSeconds(eventBusOptions.QueryDelay);
         o.QueryTimeout = TimeSpan.FromSeconds(eventBusOptions.QueryTimeout);
         o.QueryMessageLimit = eventBusOptions.QueryMessageLimit;
-        o.UseSqlServer(); 
+        o.UseSqlServer();
         o.UseBusOutbox();
     });
 
@@ -155,23 +173,44 @@ builder.Services.AddMassTransit(x =>
             timeoutCfg.Timeout = TimeSpan.FromSeconds(eventBusOptions.MessageTimeout);
         });
 
-        configure.ConfigureEndpoints(context); 
-    }); 
-});
+        configure.ConfigureEndpoints(context);
 
-builder.Services.AddDbContext<ApplicationDbContext>(options =>
-{
-    var databaseOption = databaseOptions ?? throw new Exception("Database connection string can not be empty"); 
-    
-    options.UseSqlServer(databaseOption.ConnectionString, optionBuilder =>
-    {
-        optionBuilder.CommandTimeout(databaseOption.CommandTimeout);
-        optionBuilder.EnableRetryOnFailure(
-            maxRetryCount: databaseOption.MaxRetryCount, 
-            maxRetryDelay: TimeSpan.FromSeconds(databaseOption.MaxRetryDelay), 
-            errorNumbersToAdd: null);
+
+
+
+
+        var consumers = new (string QueueName, Type ConsumerType)[]
+        {
+            ("business-user-created-integration-event-queue", typeof(BusinessUserCreatedIntegrationEventConsumer))
+        };
+
+        foreach (var (queueName, consumerType) in consumers)
+        {
+            configure.ReceiveEndpoint(queueName, receiveBuilder =>
+            {
+                ConfigureEndPoint(receiveBuilder, queueName, consumerType);
+            });
+        }
+
+        void ConfigureEndPoint(IReceiveEndpointConfigurator receiveBuilder, string queueName, Type consumerType)
+        {
+            receiveBuilder.ConfigureConsumer(context, consumerType);
+
+            receiveBuilder.UseMessageRetry(retry =>
+            {
+                retry.Interval(eventBusOptions.MessageRetryInterval, TimeSpan.FromSeconds(eventBusOptions.MessageRetryTimespan));
+            });
+
+            receiveBuilder.UseDelayedRedelivery(redelivery =>
+            {
+                redelivery.Intervals(TimeSpan.FromSeconds(eventBusOptions.DelayedRedeliveryInternval));
+            });
+
+            receiveBuilder.UseRateLimit(1000, TimeSpan.FromSeconds(2));
+        }
     });
 });
+
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
 {  
@@ -179,8 +218,8 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.SignIn.RequireConfirmedEmail = false;
     options.SignIn.RequireConfirmedAccount = false;
 
-    options.User.RequireUniqueEmail = false;
-
+    options.User.RequireUniqueEmail = true;
+ 
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
@@ -241,9 +280,9 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("RegularUserPolicy", policy => 
+    options.AddPolicy("AdministratorPolicy", policy => 
     {
-        policy.RequireRole("RegularUser"); 
+        policy.RequireRole("Administrator"); 
     });
 }); 
 
@@ -261,6 +300,10 @@ app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseRateLimiter();
 
 app.UseHsts();
+
+app.UseSwagger();
+
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

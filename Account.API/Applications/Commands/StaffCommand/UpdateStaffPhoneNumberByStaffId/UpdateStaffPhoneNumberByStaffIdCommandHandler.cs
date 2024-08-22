@@ -22,7 +22,7 @@ public class UpdateStaffPhoneNumberByStaffIdCommandHandler(
     {
         try
         {
-            var staff = await _unitOfWork.Staffs.GetByBusinessUserIdAndStaffIdAsync(request.BusinessUserId, request.StaffId);
+            var staff = await _unitOfWork.Staffs.GetByIdAsync(request.StaffId);
             
             if (staff is null)
             {

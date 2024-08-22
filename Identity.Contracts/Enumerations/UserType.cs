@@ -1,4 +1,4 @@
-﻿namespace Identity.Contracts; 
+﻿namespace Identity.Contracts.Enumerations;
 
 public enum UserType
 {
@@ -8,7 +8,7 @@ public enum UserType
     MechanicUser = 4,
     StaffUser = 5
 }
- 
+
 public static class GetUserTypeConfiguration
 {
     public static IList<UserType> AllowedUserRegisterBySelf

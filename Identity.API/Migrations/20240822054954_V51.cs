@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace Account.API.Migrations
+namespace Identity.API.Migrations
 {
     /// <inheritdoc />
-    public partial class V5 : Migration
+    public partial class V51 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

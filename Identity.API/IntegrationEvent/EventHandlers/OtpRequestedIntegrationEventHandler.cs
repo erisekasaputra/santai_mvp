@@ -19,6 +19,9 @@ public class OtpRequestedIntegrationEventHandler : INotificationHandler<OtpReque
     {
         var integrationEvent = new OtpRequestedIntegrationEvent(notification.Address, notification.Token, notification.Provider);
 
+        Console.ForegroundColor = ConsoleColor.Blue;
+        Console.WriteLine(notification.Token); 
+
         await _publisher.Publish(integrationEvent, cancellationToken);  
     }
 }

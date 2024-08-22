@@ -23,9 +23,9 @@ using Account.API.Extensions;
 using Account.API.Infrastructures;
 using Account.API.Options;
 using Account.API.SeedWork;
-using Account.API.Services; 
+using Account.API.Services;
 using FluentValidation;
-using Identity.Contracts;
+using Identity.Contracts.Enumerations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 namespace Account.API.API;
@@ -120,7 +120,7 @@ public static class MechanicUserApi
 
             if (userClaim.CurrentUserType != UserType.Administrator && mechanicUserId != userClaim.Sub)
             {
-                return TypedResults.BadRequest();
+                return TypedResults.Forbid();
             }
 
             var result = await service.Mediator.Send(new GetNationalIdentityByMechanicUserIdQuery(mechanicUserId));
@@ -149,7 +149,7 @@ public static class MechanicUserApi
 
             if (userClaim.CurrentUserType != UserType.Administrator && mechanicUserId != userClaim.Sub)
             {
-                return TypedResults.BadRequest();
+                return TypedResults.Forbid();
             }
 
             var result = await service.Mediator.Send(new GetDrivingLicenseByMechanicUserIdQuery(mechanicUserId));
@@ -179,7 +179,7 @@ public static class MechanicUserApi
 
             if (userClaim.CurrentUserType != UserType.Administrator && mechanicUserId != userClaim.Sub)
             {
-                return TypedResults.BadRequest();
+                return TypedResults.Forbid();
             } 
 
 
@@ -373,7 +373,7 @@ public static class MechanicUserApi
 
             if (userClaim.CurrentUserType != UserType.Administrator && mechanicUserId != userClaim.Sub)
             {
-                return TypedResults.BadRequest();
+                return TypedResults.Forbid();
             }
 
             var validation = await validator.ValidateAsync(request);
@@ -411,7 +411,7 @@ public static class MechanicUserApi
 
             if (userClaim.CurrentUserType != UserType.Administrator && mechanicUserId != userClaim.Sub)
             {
-                return TypedResults.BadRequest();
+                return TypedResults.Forbid();
             }
              
 

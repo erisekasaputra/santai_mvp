@@ -24,7 +24,7 @@ public class GetDeviceIdByStaffIdQueryHandler(
     {
         try
         {
-            var deviceId = await _unitOfWork.Staffs.GetDeviceIdByUserAndByIdAsync(request.UserId, request.StaffId);
+            var deviceId = await _unitOfWork.Staffs.GetDeviceIdByIdAsync(request.StaffId);
 
             if (deviceId is null)
             {

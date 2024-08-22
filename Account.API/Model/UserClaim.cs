@@ -1,4 +1,4 @@
-﻿using Identity.Contracts;
+﻿using Identity.Contracts.Enumerations;
 
 namespace Account.API.Model;
 
