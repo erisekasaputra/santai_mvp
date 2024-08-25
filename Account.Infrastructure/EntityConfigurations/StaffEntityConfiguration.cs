@@ -29,57 +29,39 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
 
         e.Property(p => p.HashedPhoneNumber)
             .HasMaxLength(255)
-            .IsRequired()
-            .HasConversion(
-                v => v.Trim(),
-                v => v.Trim()); 
+            .IsRequired(false);
 
         e.Property(p => p.EncryptedPhoneNumber)
             .HasMaxLength(255)
-            .IsRequired()
-            .HasConversion(
-                v => v.Trim(),
-                v => v.Trim());
+            .IsRequired(false);
 
         e.Property(p => p.NewHashedPhoneNumber)
             .HasMaxLength(255)
-            .IsRequired(false)
-            .HasConversion(
-                v => v == null ? null : v.Trim(),
-                v => v == null ? null : v.Trim());
+            .IsRequired(false);
 
         e.Property(p => p.NewEncryptedPhoneNumber)
             .HasMaxLength(255)
-            .IsRequired(false)
-            .HasConversion(
-                v => v == null ? null : v.Trim(),
-                v => v == null ? null : v.Trim());
+            .IsRequired(false);
 
         e.Property(p => p.IsPhoneNumberVerified)
             .IsRequired();
 
         e.Property(p => p.HashedEmail)
             .HasMaxLength(255)
-            .IsRequired();
+            .IsRequired(false);
 
         e.Property(p => p.EncryptedEmail)
-         .HasMaxLength(255)
-         .IsRequired();
+             .HasMaxLength(255)
+             .IsRequired(false);
 
         e.Property(p => p.NewHashedEmail)
             .HasMaxLength(255)
-            .IsRequired(false)
-            .HasConversion(
-                v => v == null ? null : v,
-                v => v == null ? null : v);
+            .IsRequired(false);
 
 
         e.Property(p => p.NewEncryptedEmail)
             .HasMaxLength(255)
-            .IsRequired(false)
-            .HasConversion(
-                v => v == null ? null : v,
-                v => v == null ? null : v);
+            .IsRequired(false);
 
         e.Property(p => p.IsEmailVerified)
             .IsRequired();

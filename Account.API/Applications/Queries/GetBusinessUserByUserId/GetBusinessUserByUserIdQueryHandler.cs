@@ -30,7 +30,7 @@ public class GetBusinessUserByUserIdQueryHandler(
             }
 
             var decryptedEmail = await DecryptNullableAsync(user.EncryptedEmail);
-            var decryptedPhoneNumber = await DecryptAsync(user.EncryptedPhoneNumber);
+            var decryptedPhoneNumber = await DecryptNullableAsync(user.EncryptedPhoneNumber);
             var decryptedContactPerson = await DecryptAsync(user.EncryptedContactPerson);
             var decryptedTaxId = await DecryptNullableAsync(user.EncryptedTaxId);
             var decryptedAddressLine1 = await DecryptAsync(user.Address.EncryptedAddressLine1);
@@ -78,7 +78,7 @@ public class GetBusinessUserByUserIdQueryHandler(
             {
                 foreach (var staff in user.Staffs)
                 {
-                    var decryptedStaffPhoneNumber = await DecryptAsync(staff.EncryptedPhoneNumber); 
+                    var decryptedStaffPhoneNumber = await DecryptNullableAsync(staff.EncryptedPhoneNumber); 
                     var decryptedStaffEmail = await DecryptNullableAsync(staff.EncryptedEmail);
 
                     var decryptedStaffAddressLine1 = await DecryptAsync(staff.Address.EncryptedAddressLine1); 

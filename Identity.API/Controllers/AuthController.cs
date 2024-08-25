@@ -109,236 +109,196 @@ public class AuthController : ControllerBase
     [HttpPost("otp")]
     public async Task<IResult> SendOtp([FromBody] SendOtpRequest request)
     {
-        var strategy = _dbContext.Database.CreateExecutionStrategy();
-
-        return await strategy.ExecuteAsync<IResult>(async () =>
+        using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        try
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
-            try
-            {   
 
-                if (!AllowedOtpProviderType.GetAll.Contains(request.OtpProviderType))
-                {
-                    return TypedResults.BadRequest(Result.Failure($"Unknown otp provider type '{request.OtpProviderType}'", 400));
-                }
-
-                var requestOtp = await _otpService.GetRequestOtpAsync(request.OtpRequestId);
-
-                if (requestOtp is null)
-                {
-                    return TypedResults.Unauthorized();
-                }
-
-                if (!_otpService.IsGenerateRequestOtpValidAsync(requestOtp, request.OtpRequestToken))
-                {
-                    return TypedResults.Unauthorized();
-                }
-
-                var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == requestOtp.PhoneNumber); 
-
-                if (user is null)
-                {
-                    return TypedResults.Unauthorized();
-                }
-
-                var claims = await _userManager.GetClaimsAsync(user);
-
-                if (claims is null)
-                {
-                    _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
-                }
-
-                var roles = await _userManager.GetRolesAsync(user);
-
-                if (roles is null)
-                {
-                    _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
-                }
-
-                string phoneNumber = user.PhoneNumber 
-                    ?? throw new ArgumentNullException(user.PhoneNumber, $"User {user.Id} is registered but the phone number is empty");
-
-                if (requestOtp.OtpRequestFor == OtpRequestFor.VerifyPhoneNumber)
-                {
-                    if (user.PhoneNumberConfirmed)
-                    {
-                        return TypedResults.NoContent();
-                    }
-
-                    var otpToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber!);
-
-                    await _mediator.Publish(new OtpRequestedDomainEvent(user.PhoneNumber!, otpToken, request.OtpProviderType));
-
-                    await _dbContext.SaveChangesAsync();
-
-                    await transaction.CommitAsync();
-
-                    return TypedResults.Accepted(_verifyPhoneActionName, new 
-                    {
-                        User = new
-                        {
-                            Sub = user.Id,
-                            Username = user.UserName,
-                            PhoneNumber = phoneNumber,
-                            Email = user.Email,
-                            UserType = user.UserType,
-                            BusinessCode = user.BusinessCode
-                        },
-                        
-                        Next = new
-                        {
-                            Link = Url.Action(_verifyPhoneActionName, _controllerName),
-                            Action = _verifyPhoneActionName,
-                            Method = _actionMethodService.GetHttpMethodByActionName(_verifyPhoneActionName, _controllerName)
-                        }
-                    }); 
-                }
-
-                if (requestOtp.OtpRequestFor == OtpRequestFor.VerifyLogin)
-                { 
-                    (var otp, var remainingTime) = await _otpService.GenerateOtpAsync(user.PhoneNumber!);
-                    if (otp is not null)
-                    {
-                        await _mediator.Publish(new OtpRequestedDomainEvent(user.PhoneNumber!, otp, request.OtpProviderType));
-                    }
-
-                    await _dbContext.SaveChangesAsync();
-
-                    await transaction.CommitAsync();
-
-                    return TypedResults.Ok(new
-                    {
-                        User = new
-                        {
-                            Sub = user.Id,
-                            Username = user.UserName,
-                            PhoneNumber = user.PhoneNumber!,
-                            Email = user.Email, 
-                            UserType = user.UserType,
-                            BusinessCode = user.BusinessCode
-                        },
-                        Next = new
-                        {
-                            Link = Url.Action(_verifyLoginActionName, _controllerName),
-                            Action = _verifyLoginActionName,
-                            Method = _actionMethodService.GetHttpMethodByActionName(_verifyLoginActionName, _controllerName)
-                        }
-                    });
-                }
-
-                _logger.LogError("Otp request for {0} not found", requestOtp.OtpRequestFor.ToString());
-                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
-            }
-            catch (ArgumentNullException ex)
+            if (!AllowedOtpProviderType.GetAll.Contains(request.OtpProviderType))
             {
-                _logger.LogError(ex, ex.InnerException?.Message);
+                return TypedResults.BadRequest(Result.Failure($"Unknown otp provider type '{request.OtpProviderType}'", 400));
+            }
+
+            var requestOtp = await _otpService.GetRequestOtpAsync(request.OtpRequestId);
+
+            if (requestOtp is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            if (!_otpService.IsGenerateRequestOtpValidAsync(requestOtp, request.OtpRequestToken))
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == requestOtp.PhoneNumber);
+
+            if (user is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            var claims = await _userManager.GetClaimsAsync(user);
+
+            if (claims is null)
+            {
+                _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
                 return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
             }
-            catch (Exception ex)
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles is null)
             {
-                _logger.LogError(ex.Message, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+                _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
+                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
             }
-        });    
+
+            string phoneNumber = user.PhoneNumber
+                ?? throw new ArgumentNullException(user.PhoneNumber, $"User {user.Id} is registered but the phone number is empty");
+
+            if (requestOtp.OtpRequestFor == OtpRequestFor.VerifyPhoneNumber)
+            {
+                if (user.PhoneNumberConfirmed)
+                {
+                    return TypedResults.NoContent();
+                }
+
+                var otpToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber!);
+
+                await _mediator.Publish(new OtpRequestedDomainEvent(user.PhoneNumber!, otpToken, request.OtpProviderType));
+
+                await _dbContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                return TypedResults.Accepted(_verifyPhoneActionName, new
+                {
+                    User = new
+                    {
+                        Sub = user.Id,
+                        Username = user.UserName,
+                        PhoneNumber = phoneNumber,
+                        Email = user.Email,
+                        UserType = user.UserType,
+                        BusinessCode = user.BusinessCode
+                    },
+
+                    Next = new
+                    {
+                        Link = Url.Action(_verifyPhoneActionName, _controllerName),
+                        Action = _verifyPhoneActionName,
+                        Method = _actionMethodService.GetHttpMethodByActionName(_verifyPhoneActionName, _controllerName)
+                    }
+                });
+            }
+
+            if (requestOtp.OtpRequestFor == OtpRequestFor.VerifyLogin)
+            {
+                (var otp, var remainingTime) = await _otpService.GenerateOtpAsync(user.PhoneNumber!);
+                if (otp is not null)
+                {
+                    await _mediator.Publish(new OtpRequestedDomainEvent(user.PhoneNumber!, otp, request.OtpProviderType));
+                }
+
+                await _dbContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                return TypedResults.Ok(new
+                {
+                    User = new
+                    {
+                        Sub = user.Id,
+                        Username = user.UserName,
+                        PhoneNumber = user.PhoneNumber!,
+                        Email = user.Email,
+                        UserType = user.UserType,
+                        BusinessCode = user.BusinessCode
+                    },
+                    Next = new
+                    {
+                        Link = Url.Action(_verifyLoginActionName, _controllerName),
+                        Action = _verifyLoginActionName,
+                        Method = _actionMethodService.GetHttpMethodByActionName(_verifyLoginActionName, _controllerName)
+                    }
+                });
+            }
+
+            _logger.LogError("Otp request for {0} not found", requestOtp.OtpRequestFor.ToString());
+            return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+        }
+        catch (ArgumentNullException ex)
+        {
+            _logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+        }
     } 
 
 
     [HttpPost("google-signin/callback")]
     public async Task<IResult> GoogleSignInCallBack([FromBody] GoogleSignInRequest request)
     {
-        var strategy = _dbContext.Database.CreateExecutionStrategy();
-
-        return await strategy.ExecuteAsync<IResult>(async () =>
+        using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        try
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
-            try
-            {  
-                var payload = await _googleTokenValidator.ValidateAsync(request.GoogleIdToken);
+            var payload = await _googleTokenValidator.ValidateAsync(request.GoogleIdToken);
 
-                if (payload is null)
+            if (payload is null)
+            {
+                return TypedResults.BadRequest(
+                    Result.Failure("Google ID token is invalid", 400));
+            }
+
+
+            // if user does not exist in the database, then give the CreateIdentity instruction for Regular and Mechanic user only, otherwise need to register from administrator
+            var user = await _userManager.FindByEmailAsync(payload.Email);
+
+            // if user does not exist in the database, then give the CreateIdentity instruction
+            if (user is null)
+            {
+                return TypedResults.NotFound(
+                new
                 {
-                    return TypedResults.BadRequest(
-                        Result.Failure("Google ID token is invalid", 400));
-                }
-
-
-                // if user does not exist in the database, then give the CreateIdentity instruction for Regular and Mechanic user only, otherwise need to register from administrator
-                var user = await _userManager.FindByEmailAsync(payload.Email);
-                 
-                // if user does not exist in the database, then give the CreateIdentity instruction
-                if (user is null)
-                { 
-                    return TypedResults.NotFound(
-                    new
+                    GoogleIdToken = request.GoogleIdToken,
+                    Next = new
                     {
-                        GoogleIdToken = request.GoogleIdToken,
-                        Next = new
-                        { 
-                            Link = Url.Action(_createIdentityActionName, _controllerName),
-                            Action = _createIdentityActionName,
-                            Method = _actionMethodService.GetHttpMethodByActionName(_createIdentityActionName, _controllerName),
-                            AllowedUserTypes = GetUserTypeConfiguration.AllowedUserRegisterBySelf 
-                        }
-                    });
-                } 
+                        Link = Url.Action(_createIdentityActionName, _controllerName),
+                        Action = _createIdentityActionName,
+                        Method = _actionMethodService.GetHttpMethodByActionName(_createIdentityActionName, _controllerName),
+                        AllowedUserTypes = GetUserTypeConfiguration.AllowedUserRegisterBySelf
+                    }
+                });
+            }
 
-                var claims = await _userManager.GetClaimsAsync(user);
-                if (claims is null || !claims.Any())
-                {
-                    _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
-                }
+            var claims = await _userManager.GetClaimsAsync(user);
+            if (claims is null || !claims.Any())
+            {
+                _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
+                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+            }
 
-                var roles = await _userManager.GetRolesAsync(user);
+            var roles = await _userManager.GetRolesAsync(user);
 
-                if (roles is null || !roles.Any())
-                {
-                    _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
-                }
+            if (roles is null || !roles.Any())
+            {
+                _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
+                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+            }
 
 
-                var phoneNumber = user.PhoneNumber ?? throw new ArgumentNullException(user.PhoneNumber, $"User {user.Id} with email {user.Email} is registered but the phone number is empty");
+            var phoneNumber = user.PhoneNumber ?? throw new ArgumentNullException(user.PhoneNumber, $"User {user.Id} with email {user.Email} is registered but the phone number is empty");
 
-                if (!user.PhoneNumberConfirmed)
-                {  
-                    (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyPhoneNumber);
-
-                    await _dbContext.SaveChangesAsync(); 
-                    await transaction.CommitAsync();  
-
-                    return TypedResults.Accepted(_sendOtpActionName, new
-                    {
-                        User = new
-                        {
-                            Sub = user.Id,
-                            Username = user.UserName,
-                            PhoneNumber = phoneNumber,
-                            Email = user.Email,
-                            UserType = user.UserType,
-                            BusinessCode = user.BusinessCode
-                        },
-                        Next = new
-                        {
-                            Link = Url.Action(_sendOtpActionName, _controllerName),
-                            Action = _sendOtpActionName,
-                            Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
-                            OtpRequestToken = otpRequestToken,
-                            OtpRequestId = requestId,
-                            OtpProviderTypes = AllowedOtpProviderType.GetAll 
-                        }
-                    }); 
-                }
-                 
-
-
-                (Guid newRequestId, string newOtpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyLogin);
+            if (!user.PhoneNumberConfirmed)
+            {
+                (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyPhoneNumber);
 
                 await _dbContext.SaveChangesAsync();
-
-                await transaction.CommitAsync(); 
+                await transaction.CommitAsync();
 
                 return TypedResults.Accepted(_sendOtpActionName, new
                 {
@@ -352,27 +312,57 @@ public class AuthController : ControllerBase
                         BusinessCode = user.BusinessCode
                     },
                     Next = new
-                    { 
+                    {
                         Link = Url.Action(_sendOtpActionName, _controllerName),
                         Action = _sendOtpActionName,
                         Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
-                        OtpRequestToken = newOtpRequestToken,
-                        OtpRequestId = newRequestId,
+                        OtpRequestToken = otpRequestToken,
+                        OtpRequestId = requestId,
                         OtpProviderTypes = AllowedOtpProviderType.GetAll
                     }
-                }); 
+                });
             }
-            catch (ArgumentNullException ex)
+
+
+
+            (Guid newRequestId, string newOtpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyLogin);
+
+            await _dbContext.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+
+            return TypedResults.Accepted(_sendOtpActionName, new
             {
-                _logger.LogError(ex, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500)); 
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
-            }
-        }); 
+                User = new
+                {
+                    Sub = user.Id,
+                    Username = user.UserName,
+                    PhoneNumber = phoneNumber,
+                    Email = user.Email,
+                    UserType = user.UserType,
+                    BusinessCode = user.BusinessCode
+                },
+                Next = new
+                {
+                    Link = Url.Action(_sendOtpActionName, _controllerName),
+                    Action = _sendOtpActionName,
+                    Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                    OtpRequestToken = newOtpRequestToken,
+                    OtpRequestId = newRequestId,
+                    OtpProviderTypes = AllowedOtpProviderType.GetAll
+                }
+            });
+        }
+        catch (ArgumentNullException ex)
+        {
+            _logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+        }
     }  
 
 
@@ -381,144 +371,140 @@ public class AuthController : ControllerBase
         [FromBody] LoginStaffRequest request,
         [FromServices] IValidator<LoginStaffRequest> validator)
     {
-        var strategy = _dbContext.Database.CreateExecutionStrategy();
+        using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
-        return await strategy.ExecuteAsync<IResult>(async () =>
+        try
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var validation = await validator.ValidateAsync(request);
 
-            try
+            if (!validation.IsValid)
             {
-                var validation = await validator.ValidateAsync(request);
-
-                if (!validation.IsValid)
-                {
-                    return TypedResults.BadRequest(validation.Errors);
-                }
+                return TypedResults.BadRequest(validation.Errors);
+            }
 
 
-                var phoneNumber = request.PhoneNumber.NormalizePhoneNumber(request.RegionCode);
+            var phoneNumber = request.PhoneNumber.NormalizePhoneNumber(request.RegionCode);
 
-                if (phoneNumber is null)
-                {
-                    return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 400)
-                            .WithError(new("PhoneNumber", "Phone number format is invalid")));
-                }
+            if (phoneNumber is null)
+            {
+                return TypedResults.BadRequest(
+                    Result.Failure("An error has occured", 400)
+                        .WithError(new("PhoneNumber", "Phone number format is invalid")));
+            }
 
-                var user = await _dbContext.Users.Where(x => x.PhoneNumber == phoneNumber).FirstOrDefaultAsync();
+            var user = await _dbContext.Users.Where(x => x.PhoneNumber == phoneNumber).FirstOrDefaultAsync();
 
-                if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
-                {
-                    return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 400)
-                            .WithError(new("Credentials", "We couldn't find your account")));
-                }
+            if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
+            {
+                return TypedResults.BadRequest(
+                    Result.Failure("An error has occured", 400)
+                        .WithError(new("Credentials", "We couldn't find your account")));
+            }
 
-                if (user.UserType is not UserType.StaffUser || string.IsNullOrWhiteSpace(request.BusinessCode))
-                {
-                    return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 400)
-                            .WithError(new("Credentials", "We couldn't find your account")));
-                }
+            if (user.UserType is not UserType.StaffUser || string.IsNullOrWhiteSpace(request.BusinessCode))
+            {
+                return TypedResults.BadRequest(
+                    Result.Failure("An error has occured", 400)
+                        .WithError(new("Credentials", "We couldn't find your account")));
+            }
 
-                if (!request.BusinessCode.Equals(user.BusinessCode, StringComparison.CurrentCultureIgnoreCase))
-                {
-                    return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 400)
-                            .WithError(new("Credentials", "We couldn't find your account")));
-                }
+            if (!request.BusinessCode.Equals(user.BusinessCode, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return TypedResults.BadRequest(
+                    Result.Failure("An error has occured", 400)
+                        .WithError(new("Credentials", "We couldn't find your account")));
+            }
 
-                if (!user.PhoneNumberConfirmed)
-                {
-                    (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyPhoneNumber);
-
-                    await _dbContext.SaveChangesAsync();
-
-                    await transaction.CommitAsync(); 
-
-                    return TypedResults.Accepted(_sendOtpActionName, new
-                    {
-                        User = new
-                        {
-                            Sub = user.Id,
-                            Username = user.UserName,
-                            PhoneNumber = user.PhoneNumber,
-                            Email = user.Email,
-                            BusinessCode = user.BusinessCode,
-                            UserTypes = user.UserType
-                        },
-                        Next = new
-                        { 
-                            Link = Url.Action(_sendOtpActionName, _controllerName),
-                            Action = _sendOtpActionName,
-                            Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
-                            OtpRequestToken = otpRequestToken,
-                            OtpRequestId = requestId,
-                            OtpProviderTypes = AllowedOtpProviderType.GetAll
-                        }
-                    });
-                }
-
-
-                var signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false);
-
-                if (!signInResult.Succeeded)
-                {
-                    return TypedResults.Unauthorized();
-                }
-                 
-
-                var claims = await _userManager.GetClaimsAsync(user);
-
-                if (claims is null || !claims.Any())
-                {
-                    _logger.LogWarning("User claims are missing or invalid for user ID: {UserId}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
-                }
-
-                var roles = await _userManager.GetRolesAsync(user);
-
-                if (roles is null || !roles.Any())
-                {
-                    _logger.LogWarning("User roles are missing or invalid for user ID: {UserId}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
-                }
-
-
-                (Guid newRequestId, string newOtpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyLogin);
+            if (!user.PhoneNumberConfirmed)
+            {
+                (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyPhoneNumber);
 
                 await _dbContext.SaveChangesAsync();
 
-                await transaction.CommitAsync(); 
+                await transaction.CommitAsync();
 
                 return TypedResults.Accepted(_sendOtpActionName, new
                 {
                     User = new
                     {
-                        Sub = user.Id,  
+                        Sub = user.Id,
                         Username = user.UserName,
-                        PhoneNumber = phoneNumber,
+                        PhoneNumber = user.PhoneNumber,
                         Email = user.Email,
-                        UserType = user.UserType,
-                        BusinessCode = user.BusinessCode
+                        BusinessCode = user.BusinessCode,
+                        UserTypes = user.UserType
                     },
-                    Next = new {
+                    Next = new
+                    {
                         Link = Url.Action(_sendOtpActionName, _controllerName),
                         Action = _sendOtpActionName,
                         Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
-                        OtpRequestToken = newOtpRequestToken,
-                        OtpRequestId = newRequestId,
+                        OtpRequestToken = otpRequestToken,
+                        OtpRequestId = requestId,
                         OtpProviderTypes = AllowedOtpProviderType.GetAll
                     }
                 });
             }
-            catch (Exception ex)
+
+
+            var signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false);
+
+            if (!signInResult.Succeeded)
             {
-                _logger.LogError(ex, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+                return TypedResults.Unauthorized();
             }
-        });
+
+
+            var claims = await _userManager.GetClaimsAsync(user);
+
+            if (claims is null || !claims.Any())
+            {
+                _logger.LogWarning("User claims are missing or invalid for user ID: {UserId}", user.Id);
+                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles is null || !roles.Any())
+            {
+                _logger.LogWarning("User roles are missing or invalid for user ID: {UserId}", user.Id);
+                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+            }
+
+
+            (Guid newRequestId, string newOtpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyLogin);
+
+            await _dbContext.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+
+            return TypedResults.Accepted(_sendOtpActionName, new
+            {
+                User = new
+                {
+                    Sub = user.Id,
+                    Username = user.UserName,
+                    PhoneNumber = phoneNumber,
+                    Email = user.Email,
+                    UserType = user.UserType,
+                    BusinessCode = user.BusinessCode
+                },
+                Next = new
+                {
+                    Link = Url.Action(_sendOtpActionName, _controllerName),
+                    Action = _sendOtpActionName,
+                    Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                    OtpRequestToken = newOtpRequestToken,
+                    OtpRequestId = newRequestId,
+                    OtpProviderTypes = AllowedOtpProviderType.GetAll
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+        }
     }
 
 
@@ -527,340 +513,331 @@ public class AuthController : ControllerBase
         [FromBody] LoginUserRequest request,
         [FromServices] IValidator<LoginUserRequest> validator)
     {
-        var strategy = _dbContext.Database.CreateExecutionStrategy();
+        using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
-        return await strategy.ExecuteAsync<IResult>(async () =>
+        try
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            var validation = await validator.ValidateAsync(request);
 
-            try
+            if (!validation.IsValid)
             {
-                var validation = await validator.ValidateAsync(request);
+                return TypedResults.BadRequest(validation.Errors);
+            }
 
-                if (!validation.IsValid)
+
+            var phoneNumber = request.PhoneNumber.NormalizePhoneNumber(request.RegionCode);
+
+            if (phoneNumber is null)
+            {
+                return TypedResults.BadRequest(
+                    Result.Failure("An error has occured", 400)
+                        .WithError(new("PhoneNumber", "Phone number format is invalid")));
+            }
+
+            var user = await _userManager.FindByNameAsync(phoneNumber);
+
+            if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
+            {
+                return TypedResults.BadRequest(
+                    Result.Failure("An error has occured", 400)
+                        .WithError(new("Credentials", "We couldn't find your account")));
+            }
+
+            if (user.UserType == UserType.StaffUser)
+            {
+                return TypedResults.Ok(new
                 {
-                    return TypedResults.BadRequest(validation.Errors);
-                }
-
-
-                var phoneNumber = request.PhoneNumber.NormalizePhoneNumber(request.RegionCode);
-
-                if (phoneNumber is null)
-                {
-                    return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 400)
-                            .WithError(new("PhoneNumber", "Phone number format is invalid")));
-                }
-
-                var user = await _userManager.FindByNameAsync(phoneNumber);
-
-                if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
-                {
-                    return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 400)
-                            .WithError(new("Credentials", "We couldn't find your account")));
-                }
-
-                if (user.UserType == UserType.StaffUser)
-                {
-                    return TypedResults.Ok(new
+                    Next = new
                     {
-                        Next = new
-                        {
-                            Link = Url.Action(_staffLoginActionName, _controllerName),
-                            Action = _staffLoginActionName,
-                            Method = _actionMethodService.GetHttpMethodByActionName(_staffLoginActionName, _controllerName)
-                        }
-                    });
-                }
-            
-
-                if (!user.PhoneNumberConfirmed)
-                {
-                    (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyPhoneNumber); 
-                     
-                    await _dbContext.SaveChangesAsync();
-
-                    await transaction.CommitAsync(); 
-
-                    return TypedResults.Accepted(_sendOtpActionName, new
-                    {
-                        User = new
-                        {
-                            Sub = user.Id,
-                            Username = user.UserName,
-                            PhoneNumber = user.PhoneNumber,
-                            Email = user.Email,
-                            UserType = user.UserType,
-                            BusinessCode = user.BusinessCode
-                        },
-                        Next = new {
-                            Link = Url.Action(_sendOtpActionName, _controllerName),
-                            Action = _sendOtpActionName,
-                            Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName), 
-                            OtpRequestToken = otpRequestToken,
-                            OtpRequestId = requestId,
-                            OtpProviderTypes = AllowedOtpProviderType.GetAll
-                        }
-                    });
-                }
+                        Link = Url.Action(_staffLoginActionName, _controllerName),
+                        Action = _staffLoginActionName,
+                        Method = _actionMethodService.GetHttpMethodByActionName(_staffLoginActionName, _controllerName)
+                    }
+                });
+            }
 
 
-                var signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false);
-
-                if (!signInResult.Succeeded)
-                {
-                    return TypedResults.Unauthorized();
-                }
-
-
-
-
-                var claims = await _userManager.GetClaimsAsync(user);
-
-                if (claims is null || !claims.Any())
-                {
-                    _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
-                }
-
-                var roles = await _userManager.GetRolesAsync(user);
-
-                if (roles is null || !roles.Any())
-                {
-                    _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
-                }
-
-
-
-                (Guid newRequestId, string newOtpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyLogin);
+            if (!user.PhoneNumberConfirmed)
+            {
+                (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyPhoneNumber);
 
                 await _dbContext.SaveChangesAsync();
 
-                await transaction.CommitAsync(); 
-                  
+                await transaction.CommitAsync();
+
                 return TypedResults.Accepted(_sendOtpActionName, new
                 {
                     User = new
                     {
                         Sub = user.Id,
                         Username = user.UserName,
-                        PhoneNumber = phoneNumber,
+                        PhoneNumber = user.PhoneNumber,
                         Email = user.Email,
                         UserType = user.UserType,
                         BusinessCode = user.BusinessCode
-                    }, 
-
+                    },
                     Next = new
                     {
                         Link = Url.Action(_sendOtpActionName, _controllerName),
                         Action = _sendOtpActionName,
                         Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
-                        OtpRequestToken = newOtpRequestToken,
-                        OtpRequestId = newRequestId,
+                        OtpRequestToken = otpRequestToken,
+                        OtpRequestId = requestId,
                         OtpProviderTypes = AllowedOtpProviderType.GetAll
                     }
                 });
             }
-            catch (Exception ex)
+
+
+            var signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false);
+
+            if (!signInResult.Succeeded)
             {
-                _logger.LogError(ex, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+                return TypedResults.Unauthorized();
             }
-        }); 
+
+
+
+
+            var claims = await _userManager.GetClaimsAsync(user);
+
+            if (claims is null || !claims.Any())
+            {
+                _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
+                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles is null || !roles.Any())
+            {
+                _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
+                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+            }
+
+
+
+            (Guid newRequestId, string newOtpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyLogin);
+
+            await _dbContext.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+
+            return TypedResults.Accepted(_sendOtpActionName, new
+            {
+                User = new
+                {
+                    Sub = user.Id,
+                    Username = user.UserName,
+                    PhoneNumber = phoneNumber,
+                    Email = user.Email,
+                    UserType = user.UserType,
+                    BusinessCode = user.BusinessCode
+                },
+
+                Next = new
+                {
+                    Link = Url.Action(_sendOtpActionName, _controllerName),
+                    Action = _sendOtpActionName,
+                    Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                    OtpRequestToken = newOtpRequestToken,
+                    OtpRequestId = newRequestId,
+                    OtpProviderTypes = AllowedOtpProviderType.GetAll
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+        }
     }
 
     [HttpPost("register")]
     [Idempotency(nameof(CreateIdentity))]
     public async Task<IResult> CreateIdentity([FromBody] RegisterUserRequest request)
     {
-        var strategy = _dbContext.Database.CreateExecutionStrategy();
-
-        return await strategy.ExecuteAsync<IResult>(async () =>
+        using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        try
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
-            try
+            if (!GetUserTypeConfiguration.AllowedUserRegisterBySelf.Contains(request.UserType))
             {
-                if (!GetUserTypeConfiguration.AllowedUserRegisterBySelf.Contains(request.UserType))
-                {
-                    return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 500)
-                            .WithError(new("UserType", $"Unknown user type {request.UserType}")));
-                } 
-
-                var phoneNumber = request.PhoneNumber.NormalizePhoneNumber(request.RegionCode);
-
-                if (phoneNumber is null)
-                {
-                    return TypedResults.BadRequest(
-                       Result.Failure("An error has occured", 400)
-                           .WithError(new("PhoneNumber", "Please provide valid phone number")));
-                }
-
-
-
-                GoogleJsonWebSignature.Payload? payload = null;
-
-                if (!string.IsNullOrWhiteSpace(request.GoogleIdToken))
-                {
-                    payload = await _googleTokenValidator.ValidateAsync(request.GoogleIdToken);
-
-                    var userByEmailClaim = await _userManager.FindByEmailAsync(payload.Email);
-
-                    if (userByEmailClaim is not null)
-                    {
-                        if (userByEmailClaim.PhoneNumber is null)
-                        {
-                            _logger.LogWarning("User with id {Id} has email but the phone number is empty", userByEmailClaim.Id);
-                            return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
-                        }
-                        
-
-                        var claims = await _userManager.GetClaimsAsync(userByEmailClaim);
-
-                        if (claims is null || !claims.Any())
-                        {
-                            _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", userByEmailClaim.Id);
-                            return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
-                        }
-
-                        var roles = await _userManager.GetRolesAsync(userByEmailClaim);
-
-                        if (roles is null || !roles.Any())
-                        {
-                            _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", userByEmailClaim.Id);
-                            return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
-                        }
-
-
-                        if (!userByEmailClaim.PhoneNumber.Equals(request.PhoneNumber))
-                        {
-                            return TypedResults.Conflict(Result.Failure($"Email address already used by another account.", 409));
-                        }
-
-                        if (!userByEmailClaim.PhoneNumberConfirmed)
-                        {
-                            (Guid newRequestId, string newOtpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyPhoneNumber);
-
-                            await _dbContext.SaveChangesAsync();
-                            await transaction.CommitAsync();  
-
-                            return TypedResults.Accepted(_sendOtpActionName, new
-                            {
-                                User = new
-                                {
-                                    Sub = userByEmailClaim.Id,
-                                    Username = userByEmailClaim.PhoneNumber,
-                                    PhoneNumber = userByEmailClaim.PhoneNumber,
-                                    Email = userByEmailClaim.Email,
-                                    UserType = userByEmailClaim.UserType,
-                                    BusinessCode = userByEmailClaim.BusinessCode
-                                },
-                                Next = new
-                                {
-                                    Link = Url.Action(_sendOtpActionName, _controllerName),
-                                    Action = _sendOtpActionName,
-                                    Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
-                                    OtpRequestToken = newOtpRequestToken,
-                                    OtpRequestId = newRequestId,
-                                    OtpProviderTypes = AllowedOtpProviderType.GetAll
-                                } 
-                            });
-                        }   
-
-                        return TypedResults.Conflict(Result.Failure("Email is already in use", 409));
-                    }
-                }
-
-                var user = await _userManager.FindByNameAsync(phoneNumber);
-
-                if (user != null)
-                {
-                    return TypedResults.Conflict(
-                        Result.Failure("An error has occurred", 409)
-                           .WithError(new("PhoneNumber", "Phone number is already in use")));
-                }
-
-                var newUser = new ApplicationUser
-                {
-                    PhoneNumber = phoneNumber,
-                    UserName = phoneNumber,
-                    Email = payload?.Email, 
-                    UserType = request.UserType
-                };
-
-                var addUserResult = await _userManager.CreateAsync(newUser, request.Password);
-
-                if (!addUserResult.Succeeded)
-                {
-                    var errors = addUserResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
-                    return TypedResults.InternalServerError(
-                       Result.Failure(Messages.InternalServerError, 500)
-                          .WithErrors(errors.ToList()));
-                }
-
-                if (payload?.Email is not null)
-                {
-                    await _mediator.Publish(new EmailAssignedToAUserDomainEvent(Guid.Parse(newUser.Id), payload.Email));
-
-                    var userInfoLogin = new UserLoginInfo("google", payload.Subject, "google");
-                    await _userManager.AddLoginAsync(newUser, userInfoLogin);
-                    newUser.EmailConfirmed = true;
-                    await _userManager.UpdateAsync(newUser);
-                }
-
-                var assignRoleResult = await _userManager.AddToRoleAsync(newUser, request.UserType.ToString());
-                if (!assignRoleResult.Succeeded)
-                {
-                    var errors = assignRoleResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
-                    return TypedResults.InternalServerError(
-                       Result.Failure(Messages.InternalServerError, 500)
-                          .WithErrors(errors.ToList()));
-                }
-
-                var addClaimsResult = await AddClaimsToDatabase(newUser);
-                if (!addClaimsResult.Succeeded)
-                {
-                    var errors = addClaimsResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
-                    return TypedResults.InternalServerError(
-                       Result.Failure(Messages.InternalServerError, 500)
-                          .WithErrors(errors.ToList()));
-                }
-
-                (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyPhoneNumber);
-
-                await _dbContext.SaveChangesAsync();
-                await transaction.CommitAsync();  
-
-                return TypedResults.Accepted(_sendOtpActionName, new
-                {
-                    User = new
-                    {
-                        Sub = newUser.Id,
-                        Username = newUser.UserName,
-                        PhoneNumber = newUser.PhoneNumber,
-                        Email = newUser.Email,
-                        UserType = newUser.UserType,
-                        BusinessCode = newUser.BusinessCode
-                    },
-                    Next = new
-                    {
-                        Link = Url.Action(_sendOtpActionName, _controllerName),
-                        Action = _sendOtpActionName,
-                        Method =  _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
-                        OtpRequestToken = otpRequestToken,
-                        OtpRequestId = requestId,
-                        OtpProviderTypes = AllowedOtpProviderType.GetAll
-                    } 
-                });
-            } 
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+                return TypedResults.BadRequest(
+                    Result.Failure("An error has occured", 500)
+                        .WithError(new("UserType", $"Unknown user type {request.UserType}")));
             }
-        }); 
+
+            var phoneNumber = request.PhoneNumber.NormalizePhoneNumber(request.RegionCode);
+
+            if (phoneNumber is null)
+            {
+                return TypedResults.BadRequest(
+                   Result.Failure("An error has occured", 400)
+                       .WithError(new("PhoneNumber", "Please provide valid phone number")));
+            }
+
+
+
+            GoogleJsonWebSignature.Payload? payload = null;
+
+            if (!string.IsNullOrWhiteSpace(request.GoogleIdToken))
+            {
+                payload = await _googleTokenValidator.ValidateAsync(request.GoogleIdToken);
+
+                var userByEmailClaim = await _userManager.FindByEmailAsync(payload.Email);
+
+                if (userByEmailClaim is not null)
+                {
+                    if (userByEmailClaim.PhoneNumber is null)
+                    {
+                        _logger.LogWarning("User with id {Id} has email but the phone number is empty", userByEmailClaim.Id);
+                        return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                    }
+
+
+                    var claims = await _userManager.GetClaimsAsync(userByEmailClaim);
+
+                    if (claims is null || !claims.Any())
+                    {
+                        _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", userByEmailClaim.Id);
+                        return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                    }
+
+                    var roles = await _userManager.GetRolesAsync(userByEmailClaim);
+
+                    if (roles is null || !roles.Any())
+                    {
+                        _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", userByEmailClaim.Id);
+                        return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                    }
+
+
+                    if (!userByEmailClaim.PhoneNumber.Equals(request.PhoneNumber))
+                    {
+                        return TypedResults.Conflict(Result.Failure($"Email address already used by another account.", 409));
+                    }
+
+                    if (!userByEmailClaim.PhoneNumberConfirmed)
+                    {
+                        (Guid newRequestId, string newOtpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyPhoneNumber);
+
+                        await _dbContext.SaveChangesAsync();
+                        await transaction.CommitAsync();
+
+                        return TypedResults.Accepted(_sendOtpActionName, new
+                        {
+                            User = new
+                            {
+                                Sub = userByEmailClaim.Id,
+                                Username = userByEmailClaim.PhoneNumber,
+                                PhoneNumber = userByEmailClaim.PhoneNumber,
+                                Email = userByEmailClaim.Email,
+                                UserType = userByEmailClaim.UserType,
+                                BusinessCode = userByEmailClaim.BusinessCode
+                            },
+                            Next = new
+                            {
+                                Link = Url.Action(_sendOtpActionName, _controllerName),
+                                Action = _sendOtpActionName,
+                                Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                                OtpRequestToken = newOtpRequestToken,
+                                OtpRequestId = newRequestId,
+                                OtpProviderTypes = AllowedOtpProviderType.GetAll
+                            }
+                        });
+                    }
+
+                    return TypedResults.Conflict(Result.Failure("Email is already in use", 409));
+                }
+            }
+
+            var user = await _userManager.FindByNameAsync(phoneNumber);
+
+            if (user != null)
+            {
+                return TypedResults.Conflict(
+                    Result.Failure("An error has occurred", 409)
+                       .WithError(new("PhoneNumber", "Phone number is already in use")));
+            }
+
+            var newUser = new ApplicationUser
+            {
+                PhoneNumber = phoneNumber,
+                UserName = phoneNumber,
+                Email = payload?.Email,
+                UserType = request.UserType
+            };
+
+            var addUserResult = await _userManager.CreateAsync(newUser, request.Password);
+
+            if (!addUserResult.Succeeded)
+            {
+                var errors = addUserResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
+                return TypedResults.InternalServerError(
+                   Result.Failure(Messages.InternalServerError, 500)
+                      .WithErrors(errors.ToList()));
+            }
+
+            if (payload?.Email is not null)
+            {
+                await _mediator.Publish(new EmailAssignedToAUserDomainEvent(Guid.Parse(newUser.Id), payload.Email));
+
+                var userInfoLogin = new UserLoginInfo("google", payload.Subject, "google");
+                await _userManager.AddLoginAsync(newUser, userInfoLogin);
+                newUser.EmailConfirmed = true;
+                await _userManager.UpdateAsync(newUser);
+            }
+
+            var assignRoleResult = await _userManager.AddToRoleAsync(newUser, request.UserType.ToString());
+            if (!assignRoleResult.Succeeded)
+            {
+                var errors = assignRoleResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
+                return TypedResults.InternalServerError(
+                   Result.Failure(Messages.InternalServerError, 500)
+                      .WithErrors(errors.ToList()));
+            }
+
+            var addClaimsResult = await AddClaimsToDatabase(newUser);
+            if (!addClaimsResult.Succeeded)
+            {
+                var errors = addClaimsResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
+                return TypedResults.InternalServerError(
+                   Result.Failure(Messages.InternalServerError, 500)
+                      .WithErrors(errors.ToList()));
+            }
+
+            (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, OtpRequestFor.VerifyPhoneNumber);
+
+            await _dbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            return TypedResults.Accepted(_sendOtpActionName, new
+            {
+                User = new
+                {
+                    Sub = newUser.Id,
+                    Username = newUser.UserName,
+                    PhoneNumber = newUser.PhoneNumber,
+                    Email = newUser.Email,
+                    UserType = newUser.UserType,
+                    BusinessCode = newUser.BusinessCode
+                },
+                Next = new
+                {
+                    Link = Url.Action(_sendOtpActionName, _controllerName),
+                    Action = _sendOtpActionName,
+                    Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                    OtpRequestToken = otpRequestToken,
+                    OtpRequestId = requestId,
+                    OtpProviderTypes = AllowedOtpProviderType.GetAll
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+        }
     }  
 
 
@@ -1029,89 +1006,84 @@ public class AuthController : ControllerBase
         [FromBody] VerifyLoginRequest request,
         IValidator<VerifyLoginRequest> validator)
     {
-        var strategy = _dbContext.Database.CreateExecutionStrategy();
-
-        return await strategy.ExecuteAsync<IResult>(async () =>
+        using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        try
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
-            try
+            var validation = await validator.ValidateAsync(request);
+
+            if (!validation.IsValid)
             {
-                var validation = await validator.ValidateAsync(request);
-
-                if (!validation.IsValid)
-                {
-                    return TypedResults.BadRequest(validation.Errors);
-                }
-
-                var isOtpValid = await _otpService.IsOtpValidAsync(request.PhoneNumber, request.Token);
-
-                if (!isOtpValid)
-                {
-                    return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 400)
-                            .WithError(new("Credentials", "OTP or phone number is invalid")));
-                }
-
-                var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber);
-
-                if (user is null)
-                {
-                    return TypedResults.Unauthorized();
-                }
-
-
-                var claims = await _userManager.GetClaimsAsync(user); 
-                
-                if (claims is null || !claims.Any())
-                {
-                    _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id); 
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
-                }
-
-                var roles = await _userManager.GetRolesAsync(user);
-
-                if (roles is null || !roles.Any())
-                {
-                    _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
-                }
-
-                var accessToken = _tokenService.GenerateAccessToken(new ClaimsIdentity(claims));
-
-                var refreshToken = await _tokenService.GenerateRefreshTokenAsync(user.Id);
-
-                await _otpService.RemoveOtpAsync(request.PhoneNumber);
-
-                string redirectTo = user.IsAccountRegistered ? _homePageActionName : _createAccountActionName;
-
-                await transaction.CommitAsync();
-
-                return TypedResults.Ok(
-                new
-                {
-                    AccessToken = accessToken,
-                    RefreshToken = refreshToken,
-                    User = new
-                    {
-                        Sub = user.Id,
-                        Username = user.UserName,
-                        PhoneNumber = user.PhoneNumber,
-                        Email = user.Email,
-                        UserType = user.UserType,
-                        BusinessCode = user.BusinessCode
-                    },
-                    Next = new
-                    {
-                        Action = redirectTo
-                    }
-                });
+                return TypedResults.BadRequest(validation.Errors);
             }
-            catch (Exception ex)
+
+            var isOtpValid = await _otpService.IsOtpValidAsync(request.PhoneNumber, request.Token);
+
+            if (!isOtpValid)
             {
-                _logger.LogError(ex.Message, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+                return TypedResults.BadRequest(
+                    Result.Failure("An error has occured", 400)
+                        .WithError(new("Credentials", "OTP or phone number is invalid")));
             }
-        });
+
+            var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber);
+
+            if (user is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+
+            var claims = await _userManager.GetClaimsAsync(user);
+
+            if (claims is null || !claims.Any())
+            {
+                _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
+                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+
+            if (roles is null || !roles.Any())
+            {
+                _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
+                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+            }
+
+            var accessToken = _tokenService.GenerateAccessToken(new ClaimsIdentity(claims));
+
+            var refreshToken = await _tokenService.GenerateRefreshTokenAsync(user.Id);
+
+            await _otpService.RemoveOtpAsync(request.PhoneNumber);
+
+            string redirectTo = user.IsAccountRegistered ? _homePageActionName : _createAccountActionName;
+
+            await transaction.CommitAsync();
+
+            return TypedResults.Ok(
+            new
+            {
+                AccessToken = accessToken,
+                RefreshToken = refreshToken,
+                User = new
+                {
+                    Sub = user.Id,
+                    Username = user.UserName,
+                    PhoneNumber = user.PhoneNumber,
+                    Email = user.Email,
+                    UserType = user.UserType,
+                    BusinessCode = user.BusinessCode
+                },
+                Next = new
+                {
+                    Action = redirectTo
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+        }
     }
 
 
@@ -1122,66 +1094,60 @@ public class AuthController : ControllerBase
         [FromBody] VerifyPhoneNumberRequest request,
         [FromServices] IValidator<VerifyPhoneNumberRequest> validator)
     {
-        var strategy = _dbContext.Database.CreateExecutionStrategy();
-
-        return await strategy.ExecuteAsync<IResult>(async () =>
+        var transaction = await _dbContext.Database.BeginTransactionAsync();
+        try
         {
-            var transaction = await _dbContext.Database.BeginTransactionAsync();
-            try
+            var validation = await validator.ValidateAsync(request);
+
+            if (!validation.IsValid)
             {
-                var validation = await validator.ValidateAsync(request);
+                return TypedResults.BadRequest(validation.Errors);
+            }
 
-                if (!validation.IsValid)
-                {
-                    return TypedResults.BadRequest(validation.Errors);
-                }
-
-                var user = await _userManager.FindByNameAsync(request.PhoneNumber);
+            var user = await _userManager.FindByNameAsync(request.PhoneNumber);
 
 
-                if (user is null)
-                {
-                    return TypedResults.Unauthorized();
-                }
+            if (user is null)
+            {
+                return TypedResults.Unauthorized();
+            }
 
-                if (string.IsNullOrWhiteSpace(user.PhoneNumber))
-                {
-                    _logger.LogWarning("User phone number is missing or invalid for user ID: {Id}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
-                }
+            if (string.IsNullOrWhiteSpace(user.PhoneNumber))
+            {
+                _logger.LogWarning("User phone number is missing or invalid for user ID: {Id}", user.Id);
+                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+            }
 
-                if (user.PhoneNumberConfirmed)
-                {
-                    return TypedResults.NoContent();
-                }
-
-
-                var changeResult = await _userManager.ChangePhoneNumberAsync(user, request.PhoneNumber, request.Token);
-
-                if (!changeResult.Succeeded)
-                {
-                    var errors = changeResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
-                    return TypedResults.InternalServerError(
-                       Result.Failure(Messages.InternalServerError, 500)
-                          .WithErrors(errors.ToList()));
-                }
-
-                await _mediator.Publish(new PhoneNumberConfirmedDomainEvent(Guid.Parse(user.Id), user.PhoneNumber));
-
-                await _dbContext.SaveChangesAsync();
-
-                await transaction.CommitAsync();
-
+            if (user.PhoneNumberConfirmed)
+            {
                 return TypedResults.NoContent();
             }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(
-                    Result.Failure(Messages.InternalServerError, 500));
-            } 
-        });
 
+
+            var changeResult = await _userManager.ChangePhoneNumberAsync(user, request.PhoneNumber, request.Token);
+
+            if (!changeResult.Succeeded)
+            {
+                var errors = changeResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
+                return TypedResults.InternalServerError(
+                   Result.Failure(Messages.InternalServerError, 500)
+                      .WithErrors(errors.ToList()));
+            }
+
+            await _mediator.Publish(new PhoneNumberConfirmedDomainEvent(Guid.Parse(user.Id), user.PhoneNumber));
+
+            await _dbContext.SaveChangesAsync();
+
+            await transaction.CommitAsync();
+
+            return TypedResults.NoContent();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(
+                Result.Failure(Messages.InternalServerError, 500));
+        } 
     }
 
 

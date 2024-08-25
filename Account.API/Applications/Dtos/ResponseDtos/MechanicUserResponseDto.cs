@@ -3,7 +3,7 @@
 public record MechanicUserResponseDto(
     Guid Id, 
     string? Email,
-    string PhoneNumber,
+    string? PhoneNumber,
     string TimeZoneId,
     LoyaltyProgramResponseDto LoyaltyProgram,
     AddressResponseDto Address,

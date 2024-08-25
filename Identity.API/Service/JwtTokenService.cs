@@ -28,12 +28,13 @@ public class JwtTokenService : ITokenService
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = claims,
+            Subject = claims,  
             Expires = DateTime.UtcNow.AddHours(_jwtConfigs.CurrentValue.TotalSecondsAccessTokenLifetime),
             Issuer = _jwtConfigs.CurrentValue.Issuer,
             Audience = _jwtConfigs.CurrentValue.Audience,
             SigningCredentials = credentials,
-            IssuedAt = DateTime.UtcNow
+            IssuedAt = DateTime.UtcNow,
+            NotBefore = DateTime.UtcNow
         }; 
 
         var tokenHandler = new JwtSecurityTokenHandler();

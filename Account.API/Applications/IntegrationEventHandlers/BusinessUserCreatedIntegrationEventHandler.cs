@@ -15,45 +15,52 @@ public class BusinessUserCreatedIntegrationEventHandler(
 {
     private readonly IPublishEndpoint _publisheEndpoint = publishEndpoint;
     private readonly IKeyManagementService _kmsClient = kmsClient;
-
+     
     public async Task Handle(BusinessUserCreatedDomainEvent notification, CancellationToken cancellationToken)
     {
-        var entity = notification.BusinessUser;
-
-        var staffEvents = new List<StaffEvent>();
-
-        foreach (Staff b in entity?.Staffs ?? [])
+        try
         {
-            var businessLicense = new StaffEvent(
-                b.Id,
-                await DecryptAsync(b.EncryptedPhoneNumber),
-                await DecryptNullableAsync(b.EncryptedEmail),
-                b.Name,
-                b.TimeZoneId);
+            var entity = notification.BusinessUser;
 
-            staffEvents.Add(businessLicense);
+            var staffEvents = new List<StaffEvent>();
+
+            foreach (Staff b in entity?.Staffs ?? [])
+            {
+                var businessLicense = new StaffEvent(
+                    b.Id,
+                    await DecryptNullableAsync(b.EncryptedPhoneNumber),
+                    await DecryptNullableAsync(b.EncryptedEmail),
+                    b.Name,
+                    b.TimeZoneId);
+
+                staffEvents.Add(businessLicense);
+            }
+
+            if (entity is null)
+            {
+                return;
+            }
+
+            var @event = new BusinessUserCreatedIntegrationEvent(
+                    entity.Id,
+                    await DecryptNullableAsync(entity.EncryptedEmail),
+                    await DecryptNullableAsync(entity.EncryptedPhoneNumber),
+                    entity.TimeZoneId,
+                    entity.Code,
+                    entity.BusinessName,
+                    entity.EncryptedContactPerson,
+                    entity.EncryptedTaxId,
+                    entity.WebsiteUrl,
+                    entity.Description,
+                    staffEvents
+                );
+
+            await _publisheEndpoint.Publish(@event, cancellationToken); 
         }
-
-        if (entity is null)
+        catch (Exception ex)
         {
-            return;
+            Console.WriteLine(ex.Message);  
         }
-
-        var @event = new BusinessUserCreatedIntegrationEvent(
-                entity.Id,
-                await DecryptNullableAsync(entity.EncryptedEmail),
-                await DecryptAsync(entity.EncryptedPhoneNumber),
-                entity.TimeZoneId,
-                entity.Code,
-                entity.BusinessName,
-                entity.EncryptedContactPerson,
-                entity.EncryptedTaxId,
-                entity.WebsiteUrl,
-                entity.Description,
-                staffEvents
-            );
-
-        await _publisheEndpoint.Publish(@event, cancellationToken);
     }
 
 

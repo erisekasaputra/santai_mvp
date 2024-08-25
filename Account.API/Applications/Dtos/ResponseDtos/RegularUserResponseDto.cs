@@ -3,7 +3,7 @@
 public record RegularUserResponseDto( 
     Guid Id, 
     string? Email,
-    string PhoneNumber,
+    string? PhoneNumber,
     string TimeZoneId,
     AddressResponseDto Address,
     PersonalInfoResponseDto PersonalInfo);

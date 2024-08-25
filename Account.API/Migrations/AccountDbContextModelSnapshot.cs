@@ -413,22 +413,18 @@ namespace Account.API.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<string>("EncryptedEmail")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("EncryptedPhoneNumber")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("HashedEmail")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("HashedPhoneNumber")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -470,10 +466,12 @@ namespace Account.API.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("HashedEmail")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[HashedEmail] IS NOT NULL");
 
                     b.HasIndex("HashedPhoneNumber")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[HashedPhoneNumber] IS NOT NULL");
 
                     b.ToTable("BaseUsers");
 
@@ -502,22 +500,18 @@ namespace Account.API.Migrations
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("EncryptedEmail")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("EncryptedPhoneNumber")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("HashedEmail")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("HashedPhoneNumber")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -558,10 +552,12 @@ namespace Account.API.Migrations
                     b.HasIndex("BusinessUserId");
 
                     b.HasIndex("HashedEmail")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[HashedEmail] IS NOT NULL");
 
                     b.HasIndex("HashedPhoneNumber")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[HashedPhoneNumber] IS NOT NULL");
 
                     b.ToTable("Staffs");
                 });

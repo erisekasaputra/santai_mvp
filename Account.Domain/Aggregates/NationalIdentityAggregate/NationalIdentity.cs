@@ -28,7 +28,8 @@ public class NationalIdentity : Entity, IAggregateRoot
         EncryptedIdentityNumber = encryptedIdentityNumber ?? throw new ArgumentNullException(nameof(encryptedIdentityNumber));
         FrontSideImageUrl = frontSideImageUrl ?? throw new ArgumentNullException(nameof(frontSideImageUrl));
         BackSideImageUrl = backSideImageUrl ?? throw new ArgumentNullException(nameof(backSideImageUrl));
-        VerificationStatus = VerificationState.Waiting; 
+        VerificationStatus = VerificationState.Waiting;
+        MechanicUser = null!;
     }
 
     public void VerifyDocument()

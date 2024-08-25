@@ -17,7 +17,10 @@ public class BusinessUser : BaseUser
     public ICollection<Staff>? Staffs { get; private set; }
     public ICollection<BusinessLicense>? BusinessLicenses { get; private set; } 
     protected BusinessUser() : base()
-    { 
+    {
+        Code = null!;
+        BusinessName = null!;
+        EncryptedContactPerson = null!;
     }
 
     public BusinessUser(  

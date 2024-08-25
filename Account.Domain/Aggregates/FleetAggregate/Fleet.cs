@@ -64,7 +64,18 @@ public class Fleet : Entity, IAggregateRoot
 
     public Fleet()
     {
-
+        HashedRegistrationNumber = null!;
+        EncryptedRegistrationNumber = null!;
+        Make = null!;
+        Model = null!;
+        HashedChassisNumber = null!;
+        EncryptedChassisNumber = null!;
+        HashedEngineNumber = null!;
+        EncryptedEngineNumber = null!;
+        HashedInsuranceNumber = null!;
+        EncryptedInsuranceNumber = null!;
+        Color = null!; 
+        Owner = null!;
     }
 
 

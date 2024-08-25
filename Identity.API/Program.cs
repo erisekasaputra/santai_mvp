@@ -127,11 +127,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
     options.UseSqlServer(databaseOption.ConnectionString, optionBuilder =>
     {
-        optionBuilder.CommandTimeout(databaseOption.CommandTimeout);
-        optionBuilder.EnableRetryOnFailure(
-            maxRetryCount: databaseOption.MaxRetryCount,
-            maxRetryDelay: TimeSpan.FromSeconds(databaseOption.MaxRetryDelay),
-            errorNumbersToAdd: null);
+        optionBuilder.CommandTimeout(databaseOption.CommandTimeout); 
     });
 });
 
@@ -143,7 +139,7 @@ builder.Services.AddMassTransit(x =>
         throw new Exception("Event bus options has not been set");
     }
 
-    x.AddConsumersFromNamespaceContaining<BusinessUserCreatedIntegrationEventConsumer>();
+    x.AddConsumersFromNamespaceContaining<IIdentityMarkerInterface>();
 
     x.AddEntityFrameworkOutbox<ApplicationDbContext>(o =>
     {
@@ -157,6 +153,7 @@ builder.Services.AddMassTransit(x =>
 
     x.UsingRabbitMq((context, configure) =>
     {
+
         configure.Host(eventBusOptions.Host, host =>
         {
             host.Username(eventBusOptions.Username ?? "user");
@@ -175,10 +172,6 @@ builder.Services.AddMassTransit(x =>
 
         configure.ConfigureEndpoints(context);
 
-
-
-
-
         var consumers = new (string QueueName, Type ConsumerType)[]
         {
             ("business-user-created-integration-event-queue", typeof(BusinessUserCreatedIntegrationEventConsumer))
@@ -193,9 +186,7 @@ builder.Services.AddMassTransit(x =>
         }
 
         void ConfigureEndPoint(IReceiveEndpointConfigurator receiveBuilder, string queueName, Type consumerType)
-        {
-            receiveBuilder.ConfigureConsumer(context, consumerType);
-
+        { 
             receiveBuilder.UseMessageRetry(retry =>
             {
                 retry.Interval(eventBusOptions.MessageRetryInterval, TimeSpan.FromSeconds(eventBusOptions.MessageRetryTimespan));
@@ -218,7 +209,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.SignIn.RequireConfirmedEmail = false;
     options.SignIn.RequireConfirmedAccount = false;
 
-    options.User.RequireUniqueEmail = true;
+    options.User.RequireUniqueEmail = false;
  
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;

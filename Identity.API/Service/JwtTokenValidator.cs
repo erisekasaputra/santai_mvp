@@ -34,7 +34,8 @@ public class JwtTokenValidator : IJwtTokenValidator
             ValidAudience = _audience,
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(key)
+            IssuerSigningKey = new SymmetricSecurityKey(key),
+            ClockSkew = TimeSpan.FromSeconds(0), 
         };
 
         try

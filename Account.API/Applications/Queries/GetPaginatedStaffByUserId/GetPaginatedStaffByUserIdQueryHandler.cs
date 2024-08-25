@@ -36,7 +36,7 @@ public class GetPaginatedStaffByUserIdQueryHandler(
 
             foreach (var staff in staffs)
             { 
-                var decryptedStaffPhoneNumber = await DecryptAsync(staff.EncryptedPhoneNumber);
+                var decryptedStaffPhoneNumber = await DecryptNullableAsync(staff.EncryptedPhoneNumber);
                 var decryptedStaffEmail = await DecryptNullableAsync(staff.EncryptedEmail);
 
                 var decryptedStaffAddressLine1 = await DecryptAsync(staff.Address.EncryptedAddressLine1);

@@ -25,6 +25,7 @@ public class Certification : Entity, IAggregateRoot
             throw new DomainException("Certificate date is expired");
         }
 
+        MechanicUser = null!;
         MechanicUserId = mechanicUserId != default ? mechanicUserId : throw new InvalidOperationException(nameof(mechanicUserId));
         CertificationId = certificationId ?? throw new ArgumentNullException(nameof(certificationId));
         CertificationName = certificationName ?? throw new ArgumentNullException(nameof(certificationName));

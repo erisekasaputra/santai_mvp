@@ -16,7 +16,7 @@ public class UpdateUserEmailByUserIdCommandHandler(
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _service = service;
     private readonly IKeyManagementService _kmsClient = kmsClient;
-    private readonly IHashService _hashClient = hashService;
+    private readonly IHashService _hashService = hashService;
 
     public async Task<Result> Handle(UpdateUserEmailByUserIdCommand request, CancellationToken cancellationToken)
     {
@@ -29,8 +29,9 @@ public class UpdateUserEmailByUserIdCommandHandler(
                     .WithError(new("User.Id", "User not found"));
             }
 
-            var hashedEmail = await _hashClient.Hash(request.Email);
-            var encryptedEmail = await _kmsClient.EncryptAsync(request.Email);
+
+            var hashedEmail = await HashAsync(request.Email);
+            var encryptedEmail = await EncryptAsync(request.Email);
 
             var conflict = await _unitOfWork.BaseUsers.GetAnyByIdentitiesExcludingIdAsNoTrackingAsync(request.Id, (IdentityParameter.Email, hashedEmail));
             if (conflict)
@@ -56,5 +57,33 @@ public class UpdateUserEmailByUserIdCommandHandler(
             _service.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
+    }
+
+    private async Task<string?> EncryptNullableAsync(string? plaintext)
+    {
+        if (string.IsNullOrEmpty(plaintext))
+            return null;
+
+        return await _kmsClient.EncryptAsync(plaintext);
+    }
+
+    private async Task<string> EncryptAsync(string plaintext)
+    {
+        return await _kmsClient.EncryptAsync(plaintext);
+    }
+
+    private async Task<string> HashAsync(string plainText)
+    {
+        return await _hashService.Hash(plainText);
+    }
+
+    private async Task<string?> HashNullableAsync(string? value)
+    {
+        if (string.IsNullOrWhiteSpace(value))
+        {
+            return null;
+        }
+
+        return await _hashService.Hash(value);
     }
 }

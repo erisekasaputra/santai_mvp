@@ -49,7 +49,7 @@ public class GetPaginatedRegularUserQueryHandler(
         foreach (var user in users)
         {
             var decryptedEmail = await DecryptNullableAsync(user.EncryptedEmail);
-            var decryptedPhoneNumber = await DecryptAsync(user.EncryptedPhoneNumber);
+            var decryptedPhoneNumber = await DecryptNullableAsync(user.EncryptedPhoneNumber);
             var decryptedAddressLine1 = await DecryptAsync(user.Address.EncryptedAddressLine1);
             var decryptedAddressLine2 = await DecryptNullableAsync(user.Address.EncryptedAddressLine2);
             var decryptedAddressLine3 = await DecryptNullableAsync(user.Address.EncryptedAddressLine3);

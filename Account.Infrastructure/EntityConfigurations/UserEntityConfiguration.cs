@@ -15,17 +15,17 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<BaseUser>
 
         e.HasIndex(p => p.HashedPhoneNumber).IsUnique(); 
           
-        e.Property(p => p.HashedEmail).HasMaxLength(255).IsRequired();
+        e.Property(p => p.HashedEmail).HasMaxLength(255).IsRequired(false);
         
-        e.Property(p => p.EncryptedEmail).HasMaxLength(255).IsRequired();
+        e.Property(p => p.EncryptedEmail).HasMaxLength(255).IsRequired(false);
 
         e.Property(p => p.NewHashedEmail).HasMaxLength(255).IsRequired(false);
         
         e.Property(p => p.NewEncryptedEmail).HasMaxLength(255).IsRequired(false);
 
-        e.Property(p => p.HashedPhoneNumber).HasMaxLength(255).IsRequired();
+        e.Property(p => p.HashedPhoneNumber).HasMaxLength(255).IsRequired(false);
         
-        e.Property(p => p.EncryptedPhoneNumber).HasMaxLength(255).IsRequired();
+        e.Property(p => p.EncryptedPhoneNumber).HasMaxLength(255).IsRequired(false);
 
         e.Property(p => p.NewHashedPhoneNumber).HasMaxLength(255).IsRequired(false);
 

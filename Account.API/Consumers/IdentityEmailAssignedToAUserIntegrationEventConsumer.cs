@@ -7,6 +7,6 @@ public class IdentityEmailAssignedToAUserIntegrationEventConsumer : IConsumer<Id
 {
     public async Task Consume(ConsumeContext<IdentityEmailAssignedToAUserIntegrationEvent> context)
     {
-
+        await Task.Delay(1);
     }
 }

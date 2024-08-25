@@ -33,7 +33,7 @@ public class GetStaffByUserIdAndStaffIdQueryHandler(
             }
 
             var decryptedEmail = await DecryptNullableAsync(staff.EncryptedEmail);
-            var decryptedPhoneNumber = await DecryptAsync(staff.EncryptedPhoneNumber);
+            var decryptedPhoneNumber = await DecryptNullableAsync(staff.EncryptedPhoneNumber);
 
             var decryptedAddressLine1 = await DecryptAsync(staff.Address.EncryptedAddressLine1);
             var decryptedAddressLine2 = await DecryptNullableAsync(staff.Address.EncryptedAddressLine2);

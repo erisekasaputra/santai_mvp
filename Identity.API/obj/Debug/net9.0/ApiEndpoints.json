@@ -129,16 +129,6 @@
   },
   {
     "ContainingType": "Identity.API.Controllers.AuthController",
-    "Method": "GetResource",
-    "RelativePath": "api/v1/Auth/register/business",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Identity.API.Controllers.AuthController",
     "Method": "VerifyLogin",
     "RelativePath": "api/v1/Auth/verify/login",
     "HttpMethod": "PATCH",

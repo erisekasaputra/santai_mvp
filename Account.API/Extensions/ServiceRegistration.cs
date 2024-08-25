@@ -153,13 +153,13 @@ public static class ServiceRegistration
                     timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout);
                 });
 
-                configure.ConfigureEndpoints(context); 
-
+                configure.ConfigureEndpoints(context);  
 
                 var consumers = new (string QueueName, Type ConsumerType)[]
                 {
                     ("identity-email-assigned-to-a-user-integration-event-queue", typeof(IdentityEmailAssignedToAUserIntegrationEventConsumer)),
-                    ("identity-phone-number-confirmed-integration-event-queue", typeof(IdentityPhoneNumberConfirmedIntegrationEventConsumer)) 
+                    ("identity-phone-number-confirmed-integration-event-queue", typeof(IdentityPhoneNumberConfirmedIntegrationEventConsumer)),
+                    ("phone-number-duplicate-integration-event-queue", typeof(PhoneNumberDuplicateIntegrationEventConsumer))
                 };
 
                 foreach (var (queueName, consumerType) in consumers)
@@ -171,9 +171,7 @@ public static class ServiceRegistration
                 }
 
                 void ConfigureEndPoint(IReceiveEndpointConfigurator receiveBuilder, string queueName, Type consumerType)
-                {
-                    receiveBuilder.ConfigureConsumer(context, consumerType);
-
+                { 
                     receiveBuilder.UseMessageRetry(retry =>
                     {
                         retry.Interval(options.MessageRetryInterval, TimeSpan.FromSeconds(options.MessageRetryTimespan));
@@ -281,7 +279,8 @@ public static class ServiceRegistration
             var secretKey = Encoding.UTF8.GetBytes(jwt?.SecretKey ?? throw new Exception("Secret key for jwt can not be empty"));
 
             options.TokenValidationParameters = new TokenValidationParameters()
-            {
+            { 
+                ClockSkew = TimeSpan.FromSeconds(0),
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateLifetime = true,

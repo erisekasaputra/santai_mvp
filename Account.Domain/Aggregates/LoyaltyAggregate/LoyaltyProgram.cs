@@ -22,7 +22,8 @@ public class LoyaltyProgram : Entity, IAggregateRoot
     {  
         LoyaltyUserId = loyaltyUserId;
         LoyaltyPoints = loyaltyPoints;
-        LoyaltyTier = LoyaltyTier.Basic; 
+        LoyaltyTier = LoyaltyTier.Basic;
+        BaseUser = null!;
     } 
 
     public void SetPoint(int point)

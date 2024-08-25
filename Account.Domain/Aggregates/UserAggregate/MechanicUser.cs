@@ -26,7 +26,7 @@ public class MechanicUser : BaseUser
 
     protected MechanicUser() : base()
     {
-
+        PersonalInfo = null!;
     }
 
     public MechanicUser(

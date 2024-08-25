@@ -15,7 +15,7 @@ public class PersonalInfo : ValueObject
 
     public PersonalInfo()
     {
-
+        FirstName = null!;
     }
     
     public PersonalInfo(string firstName, string? middleName, string? lastName, DateTime dateOfBirthUtc, Gender gender, string? profilePictureUrl)

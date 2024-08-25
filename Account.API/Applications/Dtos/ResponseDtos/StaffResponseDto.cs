@@ -2,7 +2,7 @@
 public record StaffResponseDto(
     Guid Id, 
     string? Email,
-    string PhoneNumber,
+    string? PhoneNumber,
     string Name,
     AddressResponseDto Address,
     string TimeZoneId);

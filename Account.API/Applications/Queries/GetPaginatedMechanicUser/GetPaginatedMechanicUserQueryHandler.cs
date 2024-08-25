@@ -77,7 +77,7 @@ public class GetPaginatedMechanicUserQueryHandler(
             responses.Add(new MechanicUserResponseDto(
                 user.Id, 
                 await DecryptNullableAsync(user.EncryptedEmail),
-                await DecryptAsync(user.EncryptedPhoneNumber),
+                await DecryptNullableAsync(user.EncryptedPhoneNumber),
                 user.TimeZoneId,
                 user.LoyaltyProgram.ToLoyaltyProgramResponseDto(),
                 address,

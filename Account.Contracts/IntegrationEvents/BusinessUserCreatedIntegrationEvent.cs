@@ -3,12 +3,11 @@ using MediatR;
 
 namespace Account.Contracts.IntegrationEvents;
 
-public class BusinessUserCreatedIntegrationEvent : INotification
-
+public class BusinessUserCreatedIntegrationEvent : INotification 
 {  
     public Guid UserId { get; set; } 
     public string? Email { get; set; }
-    public string PhoneNumber { get; set; }
+    public string? PhoneNumber { get; set; }
     public string TimeZoneId { get; set; }
     public string BusinessCode { get; set; } 
     public string BusinessName { get; set; } 
@@ -21,7 +20,7 @@ public class BusinessUserCreatedIntegrationEvent : INotification
     public BusinessUserCreatedIntegrationEvent(
         Guid userId,
         string? email,
-        string phoneNumber,
+        string? phoneNumber,
         string timeZoneId,
         string businessCode,
         string businessName,

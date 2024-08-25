@@ -8,11 +8,11 @@ namespace Account.Domain.Aggregates.UserAggregate;
 
 public class Staff : Entity, IAggregateRoot
 { 
-    public Guid BusinessUserId { get; private init; } 
-    public string BusinessUserCode { get; private init; } 
-    public BusinessUser BusinessUser { get; set; } // Only for navigation properties, does not have to be instantiated 
-    public string HashedPhoneNumber { get; private set; } 
-    public string EncryptedPhoneNumber { get; private set; }
+    public Guid BusinessUserId { get; private init; }
+    public string BusinessUserCode { get; private init; }
+    public BusinessUser? BusinessUser { get; set; } // Only for navigation properties, does not have to be instantiated 
+    public string? HashedPhoneNumber { get; private set; } 
+    public string? EncryptedPhoneNumber { get; private set; }
     public string? NewHashedPhoneNumber { get; private set; } 
     public string? NewEncryptedPhoneNumber { get; private set; }
     public bool IsPhoneNumberVerified { get; private set; }  
@@ -20,15 +20,19 @@ public class Staff : Entity, IAggregateRoot
     public string? EncryptedEmail {  get; private set; } 
     public string? NewHashedEmail { get; private set; } 
     public string? NewEncryptedEmail {  get; private set; }
-    public bool IsEmailVerified { get; private set; } 
-    public string Name { get; private set; }  
+    public bool IsEmailVerified { get; private set; }
+    public string Name { get; private set; }
     public string? DeviceId { get; private set; } 
-    public Address Address { get; private set; }  
-    public string TimeZoneId { get; private set; } 
+    public Address Address { get; private set; }
+    public string TimeZoneId { get; private set; }
     public ICollection<Fleet>? Fleets { get; private set; } 
+
     public Staff()
     {
-        
+        Address = null!;
+        BusinessUserCode = null!;
+        Name = null!;
+        TimeZoneId = null!;
     } 
     
     public Staff( 
@@ -63,6 +67,13 @@ public class Staff : Entity, IAggregateRoot
 
         IsEmailVerified = false; 
         IsPhoneNumberVerified = false; 
+    }
+
+    public void ResetPhoneNumber()
+    {
+        HashedPhoneNumber = null;
+        EncryptedPhoneNumber = null;
+        IsPhoneNumberVerified = false;
     }
 
     public void Update(string name, Address address, string timeZoneId)
@@ -123,7 +134,7 @@ public class Staff : Entity, IAggregateRoot
 
     public void ResetDeviceId()
     {
-        if (DeviceId is null)
+        if (string.IsNullOrWhiteSpace(DeviceId))
         {
             return;  
         }
@@ -135,7 +146,7 @@ public class Staff : Entity, IAggregateRoot
 
     public void SetDeviceId(string deviceId)
     {
-        if (DeviceId is not null)
+        if (!string.IsNullOrWhiteSpace(DeviceId))
         {
             throw new DomainException("This account is already registered with another device");
         }
@@ -177,7 +188,7 @@ public class Staff : Entity, IAggregateRoot
         AddDomainEvent(new EmailUpdatedDomainEvent(id, oldEmail, newEmail, oldEncryptedEmail, newEncryptedEmail));
     }
 
-    private void RaisePhoneNumberUpdatedDomainEvent(Guid id, string oldPhoneNumber, string newPhoneNumber, string oldEncryptedPhoneNumber, string newEncryptedPhoneNumber)
+    private void RaisePhoneNumberUpdatedDomainEvent(Guid id, string? oldPhoneNumber, string newPhoneNumber, string? oldEncryptedPhoneNumber, string newEncryptedPhoneNumber)
     {
         AddDomainEvent(new PhoneNumberUpdatedDomainEvent(id, oldPhoneNumber, newPhoneNumber, oldEncryptedPhoneNumber, newEncryptedPhoneNumber));
     }

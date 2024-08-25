@@ -67,8 +67,8 @@ public class UnitOfWork : IUnitOfWork
             {
                 throw new InvalidOperationException("No transaction started.");
             }
-
-            await _context.SaveChangesAsync(cancellationToken);
+             
+            await SaveChangesAsync(cancellationToken);
 
             await _transaction.CommitAsync(cancellationToken);
             
@@ -123,7 +123,9 @@ public class UnitOfWork : IUnitOfWork
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    {
+    { 
+        await DispatchDomainEventsAsync(cancellationToken);
+
         return await _context.SaveChangesAsync(cancellationToken);
     } 
 }

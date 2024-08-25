@@ -3,7 +3,7 @@
 public record BusinessUserResponseDto(
     Guid UserId, 
     string? Email,
-    string PhoneNumber,
+    string? PhoneNumber,
     string TimeZoneId,
     AddressResponseDto Address,
     string BusinessName,

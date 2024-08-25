@@ -19,7 +19,8 @@ public class ReferredProgram : Entity, IAggregateRoot
     public BaseUser BaseUser { get; private set; } // navigation properties
 
     public ReferredProgram(Guid referrerId, Guid referredUserId, string referralCode, DateTime referredDateUtc)
-    { 
+    {
+        BaseUser = null!;
         ReferrerId = referrerId != default ? referrerId : throw new ArgumentNullException(nameof(referrerId));
         ReferredUserId = referredUserId != default ? referredUserId : throw new ArgumentNullException(nameof(referredUserId));
         ReferralCode = referralCode ?? throw new ArgumentNullException(nameof(referralCode));

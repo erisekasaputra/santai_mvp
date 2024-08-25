@@ -22,9 +22,9 @@ public abstract class BaseUser : Entity, IAggregateRoot
     
     public string? NewEncryptedEmail { get; private set; }
 
-    public string HashedPhoneNumber { get; private set; }
+    public string? HashedPhoneNumber { get; private set; }
 
-    public string EncryptedPhoneNumber { get; private set; }
+    public string? EncryptedPhoneNumber { get; private set; }
     
     public bool IsPhoneNumberVerified { get; private set; }
 
@@ -46,12 +46,15 @@ public abstract class BaseUser : Entity, IAggregateRoot
      
     public ICollection<ReferredProgram>? ReferredPrograms { get; private set; } 
 
-    public ICollection<Fleet> Fleets { get; private set; }
+    public ICollection<Fleet>? Fleets { get; private set; }
 
     public string TimeZoneId {  get; set; }   
 
     protected BaseUser()
-    { 
+    {
+        Address = null!;
+        LoyaltyProgram = null!; 
+        TimeZoneId = null!;
     } 
 
     public BaseUser(  
@@ -87,6 +90,27 @@ public abstract class BaseUser : Entity, IAggregateRoot
         LoyaltyProgram = new LoyaltyProgram(Id, 0); 
     }
 
+    public void ResetPhoneNumber()
+    {
+        if (NewHashedPhoneNumber == HashedPhoneNumber)
+        {
+            NewHashedPhoneNumber = null;
+            NewEncryptedPhoneNumber = null;
+            IsPhoneNumberVerified = false;
+        }
+
+        HashedPhoneNumber = null;
+        EncryptedPhoneNumber = null;
+        IsPhoneNumberVerified = false;
+    }
+
+    public void ResetEmail()
+    { 
+        HashedEmail = null;
+        EncryptedEmail = null;
+        IsEmailVerified = false;
+    }
+
     public virtual void AddReferralProgram(int referralRewardPoint, int referralValidDate)
     {
         ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(referralRewardPoint, 0);
@@ -95,7 +119,7 @@ public abstract class BaseUser : Entity, IAggregateRoot
         ReferralProgram = new ReferralProgram(Id, DateTime.UtcNow.AddMonths(referralValidDate), referralRewardPoint);
 
         RaiseReferralProgramAddedDomainEvent(ReferralProgram);
-    }   
+    }    
 
     public virtual void UpdateEmail(string email, string encryptedEmail)
     {
@@ -157,7 +181,7 @@ public abstract class BaseUser : Entity, IAggregateRoot
         AddDomainEvent(new EmailUpdatedDomainEvent(id, oldEmail, newEmail, oldEncryptedEmail, newEncryptedEmail));
     }
 
-    private void RaisePhoneNumberUpdatedDomainEvent(Guid id, string oldPhoneNumber, string newPhoneNumber, string oldEncryptedPhoneNumber, string newEncryptedPhoneNumber)
+    private void RaisePhoneNumberUpdatedDomainEvent(Guid id, string? oldPhoneNumber, string newPhoneNumber, string? oldEncryptedPhoneNumber, string newEncryptedPhoneNumber)
     {
         AddDomainEvent(new PhoneNumberUpdatedDomainEvent(id, oldPhoneNumber, newPhoneNumber, oldEncryptedPhoneNumber, newEncryptedPhoneNumber));
     }

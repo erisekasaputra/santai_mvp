@@ -14,5 +14,6 @@ public class IdentityPhoneNumberConfirmedIntegrationEventConsumer : IConsumer<Id
 
     public async Task Consume(ConsumeContext<IdentityPhoneNumberConfirmedIntegrationEvent> context)
     {
+        await Task.Delay(1);
     }
 }

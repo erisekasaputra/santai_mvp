@@ -76,7 +76,7 @@ builder.Services.AddMassTransit(x =>
 
         void ConfigureEndPoint(IReceiveEndpointConfigurator receiveBuilder, string queueName, Type consumerType)
         {
-            receiveBuilder.ConfigureConsumer(context, consumerType);
+            //receiveBuilder.ConfigureConsumer(context, consumerType);
 
             receiveBuilder.UseMessageRetry(retry =>
             {

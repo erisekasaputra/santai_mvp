@@ -11,7 +11,8 @@ public class RegularUser : BaseUser
     public string? DeviceId { get; private set; }
        
     public RegularUser() : base()
-    { 
+    {
+        PersonalInfo = null!;
     }
 
     public RegularUser(

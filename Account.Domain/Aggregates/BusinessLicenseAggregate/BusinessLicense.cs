@@ -24,7 +24,11 @@ public class BusinessLicense : Entity, IAggregateRoot
 
     public BusinessLicense()
     {
-
+        BusinessUser = null!;
+        HashedLicenseNumber = null!;
+        EncryptedLicenseNumber = null!;
+        Name = null!;
+        Description = null!;
     }
    
     public BusinessLicense(
@@ -39,7 +43,8 @@ public class BusinessLicense : Entity, IAggregateRoot
         Description = description;
         HashedLicenseNumber = hashedLicenseNumber;
         EncryptedLicenseNumber = encryptedLicenseNumber;
-        VerificationStatus = VerificationState.Waiting; 
+        VerificationStatus = VerificationState.Waiting;
+        BusinessUser = null!;
     }
 
     public void VerifyDocument()

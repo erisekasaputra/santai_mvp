@@ -23,6 +23,7 @@ public class DrivingLicense : Entity, IAggregateRoot
  
     public DrivingLicense(Guid userId, string hashedLicenseNumber, string encryptedLicenseNumber, string frontSideImageUrl, string backSideImageUrl)
     {
+        MechanicUser = null!;
         UserId = userId != default ? userId : throw new InvalidOperationException(nameof(userId));
         HashedLicenseNumber = hashedLicenseNumber ?? throw new ArgumentNullException(nameof(hashedLicenseNumber));
         EncryptedLicenseNumber = encryptedLicenseNumber ?? throw new ArgumentNullException(nameof(encryptedLicenseNumber));
