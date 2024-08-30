@@ -1,6 +1,7 @@
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Identity.Contracts\bin\Debug\net9.0\Identity.Contracts.deps.json
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Identity.Contracts\bin\Debug\net9.0\Identity.Contracts.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Identity.Contracts\bin\Debug\net9.0\Identity.Contracts.pdb
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Identity.Contracts\obj\Debug\net9.0\Identity.Contracts.csproj.AssemblyReference.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Identity.Contracts\obj\Debug\net9.0\Identity.Contracts.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Identity.Contracts\obj\Debug\net9.0\Identity.Contracts.AssemblyInfoInputs.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Identity.Contracts\obj\Debug\net9.0\Identity.Contracts.AssemblyInfo.cs

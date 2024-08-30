@@ -2285,22 +2285,12 @@
           }
         }
       },
-      "Account.Contracts/1.0.0": {
+      "Identity.Contracts/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
           "MediatR": "12.4.0"
         },
-        "compile": {
-          "bin/placeholder/Account.Contracts.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Account.Contracts.dll": {}
-        }
-      },
-      "Identity.Contracts/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v9.0",
         "compile": {
           "bin/placeholder/Identity.Contracts.dll": {}
         },
@@ -6377,11 +6367,6 @@
         "version.txt"
       ]
     },
-    "Account.Contracts/1.0.0": {
-      "type": "project",
-      "path": "../Account.Contracts/Account.Contracts.csproj",
-      "msbuildProject": "../Account.Contracts/Account.Contracts.csproj"
-    },
     "Identity.Contracts/1.0.0": {
       "type": "project",
       "path": "../Identity.Contracts/Identity.Contracts.csproj",
@@ -6395,7 +6380,6 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
-      "Account.Contracts >= 1.0.0",
       "Azure.Identity >= 1.13.0-beta.1",
       "FluentValidation >= 11.9.2",
       "FluentValidation.AspNetCore >= 11.3.0",
@@ -6462,9 +6446,6 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Account.Contracts\\Account.Contracts.csproj": {
-              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Account.Contracts\\Account.Contracts.csproj"
-            },
             "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Identity.Contracts\\Identity.Contracts.csproj": {
               "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Identity.Contracts\\Identity.Contracts.csproj"
             },

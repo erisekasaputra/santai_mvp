@@ -149,6 +149,9 @@
         }
       },
       "Identity.Contracts/1.0.0": {
+        "dependencies": {
+          "MediatR": "12.4.0"
+        },
         "runtime": {
           "Identity.Contracts.dll": {
             "assemblyVersion": "1.0.0",

@@ -16,4 +16,10 @@ public static class AllowedOtpProviderType
             return [OtpProviderType.Sms, OtpProviderType.Whatsapp];
         }
     }
+
+    public static Dictionary<IdentityType, List<OtpProviderType>> GetAllByName = new Dictionary<IdentityType, List<OtpProviderType>>
+    {
+        { IdentityType.PhoneNumber, [OtpProviderType.Sms, OtpProviderType.Whatsapp]},
+        { IdentityType.Email, [OtpProviderType.Email]}
+    };
 }

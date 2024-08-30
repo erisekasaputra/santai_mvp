@@ -83,7 +83,7 @@ public class MechanicUser : BaseUser
 
     public void Delete()
     {
-        AddDomainEvent(new MechanicUserDeletedEvent(Id));
+        AddDomainEvent(new MechanicUserDeletedDomainEvent(Id));
     }
 
     public void SetDrivingLicense(

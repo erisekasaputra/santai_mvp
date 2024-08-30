@@ -211,7 +211,7 @@ public class BusinessUser : BaseUser
 
     private void RaiseStaffAddedDomainEvent(Staff staff)
     {
-        AddDomainEvent(new StaffAddedDomainEvent(staff));
+        AddDomainEvent(new StaffCreatedDomainEvent(staff));
     } 
     private void RaiseBusinessUserCreatedDomainEvent(BusinessUser user)
     {

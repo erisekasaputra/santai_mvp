@@ -24,8 +24,8 @@ public class PhoneNumberDuplicateIntegrationEventConsumer(
                 var response = await _mediator.Send(command);
                 
                 if (!response.IsSuccess)
-                { 
-                    _logger.LogError("An error occured {Message}, when reseting the phone number for registered user with id {Id}", response.Message, user.Id);
+                {
+                    _logger.LogError("An error occured. error: '{Message}'. When reseting the phone number: {phoneNumber} for registered user id: {Id}", response.Message, user.PhoneNumber, user.Id);
                 }
             }
 
@@ -36,7 +36,7 @@ public class PhoneNumberDuplicateIntegrationEventConsumer(
 
                 if (!response.IsSuccess)
                 {
-                    _logger.LogError("An error occured {Message}, when reseting the phone number for registered user with id {Id}", response.Message, user.Id);
+                    _logger.LogError("An error occured. error: '{Message}'. When reseting the phone number: {phoneNumber} for registered user id: {Id}", response.Message, user.PhoneNumber, user.Id);
                 }
             } 
         }

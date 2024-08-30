@@ -104,7 +104,7 @@ public class RegularUser : BaseUser
 
     private void RaiseRegularUserCreatedDomainEvent(RegularUser user)
     {
-        AddDomainEvent(new RegularUserCreateDomainEvent(user));
+        AddDomainEvent(new RegularUserCreatedDomainEvent(user));
     }
 
     private void RaiseRegularUserDeletedDomainEvent(Guid id)

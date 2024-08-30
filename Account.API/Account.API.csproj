@@ -20,6 +20,7 @@
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.2" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.65.0" />
     <PackageReference Include="Grpc.AspNetCore.Server" Version="2.65.0" />
+    <PackageReference Include="libphonenumber-csharp" Version="8.13.44" />
     <PackageReference Include="MassTransit" Version="8.2.5-develop.1942" />
     <PackageReference Include="MassTransit.Abstractions" Version="8.2.5-develop.1942" />
     <PackageReference Include="MassTransit.AmazonSQS" Version="8.2.5-develop.1942" />
@@ -54,12 +55,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Applications\DomainEventHandlers\" />
     <Folder Include="Protos\" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Account.Contracts\Account.Contracts.csproj" />
     <ProjectReference Include="..\Account.Domain\Account.Domain.csproj" />
     <ProjectReference Include="..\Account.Infrastructure\Account.Infrastructure.csproj" />
     <ProjectReference Include="..\SantaiClaimType\SantaiClaimType.csproj" />

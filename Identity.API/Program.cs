@@ -76,7 +76,7 @@ var googleOptions = builder.Configuration.GetSection(GoogleConfig.SectionName).G
 var databaseOptions = builder.Configuration.GetSection(DatabaseConfig.SectionName).Get<DatabaseConfig>(); 
 var eventBusOptions = builder.Configuration.GetSection(EventBusConfig.SectionName).Get<EventBusConfig>();
 var otpOptions = builder.Configuration.GetSection(OtpConfig.SectionName).Get<OtpConfig>(); 
-
+  
 builder.Services.AddSingleton<ActionMethodService>();
 
 builder.Services.AddSingleton<ITokenService, JwtTokenService>();

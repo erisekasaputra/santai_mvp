@@ -1,12 +1,12 @@
-﻿using Account.Contracts.IntegrationEvents;
-using Identity.API.Abstraction;
+﻿using Identity.API.Abstraction;
 using Identity.API.Domain.Entities;
-using Identity.API.Infrastructure; 
+using Identity.API.Infrastructure;
 using Identity.Contracts.Entity;
 using Identity.Contracts.Enumerations;
 using Identity.Contracts.IntegrationEvent;
 using MassTransit;
-using Microsoft.AspNetCore.Identity; 
+using MediatR;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SantaiClaimType;
 using System.Data;
@@ -14,23 +14,23 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
 namespace Identity.API.Consumers;
- 
+
 public class BusinessUserCreatedIntegrationEventConsumer(
     ApplicationDbContext dbContext, 
     UserManager<ApplicationUser> userManager,
-    IPublishEndpoint publishEndpoint,
+    IMediator mediator,
     ILogger<BusinessUserCreatedIntegrationEventConsumer> logger,
     ICacheService cacheService) : IConsumer<BusinessUserCreatedIntegrationEvent>
 {
     private readonly ApplicationDbContext _dbContext = dbContext;
     private readonly UserManager<ApplicationUser> _userManager = userManager; 
-    private readonly IPublishEndpoint _publishEndpoint = publishEndpoint;
+    private readonly IMediator _mediator = mediator;
     private readonly ILogger<BusinessUserCreatedIntegrationEventConsumer> _logger = logger;
     private readonly ICacheService _cacheService = cacheService; 
 
     public async Task Consume(ConsumeContext<BusinessUserCreatedIntegrationEvent> context)
     {
-        using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.Serializable);
+        using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
 
         var duplicateUsers = new List<DuplicateUser>();
         var newUsers = new List<ApplicationUser>();
@@ -47,11 +47,15 @@ public class BusinessUserCreatedIntegrationEventConsumer(
 
             var duplicateStaffUsers = await _dbContext.Users
               .Where(x => staffPhoneNumber.Contains(x.PhoneNumber))
-                  .ToListAsync();
+                  .ToListAsync(); 
+             
 
             if (duplicateBusinessUser is not null)
             {
-                duplicateUsers.Add(new(context.Message.UserId, context.Message.PhoneNumber, UserType.BusinessUser));
+                if (context.Message.UserId != Guid.Parse(duplicateBusinessUser.Id))
+                { 
+                    duplicateUsers.Add(new(context.Message.UserId, context.Message.PhoneNumber, UserType.BusinessUser));
+                }
             }
             else
             {
@@ -74,7 +78,10 @@ public class BusinessUserCreatedIntegrationEventConsumer(
 
                 if (duplicateStaff is not null)
                 {
-                    duplicateUsers.Add(new(staffRequest.Id, staffRequest.PhoneNumber, UserType.StaffUser));
+                    if (staffRequest.Id != Guid.Parse(duplicateStaff.Id))
+                    {
+                        duplicateUsers.Add(new(staffRequest.Id, staffRequest.PhoneNumber, UserType.StaffUser));
+                    }
                 }
                 else
                 {
@@ -91,37 +98,42 @@ public class BusinessUserCreatedIntegrationEventConsumer(
             }
 
 
+
             if (duplicateUsers.Count > 0)
             {
-                await _publishEndpoint.Publish(new PhoneNumberDuplicateIntegrationEvent(duplicateUsers));
+                await _mediator.Publish(
+                    new PhoneNumberDuplicateIntegrationEvent(duplicateUsers));
             }
 
             foreach (var newUser in newUsers)
             {
                 var result = await _userManager.CreateAsync(newUser, "000328Eris@");
 
-                await _userManager.AddToRoleAsync(newUser, newUser.UserType.ToString());
-
-                if (newUser.PhoneNumber is null)
+                if (result.Succeeded)
                 {
-                    throw new ArgumentNullException(newUser.PhoneNumber);
-                }
+                    await _userManager.AddToRoleAsync(newUser, newUser.UserType.ToString());
 
-                var claims = new List<Claim>()
-                {
-                    new (JwtRegisteredClaimNames.Sub, newUser.Id),
-                    new (ClaimTypes.Name, newUser.PhoneNumber),
-                    new (ClaimTypes.MobilePhone, newUser.PhoneNumber),
-                    new (SantaiClaimTypes.UserType, newUser.UserType.ToString()),
-                    new (ClaimTypes.Role, newUser.UserType.ToString())
-                };
+                    if (newUser.PhoneNumber is null)
+                    {
+                        throw new ArgumentNullException(newUser.PhoneNumber);
+                    }
 
-                if (!string.IsNullOrWhiteSpace(newUser.BusinessCode))
-                {
-                    claims.Add(new Claim(SantaiClaimTypes.BusinessCode, newUser.BusinessCode));
-                }
+                    var claims = new List<Claim>()
+                    {
+                        new (JwtRegisteredClaimNames.Sub, newUser.Id),
+                        new (ClaimTypes.Name, newUser.PhoneNumber),
+                        new (ClaimTypes.MobilePhone, newUser.PhoneNumber),
+                        new (SantaiClaimTypes.UserType, newUser.UserType.ToString()),
+                        new (ClaimTypes.Role, newUser.UserType.ToString())
+                    };
 
-                await _userManager.AddClaimsAsync(newUser, claims);
+                    if (!string.IsNullOrWhiteSpace(newUser.BusinessCode))
+                    {
+                        claims.Add(new Claim(SantaiClaimTypes.BusinessCode, newUser.BusinessCode));
+                    }
+
+                    await _userManager.AddClaimsAsync(newUser, claims); 
+                } 
             }
 
             await _dbContext.SaveChangesAsync();

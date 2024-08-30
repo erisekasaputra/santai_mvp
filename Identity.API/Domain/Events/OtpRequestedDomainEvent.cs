@@ -5,14 +5,16 @@ namespace Identity.API.Domain.Events;
 
 public class OtpRequestedDomainEvent : INotification
 {
-    public string Address { get; set; }
+    public string PhoneNumber { get; set; }
+    public string? Email { get; set; }
     public string Token { get; set; } 
     public OtpProviderType Provider { get; set; }
 
-    public OtpRequestedDomainEvent(string address, string token, OtpProviderType provider)
+    public OtpRequestedDomainEvent(string phoneNumber, string? email, string token, OtpProviderType provider)
     {
-        Address = address ?? throw new Exception("Address must not empty");
-        Token = token ?? throw new Exception("Token must not empty");
+        PhoneNumber = phoneNumber ?? throw new Exception("Phone number can not be empty");
+        Email = email;
+        Token = token ?? throw new Exception("Token must can not be empty");
         Provider = provider;
     }
 }

@@ -2,4 +2,4 @@
 
 namespace Account.Domain.Events;
 
-public record RegularUserDeletedDomainEvent(Guid id) : INotification;
+public record RegularUserDeletedDomainEvent(Guid Id) : INotification;

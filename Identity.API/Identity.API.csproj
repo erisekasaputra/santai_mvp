@@ -43,7 +43,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Account.Contracts\Account.Contracts.csproj" />
     <ProjectReference Include="..\Identity.Contracts\Identity.Contracts.csproj" />
     <ProjectReference Include="..\SantaiClaimType\SantaiClaimType.csproj" />
   </ItemGroup>

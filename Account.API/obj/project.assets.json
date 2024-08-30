@@ -458,6 +458,19 @@
           }
         }
       },
+      "libphonenumber-csharp/8.13.44": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/PhoneNumbers.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/PhoneNumbers.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "LinqKit/1.3.0": {
         "type": "package",
         "dependencies": {
@@ -2732,19 +2745,6 @@
           }
         }
       },
-      "Account.Contracts/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v9.0",
-        "dependencies": {
-          "MediatR": "12.4.0"
-        },
-        "compile": {
-          "bin/placeholder/Account.Contracts.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Account.Contracts.dll": {}
-        }
-      },
       "Account.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
@@ -2790,6 +2790,9 @@
       "Identity.Contracts/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "MediatR": "12.4.0"
+        },
         "compile": {
           "bin/placeholder/Identity.Contracts.dll": {}
         },
@@ -3536,6 +3539,25 @@
         "lib/netstandard2.0/Humanizer.dll",
         "lib/netstandard2.0/Humanizer.xml",
         "logo.png"
+      ]
+    },
+    "libphonenumber-csharp/8.13.44": {
+      "sha512": "59WX+iLl0yLN52RauQ0ar/aRGKxSWxJ22GbRed7AVv1pDJRz1H+XWx/LpxgHRtkbg+xyK3WxA2FNj74x4xXDug==",
+      "type": "package",
+      "path": "libphonenumber-csharp/8.13.44",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "icon.png",
+        "lib/net6.0/PhoneNumbers.dll",
+        "lib/net6.0/PhoneNumbers.xml",
+        "lib/net8.0/PhoneNumbers.dll",
+        "lib/net8.0/PhoneNumbers.xml",
+        "lib/netstandard2.0/PhoneNumbers.dll",
+        "lib/netstandard2.0/PhoneNumbers.xml",
+        "libphonenumber-csharp.8.13.44.nupkg.sha512",
+        "libphonenumber-csharp.nuspec"
       ]
     },
     "LinqKit/1.3.0": {
@@ -7572,11 +7594,6 @@
         "timezoneconverter.nuspec"
       ]
     },
-    "Account.Contracts/1.0.0": {
-      "type": "project",
-      "path": "../Account.Contracts/Account.Contracts.csproj",
-      "msbuildProject": "../Account.Contracts/Account.Contracts.csproj"
-    },
     "Account.Domain/1.0.0": {
       "type": "project",
       "path": "../Account.Domain/Account.Domain.csproj",
@@ -7604,7 +7621,6 @@
       "AWSSDK.Extensions.NETCore.Setup >= 3.7.301",
       "AWSSDK.KeyManagementService >= 3.7.400.2",
       "AWSSDK.SecretsManager >= 3.7.400.2",
-      "Account.Contracts >= 1.0.0",
       "Account.Domain >= 1.0.0",
       "Account.Infrastructure >= 1.0.0",
       "AspNetCoreRateLimit >= 5.0.0",
@@ -7640,7 +7656,8 @@
       "Swashbuckle.AspNetCore.SwaggerGen >= 6.7.0",
       "Swashbuckle.AspNetCore.SwaggerUI >= 6.7.0",
       "System.Drawing.Common >= 9.0.0-preview.6.24327.6",
-      "TimeZoneConverter >= 6.1.0"
+      "TimeZoneConverter >= 6.1.0",
+      "libphonenumber-csharp >= 8.13.44"
     ]
   },
   "packageFolders": {
@@ -7676,9 +7693,6 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Account.Contracts\\Account.Contracts.csproj": {
-              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Account.Contracts\\Account.Contracts.csproj"
-            },
             "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Account.Domain\\Account.Domain.csproj": {
               "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Account.Domain\\Account.Domain.csproj"
             },
@@ -7857,6 +7871,10 @@
           "TimeZoneConverter": {
             "target": "Package",
             "version": "[6.1.0, )"
+          },
+          "libphonenumber-csharp": {
+            "target": "Package",
+            "version": "[8.13.44, )"
           }
         },
         "imports": [

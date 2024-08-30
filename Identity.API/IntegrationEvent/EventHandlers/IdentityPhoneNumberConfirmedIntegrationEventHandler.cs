@@ -11,7 +11,7 @@ public class IdentityPhoneNumberConfirmedIntegrationEventHandler(IPublishEndpoin
 
     public async Task Handle(PhoneNumberConfirmedDomainEvent notification, CancellationToken cancellationToken)
     {
-        var @event = new IdentityPhoneNumberConfirmedIntegrationEvent(notification.Sub, notification.PhoneNumber);
+        var @event = new IdentityPhoneNumberConfirmedIntegrationEvent(notification.Sub, notification.PhoneNumber, notification.UserType);
 
         await _publishEndpoint.Publish(@event, cancellationToken);
     }

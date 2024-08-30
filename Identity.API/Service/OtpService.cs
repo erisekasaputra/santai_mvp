@@ -67,7 +67,7 @@ public class OtpService : IOtpService
         return (otp, lockingTime);
     }
 
-    public async Task<(Guid requestId, string token)> GenerateRequestOtpAsync(string phoneNumber, OtpRequestFor otpRequestFor)
+    public async Task<(Guid requestId, string token)> GenerateRequestOtpAsync(string phoneNumber, string? email, OtpRequestFor otpRequestFor)
     {
         var id = Guid.NewGuid();
 
@@ -77,6 +77,7 @@ public class OtpService : IOtpService
         {  
             Token = secret.HashToken(),
             PhoneNumber = phoneNumber,
+            Email = email,
             OtpRequestFor = otpRequestFor,
         }; 
 

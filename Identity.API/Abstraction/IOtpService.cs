@@ -10,7 +10,7 @@ public interface IOtpService
     Task<Otp?> GetOtpAsync(string phoneNumber);
     Task<bool> IsOtpValidAsync(string phoneNumber, string token);
     Task<bool> RemoveOtpAsync(string phoneNumber);
-    Task<(Guid requestId, string token)> GenerateRequestOtpAsync(string phoneNumber, OtpRequestFor otpRequestFor);
+    Task<(Guid requestId, string token)> GenerateRequestOtpAsync(string phoneNumber, string? email, OtpRequestFor otpRequestFor);
     bool IsGenerateRequestOtpValidAsync(RequestOtp requestOtp, string token);
     Task<RequestOtp?> GetRequestOtpAsync(Guid requestId);
 }

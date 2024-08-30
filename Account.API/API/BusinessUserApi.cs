@@ -789,7 +789,7 @@ public static class BusinessUserApi
             {
                 var error = validate.Errors;
                 return TypedResults.BadRequest(error);
-            }
+            } 
 
             var result = await service.Mediator.Send(new CreateBusinessUserCommand( 
                 request.Email,

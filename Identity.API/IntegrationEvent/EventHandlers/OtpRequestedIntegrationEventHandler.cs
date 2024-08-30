@@ -1,5 +1,5 @@
 ﻿using Identity.API.Domain.Events;
-using Identity.Contracts;
+using Identity.Contracts.IntegrationEvent;
 using MassTransit;
 using MediatR;
 
@@ -17,10 +17,7 @@ public class OtpRequestedIntegrationEventHandler : INotificationHandler<OtpReque
 
     public async Task Handle(OtpRequestedDomainEvent notification, CancellationToken cancellationToken)
     {
-        var integrationEvent = new OtpRequestedIntegrationEvent(notification.Address, notification.Token, notification.Provider);
-
-        Console.ForegroundColor = ConsoleColor.Blue;
-        Console.WriteLine(notification.Token); 
+        var integrationEvent = new OtpRequestedIntegrationEvent(notification.PhoneNumber, notification.Email, notification.Token, notification.Provider); 
 
         await _publisher.Publish(integrationEvent, cancellationToken);  
     }

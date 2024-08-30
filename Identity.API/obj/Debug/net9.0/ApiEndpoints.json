@@ -9,7 +9,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Identity.API.Dto.ForgotPasswordRequest",
+        "Type": "Identity.API.Dto.PasswordForgotRequest",
         "IsRequired": true
       }
     ],
@@ -122,6 +122,22 @@
       {
         "Name": "request",
         "Type": "Identity.API.Dto.RegisterUserRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Identity.API.Controllers.AuthController",
+    "Method": "ResetPassword",
+    "RelativePath": "api/v1/Auth/reset-password",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Identity.API.Dto.PasswordResetRequest",
         "IsRequired": true
       }
     ],
