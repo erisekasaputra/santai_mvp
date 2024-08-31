@@ -115,14 +115,26 @@ public class BusinessUserCreatedIntegrationEventConsumer(
                     new PhoneNumberDuplicateIntegrationEvent(duplicateUsers));
             }
 
+            if (users.Count == 0)
+            {
+                await _dbContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+
+                return;
+            }
+
             foreach ((var user, var password) in users)
             {
                 var result = await _userManager.CreateAsync(user, password);
 
                 if (!result.Succeeded)
-                {
+                { 
+                    foreach(var error in result.Errors)
+                    {
+                        _logger.LogError("An error occured during save new staff user {id}: {errors}", user.Id, error); 
+                    }
 
-                    _logger.LogError("An error occured during save new staff user {id}: {errors}", user.Id, result.Errors);
                     continue;
                 }
 
@@ -130,7 +142,11 @@ public class BusinessUserCreatedIntegrationEventConsumer(
 
                 if (!resultRole.Succeeded)
                 {
-                    _logger.LogError("An error occured during save new staff user role {id}: {errors}", user.Id, resultRole.Errors);
+                    foreach (var error in resultRole.Errors)
+                    {
+                        _logger.LogError("An error occured during save new staff user role {id}: {errors}", user.Id, error);
+                    }
+
                     continue;
                 }
 
@@ -157,7 +173,12 @@ public class BusinessUserCreatedIntegrationEventConsumer(
 
                 if (!resultClaim.Succeeded)
                 {
-                    _logger.LogError("An error occured during save new staff user claim {id}: {errors}", user.Id, resultClaim.Errors);
+                    foreach (var error in resultClaim.Errors)
+                    {
+                        _logger.LogError("An error occured during save new staff user claim {id}: {errors}", user.Id, error.Description);
+                    }
+
+                    continue;
                 }
             }
 

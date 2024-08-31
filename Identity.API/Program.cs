@@ -209,7 +209,15 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.SignIn.RequireConfirmedEmail = false;
     options.SignIn.RequireConfirmedAccount = false;
 
-    options.User.RequireUniqueEmail = false; 
+    options.User.RequireUniqueEmail = false;
+
+    // Menonaktifkan validasi password
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 0;
+    options.Password.RequiredUniqueChars = 0;
 })
 .AddEntityFrameworkStores<ApplicationDbContext>() 
 .AddSignInManager<SignInManager<ApplicationUser>>() 

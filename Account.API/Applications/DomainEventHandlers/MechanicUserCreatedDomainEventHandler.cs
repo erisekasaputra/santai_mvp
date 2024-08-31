@@ -26,6 +26,6 @@ public class MechanicUserCreatedDomainEventHandler(
 
     private async Task<string> DecryptAsync(string value)
     {
-        return await _kmsClient.EncryptAsync(value);
+        return await _kmsClient.DecryptAsync(value);
     }
 }

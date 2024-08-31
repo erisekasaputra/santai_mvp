@@ -24,7 +24,7 @@ public class BusinessUserCreatedDomainEventHandler(
 
             foreach (Staff staff in entity?.Staffs ?? [])
             {
-                var businessLicense = new StaffEvent(
+                var staffEvent = new StaffEvent(
                     staff.Id,
                     staff.BusinessUserCode,
                     await DecryptAsync(staff.EncryptedPhoneNumber!),
@@ -33,7 +33,7 @@ public class BusinessUserCreatedDomainEventHandler(
                     staff.TimeZoneId,
                     staff.Password);
 
-                staffEvents.Add(businessLicense);
+                staffEvents.Add(staffEvent);
             }
 
             if (entity is null)
@@ -74,6 +74,6 @@ public class BusinessUserCreatedDomainEventHandler(
 
     private async Task<string> DecryptAsync(string value)
     {
-        return await _kmsClient.EncryptAsync(value);
+        return await _kmsClient.DecryptAsync(value);
     }
 }
