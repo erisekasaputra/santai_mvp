@@ -15,6 +15,7 @@ public record CreateBusinessUserCommand(
         string? WebsiteUrl,
         string? BusinessDescription,
         string? ReferralCode,
+        string Password,
         IEnumerable<BusinessLicenseRequestDto> BusinessLicenses,
         IEnumerable<StaffRequestDto> Staffs
     ) : IRequest<Result>;

@@ -33,7 +33,7 @@ public class BusinessUserDeletedIntegrationEventConsumer(
         try
         {
             var businessUserId = context.Message.UserId.ToString();
-            var staffPhoneNumber = context.Message.Staffs?.Select(
+            var staffIds = context.Message.Staffs?.Select(
                 x => x.Id.ToString()) ?? [];
 
             var businessUser = await _dbContext.Users
@@ -41,7 +41,7 @@ public class BusinessUserDeletedIntegrationEventConsumer(
                     .FirstOrDefaultAsync(); 
 
             var staffUsers = await _dbContext.Users
-              .Where(x => staffPhoneNumber.Contains(x.Id))
+              .Where(x => staffIds.Contains(x.Id))
                   .ToListAsync(); 
 
             var users = staffUsers.Append(businessUser);

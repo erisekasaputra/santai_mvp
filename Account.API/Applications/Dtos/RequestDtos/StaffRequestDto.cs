@@ -6,11 +6,13 @@ public class StaffRequestDto(
     string? email,
     string name,
     AddressRequestDto address,
-    string timeZoneId)
+    string timeZoneId,
+    string password)
 { 
     public string PhoneNumber { get; set; } = phoneNumber.Clean();
     public string? Email { get; set; } = email?.CleanAndLowering();
     public string Name { get; } = name.Clean();
     public AddressRequestDto Address { get; } = address;
     public string TimeZoneId { get; set; } = timeZoneId.Clean();
+    public string Password { get; set; } = password.Clean();
 }

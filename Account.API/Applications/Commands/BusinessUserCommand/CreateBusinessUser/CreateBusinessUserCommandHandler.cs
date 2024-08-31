@@ -137,7 +137,8 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
                 encryptedContactPerson,
                 request.WebsiteUrl,
                 request.BusinessDescription,
-                request.TimeZoneId);
+                request.TimeZoneId, 
+                request.Password);
 
             // register referral program if referral option has active value
             if (referralRewardPoint.HasValue && referralValidMonth.HasValue)
@@ -405,7 +406,8 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
                 staff.Name,
                 address,
                 staff.TimeZoneId,
-                null));
+                null,
+                staff.Password));
         }
 
         return newStaffs;

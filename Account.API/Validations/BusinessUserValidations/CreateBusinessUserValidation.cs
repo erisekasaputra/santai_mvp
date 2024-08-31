@@ -3,6 +3,7 @@ using Account.API.Extensions;
 using Account.API.Validations.AddressValidations;
 using Account.API.Validations.BusinessLicenseValidations;
 using Account.API.Validations.StaffValidations;
+using CustomValidation;
 using FluentValidation;
 
 namespace Account.API.Validations.BusinessUserValidations;
@@ -10,7 +11,10 @@ namespace Account.API.Validations.BusinessUserValidations;
 public class CreateBusinessUserValidation : AbstractValidator<BusinessUserRequestDto>
 {
     public CreateBusinessUserValidation()
-    { 
+    {
+        RuleFor(x => x.Password)
+            .Must(PasswordValidator.IsValidPassword).WithMessage("Password must be at least 6 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.");
+
         RuleFor(x => x.Email)  
             .Length(5, 254).WithMessage("The email must be between 3 and 254 characters long")
             .EmailAddress().WithMessage("Email format is invalid")

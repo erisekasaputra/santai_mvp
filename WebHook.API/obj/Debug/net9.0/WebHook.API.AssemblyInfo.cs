@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("WebHook.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+3043c5325ad066b7cf1767e4a7ed9e75ad26b0a1")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+721233e5572da25ff67009efc8cc952d03840f2b")]
 [assembly: System.Reflection.AssemblyProductAttribute("WebHook.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("WebHook.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

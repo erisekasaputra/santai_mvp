@@ -11,10 +11,11 @@ public class LoginStaffValidation : AbstractValidator<LoginStaffRequest>
         RuleFor(p => p.BusinessCode)
             .NotEmpty().WithMessage("Business code must not be empty")
             .Length(6).WithMessage("Business code should in 6 characters length");
-        
-        RuleFor(p => p.RegionCode)
-            .NotEmpty().WithMessage("Region code must not be empty")
-            .Length(2).WithMessage("Region code should in 2 characters length");
+
+        RuleFor(x => x.RegionCode)
+           .NotEmpty().WithMessage("Region code is required.")
+           .Length(2).WithMessage("Region code must be exactly 2 characters long.")
+           .Matches(@"^[A-Z]{2}$").WithMessage("Region code must consist of two uppercase letters.");
 
         RuleFor(p => p.PhoneNumber)
              .NotEmpty().WithMessage("Phone number is required.")

@@ -9,7 +9,7 @@ namespace Account.API.Validations.RegularUserValidations;
 public class CreateRegularUserValidation : AbstractValidator<RegularUserRequestDto>
 {
     public CreateRegularUserValidation()
-    {  
+    {   
         RuleFor(x => x.TimeZoneId)
             .NotEmpty().WithMessage("Time zone can not be empty")
             .Length(2, 40).WithMessage("Time zone must be between 2 and 40 characters long")
@@ -33,10 +33,5 @@ public class CreateRegularUserValidation : AbstractValidator<RegularUserRequestD
            .Length(1, 255).WithMessage("The device must be between 1 and 255 characters long");
 
         RuleFor(x => x.PersonalInfo).SetValidator(new CreatePersonalInfoValidation());
-    }
-
-    private bool MustValidGuid(Guid id)
-    {
-        return id != Guid.Empty && id != default;
-    }
+    } 
 }

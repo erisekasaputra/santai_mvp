@@ -10,4 +10,5 @@ public record CreateStaffBusinessUserByUserIdCommand(
     string? Email,
     string Name,
     AddressRequestDto Address,
-    string TimeZoneId) : IRequest<Result>;
+    string TimeZoneId,
+    string Password) : IRequest<Result>;

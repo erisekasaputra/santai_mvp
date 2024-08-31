@@ -56,6 +56,8 @@ public class BusinessUserEntityConfiguration : IEntityTypeConfiguration<Business
             .WithOne(s => s.BusinessUser)
             .HasForeignKey(s => s.BusinessUserId)
             .OnDelete(DeleteBehavior.Cascade);   
+        
+        e.Ignore(b => b.Password);
     }
 }
  

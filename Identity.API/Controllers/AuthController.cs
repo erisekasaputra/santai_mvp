@@ -1,5 +1,4 @@
-﻿using FluentValidation;
-using FluentValidation.Validators;
+﻿using FluentValidation; 
 using Google.Apis.Auth;
 using Identity.API.Abstraction;
 using Identity.API.CustomAttributes;
@@ -12,6 +11,7 @@ using Identity.API.Infrastructure;
 using Identity.API.SeedWork;
 using Identity.API.Service;
 using Identity.API.Utilities;
+using Identity.API.Validations;
 using Identity.Contracts.Enumerations;
 using MassTransit;
 using MediatR;
@@ -299,10 +299,19 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost("reset-password")]
-    public async Task<IResult> ResetPassword([FromBody] PasswordResetRequest request)
+    public async Task<IResult> ResetPassword(
+        [FromBody] PasswordResetRequest request,
+        [FromServices] IValidator<PasswordResetRequest> validation)
     {
         try
         { 
+            var validations = await validation.ValidateAsync(request);
+
+            if (!validations.IsValid) 
+            {
+                return TypedResults.BadRequest(validations.Errors);
+            }
+
              var user = await _dbContext.Users.FirstOrDefaultAsync(
                     x => x.PhoneNumber == request.Identity 
                     || 
@@ -761,8 +770,16 @@ public class AuthController : ControllerBase
 
     [HttpPost("register")]
     [Idempotency(nameof(CreateIdentity))]
-    public async Task<IResult> CreateIdentity([FromBody] RegisterUserRequest request)
+    public async Task<IResult> CreateIdentity(
+        [FromBody] RegisterUserRequest request,
+        [FromServices] IValidator<RegisterUserRequest> validation)
     {
+        var validations = await validation.ValidateAsync(request);
+        if (!validations.IsValid)
+        {
+            return TypedResults.BadRequest(validations.Errors);
+        }
+
         using var transaction = await _dbContext.Database.BeginTransactionAsync();
         try
         {
@@ -780,9 +797,7 @@ public class AuthController : ControllerBase
                 return TypedResults.BadRequest(
                    Result.Failure("An error has occured", 400)
                        .WithError(new("PhoneNumber", "Please provide valid phone number")));
-            }
-
-
+            } 
 
             GoogleJsonWebSignature.Payload? payload = null;
 

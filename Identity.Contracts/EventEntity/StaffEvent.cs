@@ -2,7 +2,9 @@
 
 public record StaffEvent(
     Guid Id,
-    string? PhoneNumber,
+    string BusinessCode,
+    string PhoneNumber,
     string? Email,
     string Name,
-    string TimeZoneId);
+    string TimeZoneId,
+    string Password);

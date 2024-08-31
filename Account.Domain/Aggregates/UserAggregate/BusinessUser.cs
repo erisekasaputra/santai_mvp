@@ -14,10 +14,12 @@ public class BusinessUser : BaseUser
     public string? EncryptedTaxId { get; private set; }
     public string? WebsiteUrl { get; private set; }
     public string? Description { get; private set; }
+    public string Password { get; private set; }
     public ICollection<Staff>? Staffs { get; private set; }
     public ICollection<BusinessLicense>? BusinessLicenses { get; private set; } 
     protected BusinessUser() : base()
     {
+        Password = string.Empty;
         Code = null!;
         BusinessName = null!;
         EncryptedContactPerson = null!;
@@ -34,14 +36,16 @@ public class BusinessUser : BaseUser
         string encryptedContactPerson,
         string? websiteUrl,
         string? description, 
-        string timeZoneId) : base(email, encryptedEmail, phoneNumber, encryptedPhoneNumber, address, timeZoneId)
+        string timeZoneId,
+        string password) : base(email, encryptedEmail, phoneNumber, encryptedPhoneNumber, address, timeZoneId)
     {  
         Code = UniqueIdGenerator.Generate(Id);
         BusinessName = businessName ?? throw new ArgumentNullException(nameof(businessName));
         EncryptedTaxId = encryptedTaxId;
         EncryptedContactPerson = encryptedContactPerson ?? throw new ArgumentNullException(nameof(encryptedContactPerson));  
         WebsiteUrl = websiteUrl;
-        Description = description; 
+        Description = description;
+        Password = password;
         RaiseBusinessUserCreatedDomainEvent(this);
     } 
 
@@ -122,7 +126,8 @@ public class BusinessUser : BaseUser
         string encryptedPhoneNumber,
         string name,
         Address address,
-        string timeZoneId)
+        string timeZoneId,
+        string password)
     { 
         ArgumentNullException.ThrowIfNull(address);  
          
@@ -149,7 +154,8 @@ public class BusinessUser : BaseUser
             name,
             address,
             timeZoneId,
-            null); 
+            null,
+            password); 
 
         Staffs.Add(staff); 
 

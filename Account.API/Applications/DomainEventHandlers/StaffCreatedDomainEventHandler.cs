@@ -1,5 +1,6 @@
 ﻿using Account.API.Services;
 using Account.Domain.Events;
+using Identity.Contracts.EventEntity;
 using Identity.Contracts.IntegrationEvent;
 using MediatR;
 
@@ -14,7 +15,10 @@ public class StaffCreatedDomainEventHandler(
     public async Task Handle(StaffCreatedDomainEvent notification, CancellationToken cancellationToken)
     {
         var @event = notification.Staff;
-        await _mediator.Publish(new StaffUserCreatedIntegrationEvent(@event.Id, await DecryptNullableAsync(@event.EncryptedPhoneNumber)), cancellationToken);
+
+        var staffEvent = new StaffEvent(@event.Id, @event.BusinessUserCode, await DecryptAsync(@event.EncryptedPhoneNumber!), await DecryptNullableAsync(@event.EncryptedEmail), @event.Name, @event.TimeZoneId, @event.Password);
+
+        await _mediator.Publish(new StaffUserCreatedIntegrationEvent(staffEvent), cancellationToken);
     }
 
     private async Task<string?> DecryptNullableAsync(string? value)

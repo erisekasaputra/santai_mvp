@@ -727,7 +727,8 @@ public static class BusinessUserApi
                 request.Email,
                 request.Name,
                 request.Address,
-                request.TimeZoneId));   
+                request.TimeZoneId,
+                request.Password));   
 
             return result.ToIResult();
         }
@@ -802,9 +803,10 @@ public static class BusinessUserApi
                 request.WebsiteUrl,
                 request.BusinessDescription,
                 request.ReferralCode,
+                request.Password,
                 request.BusinessLicenses,
-                request.Staffs
-                ));  
+                request.Staffs));
+            
             return result.ToIResult();
         }
         catch (Exception ex)

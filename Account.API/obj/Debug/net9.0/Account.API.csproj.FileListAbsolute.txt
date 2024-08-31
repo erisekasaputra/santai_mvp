@@ -235,3 +235,5 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\obj\Debug\net9.0\Account.API.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\obj\Debug\net9.0\Account.API.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\obj\Debug\net9.0\ref\Account.API.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\CustomValidation.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\CustomValidation.pdb

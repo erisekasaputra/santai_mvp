@@ -101,6 +101,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SantaiClaimType", "SantaiCl
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GlobalMessage", "GlobalMessage\GlobalMessage.csproj", "{2D827956-9862-4755-928B-7EEBF9B9C0F7}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomValidation", "CustomValidation\CustomValidation.csproj", "{586A4FA3-99F1-4AAB-938D-496D75A229E9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -207,6 +209,10 @@ Global
 		{2D827956-9862-4755-928B-7EEBF9B9C0F7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2D827956-9862-4755-928B-7EEBF9B9C0F7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2D827956-9862-4755-928B-7EEBF9B9C0F7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{586A4FA3-99F1-4AAB-938D-496D75A229E9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{586A4FA3-99F1-4AAB-938D-496D75A229E9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{586A4FA3-99F1-4AAB-938D-496D75A229E9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{586A4FA3-99F1-4AAB-938D-496D75A229E9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -251,6 +257,7 @@ Global
 		{E9F3F7CF-8876-458A-8DF9-6729AE00FAD4} = {44935FC9-F5AD-4EF1-A244-1F54CF0B62D1}
 		{EF3C5A0C-4C97-4160-A8E1-21EC3FF155A2} = {44935FC9-F5AD-4EF1-A244-1F54CF0B62D1}
 		{2D827956-9862-4755-928B-7EEBF9B9C0F7} = {44935FC9-F5AD-4EF1-A244-1F54CF0B62D1}
+		{586A4FA3-99F1-4AAB-938D-496D75A229E9} = {44935FC9-F5AD-4EF1-A244-1F54CF0B62D1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3F012C31-7F5E-479A-A242-C16A92A8448D}

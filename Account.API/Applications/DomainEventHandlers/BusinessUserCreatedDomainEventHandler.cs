@@ -22,14 +22,16 @@ public class BusinessUserCreatedDomainEventHandler(
 
             var staffEvents = new List<StaffEvent>();
 
-            foreach (Staff b in entity?.Staffs ?? [])
+            foreach (Staff staff in entity?.Staffs ?? [])
             {
                 var businessLicense = new StaffEvent(
-                    b.Id,
-                    await DecryptNullableAsync(b.EncryptedPhoneNumber),
-                    await DecryptNullableAsync(b.EncryptedEmail),
-                    b.Name,
-                    b.TimeZoneId);
+                    staff.Id,
+                    staff.BusinessUserCode,
+                    await DecryptAsync(staff.EncryptedPhoneNumber!),
+                    await DecryptNullableAsync(staff.EncryptedEmail),
+                    staff.Name,
+                    staff.TimeZoneId,
+                    staff.Password);
 
                 staffEvents.Add(businessLicense);
             }
@@ -40,18 +42,18 @@ public class BusinessUserCreatedDomainEventHandler(
             }
 
             var @event = new BusinessUserCreatedIntegrationEvent(
-                    entity.Id,
-                    await DecryptNullableAsync(entity.EncryptedEmail),
-                    await DecryptNullableAsync(entity.EncryptedPhoneNumber),
-                    entity.TimeZoneId,
-                    entity.Code,
-                    entity.BusinessName,
-                    entity.EncryptedContactPerson,
-                    entity.EncryptedTaxId,
-                    entity.WebsiteUrl,
-                    entity.Description,
-                    staffEvents
-                );
+                entity.Id,
+                await DecryptNullableAsync(entity.EncryptedEmail),
+                await DecryptAsync(entity.EncryptedPhoneNumber!),
+                entity.TimeZoneId,
+                entity.Code,
+                entity.BusinessName,
+                entity.EncryptedContactPerson,
+                entity.EncryptedTaxId,
+                entity.WebsiteUrl,
+                entity.Description,
+                entity.Password,
+                staffEvents);
 
             await _mediator.Publish(@event, cancellationToken);
         }

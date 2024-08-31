@@ -3,43 +3,30 @@ using MediatR;
 
 namespace Identity.Contracts.IntegrationEvent;
 
-public class BusinessUserDeletedIntegrationEvent : INotification
+public class BusinessUserDeletedIntegrationEvent(
+   Guid userId,
+   string? email,
+   string phoneNumber,
+   string timeZoneId,
+   string businessCode,
+   string businessName,
+   string contactPerson,
+   string? taxId,
+   string? websiteUrl,
+   string? businessDescription,
+   string password,
+   IEnumerable<StaffEvent>? staffs) : INotification
 {
-    public Guid UserId { get; set; }
-    public string? Email { get; set; }
-    public string? PhoneNumber { get; set; }
-    public string TimeZoneId { get; set; }
-    public string BusinessCode { get; set; }
-    public string BusinessName { get; set; }
-    public string ContactPerson { get; set; }
-    public string? TaxId { get; set; }
-    public string? WebsiteUrl { get; set; }
-    public string? BusinessDescription { get; set; }
-    public IEnumerable<StaffEvent>? Staffs { get; set; }
-
-    public BusinessUserDeletedIntegrationEvent(
-       Guid userId,
-       string? email,
-       string? phoneNumber,
-       string timeZoneId,
-       string businessCode,
-       string businessName,
-       string contactPerson,
-       string? taxId,
-       string? websiteUrl,
-       string? businessDescription,
-       IEnumerable<StaffEvent>? staffs)
-    {
-        UserId = userId;
-        Email = email;
-        PhoneNumber = phoneNumber;
-        TimeZoneId = timeZoneId;
-        BusinessCode = businessCode;
-        BusinessName = businessName;
-        ContactPerson = contactPerson;
-        TaxId = taxId;
-        WebsiteUrl = websiteUrl;
-        BusinessDescription = businessDescription;
-        Staffs = staffs;
-    }
+    public Guid UserId { get; set; } = userId;
+    public string? Email { get; set; } = email;
+    public string PhoneNumber { get; set; } = phoneNumber;
+    public string TimeZoneId { get; set; } = timeZoneId;
+    public string BusinessCode { get; set; } = businessCode;
+    public string BusinessName { get; set; } = businessName;
+    public string ContactPerson { get; set; } = contactPerson;
+    public string? TaxId { get; set; } = taxId;
+    public string? WebsiteUrl { get; set; } = websiteUrl;
+    public string? BusinessDescription { get; set; } = businessDescription;
+    public string Password { get; set; } = password;
+    public IEnumerable<StaffEvent>? Staffs { get; set; } = staffs;
 }

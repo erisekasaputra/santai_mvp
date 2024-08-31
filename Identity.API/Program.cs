@@ -209,13 +209,7 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.SignIn.RequireConfirmedEmail = false;
     options.SignIn.RequireConfirmedAccount = false;
 
-    options.User.RequireUniqueEmail = false;
- 
-    options.Password.RequireDigit = true;
-    options.Password.RequireLowercase = true;
-    options.Password.RequireUppercase = true;
-    options.Password.RequiredLength = 6;
-    options.Password.RequireNonAlphanumeric = true;
+    options.User.RequireUniqueEmail = false; 
 })
 .AddEntityFrameworkStores<ApplicationDbContext>() 
 .AddSignInManager<SignInManager<ApplicationUser>>() 

@@ -45,18 +45,17 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
             var encryptedAddressLine3 = await EncryptNullableAsync(addressRequest.AddressLine3);
 
             var address = new Address(
-              encryptedAddressLine1,
-              encryptedAddressLine2,
-              encryptedAddressLine3,
-              addressRequest.City,
-              addressRequest.State,
-              addressRequest.PostalCode,
-              addressRequest.Country);
+                encryptedAddressLine1,
+                encryptedAddressLine2,
+                encryptedAddressLine3,
+                addressRequest.City,
+                addressRequest.State,
+                addressRequest.PostalCode,
+                addressRequest.Country);
 
             var conflicts = await _unitOfWork.Staffs.GetByIdentitiesAsNoTrackingAsync( 
                     (IdentityParameter.Email, [hashedEmail]),
-                    (IdentityParameter.PhoneNumber, [hashedPhoneNumber])
-                );
+                    (IdentityParameter.PhoneNumber, [hashedPhoneNumber]));
 
             if (conflicts is not null && conflicts.Any())
             {
@@ -93,7 +92,8 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
                 request.Name,
                 address,
                 request.TimeZoneId,
-                null);
+                null,
+                request.Password);
 
             await _unitOfWork.Staffs.CreateAsync(newStaff);
 

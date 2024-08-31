@@ -13,6 +13,7 @@ public class BusinessUserRequestDto(
     string? websiteUrl,
     string? businessDescription,
     string? referralCode,
+    string password,
     IEnumerable<BusinessLicenseRequestDto> businessLicenses,
     IEnumerable<StaffRequestDto> staffs)
 { 
@@ -26,6 +27,7 @@ public class BusinessUserRequestDto(
     public string? WebsiteUrl { get; } = websiteUrl?.Clean();
     public string? BusinessDescription { get; } = businessDescription?.Clean();
     public string? ReferralCode { get; } = referralCode?.Clean();
+    public string Password { get; } = password.Clean();
     public IEnumerable<BusinessLicenseRequestDto> BusinessLicenses { get; } = businessLicenses;
     public IEnumerable<StaffRequestDto> Staffs { get; } = staffs;
 }

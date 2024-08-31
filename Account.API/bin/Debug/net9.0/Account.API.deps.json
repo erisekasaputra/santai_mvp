@@ -16,6 +16,7 @@
           "Account.Infrastructure": "1.0.0",
           "AspNetCoreRateLimit": "5.0.0",
           "Azure.Identity": "1.13.0-beta.1",
+          "CustomValidation": "1.0.0",
           "EntityFramework": "6.5.1",
           "FluentValidation": "11.9.2",
           "FluentValidation.AspNetCore": "11.3.0",
@@ -1770,6 +1771,14 @@
           }
         }
       },
+      "CustomValidation/1.0.0": {
+        "runtime": {
+          "CustomValidation.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "Identity.Contracts/1.0.0": {
         "dependencies": {
           "MediatR": "12.4.0"
@@ -2832,6 +2841,11 @@
       "sha512": ""
     },
     "Account.Infrastructure/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "CustomValidation/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -7,7 +7,7 @@ public class BusinessUserCreatedIntegrationEvent : INotification
 {
     public Guid UserId { get; set; }
     public string? Email { get; set; }
-    public string? PhoneNumber { get; set; }
+    public string PhoneNumber { get; set; }
     public string TimeZoneId { get; set; }
     public string BusinessCode { get; set; }
     public string BusinessName { get; set; }
@@ -15,12 +15,13 @@ public class BusinessUserCreatedIntegrationEvent : INotification
     public string? TaxId { get; set; }
     public string? WebsiteUrl { get; set; }
     public string? BusinessDescription { get; set; }
+    public string Password { get; set; }
     public IEnumerable<StaffEvent>? Staffs { get; set; }
 
     public BusinessUserCreatedIntegrationEvent(
-        Guid userId,
+        Guid userId, 
         string? email,
-        string? phoneNumber,
+        string phoneNumber,
         string timeZoneId,
         string businessCode,
         string businessName,
@@ -28,6 +29,7 @@ public class BusinessUserCreatedIntegrationEvent : INotification
         string? taxId,
         string? websiteUrl,
         string? businessDescription,
+        string password,
         IEnumerable<StaffEvent>? staffs)
     {
         UserId = userId;
@@ -40,6 +42,7 @@ public class BusinessUserCreatedIntegrationEvent : INotification
         TaxId = taxId;
         WebsiteUrl = websiteUrl;
         BusinessDescription = businessDescription;
+        Password = password;    
         Staffs = staffs;
     }
 }

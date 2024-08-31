@@ -25,10 +25,12 @@ public class Staff : Entity, IAggregateRoot
     public string? DeviceId { get; private set; } 
     public Address Address { get; private set; }
     public string TimeZoneId { get; private set; }
+    public string Password { get; private set; }
     public ICollection<Fleet>? Fleets { get; private set; } 
 
     public Staff()
     {
+        Password = string.Empty;
         Address = null!;
         BusinessUserCode = null!;
         Name = null!;
@@ -45,7 +47,8 @@ public class Staff : Entity, IAggregateRoot
         string name,
         Address address,
         string timeZoneId,
-        string? deviceId)
+        string? deviceId,
+        string password)
     { 
         BusinessUserId = businessUserId != default ? businessUserId : throw new ArgumentNullException(nameof(businessUserId)); 
         BusinessUserCode = businessUserCode ?? throw new ArgumentNullException(nameof(businessUserCode));   
@@ -66,7 +69,8 @@ public class Staff : Entity, IAggregateRoot
         }
 
         IsEmailVerified = false; 
-        IsPhoneNumberVerified = false; 
+        IsPhoneNumberVerified = false;
+        Password = password;
     }
 
     public void ResetPhoneNumber()

@@ -7,6 +7,7 @@ public class StaffUserDeletedIntegrationEventConsumer : IConsumer<StaffUserDelet
 {
     public async Task Consume(ConsumeContext<StaffUserDeletedIntegrationEvent> context)
     {
+        await Task.Delay(1);
         throw new NotImplementedException();
     }
 }

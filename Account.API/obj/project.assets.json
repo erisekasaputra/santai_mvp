@@ -2787,6 +2787,16 @@
           "bin/placeholder/Account.Infrastructure.dll": {}
         }
       },
+      "CustomValidation/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/CustomValidation.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/CustomValidation.dll": {}
+        }
+      },
       "Identity.Contracts/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
@@ -7604,6 +7614,11 @@
       "path": "../Account.Infrastructure/Account.Infrastructure.csproj",
       "msbuildProject": "../Account.Infrastructure/Account.Infrastructure.csproj"
     },
+    "CustomValidation/1.0.0": {
+      "type": "project",
+      "path": "../CustomValidation/CustomValidation.csproj",
+      "msbuildProject": "../CustomValidation/CustomValidation.csproj"
+    },
     "Identity.Contracts/1.0.0": {
       "type": "project",
       "path": "../Identity.Contracts/Identity.Contracts.csproj",
@@ -7625,6 +7640,7 @@
       "Account.Infrastructure >= 1.0.0",
       "AspNetCoreRateLimit >= 5.0.0",
       "Azure.Identity >= 1.13.0-beta.1",
+      "CustomValidation >= 1.0.0",
       "EntityFramework >= 6.5.1",
       "FluentValidation >= 11.9.2",
       "FluentValidation.AspNetCore >= 11.3.0",
@@ -7698,6 +7714,9 @@
             },
             "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Account.Infrastructure\\Account.Infrastructure.csproj": {
               "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Account.Infrastructure\\Account.Infrastructure.csproj"
+            },
+            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\CustomValidation\\CustomValidation.csproj": {
+              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\CustomValidation\\CustomValidation.csproj"
             },
             "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\SantaiClaimType\\SantaiClaimType.csproj": {
               "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\SantaiClaimType\\SantaiClaimType.csproj"

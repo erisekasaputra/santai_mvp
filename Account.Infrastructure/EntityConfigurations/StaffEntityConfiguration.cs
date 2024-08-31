@@ -142,6 +142,8 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
             .HasForeignKey(f => f.StaffId)
             .OnDelete(DeleteBehavior.SetNull);
 
+        e.Ignore(p => p.Password);
+
         e.Ignore(p => p.DomainEvents);
     }
 }

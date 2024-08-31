@@ -1,6 +1,7 @@
 ﻿using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Extensions;
 using Account.API.Validations.AddressValidations;
+using CustomValidation;
 using FluentValidation;
 
 namespace Account.API.Validations.StaffValidations;
@@ -8,7 +9,10 @@ namespace Account.API.Validations.StaffValidations;
 public class CreateStaffValidation : AbstractValidator<StaffRequestDto>
 {
     public CreateStaffValidation()
-    { 
+    {
+        RuleFor(x => x.Password)
+            .Must(PasswordValidator.IsValidPassword).WithMessage("Password must be at least 6 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.");
+
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name can not be empty")
             .Length(3, 50).WithMessage("The name must be between 3 and 50 characters long")
