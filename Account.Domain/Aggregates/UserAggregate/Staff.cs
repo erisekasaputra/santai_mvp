@@ -48,7 +48,8 @@ public class Staff : Entity, IAggregateRoot
         Address address,
         string timeZoneId,
         string? deviceId,
-        string password)
+        string password,
+        bool raiseCreatedEvent = true)
     { 
         BusinessUserId = businessUserId != default ? businessUserId : throw new ArgumentNullException(nameof(businessUserId)); 
         BusinessUserCode = businessUserCode ?? throw new ArgumentNullException(nameof(businessUserCode));   
@@ -71,6 +72,11 @@ public class Staff : Entity, IAggregateRoot
         IsEmailVerified = false; 
         IsPhoneNumberVerified = false;
         Password = password;
+
+        if (raiseCreatedEvent)
+        {
+            RaiseStaffCreatedDomainEvent();
+        }
     }
 
     public void ResetPhoneNumber()
@@ -205,5 +211,10 @@ public class Staff : Entity, IAggregateRoot
     private void RaisePhoneNumberVerifiedDomainEvent(Guid id, string phoneNumber, string encryptedPhoneNumber)
     {
         AddDomainEvent(new PhoneNumberVerifiedDomainEvent(id, phoneNumber, encryptedPhoneNumber));
+    }
+
+    private void RaiseStaffCreatedDomainEvent()
+    {
+        AddDomainEvent(new StaffCreatedDomainEvent(this));
     }
 }

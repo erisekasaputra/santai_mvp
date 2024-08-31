@@ -407,7 +407,8 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
                 address,
                 staff.TimeZoneId,
                 null,
-                staff.Password));
+                staff.Password,
+                raiseCreatedEvent: false));
         }
 
         return newStaffs;

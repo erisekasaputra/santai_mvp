@@ -56,7 +56,7 @@ app.UseHttpsRedirection();
 
 app.UseHsts();
 
-app.UseMiddleware<IdempotencyMiddleware>(); 
+//app.UseMiddleware<IdempotencyMiddleware>();
 
 app.UseOutputCache();
 

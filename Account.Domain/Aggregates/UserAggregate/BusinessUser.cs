@@ -118,8 +118,7 @@ public class BusinessUser : BaseUser
         return (license, null, null);
     } 
 
-    public (Staff? newStaff, string? ErrorParameter, string? ErrorMessage) AddStaff(
-        string username,
+    public (Staff? newStaff, string? ErrorParameter, string? ErrorMessage) AddStaff( 
         string hashedEmail,
         string encryptedEmail,
         string hashedPhoneNumber,
@@ -155,11 +154,10 @@ public class BusinessUser : BaseUser
             address,
             timeZoneId,
             null,
-            password); 
+            password,
+            raiseCreatedEvent: false); 
 
-        Staffs.Add(staff); 
-
-        RaiseStaffAddedDomainEvent(staff); 
+        Staffs.Add(staff);
         
         return (staff, null, null);
     }
@@ -180,9 +178,7 @@ public class BusinessUser : BaseUser
             return (null, "Staff.Email", "Email is already registered");
         }
 
-        Staffs.Add(staff);
-
-        RaiseStaffAddedDomainEvent(staff);
+        Staffs.Add(staff); 
         
         return (staff, null, null);
     }
@@ -213,12 +209,8 @@ public class BusinessUser : BaseUser
     private void RaiseBusinessLicenseAddedDomainEvent(BusinessLicense license)
     {
         AddDomainEvent(new BusinessLicenseAddedDomainEvent(license));
-    }
-
-    private void RaiseStaffAddedDomainEvent(Staff staff)
-    {
-        AddDomainEvent(new StaffCreatedDomainEvent(staff));
     } 
+
     private void RaiseBusinessUserCreatedDomainEvent(BusinessUser user)
     {
         AddDomainEvent(new BusinessUserCreatedDomainEvent(user));

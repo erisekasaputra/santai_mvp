@@ -24,10 +24,14 @@ public class BusinessUserCreatedIntegrationEventConsumer(
     private readonly ApplicationDbContext _dbContext = dbContext;
     private readonly UserManager<ApplicationUser> _userManager = userManager; 
     private readonly IMediator _mediator = mediator;
-    private readonly ILogger<BusinessUserCreatedIntegrationEventConsumer> _logger = logger; 
+    private readonly ILogger<BusinessUserCreatedIntegrationEventConsumer> _logger = logger;
+     
+    static int NumberTried = 0;
 
     public async Task Consume(ConsumeContext<BusinessUserCreatedIntegrationEvent> context)
     {
+        NumberTried++;
+
         using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
 
         var duplicateUsers = new List<DuplicateUser>();
@@ -47,16 +51,15 @@ public class BusinessUserCreatedIntegrationEventConsumer(
 
 
             var duplicateStaffUsers = await _dbContext.Users
-              .Where(x => staffPhoneNumber.Contains(x.PhoneNumber))
-                  .ToListAsync(); 
-             
+              .Where(x => staffPhoneNumber.Contains(x.PhoneNumber)).ToListAsync();
+
 
             if (duplicateBusinessUser is not null && businessUser.UserId != Guid.Parse(duplicateBusinessUser.Id))
             {
                 duplicateUsers.Add(new(businessUser.UserId, businessUser.PhoneNumber, UserType.BusinessUser));
             }
 
-            if (duplicateBusinessUser is not null && !duplicateBusinessUser.IsAccountRegistered) 
+            if (duplicateBusinessUser is not null && !duplicateBusinessUser.IsAccountRegistered)
             {
                 duplicateBusinessUser.IsAccountRegistered = true;
                 await _userManager.UpdateAsync(duplicateBusinessUser);
@@ -72,7 +75,7 @@ public class BusinessUserCreatedIntegrationEventConsumer(
                     IsAccountRegistered = true,
                     BusinessCode = businessUser.BusinessCode,
                     UserType = UserType.BusinessUser
-                }, 
+                },
                 businessUser.Password));
             }
 
@@ -91,11 +94,11 @@ public class BusinessUserCreatedIntegrationEventConsumer(
                 {
                     duplicateStaff.IsAccountRegistered = true;
                     await _userManager.UpdateAsync(duplicateStaff);
-                } 
+                }
 
                 if (duplicateStaff is null)
                 {
-                    users.Add((new ()
+                    users.Add((new()
                     {
                         Id = staff.Id.ToString(),
                         UserName = staff.PhoneNumber,
@@ -103,7 +106,7 @@ public class BusinessUserCreatedIntegrationEventConsumer(
                         IsAccountRegistered = true,
                         BusinessCode = staff.BusinessCode,
                         UserType = UserType.StaffUser
-                    }, 
+                    },
                     staff.Password));
                 }
             }
@@ -129,10 +132,10 @@ public class BusinessUserCreatedIntegrationEventConsumer(
                 var result = await _userManager.CreateAsync(user, password);
 
                 if (!result.Succeeded)
-                { 
-                    foreach(var error in result.Errors)
+                {
+                    foreach (var error in result.Errors)
                     {
-                        _logger.LogError("An error occured during save new staff user {id}: {errors}", user.Id, error); 
+                        _logger.LogError("An error occured during save new staff user {id}: {errors}", user.Id, error);
                     }
 
                     continue;
@@ -166,7 +169,7 @@ public class BusinessUserCreatedIntegrationEventConsumer(
 
                 if (!string.IsNullOrWhiteSpace(user.BusinessCode))
                 {
-                    claims.Add(new (SantaiClaimTypes.BusinessCode, user.BusinessCode));
+                    claims.Add(new(SantaiClaimTypes.BusinessCode, user.BusinessCode));
                 }
 
                 var resultClaim = await _userManager.AddClaimsAsync(user, claims);
@@ -192,5 +195,5 @@ public class BusinessUserCreatedIntegrationEventConsumer(
             await transaction.RollbackAsync();
             throw;
         }
-    } 
+    }
 }

@@ -93,7 +93,8 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
                 address,
                 request.TimeZoneId,
                 null,
-                request.Password);
+                request.Password,
+                raiseCreatedEvent: true);
 
             await _unitOfWork.Staffs.CreateAsync(newStaff);
 

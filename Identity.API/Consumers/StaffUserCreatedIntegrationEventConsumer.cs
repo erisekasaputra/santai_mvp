@@ -26,9 +26,8 @@ public class StaffUserCreatedIntegrationEventConsumer(
     public async Task Consume(ConsumeContext<StaffUserCreatedIntegrationEvent> context)
     {
         using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted); 
-
         try
-        {
+        {  
             var staff = context.Message.Staff;
 
             var duplicateStaff = await _dbContext.Users
