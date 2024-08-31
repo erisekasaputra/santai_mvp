@@ -128,6 +128,7 @@ public class StaffUserCreatedIntegrationEventConsumer(
         {
             _logger.LogError(ex, ex.InnerException?.Message);
             await transaction.RollbackAsync();
+            throw;
         }
     }
 }

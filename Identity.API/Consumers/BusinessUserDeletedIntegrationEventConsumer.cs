@@ -56,6 +56,7 @@ public class BusinessUserDeletedIntegrationEventConsumer(
         {
             _logger.LogError(ex, ex.InnerException?.Message);
             await transaction.RollbackAsync();
+            throw;
         }
     }
     public async Task DeleteUser(params ApplicationUser?[] users)

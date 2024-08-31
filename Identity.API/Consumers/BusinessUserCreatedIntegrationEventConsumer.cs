@@ -19,14 +19,12 @@ public class BusinessUserCreatedIntegrationEventConsumer(
     ApplicationDbContext dbContext, 
     UserManager<ApplicationUser> userManager,
     IMediator mediator,
-    ILogger<BusinessUserCreatedIntegrationEventConsumer> logger,
-    ICacheService cacheService) : IConsumer<BusinessUserCreatedIntegrationEvent>
+    ILogger<BusinessUserCreatedIntegrationEventConsumer> logger) : IConsumer<BusinessUserCreatedIntegrationEvent>
 {
     private readonly ApplicationDbContext _dbContext = dbContext;
     private readonly UserManager<ApplicationUser> _userManager = userManager; 
     private readonly IMediator _mediator = mediator;
-    private readonly ILogger<BusinessUserCreatedIntegrationEventConsumer> _logger = logger;
-    private readonly ICacheService _cacheService = cacheService; 
+    private readonly ILogger<BusinessUserCreatedIntegrationEventConsumer> _logger = logger; 
 
     public async Task Consume(ConsumeContext<BusinessUserCreatedIntegrationEvent> context)
     {
@@ -171,6 +169,7 @@ public class BusinessUserCreatedIntegrationEventConsumer(
         {
             _logger.LogError(ex, ex.InnerException?.Message);
             await transaction.RollbackAsync();
+            throw;
         }
     } 
 }

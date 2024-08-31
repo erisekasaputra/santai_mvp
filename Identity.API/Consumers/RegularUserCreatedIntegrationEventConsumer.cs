@@ -43,7 +43,8 @@ public class RegularUserCreatedIntegrationEventConsumer(
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, ex.InnerException?.Message); 
+            _logger.LogError(ex, ex.InnerException?.Message);
+            throw;
         }
     }
 }

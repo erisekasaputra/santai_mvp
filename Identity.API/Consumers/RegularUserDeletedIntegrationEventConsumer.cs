@@ -31,7 +31,9 @@ public class RegularUserDeletedIntegrationEventConsumer(
                 return;
             }
 
-            await _userManager.DeleteAsync(user);
+            user.IsAccountRegistered = false;
+
+            await _userManager.UpdateAsync(user);
 
             await transaction.CommitAsync();
         }
@@ -39,6 +41,7 @@ public class RegularUserDeletedIntegrationEventConsumer(
         {
             _logger.LogError(ex, ex.InnerException?.Message);
             await transaction.RollbackAsync();
+            throw;
         }
     }
 }
