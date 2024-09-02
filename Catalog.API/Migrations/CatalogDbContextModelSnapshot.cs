@@ -344,7 +344,8 @@ namespace Catalog.API.Migrations
                 {
                     b.HasOne("Catalog.Domain.Aggregates.ItemAggregate.Item", null)
                         .WithMany("OwnerReviews")
-                        .HasForeignKey("ItemId");
+                        .HasForeignKey("ItemId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("Catalog.Domain.Aggregates.BrandAggregate.Brand", b =>

@@ -4,4 +4,5 @@ using MediatR;
 
 namespace Catalog.API.Applications.Commands.Items.ReduceItemStockQuantity;
 
-public record ReduceItemStockQuantityCommand(IEnumerable<ReduceItemStockQuantityRequest> ReduceItemStockQuantityRequests) : IRequest<Result<IEnumerable<ItemStockDto>>>;
+public record ReduceItemStockQuantityCommand(
+    IEnumerable<ReduceItemStockQuantityRequest> ReduceItemStockQuantityRequests) : IRequest<Result<IEnumerable<ItemStockDto>>>;

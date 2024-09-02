@@ -17,6 +17,6 @@ public class OwnerReviewEntityConfigurator : IEntityTypeConfiguration<OwnerRevie
 
         builder.Property(or => or.Title)
             .HasMaxLength(25)
-            .IsRequired(); 
+            .IsRequired();  
     }  
 }

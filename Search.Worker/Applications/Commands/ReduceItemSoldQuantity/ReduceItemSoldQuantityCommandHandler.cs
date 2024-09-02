@@ -1,5 +1,5 @@
-﻿using MediatR; 
-using Search.Worker.Domain.Repository;
+﻿using MediatR;
+using Search.Worker.Domain.Repositories;
 
 namespace Search.Worker.Applications.Commands.ReduceItemSoldQuantity;
 

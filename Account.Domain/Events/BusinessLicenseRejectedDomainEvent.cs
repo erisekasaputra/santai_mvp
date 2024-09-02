@@ -2,4 +2,4 @@
 
 namespace Account.Domain.Events;
 
-public record BusinessLicenseRejectedDomainEvent : INotification;
+public record BusinessLicenseRejectedDomainEvent(Guid BusinessLicenseId) : INotification;

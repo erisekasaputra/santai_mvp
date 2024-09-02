@@ -1,6 +1,5 @@
 using Account.API.API;  
-using Account.API.Extensions;
-using Account.API.Middleware; 
+using Account.API.Extensions; 
 
 var builder = WebApplication.CreateBuilder(args);
 

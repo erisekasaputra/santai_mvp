@@ -159,7 +159,7 @@ public abstract class BaseUser : Entity, IAggregateRoot
     {
         if (string.IsNullOrWhiteSpace(NewHashedPhoneNumber) || string.IsNullOrWhiteSpace(NewEncryptedPhoneNumber)) 
         {
-            throw new DomainException("New phone number is not set, can not phone number");
+            throw new DomainException("New phone number is not set, can not vefify phone number");
         }
 
         HashedPhoneNumber = NewHashedPhoneNumber;

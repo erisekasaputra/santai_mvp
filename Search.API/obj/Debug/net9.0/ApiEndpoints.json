@@ -1,0 +1,24 @@
+[
+  {
+    "ContainingType": "Search.API.API.CatalogSearchApi",
+    "Method": "GetPaginatedCatalog",
+    "RelativePath": "api/v1/search/catalog/",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Search.API.Applications.Dto.SearchRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  }
+]

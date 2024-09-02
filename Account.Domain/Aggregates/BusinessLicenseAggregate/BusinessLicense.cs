@@ -73,12 +73,12 @@ public class BusinessLicense : Entity, IAggregateRoot
 
     private void RaiseDocumentAcceptedDomainEvent()
     {
-        AddDomainEvent(new BusinessLicenseAcceptedDomainEvent());
+        AddDomainEvent(new BusinessLicenseAcceptedDomainEvent(Id));
     }
 
     private void RaiseDocumentRejectedDomainEvent()
     {
-        AddDomainEvent(new BusinessLicenseRejectedDomainEvent());
+        AddDomainEvent(new BusinessLicenseRejectedDomainEvent(Id));
     }
 
     private void RaiseVerificationStatusChangedException(VerificationState documentVerificationStatus)

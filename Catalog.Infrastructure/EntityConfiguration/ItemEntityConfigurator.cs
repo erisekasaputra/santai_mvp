@@ -43,7 +43,8 @@ public class ItemEntityConfigurator : IEntityTypeConfiguration<Item>
 
         builder.HasMany(i => i.OwnerReviews)
             .WithOne()
-            .HasForeignKey("ItemId");  
+            .HasForeignKey("ItemId")
+            .OnDelete(DeleteBehavior.Cascade);  
 
         builder.Property(ci => ci.LastPrice).HasColumnType("decimal(18, 2)");
 

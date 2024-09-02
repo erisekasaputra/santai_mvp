@@ -26,8 +26,8 @@ public static class BrandAPI
 
     private static async Task<IResult> GetBrandById(
         string brandId,
-        ApplicationService service,
-        IValidator<GetBrandByIdQuery> validator)
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<GetBrandByIdQuery> validator)
     {
         try
         {
@@ -60,7 +60,10 @@ public static class BrandAPI
         }
     }
 
-    private static async Task<IResult> GetPaginatedBrand([AsParameters] GetBrandPaginatedQuery brandPaginatedQuery, ApplicationService service, IValidator<GetBrandPaginatedQuery> validator)
+    private static async Task<IResult> GetPaginatedBrand(
+        [AsParameters] GetBrandPaginatedQuery brandPaginatedQuery,
+        [FromServices] ApplicationService service, 
+        [FromServices] IValidator<GetBrandPaginatedQuery> validator)
     {
         try
         {
@@ -93,8 +96,8 @@ public static class BrandAPI
 
     private static async Task<IResult> CreateNewBrand(
        [FromBody] CreateBrandCommand command,
-       ApplicationService service,
-       IValidator<CreateBrandCommand> validator)
+       [FromServices] ApplicationService service,
+       [FromServices] IValidator<CreateBrandCommand> validator)
     {
         try
         {
@@ -127,7 +130,11 @@ public static class BrandAPI
         }
     }
 
-    private static async Task<IResult> UpdateBrandById(string brandId, [FromBody] UpdateBrandCommand command, ApplicationService service, IValidator<UpdateBrandCommand> validator)
+    private static async Task<IResult> UpdateBrandById(
+        string brandId, 
+        [FromBody] UpdateBrandCommand command,
+        [FromServices] ApplicationService service, 
+        [FromServices] IValidator<UpdateBrandCommand> validator)
     {
         try
         {
@@ -162,7 +169,10 @@ public static class BrandAPI
         }
     }
 
-    private static async Task<IResult> DeleteBrandById(string brandId, ApplicationService service, IValidator<DeleteBrandCommand> validator)
+    private static async Task<IResult> DeleteBrandById(
+        string brandId, 
+        [FromServices] ApplicationService service, 
+        [FromServices] IValidator<DeleteBrandCommand> validator)
     {
         try
         {

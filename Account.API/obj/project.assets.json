@@ -2745,6 +2745,19 @@
           }
         }
       },
+      "Account.Contracts/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "dependencies": {
+          "MediatR": "12.4.0"
+        },
+        "compile": {
+          "bin/placeholder/Account.Contracts.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Account.Contracts.dll": {}
+        }
+      },
       "Account.Domain/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
@@ -7604,6 +7617,11 @@
         "timezoneconverter.nuspec"
       ]
     },
+    "Account.Contracts/1.0.0": {
+      "type": "project",
+      "path": "../Account.Contracts/Account.Contracts.csproj",
+      "msbuildProject": "../Account.Contracts/Account.Contracts.csproj"
+    },
     "Account.Domain/1.0.0": {
       "type": "project",
       "path": "../Account.Domain/Account.Domain.csproj",
@@ -7636,6 +7654,7 @@
       "AWSSDK.Extensions.NETCore.Setup >= 3.7.301",
       "AWSSDK.KeyManagementService >= 3.7.400.2",
       "AWSSDK.SecretsManager >= 3.7.400.2",
+      "Account.Contracts >= 1.0.0",
       "Account.Domain >= 1.0.0",
       "Account.Infrastructure >= 1.0.0",
       "AspNetCoreRateLimit >= 5.0.0",
@@ -7709,6 +7728,9 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
+            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Account.Contracts\\Account.Contracts.csproj": {
+              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Account.Contracts\\Account.Contracts.csproj"
+            },
             "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Account.Domain\\Account.Domain.csproj": {
               "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Account.Domain\\Account.Domain.csproj"
             },

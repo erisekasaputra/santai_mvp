@@ -12,6 +12,7 @@
           "AWSSDK.Extensions.NETCore.Setup": "3.7.301",
           "AWSSDK.KeyManagementService": "3.7.400.2",
           "AWSSDK.SecretsManager": "3.7.400.2",
+          "Account.Contracts": "1.0.0",
           "Account.Domain": "1.0.0",
           "Account.Infrastructure": "1.0.0",
           "AspNetCoreRateLimit": "5.0.0",
@@ -1733,6 +1734,17 @@
           }
         }
       },
+      "Account.Contracts/1.0.0": {
+        "dependencies": {
+          "MediatR": "12.4.0"
+        },
+        "runtime": {
+          "Account.Contracts.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "Account.Domain/1.0.0": {
         "dependencies": {
           "Identity.Contracts": "1.0.0",
@@ -2834,6 +2846,11 @@
       "sha512": "sha512-UGdtyKWJqXXinyvGB9X6NVoIYbTAidoZYmn3aXzxeEYC9+OL8vF36eDt1qjb6RqBkWDl4v7iE84ecI+dFhA80A==",
       "path": "timezoneconverter/6.1.0",
       "hashPath": "timezoneconverter.6.1.0.nupkg.sha512"
+    },
+    "Account.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
     },
     "Account.Domain/1.0.0": {
       "type": "project",

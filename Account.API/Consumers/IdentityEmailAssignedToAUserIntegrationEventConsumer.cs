@@ -9,18 +9,12 @@ using MediatR;
 
 namespace Account.API.Consumers;
 
-public class IdentityEmailAssignedToAUserIntegrationEventConsumer : IConsumer<IdentityEmailAssignedToAUserIntegrationEvent>
+public class IdentityEmailAssignedToAUserIntegrationEventConsumer(
+    IMediator mediator,
+    ILogger<IdentityPhoneNumberConfirmedIntegrationEventConsumer> logger) : IConsumer<IdentityEmailAssignedToAUserIntegrationEvent>
 {
-    private readonly IMediator _mediator;
-    private readonly ILogger<IdentityPhoneNumberConfirmedIntegrationEventConsumer> _logger;
-
-    public IdentityEmailAssignedToAUserIntegrationEventConsumer(
-        IMediator mediator,
-        ILogger<IdentityPhoneNumberConfirmedIntegrationEventConsumer> logger)
-    {
-        _mediator = mediator;
-        _logger = logger;
-    }
+    private readonly IMediator _mediator = mediator;
+    private readonly ILogger<IdentityPhoneNumberConfirmedIntegrationEventConsumer> _logger = logger;
 
     public async Task Consume(ConsumeContext<IdentityEmailAssignedToAUserIntegrationEvent> context)
     {

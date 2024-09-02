@@ -18,6 +18,7 @@ using Catalog.API.SeedWork;
 using Catalog.API.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Routing;
 namespace Catalog.API.API;
 
 public static class ItemAPI
@@ -28,9 +29,9 @@ public static class ItemAPI
 
         app.MapGet("/items/{itemId}", GetItemById);
         app.MapGet("/items", GetPaginatedItem);
-        
+
         app.MapPost("/items", CreateNewItem);
-        
+
         app.MapPut("/items/{itemId}", UpdateItemById);
 
         app.MapDelete("/items/{itemId}", DeleteItemById);
@@ -41,18 +42,18 @@ public static class ItemAPI
 
         app.MapPatch("/items/stock/reduce", ReduceItemsStock);
         app.MapPatch("/items/stock/increase", IncreaseItemsStock);
-        app.MapPatch("/items/stock", SetItemsStock);  
+        app.MapPatch("/items/stock", SetItemsStock);
         app.MapPatch("/items/sold/reduce", ReduceItemsSold);
         app.MapPatch("/items/sold/increase", IncreaseItemsSold);
-        app.MapPatch("/items/sold", SetItemsSold); 
-        app.MapPatch("/items/price", SetItemsPrice); 
-       
+        app.MapPatch("/items/sold", SetItemsSold);
+        app.MapPatch("/items/price", SetItemsPrice);
+
         return app;
     }
     private static async Task<IResult> GetItemById(
         string itemId,
-        ApplicationService service,
-        IValidator<GetItemByIdQuery> validator)
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<GetItemByIdQuery> validator)
     {
         try
         {
@@ -87,7 +88,10 @@ public static class ItemAPI
         }
     }
 
-    private static async Task<IResult> GetPaginatedItem([AsParameters] GetItemPaginatedQuery itemPaginatedQuery, ApplicationService service, IValidator<GetItemPaginatedQuery> validator)
+    private static async Task<IResult> GetPaginatedItem(
+        [AsParameters] GetItemPaginatedQuery itemPaginatedQuery, 
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<GetItemPaginatedQuery> validator)
     {
         try
         {
@@ -122,24 +126,21 @@ public static class ItemAPI
 
     private static async Task<IResult> CreateNewItem(
        [FromBody] CreateItemCommand command,
-       ApplicationService service,
-       IValidator<CreateItemCommand> validator,
-       HttpContext httpContext)
+       [FromServices] ApplicationService service,
+       [FromServices] IValidator<CreateItemCommand> validator)
     {
         try
-        {
+        {  
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            { 
+            {
                 return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(command);
 
             if (response.Success)
-            {
-                response.WithLink(service.LinkGenerator.GetPathByAction(httpContext, nameof(GetItemById)) ?? "");
-
+            {  
                 return TypedResults.Created(service.LinkGenerator.GetPathByName(nameof(GetItemById)), response);
             }
 
@@ -157,7 +158,11 @@ public static class ItemAPI
         }
     }
 
-    private static async Task<IResult> UpdateItemById(string itemId, [FromBody] UpdateItemCommand command, ApplicationService service, IValidator<UpdateItemCommand> validator)
+    private static async Task<IResult> UpdateItemById(
+        string itemId,
+        [FromBody] UpdateItemCommand command,
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<UpdateItemCommand> validator)
     {
         try
         {
@@ -168,7 +173,7 @@ public static class ItemAPI
 
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            { 
+            {
                 return TypedResults.BadRequest(validation.Errors);
             }
 
@@ -192,14 +197,17 @@ public static class ItemAPI
         }
     }
 
-    private static async Task<IResult> DeleteItemById(string itemId, ApplicationService service, IValidator<DeleteItemCommand> validator)
+    private static async Task<IResult> DeleteItemById(
+        string itemId,
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<DeleteItemCommand> validator)
     {
         try
         {
             var command = new DeleteItemCommand(itemId);
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            { 
+            {
                 return TypedResults.BadRequest(validation.Errors);
             }
 
@@ -213,15 +221,18 @@ public static class ItemAPI
             return TypedResults.InternalServerError();
         }
     }
-    
-    private static async Task<IResult> UndeleteItemById(string itemId, ApplicationService service, IValidator<UndeleteItemCommand> validator)
+
+    private static async Task<IResult> UndeleteItemById(
+        string itemId,
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<UndeleteItemCommand> validator)
     {
         try
         {
             var command = new UndeleteItemCommand(itemId);
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            { 
+            {
                 return TypedResults.BadRequest(validation.Errors);
             }
 
@@ -235,15 +246,18 @@ public static class ItemAPI
             return TypedResults.InternalServerError();
         }
     }
-    
-    private static async Task<IResult> SetItemActivateById(string itemId, ApplicationService service, IValidator<ActivateItemCommand> validator)
+
+    private static async Task<IResult> SetItemActivateById(
+        string itemId,
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<ActivateItemCommand> validator)
     {
         try
         {
             var command = new ActivateItemCommand(itemId);
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            { 
+            {
                 return TypedResults.BadRequest(validation.Errors);
             }
 
@@ -257,15 +271,18 @@ public static class ItemAPI
             return TypedResults.InternalServerError();
         }
     }
-    
-    private static async Task<IResult> SetItemDeactivateById(string itemId, ApplicationService service, IValidator<DeactivateItemCommand> validator)
-    { 
+
+    private static async Task<IResult> SetItemDeactivateById(
+        string itemId,
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<DeactivateItemCommand> validator)
+    {
         try
-        { 
+        {
             var command = new DeactivateItemCommand(itemId);
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)
-            {  
+            {
                 return TypedResults.BadRequest(validation.Errors);
             }
 
@@ -280,7 +297,43 @@ public static class ItemAPI
         }
     }
 
-    private static async Task<IResult> ReduceItemsStock(ReduceItemStockQuantityCommand command, ApplicationService service, IValidator<ReduceItemStockQuantityCommand> validator)
+    private static async Task<IResult> ReduceItemsStock(
+        [FromBody] ReduceItemStockQuantityCommand command,
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<ReduceItemStockQuantityCommand> validator)
+    {
+        try
+        {
+            var validation = await validator.ValidateAsync(command);
+            if (!validation.IsValid)
+            {
+                return TypedResults.BadRequest(validation.Errors);
+            }
+
+            var response = await service.Mediator.Send(command);
+
+            if (response.Success)
+            {
+                return TypedResults.NoContent();
+            }
+
+            return response.StatusCode switch
+            {
+                404 => TypedResults.NotFound(response),
+                _ => TypedResults.BadRequest(response),
+            };
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
+            return TypedResults.InternalServerError();
+        }
+    }
+
+    private static async Task<IResult> IncreaseItemsStock(
+        [FromBody] AddItemStockQuantityCommand command,
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<AddItemStockQuantityCommand> validator)
     {
         try
         { 
@@ -310,37 +363,10 @@ public static class ItemAPI
         }
     }
     
-    private static async Task<IResult> IncreaseItemsStock(AddItemStockQuantityCommand command, ApplicationService service, IValidator<AddItemStockQuantityCommand> validator)
-    {
-        try
-        { 
-            var validation = await validator.ValidateAsync(command);
-            if (!validation.IsValid)
-            { 
-                return TypedResults.BadRequest(validation.Errors);
-            }
-
-            var response = await service.Mediator.Send(command);
-
-            if (response.Success)
-            {
-                return TypedResults.NoContent();
-            }
-
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                _ => TypedResults.BadRequest(response),
-            }; 
-        }
-        catch (Exception ex)
-        {
-            service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.InternalServerError();
-        }
-    }
-    
-    private static async Task<IResult> SetItemsStock(SetItemStockQuantityCommand command, ApplicationService service, IValidator<SetItemStockQuantityCommand> validator)
+    private static async Task<IResult> SetItemsStock(
+        [FromBody] SetItemStockQuantityCommand command,
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<SetItemStockQuantityCommand> validator)
     {
         try
         { 
@@ -371,7 +397,10 @@ public static class ItemAPI
     }
      
 
-    private static async Task<IResult> ReduceItemsSold(ReduceItemSoldQuantityCommand command, ApplicationService service, IValidator<ReduceItemSoldQuantityCommand> validator)
+    private static async Task<IResult> ReduceItemsSold(
+        [FromBody] ReduceItemSoldQuantityCommand command,
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<ReduceItemSoldQuantityCommand> validator)
     {
         try
         {
@@ -401,7 +430,10 @@ public static class ItemAPI
         }
     }
 
-    private static async Task<IResult> IncreaseItemsSold(AddItemSoldQuantityCommand command, ApplicationService service, IValidator<AddItemSoldQuantityCommand> validator)
+    private static async Task<IResult> IncreaseItemsSold(
+        [FromBody] AddItemSoldQuantityCommand command,
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<AddItemSoldQuantityCommand> validator)
     {
         try
         {
@@ -431,7 +463,10 @@ public static class ItemAPI
         }
     }
 
-    private static async Task<IResult> SetItemsSold(SetItemSoldQuantityCommand command, ApplicationService service, IValidator<SetItemSoldQuantityCommand> validator)
+    private static async Task<IResult> SetItemsSold(
+        [FromBody] SetItemSoldQuantityCommand command,
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<SetItemSoldQuantityCommand> validator)
     {
         try
         {
@@ -461,7 +496,10 @@ public static class ItemAPI
         }
     }
 
-    private static async Task<IResult> SetItemsPrice(SetItemPriceCommand command, ApplicationService service, IValidator<SetItemPriceCommand> validator)
+    private static async Task<IResult> SetItemsPrice(
+        [FromBody] SetItemPriceCommand command,
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<SetItemPriceCommand> validator)
     {
         try
         {

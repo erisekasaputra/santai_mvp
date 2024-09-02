@@ -1,10 +1,9 @@
-using MassTransit;
+using MassTransit; 
 using Search.Worker.Configurations;
 using Search.Worker.Consumers;
-using Search.Worker.Domain.Repository;
+using Search.Worker.Domain.Repositories;
 using Search.Worker.Infrastructure;
-using Search.Worker.Infrastructure.Repository;
-using System.Configuration;
+using Search.Worker.Infrastructure.Repositories;
 
 var builder = Host.CreateApplicationBuilder(args); 
 
@@ -43,7 +42,19 @@ builder.Services.AddMassTransit(x =>
         {
             host.Username(builder.Configuration["RabbitMQ:Username"] ?? "user");
             host.Password(builder.Configuration["RabbitMQ:Password"] ?? "user");
-        }); 
+        });
+
+        config.UseMessageRetry(retryCfg =>
+        {
+            retryCfg.Interval(3,
+                TimeSpan.FromSeconds(3));
+        });
+
+        config.UseTimeout(timeoutCfg =>
+        {
+            timeoutCfg.Timeout = TimeSpan.FromSeconds(10);
+        });
+
 
         var consumers = new (string QueueName, Type ConsumerType)[]
         {  
@@ -66,7 +77,9 @@ builder.Services.AddMassTransit(x =>
             ("category-updated-integration-event-queue", typeof(CategoryUpdatedIntegrationEventConsumer))
         };
 
-        foreach(var (queueName , consumerType) in consumers)
+        config.ConfigureEndpoints(context);
+
+        foreach (var (queueName , consumerType) in consumers)
         {
             config.ReceiveEndpoint(queueName, receiveBuilder =>
             {
@@ -75,9 +88,7 @@ builder.Services.AddMassTransit(x =>
         }
 
         void ConfigureEndPoint(IReceiveEndpointConfigurator receiveBuilder, string queueName, Type consumerType)
-        {
-            //receiveBuilder.ConfigureConsumer(context, consumerType);
-
+        {  
             receiveBuilder.UseMessageRetry(retry =>
             {
                 retry.Interval(3, TimeSpan.FromSeconds(2));

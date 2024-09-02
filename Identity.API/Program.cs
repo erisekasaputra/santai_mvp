@@ -127,6 +127,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 
     options.UseSqlServer(databaseOption.ConnectionString, optionBuilder =>
     {
+        optionBuilder.EnableRetryOnFailure(databaseOption.MaxRetryCount);
         optionBuilder.CommandTimeout(databaseOption.CommandTimeout); 
     });
 });
@@ -152,8 +153,7 @@ builder.Services.AddMassTransit(x =>
     });
 
     x.UsingRabbitMq((context, configure) =>
-    {
-
+    { 
         configure.Host(eventBusOptions.Host, host =>
         {
             host.Username(eventBusOptions.Username ?? "user");

@@ -2,4 +2,4 @@
 
 namespace Account.Domain.Events;
 
-public record BusinessLicenseAcceptedDomainEvent : INotification; 
+public record BusinessLicenseAcceptedDomainEvent(Guid BusinessLicenseId) : INotification; 

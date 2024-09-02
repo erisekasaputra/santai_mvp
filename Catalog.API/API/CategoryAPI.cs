@@ -28,8 +28,8 @@ public static class CategoryAPI
 
     private static async Task<IResult> GetCategoryById(
         string categoryId,
-        ApplicationService service,
-        IValidator<GetCategoryByIdQuery> validator)
+        [FromServices] ApplicationService service,
+        [FromServices] IValidator<GetCategoryByIdQuery> validator)
     {
         try
         {
@@ -62,7 +62,10 @@ public static class CategoryAPI
         }
     }
 
-    private static async Task<IResult> GetPaginatedCategory([AsParameters] GetCategoryPaginatedQuery itemPaginatedQuery, ApplicationService service, IValidator<GetCategoryPaginatedQuery> validator)
+    private static async Task<IResult> GetPaginatedCategory(
+        [AsParameters] GetCategoryPaginatedQuery itemPaginatedQuery, 
+        [FromServices] ApplicationService service, 
+        [FromServices] IValidator<GetCategoryPaginatedQuery> validator)
     {
         try
         {
@@ -95,8 +98,8 @@ public static class CategoryAPI
 
     private static async Task<IResult> CreateNewCategory(
        [FromBody] CreateCategoryCommand command,
-       ApplicationService service,
-       IValidator<CreateCategoryCommand> validator)
+       [FromServices] ApplicationService service,
+       [FromServices] IValidator<CreateCategoryCommand> validator)
     {
         try
         {
@@ -129,7 +132,11 @@ public static class CategoryAPI
         }
     }
 
-    private static async Task<IResult> UpdateCategoryById(string categoryId, [FromBody] UpdateCategoryCommand command, ApplicationService service, IValidator<UpdateCategoryCommand> validator)
+    private static async Task<IResult> UpdateCategoryById(
+        string categoryId, 
+        [FromBody] UpdateCategoryCommand command, 
+        [FromServices] ApplicationService service, 
+        [FromServices] IValidator<UpdateCategoryCommand> validator)
     {
         try
         {
@@ -164,7 +171,10 @@ public static class CategoryAPI
         }
     }
 
-    private static async Task<IResult> DeleteCategoryById(string categoryId, ApplicationService service, IValidator<DeleteCategoryCommand> validator)
+    private static async Task<IResult> DeleteCategoryById(
+        string categoryId, 
+        [FromServices] ApplicationService service, 
+        [FromServices] IValidator<DeleteCategoryCommand> validator)
     {
         try
         {

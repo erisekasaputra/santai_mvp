@@ -1,6 +1,6 @@
-﻿using MediatR; 
+﻿using MediatR;
 using Search.Worker.Domain.Models;
-using Search.Worker.Domain.Repository; 
+using Search.Worker.Domain.Repositories;
 
 namespace Search.Worker.Applications.Commands.CreateItem;
 

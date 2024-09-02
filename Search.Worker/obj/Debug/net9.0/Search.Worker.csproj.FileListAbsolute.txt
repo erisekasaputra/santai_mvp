@@ -235,3 +235,4 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Search.Worker\obj\Debug\net9.0\Search.Worker.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Search.Worker\obj\Debug\net9.0\Search.Worker.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Search.Worker\obj\Debug\net9.0\ref\Search.Worker.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Search.Worker\bin\Debug\net9.0\appsettings.Production.json
