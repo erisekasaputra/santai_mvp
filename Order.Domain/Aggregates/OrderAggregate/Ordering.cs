@@ -110,10 +110,33 @@ public class Ordering : Entity
 
         Fleets.Add(fleet);
     }
-    
 
 
+    public void RemoveFleet(Fleet fleet) 
+    {
+        Fleets ??= [];
 
+        if (fleet is null)
+            throw new ArgumentNullException(nameof(fleet), "Fleet cannot be null.");
+
+        Fleets.Remove(fleet);
+    }
+
+
+    public void AssignMechanic(Mechanic mechanic)
+    {
+        if (mechanic is null)
+            throw new ArgumentNullException(nameof(mechanic), "Mechanic cannot be null.");
+
+        if (IsScheduled && DateTime.UtcNow < ScheduledOn)
+        {
+            string? formattedDate = ScheduledOn?.ToString("dddd, MMMM d, yyyy, h:mm tt");
+
+            throw new DomainException($"The mechanic can only be assigned on or after {formattedDate}.");
+        } 
+
+        Mechanic = mechanic;    
+    }
 
 
 

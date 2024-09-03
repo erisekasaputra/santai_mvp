@@ -33,8 +33,7 @@ public class GetTimeZoneByStaffIdQueryHandler(
             }
 
             return Result.Success(new
-            {
-                request.StaffId,
+            { 
                 TimeZoneId = timeZoneId,
             }, ResponseStatus.Ok);
         }

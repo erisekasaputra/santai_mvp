@@ -13,3 +13,8 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\obj\Debug\net9.0\ref\Order.Infrastructure.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\bin\Debug\net9.0\Identity.Contracts.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\bin\Debug\net9.0\Order.Domain.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\bin\Debug\net9.0\Identity.Contracts.pdb
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\bin\Debug\net9.0\Order.Domain.pdb
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\obj\Debug\net9.0\Order.In.AA82CA84.Up2Date

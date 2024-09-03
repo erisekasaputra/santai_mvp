@@ -1,16 +1,18 @@
-﻿using Account.API.Applications.Commands.FleetCommand.AssignFleetsToStaff;
-using Account.API.Applications.Commands.UserCommand.ConfirmUserEmailByUserId;
-using Account.API.Applications.Commands.UserCommand.ConfirmUserPhoneNumberByUserId;
-using Account.API.Applications.Commands.UserCommand.UpdateUserEmailByUserId;
-using Account.API.Applications.Commands.UserCommand.UpdateUserPhoneNumberByUserId;
+﻿//using Account.API.Applications.Commands.UserCommand.ConfirmUserEmailByUserId;
+//using Account.API.Applications.Commands.UserCommand.ConfirmUserPhoneNumberByUserId;
+//using Account.API.Applications.Commands.UserCommand.UpdateUserEmailByUserId;
+//using Account.API.Applications.Commands.UserCommand.UpdateUserPhoneNumberByUserId;
+//using FluentValidation;
+using Account.API.Applications.Commands.FleetCommand.AssignFleetsToStaff;
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetEmailByUserId;
 using Account.API.Applications.Queries.GetPhoneNumberByUserId;
 using Account.API.Applications.Queries.GetTimeZoneByUserId;
 using Account.API.Extensions;
+using Account.API.Infrastructures;
 using Account.API.SeedWork;
 using Account.API.Services;
-using FluentValidation;
+using Identity.Contracts.Enumerations;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Account.API.API;
@@ -21,26 +23,45 @@ public static class UserApi
     {
         var app = route.MapGroup("api/v1/users"); 
 
-        app.MapPatch("/{userId}/email", UpdateUserEmailByUserId);
-        app.MapPatch("/{userId}/email/confirm", ConfirmUserEmailByUserId);
-        app.MapPatch("/{userId}/phone-number", UpdateUserPhoneNumberByUserId);
-        app.MapPatch("/{userId}/phone-number/confirm", ConfirmUserPhoneNumberByUserId);
-        app.MapPatch("/{userId}/staff/{staffId}/fleets", AssignFleetsToStaff);
+        //app.MapPatch("/{userId}/email", UpdateUserEmailByUserId);
 
-        app.MapGet("/{userId}/email", GetEmailByUserId).CacheOutput();
-        app.MapGet("/{userId}/phone-number", GetPhoneNumberByUserId).CacheOutput();
-        app.MapGet("/{userId}/time-zone", GetTimeZoneByUserId).CacheOutput();
+        //app.MapPatch("/{userId}/email/confirm", ConfirmUserEmailByUserId);
+        
+        //app.MapPatch("/{userId}/phone-number", UpdateUserPhoneNumberByUserId);
+        
+        //app.MapPatch("/{userId}/phone-number/confirm", ConfirmUserPhoneNumberByUserId);
+        
+        app.MapPatch("/{userId}/staff/{staffId}/fleets", AssignFleetsToStaff)
+            .RequireAuthorization(PolicyName.BusinessUserPolicy, PolicyName.AdministratorPolicy);
+
+        app.MapGet("/email", GetEmailByUserId) 
+            .RequireAuthorization()
+            .CacheOutput();
+        
+        app.MapGet("/phone-number", GetPhoneNumberByUserId)
+            .RequireAuthorization()
+            .CacheOutput();
+        
+        app.MapGet("/time-zone", GetTimeZoneByUserId)
+            .RequireAuthorization()
+            .CacheOutput();
 
         return app;
     }
 
-    private static async Task<IResult> GetTimeZoneByUserId(
-        Guid userId,
-        [FromServices] ApplicationService service)
+    private static async Task<IResult> GetTimeZoneByUserId( 
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
     { 
         try
         {
-            var result = await service.Mediator.Send(new GetTimeZoneByUserIdQuery(userId));
+            var userClaim = userInfoService.GetUserInfoAsync();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }  
+
+            var result = await service.Mediator.Send(new GetTimeZoneByUserIdQuery(userClaim.Sub));
 
             return result.ToIResult();
         }
@@ -51,13 +72,19 @@ public static class UserApi
         }
     }
 
-    private static async Task<IResult> GetPhoneNumberByUserId(
-        Guid userId, 
-        [FromServices] ApplicationService service)
+    private static async Task<IResult> GetPhoneNumberByUserId( 
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
     { 
         try
         {
-            var result = await service.Mediator.Send(new GetPhoneNumberByUserIdQuery(userId));
+            var userClaim = userInfoService.GetUserInfoAsync();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            var result = await service.Mediator.Send(new GetPhoneNumberByUserIdQuery(userClaim.Sub));
 
             return result.ToIResult();
         }
@@ -68,13 +95,19 @@ public static class UserApi
         }
     }
 
-    private static async Task<IResult> GetEmailByUserId(
-        Guid userId, 
-        [FromServices] ApplicationService service)
+    private static async Task<IResult> GetEmailByUserId( 
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
     { 
         try
         {
-            var result = await service.Mediator.Send(new GetEmailByUserIdQuery(userId));
+            var userClaim = userInfoService.GetUserInfoAsync();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            var result = await service.Mediator.Send(new GetEmailByUserIdQuery(userClaim.Sub));
 
             return result.ToIResult();
         }
@@ -89,11 +122,22 @@ public static class UserApi
         Guid userId, 
         Guid staffId,
         [FromBody] AssignFleetsToStaffRequestDto request,
-        ApplicationService service)
-    {
-        // later on , user id is from user claims at authentication level  
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
+    { 
         try
-        {  
+        {
+            var userClaim = userInfoService.GetUserInfoAsync();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            if (userClaim.CurrentUserType == UserType.BusinessUser && userId != userClaim.Sub) 
+            {
+                return TypedResults.Forbid();
+            }
+
             var result = await service.Mediator.Send(
                 new AssignFleetsToStaffCommand(userId, staffId, request.FleetIds));
             
@@ -106,81 +150,117 @@ public static class UserApi
         }
     }
 
-    private static async Task<IResult> UpdateUserEmailByUserId(
-        Guid userId, 
-        [FromBody] EmailRequestDto request, 
-        ApplicationService service, 
-        IValidator<EmailRequestDto> validator)
-    {
-        // later on , user id is from user claims at authentication level  
-        try
-        {   
-            var validate = await validator.ValidateAsync(request); 
-            if (!validate.IsValid)
-            {
-                var error = validate.Errors;
-                return TypedResults.BadRequest(error);
-            }
+    //private static async Task<IResult> UpdateUserEmailByUserId(
+    //    Guid userId, 
+    //    [FromBody] EmailRequestDto request, 
+    //    [FromServices] ApplicationService service, 
+    //    [FromServices] IValidator<EmailRequestDto> validator,
+    //    [FromServices] IUserInfoService userInfoService)
+    //{
+    //    // later on , user id is from user claims at authentication level  
+    //    try
+    //    {
+    //        var userClaim = userInfoService.GetUserInfoAsync();
+    //        if (userClaim is null)
+    //        {
+    //            return TypedResults.Unauthorized();
+    //        }
 
-            var result = await service.Mediator.Send(new UpdateUserEmailByUserIdCommand(userId, request.Email)); 
-            return result.ToIResult();
-        }
-        catch (Exception ex)
-        {
-            service.Logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
-    }
+    //        var validate = await validator.ValidateAsync(request); 
+    //        if (!validate.IsValid)
+    //        {
+    //            var error = validate.Errors;
+    //            return TypedResults.BadRequest(error);
+    //        }
 
-    private static async Task<IResult> ConfirmUserEmailByUserId(Guid userId, ApplicationService service, IValidator<EmailRequestDto> validator)
-    {
-        // later on , user id is from user claims at authentication level  
-        try
-        { 
-            var result = await service.Mediator.Send(new ConfirmUserEmailByUserIdCommand(userId)); 
-            return result.ToIResult();
-        }
-        catch (Exception ex)
-        {
-            service.Logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
-    }
+    //        var result = await service.Mediator.Send(new UpdateUserEmailByUserIdCommand(userId, request.Email)); 
+    //        return result.ToIResult();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        service.Logger.LogError(ex, ex.InnerException?.Message);
+    //        return TypedResults.InternalServerError(Messages.InternalServerError);
+    //    }
+    //}
 
-    private static async Task<IResult> UpdateUserPhoneNumberByUserId(Guid userId, [FromBody] PhoneNumberRequestDto request, ApplicationService service, IValidator<PhoneNumberRequestDto> validator)
-    {
-        // later on , user id is from user claims at authentication level  
-        try
-        { 
-            var validate = await validator.ValidateAsync(request);  
-            if (!validate.IsValid)
-            {
-                var error = validate.Errors;
-                return TypedResults.BadRequest(error);
-            }
+    //private static async Task<IResult> ConfirmUserEmailByUserId(
+    //    Guid userId,
+    //    [FromServices] ApplicationService service,
+    //    [FromServices] IValidator<EmailRequestDto> validator,
+    //    [FromServices] IUserInfoService userInfoService)
+    //{
+    //    // later on , user id is from user claims at authentication level  
+    //    try
+    //    {
+    //        var userClaim = userInfoService.GetUserInfoAsync();
+    //        if (userClaim is null)
+    //        {
+    //            return TypedResults.Unauthorized();
+    //        }
 
-            var result = await service.Mediator.Send(new UpdateUserPhoneNumberByUserIdCommand(userId, request.PhoneNumber)); 
-            return result.ToIResult();
-        }
-        catch (Exception ex)
-        {
-            service.Logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
-    }
+    //        var result = await service.Mediator.Send(new ConfirmUserEmailByUserIdCommand(userId)); 
+    //        return result.ToIResult();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        service.Logger.LogError(ex, ex.InnerException?.Message);
+    //        return TypedResults.InternalServerError(Messages.InternalServerError);
+    //    }
+    //}
 
-    private static async Task<IResult> ConfirmUserPhoneNumberByUserId(Guid userId, ApplicationService service)
-    {
-        // later on , user id is from user claims at authentication level  
-        try
-        { 
-            var result = await service.Mediator.Send(new ConfirmUserPhoneNumberByUserIdCommand(userId)); 
-            return result.ToIResult();
-        }
-        catch (Exception ex)
-        {
-            service.Logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
-    }
+    //private static async Task<IResult> UpdateUserPhoneNumberByUserId(
+    //    Guid userId,
+    //    [FromBody] PhoneNumberRequestDto request,
+    //    [FromServices] ApplicationService service,
+    //    [FromServices] IValidator<PhoneNumberRequestDto> validator,
+    //    [FromServices] IUserInfoService userInfoService)
+    //{
+    //    // later on , user id is from user claims at authentication level  
+    //    try
+    //    {
+    //        var userClaim = userInfoService.GetUserInfoAsync();
+    //        if (userClaim is null)
+    //        {
+    //            return TypedResults.Unauthorized();
+    //        }
+
+    //        var validate = await validator.ValidateAsync(request);  
+    //        if (!validate.IsValid)
+    //        {
+    //            var error = validate.Errors;
+    //            return TypedResults.BadRequest(error);
+    //        }
+
+    //        var result = await service.Mediator.Send(new UpdateUserPhoneNumberByUserIdCommand(userId, request.PhoneNumber)); 
+    //        return result.ToIResult();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        service.Logger.LogError(ex, ex.InnerException?.Message);
+    //        return TypedResults.InternalServerError(Messages.InternalServerError);
+    //    }
+    //}
+
+    //private static async Task<IResult> ConfirmUserPhoneNumberByUserId(
+    //    Guid userId, 
+    //    ApplicationService service,
+    //    [FromServices] IUserInfoService userInfoService)
+    //{ 
+    //    try
+    //    {
+    //        var userClaim = userInfoService.GetUserInfoAsync();
+    //        if (userClaim is null)
+    //        {
+    //            return TypedResults.Unauthorized();
+    //        }
+
+    //        var result = await service.Mediator.Send(new ConfirmUserPhoneNumberByUserIdCommand(userId)); 
+    //        return result.ToIResult();
+    //    }
+    //    catch (Exception ex)
+    //    {
+    //        service.Logger.LogError(ex, ex.InnerException?.Message);
+    //        return TypedResults.InternalServerError(Messages.InternalServerError);
+    //    }
+    //}
 }

@@ -27,11 +27,9 @@ using Account.API.Applications.Queries.GetStaffByUserIdAndStaffId;
 using Account.API.Applications.Queries.GetTimeZoneByStaffId;
 using Account.API.CustomAttributes;
 using Account.API.Extensions;
-using Account.API.Infrastructures;
-using Account.API.Model;
+using Account.API.Infrastructures; 
 using Account.API.SeedWork;
-using Account.API.Services;
-using Account.Domain.Aggregates.UserAggregate;
+using Account.API.Services; 
 using FluentValidation;
 using Identity.Contracts.Enumerations;
 using Microsoft.AspNetCore.Mvc;
@@ -68,7 +66,7 @@ public static class BusinessUserApi
             .RequireAuthorization(
                 PolicyName.AdministratorPolicy, 
                 PolicyName.BusinessUserPolicy, 
-                PolicyName.StaffUserPolicy);
+                PolicyName.StaffUserPolicy); 
 
 
 
