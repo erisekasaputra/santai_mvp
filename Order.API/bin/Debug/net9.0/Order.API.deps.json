@@ -224,6 +224,18 @@
           }
         }
       },
+      "MassTransit.EntityFramework/8.2.6-develop.1976": {
+        "dependencies": {
+          "EntityFramework": "6.5.1",
+          "MassTransit": "8.2.6-develop.1976"
+        },
+        "runtime": {
+          "lib/netstandard2.1/MassTransit.EntityFrameworkIntegration.dll": {
+            "assemblyVersion": "8.2.6.0",
+            "fileVersion": "8.2.6.0"
+          }
+        }
+      },
       "MassTransit.EntityFrameworkCore/8.2.6-develop.1976": {
         "dependencies": {
           "MassTransit": "8.2.6-develop.1976",
@@ -1415,6 +1427,8 @@
           "Azure.Identity": "1.13.0-beta.1",
           "EntityFramework": "6.5.1",
           "Identity.Contracts": "1.0.0",
+          "MassTransit.EntityFramework": "8.2.6-develop.1976",
+          "MassTransit.EntityFrameworkCore": "8.2.6-develop.1976",
           "MediatR": "12.4.0",
           "Microsoft.EntityFrameworkCore": "9.0.0-preview.7.24405.3",
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.0-preview.7.24405.3",
@@ -1542,6 +1556,13 @@
       "sha512": "sha512-l5zu6mHevPQGP1tfDg4My8dtqH4n2jL22+Y1+GnAs12liQy5gYLcJAwSmCKb1iusjjD9S1tgfdILVkAfShfN8w==",
       "path": "masstransit.aspnetcore/7.3.1",
       "hashPath": "masstransit.aspnetcore.7.3.1.nupkg.sha512"
+    },
+    "MassTransit.EntityFramework/8.2.6-develop.1976": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-V+E8JIdSmlVOTPqN1Vp0VWYaN7NOBEHtmtc8Xzb/yGPkJxPXlltY8ZkSBjWYYyrbACnuva5e9Earn4FSFMLUrQ==",
+      "path": "masstransit.entityframework/8.2.6-develop.1976",
+      "hashPath": "masstransit.entityframework.8.2.6-develop.1976.nupkg.sha512"
     },
     "MassTransit.EntityFrameworkCore/8.2.6-develop.1976": {
       "type": "package",

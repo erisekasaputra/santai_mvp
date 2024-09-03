@@ -25,13 +25,7 @@ public class TokenJwtHandler : DelegatingHandler
             { 
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
             }
-        }
-
-        // Log the request headers for debugging
-        foreach (var header in request.Headers)
-        {
-            System.Diagnostics.Debug.WriteLine($"Header: {header.Key} = {string.Join(", ", header.Value)}");
-        }
+        } 
 
         return await base.SendAsync(request, cancellationToken);
     }

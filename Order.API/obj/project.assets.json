@@ -274,6 +274,23 @@
           }
         }
       },
+      "MassTransit.EntityFramework/8.2.6-develop.1976": {
+        "type": "package",
+        "dependencies": {
+          "EntityFramework": "6.5.1",
+          "MassTransit": "8.2.6-develop.1976"
+        },
+        "compile": {
+          "lib/netstandard2.1/MassTransit.EntityFrameworkIntegration.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.1/MassTransit.EntityFrameworkIntegration.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "MassTransit.EntityFrameworkCore/8.2.6-develop.1976": {
         "type": "package",
         "dependencies": {
@@ -2208,6 +2225,8 @@
           "Azure.Identity": "1.13.0-beta.1",
           "EntityFramework": "6.5.1",
           "Identity.Contracts": "1.0.0",
+          "MassTransit.EntityFramework": "8.2.6-develop.1976",
+          "MassTransit.EntityFrameworkCore": "8.2.6-develop.1976",
           "MediatR": "12.4.0",
           "Microsoft.EntityFrameworkCore": "9.0.0-preview.7.24405.3",
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.0-preview.7.24405.3",
@@ -2592,6 +2611,23 @@
         "lib/netstandard2.0/MassTransit.AspNetCoreIntegration.xml",
         "masstransit.aspnetcore.7.3.1.nupkg.sha512",
         "masstransit.aspnetcore.nuspec",
+        "mt-logo-small.png"
+      ]
+    },
+    "MassTransit.EntityFramework/8.2.6-develop.1976": {
+      "sha512": "V+E8JIdSmlVOTPqN1Vp0VWYaN7NOBEHtmtc8Xzb/yGPkJxPXlltY8ZkSBjWYYyrbACnuva5e9Earn4FSFMLUrQ==",
+      "type": "package",
+      "path": "masstransit.entityframework/8.2.6-develop.1976",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NuGet.README.md",
+        "lib/net472/MassTransit.EntityFrameworkIntegration.dll",
+        "lib/net472/MassTransit.EntityFrameworkIntegration.xml",
+        "lib/netstandard2.1/MassTransit.EntityFrameworkIntegration.dll",
+        "lib/netstandard2.1/MassTransit.EntityFrameworkIntegration.xml",
+        "masstransit.entityframework.8.2.6-develop.1976.nupkg.sha512",
+        "masstransit.entityframework.nuspec",
         "mt-logo-small.png"
       ]
     },

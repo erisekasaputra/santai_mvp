@@ -207,6 +207,14 @@
               "target": "Package",
               "version": "[6.5.1, )"
             },
+            "MassTransit.EntityFramework": {
+              "target": "Package",
+              "version": "[8.2.6-develop.1976, )"
+            },
+            "MassTransit.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.2.6-develop.1976, )"
+            },
             "MediatR": {
               "target": "Package",
               "version": "[12.4.0, )"

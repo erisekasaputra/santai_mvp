@@ -18,9 +18,12 @@ namespace Account.Infrastructure;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private readonly AccountDbContext _context;
+    private AccountDbContext _context;
+
     private IDbContextTransaction? _transaction;
-    private readonly IMediator _mediator;
+    
+    private IMediator _mediator;
+
     public IUserRepository BaseUsers { get; }
     public IBusinessLicenseRepository BusinessLicenses { get; }
     public ICertificationRepository Certifications { get; }
@@ -29,8 +32,7 @@ public class UnitOfWork : IUnitOfWork
     public ILoyaltyProgramRepository LoyaltyPrograms { get; }
     public IReferralProgramRepository ReferralPrograms { get; }
     public IReferredProgramRepository ReferredPrograms { get; }
-    public IStaffRepository Staffs { get; }
-
+    public IStaffRepository Staffs { get; } 
     public IFleetRepository Fleets { get; }
 
     public UnitOfWork(AccountDbContext context, IMediator mediator)
@@ -70,15 +72,16 @@ public class UnitOfWork : IUnitOfWork
              
             await SaveChangesAsync(cancellationToken);
 
-            await _transaction.CommitAsync(cancellationToken);
-            
-            _transaction.Dispose();
-            
-            _transaction = null;
+            await _transaction.CommitAsync(cancellationToken);  
         }
         catch (Exception)
         { 
             throw;
+        }
+        finally
+        {
+            _transaction?.Dispose();
+            _transaction = null;
         }
     }
 

@@ -206,3 +206,4 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.API\bin\Debug\net9.0\Identity.Contracts.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.API\bin\Debug\net9.0\Order.Domain.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.API\bin\Debug\net9.0\Order.Infrastructure.pdb
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.API\bin\Debug\net9.0\MassTransit.EntityFrameworkIntegration.dll

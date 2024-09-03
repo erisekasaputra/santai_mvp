@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "jlUufuHwIx8=",
+  "dgSpecHash": "g3zk1DB3zf8=",
   "success": true,
   "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Order.API\\Order.API.csproj",
   "expectedPackageFiles": [
@@ -19,6 +19,7 @@
     "C:\\Users\\erise\\.nuget\\packages\\masstransit.abstractions\\8.2.6-develop.1976\\masstransit.abstractions.8.2.6-develop.1976.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\masstransit.amazonsqs\\8.2.6-develop.1976\\masstransit.amazonsqs.8.2.6-develop.1976.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\masstransit.aspnetcore\\7.3.1\\masstransit.aspnetcore.7.3.1.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\masstransit.entityframework\\8.2.6-develop.1976\\masstransit.entityframework.8.2.6-develop.1976.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\masstransit.entityframeworkcore\\8.2.6-develop.1976\\masstransit.entityframeworkcore.8.2.6-develop.1976.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\masstransit.extensions.dependencyinjection\\7.3.1\\masstransit.extensions.dependencyinjection.7.3.1.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\masstransit.rabbitmq\\8.2.6-develop.1976\\masstransit.rabbitmq.8.2.6-develop.1976.nupkg.sha512",
