@@ -1,6 +1,7 @@
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Domain\bin\Debug\net9.0\Order.Domain.deps.json
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Domain\bin\Debug\net9.0\Order.Domain.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Domain\bin\Debug\net9.0\Order.Domain.pdb
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Domain\obj\Debug\net9.0\Order.Domain.csproj.AssemblyReference.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Domain\obj\Debug\net9.0\Order.Domain.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Domain\obj\Debug\net9.0\Order.Domain.AssemblyInfoInputs.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Domain\obj\Debug\net9.0\Order.Domain.AssemblyInfo.cs

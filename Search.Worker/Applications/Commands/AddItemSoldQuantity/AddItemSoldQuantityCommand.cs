@@ -2,4 +2,4 @@
 
 namespace Search.Worker.Applications.Commands.AddItemSoldQuantity;
 
-internal record AddItemSoldQuantityCommand(string Id, int Quantity) : IRequest<Unit>;
+internal record AddItemSoldQuantityCommand(Guid Id, int Quantity) : IRequest<Unit>;

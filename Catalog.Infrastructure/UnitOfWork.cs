@@ -71,9 +71,14 @@ public class UnitOfWork : IUnitOfWork
                 throw new InvalidOperationException("No transaction started.");
             }
 
+            await DispatchDomainEventsAsync(cancellationToken);
+
             await _context.SaveChangesAsync(cancellationToken);
+
             await _transaction.CommitAsync(cancellationToken);
+            
             _transaction.Dispose();
+            
             _transaction = null;
         }
         catch (Exception)
@@ -91,7 +96,9 @@ public class UnitOfWork : IUnitOfWork
         }
 
         await _transaction.RollbackAsync(cancellationToken);
+
         _transaction.Dispose();
+        
         _transaction = null;
     }
 

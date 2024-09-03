@@ -1,16 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Catalog.Domain.Aggregates.ItemAggregate;
-using Newtonsoft.Json;
-using Catalog.Domain.Aggregates.BrandAggregate;
+using Catalog.Domain.Aggregates.ItemAggregate; 
 
 namespace Catalog.Infrastructure.EntityConfiguration; 
 public class ItemEntityConfigurator : IEntityTypeConfiguration<Item>
 {
     public void Configure(EntityTypeBuilder<Item> builder)
-    {
-        builder.ToTable("items");
-
+    { 
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id)
@@ -21,6 +17,9 @@ public class ItemEntityConfigurator : IEntityTypeConfiguration<Item>
 
         builder.Property(b => b.Description)
             .HasMaxLength(1000);
+
+        builder.Property(b => b.Sku)
+           .HasMaxLength(50);
 
         builder.Property(b => b.ImageUrl)
             .HasMaxLength(500); 

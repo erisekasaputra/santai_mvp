@@ -45,7 +45,7 @@ public class Category(string name, string imageUrl) : Entity, IAggregateRoot
     {
         AddDomainEvent(new CategoryUpdatedDomainEvent(category));
     }
-    private void RaiseCategoryDeletedDomainEvent(string id)
+    private void RaiseCategoryDeletedDomainEvent(Guid id)
     {
         AddDomainEvent(new CategoryDeletedDomainEvent(id));
     }

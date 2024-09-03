@@ -6,11 +6,7 @@ namespace Catalog.API.Validations.Category;
 public class UpdateCategoryCommandValidator : AbstractValidator<UpdateCategoryCommand>
 {
     public UpdateCategoryCommandValidator()
-    {
-        RuleFor(x => x.Id)
-           .NotEmpty().WithMessage("Category ID is required.")
-           .Length(26).WithMessage("The length of the category ID should be 26 characters.");
-
+    {  
         RuleFor(x => x.Name)
            .NotEmpty().WithMessage("Name is required.")
            .Length(2, 50).WithMessage("Name must be between 2 and 50 characters.");

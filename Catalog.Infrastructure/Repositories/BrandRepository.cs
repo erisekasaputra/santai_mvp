@@ -16,7 +16,7 @@ public class BrandRepository(CatalogDbContext context, MetaTableHelper metaTable
         return entry.Entity; 
     }
      
-    public async Task<Brand?> GetBrandByIdAsync(string id)
+    public async Task<Brand?> GetBrandByIdAsync(Guid id)
     {
         return await _context.Brands
             .Where(w => !w.IsDeleted)

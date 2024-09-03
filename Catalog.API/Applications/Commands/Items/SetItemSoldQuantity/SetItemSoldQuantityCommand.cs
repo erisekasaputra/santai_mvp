@@ -4,4 +4,5 @@ using MediatR;
 
 namespace Catalog.API.Applications.Commands.Items.SetItemSoldQuantity;
 
-public record SetItemSoldQuantityCommand(IEnumerable<SetItemSoldQuantityRequest> SetItemSoldQuantityRequests) : IRequest<Result<IEnumerable<ItemSoldDto>>>;
+public record SetItemSoldQuantityCommand(
+    IEnumerable<SetItemSoldQuantityRequest> SetItemSoldQuantityRequests) : IRequest<Result<IEnumerable<ItemSoldDto>>>;

@@ -6,9 +6,9 @@ namespace Catalog.API.Validations.Item;
 public class DeactivateItemCommandValidator : AbstractValidator<DeactivateItemCommand>
 {
     public DeactivateItemCommandValidator()
-    { 
+    {
         RuleFor(x => x.Id)
-            .NotEmpty().WithMessage("ID is required")
-            .Length(26).WithMessage("The ID should be in 26 characters length");
+           .NotEmpty().WithMessage("Id is required.")
+           .NotEqual(Guid.Empty).WithMessage("The Id cannot be empty.");
     }
 }

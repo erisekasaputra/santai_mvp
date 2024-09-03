@@ -6,7 +6,7 @@ namespace Account.API.Applications.Dtos.RequestDtos;
 public class UpdateFleetRequestDto(
     string registrationNumber, 
     VehicleType vehicleType,
-    string make,
+    string brand,
     string model,
     int yearOfManufacture,
     string chassisNumber, 
@@ -15,8 +15,7 @@ public class UpdateFleetRequestDto(
     bool isInsuranceValid,
     DateTime lastInspectionDateLocal,
     int odometerReading,
-    FuelType fuelType,
-    string color,
+    FuelType fuelType, 
     string ownerName,
     string ownerAddress,
     UsageStatus usageStatus,
@@ -26,7 +25,7 @@ public class UpdateFleetRequestDto(
 {
     public string RegistrationNumber { get; set; } = registrationNumber.Clean(); 
     public VehicleType VehicleType { get; set; } = vehicleType;
-    public string Make { get; set; } = make.Clean();
+    public string Brand { get; set; } = brand.Clean();
     public string Model { get; set; } = model.Clean();
     public int YearOfManufacture { get; set; } = yearOfManufacture;
     public string ChassisNumber { get; set; } = chassisNumber.Clean(); 
@@ -35,8 +34,7 @@ public class UpdateFleetRequestDto(
     public bool IsInsuranceValid { get; set; } = isInsuranceValid;
     public DateTime LastInspectionDateLocal { get; set; } = lastInspectionDateLocal;
     public int OdometerReading { get; set; } = odometerReading;
-    public FuelType FuelType { get; set; } = fuelType;
-    public string Color { get; set; } = color.Clean();
+    public FuelType FuelType { get; set; } = fuelType; 
     public string OwnerName { get; set; } = ownerName.Clean();
     public string OwnerAddress { get; set; } = ownerAddress.Clean();
     public UsageStatus UsageStatus { get; set; } = usageStatus;

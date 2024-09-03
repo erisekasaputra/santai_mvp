@@ -4,17 +4,17 @@ public interface IItemRepository
 {
     Task<Item> CreateItemAsync(Item item);
 
-    Task<Item?> GetItemByIdAsync(string id);
+    Task<Item?> GetItemByIdAsync(Guid id);
 
-    Task<Item?> RetrieveItemById(string id);
+    Task<Item?> RetrieveItemById(Guid id);
 
     Task<(int TotalCount, int TotalPages, IEnumerable<Item> Items)> GetPaginatedItemsAsync(int pageNumber, int pageSize);
 
     void UpdateItem(Item item); 
 
-    Task<ICollection<Item>> GetItemsWithLockAsync(IEnumerable<string> itemIds);
+    Task<ICollection<Item>> GetItemsWithLockAsync(IEnumerable<Guid> itemIds);
 
-    Task MarkBrandIdToNullByDeletingBrandByIdAsync(string brandId);
+    Task MarkBrandIdToNullByDeletingBrandByIdAsync(Guid brandId);
 
-    Task MarkCategoryIdToNullByDeletingCategoryByIdAsync(string categoryId);
+    Task MarkCategoryIdToNullByDeletingCategoryByIdAsync(Guid categoryId);
 }

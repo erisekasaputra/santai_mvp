@@ -4,7 +4,7 @@ using MediatR;
 namespace Catalog.API.Applications.Commands.Brands.UpdateBrand;
 
 public record UpdateBrandCommand(
-    string Id,
+    Guid Id,
     string Name,
     string ImageUrl,
     bool IsActive) : IRequest<Result<Unit>>;

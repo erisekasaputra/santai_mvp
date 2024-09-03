@@ -58,7 +58,7 @@
     "Parameters": [
       {
         "Name": "brandId",
-        "Type": "System.String",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -80,7 +80,7 @@
     "Parameters": [
       {
         "Name": "brandId",
-        "Type": "System.String",
+        "Type": "System.Guid",
         "IsRequired": true
       },
       {
@@ -107,7 +107,7 @@
     "Parameters": [
       {
         "Name": "brandId",
-        "Type": "System.String",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -178,7 +178,7 @@
     "Parameters": [
       {
         "Name": "categoryId",
-        "Type": "System.String",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -200,7 +200,7 @@
     "Parameters": [
       {
         "Name": "categoryId",
-        "Type": "System.String",
+        "Type": "System.Guid",
         "IsRequired": true
       },
       {
@@ -227,7 +227,7 @@
     "Parameters": [
       {
         "Name": "categoryId",
-        "Type": "System.String",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -298,7 +298,7 @@
     "Parameters": [
       {
         "Name": "itemId",
-        "Type": "System.String",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -320,7 +320,7 @@
     "Parameters": [
       {
         "Name": "itemId",
-        "Type": "System.String",
+        "Type": "System.Guid",
         "IsRequired": true
       },
       {
@@ -347,7 +347,7 @@
     "Parameters": [
       {
         "Name": "itemId",
-        "Type": "System.String",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -369,7 +369,7 @@
     "Parameters": [
       {
         "Name": "itemId",
-        "Type": "System.String",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -391,7 +391,7 @@
     "Parameters": [
       {
         "Name": "itemId",
-        "Type": "System.String",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],
@@ -413,7 +413,7 @@
     "Parameters": [
       {
         "Name": "itemId",
-        "Type": "System.String",
+        "Type": "System.Guid",
         "IsRequired": true
       }
     ],

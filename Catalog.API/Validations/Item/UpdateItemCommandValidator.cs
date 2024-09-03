@@ -8,8 +8,8 @@ public class UpdateItemCommandValidator : AbstractValidator<UpdateItemCommand>
     public UpdateItemCommandValidator()
     {
         RuleFor(x => x.Id)
-           .NotEmpty().WithMessage("Item ID is required.")
-           .Length(26).WithMessage("The length of the item ID should be 26 characters.");
+          .NotEmpty().WithMessage("Id is required.")
+          .NotEqual(Guid.Empty).WithMessage("The Id cannot be empty.");
 
         RuleFor(x => x.Name)
            .NotEmpty().WithMessage("Name is required.")
@@ -18,7 +18,10 @@ public class UpdateItemCommandValidator : AbstractValidator<UpdateItemCommand>
         RuleFor(x => x.Description)
             .NotEmpty().WithMessage("Description is required.")
             .MaximumLength(1000).WithMessage("Description cannot exceed 1000 characters.");
-
+         
+        RuleFor(x => x.Sku)
+            .MaximumLength(50).WithMessage("Sku cannot exceed 50 characters.");
+          
         RuleFor(x => x.Price)
             .InclusiveBetween(1, decimal.MaxValue).WithMessage($"Item price must be in between 0 and {decimal.MaxValue}");
 
@@ -34,12 +37,12 @@ public class UpdateItemCommandValidator : AbstractValidator<UpdateItemCommand>
             .InclusiveBetween(0, int.MaxValue).WithMessage($"Sold quantity must be in between 0 and {int.MaxValue}");
 
         RuleFor(x => x.CategoryId)
-            .NotEmpty().WithMessage("Category ID is required.")
-            .Length(26).WithMessage("The length of the category ID should be 26 characters.");
+            .NotEmpty().WithMessage("Category Id is required.")
+            .NotEqual(Guid.Empty).WithMessage("The Id cannot be empty.");
 
         RuleFor(x => x.BrandId)
             .NotEmpty().WithMessage("Brand ID is required.")
-            .Length(26).WithMessage("The length of the brand ID should be 26 characters.");
+            .NotEqual(Guid.Empty).WithMessage("The ID cannot be empty.");
 
         When(x => x.OwnerReviews is not null && x.OwnerReviews.Any(), () =>
         {

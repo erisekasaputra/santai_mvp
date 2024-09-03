@@ -56,7 +56,7 @@ public static class FleetApi
                     fleetId, 
                     request.RegistrationNumber,
                     request.VehicleType,
-                    request.Make,
+                    request.Brand,
                     request.Model,
                     request.YearOfManufacture,
                     request.ChassisNumber,
@@ -65,8 +65,7 @@ public static class FleetApi
                     request.IsInsuranceValid,
                     request.LastInspectionDateLocal,
                     request.OdometerReading,
-                    request.FuelType,
-                    request.Color,
+                    request.FuelType, 
                     request.OwnerName,
                     request.OwnerAddress,
                     request.UsageStatus,
@@ -124,7 +123,7 @@ public static class FleetApi
                     userId,
                     request.RegistrationNumber,
                     request.VehicleType,
-                    request.Make,
+                    request.Brand,
                     request.Model,
                     request.YearOfManufacture,
                     request.ChassisNumber,
@@ -133,8 +132,7 @@ public static class FleetApi
                     request.IsInsuranceValid,
                     request.LastInspectionDateLocal,
                     request.OdometerReading,
-                    request.FuelType,
-                    request.Color,
+                    request.FuelType, 
                     request.OwnerName,
                     request.OwnerAddress,
                     request.UsageStatus,
@@ -165,7 +163,7 @@ public static class FleetApi
         }
         catch (Exception ex)
         {
-            service.Logger.LogError(ex.InnerException?.Message);
+            service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }

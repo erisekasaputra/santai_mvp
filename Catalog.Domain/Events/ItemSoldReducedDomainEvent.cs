@@ -2,4 +2,4 @@
 
 namespace Catalog.Domain.Events;
 
-public record ItemSoldReducedDomainEvent(string Id, int Quantity) : INotification;
+public record ItemSoldReducedDomainEvent(Guid Id, int Quantity) : INotification;

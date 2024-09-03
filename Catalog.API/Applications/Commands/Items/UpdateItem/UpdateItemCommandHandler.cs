@@ -34,7 +34,20 @@ public class UpdateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
         }
 
         var ownerReviews = request.OwnerReviews.ToOwnerReviews().ToList(); 
-        item.Update(request.Name, request.Description, request.ImageUrl, category.Id, category, brand.Id, brand, request.IsActive, ownerReviews!, request.Price, request.StockQuantity, request.SoldQuantity); 
+        item.Update(
+            request.Name,
+            request.Description,
+            request.Sku,
+            request.ImageUrl,
+            category.Id,
+            category,
+            brand.Id,
+            brand,
+            request.IsActive,
+            ownerReviews!,
+            request.Price,
+            request.StockQuantity,
+            request.SoldQuantity); 
 
         _unitOfWork.Items.UpdateItem(item);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

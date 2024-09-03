@@ -4,6 +4,6 @@ using MediatR;
 
 namespace Catalog.API.Applications.Queries.Brands.GetBrandById;
 
-public record GetBrandByIdQuery(string Id) : IRequest<Result<BrandDto>>
+public record GetBrandByIdQuery(Guid Id) : IRequest<Result<BrandDto>>
 {
 }

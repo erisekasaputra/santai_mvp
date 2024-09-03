@@ -21,7 +21,7 @@ public class ItemRepository(ElasticsearchContext context) : IItemRepository
         return false;
     }
 
-    public async Task<Item?> GetItemByIdAsync(string id, CancellationToken cancellationToken = default)
+    public async Task<Item?> GetItemByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
         var response = await _context.Client.GetAsync<Item>(id, index => index.Index(_Index), cancellationToken);
 
@@ -57,13 +57,13 @@ public class ItemRepository(ElasticsearchContext context) : IItemRepository
         return false;
     }
 
-    public async Task<bool> UpdateCategoryByCategoryIdAsync(string Id, string Name, string ImageUrl)
+    public async Task<bool> UpdateCategoryByCategoryIdAsync(Guid Id, string Name, string ImageUrl)
     {
         var response = await _context.Client.UpdateByQueryAsync<Item>(u => u
             .Indices(_Index)
             .Query(q => q
                 .Term(t => t
-                    .Field(f => f.CategoryId!.Suffix("keyword")).Value(Id))
+                    .Field(f => f.CategoryId!.Suffix("keyword")).Value(Id.ToString()))
             )
             .Script(s => s
                     .Source("ctx._source.categoryName = params.newCategoryName; ctx._source.categoryImageUrl = params.newCategoryImageUrl")
@@ -82,13 +82,13 @@ public class ItemRepository(ElasticsearchContext context) : IItemRepository
         return false;
     }
 
-    public async Task<bool> UpdateBrandByBrandIdAsync(string Id, string Name, string ImageUrl)
+    public async Task<bool> UpdateBrandByBrandIdAsync(Guid Id, string Name, string ImageUrl)
     {
         var response = await _context.Client.UpdateByQueryAsync<Item>(u => u
             .Indices(_Index)
             .Query(q => q
                 .Term(t => t
-                    .Field(f => f.BrandId!.Suffix("keyword")).Value(Id))
+                    .Field(f => f.BrandId!.Suffix("keyword")).Value(Id.ToString()))
             )
             .Script(s => s
                     .Source("ctx._source.brandName = params.newBrandName;ctx._source.brandImageUrl=params.newBrandImageUrl")
@@ -108,13 +108,13 @@ public class ItemRepository(ElasticsearchContext context) : IItemRepository
     }
 
 
-    public async Task<bool> DeleteCategoryByCategoryIdAsync(string Id)
+    public async Task<bool> DeleteCategoryByCategoryIdAsync(Guid Id)
     {
         var response = await _context.Client.UpdateByQueryAsync<Item>(u => u
             .Indices(_Index)
             .Query(q => q
                 .Term(t => t
-                    .Field(f => f.CategoryId!.Suffix("keyword")).Value(Id))
+                    .Field(f => f.CategoryId!.Suffix("keyword")).Value(Id.ToString()))
             )
             .Script(s => s
                     .Source("ctx._source.categoryId = params.newCategoryId; ctx._source.categoryName = params.newCategoryName; ctx._source.categoryImageUrl = params.newCategoryImageUrl")
@@ -134,13 +134,13 @@ public class ItemRepository(ElasticsearchContext context) : IItemRepository
         return false;
     }
 
-    public async Task<bool> DeleteBrandByBrandIdAsync(string Id)
+    public async Task<bool> DeleteBrandByBrandIdAsync(Guid Id)
     {
         var response = await _context.Client.UpdateByQueryAsync<Item>(u => u
            .Indices(_Index)
            .Query(q => q
                .Term(t => t
-                   .Field(f => f.BrandId!.Suffix("keyword")).Value(Id))
+                   .Field(f => f.BrandId!.Suffix("keyword")).Value(Id.ToString()))
            )
            .Script(s => s
                    .Source("ctx._source.brandId = params.newBrandId; ctx._source.brandName = params.newBrandName; ctx._source.brandImageUrl = params.newBrandImageUrl")

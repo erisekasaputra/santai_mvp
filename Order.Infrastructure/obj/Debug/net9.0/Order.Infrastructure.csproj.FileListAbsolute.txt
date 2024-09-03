@@ -1,6 +1,8 @@
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\bin\Debug\net9.0\Order.Infrastructure.deps.json
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\bin\Debug\net9.0\Order.Infrastructure.runtimeconfig.json
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\bin\Debug\net9.0\Order.Infrastructure.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\bin\Debug\net9.0\Order.Infrastructure.pdb
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.csproj.AssemblyReference.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.AssemblyInfoInputs.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.AssemblyInfo.cs
@@ -9,4 +11,5 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\obj\Debug\net9.0\refint\Order.Infrastructure.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.pdb
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\obj\Debug\net9.0\ref\Order.Infrastructure.dll

@@ -2,4 +2,4 @@
 
 namespace Catalog.Domain.Events;
 
-public record ItemPriceSetDomainEvent(string Id, decimal Amount) : INotification;
+public record ItemPriceSetDomainEvent(Guid Id, decimal Amount) : INotification;

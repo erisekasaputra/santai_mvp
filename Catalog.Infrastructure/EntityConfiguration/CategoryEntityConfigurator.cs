@@ -7,9 +7,7 @@ namespace Catalog.Infrastructure.EntityConfiguration;
 public class CategoryEntityConfigurator : IEntityTypeConfiguration<Category>
 { 
     public void Configure(EntityTypeBuilder<Category> builder)
-    {
-        builder.ToTable("categories");
-
+    { 
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id) 

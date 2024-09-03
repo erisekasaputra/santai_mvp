@@ -17,15 +17,17 @@ public class Item : Entity, IAggregateRoot
 
     public decimal Price { get; private set; }
 
+    public string Sku { get; private set; }
+
     public string ImageUrl { get; private set; } 
 
     public int StockQuantity { get; private set; }
 
     public int SoldQuantity { get; private set; }
 
-    public string? BrandId { get; set; } 
+    public Guid? BrandId { get; set; } 
 
-    public string? CategoryId { get; private set; } 
+    public Guid? CategoryId { get; private set; } 
 
     public Brand? Brand { get; private set; }
 
@@ -44,25 +46,39 @@ public class Item : Entity, IAggregateRoot
 
     public Item()
     {
+        Sku = string.Empty;
         Name = string.Empty;
         Description = string.Empty;
         ImageUrl = string.Empty;
         _ownerReviews = [];
     }
       
-    public Item(string name, string description, decimal price, string imageUrl, DateTime createdAt, int stockQuantity, int soldQuantity, string categoryId, Category category, string brandId, Brand brand, bool isActive, ICollection<OwnerReview> ownerReviews) : this()
+    public Item(
+        string name,
+        string description,
+        decimal price,
+        string sku,
+        string imageUrl,
+        DateTime createdAt,
+        int stockQuantity,
+        int soldQuantity,
+        Guid categoryId,
+        Category category,
+        Guid brandId,
+        Brand brand,
+        bool isActive,
+        ICollection<OwnerReview> ownerReviews) : this()
     { 
         ArgumentException.ThrowIfNullOrEmpty(name);
         ArgumentException.ThrowIfNullOrEmpty(description);
-        ArgumentException.ThrowIfNullOrEmpty(imageUrl);
-        ArgumentException.ThrowIfNullOrEmpty(categoryId);
-        ArgumentNullException.ThrowIfNull(category);
-        ArgumentException.ThrowIfNullOrEmpty(brandId);
+        ArgumentException.ThrowIfNullOrEmpty(imageUrl); 
+        ArgumentNullException.ThrowIfNull(category); 
         ArgumentNullException.ThrowIfNull(brand); 
          
         Name = name;
         Description = description;
         Price = price;
+        Sku = sku;
         ImageUrl = imageUrl;
         CreatedAt = createdAt;
         StockQuantity = stockQuantity;
@@ -85,7 +101,20 @@ public class Item : Entity, IAggregateRoot
 
         RaiseItemCreatedDomainEvent(this);
     }
-    public void Update(string name, string description, string imageUrl, string categoryId, Category category, string brandId, Brand brand, bool isActive, ICollection<OwnerReview> ownerReviews,decimal price, int stockQuantity, int soldQuantity)
+    public void Update(
+        string name,
+        string description,
+        string sku,
+        string imageUrl,
+        Guid categoryId,
+        Category category,
+        Guid brandId,
+        Brand brand,
+        bool isActive,
+        ICollection<OwnerReview> ownerReviews,
+        decimal price,
+        int stockQuantity,
+        int soldQuantity)
     {
         if (IsDeleted)
         {
@@ -94,14 +123,14 @@ public class Item : Entity, IAggregateRoot
          
         ArgumentException.ThrowIfNullOrEmpty(name);
         ArgumentException.ThrowIfNullOrEmpty(description);
-        ArgumentException.ThrowIfNullOrEmpty(imageUrl);
-        ArgumentException.ThrowIfNullOrEmpty(categoryId);
-        ArgumentNullException.ThrowIfNull(category);
-        ArgumentException.ThrowIfNullOrEmpty(brandId);
+        ArgumentException.ThrowIfNullOrEmpty(sku);
+        ArgumentException.ThrowIfNullOrEmpty(imageUrl); 
+        ArgumentNullException.ThrowIfNull(category); 
         ArgumentNullException.ThrowIfNull(brand); 
 
         Name = name;
         Description = description;
+        Sku = sku;
         ImageUrl = imageUrl;
         CategoryId = categoryId;
         Category = category;
@@ -259,37 +288,37 @@ public class Item : Entity, IAggregateRoot
         RaiseItemPriceSetDomainEvent(Id, amount);
     }
 
-    private void RaiseItemPriceSetDomainEvent(string id, decimal price)
+    private void RaiseItemPriceSetDomainEvent(Guid id, decimal price)
     {
         AddDomainEvent(new ItemPriceSetDomainEvent(id, price));
     }
 
-    private void RaiseItemSoldSetDomainEvent(string id, int quantity)
+    private void RaiseItemSoldSetDomainEvent(Guid id, int quantity)
     {
         AddDomainEvent(new ItemSoldSetDomainEvent(id, quantity));
     }
 
-    private void RaiseItemSoldAddedDomainEvent(string id, int quantity)
+    private void RaiseItemSoldAddedDomainEvent(Guid id, int quantity)
     {
         AddDomainEvent(new ItemSoldAddedDomainEvent(id, quantity));
     }
 
-    private void RaiseItemSoldReducedDomainEvent(string id, int quantity)
+    private void RaiseItemSoldReducedDomainEvent(Guid id, int quantity)
     {
         AddDomainEvent(new ItemSoldReducedDomainEvent(id, quantity));
     }
 
-    private void RaiseItemStockSetDomainEvent(string id, int quantity)
+    private void RaiseItemStockSetDomainEvent(Guid id, int quantity)
     {
         AddDomainEvent(new ItemStockSetDomainEvent(id, quantity));
     }
 
-    private void RaiseItemStockAddedDomainEvent(string id, int quantity)
+    private void RaiseItemStockAddedDomainEvent(Guid id, int quantity)
     {
         AddDomainEvent(new ItemStockAddedDomainEvent(id, quantity));
     }
 
-    private void RaiseItemStockReducedDomainEvent(string id, int quantity)
+    private void RaiseItemStockReducedDomainEvent(Guid id, int quantity)
     {
         AddDomainEvent(new ItemStockReducedDomainEvent(id, quantity));
     }
@@ -298,7 +327,7 @@ public class Item : Entity, IAggregateRoot
     {
         AddDomainEvent(new ItemCreatedDomainEvent(item));
     }
-    private void RaiseItemDeletedDomainEvent(string id)
+    private void RaiseItemDeletedDomainEvent(Guid id)
     {
         AddDomainEvent(new ItemDeletedDomainEvent(id));
     }
@@ -307,15 +336,15 @@ public class Item : Entity, IAggregateRoot
     { 
         AddDomainEvent(new ItemUpdatedDomainEvent(item));
     } 
-    private void RaiseItemInactivatedDomainEvent(string id)
+    private void RaiseItemInactivatedDomainEvent(Guid id)
     {
         AddDomainEvent(new ItemInactivatedDomainEvent(id));
     }
-    private void RaiseItemUndeletedDomainEvent(string id)
+    private void RaiseItemUndeletedDomainEvent(Guid id)
     {
         AddDomainEvent(new ItemUndeletedDomainEvent(id));
     }
-    private void RaiseItemActivatedDomainEvent(string id)
+    private void RaiseItemActivatedDomainEvent(Guid id)
     {
         AddDomainEvent(new ItemActivatedDomainEvent(id));
     }

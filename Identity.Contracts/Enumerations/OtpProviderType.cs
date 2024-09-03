@@ -13,7 +13,7 @@ public static class AllowedOtpProviderType
     {
         get
         {
-            return [OtpProviderType.Sms, OtpProviderType.Whatsapp];
+            return [OtpProviderType.Sms, OtpProviderType.Whatsapp, OtpProviderType.Email];
         }
     }
 

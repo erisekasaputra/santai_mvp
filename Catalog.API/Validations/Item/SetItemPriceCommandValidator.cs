@@ -6,7 +6,7 @@ namespace Catalog.API.Validations.Item;
 public class SetItemPriceCommandValidator : AbstractValidator<SetItemPriceCommand>
 {
     public SetItemPriceCommandValidator()
-    {
+    { 
         RuleForEach(x => x.SetItemPriceRequests).SetValidator(new SetItemPriceRequestValidator());
     }
 }

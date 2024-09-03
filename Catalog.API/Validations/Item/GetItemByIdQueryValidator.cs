@@ -8,6 +8,7 @@ public class GetItemByIdQueryValidator : AbstractValidator<GetItemByIdQuery>
     public GetItemByIdQueryValidator()
     {
         RuleFor(x => x.Id)
-            .Length(26).WithMessage("The item id should be in 26 character length");
+           .NotEmpty().WithMessage("Id is required.")
+           .NotEqual(Guid.Empty).WithMessage("The Id cannot be empty.");
     }
 }

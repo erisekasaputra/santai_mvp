@@ -6,7 +6,7 @@ namespace Catalog.API.Validations.Item;
 public class SetItemStockQuantityCommandValidator : AbstractValidator<SetItemStockQuantityCommand>
 {
     public SetItemStockQuantityCommandValidator()
-    {
+    { 
         RuleForEach(x => x.SetItemStockQuantityRequests).SetValidator(new SetItemStockQuantityRequestValidator());
     }
 }

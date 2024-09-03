@@ -2,4 +2,4 @@
 
 namespace Catalog.Contracts;
 
-public record ItemStockSetIntegrationEvent(string Id, int Quantity) : INotification;
+public record ItemStockSetIntegrationEvent(Guid Id, int Quantity) : INotification;

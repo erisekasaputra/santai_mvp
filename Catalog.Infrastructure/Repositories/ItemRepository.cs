@@ -17,7 +17,7 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
         return result.Entity;
     }
 
-    public async Task<Item?> RetrieveItemById(string id)
+    public async Task<Item?> RetrieveItemById(Guid id)
     {
         return await _context.Items
             .Where (x => !x.IsDeleted)
@@ -27,7 +27,7 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
             .FirstOrDefaultAsync(e => e.Id == id);
     }
   
-    public async Task<Item?> GetItemByIdAsync(string id)
+    public async Task<Item?> GetItemByIdAsync(Guid id)
     {
         return await _context.Items
             .Include(p => p.Category)
@@ -60,7 +60,7 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
         _context.Items.Update(item);
     } 
 
-    public async Task<ICollection<Item>> GetItemsWithLockAsync(IEnumerable<string> itemIds)
+    public async Task<ICollection<Item>> GetItemsWithLockAsync(IEnumerable<Guid> itemIds)
     {
         var tableName = _metaTableHelper.GetTableName<Item>();
         var itemIdColumn = _metaTableHelper.GetColumnName<Item>(nameof(Item.Id)); 
@@ -83,20 +83,17 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
         return await _context.Items.FromSqlRaw(sql, parameters).ToListAsync(); 
     }
 
-    public async Task MarkBrandIdToNullByDeletingBrandByIdAsync(string brandId)
+    public async Task MarkBrandIdToNullByDeletingBrandByIdAsync(Guid brandId)
     {
-        string? Null = null;
-
+        Guid? nulling = null;
         await _context.Items.Where(x => x.BrandId == brandId)
-            .ExecuteUpdateAsync(u => 
-                                    u.SetProperty(p => p.BrandId, Null));
+            .ExecuteUpdateAsync(u => u.SetProperty(p => p.BrandId, nulling));
     } 
-    public async Task MarkCategoryIdToNullByDeletingCategoryByIdAsync(string categoryId)
+    public async Task MarkCategoryIdToNullByDeletingCategoryByIdAsync(Guid categoryId)
     {
-        string? Null = null;
-
+        Guid? nulling = null;
         await _context.Items.Where(x => x.CategoryId == categoryId)
             .ExecuteUpdateAsync(u => 
-                                    u.SetProperty(p => p.CategoryId, Null));
+                u.SetProperty(p => p.CategoryId, nulling));
     }  
 }

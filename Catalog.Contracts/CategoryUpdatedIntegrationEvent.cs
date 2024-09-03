@@ -2,4 +2,4 @@
 
 namespace Catalog.Contracts;
 
-public record CategoryUpdatedIntegrationEvent(string Id, string Name, string ImageUrl) : INotification;
+public record CategoryUpdatedIntegrationEvent(Guid Id, string Name, string ImageUrl) : INotification;

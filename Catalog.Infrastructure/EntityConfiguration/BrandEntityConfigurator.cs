@@ -7,9 +7,7 @@ namespace Catalog.Infrastructure.EntityConfiguration;
 public class BrandEntityConfigurator : IEntityTypeConfiguration<Brand>
 {
     public void Configure(EntityTypeBuilder<Brand> builder)
-    {
-        builder.ToTable("brands");
-
+    { 
         builder.HasKey(x => x.Id);
 
         builder.Property(x => x.Id) 

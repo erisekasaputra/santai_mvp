@@ -7,11 +7,11 @@ public abstract class Entity
     private List<INotification> _domainEvents;
     public IReadOnlyCollection<INotification>? DomainEvents => _domainEvents?.AsReadOnly();
 
-    public string Id { get; set; }
+    public Guid Id { get; set; }
 
     protected Entity()
     {
-        Id = Ulid.NewUlid().ToString();
+        Id = Guid.NewGuid();
         _domainEvents = [];
     }
 
@@ -55,7 +55,7 @@ public abstract class Entity
 
     public override int GetHashCode()
     {
-        return Id != null ? Id.GetHashCode() : 0;
+        return Id != Guid.Empty ? Id.GetHashCode() : 0;
     }
 
     public static bool operator ==(Entity left, Entity right)

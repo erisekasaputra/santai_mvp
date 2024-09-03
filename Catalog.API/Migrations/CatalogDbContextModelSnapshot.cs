@@ -24,9 +24,10 @@ namespace Catalog.API.Migrations
 
             modelBuilder.Entity("Catalog.Domain.Aggregates.BrandAggregate.Brand", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(26)
-                        .HasColumnType("nvarchar(26)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -43,14 +44,15 @@ namespace Catalog.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("brands", (string)null);
+                    b.ToTable("Brands");
                 });
 
             modelBuilder.Entity("Catalog.Domain.Aggregates.CategoryAggregate.Category", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(26)
-                        .HasColumnType("nvarchar(26)");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("ImageUrl")
                         .IsRequired()
@@ -67,20 +69,21 @@ namespace Catalog.API.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("categories", (string)null);
+                    b.ToTable("Categories");
                 });
 
             modelBuilder.Entity("Catalog.Domain.Aggregates.ItemAggregate.Item", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(26)
-                        .HasColumnType("nvarchar(26)");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("BrandId")
-                        .HasColumnType("nvarchar(26)");
+                    b.Property<Guid?>("BrandId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("CategoryId")
-                        .HasColumnType("nvarchar(26)");
+                    b.Property<Guid?>("CategoryId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
@@ -112,6 +115,11 @@ namespace Catalog.API.Migrations
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 2)");
 
+                    b.Property<string>("Sku")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
                     b.Property<int>("SoldQuantity")
                         .HasColumnType("int");
 
@@ -124,17 +132,18 @@ namespace Catalog.API.Migrations
 
                     b.HasIndex("CategoryId");
 
-                    b.ToTable("items", (string)null);
+                    b.ToTable("Items");
                 });
 
             modelBuilder.Entity("Catalog.Domain.Aggregates.OwnerReviewAggregate.OwnerReview", b =>
                 {
-                    b.Property<string>("Id")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasMaxLength(26)
-                        .HasColumnType("nvarchar(26)");
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("ItemId")
-                        .HasColumnType("nvarchar(26)");
+                    b.Property<Guid?>("ItemId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Rating")
                         .HasColumnType("int");
@@ -148,7 +157,7 @@ namespace Catalog.API.Migrations
 
                     b.HasIndex("ItemId");
 
-                    b.ToTable("owner_reviews", (string)null);
+                    b.ToTable("OwnerReviews");
                 });
 
             modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.InboxState", b =>

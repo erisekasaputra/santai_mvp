@@ -2,4 +2,4 @@
 
 namespace Search.Worker.Applications.Commands.DeleteItemCategory;
 
-public record DeleteItemCategoryCommand(string Id) : IRequest;
+public record DeleteItemCategoryCommand(Guid Id) : IRequest;

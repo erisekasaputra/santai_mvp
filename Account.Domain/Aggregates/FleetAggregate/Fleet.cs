@@ -22,7 +22,7 @@ public class Fleet : Entity, IAggregateRoot
 
     public VehicleType VehicleType { get; private set; }
 
-    public string Make { get; private set; }
+    public string Brand { get; private set; }
 
     public string Model { get; private set; }
 
@@ -46,9 +46,7 @@ public class Fleet : Entity, IAggregateRoot
 
     public int OdometerReading { get; private set; }
 
-    public FuelType FuelType { get; private set; }
-
-    public string Color { get; private set; }
+    public FuelType FuelType { get; private set; } 
 
     public Owner Owner { get; private set; }
 
@@ -66,15 +64,14 @@ public class Fleet : Entity, IAggregateRoot
     {
         HashedRegistrationNumber = null!;
         EncryptedRegistrationNumber = null!;
-        Make = null!;
+        Brand = null!;
         Model = null!;
         HashedChassisNumber = null!;
         EncryptedChassisNumber = null!;
         HashedEngineNumber = null!;
         EncryptedEngineNumber = null!;
         HashedInsuranceNumber = null!;
-        EncryptedInsuranceNumber = null!;
-        Color = null!; 
+        EncryptedInsuranceNumber = null!; 
         Owner = null!;
     }
 
@@ -84,7 +81,7 @@ public class Fleet : Entity, IAggregateRoot
         string hashedRegistrationNumber,
         string encryptedRegistrationNumber,
         VehicleType vehicleType,
-        string make,
+        string brand,
         string model,
         int yearOfManufacture,
         string hashedChassisNumber,
@@ -96,8 +93,7 @@ public class Fleet : Entity, IAggregateRoot
         bool isInsuranceValid,
         DateTime lastInspectionDateUtc,
         int odometerReading,
-        FuelType fuelType,
-        string color,
+        FuelType fuelType, 
         string encryptedOwnerName,
         string encryptedOwnerAddress, 
         UsageStatus usageStatus,
@@ -114,7 +110,7 @@ public class Fleet : Entity, IAggregateRoot
         HashedRegistrationNumber = hashedRegistrationNumber ?? throw new ArgumentNullException(nameof(hashedRegistrationNumber));
         EncryptedRegistrationNumber = encryptedRegistrationNumber ?? throw new ArgumentNullException(nameof(encryptedRegistrationNumber));
         VehicleType = vehicleType;
-        Make = make ?? throw new ArgumentNullException(nameof(make));
+        Brand = brand ?? throw new ArgumentNullException(nameof(brand));
         Model = model ?? throw new ArgumentNullException(nameof(model));
         YearOfManufacture = yearOfManufacture;
         HashedChassisNumber = hashedChassisNumber ?? throw new ArgumentNullException(nameof(hashedChassisNumber));
@@ -126,8 +122,7 @@ public class Fleet : Entity, IAggregateRoot
         IsInsuranceValid = isInsuranceValid;
         LastInspectionDateUtc = lastInspectionDateUtc;
         OdometerReading = odometerReading;
-        FuelType = fuelType;
-        Color = color ?? throw new ArgumentNullException(nameof(color));
+        FuelType = fuelType; 
         UsageStatus = usageStatus;
         OwnershipStatus = ownershipStatus;
         TransmissionType = transmissionType;
@@ -140,7 +135,7 @@ public class Fleet : Entity, IAggregateRoot
         string hashedRegistrationNumber,
         string encryptedRegistrationNumber,
         VehicleType vehicleType,
-        string make,
+        string brand,
         string model,
         int yearOfManufacture,
         string hashedChassisNumber,
@@ -152,8 +147,7 @@ public class Fleet : Entity, IAggregateRoot
         bool isInsuranceValid,
         DateTime lastInspectionDateUtc,
         int odometerReading,
-        FuelType fuelType,
-        string color,
+        FuelType fuelType, 
         string encryptedOwnerName,
         string encryptedOwnerAddress,
         UsageStatus usageStatus,
@@ -169,7 +163,7 @@ public class Fleet : Entity, IAggregateRoot
         HashedRegistrationNumber = hashedRegistrationNumber ?? throw new ArgumentNullException(nameof(hashedRegistrationNumber));
         EncryptedRegistrationNumber = encryptedRegistrationNumber ?? throw new ArgumentNullException(nameof(encryptedRegistrationNumber));
         VehicleType = vehicleType;
-        Make = make ?? throw new ArgumentNullException(nameof(make));
+        Brand = brand ?? throw new ArgumentNullException(nameof(brand));
         Model = model ?? throw new ArgumentNullException(nameof(model));
         YearOfManufacture = yearOfManufacture;
         HashedChassisNumber = hashedChassisNumber ?? throw new ArgumentNullException(nameof(hashedChassisNumber));
@@ -181,8 +175,7 @@ public class Fleet : Entity, IAggregateRoot
         IsInsuranceValid = isInsuranceValid;
         LastInspectionDateUtc = lastInspectionDateUtc;
         OdometerReading = odometerReading;
-        FuelType = fuelType;
-        Color = color ?? throw new ArgumentNullException(nameof(color));
+        FuelType = fuelType; 
         UsageStatus = usageStatus;
         OwnershipStatus = ownershipStatus;
         TransmissionType = transmissionType; 

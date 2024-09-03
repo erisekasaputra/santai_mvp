@@ -8,8 +8,8 @@ public class SetItemPriceRequestValidator : AbstractValidator<SetItemPriceReques
     public SetItemPriceRequestValidator()
     {
         RuleFor(x => x.ItemId)
-            .NotEmpty().WithMessage("Item ID is not allowed to be null")
-            .Length(26).WithMessage("Item ID should in 26 characters length");
+          .NotEmpty().WithMessage("Id is required.")
+          .NotEqual(Guid.Empty).WithMessage("The Id cannot be empty.");
 
         RuleFor(x => x.Amount)
             .NotEmpty().WithMessage("Amount can not be null")

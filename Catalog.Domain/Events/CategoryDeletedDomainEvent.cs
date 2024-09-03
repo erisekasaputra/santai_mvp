@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Catalog.Domain.Events;
 
-public record CategoryDeletedDomainEvent(string Id) : INotification;
+public record CategoryDeletedDomainEvent(Guid Id) : INotification;

@@ -11,7 +11,10 @@ public class BrandUpdatedDomainEventHandler(IMediator mediator) : INotificationH
 
     public async Task Handle(BrandUpdatedDomainEvent notification, CancellationToken cancellationToken)
     {
-        var @event = new BrandUpdatedIntegrationEvent(notification.Brand.Id, notification.Brand.Name, notification.Brand.ImageUrl);
+        var @event = new BrandUpdatedIntegrationEvent(
+            notification.Brand.Id,
+            notification.Brand.Name,
+            notification.Brand.ImageUrl);
 
         await _mediator.Publish(@event, cancellationToken);
     }

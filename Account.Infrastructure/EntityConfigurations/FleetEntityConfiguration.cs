@@ -26,7 +26,7 @@ public class FleetEntityConfiguration : IEntityTypeConfiguration<Fleet>
         e.Property(v => v.EncryptedRegistrationNumber)
             .HasMaxLength(255);
 
-        e.Property(v => v.Make)
+        e.Property(v => v.Brand)
             .HasMaxLength(100)
             .IsRequired();
 
@@ -50,11 +50,7 @@ public class FleetEntityConfiguration : IEntityTypeConfiguration<Fleet>
             .HasMaxLength(255);
 
         e.Property(v => v.EncryptedInsuranceNumber)
-            .HasMaxLength(255);
-
-        e.Property(v => v.Color)
-            .HasMaxLength(100)
-            .IsRequired();
+            .HasMaxLength(255); 
          
         e.Property(v => v.VehicleType)
             .HasConversion<string>()

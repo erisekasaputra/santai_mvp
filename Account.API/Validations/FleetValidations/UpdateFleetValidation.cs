@@ -19,7 +19,7 @@ public class UpdateFleetValidation : AbstractValidator<UpdateFleetRequestDto>
             .IsInEnum().WithMessage("Invalid vehicle type.");
 
         // Make: Required and should be a valid brand
-        RuleFor(x => x.Make)
+        RuleFor(x => x.Brand)
             .NotEmpty().WithMessage("Make is required.")
             .MaximumLength(100).WithMessage("Make can not exceed more than 100 characters");
 
@@ -59,12 +59,7 @@ public class UpdateFleetValidation : AbstractValidator<UpdateFleetRequestDto>
         // Fuel Type: Should be one of the predefined types (e.g., Petrol, Diesel, Electric)
         RuleFor(x => x.FuelType)
             .NotEmpty().WithMessage("Fuel type is required.")
-            .IsInEnum().WithMessage("Invalid fuel type. Should be Petrol, Diesel, Electric");
-
-        // Color: Required
-        RuleFor(x => x.Color)
-            .NotEmpty().WithMessage("Color is required.")
-            .MaximumLength(100).WithMessage("Color can not exceed more than 100 characters");
+            .IsInEnum().WithMessage("Invalid fuel type. Should be Petrol, Diesel, Electric"); 
 
         // Owner Name: Required
         RuleFor(x => x.OwnerName)

@@ -2,4 +2,4 @@
 
 namespace Catalog.Contracts;
 
-public record ItemInactivatedIntegrationEvent(string Id) : INotification;
+public record ItemInactivatedIntegrationEvent(Guid Id) : INotification;

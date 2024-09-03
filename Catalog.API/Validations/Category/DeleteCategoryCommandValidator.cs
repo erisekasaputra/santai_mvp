@@ -6,9 +6,6 @@ namespace Catalog.API.Validations.Category;
 public class DeleteCategoryCommandValidator : AbstractValidator<DeleteCategoryCommand>
 {
     public DeleteCategoryCommandValidator()
-    {
-        RuleFor(x => x.Id)
-            .NotEmpty().WithMessage("Category ID is required.")
-            .Length(26).WithMessage("The length of the category ID should be 26 characters.");
+    { 
     }
 }

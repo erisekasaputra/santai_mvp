@@ -1,78 +1,63 @@
 ﻿namespace Search.Worker.Domain.Models;
 
-public class Item
+public class Item(
+    Guid id,
+    string name,
+    string description,
+    string sku,
+    decimal price,
+    string imageUrl,
+    int stockQuantity,
+    int soldQuantity,
+    Guid? categoryId,
+    string? categoryName,
+    string? categoryImageUrl,
+    Guid? brandId,
+    string? brandName,
+    string? brandImageUrl,
+    bool isActive,
+    bool isDeleted,
+    IEnumerable<OwnerReview>? ownerReviews)
 {
-    public string Id { get; init; }
-    public string Name { get; private set; }
-    public string Description { get; private  set; }
-    public decimal Price { get; private set; }
-    public string ImageUrl { get; private set; }
-    public DateTime CreatedAt { get; init; }
-    public int StockQuantity { get; private set; }
-    public int SoldQuantity { get; private set; }
-    public string? CategoryId { get; private set; }
-    public string? CategoryName { get; private set; }
-    public string? CategoryImageUrl { get; private set; }
-    public string? BrandId { get; private set; }
-    public string? BrandName { get; private set; }
-    public string? BrandImageUrl { get; private set; }
-    public bool IsActive { get; private set; }
-    public bool IsDeleted { get; private set; }
-    public IEnumerable<OwnerReview>? OwnerReviews { get; private set; }
+    public Guid Id { get; init; } = id;
+    public string Name { get; private set; } = name;
+    public string Description { get; private set; } = description;
+    public string Sku { get; private set; } = sku;
+    public decimal Price { get; private set; } = price;
+    public string ImageUrl { get; private set; } = imageUrl;
+    public int StockQuantity { get; private set; } = stockQuantity;
+    public int SoldQuantity { get; private set; } = soldQuantity;
+    public Guid? CategoryId { get; private set; } = categoryId;
+    public string? CategoryName { get; private set; } = categoryName;
+    public string? CategoryImageUrl { get; private set; } = categoryImageUrl;
+    public Guid? BrandId { get; private set; } = brandId;
+    public string? BrandName { get; private set; } = brandName;
+    public string? BrandImageUrl { get; private set; } = brandImageUrl;
+    public bool IsActive { get; private set; } = isActive;
+    public bool IsDeleted { get; private set; } = isDeleted;
+    public IEnumerable<OwnerReview>? OwnerReviews { get; private set; } = ownerReviews;
 
-    public Item(string id,
-                string name,
-                string description,
-                decimal price,
-                string imageUrl,
-                DateTime createdAt,
-                int stockQuantity,
-                int soldQuantity,
-                string? categoryId,
-                string? categoryName,
-                string? categoryImageUrl,
-                string? brandId,
-                string? brandName,
-                string? brandImageUrl,
-                bool isActive,
-                bool isDeleted,
-                IEnumerable<OwnerReview>? ownerReviews)
-    {
-        Id = id;
-        Name = name;
-        Description = description;
-        Price = price;
-        ImageUrl = imageUrl;
-        StockQuantity = stockQuantity;
-        SoldQuantity = soldQuantity;
-        CategoryId = categoryId;
-        CategoryName = categoryName;
-        CategoryImageUrl = categoryImageUrl;
-        BrandId = brandId;
-        BrandName = brandName;
-        BrandImageUrl = brandImageUrl;
-        IsActive = isActive;
-        IsDeleted = isDeleted;
-        OwnerReviews = ownerReviews;
-    }
-    public void Update( string name,
-                        string description,
-                        decimal price,
-                        string imageUrl, 
-                        int stockQuantity,
-                        int soldQuantity,
-                        string? categoryId,
-                        string? categoryName,
-                        string? categoryImageUrl,
-                        string? brandId,
-                        string? brandName,
-                        string? brandImageUrl,
-                        bool isActive,
-                        bool isDeleted,
-                        IEnumerable<OwnerReview>? ownerReviews)
+    public void Update(
+        string name,
+        string description,
+        string sku,
+        decimal price,
+        string imageUrl,
+        int stockQuantity,
+        int soldQuantity,
+        Guid? categoryId,
+        string? categoryName,
+        string? categoryImageUrl,
+        Guid? brandId,
+        string? brandName,
+        string? brandImageUrl,
+        bool isActive,
+        bool isDeleted,
+        IEnumerable<OwnerReview>? ownerReviews)
     {
         Name = name;
         Description = description;
+        Sku = sku;
         Price = price;
         ImageUrl = imageUrl;
         StockQuantity = stockQuantity;

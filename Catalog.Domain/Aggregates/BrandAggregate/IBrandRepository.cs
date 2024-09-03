@@ -4,7 +4,7 @@ public interface IBrandRepository
 {
     Task<Brand> CreateBrandAsync(Brand item);
 
-    Task<Brand?> GetBrandByIdAsync(string id);
+    Task<Brand?> GetBrandByIdAsync(Guid id);
 
     Task<Brand?> GetBrandByNameAsync(string name);
 

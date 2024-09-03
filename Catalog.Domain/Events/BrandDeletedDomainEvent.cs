@@ -2,4 +2,4 @@
 
 namespace Catalog.Domain.Events;
 
-public record BrandDeletedDomainEvent(string Id) : INotification; 
+public record BrandDeletedDomainEvent(Guid Id) : INotification; 

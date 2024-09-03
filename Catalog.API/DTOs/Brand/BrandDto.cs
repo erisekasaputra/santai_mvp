@@ -1,3 +1,3 @@
 ﻿namespace Catalog.API.DTOs.Brand;
 
-public record BrandDto(string Id, string Name, string ImageUrl);
+public record BrandDto(Guid Id, string Name, string ImageUrl);

@@ -25,7 +25,7 @@ public static class BrandAPI
     }
 
     private static async Task<IResult> GetBrandById(
-        string brandId,
+        Guid brandId,
         [FromServices] ApplicationService service,
         [FromServices] IValidator<GetBrandByIdQuery> validator)
     {
@@ -131,7 +131,7 @@ public static class BrandAPI
     }
 
     private static async Task<IResult> UpdateBrandById(
-        string brandId, 
+        Guid brandId, 
         [FromBody] UpdateBrandCommand command,
         [FromServices] ApplicationService service, 
         [FromServices] IValidator<UpdateBrandCommand> validator)
@@ -170,7 +170,7 @@ public static class BrandAPI
     }
 
     private static async Task<IResult> DeleteBrandById(
-        string brandId, 
+        Guid brandId, 
         [FromServices] ApplicationService service, 
         [FromServices] IValidator<DeleteBrandCommand> validator)
     {

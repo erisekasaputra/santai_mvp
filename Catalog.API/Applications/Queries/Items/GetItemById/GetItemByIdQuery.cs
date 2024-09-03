@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Catalog.API.Applications.Queries.Items.GetItemById;
 
-public record GetItemByIdQuery(string Id) : IRequest<Result<ItemDto>>;
+public record GetItemByIdQuery(Guid Id) : IRequest<Result<ItemDto>>;

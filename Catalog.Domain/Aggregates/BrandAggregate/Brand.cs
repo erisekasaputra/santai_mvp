@@ -51,7 +51,7 @@ public class Brand : Entity, IAggregateRoot
         AddDomainEvent(new BrandUpdatedDomainEvent(brand));
     }
 
-    private void RaiseBrandDeletedDomainEvent(string id)
+    private void RaiseBrandDeletedDomainEvent(Guid id)
     {
         AddDomainEvent(new BrandDeletedDomainEvent(id));
     }

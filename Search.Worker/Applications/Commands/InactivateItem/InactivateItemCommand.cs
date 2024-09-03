@@ -2,4 +2,4 @@
 
 namespace Search.Worker.Applications.Commands.InactivateItem;
 
-internal record InactivateItemCommand(string Id) : IRequest<Unit>; 
+internal record InactivateItemCommand(Guid Id) : IRequest<Unit>; 

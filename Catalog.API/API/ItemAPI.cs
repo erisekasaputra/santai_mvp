@@ -17,8 +17,7 @@ using Catalog.API.DTOs.Item;
 using Catalog.API.SeedWork;
 using Catalog.API.Services;
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Mvc; 
 namespace Catalog.API.API;
 
 public static class ItemAPI
@@ -51,7 +50,7 @@ public static class ItemAPI
         return app;
     }
     private static async Task<IResult> GetItemById(
-        string itemId,
+        Guid itemId,
         [FromServices] ApplicationService service,
         [FromServices] IValidator<GetItemByIdQuery> validator)
     {
@@ -159,7 +158,7 @@ public static class ItemAPI
     }
 
     private static async Task<IResult> UpdateItemById(
-        string itemId,
+        Guid itemId,
         [FromBody] UpdateItemCommand command,
         [FromServices] ApplicationService service,
         [FromServices] IValidator<UpdateItemCommand> validator)
@@ -198,7 +197,7 @@ public static class ItemAPI
     }
 
     private static async Task<IResult> DeleteItemById(
-        string itemId,
+        Guid itemId,
         [FromServices] ApplicationService service,
         [FromServices] IValidator<DeleteItemCommand> validator)
     {
@@ -223,7 +222,7 @@ public static class ItemAPI
     }
 
     private static async Task<IResult> UndeleteItemById(
-        string itemId,
+        Guid itemId,
         [FromServices] ApplicationService service,
         [FromServices] IValidator<UndeleteItemCommand> validator)
     {
@@ -248,7 +247,7 @@ public static class ItemAPI
     }
 
     private static async Task<IResult> SetItemActivateById(
-        string itemId,
+        Guid itemId,
         [FromServices] ApplicationService service,
         [FromServices] IValidator<ActivateItemCommand> validator)
     {
@@ -273,7 +272,7 @@ public static class ItemAPI
     }
 
     private static async Task<IResult> SetItemDeactivateById(
-        string itemId,
+        Guid itemId,
         [FromServices] ApplicationService service,
         [FromServices] IValidator<DeactivateItemCommand> validator)
     {

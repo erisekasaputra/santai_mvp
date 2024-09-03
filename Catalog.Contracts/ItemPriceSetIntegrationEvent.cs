@@ -2,4 +2,4 @@
 
 namespace Catalog.Contracts;
 
-public record ItemPriceSetIntegrationEvent(string Id, decimal Amount) : INotification;
+public record ItemPriceSetIntegrationEvent(Guid Id, decimal Amount) : INotification;

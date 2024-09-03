@@ -1,3 +1,3 @@
 ﻿namespace Catalog.API.Applications.Commands.Items.AddItemSoldQuantity;
 
-public record AddItemSoldQuantityRequest(string ItemId, int Quantity);
+public record AddItemSoldQuantityRequest(Guid ItemId, int Quantity);

@@ -2,4 +2,4 @@
 
 namespace Catalog.Domain.Events;
 
-public record ItemActivatedDomainEvent(string Id) : INotification;
+public record ItemActivatedDomainEvent(Guid Id) : INotification;

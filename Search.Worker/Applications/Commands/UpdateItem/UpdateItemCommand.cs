@@ -4,18 +4,19 @@ using MediatR;
 namespace Search.Worker.Applications.Commands.UpdateItem;
 
 public record UpdateItemCommand(
-    string Id,
+    Guid Id,
     string Name,
     string Description,
+    string Sku,
     decimal Price,
     string ImageUrl,
     DateTime CreatedAt,
     int StockQuantity,
     int SoldQuantity,
-    string? CategoryId,
+    Guid? CategoryId,
     string? CategoryName,
     string? CategoryImageUrl,
-    string? BrandId,
+    Guid? BrandId,
     string? BrandName, 
     string? BrandImageUrl, 
     bool IsActive,

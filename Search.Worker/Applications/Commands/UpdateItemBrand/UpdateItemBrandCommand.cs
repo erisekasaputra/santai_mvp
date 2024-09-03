@@ -2,4 +2,4 @@
 
 namespace Search.Worker.Applications.Commands.UpdateItemBrand;
 
-public record UpdateItemBrandCommand(string Id, string Name, string ImageUrl) : IRequest; 
+public record UpdateItemBrandCommand(Guid Id, string Name, string ImageUrl) : IRequest; 

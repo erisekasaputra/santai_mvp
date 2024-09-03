@@ -2,17 +2,19 @@
 
 namespace Catalog.API.DTOs.Item;
 
-public record ItemDto(string Id,
-                  string Name,
-                  string Description,
-                  decimal Price,
-                  string ImageUrl,
-                  DateTime CreatedAt,
-                  int StockQuantity,
-                  int SoldQuantity,
-                  string CategoryId,
-                  string CategoryName,
-                  string BrandId,
-                  string BrandName,
-                  bool IsActive,
-                  IEnumerable<OwnerReviewDto>? OwnerReviews);
+public record ItemDto(
+    Guid Id,
+    string Name,
+    string Description,
+    string Sku,
+    decimal Price,
+    string ImageUrl,
+    DateTime CreatedAt,
+    int StockQuantity,
+    int SoldQuantity,
+    Guid? CategoryId,
+    string CategoryName,
+    Guid? BrandId,
+    string BrandName,
+    bool IsActive,
+    IEnumerable<OwnerReviewDto>? OwnerReviews);

@@ -2,4 +2,4 @@
 
 namespace Catalog.Contracts;
 
-public record BrandUpdatedIntegrationEvent(string Id, string Name, string ImageUrl) : INotification;
+public record BrandUpdatedIntegrationEvent(Guid Id, string Name, string ImageUrl) : INotification;

@@ -15,6 +15,9 @@ public class CreateItemCommandValidator : AbstractValidator<CreateItemCommand>
             .NotEmpty().WithMessage("Description is required.")
             .MaximumLength(1000).WithMessage("Description cannot exceed 1000 characters.");
 
+        RuleFor(x => x.Sku) 
+            .MaximumLength(50).WithMessage("Sku cannot exceed 50 characters.");
+
         RuleFor(x => x.Price)
             .InclusiveBetween(1, decimal.MaxValue).WithMessage($"Item price must be in between 0 and {decimal.MaxValue}");
 
@@ -30,12 +33,12 @@ public class CreateItemCommandValidator : AbstractValidator<CreateItemCommand>
             .InclusiveBetween(0, int.MaxValue).WithMessage($"Sold quantity must be in between 0 and {int.MaxValue}");
 
         RuleFor(x => x.CategoryId)
-            .NotEmpty().WithMessage("Category ID is required.")
-            .Length(26).WithMessage("The length of the category ID should be 26 characters.");
+            .NotEmpty().WithMessage("Category Id is required.")
+            .NotEqual(Guid.Empty).WithMessage("The Id cannot be empty.");
 
         RuleFor(x => x.BrandId)
-            .NotEmpty().WithMessage("Brand ID is required.")
-            .Length(26).WithMessage("The length of the brand ID should be 26 characters.");
+            .NotEmpty().WithMessage("Brand Id is required.") 
+            .NotEqual(Guid.Empty).WithMessage("The Id cannot be empty.");
 
         When(x => x.OwnerReviews is not null && x.OwnerReviews.Any(), () =>
         { 

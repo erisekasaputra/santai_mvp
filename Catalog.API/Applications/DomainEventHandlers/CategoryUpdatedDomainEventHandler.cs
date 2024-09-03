@@ -10,7 +10,10 @@ public class CategoryUpdatedDomainEventHandler(IMediator mediator) : INotificati
 
     public async Task Handle(CategoryUpdatedDomainEvent notification, CancellationToken cancellationToken)
     {
-        var @event = new CategoryUpdatedIntegrationEvent(notification.Category.Id, notification.Category.Name, notification.Category.ImageUrl);
+        var @event = new CategoryUpdatedIntegrationEvent(
+            notification.Category.Id,
+            notification.Category.Name,
+            notification.Category.ImageUrl);
 
         await _mediator.Publish(@event, cancellationToken);
     }

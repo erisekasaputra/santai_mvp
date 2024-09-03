@@ -27,7 +27,7 @@ public static class CategoryAPI
     }
 
     private static async Task<IResult> GetCategoryById(
-        string categoryId,
+        Guid categoryId,
         [FromServices] ApplicationService service,
         [FromServices] IValidator<GetCategoryByIdQuery> validator)
     {
@@ -133,7 +133,7 @@ public static class CategoryAPI
     }
 
     private static async Task<IResult> UpdateCategoryById(
-        string categoryId, 
+        Guid categoryId, 
         [FromBody] UpdateCategoryCommand command, 
         [FromServices] ApplicationService service, 
         [FromServices] IValidator<UpdateCategoryCommand> validator)
@@ -172,7 +172,7 @@ public static class CategoryAPI
     }
 
     private static async Task<IResult> DeleteCategoryById(
-        string categoryId, 
+        Guid categoryId, 
         [FromServices] ApplicationService service, 
         [FromServices] IValidator<DeleteCategoryCommand> validator)
     {

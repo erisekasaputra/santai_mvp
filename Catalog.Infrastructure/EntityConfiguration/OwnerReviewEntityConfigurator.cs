@@ -7,9 +7,7 @@ namespace Catalog.Infrastructure.EntityConfiguration;
 public class OwnerReviewEntityConfigurator : IEntityTypeConfiguration<OwnerReview>
 {
     public void Configure(EntityTypeBuilder<OwnerReview> builder)
-    {
-        builder.ToTable("owner_reviews");
-         
+    { 
         builder.HasKey(or => or.Id);
 
         builder.Property(or => or.Id)

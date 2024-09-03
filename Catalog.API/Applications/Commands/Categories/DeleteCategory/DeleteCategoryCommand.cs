@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Catalog.API.Applications.Commands.Categories.DeleteCategory;
 
-public record DeleteCategoryCommand(string Id) : IRequest<Result<Unit>>;
+public record DeleteCategoryCommand(Guid Id) : IRequest<Result<Unit>>;

@@ -2,4 +2,4 @@
 
 namespace Catalog.Contracts;
 
-public record CategoryDeletedIntegrationEvent(string Id) : INotification;
+public record CategoryDeletedIntegrationEvent(Guid Id) : INotification;
