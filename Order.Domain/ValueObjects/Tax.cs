@@ -5,25 +5,28 @@ namespace Order.Domain.ValueObjects;
 
 public class Tax : ValueObject
 {
-    public decimal Rate { get; private set; } 
+    public decimal Rate { get; private set; }   
+
     public Tax(decimal rate)
     {
-        if (rate < 0)
-            throw new DomainException("Tax rate cannot be negative.");
+        if (Rate < 1 || Rate > 100)
+            throw new DomainException("Discount percentage must be between 1 and 100.");
 
-        Rate = rate;
+        Rate = rate; 
     }
 
-    public decimal Apply(decimal amount)
+    public Money Apply(Money subtotal)
     {
-        if (amount < 0)
+        if (subtotal.Amount < 0)
             throw new DomainException("Amount cannot be negative.");
 
-        return (Rate / 100) * amount;
-    }
+        var taxAmount = new Money(subtotal.Amount * (Rate / 100), subtotal.Currency); 
+        
+        return taxAmount;
+    } 
 
-    protected override IEnumerable<object> GetEqualityComponents()
+    protected override IEnumerable<object?> GetEqualityComponents()
     {
-        yield return Rate;
+        yield return Rate; 
     }
 }

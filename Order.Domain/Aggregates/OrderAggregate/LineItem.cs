@@ -1,4 +1,5 @@
-﻿using Order.Domain.Exceptions;
+﻿using Order.Domain.Enumerations;
+using Order.Domain.Exceptions;
 using Order.Domain.SeedWork;
 using Order.Domain.ValueObjects;
 
@@ -8,17 +9,17 @@ public class LineItem : Entity
 {
     public string Name { get; private set; }
     public string Sku { get; private set; }
-    public decimal UnitPrice { get; private set; }
+    public Money UnitPrice { get; private set; }  
+    public Money BaseUnitPrice { get; private init; }
     public int Quantity { get; private set; }
-    public Discount? Discount { get; private set; }
-    public Tax? Tax { get; private set; }
-    public decimal TotalPrice => CalculateTotalPrice();
+    public Coupon? Coupon { get; private set; }
+    public Tax? Tax { get; private set; } 
 
     public LineItem(
         Guid id,
         string name,
         string sku,
-        decimal unitPrice,
+        Money price,
         int quantity = 1)
     {
         if (string.IsNullOrWhiteSpace(name))
@@ -27,7 +28,7 @@ public class LineItem : Entity
         if (string.IsNullOrWhiteSpace(sku))
             throw new DomainException("SKU cannot be null or empty.");
 
-        if (unitPrice <= 0)
+        if (price.Amount <= 0)
             throw new DomainException("Unit price must be greater than zero.");
 
         if (quantity <= 0)
@@ -36,7 +37,8 @@ public class LineItem : Entity
         Id = id;
         Name = name;
         Sku = sku;
-        UnitPrice = unitPrice;
+        UnitPrice = price;
+        BaseUnitPrice = price;
         Quantity = quantity;  
     }
 
@@ -61,12 +63,25 @@ public class LineItem : Entity
         Quantity -= quantity;
     }
 
-    public void ApplyDiscount(Discount discount)
+    public void ApplyDiscount(Coupon coupon)
     {
-        if (discount is null) 
-            throw new DomainException("Discount cannot be null."); 
+        if (coupon is null) 
+            throw new DomainException("Coupon cannot be null."); 
+        
+        if (coupon.CouponValueType == PercentageOrValueType.Value)
+        {
+            if (coupon.Value is null)
+            { 
+                throw new DomainException($"Coupon value can not be empty.");
+            }
 
-        Discount = discount;
+            if (coupon.Value.Currency != BaseUnitPrice.Currency)
+            {
+                throw new DomainException($"Coupon currency ({coupon.Value?.Currency}) does not match line item currency ({BaseUnitPrice.Currency}).");
+            }
+        }
+
+        Coupon = coupon;
     }
 
     public void ApplyTax(Tax tax)
@@ -77,17 +92,22 @@ public class LineItem : Entity
         Tax = tax;
     }
 
-    private decimal CalculateTotalPrice()
+    public Money CalculateTotalPrice()
     {
-        var discountAmount = Discount is null ? 0 : Discount.Apply(UnitPrice * Quantity);
-        var subtotal = (UnitPrice * Quantity) - discountAmount;
+        var subtotal = new Money(UnitPrice.Amount * Quantity, UnitPrice.Currency);
 
-        if (subtotal < 1)
+        if (Coupon is not null)
         {
-            throw new DomainException("Subtotal can not less than or equal with zero");
+            var discount = Coupon.Apply(subtotal);
+            subtotal -= discount;
         }
 
-        var taxAmount = Tax is null ? 0 : Tax.Apply(subtotal);
-        return subtotal + taxAmount;
-    }
+        if (Tax is not null)
+        {
+            var taxAmount = Tax.Apply(subtotal);
+            subtotal += taxAmount;
+        }
+
+        return subtotal;
+    } 
 }

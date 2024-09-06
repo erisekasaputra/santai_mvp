@@ -1,6 +1,6 @@
 ﻿namespace Order.Domain.Enumerations;
 
-public enum DiscountType
+public enum PercentageOrValueType
 {
     Percentage,
     Value
