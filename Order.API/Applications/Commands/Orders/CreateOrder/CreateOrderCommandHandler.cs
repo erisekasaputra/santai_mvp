@@ -45,10 +45,10 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Res
                 order.AddFleet(fleet.Id, "", "", "", ""); 
             } 
 
-            order.ApplyDiscount(Coupon.CreateValueDiscount(command.CouponCode, 10, GlobalCurrency, 10));
+            order.ApplyDiscount(Coupon.CreateValueDiscount(order.Id, command.CouponCode, 10, GlobalCurrency, 10));
             order.ApplyTax(new Tax(10, GlobalCurrency));
-            order.ApplyFee(Fee.CreateByValue(FeeDescription.MechanicFee, 10, GlobalCurrency)); 
-            order.ApplyFee(Fee.CreateByPercentage(FeeDescription.ServiceFee, 10, GlobalCurrency));  
+            order.ApplyFee(Fee.CreateByValue(order.Id, FeeDescription.MechanicFee, 10, GlobalCurrency)); 
+            order.ApplyFee(Fee.CreateByPercentage(order.Id, FeeDescription.ServiceFee, 10, GlobalCurrency));  
 
             order.CalculateGrandTotal();  
             

@@ -7,19 +7,21 @@ namespace Order.Domain.Aggregates.OrderAggregate;
 
 public class Fee : Entity
 { 
+    public Guid OrderingId { get; private set; }
     public PercentageOrValueType PercentageOrValueType { get; private set; }
     public FeeDescription FeeDescription { get; private set; }
     public decimal? Percentage { get; private set; }
     public Money? Amount { get; private set; } 
     public Money FeeAmount { get; private set; }
 
-    private Fee(FeeDescription feeDescription, PercentageOrValueType percentageOrValueType, decimal amount, Currency currency)
+    private Fee(Guid orderingId, FeeDescription feeDescription, PercentageOrValueType percentageOrValueType, decimal amount, Currency currency)
     {
         if (amount <= 0) 
         {
             throw new DomainException("Amount can not less than or equal with 0");
         }
 
+        OrderingId = orderingId;
         FeeAmount = new Money(0, currency);
         PercentageOrValueType = percentageOrValueType;
         FeeDescription = feeDescription;
@@ -46,14 +48,14 @@ public class Fee : Entity
         }    
     } 
 
-    public static Fee CreateByValue(FeeDescription feeDescription, decimal amount, Currency currency)
+    public static Fee CreateByValue(Guid orderingId, FeeDescription feeDescription, decimal amount, Currency currency)
     { 
-        return new Fee(feeDescription, PercentageOrValueType.Value, amount, currency);
+        return new Fee(orderingId, feeDescription, PercentageOrValueType.Value, amount, currency);
     }
 
-    public static Fee CreateByPercentage(FeeDescription feeDescription, decimal percentage, Currency currency) 
+    public static Fee CreateByPercentage(Guid orderingId, FeeDescription feeDescription, decimal percentage, Currency currency) 
     {
-        return new Fee(feeDescription, PercentageOrValueType.Percentage, percentage, currency);
+        return new Fee(orderingId, feeDescription, PercentageOrValueType.Percentage, percentage, currency);
     }
 
     public Money Apply(Money orderAmount)

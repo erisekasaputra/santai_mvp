@@ -7,7 +7,6 @@ namespace Order.Infrastructure.EntityConfigurations;
 public class BuyerEntityConfiguration : IEntityTypeConfiguration<Buyer>
 {
     public void Configure(EntityTypeBuilder<Buyer> builder)
-    {
-        throw new NotImplementedException();
+    { 
     }
 }

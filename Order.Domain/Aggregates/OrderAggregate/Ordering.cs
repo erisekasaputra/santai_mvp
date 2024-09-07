@@ -11,10 +11,8 @@ namespace Order.Domain.Aggregates.OrderAggregate;
 public class Ordering : Entity
 {  
     public Currency BaseCurrency { get; private set; }
-    public Address Address { get; private set; }
-    public Guid BuyerId { get; private set; }
-    public Buyer Buyer { get; private set; }
-    public Guid? MechanicId { get; private set; }
+    public Address Address { get; private set; } 
+    public Buyer Buyer { get; private set; } 
     public Mechanic? Mechanic { get; private set; } 
     public DateTime? MechanicWaitingAcceptTime { get; private set; }
     public bool IsScheduled { get; private set; }
@@ -27,13 +25,15 @@ public class Ordering : Entity
     public Payment? Payment { get; private set; }
     public Money OrderAmount { get; private set; }
     public Coupon? Coupon { get; private set; }
-    public Money GrandTotal { get; private set; }
-    public bool IsPaid { get; private set; }
+    public Money GrandTotal { get; private set; } 
     public Rating? Rating { get; private set; }
-    public bool IsRated { get; private set; }
     public ICollection<string>? RatingImages { get; private set; }
     public ICollection<Fee> Fees { get; private set; } 
     public Cancellation? Cancellation { get; private set; } 
+
+    public bool IsRated => Rating is not null && Rating.Value > 0.0M;
+    public bool IsPaid => Payment is not null && Payment.Money.Amount > 0.0M; 
+
     public Ordering(
         Currency currency,
         string addressLine,
@@ -50,12 +50,11 @@ public class Ordering : Entity
             throw new DomainException("Scheduled date can not in the past and can not be null");
         }
 
-        BaseCurrency = currency;
-        BuyerId = buyerId;
+        BaseCurrency = currency; 
         OrderAmount = new Money(0, currency);
         GrandTotal = new Money(0, currency); 
         Address = new Address(addressLine, latitude, longitude);
-        Buyer = new Buyer(buyerId, buyerName, buyerType);
+        Buyer = new Buyer(Id, buyerId, buyerName, buyerType);
         LineItems = [];
         Fleets = [];
         RatingImages = [];
@@ -72,20 +71,17 @@ public class Ordering : Entity
         }
 
         if (buyerType is UserType.BusinessUser || buyerType is UserType.StaffUser)
-        {
-            IsPaid = true;
+        { 
             Status = OrderStatus.PaymentPaid;
         }
         else
-        {
-            IsPaid = false;
+        { 
             Status = OrderStatus.PaymentPending; 
         }
          
 
         CreatedAtUtc = DateTime.UtcNow;
-        TotalCanceledByMechanic = 0; 
-        IsRated = false;
+        TotalCanceledByMechanic = 0;  
         RaiseOrderCreatedDomainEvent();
     } 
       
@@ -221,7 +217,12 @@ public class Ordering : Entity
         }
     }
 
-    public void AddFleet(Guid id, string brand, string model, string registrationNumber, string imageUrl)
+    public void AddFleet(
+        Guid id,
+        string brand,
+        string model,
+        string registrationNumber,
+        string imageUrl)
     {
         if (id == Guid.Empty)
             throw new ArgumentNullException(nameof(id), "Fleet id cannot be null.");
@@ -236,7 +237,13 @@ public class Ordering : Entity
             return;
         }
 
-        Fleets.Add(new (id, brand, model, registrationNumber, imageUrl));
+        Fleets.Add(new (
+            Id,
+            id,
+            brand,
+            model,
+            registrationNumber,
+            imageUrl));
     } 
 
     private bool IsCancelableByBuyer(Guid buyerId, out string errorMessage) 
@@ -247,13 +254,13 @@ public class Ordering : Entity
             return false;
         }
 
-        if (buyerId == Guid.Empty || BuyerId == Guid.Empty) 
+        if (buyerId == Guid.Empty || Buyer.BuyerId == Guid.Empty) 
         {
             errorMessage = "Buyer ID can not be empty";
             return false;
         }
          
-        if (!BuyerId.Equals(buyerId)) 
+        if (!Buyer.BuyerId.Equals(buyerId)) 
         {
             errorMessage = "Order cancellation is not allowed: The user ID associated with the order does not match the user ID of the requester.";
             return false;
@@ -296,28 +303,7 @@ public class Ordering : Entity
         return false;
     }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+     
 
 
     private bool IsCancelableByMechanic(Guid mechanicId, out string errorMessage)
@@ -342,7 +328,13 @@ public class Ordering : Entity
             return false;
         }
 
-        if (MechanicId is null || !MechanicId.Equals(mechanicId))
+        if (Mechanic is null)
+        {
+            errorMessage = "Mechanic has not been set";
+            return false;
+        }
+
+        if (!Mechanic.MechanicId.Equals(mechanicId))
         {
             errorMessage = "The mechanic ID must match if the mechanic is initiating the cancellation.";
             return false;
@@ -369,7 +361,12 @@ public class Ordering : Entity
             throw new DomainException($"Order status must be {OrderStatus.MechanicAssigned}");
         }
 
-        if (MechanicId != mechanicId)
+        if (Mechanic is null)
+        {
+            throw new DomainException("Mechanic has not been set");
+        }
+
+        if (Mechanic.MechanicId != mechanicId)
         {
             throw new DomainException($"Mechanic ID is missmatch");
         }
@@ -383,8 +380,7 @@ public class Ordering : Entity
         {
             throw new DomainException("Can not accept the order, because the waiting time is expired");
         }
-
-        MechanicId = null;
+         
         Mechanic = null;
         Status = OrderStatus.FindingMechanic;
         TotalCanceledByMechanic++;
@@ -401,8 +397,7 @@ public class Ordering : Entity
         {
             throw new DomainException(errorMessage);
         }
-
-        MechanicId = null;
+         
         Mechanic = null;
         Status = OrderStatus.FindingMechanic;
         TotalCanceledByMechanic++;
@@ -471,12 +466,17 @@ public class Ordering : Entity
             throw new DomainException("Fleet ID does not exists");
         }
 
-        if (!MechanicId.Equals(mechanicId))
+        if (Mechanic is null)
+        {
+            throw new DomainException("Mechanic has not been set");
+        }
+
+        if (!Mechanic.MechanicId.Equals(mechanicId))
         { 
             throw new DomainException("Mechanic ID is missmatch");
         }
         
-        if (!BuyerId.Equals(buyerId))
+        if (!Buyer.BuyerId.Equals(buyerId))
         {
             throw new DomainException("Buyer ID is missmatch");
         }
@@ -520,12 +520,17 @@ public class Ordering : Entity
             throw new DomainException("Fleet ID does not exists");
         }
 
-        if (!MechanicId.Equals(mechanicId))
+        if (Mechanic is null)
+        {
+            throw new DomainException("Mechanic has not been set");
+        }
+
+        if (!Mechanic.MechanicId.Equals(mechanicId))
         {
             throw new DomainException("Mechanic ID is missmatch");
         }
 
-        if (!BuyerId.Equals(buyerId))
+        if (!Buyer.BuyerId.Equals(buyerId))
         {
             throw new DomainException("Buyer ID is missmatch");
         }
@@ -569,12 +574,17 @@ public class Ordering : Entity
             throw new DomainException("Fleet ID does not exists");
         }
 
-        if (!MechanicId.Equals(mechanicId))
+        if (Mechanic is null)
+        {
+            throw new DomainException("Mechanic has not been set");
+        }
+
+        if (!Mechanic.MechanicId.Equals(mechanicId))
         {
             throw new DomainException("Mechanic ID is missmatch");
         }
 
-        if (!BuyerId.Equals(buyerId))
+        if (!Buyer.BuyerId.Equals(buyerId))
         {
             throw new DomainException("Buyer ID is missmatch");
         }
@@ -619,8 +629,7 @@ public class Ordering : Entity
             throw new DomainException("Rating must be between 1 and 5");
         } 
 
-        Rating = new Rating(rating, comment);
-        IsRated = true;
+        Rating = new Rating(rating, comment); 
         RatingImages = images?.ToList();
 
         RaiseOrderRatedDomainEvent();
@@ -656,14 +665,14 @@ public class Ordering : Entity
         }
 
         Payment = new Payment(
+            Id,
             amount,
             currency,
             transactionAt,
             paymentMethod,
             bankReference);
 
-        Status = OrderStatus.PaymentPaid; 
-        IsPaid = true; 
+        Status = OrderStatus.PaymentPaid;  
         RaiseOrderPaymentPaidDomainEvent();
     }
 
@@ -686,9 +695,9 @@ public class Ordering : Entity
             string? formattedDate = ScheduledOnUtc?.ToString("dddd, MMMM d, yyyy, h:mm tt");
             errorMessage = $"The mechanic can only be assigned on or after {formattedDate} UTC";
             return false;
-        }
+        }  
 
-        if (MechanicId.HasValue && MechanicId != Guid.Empty && MechanicId is not null) 
+        if (Mechanic is not null) 
         {
             errorMessage = "Mechanic is already assigned";
             return false;
@@ -721,7 +730,12 @@ public class Ordering : Entity
             throw new DomainException($"Order status must be {OrderStatus.MechanicAssigned}");
         }
 
-        if (MechanicId != mechanicId)
+        if (Mechanic is null)
+        {
+            throw new DomainException("Mechanic has not been set");
+        }
+
+        if (Mechanic.MechanicId != mechanicId)
         {
             throw new DomainException($"Mechanic ID is missmatch");
         }
@@ -749,9 +763,8 @@ public class Ordering : Entity
         }
 
         MechanicWaitingAcceptTime = DateTime.UtcNow.AddSeconds(mechanicWaitingAcceptTimeInSeconds); 
-        Status = OrderStatus.MechanicAssigned;
-        MechanicId = mechanicId;
-        Mechanic = new Mechanic(mechanicId, name, performance);
+        Status = OrderStatus.MechanicAssigned; 
+        Mechanic = new Mechanic(Id, mechanicId, name, performance);
 
         RaiseMechanicAssignedDomainEvent();
     }
@@ -768,7 +781,12 @@ public class Ordering : Entity
             throw new DomainException($"Order status must be {OrderStatus.MechanicAcceptedOrder}");
         }
 
-        if (MechanicId != mechanicId)
+        if (Mechanic is null)
+        {
+            throw new DomainException("Mechanic has not been set");
+        }
+
+        if (Mechanic.MechanicId != mechanicId)
         {
             throw new DomainException($"Mechanic ID is missmatch");
         }
@@ -790,7 +808,12 @@ public class Ordering : Entity
             throw new DomainException($"Order status must be {OrderStatus.MechanicDispatched}");
         }
 
-        if (MechanicId != mechanicId)
+        if (Mechanic is null)
+        {
+            throw new DomainException("Mechanic has not been set");
+        }
+
+        if (Mechanic.MechanicId != mechanicId)
         {
             throw new DomainException($"Mechanic ID is missmatch");
         }

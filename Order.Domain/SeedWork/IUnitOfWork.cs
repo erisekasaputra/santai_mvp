@@ -4,7 +4,7 @@ using System.Data;
 namespace Order.Domain.SeedWork;
 
 public interface IUnitOfWork
-{ 
+{  
     IOrderRepository Orders { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

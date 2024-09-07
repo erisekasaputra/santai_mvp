@@ -7,7 +7,6 @@ namespace Order.Infrastructure.EntityConfigurations;
 public class FleetEntityConfiguration : IEntityTypeConfiguration<Fleet>
 {
     public void Configure(EntityTypeBuilder<Fleet> builder)
-    {
-        throw new NotImplementedException();
+    { 
     }
 }

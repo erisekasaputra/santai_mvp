@@ -7,7 +7,6 @@ namespace Order.Infrastructure.EntityConfigurations;
 public class MechanicEntityConfiguration : IEntityTypeConfiguration<Mechanic>
 {
     public void Configure(EntityTypeBuilder<Mechanic> builder)
-    {
-        throw new NotImplementedException();
+    { 
     }
 }

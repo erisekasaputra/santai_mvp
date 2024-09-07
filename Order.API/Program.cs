@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Order.API;
 using Order.API.Configurations;
@@ -5,8 +6,24 @@ using Order.API.CustomDelegate;
 using Order.Domain.Interfaces;
 using Order.Infrastructure;
 using Order.Infrastructure.Services;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.Configure<JsonOptions>(options =>
+{
+    options.SerializerOptions.Converters
+        .Add(new JsonStringEnumConverter(
+            namingPolicy: System.Text.Json.JsonNamingPolicy.CamelCase,
+            allowIntegerValues: true));
+});
+
+builder.Services.AddControllers()
+.AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
+
 
 builder.Services.AddControllers();
 

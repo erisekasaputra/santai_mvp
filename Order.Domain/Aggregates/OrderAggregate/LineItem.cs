@@ -14,8 +14,7 @@ public class LineItem : Entity
     public int Quantity { get; private set; }
     public Coupon? Coupon { get; private set; }
     public Tax? Tax { get; private set; } 
-    public Guid OrderId { get; private set; }
-    public Ordering Ordering { get; private set; }
+    public Guid OrderingId { get; private set; } 
     public Money SubTotal { get; private set; }
 
     public LineItem(
@@ -39,13 +38,12 @@ public class LineItem : Entity
             throw new DomainException("Quantity must be greater than zero.");
 
         Id = id;
-        OrderId = orderId;
+        OrderingId = orderId;
         Name = name;
         Sku = sku;
         UnitPrice = price;
         BaseUnitPrice = price;
-        Quantity = quantity;
-        Ordering = null!;
+        Quantity = quantity; 
         SubTotal = new Money(0, price.Currency);
     }
 

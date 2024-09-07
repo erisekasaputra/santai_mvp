@@ -4,13 +4,15 @@ namespace Order.Domain.Aggregates.OrderAggregate;
 
 public class Fleet : Entity
 {
+    public Guid OrderingId { get; private set; }
     public string Brand { get; private set; }
     public string Model { get; private set; }
     public string RegistrationNumber { get; private set; }
     public string ImageUrl { get; private set; }
-    public Fleet(Guid id, string brand, string model, string registrationNumber, string imageUrl)
+    public Fleet(Guid orderingId, Guid fleetId, string brand, string model, string registrationNumber, string imageUrl)
     {
-        Id = id;
+        OrderingId = orderingId;
+        Id = fleetId;
         Brand = brand;
         Model = model;
         RegistrationNumber = registrationNumber;
