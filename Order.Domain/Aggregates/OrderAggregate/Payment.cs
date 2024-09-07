@@ -8,16 +8,19 @@ public class Payment : Entity
 {
     public Guid OrderingId { get; private set; }
     public Ordering Ordering { get; private set; }
-    public Money Money { get; set; }
+    public Money Amount { get; set; }
     public DateTime? TransactionAt { get; private set; }
     public string? PaymentMethod { get; private set; }
     public string? BankReference { get; private set; }
     public DateTime CreatedAt { get; private init; }
-
+    public Payment()
+    {
+        
+    }
     public Payment(Guid orderingId, decimal amount, Currency currency, DateTime transactionAt, string? paymentMethod, string? bankReference)
     {
         OrderingId = orderingId;
-        Money = new Money(amount, currency);
+        Amount = new Money(amount, currency);
         TransactionAt = transactionAt;
         PaymentMethod = paymentMethod;
         BankReference = bankReference;

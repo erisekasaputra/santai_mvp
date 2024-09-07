@@ -11,12 +11,14 @@ public class LineItem : Entity
     public string Sku { get; private set; }
     public Money UnitPrice { get; private set; }  
     public Money BaseUnitPrice { get; private init; }
-    public int Quantity { get; private set; }
-    public Coupon? Coupon { get; private set; }
+    public int Quantity { get; private set; } 
     public Tax? Tax { get; private set; } 
     public Guid OrderingId { get; private set; } 
     public Money SubTotal { get; private set; }
-
+    public LineItem()
+    {
+        
+    }
     public LineItem(
         Guid id,
         Guid orderId,
@@ -84,9 +86,7 @@ public class LineItem : Entity
             {
                 throw new DomainException($"Coupon currency ({coupon.Value.Currency}) does not match line item currency ({BaseUnitPrice.Currency}).");
             }
-        }
-
-        Coupon = coupon;
+        } 
     }
 
     public void ApplyTax(Tax tax)
@@ -104,13 +104,7 @@ public class LineItem : Entity
 
     public Money CalculateTotalPrice()
     {
-        var subtotal = new Money(UnitPrice.Amount * Quantity, UnitPrice.Currency);
-
-        if (Coupon is not null)
-        {
-            var discount = Coupon.Apply(subtotal);
-            subtotal -= discount;
-        }
+        var subtotal = new Money(UnitPrice.Amount * Quantity, UnitPrice.Currency);  
 
         if (Tax is not null)
         {

@@ -14,7 +14,10 @@ public class Coupon : Entity
     public Money? Value { get; private set; }
     public Money MinimumOrderValue { get; private set; }
     public Money DiscountAmount { get; private set; }
-
+    public Coupon()
+    {
+        
+    }
     private Coupon(
         Guid orderingId,
         string couponCode,

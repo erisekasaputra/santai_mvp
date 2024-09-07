@@ -32,8 +32,11 @@ public class Ordering : Entity
     public Cancellation? Cancellation { get; private set; } 
 
     public bool IsRated => Rating is not null && Rating.Value > 0.0M;
-    public bool IsPaid => Payment is not null && Payment.Money.Amount > 0.0M; 
-
+    public bool IsPaid => Payment is not null && Payment.Amount.Amount > 0.0M;
+    public Ordering()
+    {
+        
+    }
     public Ordering(
         Currency currency,
         string addressLine,

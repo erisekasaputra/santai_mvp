@@ -15,6 +15,12 @@ public class Mechanic : Entity
     public decimal Performance { get; private set; }
 
     public bool IsRated => Rating is not null && Rating.Value > 0.0M;
+
+    public Mechanic()
+    {
+        
+    }
+
     public Mechanic(Guid orderingId, Guid mechanicId, string name, decimal perfomance)
     {
         OrderingId = orderingId;

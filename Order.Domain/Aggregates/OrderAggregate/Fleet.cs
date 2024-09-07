@@ -9,6 +9,10 @@ public class Fleet : Entity
     public string Model { get; private set; }
     public string RegistrationNumber { get; private set; }
     public string ImageUrl { get; private set; }
+    public Fleet()
+    {
+        
+    }
     public Fleet(Guid orderingId, Guid fleetId, string brand, string model, string registrationNumber, string imageUrl)
     {
         OrderingId = orderingId;

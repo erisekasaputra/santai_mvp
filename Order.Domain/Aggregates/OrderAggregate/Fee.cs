@@ -13,7 +13,10 @@ public class Fee : Entity
     public decimal? Percentage { get; private set; }
     public Money? Amount { get; private set; } 
     public Money FeeAmount { get; private set; }
-
+    public Fee()
+    {
+        
+    }
     private Fee(Guid orderingId, FeeDescription feeDescription, PercentageOrValueType percentageOrValueType, decimal amount, Currency currency)
     {
         if (amount <= 0) 

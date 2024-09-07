@@ -14,7 +14,9 @@
           "MassTransit.EntityFramework": "8.2.6-develop.1976",
           "MassTransit.EntityFrameworkCore": "8.2.6-develop.1976",
           "MediatR": "12.4.0",
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "9.0.0-preview.7.24406.2",
           "Microsoft.EntityFrameworkCore": "9.0.0-preview.7.24405.3",
+          "Microsoft.EntityFrameworkCore.Design": "9.0.0-preview.7.24405.3",
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.0-preview.7.24405.3",
           "Microsoft.EntityFrameworkCore.Tools": "9.0.0-preview.7.24405.3",
           "Microsoft.Identity.Client": "4.64.0",
@@ -166,6 +168,37 @@
           "lib/netstandard2.0/MediatR.Contracts.dll": {
             "assemblyVersion": "2.0.1.0",
             "fileVersion": "2.0.1.0"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Cryptography.Internal/9.0.0-preview.7.24406.2": {
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.Cryptography.Internal.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.40602"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Cryptography.KeyDerivation/9.0.0-preview.7.24406.2": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Cryptography.Internal": "9.0.0-preview.7.24406.2"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.Cryptography.KeyDerivation.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.40602"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Identity.EntityFrameworkCore/9.0.0-preview.7.24406.2": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.Relational": "9.0.0-preview.7.24405.3",
+          "Microsoft.Extensions.Identity.Stores": "9.0.0-preview.7.24406.2"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.40602"
           }
         }
       },
@@ -753,6 +786,32 @@
           "lib/net8.0/Microsoft.Extensions.Hosting.Abstractions.dll": {
             "assemblyVersion": "8.0.0.0",
             "fileVersion": "8.0.23.53103"
+          }
+        }
+      },
+      "Microsoft.Extensions.Identity.Core/9.0.0-preview.7.24406.2": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Cryptography.KeyDerivation": "9.0.0-preview.7.24406.2",
+          "Microsoft.Extensions.Logging": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Options": "9.0.0-preview.7.24405.7"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Identity.Core.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.40602"
+          }
+        }
+      },
+      "Microsoft.Extensions.Identity.Stores/9.0.0-preview.7.24406.2": {
+        "dependencies": {
+          "Microsoft.Extensions.Caching.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Identity.Core": "9.0.0-preview.7.24406.2",
+          "Microsoft.Extensions.Logging": "9.0.0-preview.7.24405.7"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Identity.Stores.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.40602"
           }
         }
       },
@@ -1397,6 +1456,27 @@
       "path": "mediatr.contracts/2.0.1",
       "hashPath": "mediatr.contracts.2.0.1.nupkg.sha512"
     },
+    "Microsoft.AspNetCore.Cryptography.Internal/9.0.0-preview.7.24406.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-M1EiNWUQONaqBKHAOkBDK7VDaFMr49SuaA8EqD4XL7Qc4QCDv0cYWRiC0tU5h8ELY4OGaJG1zS4IJfLl56s+7w==",
+      "path": "microsoft.aspnetcore.cryptography.internal/9.0.0-preview.7.24406.2",
+      "hashPath": "microsoft.aspnetcore.cryptography.internal.9.0.0-preview.7.24406.2.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Cryptography.KeyDerivation/9.0.0-preview.7.24406.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-avCdigk710YAoXr4M42sSNXfAVaw3RbERtLEAlwAJzlFbofRDlRAAV/C7q+9xM8TD7iOrlMMrscdnXc0JoASqQ==",
+      "path": "microsoft.aspnetcore.cryptography.keyderivation/9.0.0-preview.7.24406.2",
+      "hashPath": "microsoft.aspnetcore.cryptography.keyderivation.9.0.0-preview.7.24406.2.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Identity.EntityFrameworkCore/9.0.0-preview.7.24406.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-F7QVL6LSt2t0/Z5jHg303kNq9Hm/g8eJqGDn9gSyY5Ad1wEEmEYcXYyspjI66TnosQvdqaIb59e4zPpUqPnt8A==",
+      "path": "microsoft.aspnetcore.identity.entityframeworkcore/9.0.0-preview.7.24406.2",
+      "hashPath": "microsoft.aspnetcore.identity.entityframeworkcore.9.0.0-preview.7.24406.2.nupkg.sha512"
+    },
     "Microsoft.Bcl.AsyncInterfaces/7.0.0": {
       "type": "package",
       "serviceable": true,
@@ -1606,6 +1686,20 @@
       "sha512": "sha512-AG7HWwVRdCHlaA++1oKDxLsXIBxmDpMPb3VoyOoAghEWnkUvEAdYQUwnV4jJbAaa/nMYNiEh5ByoLauZBEiovg==",
       "path": "microsoft.extensions.hosting.abstractions/8.0.0",
       "hashPath": "microsoft.extensions.hosting.abstractions.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Identity.Core/9.0.0-preview.7.24406.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-6arHeUKSSsbXRDOxWnFsRzDlG93DYcZz+zLJUgwKOY9V9FbG7YPmQArImcJt/g45kREYRj+nopZ2Bgw6Oi6SeQ==",
+      "path": "microsoft.extensions.identity.core/9.0.0-preview.7.24406.2",
+      "hashPath": "microsoft.extensions.identity.core.9.0.0-preview.7.24406.2.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Identity.Stores/9.0.0-preview.7.24406.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-F2MpWeBYMcbOZdQjzePeu7sxACzMxKJ5L66EBaSQPF//dNNssKKhN49SaoSXMrMiL3ej3ZWywXcC70Z19NQy9Q==",
+      "path": "microsoft.extensions.identity.stores/9.0.0-preview.7.24406.2",
+      "hashPath": "microsoft.extensions.identity.stores.9.0.0-preview.7.24406.2.nupkg.sha512"
     },
     "Microsoft.Extensions.Logging/9.0.0-preview.7.24405.7": {
       "type": "package",

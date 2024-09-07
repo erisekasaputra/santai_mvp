@@ -8,7 +8,10 @@ public class Tax : ValueObject
 {
     public decimal Rate { get; private set; }   
     public Money TaxAmount { get; private set; }
-
+    public Tax()
+    {
+        
+    }
     public Tax(decimal rate, Currency currency)
     {
         if (rate < 1 || rate > 100)

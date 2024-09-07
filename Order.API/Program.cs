@@ -1,9 +1,12 @@
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
 using Order.API;
+using Order.API.Applications.Services;
+using Order.API.Applications.Services.Interfaces;
 using Order.API.Configurations;
 using Order.API.CustomDelegate;
 using Order.Domain.Interfaces;
+using Order.Domain.SeedWork;
 using Order.Infrastructure;
 using Order.Infrastructure.Services;
 using System.Text.Json.Serialization;
@@ -44,15 +47,22 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddTransient<TokenJwtHandler>();
 
+builder.Services.AddScoped<IPaymentService, PaymentService>();
+
 builder.Services.AddHttpClient<IAccountService, AccountService>(client =>
 {
     client.BaseAddress = new Uri(accountServiceClientConfig?.Host ?? throw new Exception("Account service client host is not set"));
 })
 .AddHttpMessageHandler<TokenJwtHandler>();
 
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
 builder.Services.AddDbContext<OrderDbContext>(options =>
-{
-    options.UseSqlServer(databaseConfig?.ConnectionString ?? throw new Exception("Database connection string is not set"));
+{ 
+    options.UseSqlServer(databaseConfig?.ConnectionString ?? throw new Exception("Database connection string is not set"), sqlServerOptions =>
+    {
+        sqlServerOptions.MigrationsAssembly(typeof(OrderDbContext).Assembly);
+    });
 });
 
 builder.Services.AddOpenApi();
