@@ -1,35 +1,72 @@
 ﻿using MediatR;
+using Order.API.Applications.Services.Interfaces;
 using Order.API.SeedWorks;
 using Order.Domain.Aggregates.OrderAggregate;
 using Order.Domain.Enumerations;
+using Order.Domain.Exceptions;
+using Order.Domain.ValueObjects;
 
 namespace Order.API.Applications.Commands.Orders.CreateOrder;
 
 public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Result>
 {
-    private readonly ILogger<CreateOrderCommandHandler> _logger;    
-    public CreateOrderCommandHandler(ILogger<CreateOrderCommandHandler> logger)
+    private readonly ILogger<CreateOrderCommandHandler> _logger;
+    private readonly IPaymentService _paymentService;
+    private const Currency GlobalCurrency = Currency.MYR;
+
+    public CreateOrderCommandHandler(ILogger<CreateOrderCommandHandler> logger, IPaymentService paymentService)
     {
         _logger = logger;
+        _paymentService = paymentService;
     }
 
-    public async Task<Result> Handle(CreateOrderCommand command, CancellationToken cancellationToken)
+    public async Task<Result> Handle(CreateOrderCommand command, CancellationToken cancellationToken) 
     {
         try
-        {
-            var order = new Ordering(Currency.MYR, "", 1, 1, Guid.NewGuid(), "", UserType.RegularUser, true, DateTime.UtcNow);
+        { 
+            var order = new Ordering(
+                GlobalCurrency,
+                command.Address,
+                command.Latitude,
+                command.Longitude,
+                command.BuyerId,
+                "Buyer Name",
+                command.UserType,
+                command.IsOrderScheduled,
+                command.ScheduledOn);
 
-            order.AddOrderItem(Guid.NewGuid(), "", "", 1, Currency.MYR, 1);
-            order.AddOrderItem(Guid.NewGuid(), "", "", 1, Currency.MYR, 1);  
+            foreach (var lineItem in command.LineItems) 
+            {
+                order.AddOrderItem(lineItem.Id, "Sampo 1", "SKU123", 10, GlobalCurrency, lineItem.Quantity);
+            }   
+             
+            foreach (var fleet in command.Fleets)
+            {
+                order.AddFleet(fleet.Id, "", "", "", ""); 
+            } 
 
-            order.CalculateOrderAmount(); // the most end of line 
+            order.ApplyDiscount(Coupon.CreateValueDiscount(command.CouponCode, 10, GlobalCurrency, 10));
+            order.ApplyTax(new Tax(10, GlobalCurrency));
+            order.ApplyFee(Fee.CreateByValue(FeeDescription.MechanicFee, 10, GlobalCurrency)); 
+            order.ApplyFee(Fee.CreateByPercentage(FeeDescription.ServiceFee, 10, GlobalCurrency));  
 
-            order.AddFeeByPercentage(FeeDescription.MechanicFee, 100);
-            order.AddFeeByValue(FeeDescription.ServiceFee, 50, Currency.MYR);
-
-            order.CalculateGrandTotal();
+            order.CalculateGrandTotal();  
+            
 
             return Result.Success(order);
+        }
+        catch(ArgumentNullException ex)
+        { 
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+        }
+        catch(DomainException ex)
+        { 
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest); 
+        }
+        catch(NotImplementedException ex)
+        {
+            _logger.LogError(ex, ex.Message);
+            return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
         catch (Exception ex)
         {

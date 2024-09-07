@@ -4,7 +4,7 @@ public enum OrderStatus
 { 
     PaymentPending,
     PaymentPaid, 
-    FindingMechanic,
+    FindingMechanic, 
     MechanicAssigned,
     MechanicAcceptedOrder,
     MechanicDispatched,

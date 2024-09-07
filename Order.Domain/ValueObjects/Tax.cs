@@ -1,4 +1,5 @@
-﻿using Order.Domain.Exceptions;
+﻿using Order.Domain.Enumerations;
+using Order.Domain.Exceptions;
 using Order.Domain.SeedWork;
 
 namespace Order.Domain.ValueObjects;
@@ -6,13 +7,15 @@ namespace Order.Domain.ValueObjects;
 public class Tax : ValueObject
 {
     public decimal Rate { get; private set; }   
+    public Money TaxAmount { get; private set; }
 
-    public Tax(decimal rate)
+    public Tax(decimal rate, Currency currency)
     {
-        if (Rate < 1 || Rate > 100)
-            throw new DomainException("Discount percentage must be between 1 and 100.");
+        if (rate < 1 || rate > 100)
+            throw new DomainException("Tax percentage must be between 1 and 100.");
 
-        Rate = rate; 
+        Rate = rate;
+        TaxAmount = new Money(0, currency);
     }
 
     public Money Apply(Money subtotal)
@@ -20,7 +23,14 @@ public class Tax : ValueObject
         if (subtotal.Amount < 0)
             throw new DomainException("Amount cannot be negative.");
 
+        if (subtotal.Currency != TaxAmount.Currency)
+        {
+            throw new DomainException("Tax currency should be the same as subtotal currency");
+        }
+
         var taxAmount = new Money(subtotal.Amount * (Rate / 100), subtotal.Currency); 
+
+        TaxAmount = taxAmount;
         
         return taxAmount;
     } 

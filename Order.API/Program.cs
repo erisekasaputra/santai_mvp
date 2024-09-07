@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Order.API;
 using Order.API.Configurations;
 using Order.API.CustomDelegate;
 using Order.Domain.Interfaces;
@@ -16,6 +17,11 @@ builder.Services.Configure<DatabaseConfiguration>(builder.Configuration.GetSecti
 var accountServiceClientConfig = builder.Configuration.GetSection(AccountServiceClientConfiguration.SectionName).Get<AccountServiceClientConfiguration>();
 
 var databaseConfig = builder.Configuration.GetSection(DatabaseConfiguration.SectionName).Get<DatabaseConfiguration>();
+
+builder.Services.AddMediatR(x =>
+{
+    x.RegisterServicesFromAssemblyContaining<IOrderApiMarkerInterface>();
+});
 
 builder.Services.AddHttpContextAccessor();
 

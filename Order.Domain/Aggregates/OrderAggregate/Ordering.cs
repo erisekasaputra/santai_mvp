@@ -10,6 +10,7 @@ namespace Order.Domain.Aggregates.OrderAggregate;
 
 public class Ordering : Entity
 {  
+    public Currency BaseCurrency { get; private set; }
     public Address Address { get; private set; }
     public Guid BuyerId { get; private set; }
     public Buyer Buyer { get; private set; }
@@ -25,14 +26,14 @@ public class Ordering : Entity
     public DateTime CreatedAtUtc { get; private init; }  
     public Payment? Payment { get; private set; }
     public Money OrderAmount { get; private set; }
+    public Coupon? Coupon { get; private set; }
     public Money GrandTotal { get; private set; }
     public bool IsPaid { get; private set; }
     public Rating? Rating { get; private set; }
     public bool IsRated { get; private set; }
     public ICollection<string>? RatingImages { get; private set; }
-    public ICollection<Fee> Fees { get; private set; }
-    public ICollection<Fee>? Charges { get; private set; }
-
+    public ICollection<Fee> Fees { get; private set; } 
+    public Cancellation? Cancellation { get; private set; } 
     public Ordering(
         Currency currency,
         string addressLine,
@@ -49,15 +50,16 @@ public class Ordering : Entity
             throw new DomainException("Scheduled date can not in the past and can not be null");
         }
 
+        BaseCurrency = currency;
+        BuyerId = buyerId;
         OrderAmount = new Money(0, currency);
-        GrandTotal = new Money(0, currency);
+        GrandTotal = new Money(0, currency); 
         Address = new Address(addressLine, latitude, longitude);
         Buyer = new Buyer(buyerId, buyerName, buyerType);
         LineItems = [];
         Fleets = [];
         RatingImages = [];
-        Fees = [];
-        Charges = [];
+        Fees = []; 
 
         IsScheduled = isScheduled; 
         if (isScheduled)
@@ -85,77 +87,66 @@ public class Ordering : Entity
         TotalCanceledByMechanic = 0; 
         IsRated = false;
         RaiseOrderCreatedDomainEvent();
-    }
-
-    public void CalculateOrderAmount()
-    { 
-        var totalAmount = LineItems.Sum(lineItem => lineItem.CalculateTotalPrice().Amount); 
-        OrderAmount = new Money(totalAmount, OrderAmount.Currency);
-    }
-     
-    public void AddFeeByValue(FeeDescription feeDescription, decimal amount, Currency currency)
-    {
-        if (OrderAmount.Currency != currency)
-        { 
-            throw new DomainException($"Fee currency ({currency}) does not match order currency ({OrderAmount.Currency}).");
+    } 
+      
+    public void ApplyFee(Fee fee)
+    {   
+        if (fee is null)
+        {
+            throw new DomainException("Fee can not be empty");
         }
 
-        if (amount <= 0)
+        if (fee.PercentageOrValueType == PercentageOrValueType.Value)
         {
-            throw new DomainException("Fee amount can not less than or equal with 0");
+            if (fee.Amount is null)
+            {
+                throw new DomainException("Fee amount can not be null");
+            }
+
+            if (fee.Amount.Currency != BaseCurrency)
+            {
+                throw new DomainException($"Fee currency {fee.Amount.Currency} does not match order currency ({BaseCurrency}).");
+            } 
         }
 
-        if (Fees.Select(x => x.FeeDescription == feeDescription).Any()) 
-        {
-            return;
-        }
+        var isFeeExists = Fees.Where(x => x.FeeDescription == fee.FeeDescription).ToList().Count > 0;
 
-        Fees.Add(Fee.CreateByValue(feeDescription, amount, currency));
-    }
-
-
-    public void AddFeeByPercentage(FeeDescription feeDescription, decimal amount)
-    { 
-        if (amount <= 0)
-        {
-            throw new DomainException("Fee percentage can not less than or equal with 0");
-        }
-
-        if (amount < 1 && amount > 100)
-        {
-            throw new DomainException("Fee percentage must be between 1 and 100");
-        }  
-
-        if (OrderAmount.Amount <= 0)
-        {
-            CalculateOrderAmount(); 
-        }
-
-        if (OrderAmount.Amount <=0)
-        {
-            throw new DomainException("There is no order item you have made");
-        }
-
-        if (Fees.Select(x => x.FeeDescription == feeDescription).Any())
+        if (isFeeExists)
         {
             return;
         }
 
-        Fees.Add(Fee.CreateByPercentage(feeDescription, amount, OrderAmount));
+        Fees.Add(fee);
     }
 
     public void CalculateGrandTotal()
-    { 
+    {
+        if (GrandTotal.Currency != OrderAmount.Currency)
+        {
+            throw new DomainException("Grand total currency with Order Amount currency is missmatch, incosistent state has occured");
+        }
+
+        if (LineItems is null || LineItems.Count == 0) 
+        {
+            throw new DomainException("Line items should not be empty");
+        }
+
+        var totalAmount = LineItems.Sum(lineItem => lineItem.CalculateTotalPrice().Amount);
+        OrderAmount.SetAmount(totalAmount);
+
         if (OrderAmount.Amount <= 0)
         {
             throw new DomainException("Order amount can not less than or equal with 0");
         }
 
-        GrandTotal += OrderAmount;
+        GrandTotal.SetAmount(totalAmount); 
+        GrandTotal -= Coupon?.Apply(GrandTotal) ?? new Money(0, OrderAmount.Currency);
 
-        foreach (var fe in Fees)
+        var holdedGrandTotal = GrandTotal;
+
+        foreach (var fee in Fees)
         {
-            GrandTotal += fe.Amount;
+            GrandTotal += fee.Apply(holdedGrandTotal);
         }
     }
 
@@ -163,14 +154,14 @@ public class Ordering : Entity
     {
         LineItems ??= [];
 
-        if (currency != OrderAmount.Currency)
+        if (currency != BaseCurrency)
         {
-            throw new DomainException($"Item price currency ({currency}) does not match order currency ({OrderAmount.Currency}).");
+            throw new DomainException($"Item price currency ({currency}) does not match order currency ({BaseCurrency}).");
         }
 
-        var lineItemPrice = new Money(price, OrderAmount.Currency); 
+        var lineItemPrice = new Money(price, currency); 
 
-        var orderItem = new LineItem(id, name, sku, lineItemPrice, quantity) ?? throw new DomainException("Order item cannot be null.");
+        var orderItem = new LineItem(id, Id, name, sku, lineItemPrice, quantity) ?? throw new DomainException("Order item cannot be null.");
 
         var items = LineItems.Where(x => x.Id == orderItem.Id).FirstOrDefault();
 
@@ -186,25 +177,32 @@ public class Ordering : Entity
     public void ApplyDiscount(Coupon coupon)
     {
         if (coupon is null)
-            throw new ArgumentNullException(nameof(coupon), "Coupon cannot be null."); 
+            throw new ArgumentNullException(nameof(coupon), "Coupon cannot be null.");
 
         if (coupon.CouponValueType == PercentageOrValueType.Value)
         {
             if (coupon.Value is null)
             {
-                throw new DomainException($"Coupon value can not be empty.");
+                throw new DomainException("Coupon value can not be null");
             }
 
-            if (coupon.Value.Currency != OrderAmount.Currency)
+            if (coupon.Value.Currency != BaseCurrency)
             {
-                throw new DomainException($"Coupon currency ({coupon.Value?.Currency}) does not match line order currency ({OrderAmount.Currency}).");
+                throw new DomainException($"Coupon currency {coupon.Value.Currency} does not match order currency ({BaseCurrency})."); 
             }
-        }  
-
-        foreach (var item in LineItems)
-        {
-            item.ApplyDiscount(coupon);
         }
+
+        if (coupon.MinimumOrderValue.Currency != BaseCurrency) 
+        { 
+            throw new DomainException($"Minimum order currency does not match order currency ({BaseCurrency}).");
+        }
+
+        if (Coupon is not null)
+        {
+            return;
+        }
+
+        Coupon = coupon;
     }
 
     public void ApplyTax(Tax tax)
@@ -212,37 +210,116 @@ public class Ordering : Entity
         if (tax is null)
             throw new ArgumentNullException(nameof(tax), "Tax cannot be null."); 
 
-        foreach (var item in LineItems)
+        if (tax.TaxAmount.Currency != BaseCurrency)
         {
+            throw new DomainException($"Tax currency does not match order currency ({BaseCurrency}).");
+        }
+
+        foreach (var item in LineItems)
+        {  
             item.ApplyTax(tax);
         }
     }
 
-    public void AddFleet(Fleet fleet)
+    public void AddFleet(Guid id, string brand, string model, string registrationNumber, string imageUrl)
     {
-        if (fleet is null)
-            throw new ArgumentNullException(nameof(fleet), "Fleet cannot be null.");
+        if (id == Guid.Empty)
+            throw new ArgumentNullException(nameof(id), "Fleet id cannot be null.");
 
-        if (Fleets.Where(x => x.Id == fleet.Id).Any())
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(nameof(brand), "Brand can not be empty");
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(nameof(model), "Model can not be empty");
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(nameof(registrationNumber), "Registration number can not be empty");
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(nameof(imageUrl), "Image url can not be empty");
+
+        if (Fleets.Where(x => x.Id == id).ToList().Count > 0)
         {
             return;
         }
 
-        Fleets.Add(fleet);
-    }
+        Fleets.Add(new (id, brand, model, registrationNumber, imageUrl));
+    } 
 
-
-    public void RemoveFleet(Fleet fleet) 
+    private bool IsCancelableByBuyer(Guid buyerId, out string errorMessage) 
     {
-        Fleets ??= [];
+        if (Status is OrderStatus.OrderCanceledByUser)
+        {
+            errorMessage = "Order is already canceled by user";
+            return false;
+        }
 
-        if (fleet is null)
-            throw new ArgumentNullException(nameof(fleet), "Fleet cannot be null.");
+        if (buyerId == Guid.Empty || BuyerId == Guid.Empty) 
+        {
+            errorMessage = "Buyer ID can not be empty";
+            return false;
+        }
+         
+        if (!BuyerId.Equals(buyerId)) 
+        {
+            errorMessage = "Order cancellation is not allowed: The user ID associated with the order does not match the user ID of the requester.";
+            return false;
+        } 
 
-        Fleets.Remove(fleet);
+        if (Status is OrderStatus.ServiceCompleted or OrderStatus.ServiceIncompleted)
+        {
+            errorMessage = $"Can not canceling the order when the status is {Status}";
+            return false;
+        }  
+
+        errorMessage = "Success";
+        return true;
+    }  
+
+    private bool IsRefundableCancellation()
+    { 
+        // if business user get no refund, otherwise will get refund
+        if (Buyer.BuyerType is UserType.BusinessUser or UserType.StaffUser)
+        {
+            return false;
+        }
+
+        // if not already paid, dont give refund
+        if (!IsPaid)
+        {
+            return false;
+        }
+
+        return true;
     }
-     
-     
+
+    private bool IsChargeableCancellation()
+    { 
+        if (Status is OrderStatus.MechanicAcceptedOrder or OrderStatus.MechanicDispatched or OrderStatus.MechanicArrived or OrderStatus.MechanicArrived or OrderStatus.ServiceInProgress or OrderStatus.ServiceCompleted or OrderStatus.ServiceIncompleted)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     private bool IsCancelableByMechanic(Guid mechanicId, out string errorMessage)
     {
         if (Status is not OrderStatus.MechanicAssigned &&
@@ -269,103 +346,245 @@ public class Ordering : Entity
         {
             errorMessage = "The mechanic ID must match if the mechanic is initiating the cancellation.";
             return false;
-        } 
+        }
 
         errorMessage = "Success";
         return true;
     }
 
+    public void RejectOrderByMechanic(Guid mechanicId)
+    {
+        if (mechanicId == Guid.Empty)
+        {
+            throw new DomainException("Mechanic id can not be empty");
+        }
+
+        if (Status is OrderStatus.OrderCanceledByUser)
+        {
+            throw new DomainException("Order is already canceled by user");
+        }
+
+        if (Status is not OrderStatus.MechanicAssigned)
+        {
+            throw new DomainException($"Order status must be {OrderStatus.MechanicAssigned}");
+        }
+
+        if (MechanicId != mechanicId)
+        {
+            throw new DomainException($"Mechanic ID is missmatch");
+        }
+
+        if (MechanicWaitingAcceptTime is null)
+        {
+            throw new InvalidOperationException($"Mechanic waiting accept time is empty, inconsistent aggregate is occured");
+        }
+
+        if (MechanicWaitingAcceptTime < DateTime.UtcNow)
+        {
+            throw new DomainException("Can not accept the order, because the waiting time is expired");
+        }
+
+        MechanicId = null;
+        Mechanic = null;
+        Status = OrderStatus.FindingMechanic;
+        TotalCanceledByMechanic++;
+        MechanicWaitingAcceptTime = null;
+
+        RaiseOrderRejectedByMechanicDomainEvent();
+        RaiseOrderFindingMechanicDomainEvent();
+    } 
+  
 
     public void CancelByMechanic(Guid mechanicId)
-    { 
+    {
         if (!IsCancelableByMechanic(mechanicId, out string errorMessage))
         {
             throw new DomainException(errorMessage);
         }
 
         MechanicId = null;
-        Mechanic = null; 
-        Status = OrderStatus.FindingMechanic; 
+        Mechanic = null;
+        Status = OrderStatus.FindingMechanic;
         TotalCanceledByMechanic++;
         MechanicWaitingAcceptTime = null;
 
         RaiseOrderCanceledByMechanicDomainEvent();
-    } 
-
-    private bool IsCancelableByBuyer(Guid buyerId, out string errorMessage) 
-    {
-        if (buyerId == Guid.Empty || BuyerId == Guid.Empty) 
-        {
-            errorMessage = "Buyer ID can not be empty";
-            return false;
-        }
-         
-        if (!BuyerId.Equals(buyerId)) 
-        {
-            errorMessage = "Order cancellation is not allowed: The user ID associated with the order does not match the user ID of the requester.";
-            return false;
-        } 
-
-        if (Status is OrderStatus.ServiceInProgress or OrderStatus.ServiceCompleted or OrderStatus.ServiceIncompleted)
-        {
-            errorMessage = $"Can not canceling the order when the status is {Status}";
-            return false;
-        } 
-
-        if (Status is OrderStatus.OrderCanceledByUser)
-        {
-            errorMessage = "Order is already canceled by user";
-            return false;
-        } 
-
-        errorMessage = "Success";
-        return true;
+        RaiseOrderFindingMechanicDomainEvent();
     }
 
-    // belum clear ----------------------------------------------------------------------------------------------
-
-    public void ProcessService()
-    {
-
-    }
-
-    public void ProcessInspection()
-    {
-
-    }
-     
-    
     public void CancelByBuyer(Guid buyerId)
-    { 
+    {  
         if (!IsCancelableByBuyer(buyerId, out string errorMessage))
         {
             throw new DomainException(errorMessage);
         }
 
-        if (!IsPaid)
-        {
-            Status = OrderStatus.OrderCanceledByUser;
-            RaiseOrderCanceledByBuyerWithNoRefundDomainEvent();
-            return;
-        }
+        Cancellation = new Cancellation();  
 
-        if (IsPaid && (Buyer.BuyerType == UserType.BusinessUser || Buyer.BuyerType == UserType.StaffUser))
-        { 
-            Status = OrderStatus.OrderCanceledByUser;
-            RaiseOrderCanceledByBuyerWithNoRefundDomainEvent();
-            return;
-        }
- 
-        if (IsPaid && Status is OrderStatus.PaymentPending or OrderStatus.PaymentPaid or OrderStatus.FindingMechanic)
+        if (IsChargeableCancellation())
         {
-
+            Cancellation.ApplyCancellationCharge(
+                Fees.Where(x => ChargeCancellation.Charges.Contains(x.FeeDescription)).ToArray());
         }
+         
+        if (IsRefundableCancellation())
+        {
+            Cancellation.ApplyCancellationRefund(GrandTotal);
+        } 
 
         Status = OrderStatus.OrderCanceledByUser;
-        RaiseOrderCanceledByBuyerWithRefundDomainEvent();
-        return; 
-    }  
 
+        RaiseOrderCanceledByBuyerDomainEvent();  
+    }
+
+    public void SetServiceInProgress(Guid mechanicId, Guid buyerId, Guid fleetId)
+    {
+        if (Status is OrderStatus.OrderCanceledByUser)
+        {
+            throw new DomainException("Order is already canceled by user");
+        }
+
+        if (Status is not OrderStatus.MechanicArrived)
+        {
+            throw new DomainException($"Order status must be {OrderStatus.MechanicArrived}");
+        } 
+
+        if (mechanicId ==  Guid.Empty)
+        {
+            throw new DomainException("Mechanic ID must no be empty");
+        }
+
+        if (buyerId == Guid.Empty)
+        {
+            throw new DomainException("Buyer ID must no be empty");
+        }
+
+        if (fleetId == Guid.Empty)
+        {
+            throw new DomainException("Fleet ID must not be empty");
+        }
+
+        var fleetExists = Fleets.Where(x => x.Id == fleetId).ToList().Count > 0;
+
+        if (!fleetExists) 
+        {
+            throw new DomainException("Fleet ID does not exists");
+        }
+
+        if (!MechanicId.Equals(mechanicId))
+        { 
+            throw new DomainException("Mechanic ID is missmatch");
+        }
+        
+        if (!BuyerId.Equals(buyerId))
+        {
+            throw new DomainException("Buyer ID is missmatch");
+        }
+
+        Status = OrderStatus.ServiceInProgress;
+
+        RaiseServiceProcessedDomainEvent();
+    } 
+
+    public void SetServiceCompleted(Guid mechanicId, Guid buyerId, Guid fleetId)
+    {
+        if (Status is OrderStatus.OrderCanceledByUser)
+        {
+            throw new DomainException("Order is already canceled by user");
+        }
+
+        if (Status is not OrderStatus.ServiceInProgress)
+        {
+            throw new DomainException($"Order status must be {OrderStatus.ServiceInProgress}");
+        }
+
+        if (mechanicId == Guid.Empty)
+        {
+            throw new DomainException("Mechanic ID must no be empty");
+        }
+
+        if (buyerId == Guid.Empty)
+        {
+            throw new DomainException("Buyer ID must no be empty");
+        }
+
+        if (fleetId == Guid.Empty)
+        {
+            throw new DomainException("Fleet ID must not be empty");
+        }
+
+        var fleetExists = Fleets.Where(x => x.Id == fleetId).ToList().Count > 0;
+
+        if (!fleetExists)
+        {
+            throw new DomainException("Fleet ID does not exists");
+        }
+
+        if (!MechanicId.Equals(mechanicId))
+        {
+            throw new DomainException("Mechanic ID is missmatch");
+        }
+
+        if (!BuyerId.Equals(buyerId))
+        {
+            throw new DomainException("Buyer ID is missmatch");
+        }
+
+        Status = OrderStatus.ServiceCompleted;
+
+        RaiseServiceCompletedDomainEvent();
+    } 
+
+    public void SetServiceIncompleted(Guid mechanicId, Guid buyerId, Guid fleetId)
+    {
+        if (Status is OrderStatus.OrderCanceledByUser)
+        {
+            throw new DomainException("Order is already canceled by user");
+        }
+
+        if (Status is not OrderStatus.ServiceInProgress)
+        {
+            throw new DomainException($"Order status must be {OrderStatus.ServiceInProgress}");
+        }
+
+        if (mechanicId == Guid.Empty)
+        {
+            throw new DomainException("Mechanic ID must no be empty");
+        }
+
+        if (buyerId == Guid.Empty)
+        {
+            throw new DomainException("Buyer ID must no be empty");
+        }
+
+        if (fleetId == Guid.Empty)
+        {
+            throw new DomainException("Fleet ID must not be empty");
+        }
+
+        var fleetExists = Fleets.Where(x => x.Id == fleetId).ToList().Count > 0;
+
+        if (!fleetExists)
+        {
+            throw new DomainException("Fleet ID does not exists");
+        }
+
+        if (!MechanicId.Equals(mechanicId))
+        {
+            throw new DomainException("Mechanic ID is missmatch");
+        }
+
+        if (!BuyerId.Equals(buyerId))
+        {
+            throw new DomainException("Buyer ID is missmatch");
+        }
+
+        Status = OrderStatus.ServiceIncompleted;
+
+        RaiseServiceIncompletedDomainEvent();
+    }
+     
+  
     public void SetFindingMechanic()
     { 
         if (Status is OrderStatus.OrderCanceledByUser)
@@ -381,7 +600,7 @@ public class Ordering : Entity
         Status = OrderStatus.FindingMechanic;
 
         RaiseOrderFindingMechanicDomainEvent();
-    }
+    } 
 
     public void SetOrderRating(decimal rating, string comment, IEnumerable<string>? images)
     {
@@ -424,6 +643,16 @@ public class Ordering : Entity
         if (Status is not OrderStatus.PaymentPending || IsPaid)
         { 
             throw new DomainException($"Could not set payment to {OrderStatus.PaymentPending}");
+        }
+
+        if (amount != GrandTotal.Amount)
+        {
+            throw new DomainException("Paid amount is not equal with grand total amount");
+        }
+
+        if (currency != BaseCurrency)
+        {
+            throw new DomainException("Currency for payment is not equal with order currency"); 
         }
 
         Payment = new Payment(
@@ -476,7 +705,17 @@ public class Ordering : Entity
     }
 
     public void AcceptOrderByMechanic(Guid mechanicId)
-    { 
+    {
+        if (mechanicId == Guid.Empty)
+        {
+            throw new DomainException("Mechanic id can not be empty");
+        }
+
+        if (Status is OrderStatus.OrderCanceledByUser)
+        { 
+            throw new DomainException("Order is already canceled by user"); 
+        }
+
         if (Status is not OrderStatus.MechanicAssigned) 
         {
             throw new DomainException($"Order status must be {OrderStatus.MechanicAssigned}");
@@ -489,7 +728,7 @@ public class Ordering : Entity
 
         if (MechanicWaitingAcceptTime is null)
         {  
-            throw new InvalidOperationException($"MechanicWaitingAcceptTime is empty, inconsistent aggregate is occured");
+            throw new InvalidOperationException($"Mechanic waiting accept time is empty, inconsistent aggregate is occured");
         }
 
         if (MechanicWaitingAcceptTime < DateTime.UtcNow)
@@ -561,55 +800,58 @@ public class Ordering : Entity
         RaiseMechanicArrivedDomainEvent();
     }
 
+    private void RaiseServiceCompletedDomainEvent()
+    {
+    }
+
+    private void RaiseServiceIncompletedDomainEvent()
+    {
+    }
+
+
+    private void RaiseServiceProcessedDomainEvent()
+    { 
+    }
+
     private void RaiseMechanicArrivedDomainEvent()
     {
-        throw new NotImplementedException();
     }
 
     private void RaiseMechanicDispatchedDomainEvent()
     {
-        throw new NotImplementedException();
     }
 
     private void RaiseOrderRatedDomainEvent()
     {
-        throw new NotImplementedException();
     }
 
     private void RaiseOrderAcceptedByMechanicDomainEvent()
     {
-        throw new NotImplementedException();
     }
 
-    private void RaiseOrderCanceledByBuyerWithRefundDomainEvent()
+    private void RaiseOrderCanceledByBuyerDomainEvent()
     {
-        throw new NotImplementedException();
     }
 
     private void RaiseMechanicAssignedDomainEvent()
     {
-        throw new NotImplementedException();
     }
 
     private void RaiseOrderCanceledByMechanicDomainEvent()
     {
-        throw new NotImplementedException();
-    }
-    private void RaiseOrderCanceledByBuyerWithNoRefundDomainEvent()
-    {
-        throw new NotImplementedException();
-    }
+    } 
     private void RaiseOrderPaymentPaidDomainEvent()
     {
-        throw new NotImplementedException();
     }
 
     private void RaiseOrderFindingMechanicDomainEvent()
     {
-        throw new NotImplementedException();
     }
     public void RaiseOrderCreatedDomainEvent()
     {
         AddDomainEvent(new OrderCreatedDomainEvent(this));
+    }
+    private void RaiseOrderRejectedByMechanicDomainEvent()
+    { 
     }
 }

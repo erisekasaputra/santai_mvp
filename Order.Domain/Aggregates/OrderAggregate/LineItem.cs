@@ -14,9 +14,13 @@ public class LineItem : Entity
     public int Quantity { get; private set; }
     public Coupon? Coupon { get; private set; }
     public Tax? Tax { get; private set; } 
+    public Guid OrderId { get; private set; }
+    public Ordering Ordering { get; private set; }
+    public Money SubTotal { get; private set; }
 
     public LineItem(
         Guid id,
+        Guid orderId,
         string name,
         string sku,
         Money price,
@@ -35,11 +39,14 @@ public class LineItem : Entity
             throw new DomainException("Quantity must be greater than zero.");
 
         Id = id;
+        OrderId = orderId;
         Name = name;
         Sku = sku;
         UnitPrice = price;
         BaseUnitPrice = price;
-        Quantity = quantity;  
+        Quantity = quantity;
+        Ordering = null!;
+        SubTotal = new Money(0, price.Currency);
     }
 
     public void AddQuantity(int quantity)
@@ -77,7 +84,7 @@ public class LineItem : Entity
 
             if (coupon.Value.Currency != BaseUnitPrice.Currency)
             {
-                throw new DomainException($"Coupon currency ({coupon.Value?.Currency}) does not match line item currency ({BaseUnitPrice.Currency}).");
+                throw new DomainException($"Coupon currency ({coupon.Value.Currency}) does not match line item currency ({BaseUnitPrice.Currency}).");
             }
         }
 
@@ -88,6 +95,11 @@ public class LineItem : Entity
     {
         if (tax is null) 
             throw new DomainException("Tax cannot be null."); 
+
+        if (tax.TaxAmount.Currency != BaseUnitPrice.Currency)
+        {
+            throw new DomainException("Tax currency should be the same as line item currency");
+        }
 
         Tax = tax;
     }
@@ -107,6 +119,8 @@ public class LineItem : Entity
             var taxAmount = Tax.Apply(subtotal);
             subtotal += taxAmount;
         }
+
+        SubTotal = subtotal;
 
         return subtotal;
     } 

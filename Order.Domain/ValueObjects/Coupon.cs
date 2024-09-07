@@ -10,7 +10,8 @@ public class Coupon : ValueObject
     public PercentageOrValueType CouponValueType { get; private set; }
     public decimal? Percentage { get; private set; }
     public Money? Value { get; private set; }
-    public Money MinimumOrderValue { get; private set; }
+    public Money MinimumOrderValue { get; private set; } 
+    public Money DiscountAmount { get; private set; }
 
     private Coupon(
         string couponCode,
@@ -28,27 +29,33 @@ public class Coupon : ValueObject
         if (minimumOrderValue.Amount < 0)
             throw new DomainException("Minimum order value cannot be negative.");
 
+        if (couponValueType == PercentageOrValueType.Value && (value is not null && value.Currency != minimumOrderValue.Currency))
+            throw new DomainException("Coupon value currency should be the same as minimum order currency");  
+
         CouponCode = couponCode;
         CouponValueType = couponValueType;
         Percentage = couponValueType == PercentageOrValueType.Percentage ? percentage : 0;
         Value = couponValueType == PercentageOrValueType.Value ? value : null;
         MinimumOrderValue = minimumOrderValue;
+        DiscountAmount = new Money(0, minimumOrderValue.Currency); 
     }
 
     public static Coupon CreatePercentageDiscount(
         string couponCode,
         decimal percentage,
-        Money minimumOrderValue)
-    {
-        return new Coupon(couponCode, PercentageOrValueType.Percentage, percentage, null, minimumOrderValue);
+        decimal minimumOrderAmount,
+        Currency minimumOrderCurrency)
+    {  
+        return new Coupon(couponCode, PercentageOrValueType.Percentage, percentage, null, new Money(minimumOrderAmount, minimumOrderCurrency));
     }
 
     public static Coupon CreateValueDiscount(
         string couponCode,
-        Money value,
-        Money minimumOrderValue)
-    {
-        return new Coupon(couponCode, PercentageOrValueType.Value, 0, value, minimumOrderValue);
+        decimal amount, 
+        Currency currency,
+        decimal minimumOrderAmount)
+    {  
+        return new Coupon(couponCode, PercentageOrValueType.Value, 0, new Money(amount, currency), new Money(minimumOrderAmount, currency));
     }
 
     public Money Apply(Money orderAmount)
@@ -58,6 +65,11 @@ public class Coupon : ValueObject
 
         if (orderAmount.Amount < MinimumOrderValue.Amount)
             return new Money(0, orderAmount.Currency);
+
+        if (orderAmount.Currency != DiscountAmount.Currency)
+        {
+            throw new DomainException("Order amount currency should be the same as discount amount currency");
+        }
 
         Money discountAmount;
 
@@ -74,6 +86,8 @@ public class Coupon : ValueObject
         {
             discountAmount = new Money(0, orderAmount.Currency);
         }
+
+        DiscountAmount = discountAmount;
 
         return discountAmount > orderAmount ? throw new DomainException("Discount amount can not greater than order amount") : discountAmount;
     }

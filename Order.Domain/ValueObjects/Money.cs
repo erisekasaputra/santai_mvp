@@ -5,8 +5,8 @@ namespace Order.Domain.ValueObjects;
 
 public class Money : IEquatable<Money>
 {
-    public decimal Amount { get; private set; }
-    public Currency Currency { get; private set; }
+    public decimal Amount { get; set; }
+    public Currency Currency { get; set; }
 
     public Money(decimal amount, Currency currency)
     {
@@ -17,6 +17,15 @@ public class Money : IEquatable<Money>
         Currency = currency;
     }
 
+    public void SetAmount(decimal amount)
+    {
+        if (amount < 0)
+        {
+            throw new DomainException("Amount can not be negative");
+        }
+
+        Amount = amount;
+    }
     public Money ConvertCurrency(Currency targetCurrency, Func<Currency, Currency, decimal> exchangeRate)
     {
         if (Currency == targetCurrency)
