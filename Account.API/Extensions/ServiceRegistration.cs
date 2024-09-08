@@ -1,25 +1,24 @@
-﻿using Account.Domain.SeedWork;
-using Account.Infrastructure;
-using FluentValidation;
-using FluentValidation.AspNetCore;
-using Microsoft.Extensions.Options;
-using StackExchange.Redis;
-using MassTransit;
-using Microsoft.EntityFrameworkCore;
-using Account.API.Options;
-using Amazon.KeyManagementService;
-using Account.API.Services;
+﻿using Account.API.Consumers;
 using Account.API.Infrastructures;
 using Account.API.Middleware;
-using System.Text.Json.Serialization;
-using Microsoft.AspNetCore.Http.Json;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using System.Text;
-using Microsoft.IdentityModel.Tokens;
+using Account.API.Options;
 using Account.API.SeedWork;
+using Account.API.Services;
+using Account.Domain.SeedWork;
+using Account.Infrastructure;
+using Amazon.KeyManagementService;
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Identity.Contracts.Enumerations;
-using Polly;
-using Account.API.Consumers;
+using MassTransit;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Json;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using StackExchange.Redis;
+using System.Text;
+using System.Text.Json.Serialization;
 
 namespace Account.API.Extensions;
 
@@ -29,7 +28,7 @@ public static class ServiceRegistration
     {
         services.AddMediatR(e =>
         {
-            e.RegisterServicesFromAssemblyContaining<IAccountMarkerInterface>();
+            e.RegisterServicesFromAssemblyContaining<IAccountAPIMarkerInterface>();
         });
 
         return services;
@@ -69,10 +68,30 @@ public static class ServiceRegistration
             }; 
         });
 
+
+
+
+
+
         services.AddOutputCache(policy =>
         { 
             policy.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(cacheOptions.CurrentValue.CacheLifeTime); 
-        }); 
+        })
+        .AddStackExchangeRedisOutputCache(redisOptions =>
+        {
+            redisOptions.ConfigurationOptions = new ConfigurationOptions
+            {
+
+                EndPoints = { cacheOptions.CurrentValue.Host },
+                ConnectTimeout = (int)TimeSpan.FromSeconds(cacheOptions.CurrentValue.ConnectTimeout).TotalMilliseconds,
+                SyncTimeout = (int)TimeSpan.FromSeconds(cacheOptions.CurrentValue.SyncTimeout).TotalMilliseconds,
+                AbortOnConnectFail = false,
+                ReconnectRetryPolicy = new ExponentialRetry((int)TimeSpan
+                    .FromSeconds(cacheOptions.CurrentValue.ReconnectRetryPolicy).TotalMilliseconds)
+            };
+        });
+
+
 
         return services;
     }
@@ -81,7 +100,7 @@ public static class ServiceRegistration
     {
         services.AddFluentValidationAutoValidation();
         services.AddFluentValidationClientsideAdapters();
-        services.AddValidatorsFromAssemblyContaining<IAccountMarkerInterface>();
+        services.AddValidatorsFromAssemblyContaining<IAccountAPIMarkerInterface>();
 
         return services;
     }
@@ -101,12 +120,12 @@ public static class ServiceRegistration
         var databaseOption = services.BuildServiceProvider().GetService<IOptionsMonitor<DatabaseOption>>() 
             ?? throw new Exception("Please provide value for database option");
 
-        services.AddDbContext<AccountDbContext>((serviceProvider, options) =>
+        services.AddDbContext<AccountDbContext>(options =>
         { 
             options.UseSqlServer(databaseOption.CurrentValue.ConnectionString, action =>
             {
                 action.CommandTimeout(databaseOption.CurrentValue.CommandTimeOut);
-                action.MigrationsAssembly(typeof(IAccountMarkerInterface).Assembly.GetName().Name);
+                action.MigrationsAssembly("Account.Infrastructure");
             });
         });
 
@@ -132,7 +151,9 @@ public static class ServiceRegistration
                 o.UseBusOutbox();
             });
 
-            x.AddConsumersFromNamespaceContaining<IAccountMarkerInterface>(); 
+            x.AddConsumer<IdentityEmailAssignedToAUserIntegrationEventConsumer>();
+            x.AddConsumer<IdentityPhoneNumberConfirmedIntegrationEventConsumer>();
+            x.AddConsumer<PhoneNumberDuplicateIntegrationEventConsumer>();
 
             x.UsingRabbitMq((context, configure) =>
             {  

@@ -1,4 +1,5 @@
-﻿using Order.Domain.Aggregates.BuyerAggregate;
+﻿using Identity.Contracts.Enumerations;
+using Order.Domain.Aggregates.BuyerAggregate;
 using Order.Domain.Aggregates.MechanicAggregate;
 using Order.Domain.Enumerations;
 using Order.Domain.Events;
@@ -35,7 +36,13 @@ public class Ordering : Entity
     public bool IsPaid => Payment is not null && Payment.Amount.Amount > 0.0M;
     public Ordering()
     {
-        
+        Address = null!;
+        Buyer = null!;
+        LineItems = null!;
+        Fleets = null!;
+        OrderAmount = null!;
+        GrandTotal = null!;
+        Fees = null!; 
     }
     public Ordering(
         Currency currency,

@@ -1201,11 +1201,11 @@
           }
         }
       },
-      "Microsoft.EntityFrameworkCore.SqlServer/9.0.0-preview.6.24327.4": {
+      "Microsoft.EntityFrameworkCore.SqlServer/9.0.0-preview.7.24405.3": {
         "type": "package",
         "dependencies": {
           "Microsoft.Data.SqlClient": "5.2.1",
-          "Microsoft.EntityFrameworkCore.Relational": "9.0.0-preview.6.24327.4"
+          "Microsoft.EntityFrameworkCore.Relational": "9.0.0-preview.7.24405.3"
         },
         "compile": {
           "lib/net8.0/Microsoft.EntityFrameworkCore.SqlServer.dll": {
@@ -1760,7 +1760,7 @@
           }
         }
       },
-      "Microsoft.Win32.SystemEvents/9.0.0-preview.6.24327.7": {
+      "Microsoft.Win32.SystemEvents/9.0.0-preview.7.24405.7": {
         "type": "package",
         "compile": {
           "lib/net9.0/Microsoft.Win32.SystemEvents.dll": {
@@ -2411,10 +2411,10 @@
           }
         }
       },
-      "System.Drawing.Common/9.0.0-preview.6.24327.6": {
+      "System.Drawing.Common/9.0.0-preview.7.24405.4": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Win32.SystemEvents": "9.0.0-preview.6.24327.7"
+          "Microsoft.Win32.SystemEvents": "9.0.0-preview.7.24405.7"
         },
         "compile": {
           "lib/net9.0/System.Drawing.Common.dll": {
@@ -2764,7 +2764,7 @@
         "dependencies": {
           "Identity.Contracts": "1.0.0",
           "MediatR": "12.4.0",
-          "Microsoft.EntityFrameworkCore": "8.0.7"
+          "Microsoft.EntityFrameworkCore": "9.0.0-preview.7.24405.3"
         },
         "compile": {
           "bin/placeholder/Account.Domain.dll": {}
@@ -2787,11 +2787,11 @@
           "MassTransit.RabbitMQ": "8.2.4-develop.1891",
           "MediatR": "12.4.0",
           "Microsoft.EntityFrameworkCore": "9.0.0-preview.7.24405.3",
-          "Microsoft.EntityFrameworkCore.SqlServer": "9.0.0-preview.6.24327.4",
+          "Microsoft.EntityFrameworkCore.SqlServer": "9.0.0-preview.7.24405.3",
           "Newtonsoft.Json": "13.0.3",
           "Polly": "8.4.1",
           "StackExchange.Redis": "2.8.0",
-          "System.Drawing.Common": "9.0.0-preview.6.24327.6"
+          "System.Drawing.Common": "9.0.0-preview.7.24405.4"
         },
         "compile": {
           "bin/placeholder/Account.Infrastructure.dll": {}
@@ -5035,10 +5035,10 @@
         "microsoft.entityframeworkcore.relational.nuspec"
       ]
     },
-    "Microsoft.EntityFrameworkCore.SqlServer/9.0.0-preview.6.24327.4": {
-      "sha512": "0bhQqqIm5B5nL7CgZiZ7jZcIS9OVOcpimoiM5vispua2mIJPFXxREKriMO5PdXkGpPrS5qXeR1VdIheCp7w9dQ==",
+    "Microsoft.EntityFrameworkCore.SqlServer/9.0.0-preview.7.24405.3": {
+      "sha512": "IN2boEqlxxidsQB8LtTauYXzzbfzuS3BCzN2Ra9hrA8tmCaYFGO4yv+sI7mTRVmNdirt5HNaOF0HotrGSxcvKQ==",
       "type": "package",
-      "path": "microsoft.entityframeworkcore.sqlserver/9.0.0-preview.6.24327.4",
+      "path": "microsoft.entityframeworkcore.sqlserver/9.0.0-preview.7.24405.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -5046,7 +5046,7 @@
         "PACKAGE.md",
         "lib/net8.0/Microsoft.EntityFrameworkCore.SqlServer.dll",
         "lib/net8.0/Microsoft.EntityFrameworkCore.SqlServer.xml",
-        "microsoft.entityframeworkcore.sqlserver.9.0.0-preview.6.24327.4.nupkg.sha512",
+        "microsoft.entityframeworkcore.sqlserver.9.0.0-preview.7.24405.3.nupkg.sha512",
         "microsoft.entityframeworkcore.sqlserver.nuspec"
       ]
     },
@@ -5893,16 +5893,15 @@
         "version.txt"
       ]
     },
-    "Microsoft.Win32.SystemEvents/9.0.0-preview.6.24327.7": {
-      "sha512": "iY1g4tiJLFzV+Ygp+g78w8sNMkDLiEY9nYnZVhVto+lAt6UVzw5ZqwRvLGDPzyrV9J1D/MKchmnziLkL8Ro6hA==",
+    "Microsoft.Win32.SystemEvents/9.0.0-preview.7.24405.7": {
+      "sha512": "dNlcbz1MZ3wZ0QQ7nwclHoeeQLsMTXTv2Hf7/aGyqruOQaWAn5VMP+RDdJlgn4D1uqkBMpzReSVSJ6lwk2WdTQ==",
       "type": "package",
-      "path": "microsoft.win32.systemevents/9.0.0-preview.6.24327.7",
+      "path": "microsoft.win32.systemevents/9.0.0-preview.7.24405.7",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "LICENSE.TXT",
-        "PACKAGE.md",
         "THIRD-PARTY-NOTICES.TXT",
         "buildTransitive/net461/Microsoft.Win32.SystemEvents.targets",
         "buildTransitive/net462/_._",
@@ -5916,7 +5915,7 @@
         "lib/net9.0/Microsoft.Win32.SystemEvents.xml",
         "lib/netstandard2.0/Microsoft.Win32.SystemEvents.dll",
         "lib/netstandard2.0/Microsoft.Win32.SystemEvents.xml",
-        "microsoft.win32.systemevents.9.0.0-preview.6.24327.7.nupkg.sha512",
+        "microsoft.win32.systemevents.9.0.0-preview.7.24405.7.nupkg.sha512",
         "microsoft.win32.systemevents.nuspec",
         "runtimes/win/lib/net8.0/Microsoft.Win32.SystemEvents.dll",
         "runtimes/win/lib/net8.0/Microsoft.Win32.SystemEvents.xml",
@@ -6969,10 +6968,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "System.Drawing.Common/9.0.0-preview.6.24327.6": {
-      "sha512": "4mNJBnN4iroaz44NIcYVKSPgOqhBTsPHqBG5aTfSjsKWCkRzhKnkVsWuYzx4FrZoEToGveMvUCanlY/V7GUZ5A==",
+    "System.Drawing.Common/9.0.0-preview.7.24405.4": {
+      "sha512": "XSbo4GOUV0dWqPissHqmGxWN2p8FzzXuFZjicAZ86yLw1l4zriPwxowACMD59ecXuFZQNMQYhqfupws1wkyqPg==",
       "type": "package",
-      "path": "system.drawing.common/9.0.0-preview.6.24327.6",
+      "path": "system.drawing.common/9.0.0-preview.7.24405.4",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -7006,7 +7005,7 @@
         "lib/xamarinmac20/_._",
         "lib/xamarintvos10/_._",
         "lib/xamarinwatchos10/_._",
-        "system.drawing.common.9.0.0-preview.6.24327.6.nupkg.sha512",
+        "system.drawing.common.9.0.0-preview.7.24405.4.nupkg.sha512",
         "system.drawing.common.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -7669,7 +7668,7 @@
       "Microsoft.AspNetCore.OutputCaching.StackExchangeRedis >= 9.0.0-preview.7.24406.2",
       "Microsoft.EntityFrameworkCore >= 9.0.0-preview.7.24405.3",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.0-preview.7.24405.3",
-      "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.0-preview.6.24327.4",
+      "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.0-preview.7.24405.3",
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.0-preview.6.24327.4",
       "Microsoft.Extensions.Caching.StackExchangeRedis >= 9.0.0-preview.7.24406.2",
       "Polly >= 8.4.1",
@@ -7682,7 +7681,7 @@
       "Swashbuckle.AspNetCore.Swagger >= 6.7.0",
       "Swashbuckle.AspNetCore.SwaggerGen >= 6.7.0",
       "Swashbuckle.AspNetCore.SwaggerUI >= 6.7.0",
-      "System.Drawing.Common >= 9.0.0-preview.6.24327.6",
+      "System.Drawing.Common >= 9.0.0-preview.7.24405.4",
       "TimeZoneConverter >= 6.1.0",
       "libphonenumber-csharp >= 8.13.44"
     ]
@@ -7849,7 +7848,7 @@
           },
           "Microsoft.EntityFrameworkCore.SqlServer": {
             "target": "Package",
-            "version": "[9.0.0-preview.6.24327.4, )"
+            "version": "[9.0.0-preview.7.24405.3, )"
           },
           "Microsoft.EntityFrameworkCore.Tools": {
             "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
@@ -7899,7 +7898,7 @@
           },
           "System.Drawing.Common": {
             "target": "Package",
-            "version": "[9.0.0-preview.6.24327.6, )"
+            "version": "[9.0.0-preview.7.24405.4, )"
           },
           "TimeZoneConverter": {
             "target": "Package",

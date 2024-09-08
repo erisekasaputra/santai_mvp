@@ -141,7 +141,7 @@ public class FilesController
                     .WithError(new("ResourceName", "Object resource not found")));
             }
 
-            await _cacheService.SetAsync<byte[]>(objectName, bytes, TimeSpan.FromMinutes(5));
+            await _cacheService.SetAsync(objectName, bytes, TimeSpan.FromMinutes(5));
 
             return TypedResults.File(bytes, ContentType.GetContentType(type), resourceName);
         }

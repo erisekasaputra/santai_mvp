@@ -16,7 +16,9 @@ public class Coupon : Entity
     public Money DiscountAmount { get; private set; }
     public Coupon()
     {
-        
+        CouponCode = string.Empty;
+        MinimumOrderValue = null!;
+        DiscountAmount = null!;
     }
     private Coupon(
         Guid orderingId,

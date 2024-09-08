@@ -2,8 +2,6 @@
 using PhoneNumbers;
 
 namespace Account.API.Services;
-
-
 public static class PhoneNumberService
 {
     public static string? NormalizePhoneNumber(this string phoneNumber, string regionCode)

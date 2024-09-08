@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net9.0": {
-      "AWSSDK.Core/3.7.400.3": {
+      "AWSSDK.Core/4.0.0-preview.2": {
         "type": "package",
         "compile": {
           "lib/net8.0/AWSSDK.Core.dll": {
@@ -11,6 +11,60 @@
         },
         "runtime": {
           "lib/net8.0/AWSSDK.Core.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "AWSSDK.Extensions.NETCore.Setup/4.0.0-preview.2": {
+        "type": "package",
+        "dependencies": {
+          "AWSSDK.Core": "4.0.0-preview.2",
+          "Microsoft.Extensions.Configuration.Abstractions": "2.0.0",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "2.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "2.0.0"
+        },
+        "compile": {
+          "lib/net8.0/AWSSDK.Extensions.NETCore.Setup.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.Extensions.NETCore.Setup.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0/AWSSDK.Extensions.NETCore.Setup.targets": {}
+        }
+      },
+      "AWSSDK.KeyManagementService/4.0.0-preview.2": {
+        "type": "package",
+        "dependencies": {
+          "AWSSDK.Core": "[4.0.0-preview.2, 5.0.0-preview.2)"
+        },
+        "compile": {
+          "lib/net8.0/AWSSDK.KeyManagementService.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.KeyManagementService.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "AWSSDK.S3/4.0.0-preview.2": {
+        "type": "package",
+        "dependencies": {
+          "AWSSDK.Core": "[4.0.0-preview.2, 5.0.0-preview.2)"
+        },
+        "compile": {
+          "lib/net8.0/AWSSDK.S3.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.S3.dll": {
             "related": ".pdb;.xml"
           }
         }
@@ -216,6 +270,19 @@
         "runtime": {
           "lib/net8.0/JWT.dll": {
             "related": ".pdb;.xml"
+          }
+        }
+      },
+      "libphonenumber-csharp/8.13.45": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/PhoneNumbers.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/PhoneNumbers.dll": {
+            "related": ".xml"
           }
         }
       },
@@ -465,6 +532,27 @@
         },
         "runtime": {
           "lib/net9.0/Microsoft.AspNetCore.OpenApi.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
+      "Microsoft.AspNetCore.OutputCaching.StackExchangeRedis/9.0.0-preview.7.24406.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Options": "9.0.0-preview.7.24405.7",
+          "StackExchange.Redis": "2.7.27"
+        },
+        "compile": {
+          "lib/net9.0/Microsoft.AspNetCore.OutputCaching.StackExchangeRedis.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.OutputCaching.StackExchangeRedis.dll": {
             "related": ".xml"
           }
         },
@@ -1062,6 +1150,25 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
+      "Microsoft.Extensions.Caching.StackExchangeRedis/9.0.0-preview.7.24406.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Caching.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Options": "9.0.0-preview.7.24405.7",
+          "StackExchange.Redis": "2.7.27"
+        },
+        "compile": {
+          "lib/net9.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.Extensions.Configuration.Abstractions/9.0.0-preview.7.24405.7": {
         "type": "package",
         "dependencies": {
@@ -1652,7 +1759,7 @@
           }
         }
       },
-      "StackExchange.Redis/2.8.0": {
+      "StackExchange.Redis/2.8.12": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "6.0.0",
@@ -2282,6 +2389,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
+          "Identity.Contracts": "1.0.0",
           "MediatR": "12.4.0"
         },
         "compile": {
@@ -2315,27 +2423,34 @@
         "runtime": {
           "bin/placeholder/Order.Infrastructure.dll": {}
         }
+      },
+      "SantaiClaimType/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v9.0",
+        "compile": {
+          "bin/placeholder/SantaiClaimType.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/SantaiClaimType.dll": {}
+        }
       }
     }
   },
   "libraries": {
-    "AWSSDK.Core/3.7.400.3": {
-      "sha512": "Sw88+Hdw1OsA0++zImHbYJa7FA6OznFhtbB9wJjrAA5O4i/LOhqu1Zh7YjLBL4n1hkicbHSAlPmHP6Kgw70Xkg==",
+    "AWSSDK.Core/4.0.0-preview.2": {
+      "sha512": "6nuzxpIh7Vs2ghYvzuT1af0zgUi2grqq+ZSO9vzcMIttFY6TqrK8r262dmyY5XSdqVAl/fzA5AxPNoAbxA/waw==",
       "type": "package",
-      "path": "awssdk.core/3.7.400.3",
+      "path": "awssdk.core/4.0.0-preview.2",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "awssdk.core.3.7.400.3.nupkg.sha512",
+        "awssdk.core.4.0.0-preview.2.nupkg.sha512",
         "awssdk.core.nuspec",
         "images/AWSLogo.png",
-        "lib/net35/AWSSDK.Core.dll",
-        "lib/net35/AWSSDK.Core.pdb",
-        "lib/net35/AWSSDK.Core.xml",
-        "lib/net45/AWSSDK.Core.dll",
-        "lib/net45/AWSSDK.Core.pdb",
-        "lib/net45/AWSSDK.Core.xml",
+        "lib/net472/AWSSDK.Core.dll",
+        "lib/net472/AWSSDK.Core.pdb",
+        "lib/net472/AWSSDK.Core.xml",
         "lib/net8.0/AWSSDK.Core.dll",
         "lib/net8.0/AWSSDK.Core.pdb",
         "lib/net8.0/AWSSDK.Core.xml",
@@ -2346,6 +2461,89 @@
         "lib/netstandard2.0/AWSSDK.Core.pdb",
         "lib/netstandard2.0/AWSSDK.Core.xml",
         "tools/account-management.ps1"
+      ]
+    },
+    "AWSSDK.Extensions.NETCore.Setup/4.0.0-preview.2": {
+      "sha512": "f34S3kghfBBBeGalyCSJwRiHXsotasDOh/6fKEBPqMG03jEjBFCbURdlevG1ikBcge9ZwG0omAQgA0uI4UYy4w==",
+      "type": "package",
+      "path": "awssdk.extensions.netcore.setup/4.0.0-preview.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "ConfigurationSchema.json",
+        "awssdk.extensions.netcore.setup.4.0.0-preview.2.nupkg.sha512",
+        "awssdk.extensions.netcore.setup.nuspec",
+        "buildTransitive/net8.0/AWSSDK.Extensions.NETCore.Setup.targets",
+        "buildTransitive/netcoreapp3.1/AWSSDK.Extensions.NETCore.Setup.targets",
+        "buildTransitive/netstandard2.0/AWSSDK.Extensions.NETCore.Setup.targets",
+        "images/AWSLogo.png",
+        "lib/net8.0/AWSSDK.Extensions.NETCore.Setup.dll",
+        "lib/net8.0/AWSSDK.Extensions.NETCore.Setup.pdb",
+        "lib/net8.0/AWSSDK.Extensions.NETCore.Setup.xml",
+        "lib/netcoreapp3.1/AWSSDK.Extensions.NETCore.Setup.dll",
+        "lib/netcoreapp3.1/AWSSDK.Extensions.NETCore.Setup.pdb",
+        "lib/netcoreapp3.1/AWSSDK.Extensions.NETCore.Setup.xml",
+        "lib/netstandard2.0/AWSSDK.Extensions.NETCore.Setup.dll",
+        "lib/netstandard2.0/AWSSDK.Extensions.NETCore.Setup.pdb",
+        "lib/netstandard2.0/AWSSDK.Extensions.NETCore.Setup.xml"
+      ]
+    },
+    "AWSSDK.KeyManagementService/4.0.0-preview.2": {
+      "sha512": "GUVVJzJuCNnbrJZcE5NI+AsnzvkU+IM97f1iYCIw5VAMuoLKahsTShHhZ6NQNlY57sWvs1GjcdC4ey2RodU/hQ==",
+      "type": "package",
+      "path": "awssdk.keymanagementservice/4.0.0-preview.2",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "analyzers/dotnet/cs/AWSSDK.KeyManagementService.CodeAnalysis.dll",
+        "analyzers/dotnet/cs/SharedAnalysisCode.dll",
+        "awssdk.keymanagementservice.4.0.0-preview.2.nupkg.sha512",
+        "awssdk.keymanagementservice.nuspec",
+        "images/AWSLogo.png",
+        "lib/net472/AWSSDK.KeyManagementService.dll",
+        "lib/net472/AWSSDK.KeyManagementService.pdb",
+        "lib/net472/AWSSDK.KeyManagementService.xml",
+        "lib/net8.0/AWSSDK.KeyManagementService.dll",
+        "lib/net8.0/AWSSDK.KeyManagementService.pdb",
+        "lib/net8.0/AWSSDK.KeyManagementService.xml",
+        "lib/netcoreapp3.1/AWSSDK.KeyManagementService.dll",
+        "lib/netcoreapp3.1/AWSSDK.KeyManagementService.pdb",
+        "lib/netcoreapp3.1/AWSSDK.KeyManagementService.xml",
+        "lib/netstandard2.0/AWSSDK.KeyManagementService.dll",
+        "lib/netstandard2.0/AWSSDK.KeyManagementService.pdb",
+        "lib/netstandard2.0/AWSSDK.KeyManagementService.xml",
+        "tools/install.ps1",
+        "tools/uninstall.ps1"
+      ]
+    },
+    "AWSSDK.S3/4.0.0-preview.2": {
+      "sha512": "1ZaYCM8fMAI3Bd+LrUVI7Bl8OAsUYMrJVmI0J7rdaOByQUeFWrnPOHPzq/1Lr5mdaK6z5nLmlau7TKEUHUhOOQ==",
+      "type": "package",
+      "path": "awssdk.s3/4.0.0-preview.2",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "analyzers/dotnet/cs/AWSSDK.S3.CodeAnalysis.dll",
+        "analyzers/dotnet/cs/SharedAnalysisCode.dll",
+        "awssdk.s3.4.0.0-preview.2.nupkg.sha512",
+        "awssdk.s3.nuspec",
+        "images/AWSLogo.png",
+        "lib/net472/AWSSDK.S3.dll",
+        "lib/net472/AWSSDK.S3.pdb",
+        "lib/net472/AWSSDK.S3.xml",
+        "lib/net8.0/AWSSDK.S3.dll",
+        "lib/net8.0/AWSSDK.S3.pdb",
+        "lib/net8.0/AWSSDK.S3.xml",
+        "lib/netcoreapp3.1/AWSSDK.S3.dll",
+        "lib/netcoreapp3.1/AWSSDK.S3.pdb",
+        "lib/netcoreapp3.1/AWSSDK.S3.xml",
+        "lib/netstandard2.0/AWSSDK.S3.dll",
+        "lib/netstandard2.0/AWSSDK.S3.pdb",
+        "lib/netstandard2.0/AWSSDK.S3.xml",
+        "tools/install.ps1",
+        "tools/uninstall.ps1"
       ]
     },
     "AWSSDK.SimpleNotificationService/3.7.400.3": {
@@ -2644,6 +2842,25 @@
         "lib/netstandard2.0/JWT.xml"
       ]
     },
+    "libphonenumber-csharp/8.13.45": {
+      "sha512": "hVhRxNATI+Yo/KYliUZ3z4BEoRUA+yHgGkV/8pSdkasR8+lLKcjO2UkCVuwyNKieqcY52ogzayRof6XfbTl7ug==",
+      "type": "package",
+      "path": "libphonenumber-csharp/8.13.45",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "icon.png",
+        "lib/net6.0/PhoneNumbers.dll",
+        "lib/net6.0/PhoneNumbers.xml",
+        "lib/net8.0/PhoneNumbers.dll",
+        "lib/net8.0/PhoneNumbers.xml",
+        "lib/netstandard2.0/PhoneNumbers.dll",
+        "lib/netstandard2.0/PhoneNumbers.xml",
+        "libphonenumber-csharp.8.13.45.nupkg.sha512",
+        "libphonenumber-csharp.nuspec"
+      ]
+    },
     "MassTransit/8.2.6-develop.1976": {
       "sha512": "SZekVyrK5YQutGKnIS/xREXRg1FqONzqSqXKSWdyi3QjJiYAmNRxP9jD6t8G9jmYT/FcEXhtVIFWsb1IkhkPeg==",
       "type": "package",
@@ -2904,6 +3121,21 @@
         "lib/net9.0/Microsoft.AspNetCore.OpenApi.xml",
         "microsoft.aspnetcore.openapi.9.0.0-preview.6.24328.4.nupkg.sha512",
         "microsoft.aspnetcore.openapi.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.OutputCaching.StackExchangeRedis/9.0.0-preview.7.24406.2": {
+      "sha512": "8PXS4i9l3+g3FHKHeld7GYZc1BorBoxNKLatbLZhRw5cD3oMQuSm63d8WC+WvHPauAXGSDeRrLArBHy3sSmMBw==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.outputcaching.stackexchangeredis/9.0.0-preview.7.24406.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net9.0/Microsoft.AspNetCore.OutputCaching.StackExchangeRedis.dll",
+        "lib/net9.0/Microsoft.AspNetCore.OutputCaching.StackExchangeRedis.xml",
+        "microsoft.aspnetcore.outputcaching.stackexchangeredis.9.0.0-preview.7.24406.2.nupkg.sha512",
+        "microsoft.aspnetcore.outputcaching.stackexchangeredis.nuspec"
       ]
     },
     "Microsoft.Bcl.AsyncInterfaces/7.0.0": {
@@ -4228,6 +4460,27 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "Microsoft.Extensions.Caching.StackExchangeRedis/9.0.0-preview.7.24406.2": {
+      "sha512": "oUidQdWahVBxynb8aX/7+Nes0RFauKEcle057glFynH/13eEj87UkxNx7ht3C2Btye48MUQg1nNpXMPqlykqzw==",
+      "type": "package",
+      "path": "microsoft.extensions.caching.stackexchangeredis/9.0.0-preview.7.24406.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net462/Microsoft.Extensions.Caching.StackExchangeRedis.dll",
+        "lib/net462/Microsoft.Extensions.Caching.StackExchangeRedis.xml",
+        "lib/net8.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll",
+        "lib/net8.0/Microsoft.Extensions.Caching.StackExchangeRedis.xml",
+        "lib/net9.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll",
+        "lib/net9.0/Microsoft.Extensions.Caching.StackExchangeRedis.xml",
+        "lib/netstandard2.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll",
+        "lib/netstandard2.0/Microsoft.Extensions.Caching.StackExchangeRedis.xml",
+        "microsoft.extensions.caching.stackexchangeredis.9.0.0-preview.7.24406.2.nupkg.sha512",
+        "microsoft.extensions.caching.stackexchangeredis.nuspec"
+      ]
+    },
     "Microsoft.Extensions.Configuration.Abstractions/9.0.0-preview.7.24405.7": {
       "sha512": "js6hxltWDt6xiLuNifDZ8EShtPf9z0XW7ztUPQduSSpbctqbtCwifEDZdL+lUy72aQ1lKGl8hNHiI0Xygwc29Q==",
       "type": "package",
@@ -5126,10 +5379,10 @@
         "version.txt"
       ]
     },
-    "StackExchange.Redis/2.8.0": {
-      "sha512": "MjAJ0ejH8zLhtuN5+Z+/I07NmPGdVuGEvE2+4xONQoFwgl+7vbQ/A6jlUgH9UkZb4s9Mu9QDyBq1TkRqQcOgTQ==",
+    "StackExchange.Redis/2.8.12": {
+      "sha512": "uUI5cgV1huCKcfTG4kh1NpLj+K7U9HWEfb0Bxs4qy9pFtc2kxQzRyr4RbVCm6zmWO9zufcs7zd9XVIE8+i0YMg==",
       "type": "package",
-      "path": "stackexchange.redis/2.8.0",
+      "path": "stackexchange.redis/2.8.12",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -5143,7 +5396,7 @@
         "lib/netcoreapp3.1/StackExchange.Redis.xml",
         "lib/netstandard2.0/StackExchange.Redis.dll",
         "lib/netstandard2.0/StackExchange.Redis.xml",
-        "stackexchange.redis.2.8.0.nupkg.sha512",
+        "stackexchange.redis.2.8.12.nupkg.sha512",
         "stackexchange.redis.nuspec"
       ]
     },
@@ -6298,10 +6551,19 @@
       "type": "project",
       "path": "../Order.Infrastructure/Order.Infrastructure.csproj",
       "msbuildProject": "../Order.Infrastructure/Order.Infrastructure.csproj"
+    },
+    "SantaiClaimType/1.0.0": {
+      "type": "project",
+      "path": "../SantaiClaimType/SantaiClaimType.csproj",
+      "msbuildProject": "../SantaiClaimType/SantaiClaimType.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net9.0": [
+      "AWSSDK.Core >= 4.0.0-preview.2",
+      "AWSSDK.Extensions.NETCore.Setup >= 4.0.0-preview.2",
+      "AWSSDK.KeyManagementService >= 4.0.0-preview.2",
+      "AWSSDK.S3 >= 4.0.0-preview.2",
       "Azure.Identity >= 1.13.0-beta.1",
       "EntityFramework >= 6.5.1",
       "FluentValidation >= 11.9.2",
@@ -6319,17 +6581,21 @@
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 9.0.0-preview.7.24406.2",
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore >= 9.0.0-preview.7.24406.2",
       "Microsoft.AspNetCore.OpenApi >= 9.0.0-preview.6.24328.4",
+      "Microsoft.AspNetCore.OutputCaching.StackExchangeRedis >= 9.0.0-preview.7.24406.2",
       "Microsoft.EntityFrameworkCore >= 9.0.0-preview.7.24405.3",
       "Microsoft.EntityFrameworkCore.Design >= 9.0.0-preview.7.24405.3",
       "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.0-preview.7.24405.3",
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.0-preview.7.24405.3",
+      "Microsoft.Extensions.Caching.StackExchangeRedis >= 9.0.0-preview.7.24406.2",
       "Microsoft.Identity.Client >= 4.64.0",
       "Order.Domain >= 1.0.0",
       "Order.Infrastructure >= 1.0.0",
-      "StackExchange.Redis >= 2.8.0",
+      "SantaiClaimType >= 1.0.0",
+      "StackExchange.Redis >= 2.8.12",
       "System.Drawing.Common >= 9.0.0-preview.7.24405.4",
       "System.IdentityModel.Tokens.Jwt >= 8.0.2",
-      "TimeZoneConverter >= 6.1.0"
+      "TimeZoneConverter >= 6.1.0",
+      "libphonenumber-csharp >= 8.13.45"
     ]
   },
   "packageFolders": {
@@ -6339,11 +6605,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Order.API\\Order.API.csproj",
+      "projectUniqueName": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Order.API\\Order.API.csproj",
       "projectName": "Order.API",
-      "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Order.API\\Order.API.csproj",
+      "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Order.API\\Order.API.csproj",
       "packagesPath": "C:\\Users\\erise\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Order.API\\obj\\",
+      "outputPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Order.API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -6365,14 +6631,17 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Identity.Contracts\\Identity.Contracts.csproj": {
-              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Identity.Contracts\\Identity.Contracts.csproj"
+            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Identity.Contracts\\Identity.Contracts.csproj": {
+              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Identity.Contracts\\Identity.Contracts.csproj"
             },
-            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Order.Domain\\Order.Domain.csproj": {
-              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Order.Domain\\Order.Domain.csproj"
+            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Order.Domain\\Order.Domain.csproj": {
+              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Order.Domain\\Order.Domain.csproj"
             },
-            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Order.Infrastructure\\Order.Infrastructure.csproj": {
-              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Order.Infrastructure\\Order.Infrastructure.csproj"
+            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Order.Infrastructure\\Order.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Order.Infrastructure\\Order.Infrastructure.csproj"
+            },
+            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\SantaiClaimType\\SantaiClaimType.csproj": {
+              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\SantaiClaimType\\SantaiClaimType.csproj"
             }
           }
         }
@@ -6392,6 +6661,22 @@
       "net9.0": {
         "targetAlias": "net9.0",
         "dependencies": {
+          "AWSSDK.Core": {
+            "target": "Package",
+            "version": "[4.0.0-preview.2, )"
+          },
+          "AWSSDK.Extensions.NETCore.Setup": {
+            "target": "Package",
+            "version": "[4.0.0-preview.2, )"
+          },
+          "AWSSDK.KeyManagementService": {
+            "target": "Package",
+            "version": "[4.0.0-preview.2, )"
+          },
+          "AWSSDK.S3": {
+            "target": "Package",
+            "version": "[4.0.0-preview.2, )"
+          },
           "Azure.Identity": {
             "target": "Package",
             "version": "[1.13.0-beta.1, )"
@@ -6456,6 +6741,10 @@
             "target": "Package",
             "version": "[9.0.0-preview.6.24328.4, )"
           },
+          "Microsoft.AspNetCore.OutputCaching.StackExchangeRedis": {
+            "target": "Package",
+            "version": "[9.0.0-preview.7.24406.2, )"
+          },
           "Microsoft.EntityFrameworkCore": {
             "target": "Package",
             "version": "[9.0.0-preview.7.24405.3, )"
@@ -6476,13 +6765,17 @@
             "target": "Package",
             "version": "[9.0.0-preview.7.24405.3, )"
           },
+          "Microsoft.Extensions.Caching.StackExchangeRedis": {
+            "target": "Package",
+            "version": "[9.0.0-preview.7.24406.2, )"
+          },
           "Microsoft.Identity.Client": {
             "target": "Package",
             "version": "[4.64.0, )"
           },
           "StackExchange.Redis": {
             "target": "Package",
-            "version": "[2.8.0, )"
+            "version": "[2.8.12, )"
           },
           "System.Drawing.Common": {
             "target": "Package",
@@ -6495,6 +6788,10 @@
           "TimeZoneConverter": {
             "target": "Package",
             "version": "[6.1.0, )"
+          },
+          "libphonenumber-csharp": {
+            "target": "Package",
+            "version": "[8.13.45, )"
           }
         },
         "imports": [

@@ -15,11 +15,11 @@ public static class BrandAPI
     {
         var app = route.MapGroup(groupName);
 
-        app.MapGet("/brands/{brandId}", GetBrandById);
-        app.MapGet("/brands", GetPaginatedBrand);
-        app.MapPost("/brands", CreateNewBrand);
-        app.MapPut("/brands/{brandId}", UpdateBrandById);
-        app.MapDelete("/brands/{brandId}", DeleteBrandById);
+        app.MapGet("/brands/{brandId}", GetBrandById).RequireAuthorization();
+        app.MapGet("/brands", GetPaginatedBrand).RequireAuthorization();
+        app.MapPost("/brands", CreateNewBrand).RequireAuthorization();
+        app.MapPut("/brands/{brandId}", UpdateBrandById).RequireAuthorization();
+        app.MapDelete("/brands/{brandId}", DeleteBrandById).RequireAuthorization();
 
         return app;
     }

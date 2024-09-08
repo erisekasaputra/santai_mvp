@@ -17,7 +17,11 @@ public class LineItem : Entity
     public Money SubTotal { get; private set; }
     public LineItem()
     {
-        
+        Name = string.Empty;
+        Sku = string.Empty;
+        UnitPrice = null!;
+        BaseUnitPrice = null!;
+        SubTotal = null!;
     }
     public LineItem(
         Guid id,

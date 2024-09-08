@@ -26,26 +26,26 @@ public static class ItemAPI
     {
         var app = route.MapGroup(groupName);
 
-        app.MapGet("/items/{itemId}", GetItemById);
-        app.MapGet("/items", GetPaginatedItem);
+        app.MapGet("/items/{itemId}", GetItemById).RequireAuthorization();
+        app.MapGet("/items", GetPaginatedItem).RequireAuthorization();
 
-        app.MapPost("/items", CreateNewItem);
+        app.MapPost("/items", CreateNewItem).RequireAuthorization();
 
-        app.MapPut("/items/{itemId}", UpdateItemById);
+        app.MapPut("/items/{itemId}", UpdateItemById).RequireAuthorization();
 
-        app.MapDelete("/items/{itemId}", DeleteItemById);
-        app.MapPatch("/items/{itemId}/undelete", UndeleteItemById);
+        app.MapDelete("/items/{itemId}", DeleteItemById).RequireAuthorization();
+        app.MapPatch("/items/{itemId}/undelete", UndeleteItemById).RequireAuthorization();
 
-        app.MapPatch("/items/{itemId}/activate", SetItemActivateById);
-        app.MapPatch("/items/{itemId}/deactivate", SetItemDeactivateById);
+        app.MapPatch("/items/{itemId}/activate", SetItemActivateById).RequireAuthorization();
+        app.MapPatch("/items/{itemId}/deactivate", SetItemDeactivateById).RequireAuthorization();
 
-        app.MapPatch("/items/stock/reduce", ReduceItemsStock);
-        app.MapPatch("/items/stock/increase", IncreaseItemsStock);
-        app.MapPatch("/items/stock", SetItemsStock);
-        app.MapPatch("/items/sold/reduce", ReduceItemsSold);
-        app.MapPatch("/items/sold/increase", IncreaseItemsSold);
-        app.MapPatch("/items/sold", SetItemsSold);
-        app.MapPatch("/items/price", SetItemsPrice);
+        app.MapPatch("/items/stock/reduce", ReduceItemsStock).RequireAuthorization();
+        app.MapPatch("/items/stock/increase", IncreaseItemsStock).RequireAuthorization();
+        app.MapPatch("/items/stock", SetItemsStock).RequireAuthorization();
+        app.MapPatch("/items/sold/reduce", ReduceItemsSold).RequireAuthorization();
+        app.MapPatch("/items/sold/increase", IncreaseItemsSold).RequireAuthorization();
+        app.MapPatch("/items/sold", SetItemsSold).RequireAuthorization();
+        app.MapPatch("/items/price", SetItemsPrice).RequireAuthorization();
 
         return app;
     }

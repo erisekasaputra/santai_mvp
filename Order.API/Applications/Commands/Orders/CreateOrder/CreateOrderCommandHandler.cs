@@ -65,12 +65,12 @@ public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Res
         }
         catch(NotImplementedException ex)
         {
-            _logger.LogError(ex, ex.Message);
+            _logger.LogError(ex, "An error occured , Error: {error}, Detail: {Detail}", ex.Message, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, ex.InnerException?.Message);
+            _logger.LogError(ex, "An error occured , Error: {error}, Detail: {Detail}", ex.Message, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

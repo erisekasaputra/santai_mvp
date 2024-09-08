@@ -11,16 +11,15 @@ using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args); 
 
-builder.Services.Configure<StorageConfigs>(builder.Configuration.GetSection(StorageConfigs.SectionName));
-
-builder.Services.Configure<KmsConfigs>(builder.Configuration.GetSection(KmsConfigs.SectionName));
-
-builder.Services.Configure<CacheConfigs>(builder.Configuration.GetSection(CacheConfigs.SectionName));
-
-
+builder.Services.Configure<StorageConfigs>(builder.Configuration.GetSection(StorageConfigs.SectionName)); 
+builder.Services.Configure<KmsConfigs>(builder.Configuration.GetSection(KmsConfigs.SectionName)); 
+builder.Services.Configure<CacheConfigs>(builder.Configuration.GetSection(CacheConfigs.SectionName)); 
 var storageConfigs = builder.Configuration.GetSection(StorageConfigs.SectionName).Get<StorageConfigs>();
 
+
+
 builder.Services.AddSingleton<IFileValidation, FileValidator>();
+builder.Services.AddSingleton<ICacheService, CacheService>();
 
 if (storageConfigs?.UseMinio ?? false)
 { 
@@ -56,14 +55,12 @@ builder.Services.AddRateLimiter(options =>
         configureOptions.QueueLimit = 100;
         configureOptions.TokensPerPeriod = 1000;
         configureOptions.ReplenishmentPeriod = TimeSpan.FromSeconds(1);
-    });
-
+    }); 
 });
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
-    var cacheOptions = sp.CreateScope().ServiceProvider.GetRequiredService<IOptionsMonitor<CacheConfigs>>();
-
+    var cacheOptions = sp.CreateScope().ServiceProvider.GetRequiredService<IOptionsMonitor<CacheConfigs>>(); 
     var configurations = new ConfigurationOptions
     {
         EndPoints = { cacheOptions.CurrentValue.Host },
@@ -72,12 +69,9 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
         AbortOnConnectFail = false,
         ReconnectRetryPolicy = new ExponentialRetry((int)TimeSpan
             .FromSeconds(cacheOptions.CurrentValue.ReconnectRetryPolicy).TotalMilliseconds)
-    };
-
+    }; 
     return ConnectionMultiplexer.Connect(configurations);
-});
-
-builder.Services.AddSingleton<ICacheService, CacheService>();
+}); 
 
 var app = builder.Build();
 

@@ -1,5 +1,4 @@
-﻿namespace Account.API.Utilities;
-
+﻿namespace Account.API.Utilities; 
 
 public class RegionCodeValidator
 {

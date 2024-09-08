@@ -15,7 +15,8 @@ public class Payment : Entity
     public DateTime CreatedAt { get; private init; }
     public Payment()
     {
-        
+        Ordering = null!;
+        Amount = null!;
     }
     public Payment(Guid orderingId, decimal amount, Currency currency, DateTime transactionAt, string? paymentMethod, string? bankReference)
     {

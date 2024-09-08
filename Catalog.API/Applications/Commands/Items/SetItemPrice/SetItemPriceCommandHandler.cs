@@ -42,14 +42,14 @@ public class SetItemPriceCommandHandler : IRequestHandler<SetItemPriceCommand, R
                 await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
 
                 // Extract the item IDs from the request
-                var itemIds = request.SetItemPriceRequests.Select(x => x.ItemId).ToList();
+                var itemIds = request.ItemIds.Select(x => x.ItemId).ToList();
 
                 // Retrieve the items with row locks
                 var items = await _unitOfWork.Items.GetItemsWithLockAsync(itemIds);
 
                 // Find the missing item IDs
                 var retrievedItemIds = items.Select(item => item.Id).ToHashSet();
-                var missingItemRequests = request.SetItemPriceRequests.Where(x => !retrievedItemIds.Contains(x.ItemId)).ToList();
+                var missingItemRequests = request.ItemIds.Where(x => !retrievedItemIds.Contains(x.ItemId)).ToList();
 
                 if (missingItemRequests.Count > 0)
                 {
@@ -67,7 +67,7 @@ public class SetItemPriceCommandHandler : IRequestHandler<SetItemPriceCommand, R
 
                 foreach (var item in items)
                 {
-                    var amount = request.SetItemPriceRequests.First(x => x.ItemId == item.Id).Amount; 
+                    var amount = request.ItemIds.First(x => x.ItemId == item.Id).Amount; 
 
                     try
                     {

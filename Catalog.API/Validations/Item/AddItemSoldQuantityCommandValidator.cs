@@ -7,6 +7,6 @@ public class AddItemSoldQuantityCommandValidator : AbstractValidator<AddItemSold
 {
     public AddItemSoldQuantityCommandValidator()
     {
-        RuleForEach(x => x.AddItemSoldQuantityRequests).SetValidator(new AddItemSoldQuantityRequestValidator());
+        RuleForEach(x => x.ItemIds).SetValidator(new AddItemSoldQuantityRequestValidator());
     }
 }

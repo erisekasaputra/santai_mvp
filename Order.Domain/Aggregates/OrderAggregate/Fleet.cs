@@ -11,7 +11,10 @@ public class Fleet : Entity
     public string ImageUrl { get; private set; }
     public Fleet()
     {
-        
+        Brand = string.Empty;
+        Model = string.Empty;
+        RegistrationNumber = string.Empty;
+        ImageUrl = string.Empty;
     }
     public Fleet(Guid orderingId, Guid fleetId, string brand, string model, string registrationNumber, string imageUrl)
     {

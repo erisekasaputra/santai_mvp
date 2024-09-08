@@ -1,8 +1,6 @@
-﻿using System;
-using TimeZoneConverter;
+﻿ using TimeZoneConverter;
 
 namespace Order.API.Extensions;
-
 
 public static class DateTimeExtension
 {

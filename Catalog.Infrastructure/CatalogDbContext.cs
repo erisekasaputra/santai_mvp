@@ -10,7 +10,7 @@ using System.Data;
 
 namespace Catalog.Infrastructure;
 
-public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : DbContext(options)
+public class CatalogDbContext : DbContext
 {
     public DbSet<Item> Items { get; set; }
     public DbSet<Category> Categories { get; set; }
@@ -24,9 +24,14 @@ public class CatalogDbContext(DbContextOptions<CatalogDbContext> options) : DbCo
 
     public bool HasActiveTransaction => _currentTransaction != null;
 
+    public CatalogDbContext(DbContextOptions<CatalogDbContext> options) : base(options)
+    {
+        
+    }
+
     public async Task<bool> SaveEntitiesAsync(CancellationToken cancellationToken = default)
     {  
-        _ = await base.SaveChangesAsync(cancellationToken);
+        await base.SaveChangesAsync(cancellationToken);
 
         return true;
     }

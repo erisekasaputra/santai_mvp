@@ -18,7 +18,7 @@ public class Mechanic : Entity
 
     public Mechanic()
     {
-        
+        Name = string.Empty;
     }
 
     public Mechanic(Guid orderingId, Guid mechanicId, string name, decimal perfomance)

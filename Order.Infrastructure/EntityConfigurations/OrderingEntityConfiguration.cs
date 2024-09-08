@@ -6,25 +6,12 @@ using Order.Domain.Aggregates.BuyerAggregate;
 using Order.Domain.Aggregates.MechanicAggregate;
 using Order.Domain.Aggregates.OrderAggregate;
 using Order.Domain.Enumerations;
-using System.Text.Json;
+using Order.Infrastructure.EntityConfigurations.Extensions; 
 
 namespace Order.Infrastructure.EntityConfigurations;
 
 public class OrderingEntityConfiguration : IEntityTypeConfiguration<Ordering>
-{
-    private static string SerializeList(ICollection<string>? list)
-    {
-        if (list == null) return string.Empty;
-
-        return JsonSerializer.Serialize(list.ToList());
-    } 
-    private static ICollection<string> DeserializeList(string json)
-    {
-        if (string.IsNullOrWhiteSpace(json)) return [];
-
-        return JsonSerializer.Deserialize<List<string>>(json) ?? [];
-    } 
-
+{ 
     public void Configure(EntityTypeBuilder<Ordering> builder)
     {
         builder.HasKey(x => x.Id);
@@ -120,14 +107,12 @@ public class OrderingEntityConfiguration : IEntityTypeConfiguration<Ordering>
         builder.HasMany(o => o.Fees)
             .WithOne()
             .HasForeignKey(p => p.OrderingId)  
-            .OnDelete(DeleteBehavior.Cascade);
-
-
+            .OnDelete(DeleteBehavior.Cascade); 
 
 
         var converter = new ValueConverter<ICollection<string>?, string>(
-             v => SerializeList(v), 
-             v => DeserializeList(v)  
+             v => CustomSerializer.SerializeList(v), 
+             v => CustomSerializer.DeserializeList(v)  
         );
 
         var comparer = new ValueComparer<ICollection<string>?>(
@@ -136,8 +121,7 @@ public class OrderingEntityConfiguration : IEntityTypeConfiguration<Ordering>
             c => c == null ? 0 : c.Aggregate(0, (a, v) => HashCode.Combine(a, v.GetHashCode())),  
             c => c == null ? null : c.ToList()  
         );
-
-
+         
 
         builder.Property(o => o.RatingImages)
             .HasConversion(converter)

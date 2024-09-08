@@ -15,7 +15,7 @@ public class Fee : Entity
     public Money FeeAmount { get; private set; }
     public Fee()
     {
-        
+        FeeAmount = null!;
     }
     private Fee(Guid orderingId, FeeDescription feeDescription, PercentageOrValueType percentageOrValueType, decimal amount, Currency currency)
     {

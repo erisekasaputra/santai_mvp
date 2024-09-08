@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "cL9sEL/odqE=",
+  "dgSpecHash": "ciqpYc3d6Iw=",
   "success": true,
-  "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Order.Infrastructure\\Order.Infrastructure.csproj",
+  "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Order.Infrastructure\\Order.Infrastructure.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\erise\\.nuget\\packages\\azure.core\\1.41.0\\azure.core.1.41.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\azure.core.experimental\\0.1.0-preview.34\\azure.core.experimental.0.1.0-preview.34.nupkg.sha512",

@@ -7,6 +7,6 @@ public class SetItemPriceCommandValidator : AbstractValidator<SetItemPriceComman
 {
     public SetItemPriceCommandValidator()
     { 
-        RuleForEach(x => x.SetItemPriceRequests).SetValidator(new SetItemPriceRequestValidator());
+        RuleForEach(x => x.ItemIds).SetValidator(new SetItemPriceRequestValidator());
     }
 }

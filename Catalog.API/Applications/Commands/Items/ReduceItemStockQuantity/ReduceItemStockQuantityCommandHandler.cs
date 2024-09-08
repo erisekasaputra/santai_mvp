@@ -7,9 +7,8 @@ using Polly;
 using Polly.Retry;
 using Catalog.API.Services;
 using Microsoft.EntityFrameworkCore;
-using Catalog.API.Applications.Commands.Items.ReduceItemStockQuantity;
 
-namespace Catalog.API.Applications.Commands.Items.ReduceStock;
+namespace Catalog.API.Applications.Commands.Items.ReduceItemStockQuantity;
 
 public class ReduceItemStockQuantityCommandHandler : IRequestHandler<ReduceItemStockQuantityCommand, Result<IEnumerable<ItemStockDto>>>
 {
@@ -42,14 +41,14 @@ public class ReduceItemStockQuantityCommandHandler : IRequestHandler<ReduceItemS
                 await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
 
                 // Extract the item IDs from the request
-                var itemIds = request.ReduceItemStockQuantityRequests.Select(x => x.ItemId).ToList();
+                var itemIds = request.ItemIds.Select(x => x.ItemId).ToList();
 
                 // Retrieve the items with row locks
                 var items = await _unitOfWork.Items.GetItemsWithLockAsync(itemIds);
 
                 // Find the missing item IDs
                 var retrievedItemIds = items.Select(item => item.Id).ToHashSet();
-                var missingItemRequests = request.ReduceItemStockQuantityRequests.Where(x => !retrievedItemIds.Contains(x.ItemId)).ToList();
+                var missingItemRequests = request.ItemIds.Where(x => !retrievedItemIds.Contains(x.ItemId)).ToList();
 
                 if (missingItemRequests.Count > 0)
                 {
@@ -67,7 +66,7 @@ public class ReduceItemStockQuantityCommandHandler : IRequestHandler<ReduceItemS
 
                 foreach (var item in items)
                 {
-                    var quantity = request.ReduceItemStockQuantityRequests.First(x => x.ItemId == item.Id).Quantity; 
+                    var quantity = request.ItemIds.First(x => x.ItemId == item.Id).Quantity;
 
                     try
                     {

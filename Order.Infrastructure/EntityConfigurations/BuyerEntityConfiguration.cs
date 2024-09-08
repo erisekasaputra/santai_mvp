@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Identity.Contracts.Enumerations;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Order.Domain.Aggregates.BuyerAggregate;
-using Order.Domain.Enumerations;
+using Order.Domain.Aggregates.BuyerAggregate; 
 
 namespace Order.Infrastructure.EntityConfigurations;
 

@@ -10,7 +10,8 @@ public class Tax : ValueObject
     public Money TaxAmount { get; private set; }
     public Tax()
     {
-        
+        Rate = 0;
+        TaxAmount = null!;
     }
     public Tax(decimal rate, Currency currency)
     {

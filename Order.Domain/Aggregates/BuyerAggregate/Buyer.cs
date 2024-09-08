@@ -1,5 +1,5 @@
-﻿using Order.Domain.Aggregates.OrderAggregate;
-using Order.Domain.Enumerations;
+﻿using Identity.Contracts.Enumerations;
+using Order.Domain.Aggregates.OrderAggregate; 
 using Order.Domain.SeedWork;
 
 namespace Order.Domain.Aggregates.BuyerAggregate;

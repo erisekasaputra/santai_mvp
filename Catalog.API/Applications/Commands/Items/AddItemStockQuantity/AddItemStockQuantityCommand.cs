@@ -5,4 +5,4 @@ using MediatR;
 namespace Catalog.API.Applications.Commands.Items.AddItemStockQuantity;
 
 public record AddItemStockQuantityCommand(
-    IEnumerable<AddItemStockQuantityRequest> AddItemStockQuantityRequests) : IRequest<Result<IEnumerable<ItemStockDto>>>;
+    IEnumerable<AddItemStockQuantityRequest> ItemIds) : IRequest<Result<IEnumerable<ItemStockDto>>>;

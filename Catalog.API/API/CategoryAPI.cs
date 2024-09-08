@@ -2,9 +2,7 @@
 using Catalog.API.Applications.Commands.Categories.DeleteCategory;
 using Catalog.API.Applications.Commands.Categories.UpdateCategory;
 using Catalog.API.Applications.Queries.Categories.GetCategoryById;
-using Catalog.API.Applications.Queries.Categories.GetCategoryPaginated;
-using Catalog.API.DTOs.Category;
-using Catalog.API.SeedWork;
+using Catalog.API.Applications.Queries.Categories.GetCategoryPaginated; 
 using Catalog.API.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -17,11 +15,11 @@ public static class CategoryAPI
     {
         var app = route.MapGroup(groupName);
 
-        app.MapGet("/categories/{categoryId}", GetCategoryById);
-        app.MapGet("/categories", GetPaginatedCategory);
-        app.MapPost("/categories", CreateNewCategory);
-        app.MapPut("/categories/{categoryId}", UpdateCategoryById);
-        app.MapDelete("/categories/{categoryId}", DeleteCategoryById);
+        app.MapGet("/categories/{categoryId}", GetCategoryById).RequireAuthorization();
+        app.MapGet("/categories", GetPaginatedCategory).RequireAuthorization();
+        app.MapPost("/categories", CreateNewCategory).RequireAuthorization();
+        app.MapPut("/categories/{categoryId}", UpdateCategoryById).RequireAuthorization();
+        app.MapDelete("/categories/{categoryId}", DeleteCategoryById).RequireAuthorization();
 
         return app;
     }

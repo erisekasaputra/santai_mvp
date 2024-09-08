@@ -1362,6 +1362,7 @@
       },
       "Order.Domain/1.0.0": {
         "dependencies": {
+          "Identity.Contracts": "1.0.0",
           "MediatR": "12.4.0"
         },
         "runtime": {

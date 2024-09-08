@@ -12,26 +12,20 @@ public class AccountCacheService : ICacheService
     {
         _connectionMultiplexer = connectionMultiplexer; 
     }
-
-
+     
     public async Task<T?> GetAsync<T>(string key)
     {
         try
-        {
-
-            var db = _connectionMultiplexer.GetDatabase();
-
+        { 
+            var db = _connectionMultiplexer.GetDatabase(); 
             var cacheData = await db.StringGetAsync(key);
-
+             
             if (cacheData.IsNullOrEmpty)
             {
                 return default;
-            }
-
-            var bytes = Encoding.UTF8.GetBytes(cacheData!);
-
-            using var stream = new MemoryStream(bytes);
-
+            } 
+            var bytes = Encoding.UTF8.GetBytes(cacheData!); 
+            using var stream = new MemoryStream(bytes); 
             return await JsonSerializer.DeserializeAsync<T>(stream);  
         }
         catch (RedisException)
@@ -48,8 +42,7 @@ public class AccountCacheService : ICacheService
     {  
         try
         { 
-            var db = _connectionMultiplexer.GetDatabase();
-
+            var db = _connectionMultiplexer.GetDatabase(); 
             var script = @"
                 if redis.call('EXISTS', KEYS[1]) == 0 then
                     redis.call('SET', KEYS[1], ARGV[2])

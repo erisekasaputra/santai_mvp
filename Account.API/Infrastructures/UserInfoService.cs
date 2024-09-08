@@ -1,7 +1,6 @@
 ﻿using Account.API.Model;
 using Identity.Contracts.Enumerations;
-using SantaiClaimType;
-using System.IdentityModel.Tokens.Jwt;
+using SantaiClaimType; 
 using System.Security.Claims;
 
 namespace Account.API.Infrastructures;
