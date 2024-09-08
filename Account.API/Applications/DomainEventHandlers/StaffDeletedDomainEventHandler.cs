@@ -1,5 +1,5 @@
 ﻿using Account.Domain.Events;
-using Identity.Contracts.IntegrationEvent;
+using Core.Events;
 using MediatR;
 
 namespace Account.API.Applications.DomainEventHandlers;

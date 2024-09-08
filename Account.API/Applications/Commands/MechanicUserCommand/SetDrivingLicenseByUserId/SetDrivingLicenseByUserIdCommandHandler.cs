@@ -1,6 +1,7 @@
-﻿using Account.API.Options;
-using Account.API.SeedWork;
-using Account.API.Services;
+﻿using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
+using Core.Results;
+using Core.Messages;
 using Account.Domain.Aggregates.DrivingLicenseAggregate;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
@@ -11,21 +12,18 @@ namespace Account.API.Applications.Commands.MechanicUserCommand.SetDrivingLicens
 
 public class SetDrivingLicenseByUserIdCommandHandler : IRequestHandler<SetDrivingLicenseByUserIdCommand, Result>
 {
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IOptionsMonitor<ReferralProgramOption> _referralOptions;
+    private readonly IUnitOfWork _unitOfWork; 
     private readonly ApplicationService _service;
     private readonly IKeyManagementService _kmsClient;
     private readonly IHashService _hashService;
 
     public SetDrivingLicenseByUserIdCommandHandler(
-        IUnitOfWork unitOfWork,
-        IOptionsMonitor<ReferralProgramOption> referralOptions,
+        IUnitOfWork unitOfWork, 
         ApplicationService service,
         IKeyManagementService kmsClient,
         IHashService hashService)
     {
-        _unitOfWork = unitOfWork;
-        _referralOptions = referralOptions;
+        _unitOfWork = unitOfWork; 
         _service = service;
         _kmsClient = kmsClient;
         _hashService = hashService;

@@ -237,6 +237,56 @@
           "buildTransitive/net6.0/EntityFramework.targets": {}
         }
       },
+      "FluentValidation/11.9.2": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/FluentValidation.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/FluentValidation.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "FluentValidation.AspNetCore/11.3.0": {
+        "type": "package",
+        "dependencies": {
+          "FluentValidation": "11.5.1",
+          "FluentValidation.DependencyInjectionExtensions": "11.5.1"
+        },
+        "compile": {
+          "lib/net6.0/FluentValidation.AspNetCore.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/FluentValidation.AspNetCore.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
+      "FluentValidation.DependencyInjectionExtensions/11.9.2": {
+        "type": "package",
+        "dependencies": {
+          "FluentValidation": "11.9.2",
+          "Microsoft.Extensions.Dependencyinjection.Abstractions": "2.1.0"
+        },
+        "compile": {
+          "lib/netstandard2.1/FluentValidation.DependencyInjectionExtensions.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.1/FluentValidation.DependencyInjectionExtensions.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Humanizer.Core/2.14.1": {
         "type": "package",
         "compile": {
@@ -246,6 +296,19 @@
         },
         "runtime": {
           "lib/net6.0/Humanizer.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "libphonenumber-csharp/8.13.45": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0/PhoneNumbers.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/PhoneNumbers.dll": {
             "related": ".xml"
           }
         }
@@ -486,6 +549,44 @@
             "related": ".xml"
           }
         }
+      },
+      "Microsoft.AspNetCore.Http.Features/5.0.17": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "5.0.1",
+          "System.IO.Pipelines": "5.0.2"
+        },
+        "compile": {
+          "lib/net5.0/Microsoft.AspNetCore.Http.Features.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net5.0/Microsoft.AspNetCore.Http.Features.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.OutputCaching.StackExchangeRedis/9.0.0-preview.7.24406.2": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Options": "9.0.0-preview.7.24405.7",
+          "StackExchange.Redis": "2.7.27"
+        },
+        "compile": {
+          "lib/net9.0/Microsoft.AspNetCore.OutputCaching.StackExchangeRedis.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.OutputCaching.StackExchangeRedis.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "Microsoft.Bcl.AsyncInterfaces/7.0.0": {
         "type": "package",
@@ -1077,11 +1178,30 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
-      "Microsoft.Extensions.Configuration/9.0.0-preview.6.24327.7": {
+      "Microsoft.Extensions.Caching.StackExchangeRedis/9.0.0-preview.7.24406.2": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "9.0.0-preview.6.24327.7",
-          "Microsoft.Extensions.Primitives": "9.0.0-preview.6.24327.7"
+          "Microsoft.Extensions.Caching.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Options": "9.0.0-preview.7.24405.7",
+          "StackExchange.Redis": "2.7.27"
+        },
+        "compile": {
+          "lib/net9.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration/9.0.0-preview.7.24405.7": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Primitives": "9.0.0-preview.7.24405.7"
         },
         "compile": {
           "lib/net9.0/Microsoft.Extensions.Configuration.dll": {
@@ -1116,10 +1236,10 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
-      "Microsoft.Extensions.Configuration.Binder/9.0.0-preview.6.24327.7": {
+      "Microsoft.Extensions.Configuration.Binder/9.0.0-preview.7.24405.7": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "9.0.0-preview.6.24327.7"
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.0-preview.7.24405.7"
         },
         "compile": {
           "lib/net9.0/Microsoft.Extensions.Configuration.Binder.dll": {
@@ -1299,12 +1419,12 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
-      "Microsoft.Extensions.Diagnostics/9.0.0-preview.6.24327.7": {
+      "Microsoft.Extensions.Diagnostics/9.0.0-preview.7.24405.7": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Extensions.Configuration": "9.0.0-preview.6.24327.7",
-          "Microsoft.Extensions.Diagnostics.Abstractions": "9.0.0-preview.6.24327.7",
-          "Microsoft.Extensions.Options.ConfigurationExtensions": "9.0.0-preview.6.24327.7"
+          "Microsoft.Extensions.Configuration": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Diagnostics.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "9.0.0-preview.7.24405.7"
         },
         "compile": {
           "lib/net9.0/Microsoft.Extensions.Diagnostics.dll": {
@@ -1320,12 +1440,12 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
-      "Microsoft.Extensions.Diagnostics.Abstractions/9.0.0-preview.6.24327.7": {
+      "Microsoft.Extensions.Diagnostics.Abstractions/9.0.0-preview.7.24405.7": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-preview.6.24327.7",
-          "Microsoft.Extensions.Options": "9.0.0-preview.6.24327.7",
-          "System.Diagnostics.DiagnosticSource": "9.0.0-preview.6.24327.7"
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Options": "9.0.0-preview.7.24405.7",
+          "System.Diagnostics.DiagnosticSource": "9.0.0-preview.7.24405.7"
         },
         "compile": {
           "lib/net9.0/Microsoft.Extensions.Diagnostics.Abstractions.dll": {
@@ -1492,28 +1612,28 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
-      "Microsoft.Extensions.Http/8.0.0": {
+      "Microsoft.Extensions.Http/9.0.0-preview.7.24405.7": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "8.0.0",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
-          "Microsoft.Extensions.Diagnostics": "8.0.0",
-          "Microsoft.Extensions.Logging": "8.0.0",
-          "Microsoft.Extensions.Logging.Abstractions": "8.0.0",
-          "Microsoft.Extensions.Options": "8.0.0"
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Diagnostics": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Logging": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Options": "9.0.0-preview.7.24405.7"
         },
         "compile": {
-          "lib/net8.0/Microsoft.Extensions.Http.dll": {
+          "lib/net9.0/Microsoft.Extensions.Http.dll": {
             "related": ".xml"
           }
         },
         "runtime": {
-          "lib/net8.0/Microsoft.Extensions.Http.dll": {
+          "lib/net9.0/Microsoft.Extensions.Http.dll": {
             "related": ".xml"
           }
         },
         "build": {
-          "buildTransitive/net6.0/_._": {}
+          "buildTransitive/net8.0/_._": {}
         }
       },
       "Microsoft.Extensions.Logging/9.0.0-preview.7.24405.7": {
@@ -1695,14 +1815,14 @@
           "buildTransitive/net8.0/Microsoft.Extensions.Options.targets": {}
         }
       },
-      "Microsoft.Extensions.Options.ConfigurationExtensions/9.0.0-preview.6.24327.7": {
+      "Microsoft.Extensions.Options.ConfigurationExtensions/9.0.0-preview.7.24405.7": {
         "type": "package",
         "dependencies": {
-          "Microsoft.Extensions.Configuration.Abstractions": "9.0.0-preview.6.24327.7",
-          "Microsoft.Extensions.Configuration.Binder": "9.0.0-preview.6.24327.7",
-          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-preview.6.24327.7",
-          "Microsoft.Extensions.Options": "9.0.0-preview.6.24327.7",
-          "Microsoft.Extensions.Primitives": "9.0.0-preview.6.24327.7"
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Configuration.Binder": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Options": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Primitives": "9.0.0-preview.7.24405.7"
         },
         "compile": {
           "lib/net9.0/Microsoft.Extensions.Options.ConfigurationExtensions.dll": {
@@ -1734,7 +1854,7 @@
           "buildTransitive/net8.0/_._": {}
         }
       },
-      "Microsoft.Identity.Client/4.62.0": {
+      "Microsoft.Identity.Client/4.64.0": {
         "type": "package",
         "dependencies": {
           "Microsoft.IdentityModel.Abstractions": "6.35.0",
@@ -1963,6 +2083,22 @@
           "buildTransitive/Mono.TextTemplating.targets": {}
         }
       },
+      "Pipelines.Sockets.Unofficial/2.2.8": {
+        "type": "package",
+        "dependencies": {
+          "System.IO.Pipelines": "5.0.1"
+        },
+        "compile": {
+          "lib/net5.0/Pipelines.Sockets.Unofficial.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net5.0/Pipelines.Sockets.Unofficial.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Polly/8.4.1": {
         "type": "package",
         "dependencies": {
@@ -2041,6 +2177,23 @@
           "runtimes/win-x86/native/sni.dll": {
             "assetType": "native",
             "rid": "win-x86"
+          }
+        }
+      },
+      "StackExchange.Redis/2.8.12": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "6.0.0",
+          "Pipelines.Sockets.Unofficial": "2.2.8"
+        },
+        "compile": {
+          "lib/net6.0/StackExchange.Redis.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/StackExchange.Redis.dll": {
+            "related": ".xml"
           }
         }
       },
@@ -2703,17 +2856,46 @@
           }
         }
       },
-      "Catalog.Contracts/1.0.0": {
+      "TimeZoneConverter/6.1.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/TimeZoneConverter.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/TimeZoneConverter.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Core/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v9.0",
         "dependencies": {
-          "MediatR": "12.4.0"
+          "Azure.Identity": "1.13.0-beta.1",
+          "EntityFramework": "6.5.1",
+          "FluentValidation": "11.9.2",
+          "FluentValidation.AspNetCore": "11.3.0",
+          "FluentValidation.DependencyInjectionExtensions": "11.9.2",
+          "MediatR": "12.4.0",
+          "Microsoft.AspNetCore.Http.Features": "5.0.17",
+          "Microsoft.AspNetCore.OutputCaching.StackExchangeRedis": "9.0.0-preview.7.24406.2",
+          "Microsoft.EntityFrameworkCore": "9.0.0-preview.7.24405.3",
+          "Microsoft.EntityFrameworkCore.SqlServer": "9.0.0-preview.7.24405.3",
+          "Microsoft.Extensions.Caching.StackExchangeRedis": "9.0.0-preview.7.24406.2",
+          "Microsoft.Extensions.Http": "9.0.0-preview.7.24405.7",
+          "Microsoft.Identity.Client": "4.64.0",
+          "StackExchange.Redis": "2.8.12",
+          "System.Drawing.Common": "9.0.0-preview.7.24405.4",
+          "TimeZoneConverter": "6.1.0",
+          "libphonenumber-csharp": "8.13.45"
         },
         "compile": {
-          "bin/placeholder/Catalog.Contracts.dll": {}
+          "bin/placeholder/Core.dll": {}
         },
         "runtime": {
-          "bin/placeholder/Catalog.Contracts.dll": {}
+          "bin/placeholder/Core.dll": {}
         }
       }
     }
@@ -3069,6 +3251,67 @@
         "tools/net6.0/any/ef6.runtimeconfig.json"
       ]
     },
+    "FluentValidation/11.9.2": {
+      "sha512": "XeHp9LvFvu1fsQ/NvDCymV02GOCB1nz7ZUhfpI3uMhCcHTkV1K5bMkv+Nc/kuNYyAsX5+5bcmUanIEMd5QN+Eg==",
+      "type": "package",
+      "path": "fluentvalidation/11.9.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "fluent-validation-icon.png",
+        "fluentvalidation.11.9.2.nupkg.sha512",
+        "fluentvalidation.nuspec",
+        "lib/net5.0/FluentValidation.dll",
+        "lib/net5.0/FluentValidation.xml",
+        "lib/net6.0/FluentValidation.dll",
+        "lib/net6.0/FluentValidation.xml",
+        "lib/net7.0/FluentValidation.dll",
+        "lib/net7.0/FluentValidation.xml",
+        "lib/net8.0/FluentValidation.dll",
+        "lib/net8.0/FluentValidation.xml",
+        "lib/netstandard2.0/FluentValidation.dll",
+        "lib/netstandard2.0/FluentValidation.xml",
+        "lib/netstandard2.1/FluentValidation.dll",
+        "lib/netstandard2.1/FluentValidation.xml"
+      ]
+    },
+    "FluentValidation.AspNetCore/11.3.0": {
+      "sha512": "jtFVgKnDFySyBlPS8bZbTKEEwJZnn11rXXJ2SQnjDhZ56rQqybBg9Joq4crRLz3y0QR8WoOq4iE4piV81w/Djg==",
+      "type": "package",
+      "path": "fluentvalidation.aspnetcore/11.3.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "fluent-validation-icon.png",
+        "fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
+        "fluentvalidation.aspnetcore.nuspec",
+        "lib/net5.0/FluentValidation.AspNetCore.dll",
+        "lib/net5.0/FluentValidation.AspNetCore.xml",
+        "lib/net6.0/FluentValidation.AspNetCore.dll",
+        "lib/net6.0/FluentValidation.AspNetCore.xml",
+        "lib/netcoreapp3.1/FluentValidation.AspNetCore.dll",
+        "lib/netcoreapp3.1/FluentValidation.AspNetCore.xml"
+      ]
+    },
+    "FluentValidation.DependencyInjectionExtensions/11.9.2": {
+      "sha512": "PMAdnR1fX1c8DyUvu5YvRa0V0JHES8vzXnVX0OSS3z9W/SkuHqcGrtiSOdW1QehG3vZhXsKhqf3wgDzW/OYahA==",
+      "type": "package",
+      "path": "fluentvalidation.dependencyinjectionextensions/11.9.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "fluent-validation-icon.png",
+        "fluentvalidation.dependencyinjectionextensions.11.9.2.nupkg.sha512",
+        "fluentvalidation.dependencyinjectionextensions.nuspec",
+        "lib/netstandard2.0/FluentValidation.DependencyInjectionExtensions.dll",
+        "lib/netstandard2.0/FluentValidation.DependencyInjectionExtensions.xml",
+        "lib/netstandard2.1/FluentValidation.DependencyInjectionExtensions.dll",
+        "lib/netstandard2.1/FluentValidation.DependencyInjectionExtensions.xml"
+      ]
+    },
     "Humanizer.Core/2.14.1": {
       "sha512": "lQKvtaTDOXnoVJ20ibTuSIOf2i0uO0MPbDhd1jm238I+U/2ZnRENj0cktKZhtchBMtCUSRQ5v4xBCUbKNmyVMw==",
       "type": "package",
@@ -3085,6 +3328,25 @@
         "lib/netstandard2.0/Humanizer.dll",
         "lib/netstandard2.0/Humanizer.xml",
         "logo.png"
+      ]
+    },
+    "libphonenumber-csharp/8.13.45": {
+      "sha512": "hVhRxNATI+Yo/KYliUZ3z4BEoRUA+yHgGkV/8pSdkasR8+lLKcjO2UkCVuwyNKieqcY52ogzayRof6XfbTl7ug==",
+      "type": "package",
+      "path": "libphonenumber-csharp/8.13.45",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "icon.png",
+        "lib/net6.0/PhoneNumbers.dll",
+        "lib/net6.0/PhoneNumbers.xml",
+        "lib/net8.0/PhoneNumbers.dll",
+        "lib/net8.0/PhoneNumbers.xml",
+        "lib/netstandard2.0/PhoneNumbers.dll",
+        "lib/netstandard2.0/PhoneNumbers.xml",
+        "libphonenumber-csharp.8.13.45.nupkg.sha512",
+        "libphonenumber-csharp.nuspec"
       ]
     },
     "librdkafka.redist/2.5.0": {
@@ -3287,6 +3549,40 @@
         "lib/netstandard2.0/MediatR.Contracts.xml",
         "mediatr.contracts.2.0.1.nupkg.sha512",
         "mediatr.contracts.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.Http.Features/5.0.17": {
+      "sha512": "3jG2xS+dx8DDCGV/F+STdPTg89lX3ao3dF/VEPvJaz3wzBIjuadipTtYNEXDIVuOPZwb6jdmhrX9jkzOIBm5cw==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.http.features/5.0.17",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net461/Microsoft.AspNetCore.Http.Features.dll",
+        "lib/net461/Microsoft.AspNetCore.Http.Features.xml",
+        "lib/net5.0/Microsoft.AspNetCore.Http.Features.dll",
+        "lib/net5.0/Microsoft.AspNetCore.Http.Features.xml",
+        "lib/netstandard2.0/Microsoft.AspNetCore.Http.Features.dll",
+        "lib/netstandard2.0/Microsoft.AspNetCore.Http.Features.xml",
+        "microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512",
+        "microsoft.aspnetcore.http.features.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.OutputCaching.StackExchangeRedis/9.0.0-preview.7.24406.2": {
+      "sha512": "8PXS4i9l3+g3FHKHeld7GYZc1BorBoxNKLatbLZhRw5cD3oMQuSm63d8WC+WvHPauAXGSDeRrLArBHy3sSmMBw==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.outputcaching.stackexchangeredis/9.0.0-preview.7.24406.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net9.0/Microsoft.AspNetCore.OutputCaching.StackExchangeRedis.dll",
+        "lib/net9.0/Microsoft.AspNetCore.OutputCaching.StackExchangeRedis.xml",
+        "microsoft.aspnetcore.outputcaching.stackexchangeredis.9.0.0-preview.7.24406.2.nupkg.sha512",
+        "microsoft.aspnetcore.outputcaching.stackexchangeredis.nuspec"
       ]
     },
     "Microsoft.Bcl.AsyncInterfaces/7.0.0": {
@@ -4611,16 +4907,36 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Extensions.Configuration/9.0.0-preview.6.24327.7": {
-      "sha512": "dssSMh8GFVW1YIh3AY4wFegOjrCfZAEgJzSTo0DKLpucqLfSj5iU7pfXqLy9VfBIEy0bf2iPXR0Dayjypbk97w==",
+    "Microsoft.Extensions.Caching.StackExchangeRedis/9.0.0-preview.7.24406.2": {
+      "sha512": "oUidQdWahVBxynb8aX/7+Nes0RFauKEcle057glFynH/13eEj87UkxNx7ht3C2Btye48MUQg1nNpXMPqlykqzw==",
       "type": "package",
-      "path": "microsoft.extensions.configuration/9.0.0-preview.6.24327.7",
+      "path": "microsoft.extensions.caching.stackexchangeredis/9.0.0-preview.7.24406.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net462/Microsoft.Extensions.Caching.StackExchangeRedis.dll",
+        "lib/net462/Microsoft.Extensions.Caching.StackExchangeRedis.xml",
+        "lib/net8.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll",
+        "lib/net8.0/Microsoft.Extensions.Caching.StackExchangeRedis.xml",
+        "lib/net9.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll",
+        "lib/net9.0/Microsoft.Extensions.Caching.StackExchangeRedis.xml",
+        "lib/netstandard2.0/Microsoft.Extensions.Caching.StackExchangeRedis.dll",
+        "lib/netstandard2.0/Microsoft.Extensions.Caching.StackExchangeRedis.xml",
+        "microsoft.extensions.caching.stackexchangeredis.9.0.0-preview.7.24406.2.nupkg.sha512",
+        "microsoft.extensions.caching.stackexchangeredis.nuspec"
+      ]
+    },
+    "Microsoft.Extensions.Configuration/9.0.0-preview.7.24405.7": {
+      "sha512": "UZGC/QiEjoA2ew5BWe5KYWxMRICwuOvzfASzP2ExuOKQWgr2IAuvhnP3OGXOuodpBDuP3rbqIfs1JbGvBqTfXw==",
+      "type": "package",
+      "path": "microsoft.extensions.configuration/9.0.0-preview.7.24405.7",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "LICENSE.TXT",
-        "PACKAGE.md",
         "THIRD-PARTY-NOTICES.TXT",
         "buildTransitive/net461/Microsoft.Extensions.Configuration.targets",
         "buildTransitive/net462/_._",
@@ -4634,7 +4950,7 @@
         "lib/net9.0/Microsoft.Extensions.Configuration.xml",
         "lib/netstandard2.0/Microsoft.Extensions.Configuration.dll",
         "lib/netstandard2.0/Microsoft.Extensions.Configuration.xml",
-        "microsoft.extensions.configuration.9.0.0-preview.6.24327.7.nupkg.sha512",
+        "microsoft.extensions.configuration.9.0.0-preview.7.24405.7.nupkg.sha512",
         "microsoft.extensions.configuration.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -4666,16 +4982,15 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Extensions.Configuration.Binder/9.0.0-preview.6.24327.7": {
-      "sha512": "MFqEmA5vvbZVHW8m6drWoFAENfV7YlwoxTQjDV2HjKZjqR6G+2YbwiFNEPk8aYCQ4aHKasPEmeYGhJf3n+RSjg==",
+    "Microsoft.Extensions.Configuration.Binder/9.0.0-preview.7.24405.7": {
+      "sha512": "BvGWJRKXBAHh+x2/xk4ktchXnTIFMC9eclAtmS7uVM0NAW3jgeTuB4Aca3BbOgWjfxXFJTYwb3dZrvdcWWP/Uw==",
       "type": "package",
-      "path": "microsoft.extensions.configuration.binder/9.0.0-preview.6.24327.7",
+      "path": "microsoft.extensions.configuration.binder/9.0.0-preview.7.24405.7",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "LICENSE.TXT",
-        "PACKAGE.md",
         "THIRD-PARTY-NOTICES.TXT",
         "analyzers/dotnet/cs/Microsoft.Extensions.Configuration.Binder.SourceGeneration.dll",
         "analyzers/dotnet/cs/cs/Microsoft.Extensions.Configuration.Binder.SourceGeneration.resources.dll",
@@ -4700,7 +5015,7 @@
         "lib/net9.0/Microsoft.Extensions.Configuration.Binder.xml",
         "lib/netstandard2.0/Microsoft.Extensions.Configuration.Binder.dll",
         "lib/netstandard2.0/Microsoft.Extensions.Configuration.Binder.xml",
-        "microsoft.extensions.configuration.binder.9.0.0-preview.6.24327.7.nupkg.sha512",
+        "microsoft.extensions.configuration.binder.9.0.0-preview.7.24405.7.nupkg.sha512",
         "microsoft.extensions.configuration.binder.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -4937,10 +5252,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Extensions.Diagnostics/9.0.0-preview.6.24327.7": {
-      "sha512": "LzYPB4GDtki+XfuwdQ4UA/g29atN77QedbQA+7x6qlpA0pHbu5vk7kMB19EkRG5lAm8ii+V/7pcIBS/U36yXZw==",
+    "Microsoft.Extensions.Diagnostics/9.0.0-preview.7.24405.7": {
+      "sha512": "d2mRKx2cPIG+pKQFa808UmBjPh0KKIW7FboO4lruee4cIj8wtaIWVPQSDP8x7wbhYW/OdykHB4USpOChu906Vw==",
       "type": "package",
-      "path": "microsoft.extensions.diagnostics/9.0.0-preview.6.24327.7",
+      "path": "microsoft.extensions.diagnostics/9.0.0-preview.7.24405.7",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -4959,15 +5274,15 @@
         "lib/net9.0/Microsoft.Extensions.Diagnostics.xml",
         "lib/netstandard2.0/Microsoft.Extensions.Diagnostics.dll",
         "lib/netstandard2.0/Microsoft.Extensions.Diagnostics.xml",
-        "microsoft.extensions.diagnostics.9.0.0-preview.6.24327.7.nupkg.sha512",
+        "microsoft.extensions.diagnostics.9.0.0-preview.7.24405.7.nupkg.sha512",
         "microsoft.extensions.diagnostics.nuspec",
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Extensions.Diagnostics.Abstractions/9.0.0-preview.6.24327.7": {
-      "sha512": "MPplYgtYXybdRZlUBw+4yvWihVpYx7B5MHJ3fIEeRQZxI5aRsiFyQ+kdIprStIPPcVzrKHgOjFDB9Lvffc+msw==",
+    "Microsoft.Extensions.Diagnostics.Abstractions/9.0.0-preview.7.24405.7": {
+      "sha512": "zWzK2Rb/a1D4iqGDrWj1hwHaFs/bRx1yG/susTA55+FZu96nAcR+yJcq78WTp1H/n39N8AK29FtQmOeSI4LN5Q==",
       "type": "package",
-      "path": "microsoft.extensions.diagnostics.abstractions/9.0.0-preview.6.24327.7",
+      "path": "microsoft.extensions.diagnostics.abstractions/9.0.0-preview.7.24405.7",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -4986,7 +5301,7 @@
         "lib/net9.0/Microsoft.Extensions.Diagnostics.Abstractions.xml",
         "lib/netstandard2.0/Microsoft.Extensions.Diagnostics.Abstractions.dll",
         "lib/netstandard2.0/Microsoft.Extensions.Diagnostics.Abstractions.xml",
-        "microsoft.extensions.diagnostics.abstractions.9.0.0-preview.6.24327.7.nupkg.sha512",
+        "microsoft.extensions.diagnostics.abstractions.9.0.0-preview.7.24405.7.nupkg.sha512",
         "microsoft.extensions.diagnostics.abstractions.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -5173,32 +5488,29 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Extensions.Http/8.0.0": {
-      "sha512": "cWz4caHwvx0emoYe7NkHPxII/KkTI8R/LC9qdqJqnKv2poTJ4e2qqPGQqvRoQ5kaSA4FU5IV3qFAuLuOhoqULQ==",
+    "Microsoft.Extensions.Http/9.0.0-preview.7.24405.7": {
+      "sha512": "1o30Xk22EUiKym+jjMWnCQ5VoWBnSog18qqNPn9U4Z0qqpvhj9pZH0UiaHkBDlyyChHHTMS8rQK5mOfj+GfCXg==",
       "type": "package",
-      "path": "microsoft.extensions.http/8.0.0",
+      "path": "microsoft.extensions.http/9.0.0-preview.7.24405.7",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "LICENSE.TXT",
-        "PACKAGE.md",
         "THIRD-PARTY-NOTICES.TXT",
         "buildTransitive/net461/Microsoft.Extensions.Http.targets",
         "buildTransitive/net462/_._",
-        "buildTransitive/net6.0/_._",
+        "buildTransitive/net8.0/_._",
         "buildTransitive/netcoreapp2.0/Microsoft.Extensions.Http.targets",
         "lib/net462/Microsoft.Extensions.Http.dll",
         "lib/net462/Microsoft.Extensions.Http.xml",
-        "lib/net6.0/Microsoft.Extensions.Http.dll",
-        "lib/net6.0/Microsoft.Extensions.Http.xml",
-        "lib/net7.0/Microsoft.Extensions.Http.dll",
-        "lib/net7.0/Microsoft.Extensions.Http.xml",
         "lib/net8.0/Microsoft.Extensions.Http.dll",
         "lib/net8.0/Microsoft.Extensions.Http.xml",
+        "lib/net9.0/Microsoft.Extensions.Http.dll",
+        "lib/net9.0/Microsoft.Extensions.Http.xml",
         "lib/netstandard2.0/Microsoft.Extensions.Http.dll",
         "lib/netstandard2.0/Microsoft.Extensions.Http.xml",
-        "microsoft.extensions.http.8.0.0.nupkg.sha512",
+        "microsoft.extensions.http.9.0.0-preview.7.24405.7.nupkg.sha512",
         "microsoft.extensions.http.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -5485,16 +5797,15 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Extensions.Options.ConfigurationExtensions/9.0.0-preview.6.24327.7": {
-      "sha512": "NJTqZvGByAWf7W4J8Gc29QASNIf+YQgdIFX03HYnr1JCPEfVxJBuHa394fWKeT7zZkUPtJSB+HhMCldPszyfNg==",
+    "Microsoft.Extensions.Options.ConfigurationExtensions/9.0.0-preview.7.24405.7": {
+      "sha512": "My88HaR13/OK42/5ijFG7h6iAbrjAmfbhvmzVRyQkHbXV552BOe+5NABPDKOW3HUF7ePcwZ0QmlWgnH1ioqgLg==",
       "type": "package",
-      "path": "microsoft.extensions.options.configurationextensions/9.0.0-preview.6.24327.7",
+      "path": "microsoft.extensions.options.configurationextensions/9.0.0-preview.7.24405.7",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "Icon.png",
         "LICENSE.TXT",
-        "PACKAGE.md",
         "THIRD-PARTY-NOTICES.TXT",
         "buildTransitive/net461/Microsoft.Extensions.Options.ConfigurationExtensions.targets",
         "buildTransitive/net462/_._",
@@ -5508,7 +5819,7 @@
         "lib/net9.0/Microsoft.Extensions.Options.ConfigurationExtensions.xml",
         "lib/netstandard2.0/Microsoft.Extensions.Options.ConfigurationExtensions.dll",
         "lib/netstandard2.0/Microsoft.Extensions.Options.ConfigurationExtensions.xml",
-        "microsoft.extensions.options.configurationextensions.9.0.0-preview.6.24327.7.nupkg.sha512",
+        "microsoft.extensions.options.configurationextensions.9.0.0-preview.7.24405.7.nupkg.sha512",
         "microsoft.extensions.options.configurationextensions.nuspec",
         "useSharedDesignerContext.txt"
       ]
@@ -5540,10 +5851,10 @@
         "useSharedDesignerContext.txt"
       ]
     },
-    "Microsoft.Identity.Client/4.62.0": {
-      "sha512": "2q5m8ASh9lJ714CkCxA1lmj60K6OeDR2vV78adviOM/ZEoISldY+THr7gmqJ6rtSbZ0J4R/a9KcgL/wm8Ogi4Q==",
+    "Microsoft.Identity.Client/4.64.0": {
+      "sha512": "LY5Mr3+UdjWdc5ej93bE0uYTs5ZpD4zzg3w69tSO8b+JieEGZ6t0eUX003/x7gPadsxCw2RKLNKtfRGxWrUsNQ==",
       "type": "package",
-      "path": "microsoft.identity.client/4.62.0",
+      "path": "microsoft.identity.client/4.64.0",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -5560,7 +5871,7 @@
         "lib/net6.0/Microsoft.Identity.Client.xml",
         "lib/netstandard2.0/Microsoft.Identity.Client.dll",
         "lib/netstandard2.0/Microsoft.Identity.Client.xml",
-        "microsoft.identity.client.4.62.0.nupkg.sha512",
+        "microsoft.identity.client.4.64.0.nupkg.sha512",
         "microsoft.identity.client.nuspec"
       ]
     },
@@ -5862,6 +6173,29 @@
         "readme.md"
       ]
     },
+    "Pipelines.Sockets.Unofficial/2.2.8": {
+      "sha512": "zG2FApP5zxSx6OcdJQLbZDk2AVlN2BNQD6MorwIfV6gVj0RRxWPEp2LXAxqDGZqeNV1Zp0BNPcNaey/GXmTdvQ==",
+      "type": "package",
+      "path": "pipelines.sockets.unofficial/2.2.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net461/Pipelines.Sockets.Unofficial.dll",
+        "lib/net461/Pipelines.Sockets.Unofficial.xml",
+        "lib/net472/Pipelines.Sockets.Unofficial.dll",
+        "lib/net472/Pipelines.Sockets.Unofficial.xml",
+        "lib/net5.0/Pipelines.Sockets.Unofficial.dll",
+        "lib/net5.0/Pipelines.Sockets.Unofficial.xml",
+        "lib/netcoreapp3.1/Pipelines.Sockets.Unofficial.dll",
+        "lib/netcoreapp3.1/Pipelines.Sockets.Unofficial.xml",
+        "lib/netstandard2.0/Pipelines.Sockets.Unofficial.dll",
+        "lib/netstandard2.0/Pipelines.Sockets.Unofficial.xml",
+        "lib/netstandard2.1/Pipelines.Sockets.Unofficial.dll",
+        "lib/netstandard2.1/Pipelines.Sockets.Unofficial.xml",
+        "pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
+        "pipelines.sockets.unofficial.nuspec"
+      ]
+    },
     "Polly/8.4.1": {
       "sha512": "kBxql53peR0bjxeEuuY114GD2rmC0tkUwE1xuKUlnd74ULEsGu3OwcLH56KkwxBPUbOysPa7stT9SJ6pKGTzlg==",
       "type": "package",
@@ -5993,6 +6327,27 @@
         "runtimes/win-x86/native/sni.dll",
         "useSharedDesignerContext.txt",
         "version.txt"
+      ]
+    },
+    "StackExchange.Redis/2.8.12": {
+      "sha512": "uUI5cgV1huCKcfTG4kh1NpLj+K7U9HWEfb0Bxs4qy9pFtc2kxQzRyr4RbVCm6zmWO9zufcs7zd9XVIE8+i0YMg==",
+      "type": "package",
+      "path": "stackexchange.redis/2.8.12",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net461/StackExchange.Redis.dll",
+        "lib/net461/StackExchange.Redis.xml",
+        "lib/net472/StackExchange.Redis.dll",
+        "lib/net472/StackExchange.Redis.xml",
+        "lib/net6.0/StackExchange.Redis.dll",
+        "lib/net6.0/StackExchange.Redis.xml",
+        "lib/netcoreapp3.1/StackExchange.Redis.dll",
+        "lib/netcoreapp3.1/StackExchange.Redis.xml",
+        "lib/netstandard2.0/StackExchange.Redis.dll",
+        "lib/netstandard2.0/StackExchange.Redis.xml",
+        "stackexchange.redis.2.8.12.nupkg.sha512",
+        "stackexchange.redis.nuspec"
       ]
     },
     "System.Buffers/4.5.0": {
@@ -7395,16 +7750,33 @@
         "version.txt"
       ]
     },
-    "Catalog.Contracts/1.0.0": {
+    "TimeZoneConverter/6.1.0": {
+      "sha512": "UGdtyKWJqXXinyvGB9X6NVoIYbTAidoZYmn3aXzxeEYC9+OL8vF36eDt1qjb6RqBkWDl4v7iE84ecI+dFhA80A==",
+      "type": "package",
+      "path": "timezoneconverter/6.1.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net462/TimeZoneConverter.dll",
+        "lib/net462/TimeZoneConverter.xml",
+        "lib/net6.0/TimeZoneConverter.dll",
+        "lib/net6.0/TimeZoneConverter.xml",
+        "lib/netstandard2.0/TimeZoneConverter.dll",
+        "lib/netstandard2.0/TimeZoneConverter.xml",
+        "timezoneconverter.6.1.0.nupkg.sha512",
+        "timezoneconverter.nuspec"
+      ]
+    },
+    "Core/1.0.0": {
       "type": "project",
-      "path": "../Catalog.Contracts/Catalog.Contracts.csproj",
-      "msbuildProject": "../Catalog.Contracts/Catalog.Contracts.csproj"
+      "path": "../Core/Core.csproj",
+      "msbuildProject": "../Core/Core.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net9.0": [
       "Azure.Identity >= 1.13.0-beta.1",
-      "Catalog.Contracts >= 1.0.0",
+      "Core >= 1.0.0",
       "Elastic.Apm.Elasticsearch >= 1.28.0",
       "Elastic.Clients.Elasticsearch >= 8.14.8",
       "EntityFramework >= 6.5.1",
@@ -7416,9 +7788,10 @@
       "MediatR >= 12.4.0",
       "Microsoft.EntityFrameworkCore.SqlServer >= 9.0.0-preview.7.24405.3",
       "Microsoft.EntityFrameworkCore.Tools >= 9.0.0-preview.6.24327.4",
+      "Microsoft.Extensions.Caching.StackExchangeRedis >= 9.0.0-preview.7.24406.2",
       "Microsoft.Extensions.Hosting >= 9.0.0-preview.6.24327.7",
-      "Microsoft.Extensions.Http >= 8.0.0",
       "Polly >= 8.4.1",
+      "StackExchange.Redis >= 2.8.12",
       "System.Drawing.Common >= 9.0.0-preview.7.24405.4"
     ]
   },
@@ -7429,11 +7802,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Search.Worker\\Search.Worker.csproj",
+      "projectUniqueName": "C:\\Santai.MVP\\Search.Worker\\Search.Worker.csproj",
       "projectName": "Search.Worker",
-      "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Search.Worker\\Search.Worker.csproj",
+      "projectPath": "C:\\Santai.MVP\\Search.Worker\\Search.Worker.csproj",
       "packagesPath": "C:\\Users\\erise\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Search.Worker\\obj\\",
+      "outputPath": "C:\\Santai.MVP\\Search.Worker\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -7455,8 +7828,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Catalog.Contracts\\Catalog.Contracts.csproj": {
-              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.Mvp\\Catalog.Contracts\\Catalog.Contracts.csproj"
+            "C:\\Santai.MVP\\Core\\Core.csproj": {
+              "projectPath": "C:\\Santai.MVP\\Core\\Core.csproj"
             }
           }
         }
@@ -7526,17 +7899,21 @@
             "target": "Package",
             "version": "[9.0.0-preview.6.24327.4, )"
           },
+          "Microsoft.Extensions.Caching.StackExchangeRedis": {
+            "target": "Package",
+            "version": "[9.0.0-preview.7.24406.2, )"
+          },
           "Microsoft.Extensions.Hosting": {
             "target": "Package",
             "version": "[9.0.0-preview.6.24327.7, )"
           },
-          "Microsoft.Extensions.Http": {
-            "target": "Package",
-            "version": "[8.0.0, )"
-          },
           "Polly": {
             "target": "Package",
             "version": "[8.4.1, )"
+          },
+          "StackExchange.Redis": {
+            "target": "Package",
+            "version": "[2.8.12, )"
           },
           "System.Drawing.Common": {
             "target": "Package",

@@ -1,0 +1,15 @@
+﻿using System.Text.RegularExpressions;
+
+namespace Core.Validations;
+
+public static partial class PhoneNumberValidation
+{
+    [GeneratedRegex("^\\+[1-9]\\d{1,14}$")]
+    private static partial Regex PhoneNumberRegex();
+
+    public static bool IsValidPhoneNumber(string phoneNumber)
+    { 
+        Regex regex = PhoneNumberRegex();
+        return regex.IsMatch(phoneNumber);
+    } 
+}

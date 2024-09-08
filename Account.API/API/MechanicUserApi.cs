@@ -18,14 +18,15 @@ using Account.API.Applications.Queries.GetMechanicUserById;
 using Account.API.Applications.Queries.GetNationalIdentityByMechanicUserId;
 using Account.API.Applications.Queries.GetPaginatedMechanicCertificationByUserId;
 using Account.API.Applications.Queries.GetPaginatedMechanicUser;
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
 using Account.API.CustomAttributes;
 using Account.API.Extensions;
-using Account.API.Infrastructures;
-using Account.API.Options;
-using Account.API.SeedWork;
-using Account.API.Services;
-using FluentValidation;
-using Identity.Contracts.Enumerations;
+using Core.Configurations;
+using Core.Enumerations;
+using Core.Messages;
+using Core.SeedWorks;
+using FluentValidation; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 namespace Account.API.API;
@@ -618,7 +619,7 @@ public static class MechanicUserApi
     private static async Task<IResult> GetMechanicUserById(
         Guid mechanicUserId,
         [FromServices] IKeyManagementService _kms,
-        [FromServices] IOptionsMonitor<KeyManagementServiceOption> options,
+        [FromServices] IOptionsMonitor<EncryptionConfiguration> options,
         [FromServices] ApplicationService service,
         [FromServices] IUserInfoService userInfoService)
     {

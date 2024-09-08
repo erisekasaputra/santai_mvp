@@ -1,6 +1,6 @@
-﻿using Catalog.API.Configurations;
+﻿using Catalog.API.Applications.Services.Interfaces; 
 using Catalog.API.CustomAttributes;
-using Catalog.API.Services.Interfaces;
+using Core.Configurations;
 using Microsoft.Extensions.Options;
 
 namespace Catalog.API.Middewares;
@@ -24,7 +24,7 @@ public class IdempotencyMiddleware
         {
             using var scope = _serviceProvider.CreateScope();
             var cacheService = scope.ServiceProvider.GetRequiredService<ICacheService>();
-            var idempotencyOptions = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<IdempotencyOptions>>();
+            var idempotencyOptions = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<IdempotencyConfiguration>>();
 
             var endPoint = context.GetEndpoint();
 

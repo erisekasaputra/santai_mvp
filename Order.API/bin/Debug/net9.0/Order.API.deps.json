@@ -13,11 +13,11 @@
           "AWSSDK.KeyManagementService": "4.0.0-preview.2",
           "AWSSDK.S3": "4.0.0-preview.2",
           "Azure.Identity": "1.13.0-beta.1",
+          "Core": "1.0.0",
           "EntityFramework": "6.5.1",
           "FluentValidation": "11.9.2",
           "FluentValidation.AspNetCore": "11.3.0",
           "FluentValidation.DependencyInjectionExtensions": "11.9.2",
-          "Identity.Contracts": "1.0.0",
           "JWT": "11.0.0-beta2",
           "MassTransit": "8.2.6-develop.1976",
           "MassTransit.AmazonSQS": "8.2.6-develop.1976",
@@ -38,7 +38,6 @@
           "Microsoft.Identity.Client": "4.64.0",
           "Order.Domain": "1.0.0",
           "Order.Infrastructure": "1.0.0",
-          "SantaiClaimType": "1.0.0",
           "StackExchange.Redis": "2.8.12",
           "System.Drawing.Common": "9.0.0-preview.7.24405.4",
           "System.IdentityModel.Tokens.Jwt": "8.0.2",
@@ -375,6 +374,12 @@
       "Microsoft.AspNetCore.Cryptography.KeyDerivation/9.0.0-preview.7.24406.2": {
         "dependencies": {
           "Microsoft.AspNetCore.Cryptography.Internal": "9.0.0-preview.7.24406.2"
+        }
+      },
+      "Microsoft.AspNetCore.Http.Features/5.0.17": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "9.0.0-preview.7.24405.7",
+          "System.IO.Pipelines": "9.0.0-preview.7.24405.7"
         }
       },
       "Microsoft.AspNetCore.Identity.EntityFrameworkCore/9.0.0-preview.7.24406.2": {
@@ -911,12 +916,35 @@
           }
         }
       },
+      "Microsoft.Extensions.Configuration/9.0.0-preview.7.24405.7": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Primitives": "9.0.0-preview.7.24405.7"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Configuration.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.40507"
+          }
+        }
+      },
       "Microsoft.Extensions.Configuration.Abstractions/9.0.0-preview.7.24405.7": {
         "dependencies": {
           "Microsoft.Extensions.Primitives": "9.0.0-preview.7.24405.7"
         },
         "runtime": {
           "lib/net9.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.40507"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.Binder/9.0.0-preview.7.24405.7": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.0-preview.7.24405.7"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Configuration.Binder.dll": {
             "assemblyVersion": "9.0.0.0",
             "fileVersion": "9.0.24.40507"
           }
@@ -953,11 +981,30 @@
           }
         }
       },
-      "Microsoft.Extensions.Diagnostics.Abstractions/8.0.0": {
+      "Microsoft.Extensions.Diagnostics/9.0.0-preview.7.24405.7": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Diagnostics.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "9.0.0-preview.7.24405.7"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Diagnostics.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.40507"
+          }
+        }
+      },
+      "Microsoft.Extensions.Diagnostics.Abstractions/9.0.0-preview.7.24405.7": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-preview.7.24405.7",
           "Microsoft.Extensions.Options": "9.0.0-preview.7.24405.7",
           "System.Diagnostics.DiagnosticSource": "9.0.0-preview.7.24405.7"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Diagnostics.Abstractions.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.40507"
+          }
         }
       },
       "Microsoft.Extensions.Diagnostics.HealthChecks/8.0.0": {
@@ -978,9 +1025,25 @@
         "dependencies": {
           "Microsoft.Extensions.Configuration.Abstractions": "9.0.0-preview.7.24405.7",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-preview.7.24405.7",
-          "Microsoft.Extensions.Diagnostics.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Diagnostics.Abstractions": "9.0.0-preview.7.24405.7",
           "Microsoft.Extensions.FileProviders.Abstractions": "8.0.0",
           "Microsoft.Extensions.Logging.Abstractions": "9.0.0-preview.7.24405.7"
+        }
+      },
+      "Microsoft.Extensions.Http/9.0.0-preview.7.24405.7": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Diagnostics": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Logging": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Options": "9.0.0-preview.7.24405.7"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Http.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.40507"
+          }
         }
       },
       "Microsoft.Extensions.Identity.Core/9.0.0-preview.7.24406.2": {
@@ -1029,6 +1092,21 @@
         },
         "runtime": {
           "lib/net9.0/Microsoft.Extensions.Options.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.40507"
+          }
+        }
+      },
+      "Microsoft.Extensions.Options.ConfigurationExtensions/9.0.0-preview.7.24405.7": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Configuration.Binder": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Options": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Primitives": "9.0.0-preview.7.24405.7"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Options.ConfigurationExtensions.dll": {
             "assemblyVersion": "9.0.0.0",
             "fileVersion": "9.0.24.40507"
           }
@@ -1525,12 +1603,28 @@
           }
         }
       },
-      "Identity.Contracts/1.0.0": {
+      "Core/1.0.0": {
         "dependencies": {
-          "MediatR": "12.4.0"
+          "Azure.Identity": "1.13.0-beta.1",
+          "EntityFramework": "6.5.1",
+          "FluentValidation": "11.9.2",
+          "FluentValidation.AspNetCore": "11.3.0",
+          "FluentValidation.DependencyInjectionExtensions": "11.9.2",
+          "MediatR": "12.4.0",
+          "Microsoft.AspNetCore.Http.Features": "5.0.17",
+          "Microsoft.AspNetCore.OutputCaching.StackExchangeRedis": "9.0.0-preview.7.24406.2",
+          "Microsoft.EntityFrameworkCore": "9.0.0-preview.7.24405.3",
+          "Microsoft.EntityFrameworkCore.SqlServer": "9.0.0-preview.7.24405.3",
+          "Microsoft.Extensions.Caching.StackExchangeRedis": "9.0.0-preview.7.24406.2",
+          "Microsoft.Extensions.Http": "9.0.0-preview.7.24405.7",
+          "Microsoft.Identity.Client": "4.64.0",
+          "StackExchange.Redis": "2.8.12",
+          "System.Drawing.Common": "9.0.0-preview.7.24405.4",
+          "TimeZoneConverter": "6.1.0",
+          "libphonenumber-csharp": "8.13.45"
         },
         "runtime": {
-          "Identity.Contracts.dll": {
+          "Core.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1538,7 +1632,7 @@
       },
       "Order.Domain/1.0.0": {
         "dependencies": {
-          "Identity.Contracts": "1.0.0",
+          "Core": "1.0.0",
           "MediatR": "12.4.0"
         },
         "runtime": {
@@ -1552,13 +1646,13 @@
         "dependencies": {
           "Azure.Identity": "1.13.0-beta.1",
           "EntityFramework": "6.5.1",
-          "Identity.Contracts": "1.0.0",
           "MassTransit.EntityFramework": "8.2.6-develop.1976",
           "MassTransit.EntityFrameworkCore": "8.2.6-develop.1976",
           "MediatR": "12.4.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "9.0.0-preview.7.24406.2",
           "Microsoft.EntityFrameworkCore": "9.0.0-preview.7.24405.3",
           "Microsoft.EntityFrameworkCore.SqlServer": "9.0.0-preview.7.24405.3",
+          "Microsoft.Extensions.Caching.StackExchangeRedis": "9.0.0-preview.7.24406.2",
           "Microsoft.Identity.Client": "4.64.0",
           "Order.Domain": "1.0.0",
           "StackExchange.Redis": "2.8.12",
@@ -1566,14 +1660,6 @@
         },
         "runtime": {
           "Order.Infrastructure.dll": {
-            "assemblyVersion": "1.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
-      },
-      "SantaiClaimType/1.0.0": {
-        "runtime": {
-          "SantaiClaimType.dll": {
             "assemblyVersion": "1.0.0",
             "fileVersion": "1.0.0.0"
           }
@@ -1790,6 +1876,13 @@
       "path": "microsoft.aspnetcore.cryptography.keyderivation/9.0.0-preview.7.24406.2",
       "hashPath": "microsoft.aspnetcore.cryptography.keyderivation.9.0.0-preview.7.24406.2.nupkg.sha512"
     },
+    "Microsoft.AspNetCore.Http.Features/5.0.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3jG2xS+dx8DDCGV/F+STdPTg89lX3ao3dF/VEPvJaz3wzBIjuadipTtYNEXDIVuOPZwb6jdmhrX9jkzOIBm5cw==",
+      "path": "microsoft.aspnetcore.http.features/5.0.17",
+      "hashPath": "microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512"
+    },
     "Microsoft.AspNetCore.Identity.EntityFrameworkCore/9.0.0-preview.7.24406.2": {
       "type": "package",
       "serviceable": true,
@@ -1965,12 +2058,26 @@
       "path": "microsoft.extensions.caching.stackexchangeredis/9.0.0-preview.7.24406.2",
       "hashPath": "microsoft.extensions.caching.stackexchangeredis.9.0.0-preview.7.24406.2.nupkg.sha512"
     },
+    "Microsoft.Extensions.Configuration/9.0.0-preview.7.24405.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UZGC/QiEjoA2ew5BWe5KYWxMRICwuOvzfASzP2ExuOKQWgr2IAuvhnP3OGXOuodpBDuP3rbqIfs1JbGvBqTfXw==",
+      "path": "microsoft.extensions.configuration/9.0.0-preview.7.24405.7",
+      "hashPath": "microsoft.extensions.configuration.9.0.0-preview.7.24405.7.nupkg.sha512"
+    },
     "Microsoft.Extensions.Configuration.Abstractions/9.0.0-preview.7.24405.7": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-js6hxltWDt6xiLuNifDZ8EShtPf9z0XW7ztUPQduSSpbctqbtCwifEDZdL+lUy72aQ1lKGl8hNHiI0Xygwc29Q==",
       "path": "microsoft.extensions.configuration.abstractions/9.0.0-preview.7.24405.7",
       "hashPath": "microsoft.extensions.configuration.abstractions.9.0.0-preview.7.24405.7.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.Binder/9.0.0-preview.7.24405.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-BvGWJRKXBAHh+x2/xk4ktchXnTIFMC9eclAtmS7uVM0NAW3jgeTuB4Aca3BbOgWjfxXFJTYwb3dZrvdcWWP/Uw==",
+      "path": "microsoft.extensions.configuration.binder/9.0.0-preview.7.24405.7",
+      "hashPath": "microsoft.extensions.configuration.binder.9.0.0-preview.7.24405.7.nupkg.sha512"
     },
     "Microsoft.Extensions.DependencyInjection/9.0.0-preview.7.24405.7": {
       "type": "package",
@@ -1993,12 +2100,19 @@
       "path": "microsoft.extensions.dependencymodel/9.0.0-preview.7.24405.7",
       "hashPath": "microsoft.extensions.dependencymodel.9.0.0-preview.7.24405.7.nupkg.sha512"
     },
-    "Microsoft.Extensions.Diagnostics.Abstractions/8.0.0": {
+    "Microsoft.Extensions.Diagnostics/9.0.0-preview.7.24405.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-JHYCQG7HmugNYUhOl368g+NMxYE/N/AiclCYRNlgCY9eVyiBkOHMwK4x60RYMxv9EL3+rmj1mqHvdCiPpC+D4Q==",
-      "path": "microsoft.extensions.diagnostics.abstractions/8.0.0",
-      "hashPath": "microsoft.extensions.diagnostics.abstractions.8.0.0.nupkg.sha512"
+      "sha512": "sha512-d2mRKx2cPIG+pKQFa808UmBjPh0KKIW7FboO4lruee4cIj8wtaIWVPQSDP8x7wbhYW/OdykHB4USpOChu906Vw==",
+      "path": "microsoft.extensions.diagnostics/9.0.0-preview.7.24405.7",
+      "hashPath": "microsoft.extensions.diagnostics.9.0.0-preview.7.24405.7.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Diagnostics.Abstractions/9.0.0-preview.7.24405.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zWzK2Rb/a1D4iqGDrWj1hwHaFs/bRx1yG/susTA55+FZu96nAcR+yJcq78WTp1H/n39N8AK29FtQmOeSI4LN5Q==",
+      "path": "microsoft.extensions.diagnostics.abstractions/9.0.0-preview.7.24405.7",
+      "hashPath": "microsoft.extensions.diagnostics.abstractions.9.0.0-preview.7.24405.7.nupkg.sha512"
     },
     "Microsoft.Extensions.Diagnostics.HealthChecks/8.0.0": {
       "type": "package",
@@ -2027,6 +2141,13 @@
       "sha512": "sha512-AG7HWwVRdCHlaA++1oKDxLsXIBxmDpMPb3VoyOoAghEWnkUvEAdYQUwnV4jJbAaa/nMYNiEh5ByoLauZBEiovg==",
       "path": "microsoft.extensions.hosting.abstractions/8.0.0",
       "hashPath": "microsoft.extensions.hosting.abstractions.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Http/9.0.0-preview.7.24405.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-1o30Xk22EUiKym+jjMWnCQ5VoWBnSog18qqNPn9U4Z0qqpvhj9pZH0UiaHkBDlyyChHHTMS8rQK5mOfj+GfCXg==",
+      "path": "microsoft.extensions.http/9.0.0-preview.7.24405.7",
+      "hashPath": "microsoft.extensions.http.9.0.0-preview.7.24405.7.nupkg.sha512"
     },
     "Microsoft.Extensions.Identity.Core/9.0.0-preview.7.24406.2": {
       "type": "package",
@@ -2062,6 +2183,13 @@
       "sha512": "sha512-2Nx6IYXoDv8DdXe0TlmPb3h67TZD+XPeydZxk6MxC30GROYG+RWEaXLGHNDnEJPmii582GcEwkMaMZpZMa4UgA==",
       "path": "microsoft.extensions.options/9.0.0-preview.7.24405.7",
       "hashPath": "microsoft.extensions.options.9.0.0-preview.7.24405.7.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Options.ConfigurationExtensions/9.0.0-preview.7.24405.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-My88HaR13/OK42/5ijFG7h6iAbrjAmfbhvmzVRyQkHbXV552BOe+5NABPDKOW3HUF7ePcwZ0QmlWgnH1ioqgLg==",
+      "path": "microsoft.extensions.options.configurationextensions/9.0.0-preview.7.24405.7",
+      "hashPath": "microsoft.extensions.options.configurationextensions.9.0.0-preview.7.24405.7.nupkg.sha512"
     },
     "Microsoft.Extensions.Primitives/9.0.0-preview.7.24405.7": {
       "type": "package",
@@ -2455,7 +2583,7 @@
       "path": "timezoneconverter/6.1.0",
       "hashPath": "timezoneconverter.6.1.0.nupkg.sha512"
     },
-    "Identity.Contracts/1.0.0": {
+    "Core/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -2466,11 +2594,6 @@
       "sha512": ""
     },
     "Order.Infrastructure/1.0.0": {
-      "type": "project",
-      "serviceable": false,
-      "sha512": ""
-    },
-    "SantaiClaimType/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

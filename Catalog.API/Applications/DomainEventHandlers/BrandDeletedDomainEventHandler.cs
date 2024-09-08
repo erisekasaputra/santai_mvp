@@ -1,6 +1,7 @@
-﻿using Catalog.Contracts;
+﻿ 
 using Catalog.Domain.Events;
 using Catalog.Domain.SeedWork;
+using Core.Events;
 using MediatR;
 
 namespace Catalog.API.Applications.DomainEventHandlers;

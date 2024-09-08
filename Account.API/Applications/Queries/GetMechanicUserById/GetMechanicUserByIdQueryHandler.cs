@@ -1,10 +1,9 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Infrastructures;
-using Account.API.Mapper;
-using Account.API.Options;
-using Account.API.SeedWork;
-using Account.API.Services;
-using Account.API.Utilities;
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
+using Account.API.Extensions;
+using Core.Results;
+using Core.Messages;
 using Account.Domain.Aggregates.DrivingLicenseAggregate;
 using Account.Domain.Aggregates.NationalIdentityAggregate;
 using Account.Domain.Enumerations;
@@ -12,6 +11,7 @@ using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Options;
+using Core.Configurations;
 
 namespace Account.API.Applications.Queries.GetMechanicUserById;
 
@@ -20,13 +20,13 @@ public class GetMechanicUserByIdQueryHandler(
     ApplicationService service,
     IKeyManagementService kmsClient,
     ICacheService cacheService,
-    IOptionsMonitor<InMemoryDatabaseOption> cacheOption) : IRequestHandler<GetMechanicUserByIdQuery, Result>
+    IOptionsMonitor<CacheConfiguration> cacheOption) : IRequestHandler<GetMechanicUserByIdQuery, Result>
 { 
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _appService = service;
     private readonly IKeyManagementService _kmsClient = kmsClient;
     private readonly ICacheService _cacheService = cacheService;
-    private readonly IOptionsMonitor<InMemoryDatabaseOption> _cacheOptions = cacheOption;
+    private readonly IOptionsMonitor<CacheConfiguration> _cacheOptions = cacheOption;
 
     public async Task<Result> Handle(GetMechanicUserByIdQuery request, CancellationToken cancellationToken)
     {

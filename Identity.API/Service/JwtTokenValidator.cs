@@ -1,5 +1,6 @@
-﻿using Identity.API.Abstraction;
-using Identity.API.Configs;
+﻿
+using Core.Configurations;
+using Identity.API.Service.Interfaces;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -14,7 +15,7 @@ public class JwtTokenValidator : IJwtTokenValidator
     private readonly string _audience;
     private readonly string _key;
 
-    public JwtTokenValidator(IOptionsMonitor<JwtConfig> jwtConfigs)
+    public JwtTokenValidator(IOptionsMonitor<JwtConfiguration> jwtConfigs)
     { 
         _issuer = jwtConfigs.CurrentValue.Issuer;
         _audience = jwtConfigs.CurrentValue.Audience;

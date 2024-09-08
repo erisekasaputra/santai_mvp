@@ -1,6 +1,7 @@
-﻿using Catalog.API.SeedWork;
+﻿
+using Core.Results;
 using MediatR;
 
 namespace Catalog.API.Applications.Commands.Items.DeleteItem;
 
-public record DeleteItemCommand(Guid Id) : IRequest<Result<Unit>>;
+public record DeleteItemCommand(Guid Id) : IRequest<Result>;

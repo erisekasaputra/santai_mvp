@@ -1,16 +1,16 @@
-﻿using Catalog.API.DTOs.ItemStock;
-using Catalog.API.SeedWork;
-using Catalog.Domain.SeedWork;
+﻿using Catalog.Domain.SeedWork;
 using MediatR;
 using System.Data;
 using Polly;
 using Polly.Retry;
-using Catalog.API.Services;
 using Microsoft.EntityFrameworkCore;
+using Catalog.API.Applications.Services;
+using Core.Results;
+using Catalog.API.Applications.Dtos.ItemStock;
 
 namespace Catalog.API.Applications.Commands.Items.ReduceItemStockQuantity;
 
-public class ReduceItemStockQuantityCommandHandler : IRequestHandler<ReduceItemStockQuantityCommand, Result<IEnumerable<ItemStockDto>>>
+public class ReduceItemStockQuantityCommandHandler : IRequestHandler<ReduceItemStockQuantityCommand, Result>
 {
     private readonly AsyncRetryPolicy _asyncRetryPolicy;
     private readonly IUnitOfWork _unitOfWork;
@@ -29,7 +29,7 @@ public class ReduceItemStockQuantityCommandHandler : IRequestHandler<ReduceItemS
                                         service.Logger.LogInformation("Retry {retryCount} encountered an exception: {Message}. Waiting {timeSpan} before next retry.", retryCount, exception.Message, timeSpan));
     }
 
-    public async Task<Result<IEnumerable<ItemStockDto>>> Handle(ReduceItemStockQuantityCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(ReduceItemStockQuantityCommand request, CancellationToken cancellationToken)
     {
         var result = await _asyncRetryPolicy.ExecuteAsync(async () =>
         {
@@ -58,7 +58,7 @@ public class ReduceItemStockQuantityCommandHandler : IRequestHandler<ReduceItemS
 
                     await _unitOfWork.RollbackTransactionAsync(cancellationToken);
 
-                    return Result<IEnumerable<ItemStockDto>>.Failure(message, 404).WithData(missingItemRequests.Select(x =>
+                    return Result.Failure(message, ResponseStatus.BadRequest).WithData(missingItemRequests.Select(x =>
                     {
                         return new ItemStockDto(x.ItemId, 0, "Data not found");
                     }).ToList());
@@ -83,7 +83,7 @@ public class ReduceItemStockQuantityCommandHandler : IRequestHandler<ReduceItemS
                 if (insufficientItem == 0)
                 {
                     await _unitOfWork.CommitTransactionAsync(cancellationToken);
-                    return Result<IEnumerable<ItemStockDto>>.SuccessResult([], [], 200);
+                    return Result.Success(null, ResponseStatus.Ok);
                 }
 
                 var messageInsufficient = insufficientItem == 1
@@ -91,7 +91,7 @@ public class ReduceItemStockQuantityCommandHandler : IRequestHandler<ReduceItemS
                        : $"There are {insufficientItem} error items";
 
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                return Result<IEnumerable<ItemStockDto>>.Failure(messageInsufficient, 400).WithData(itemErrors);
+                return Result.Failure(messageInsufficient, ResponseStatus.BadRequest).WithData(itemErrors);
             }
             catch (DBConcurrencyException)
             {

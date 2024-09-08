@@ -1,36 +1,36 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Extensions;
-using Account.API.Options;
-using Account.API.SeedWork;
-using Account.API.Services;
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
+using Core.Results;
 using Account.Domain.Aggregates.FleetAggregate;
 using Account.Domain.Enumerations;
 using Account.Domain.Exceptions;
-using Account.Domain.SeedWork;
-using Identity.Contracts.Enumerations;
+using Account.Domain.SeedWork; 
 using MediatR;
 using Microsoft.Extensions.Options;
 using System.Data;
+using Core.Configurations;
+using Core.Extensions;
+using Core.Enumerations;
+using Core.Messages;
 
 namespace Account.API.Applications.Commands.FleetCommand.CreateFleetByUserId;
 
 public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUserIdCommand, Result>
 { 
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly IOptionsMonitor<ReferralProgramOption> _referralOptions;
+    private readonly IUnitOfWork _unitOfWork; 
     private readonly ApplicationService _service;
     private readonly IKeyManagementService _kmsClient;
     private readonly IHashService _hashService;
 
     public CreateFleetByUserIdCommandHandler(
       IUnitOfWork unitOfWork,
-      IOptionsMonitor<ReferralProgramOption> referralOptions,
+      IOptionsMonitor<ReferralProgramConfiguration> referralOptions,
       ApplicationService service,
       IKeyManagementService kmsClient,
       IHashService hashService)
     {
-        _unitOfWork = unitOfWork;
-        _referralOptions = referralOptions;
+        _unitOfWork = unitOfWork; 
         _service = service;
         _kmsClient = kmsClient;
         _hashService = hashService;

@@ -1,12 +1,12 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Extensions;
-using Account.API.Infrastructures;
-using Account.API.SeedWork;
-using Account.API.Services;
-using Account.Domain.Aggregates.DrivingLicenseAggregate;
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
+using Core.Results;
+using Core.Messages;
 using Account.Domain.Aggregates.FleetAggregate;
 using Account.Domain.SeedWork;
 using MediatR;
+using Core.Extensions;
 
 namespace Account.API.Applications.Queries.GetPaginatedFleetByUserId;
 

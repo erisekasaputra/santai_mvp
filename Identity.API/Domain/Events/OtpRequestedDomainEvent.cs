@@ -1,4 +1,4 @@
-﻿using Identity.Contracts.Enumerations;
+﻿using Core.Enumerations; 
 using MediatR;
 
 namespace Identity.API.Domain.Events;

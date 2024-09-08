@@ -1,13 +1,13 @@
-﻿using Catalog.API.SeedWork;
-using Catalog.Domain.SeedWork;
+﻿using Catalog.Domain.SeedWork;
+using Core.Results;
 using MediatR;
 
 namespace Catalog.API.Applications.Commands.Categories.DeleteCategory;
 
-public class DeleteCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteCategoryCommand, Result<Unit>>
+public class DeleteCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteCategoryCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    public async Task<Result<Unit>> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
     {
         var item = await _unitOfWork.Categories.GetCategoryByIdAsync(request.Id);
 
@@ -20,6 +20,6 @@ public class DeleteCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHand
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        return Result<Unit>.SuccessResult(Unit.Value, [], 204);
+        return Result.Success(Unit.Value, ResponseStatus.NoContent);
     }
 }

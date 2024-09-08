@@ -1,36 +1,36 @@
-﻿using Catalog.API.Extensions;
-using Catalog.API.SeedWork;
+﻿using Catalog.API.Extensions; 
 using Catalog.Domain.SeedWork;
+using Core.Results;
 using MediatR;
 
 namespace Catalog.API.Applications.Commands.Items.UpdateItem;
 
-public class UpdateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateItemCommand, Result<Unit>>
+public class UpdateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<UpdateItemCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    public async Task<Result<Unit>> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(UpdateItemCommand request, CancellationToken cancellationToken)
     {
         var category = await _unitOfWork.Categories.GetCategoryByIdAsync(request.CategoryId);
         if (category is null)
         {
-            return Result<Unit>.Failure($"Category with id {request.CategoryId} is not found", 404);
+            return Result.Failure($"Category with id {request.CategoryId} is not found", ResponseStatus.NotFound);
         }
 
         var brand = await _unitOfWork.Brands.GetBrandByIdAsync(request.BrandId);
         if (brand is null)
         {
-            return Result<Unit>.Failure($"Brand with id {request.BrandId} is not found", 404);
+            return Result.Failure($"Brand with id {request.BrandId} is not found", ResponseStatus.NotFound);
         }
 
         var item = await _unitOfWork.Items.GetItemByIdAsync(request.Id);
         if (item is null)
         {
-            return Result<Unit>.Failure($"Item with id {request.Id} is not found", 404);
+            return Result.Failure($"Item with id {request.Id} is not found", ResponseStatus.NotFound);
         }
 
         if (item.IsDeleted)
         {
-            return Result<Unit>.Failure($"Item with id {request.Id} is not found or it has been deleted", 404);
+            return Result.Failure($"Item with id {request.Id} is not found or it has been deleted", ResponseStatus.NotFound);
         }
 
         var ownerReviews = request.OwnerReviews.ToOwnerReviews().ToList(); 
@@ -52,6 +52,6 @@ public class UpdateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
         _unitOfWork.Items.UpdateItem(item);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        return Result<Unit>.SuccessResult(Unit.Value, [], 204);
+        return Result.Success(Unit.Value, ResponseStatus.NoContent);
     }
 }

@@ -1,10 +1,11 @@
-﻿using Identity.API.Abstraction;
-using Identity.API.Configs;
+﻿
+using Core.Configurations;
 using Identity.API.Domain.Entities;
 using Identity.API.Enumerations;
 using Identity.API.SeedWork;
+using Identity.API.Service.Interfaces;
 using Identity.API.Utilities;
-using Microsoft.Extensions.Options; 
+using Microsoft.Extensions.Options;
 
 namespace Identity.API.Service;
 
@@ -12,8 +13,8 @@ public class OtpService : IOtpService
 {
     const int treshold = 2; 
     private readonly ICacheService _cacheService;
-    private readonly OtpConfig _otpConfig;
-    public OtpService(ICacheService cacheService, IOptionsMonitor<OtpConfig> otpConfig)
+    private readonly OtpConfiguration _otpConfig;
+    public OtpService(ICacheService cacheService, IOptionsMonitor<OtpConfiguration> otpConfig)
     {
         _cacheService = cacheService;
         _otpConfig = otpConfig.CurrentValue;

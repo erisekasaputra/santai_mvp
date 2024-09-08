@@ -1,7 +1,7 @@
-﻿using MassTransit.Transports;
+﻿
+using Core.Events;
 using MassTransit;
-using MediatR;
-using Identity.Contracts.IntegrationEvent;
+using MediatR; 
 
 namespace Identity.API.IntegrationEvent.EventHandlers;
 

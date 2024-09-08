@@ -1,20 +1,20 @@
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\bin\Debug\net9.0\Account.Infrastructure.deps.json
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\bin\Debug\net9.0\Account.Infrastructure.runtimeconfig.json
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\bin\Debug\net9.0\Account.Infrastructure.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\bin\Debug\net9.0\Account.Infrastructure.pdb
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\bin\Debug\net9.0\Account.Domain.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\bin\Debug\net9.0\Identity.Contracts.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\bin\Debug\net9.0\Account.Domain.pdb
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\bin\Debug\net9.0\Identity.Contracts.pdb
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.csproj.AssemblyReference.cache
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.AssemblyInfoInputs.cache
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.AssemblyInfo.cs
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.csproj.CoreCompileInputs.cache
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.sourcelink.json
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\obj\Debug\net9.0\Account..8D276FD3.Up2Date
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\obj\Debug\net9.0\refint\Account.Infrastructure.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.pdb
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.genruntimeconfig.cache
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.Infrastructure\obj\Debug\net9.0\ref\Account.Infrastructure.dll
+C:\Santai.MVP\Account.Infrastructure\bin\Debug\net9.0\Account.Infrastructure.deps.json
+C:\Santai.MVP\Account.Infrastructure\bin\Debug\net9.0\Account.Infrastructure.runtimeconfig.json
+C:\Santai.MVP\Account.Infrastructure\bin\Debug\net9.0\Account.Infrastructure.dll
+C:\Santai.MVP\Account.Infrastructure\bin\Debug\net9.0\Account.Infrastructure.pdb
+C:\Santai.MVP\Account.Infrastructure\bin\Debug\net9.0\Account.Domain.dll
+C:\Santai.MVP\Account.Infrastructure\bin\Debug\net9.0\Core.dll
+C:\Santai.MVP\Account.Infrastructure\bin\Debug\net9.0\Account.Domain.pdb
+C:\Santai.MVP\Account.Infrastructure\bin\Debug\net9.0\Core.pdb
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.csproj.AssemblyReference.cache
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.AssemblyInfoInputs.cache
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.AssemblyInfo.cs
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.sourcelink.json
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account..8D276FD3.Up2Date
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.dll
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\refint\Account.Infrastructure.dll
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.pdb
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.genruntimeconfig.cache
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\ref\Account.Infrastructure.dll

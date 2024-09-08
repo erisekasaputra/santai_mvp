@@ -1,8 +1,9 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Infrastructures;
-using Account.API.Mapper;
-using Account.API.SeedWork;
-using Account.API.Services;
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
+using Account.API.Extensions;
+using Core.Results;
+using Core.Messages;
 using Account.Domain.Aggregates.CertificationAggregate;
 using Account.Domain.SeedWork;
 using MediatR;
@@ -41,7 +42,7 @@ public class GetPaginatedMechanicCertificationByUserIdQueryHandler(
                 return Result.Failure($"Mechanic user does not have any certification record", ResponseStatus.NotFound);
             }
 
-            var paginatedResponse = new PaginatedItemReponseDto<CertificationResponseDto>(
+            var paginatedResponse = new PaginatedResponseDto<CertificationResponseDto>(
                 request.PageNumber,
                 request.PageSize,
                 totalCount,

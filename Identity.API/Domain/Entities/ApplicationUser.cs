@@ -1,4 +1,5 @@
-﻿using Identity.Contracts.Enumerations;
+﻿
+using Core.Enumerations;
 using Microsoft.AspNetCore.Identity;
 
 namespace Identity.API.Domain.Entities;

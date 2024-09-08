@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Options;
-using Order.API.Applications.Services.Interfaces;
-using Order.API.Configurations;
+﻿using Core.Configurations;
+using Microsoft.Extensions.Options;
+using Order.API.Applications.Services.Interfaces; 
 using Order.API.CustomAttributes;
 
 namespace Order.API.Middlewares;
@@ -24,7 +24,7 @@ public class IdempotencyMiddleware
         {
             using var scope = _serviceProvider.CreateScope();
             var cacheService = scope.ServiceProvider.GetRequiredService<ICacheService>();
-            var idempotencyOptions = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<IdempotencyOptions>>();
+            var idempotencyOptions = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<IdempotencyConfiguration>>();
 
             var endPoint = context.GetEndpoint();
 

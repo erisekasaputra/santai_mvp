@@ -1,7 +1,8 @@
-﻿using Identity.API.Abstraction;
-using Identity.API.Configs;
-using Identity.API.CustomAttributes;
-using Identity.API.SeedWork;
+﻿
+using Core.Configurations;
+using Core.Results;
+using Identity.API.CustomAttributes; 
+using Identity.API.Service.Interfaces;
 using Microsoft.Extensions.Options;
 
 namespace Identity.API.Middleware;
@@ -25,7 +26,7 @@ public class IdempotencyMiddleware
         {
             using var scope = _serviceProvider.CreateScope();
             var cacheService = scope.ServiceProvider.GetRequiredService<ICacheService>();
-            var idempotencyOptions = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<IdempotencyConfig>>();
+            var idempotencyOptions = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<IdempotencyConfiguration>>();
 
             var endPoint = context.GetEndpoint();
 
@@ -58,7 +59,7 @@ public class IdempotencyMiddleware
                 context.Response.StatusCode = StatusCodes.Status400BadRequest;
                 context.Response.ContentType = "application/json";
 
-                var errorResponse = Result.Failure("Idempotency key is required", 400);
+                var errorResponse = Result.Failure("Idempotency key is required", ResponseStatus.BadRequest);
                 await context.Response.WriteAsJsonAsync(errorResponse);
                 return;
             }
@@ -69,7 +70,7 @@ public class IdempotencyMiddleware
             {
                 context.Response.StatusCode = StatusCodes.Status409Conflict;
                 context.Response.ContentType = "application/json";
-                var errorResponse = Result.Failure("Idempotency key is invalid", 400);
+                var errorResponse = Result.Failure("Idempotency key is invalid", ResponseStatus.BadRequest);
                 await context.Response.WriteAsJsonAsync(errorResponse);
                 return;
             }

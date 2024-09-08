@@ -1,7 +1,7 @@
-﻿using Elastic.Clients.Elasticsearch;
+﻿using Core.Configurations;
+using Elastic.Clients.Elasticsearch;
 using Elastic.Transport;
-using Microsoft.Extensions.Options;
-using Search.API.Configurations;
+using Microsoft.Extensions.Options; 
 
 namespace Search.API.Infrastructure; 
 
@@ -19,7 +19,7 @@ public class ElasticsearchContext
 
     public ElasticsearchClient Client => _client;
 
-    public ElasticsearchContext(IOptions<ElasticsearchOptions> options)
+    public ElasticsearchContext(IOptions<ElasticsearchConfiguration> options)
     {
         ArgumentNullException.ThrowIfNull(options.Value);
 

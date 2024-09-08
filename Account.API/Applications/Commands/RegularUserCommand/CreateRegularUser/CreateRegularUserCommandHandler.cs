@@ -1,8 +1,9 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Mapper;
-using Account.API.Options;
-using Account.API.SeedWork;
-using Account.API.Services;
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
+using Account.API.Extensions;
+using Core.Results;
+using Core.Messages;
 using Account.Domain.Aggregates.ReferredAggregate;
 using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Enumerations;
@@ -12,19 +13,20 @@ using Account.Domain.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Options;
 using System.Data;
+using Core.Configurations;
 
 namespace Account.API.Applications.Commands.RegularUserCommand.CreateRegularUser;
 
 public class CreateRegularUserCommandHandler(
     IUnitOfWork unitOfWork,
     ApplicationService service,
-    IOptionsMonitor<ReferralProgramOption> referralOptions,
+    IOptionsMonitor<ReferralProgramConfiguration> referralOptions,
     IKeyManagementService kmsClient,
     IHashService hashService) : IRequestHandler<CreateRegularUserCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _appService = service; 
-    private readonly IOptionsMonitor<ReferralProgramOption> _referralOptions = referralOptions;
+    private readonly IOptionsMonitor<ReferralProgramConfiguration> _referralOptions = referralOptions;
     private readonly IKeyManagementService _kmsClient = kmsClient;
     private readonly IHashService _hashClient = hashService;
 
@@ -55,11 +57,15 @@ public class CreateRegularUserCommandHandler(
                   addressRequest.PostalCode,
                   addressRequest.Country);
 
+            if (await _unitOfWork.BaseUsers.GetAnyByIdAsync(request.IdentityId)) 
+            {
+                return Result.Failure("User already registered", ResponseStatus.Conflict);
+            }
+
             var conflicts = await _unitOfWork.BaseUsers.GetByIdentitiesAsNoTrackingAsync(
                     (IdentityParameter.Email, hashedEmail),
-                    (IdentityParameter.PhoneNumber, hashedPhoneNumber)
-                );
-
+                    (IdentityParameter.PhoneNumber, hashedPhoneNumber));
+             
             if (conflicts is not null)
             {
                 return await RollbackAndReturnFailureAsync(UserIdentityConflict(
@@ -124,6 +130,7 @@ public class CreateRegularUserCommandHandler(
             
             return Result.Success(ToRegularUserResponseDto(user, request), ResponseStatus.Created);
         }
+
         catch (DomainException ex)
         {
             return await RollbackAndReturnFailureAsync(Result.Failure(ex.Message, ResponseStatus.BadRequest), cancellationToken);

@@ -1,5 +1,6 @@
-﻿using Catalog.API.DTOs.OwnerReview;
-using Catalog.API.SeedWork;
+﻿
+using Catalog.API.Applications.Dtos.OwnerReview;
+using Core.Results;
 using MediatR;
 
 namespace Catalog.API.Applications.Commands.Items.UpdateItem;
@@ -16,4 +17,4 @@ public record UpdateItemCommand(
     Guid CategoryId,
     Guid BrandId,
     bool IsActive,
-    IEnumerable<OwnerReviewDto> OwnerReviews) : IRequest<Result<Unit>>;
+    IEnumerable<OwnerReviewDto> OwnerReviews) : IRequest<Result>;

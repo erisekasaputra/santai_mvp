@@ -1,4 +1,4 @@
-﻿using Account.API.SeedWork;
+﻿using Core.Results;
 using Account.Domain.Enumerations;
 using MediatR;
 

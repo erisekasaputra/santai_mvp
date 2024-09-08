@@ -1,13 +1,14 @@
-﻿using Catalog.API.SeedWork;
+﻿ 
 using Catalog.Domain.SeedWork;
+using Core.Results;
 using MediatR;
 
 namespace Catalog.API.Applications.Commands.Items.DeleteItem;
 
-public class DeleteItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteItemCommand, Result<Unit>>
+public class DeleteItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeleteItemCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    public async Task<Result<Unit>> Handle(DeleteItemCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(DeleteItemCommand request, CancellationToken cancellationToken)
     {
         var item = await _unitOfWork.Items.GetItemByIdAsync(request.Id);
 
@@ -20,6 +21,6 @@ public class DeleteItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        return Result<Unit>.SuccessResult(Unit.Value, [], 204);
+        return Result.Success(Unit.Value, ResponseStatus.NoContent);
     }
 }

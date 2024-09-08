@@ -18,3 +18,23 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Order.Infrastructure\obj\Debug\net9.0\ref\Order.Infrastructure.dll
+C:\Santai.MVP\Order.Infrastructure\bin\Debug\net9.0\Order.Infrastructure.deps.json
+C:\Santai.MVP\Order.Infrastructure\bin\Debug\net9.0\Order.Infrastructure.runtimeconfig.json
+C:\Santai.MVP\Order.Infrastructure\bin\Debug\net9.0\Order.Infrastructure.dll
+C:\Santai.MVP\Order.Infrastructure\bin\Debug\net9.0\Order.Infrastructure.pdb
+C:\Santai.MVP\Order.Infrastructure\bin\Debug\net9.0\Core.dll
+C:\Santai.MVP\Order.Infrastructure\bin\Debug\net9.0\Order.Domain.dll
+C:\Santai.MVP\Order.Infrastructure\bin\Debug\net9.0\Order.Domain.pdb
+C:\Santai.MVP\Order.Infrastructure\bin\Debug\net9.0\Core.pdb
+C:\Santai.MVP\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.csproj.AssemblyReference.cache
+C:\Santai.MVP\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Santai.MVP\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.AssemblyInfoInputs.cache
+C:\Santai.MVP\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.AssemblyInfo.cs
+C:\Santai.MVP\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Santai.MVP\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.sourcelink.json
+C:\Santai.MVP\Order.Infrastructure\obj\Debug\net9.0\Order.In.AA82CA84.Up2Date
+C:\Santai.MVP\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.dll
+C:\Santai.MVP\Order.Infrastructure\obj\Debug\net9.0\refint\Order.Infrastructure.dll
+C:\Santai.MVP\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.pdb
+C:\Santai.MVP\Order.Infrastructure\obj\Debug\net9.0\Order.Infrastructure.genruntimeconfig.cache
+C:\Santai.MVP\Order.Infrastructure\obj\Debug\net9.0\ref\Order.Infrastructure.dll

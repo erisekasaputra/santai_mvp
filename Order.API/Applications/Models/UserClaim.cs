@@ -1,4 +1,6 @@
-﻿using Identity.Contracts.Enumerations; 
+﻿
+
+using Core.Enumerations;
 
 namespace Order.API.Applications.Models;
 

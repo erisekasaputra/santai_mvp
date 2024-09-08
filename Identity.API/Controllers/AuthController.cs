@@ -1,6 +1,12 @@
-﻿using FluentValidation; 
+﻿ 
+using Core.CustomClaims;
+using Core.Enumerations;
+using Core.Extensions;
+using Core.Messages;
+using Core.Results;
+using Core.Validations;
+using FluentValidation;
 using Google.Apis.Auth;
-using Identity.API.Abstraction;
 using Identity.API.CustomAttributes;
 using Identity.API.Domain.Entities;
 using Identity.API.Domain.Events;
@@ -8,23 +14,21 @@ using Identity.API.Dto;
 using Identity.API.Enumerations;
 using Identity.API.Extensions;
 using Identity.API.Infrastructure;
-using Identity.API.SeedWork;
 using Identity.API.Service;
-using Identity.API.Utilities; 
-using Identity.Contracts.Enumerations;
+using Identity.API.Service.Interfaces;
+using Identity.API.Utilities;
 using MassTransit;
-using MediatR; 
-using Microsoft.AspNetCore.Authorization; 
-using Microsoft.AspNetCore.Identity; 
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using SantaiClaimType; 
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-namespace Identity.API.Controllers;
 
+namespace Identity.API.Controllers;
 
 [Route("api/v1/[controller]")]
 [ApiController]
@@ -125,7 +129,8 @@ public class AuthController : ControllerBase
             {
                 if (!AllowedOtpProviderType.GetAll.Contains(request.OtpProviderType))
                 {
-                    return TypedResults.BadRequest(Result.Failure($"Unknown otp provider type '{request.OtpProviderType}'", 400));
+                    return TypedResults.BadRequest(
+                        Result.Failure($"Unknown otp provider type '{request.OtpProviderType}'", ResponseStatus.BadRequest));
                 }
 
                 var requestOtp = await _otpService.GetRequestOtpAsync(request.OtpRequestId);
@@ -167,7 +172,8 @@ public class AuthController : ControllerBase
                 if (claims is null)
                 {
                     _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                    return TypedResults.InternalServerError(
+                        Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                 }
 
                 var roles = await _userManager.GetRolesAsync(user);
@@ -175,7 +181,8 @@ public class AuthController : ControllerBase
                 if (roles is null)
                 {
                     _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                    return TypedResults.InternalServerError(
+                        Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                 }
 
                 string phoneNumber = user.PhoneNumber
@@ -283,7 +290,8 @@ public class AuthController : ControllerBase
                 }
 
                 _logger.LogError("Otp request for {otpRequestFor} not found", requestOtp.OtpRequestFor.ToString());
-                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
             }
             catch (DbUpdateException ex)
             {
@@ -293,12 +301,14 @@ public class AuthController : ControllerBase
             catch (ArgumentNullException ex)
             {
                 _logger.LogError(ex, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
             }
         }); 
     }
@@ -328,7 +338,8 @@ public class AuthController : ControllerBase
 
             if (user is null)
             {
-                return TypedResults.NotFound(Result.Failure("User not found", 404));
+                return TypedResults.NotFound(
+                    Result.Failure("User not found", ResponseStatus.NotFound));
             }
 
             if (string.IsNullOrWhiteSpace(user.PhoneNumber))
@@ -342,7 +353,7 @@ public class AuthController : ControllerBase
             if (!isOtpValid)
             {
                 return TypedResults.BadRequest(
-                    Result.Failure("An error has occured", 400)
+                    Result.Failure("An error has occured", ResponseStatus.BadRequest)
                         .WithError(new("Credential", "OTP or phone number is invalid")));
             }
 
@@ -350,7 +361,7 @@ public class AuthController : ControllerBase
             if (!passwordValidation.Succeeded)
             {
                 return TypedResults.BadRequest(
-                    Result.Failure("Password validation error", 400)
+                    Result.Failure("Password validation error", ResponseStatus.BadRequest)
                         .WithErrors(passwordValidation.Errors.Select(x => new ErrorDetail(x.Code, x.Description)).ToList()));
             }
 
@@ -364,13 +375,14 @@ public class AuthController : ControllerBase
             }
 
             return TypedResults.BadRequest(
-                Result.Failure("Validation failed", 400)
+                Result.Failure("Validation failed", ResponseStatus.BadRequest)
                     .WithErrors(updateResult.Errors.Select(x => new ErrorDetail(x.Code, $"Description: {x.Description}")).ToList()));
         }
         catch (Exception ex)
         {
             _logger.LogError(ex.Message, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+            return TypedResults.InternalServerError(
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         } 
     }
 
@@ -390,7 +402,7 @@ public class AuthController : ControllerBase
                 if (payload is null)
                 {
                     return TypedResults.BadRequest(
-                        Result.Failure("Google ID token is invalid", 400));
+                        Result.Failure("Google ID token is invalid", ResponseStatus.BadRequest));
                 }
 
 
@@ -418,7 +430,8 @@ public class AuthController : ControllerBase
                 if (claims is null || !claims.Any())
                 {
                     _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                    return TypedResults.InternalServerError(
+                        Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                 }
 
                 var roles = await _userManager.GetRolesAsync(user);
@@ -426,7 +439,8 @@ public class AuthController : ControllerBase
                 if (roles is null || !roles.Any())
                 {
                     _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                    return TypedResults.InternalServerError(
+                        Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                 }
 
 
@@ -501,12 +515,14 @@ public class AuthController : ControllerBase
             catch (ArgumentNullException ex)
             {
                 _logger.LogError(ex, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
             }
         }); 
     }  
@@ -538,7 +554,7 @@ public class AuthController : ControllerBase
                 if (phoneNumber is null)
                 {
                     return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 400)
+                        Result.Failure("An error has occured", ResponseStatus.BadRequest)
                             .WithError(new("PhoneNumber", "Phone number format is invalid")));
                 }
 
@@ -547,21 +563,21 @@ public class AuthController : ControllerBase
                 if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
                 {
                     return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 400)
+                        Result.Failure("An error has occured", ResponseStatus.BadRequest)
                             .WithError(new("Credential", "We couldn't find your account")));
                 }
 
                 if (user.UserType is not UserType.StaffUser || string.IsNullOrWhiteSpace(request.BusinessCode))
                 {
                     return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 400)
+                        Result.Failure("An error has occured", ResponseStatus.BadRequest)
                             .WithError(new("Credential", "We couldn't find your account")));
                 }
 
                 if (!request.BusinessCode.Equals(user.BusinessCode, StringComparison.CurrentCultureIgnoreCase))
                 {
                     return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 400)
+                        Result.Failure("An error has occured", ResponseStatus.BadRequest)
                             .WithError(new("Credential", "We couldn't find your account")));
                 }
 
@@ -602,7 +618,8 @@ public class AuthController : ControllerBase
                 if (claims is null || !claims.Any())
                 {
                     _logger.LogWarning("User claims are missing or invalid for user ID: {UserId}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                    return TypedResults.InternalServerError(
+                        Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                 }
 
                 var roles = await _userManager.GetRolesAsync(user);
@@ -610,7 +627,8 @@ public class AuthController : ControllerBase
                 if (roles is null || !roles.Any())
                 {
                     _logger.LogWarning("User roles are missing or invalid for user ID: {UserId}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                    return TypedResults.InternalServerError(
+                        Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                 }
 
 
@@ -650,7 +668,8 @@ public class AuthController : ControllerBase
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
             }
         }); 
     }
@@ -682,7 +701,7 @@ public class AuthController : ControllerBase
                 if (phoneNumber is null)
                 {
                     return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 400)
+                        Result.Failure("An error has occured", ResponseStatus.BadRequest)
                             .WithError(new("PhoneNumber", "Phone number format is invalid")));
                 }
 
@@ -691,7 +710,7 @@ public class AuthController : ControllerBase
                 if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
                 {
                     return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 400)
+                        Result.Failure("An error has occured", ResponseStatus.BadRequest)
                             .WithError(new("Credential", "We couldn't find your account")));
                 }
 
@@ -746,7 +765,8 @@ public class AuthController : ControllerBase
                 if (claims is null || !claims.Any())
                 {
                     _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                    return TypedResults.InternalServerError(
+                        Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                 }
 
                 var roles = await _userManager.GetRolesAsync(user);
@@ -754,7 +774,8 @@ public class AuthController : ControllerBase
                 if (roles is null || !roles.Any())
                 {
                     _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                    return TypedResults.InternalServerError(
+                        Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                 } 
 
 
@@ -795,7 +816,8 @@ public class AuthController : ControllerBase
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
             }
         }); 
     }
@@ -822,7 +844,7 @@ public class AuthController : ControllerBase
                 if (!GetUserTypeConfiguration.AllowedUserRegisterBySelf.Contains(request.UserType))
                 {
                     return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 500)
+                        Result.Failure("An error has occured", ResponseStatus.InternalServerError)
                             .WithError(new("UserType", $"Unknown user type {request.UserType}")));
                 }
 
@@ -831,7 +853,7 @@ public class AuthController : ControllerBase
                 if (phoneNumber is null)
                 {
                     return TypedResults.BadRequest(
-                       Result.Failure("An error has occured", 400)
+                       Result.Failure("An error has occured", ResponseStatus.BadRequest)
                            .WithError(new("PhoneNumber", "Please provide valid phone number")));
                 }
 
@@ -848,7 +870,8 @@ public class AuthController : ControllerBase
                         if (userByEmailClaim.PhoneNumber is null)
                         {
                             _logger.LogWarning("User {Id} has email but the phone number is empty", userByEmailClaim.Id);
-                            return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                            return TypedResults.InternalServerError(
+                                Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                         } 
 
                         var claims = await _userManager.GetClaimsAsync(userByEmailClaim);
@@ -856,7 +879,8 @@ public class AuthController : ControllerBase
                         if (claims is null || !claims.Any())
                         {
                             _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", userByEmailClaim.Id);
-                            return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                            return TypedResults.InternalServerError(
+                                Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                         }
 
                         var roles = await _userManager.GetRolesAsync(userByEmailClaim);
@@ -864,13 +888,15 @@ public class AuthController : ControllerBase
                         if (roles is null || !roles.Any())
                         {
                             _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", userByEmailClaim.Id);
-                            return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                            return TypedResults.InternalServerError(
+                                Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                         }
 
 
                         if (!userByEmailClaim.PhoneNumber.Equals(request.PhoneNumber))
                         {
-                            return TypedResults.Conflict(Result.Failure($"Email address already used by another account.", 409));
+                            return TypedResults.Conflict(
+                                Result.Failure($"Email address already used by another account.", ResponseStatus.Conflict));
                         }
 
                         if (!userByEmailClaim.PhoneNumberConfirmed)
@@ -903,7 +929,8 @@ public class AuthController : ControllerBase
                             });
                         }
 
-                        return TypedResults.Conflict(Result.Failure("Email is already in use", 409));
+                        return TypedResults.Conflict(
+                            Result.Failure("Email is already in used", ResponseStatus.Conflict));
                     }
                 }
 
@@ -912,7 +939,7 @@ public class AuthController : ControllerBase
                 if (user != null)
                 {
                     return TypedResults.Conflict(
-                        Result.Failure("An error has occurred", 409)
+                        Result.Failure("An error has occurred", ResponseStatus.Conflict)
                            .WithError(new("PhoneNumber", "Phone number is already in use")));
                 }
 
@@ -930,7 +957,7 @@ public class AuthController : ControllerBase
                 {
                     var errors = addUserResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
                     return TypedResults.InternalServerError(
-                       Result.Failure(Messages.InternalServerError, 500)
+                       Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError)
                           .WithErrors(errors.ToList()));
                 }
 
@@ -951,7 +978,7 @@ public class AuthController : ControllerBase
                 {
                     var errors = assignRoleResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
                     return TypedResults.InternalServerError(
-                       Result.Failure(Messages.InternalServerError, 500)
+                       Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError)
                           .WithErrors(errors.ToList()));
                 }
 
@@ -960,7 +987,7 @@ public class AuthController : ControllerBase
                 {
                     var errors = addClaimsResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
                     return TypedResults.InternalServerError(
-                       Result.Failure(Messages.InternalServerError, 500)
+                       Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError)
                           .WithErrors(errors.ToList()));
                 }
 
@@ -1000,7 +1027,8 @@ public class AuthController : ControllerBase
             catch (Exception ex)
             {
                 _logger.LogError(ex, ex.InnerException?.Message);
-                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
             }
         }); 
     }  
@@ -1014,20 +1042,23 @@ public class AuthController : ControllerBase
         {
             if (string.IsNullOrWhiteSpace(refreshTokenRequest.RefreshToken))
             {
-                return TypedResults.BadRequest(Result.Failure("Refresh token must not be null", 400));
+                return TypedResults.BadRequest(
+                    Result.Failure("Refresh token must not be null", ResponseStatus.BadRequest));
             } 
 
             if (_httpContext is null)
             {
                 _logger.LogError("Http context is null");
-                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
             }
 
             var bearer = _httpContext.GetBearerToken();
 
             if (bearer is null)
             {
-                return TypedResults.BadRequest(Result.Failure("Access token must not be null", 400));
+                return TypedResults.BadRequest(
+                    Result.Failure("Access token must not be null", ResponseStatus.BadRequest));
             }
              
 
@@ -1057,7 +1088,8 @@ public class AuthController : ControllerBase
             if (claims is null || !claims.Any())
             { 
                 _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
-                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
             } 
 
             var roles = await _userManager.GetRolesAsync(user);
@@ -1065,7 +1097,8 @@ public class AuthController : ControllerBase
             if (roles is null || !roles.Any())
             {
                 _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
-                return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
             }
 
 
@@ -1094,7 +1127,8 @@ public class AuthController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+            return TypedResults.InternalServerError(
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         }
     }
 
@@ -1108,13 +1142,13 @@ public class AuthController : ControllerBase
             ApplicationUser? user = null;
             IdentityType? identityType = null; 
 
-            if (PhoneNumberValidator.IsValid(request.Identity))
+            if (PhoneNumberValidation.IsValidPhoneNumber(request.Identity))
             {
                 user = await _userManager.FindByNameAsync(request.Identity);
                 identityType = IdentityType.PhoneNumber; 
             }
 
-            if (EmailAddress.IsValidEmail(request.Identity))
+            if (EmailValidation.IsValidEmail(request.Identity))
             {
                 user = await _userManager.FindByEmailAsync(request.Identity);
                 identityType = IdentityType.Email; 
@@ -1123,13 +1157,13 @@ public class AuthController : ControllerBase
             if (identityType is null)
             {
                 return TypedResults.BadRequest(
-                    Result.Failure("Please give the valid email address or phone number", 400)
+                    Result.Failure("Please give the valid email address or phone number", ResponseStatus.BadRequest)
                         .WithError(new("Identity", "Phone number or email address is invalid")));
             }
 
             if (user is null)
             {
-                return TypedResults.NotFound(Result.Failure("User not found", 404));
+                return TypedResults.NotFound(Result.Failure("User not found", ResponseStatus.NotFound));
             }
 
             if (!AllowedOtpProviderType.GetAllByName.TryGetValue(
@@ -1138,7 +1172,7 @@ public class AuthController : ControllerBase
             {
                 _logger.LogError("Identity type {identityType} does not have configuration", identityType);
                 return TypedResults.InternalServerError(
-                    Result.Failure(Messages.InternalServerError, 500));
+                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
             }
 
             (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(
@@ -1166,7 +1200,7 @@ public class AuthController : ControllerBase
         {
             _logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(
-                Result.Failure(Messages.InternalServerError, 500));
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         } 
     }
 
@@ -1178,20 +1212,23 @@ public class AuthController : ControllerBase
         {
             if (string.IsNullOrEmpty(request.RefreshToken))
             {
-                return TypedResults.BadRequest(Result.Failure("Refresh token must not null", 400));
+                return TypedResults.BadRequest(
+                    Result.Failure("Refresh token must not null", ResponseStatus.BadRequest));
             }
 
             if (_httpContext is null)
             {
                 _logger.LogError("Http context is null");
-                return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
             }
 
             var bearer = _httpContext.GetBearerToken();
 
             if (bearer is null)
             {
-                return TypedResults.BadRequest(Result.Failure("Access token must not be null", 400));
+                return TypedResults.BadRequest(
+                    Result.Failure("Access token must not be null", ResponseStatus.BadRequest));
             }
 
             var isAccessTokenBlocked = await _tokenService.IsAccessTokenBlacklisted(bearer);
@@ -1203,7 +1240,7 @@ public class AuthController : ControllerBase
         {
             _logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(
-                Result.Failure(Messages.InternalServerError, 500));
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         } 
     }
 
@@ -1233,7 +1270,7 @@ public class AuthController : ControllerBase
                 if (!isOtpValid)
                 {
                     return TypedResults.BadRequest(
-                        Result.Failure("An error has occured", 400)
+                        Result.Failure("An error has occured", ResponseStatus.BadRequest)
                             .WithError(new("Credential", "OTP or phone number is invalid")));
                 }
 
@@ -1250,7 +1287,8 @@ public class AuthController : ControllerBase
                 if (claims is null || !claims.Any())
                 {
                     _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                    return TypedResults.InternalServerError(
+                        Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                 }
 
                 var roles = await _userManager.GetRolesAsync(user);
@@ -1258,7 +1296,8 @@ public class AuthController : ControllerBase
                 if (roles is null || !roles.Any())
                 {
                     _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                    return TypedResults.InternalServerError(
+                        Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                 }
 
                 var accessToken = _tokenService.GenerateAccessToken(new ClaimsIdentity(claims));
@@ -1300,7 +1339,7 @@ public class AuthController : ControllerBase
             {
                 _logger.LogError(ex, ex.InnerException?.Message);
                 return TypedResults.InternalServerError(
-                    Result.Failure(Messages.InternalServerError, 500));
+                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
             }
         }); 
     }
@@ -1338,7 +1377,8 @@ public class AuthController : ControllerBase
                 if (string.IsNullOrWhiteSpace(user.PhoneNumber))
                 {
                     _logger.LogWarning("User phone number is missing or invalid for user ID: {Id}", user.Id);
-                    return TypedResults.InternalServerError(Result.Failure(Messages.AccountError, 500));
+                    return TypedResults.InternalServerError(
+                        Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                 }
 
                 if (user.PhoneNumberConfirmed)
@@ -1353,11 +1393,12 @@ public class AuthController : ControllerBase
                 {
                     var errors = changeResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
                     return TypedResults.InternalServerError(
-                       Result.Failure(Messages.InternalServerError, 500)
+                       Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError)
                           .WithErrors(errors.ToList()));
                 }
 
-                await _mediator.Publish(new PhoneNumberConfirmedDomainEvent(Guid.Parse(user.Id), user.PhoneNumber, user.UserType));
+                await _mediator.Publish(
+                    new PhoneNumberConfirmedDomainEvent(Guid.Parse(user.Id), user.PhoneNumber, user.UserType));
 
                 await _dbContext.SaveChangesAsync();
 
@@ -1374,7 +1415,7 @@ public class AuthController : ControllerBase
             {
                 _logger.LogError(ex, ex.InnerException?.Message);
                 return TypedResults.InternalServerError(
-                    Result.Failure(Messages.InternalServerError, 500));
+                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
             }
         }); 
     }
@@ -1389,14 +1430,15 @@ public class AuthController : ControllerBase
         {
             if (string.IsNullOrEmpty(request.RefreshToken))
             {
-                return TypedResults.BadRequest(Result.Failure("Refresh token must not null", 400));
+                return TypedResults.BadRequest(
+                    Result.Failure("Refresh token must not null", ResponseStatus.BadRequest));
             }
 
             if (_httpContext is null)
             {
                 _logger.LogError("Http context is null");
                 return TypedResults.InternalServerError(
-                    Result.Failure(Messages.InternalServerError, 500));
+                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
             }
 
             var bearer = _httpContext.GetBearerToken();
@@ -1414,7 +1456,8 @@ public class AuthController : ControllerBase
         catch (Exception ex)
         {
             _logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, 500));
+            return TypedResults.InternalServerError(
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         }
     }
 
@@ -1424,7 +1467,7 @@ public class AuthController : ControllerBase
         if(user.PhoneNumber is null)
         {
             throw new ArgumentNullException(user.PhoneNumber);
-        }
+        } 
 
         var claims = new List<Claim>()
         {

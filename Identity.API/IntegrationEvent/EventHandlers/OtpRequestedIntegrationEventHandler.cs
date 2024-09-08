@@ -1,5 +1,5 @@
-﻿using Identity.API.Domain.Events;
-using Identity.Contracts.IntegrationEvent;
+﻿using Core.Events;
+using Identity.API.Domain.Events; 
 using MassTransit;
 using MediatR;
 

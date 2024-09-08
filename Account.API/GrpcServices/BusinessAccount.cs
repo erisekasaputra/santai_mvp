@@ -1,3 +1,0 @@
-﻿
-namespace Account.API.GrpcServices;
- 

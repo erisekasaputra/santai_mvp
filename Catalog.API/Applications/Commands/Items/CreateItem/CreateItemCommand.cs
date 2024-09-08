@@ -1,6 +1,5 @@
-﻿using Catalog.API.DTOs.Item;
-using Catalog.API.DTOs.OwnerReview;
-using Catalog.API.SeedWork;
+﻿using Catalog.API.Applications.Dtos.OwnerReview;
+using Core.Results;
 using MediatR;
 
 namespace Catalog.API.Applications.Commands.Items.CreateItem;
@@ -16,4 +15,4 @@ public record CreateItemCommand(
     Guid CategoryId,
     Guid BrandId,
     bool IsActive,
-    IEnumerable<OwnerReviewDto> OwnerReviews) : IRequest<Result<ItemDto>>;
+    IEnumerable<OwnerReviewDto> OwnerReviews) : IRequest<Result>;

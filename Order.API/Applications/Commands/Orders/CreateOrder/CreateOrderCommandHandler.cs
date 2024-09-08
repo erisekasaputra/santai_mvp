@@ -1,6 +1,7 @@
-﻿using MediatR;
-using Order.API.Applications.Services.Interfaces;
-using Order.API.SeedWorks;
+﻿using Core.Messages;
+using Core.Results;
+using MediatR; 
+using Order.API.Applications.Services.Interfaces;  
 using Order.Domain.Aggregates.OrderAggregate;
 using Order.Domain.Enumerations;
 using Order.Domain.Exceptions;
@@ -8,20 +9,15 @@ using Order.Domain.ValueObjects;
 
 namespace Order.API.Applications.Commands.Orders.CreateOrder;
 
-public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, Result>
+public class CreateOrderCommandHandler(ILogger<CreateOrderCommandHandler> logger, IPaymentService paymentService) : IRequestHandler<CreateOrderCommand, Result>
 {
-    private readonly ILogger<CreateOrderCommandHandler> _logger;
-    private readonly IPaymentService _paymentService;
+    private readonly ILogger<CreateOrderCommandHandler> _logger = logger;
+    private readonly IPaymentService _paymentService = paymentService;
     private const Currency GlobalCurrency = Currency.MYR;
 
-    public CreateOrderCommandHandler(ILogger<CreateOrderCommandHandler> logger, IPaymentService paymentService)
-    {
-        _logger = logger;
-        _paymentService = paymentService;
-    }
-
     public async Task<Result> Handle(CreateOrderCommand command, CancellationToken cancellationToken) 
-    {
+    { 
+        await Task.Delay(1, cancellationToken);
         try
         { 
             var order = new Ordering(

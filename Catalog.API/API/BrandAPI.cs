@@ -2,8 +2,9 @@
 using Catalog.API.Applications.Commands.Brands.DeleteBrand;
 using Catalog.API.Applications.Commands.Brands.UpdateBrand;
 using Catalog.API.Applications.Queries.Brands.GetBrandById;
-using Catalog.API.Applications.Queries.Brands.GetBrandPaginated; 
-using Catalog.API.Services;
+using Catalog.API.Applications.Queries.Brands.GetBrandPaginated;
+using Catalog.API.Applications.Services;
+using Catalog.API.Extensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -42,16 +43,7 @@ public static class BrandAPI
 
             var response = await service.Mediator.Send(query);
 
-            if (response.Success)
-            {
-                return TypedResults.Ok(response);
-            }
-
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                _ => TypedResults.BadRequest(response),
-            };
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -76,16 +68,7 @@ public static class BrandAPI
 
             var response = await service.Mediator.Send(brandPaginatedQuery);
 
-            if (response.Success)
-            {
-                return TypedResults.Ok(response);
-            }
-
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                _ => TypedResults.BadRequest(response),
-            };
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -108,20 +91,8 @@ public static class BrandAPI
             }
 
             var response = await service.Mediator.Send(command);
-
-            if (response.Success)
-            {
-                response.WithLink(service.LinkGenerator.GetPathByName(nameof(GetBrandById)) ?? "");
-
-                return TypedResults.Created(service.LinkGenerator.GetPathByName(nameof(GetBrandById)), response);
-            }
-
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                409 => TypedResults.Conflict(response),
-                _ => TypedResults.BadRequest(response),
-            };
+             
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -149,18 +120,9 @@ public static class BrandAPI
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            var response = await service.Mediator.Send(command);
+            var response = await service.Mediator.Send(command); 
 
-            if (response.Success)
-            {
-                return TypedResults.NoContent();
-            }
-
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                _ => TypedResults.BadRequest(response),
-            };
+            return response.ToIResult();
         }
         catch (Exception ex)
         {

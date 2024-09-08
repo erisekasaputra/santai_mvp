@@ -1,7 +1,7 @@
-﻿using Account.API.Applications.Dtos.RequestDtos;
-using Account.API.Extensions;
+﻿using Account.API.Applications.Dtos.RequestDtos; 
 using Account.API.Validations.AddressValidations;
-using CustomValidation;
+using Core.Extensions;
+using Core.Validations; 
 using FluentValidation;
 
 namespace Account.API.Validations.StaffValidations;
@@ -11,12 +11,12 @@ public class CreateStaffValidation : AbstractValidator<StaffRequestDto>
     public CreateStaffValidation()
     {
         RuleFor(x => x.Password)
-            .Must(PasswordValidator.IsValidPassword).WithMessage("Password must be at least 6 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.");
+            .Must(PasswordValidation.IsValidPassword).WithMessage("Password must be at least 6 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.");
 
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name can not be empty")
             .Length(3, 50).WithMessage("The name must be between 3 and 50 characters long")
-            .Must(NameExtension.IsValidName).WithMessage("The name must contain only alphabet and can not have multiple spaces (only single space on each separated name), e.g: 'Michael John Doe'");
+            .Must(NameValidation.IsValidName).WithMessage("The name must contain only alphabet and can not have multiple spaces (only single space on each separated name), e.g: 'Michael John Doe'");
 
         RuleFor(x => x.Email)
            .Length(3, 254).WithMessage("The email must be between 3 and 254 characters long")
@@ -26,7 +26,7 @@ public class CreateStaffValidation : AbstractValidator<StaffRequestDto>
         RuleFor(x => x.PhoneNumber)
             .NotEmpty().WithMessage("Phone number can not be empty")
             .Length(3, 20).WithMessage("Phone number must be between 3 and 20 characters long")
-            .Must(PhoneNumberExtension.IsValidPhoneNumber).WithMessage("Phone number must consist of number only and start with '+'");
+            .Must(PhoneNumberValidation.IsValidPhoneNumber).WithMessage("Phone number must consist of number only and start with '+'");
 
         RuleFor(x => x.TimeZoneId)
             .NotEmpty().WithMessage("Time zone can not be empty")

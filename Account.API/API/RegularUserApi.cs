@@ -7,14 +7,15 @@ using Account.API.Applications.Commands.RegularUserCommand.SetDeviceIdByUserId;
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetRegularUserByUserId;
 using Account.API.Extensions;
-using Account.API.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Account.API.Applications.Queries.GetPaginatedRegularUser;
-using Account.API.CustomAttributes;
-using Account.API.SeedWork;
-using Account.API.Infrastructures;
-using Identity.Contracts.Enumerations;
+using Account.API.CustomAttributes; 
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
+using Core.SeedWorks;
+using Core.Messages;
+using Core.Enumerations;
 
 namespace Account.API.API;
 

@@ -1,4 +1,5 @@
-﻿using Identity.Contracts.Enumerations;
+﻿
+using Core.Enumerations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Order.Domain.Aggregates.BuyerAggregate; 

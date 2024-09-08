@@ -1,6 +1,6 @@
-﻿using Identity.Contracts.IntegrationEvent;
+﻿using Core.Events; 
 using MassTransit;
-using MediatR; 
+using MediatR;
 
 namespace Account.API.Applications.IntegrationEventHandlers;
 

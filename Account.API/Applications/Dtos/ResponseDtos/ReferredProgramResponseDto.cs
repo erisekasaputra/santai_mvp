@@ -2,4 +2,9 @@
 
 namespace Account.API.Applications.Dtos.ResponseDtos;
 
-public record ReferredProgramResponseDto(Guid ReferrerId, Guid ReferredUserId, string ReferralCode, DateTime ReferredDateUtc, ReferralStatus Status);
+public record ReferredProgramResponseDto(
+    Guid ReferrerId,
+    Guid ReferredUserId,
+    string ReferralCode,
+    DateTime ReferredDateUtc,
+    ReferralStatus Status);

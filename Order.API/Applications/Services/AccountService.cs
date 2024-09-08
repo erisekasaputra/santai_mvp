@@ -1,6 +1,6 @@
-﻿using Identity.Contracts.Enumerations;
-using Order.API.Applications.Services.Interfaces;
-using Order.Domain.Enumerations;
+﻿
+using Core.Enumerations;
+using Order.API.Applications.Services.Interfaces; 
 using Order.Infrastructure.SeedWorks;
 using System.Text.Json;
 

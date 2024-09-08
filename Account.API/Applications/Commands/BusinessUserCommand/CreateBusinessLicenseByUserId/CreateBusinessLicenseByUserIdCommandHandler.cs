@@ -1,10 +1,12 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.SeedWork;
-using Account.API.Services;
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
+using Core.Results;
 using Account.Domain.Aggregates.BusinessLicenseAggregate;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using MediatR;
+using Core.Messages;
 
 namespace Account.API.Applications.Commands.BusinessUserCommand.CreateBusinessLicenseByUserId;
 

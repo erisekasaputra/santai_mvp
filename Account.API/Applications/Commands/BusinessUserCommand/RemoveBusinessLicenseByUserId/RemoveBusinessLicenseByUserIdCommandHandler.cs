@@ -1,8 +1,9 @@
-﻿using Account.API.SeedWork;
-using Account.API.Services;
+﻿using Account.API.Applications.Services;
+using Core.Results;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using MediatR;
+using Core.Messages;
 
 namespace Account.API.Applications.Commands.BusinessUserCommand.RemoveBusinessLicenseByUserId;
 

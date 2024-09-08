@@ -1,6 +1,6 @@
-﻿using Account.API.CustomAttributes;
-using Account.API.Infrastructures;
-using Account.API.Options; 
+﻿using Account.API.Applications.Services.Interfaces;
+using Account.API.CustomAttributes;
+using Core.Configurations;
 using Microsoft.Extensions.Options;
 
 namespace Account.API.Middleware;
@@ -24,7 +24,7 @@ public class IdempotencyMiddleware
         { 
             using var scope = _serviceProvider.CreateScope();
             var cacheService = scope.ServiceProvider.GetRequiredService<ICacheService>();
-            var idempotencyOptions = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<IdempotencyOptions>>();
+            var idempotencyOptions = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<IdempotencyConfiguration>>();
 
             var endPoint = context.GetEndpoint();
 

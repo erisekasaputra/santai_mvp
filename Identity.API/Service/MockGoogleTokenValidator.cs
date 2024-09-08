@@ -1,5 +1,5 @@
 ﻿using Google.Apis.Auth;
-using Identity.API.Abstraction;
+using Identity.API.Service.Interfaces;
 
 namespace Identity.API.Service;
 

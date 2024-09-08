@@ -1,11 +1,13 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Mapper;
-using Account.API.Options;
-using Account.API.SeedWork;
-using Account.API.Services;
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
+using Account.API.Extensions;
+using Core.Results;
+using Core.Messages;
 using Account.Domain.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Options;
+using Core.Configurations;
 
 namespace Account.API.Applications.Queries.GetBusinessUserByUserId;
 
@@ -13,12 +15,12 @@ public class GetBusinessUserByUserIdQueryHandler(
     IUnitOfWork unitOfWork,
     ApplicationService service,
     IKeyManagementService kmsClient,  
-    IOptionsMonitor<InMemoryDatabaseOption> cacheOption) : IRequestHandler<GetBusinessUserByUserIdQuery, Result>
+    IOptionsMonitor<CacheConfiguration> cacheOption) : IRequestHandler<GetBusinessUserByUserIdQuery, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _appService = service;
     private readonly IKeyManagementService _kmsClient = kmsClient;   
-    private readonly IOptionsMonitor<InMemoryDatabaseOption> _cacheOptions = cacheOption;
+    private readonly IOptionsMonitor<CacheConfiguration> _cacheOptions = cacheOption;
     public async Task<Result> Handle(GetBusinessUserByUserIdQuery request, CancellationToken cancellationToken)
     {
         try

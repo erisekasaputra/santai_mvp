@@ -8,11 +8,12 @@ using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetEmailByUserId;
 using Account.API.Applications.Queries.GetPhoneNumberByUserId;
 using Account.API.Applications.Queries.GetTimeZoneByUserId;
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
 using Account.API.Extensions;
-using Account.API.Infrastructures;
-using Account.API.SeedWork;
-using Account.API.Services;
-using Identity.Contracts.Enumerations;
+using Core.Enumerations;
+using Core.Messages;
+using Core.SeedWorks; 
 using Microsoft.AspNetCore.Mvc;
 
 namespace Account.API.API;

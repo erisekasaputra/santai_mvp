@@ -1,7 +1,7 @@
-﻿using Account.API.Applications.Dtos.RequestDtos;
-using Account.API.Extensions;
+﻿using Account.API.Applications.Dtos.RequestDtos; 
 using Account.API.Validations.AddressValidations;
 using Account.API.Validations.PersonalInfoValidations;
+using Core.Extensions;
 using FluentValidation;
 
 namespace Account.API.Validations.RegularUserValidations;

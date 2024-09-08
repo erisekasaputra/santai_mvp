@@ -2,8 +2,9 @@
 using Catalog.API.Applications.Commands.Categories.DeleteCategory;
 using Catalog.API.Applications.Commands.Categories.UpdateCategory;
 using Catalog.API.Applications.Queries.Categories.GetCategoryById;
-using Catalog.API.Applications.Queries.Categories.GetCategoryPaginated; 
-using Catalog.API.Services;
+using Catalog.API.Applications.Queries.Categories.GetCategoryPaginated;
+using Catalog.API.Applications.Services;
+using Catalog.API.Extensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,18 +41,9 @@ public static class CategoryAPI
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            var response = await service.Mediator.Send(query);
+            var response = await service.Mediator.Send(query); 
 
-            if (response.Success)
-            {
-                return TypedResults.Ok(response);
-            }
-
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                _ => TypedResults.BadRequest(response),
-            };
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -74,18 +66,9 @@ public static class CategoryAPI
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            var response = await service.Mediator.Send(itemPaginatedQuery);
+            var response = await service.Mediator.Send(itemPaginatedQuery); 
 
-            if (response.Success)
-            {
-                return TypedResults.Ok(response);
-            }
-
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                _ => TypedResults.BadRequest(response),
-            };
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -107,21 +90,9 @@ public static class CategoryAPI
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            var response = await service.Mediator.Send(command);
+            var response = await service.Mediator.Send(command); 
 
-            if (response.Success)
-            {
-                response.WithLink(service.LinkGenerator.GetPathByName(nameof(GetCategoryById)) ?? "");
-
-                return TypedResults.Created(service.LinkGenerator.GetPathByName(nameof(GetCategoryById)), response);
-            }
-
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                409 => TypedResults.Conflict(response),
-                _ => TypedResults.BadRequest(response),
-            };
+            return response.ToIResult(); 
         }
         catch (Exception ex)
         {
@@ -149,18 +120,9 @@ public static class CategoryAPI
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            var response = await service.Mediator.Send(command);
+            var response = await service.Mediator.Send(command); 
 
-            if (response.Success)
-            {
-                return TypedResults.NoContent();
-            }
-
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                _ => TypedResults.BadRequest(response),
-            };
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -183,9 +145,9 @@ public static class CategoryAPI
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            await service.Mediator.Send(command);
+            var response = await service.Mediator.Send(command); 
 
-            return TypedResults.NoContent();
+            return response.ToIResult();
         }
         catch (Exception ex)
         {

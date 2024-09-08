@@ -1,4 +1,4 @@
-﻿using Account.API.Extensions;
+﻿using Core.Extensions;
 
 namespace Account.API.Applications.Dtos.RequestDtos;
 

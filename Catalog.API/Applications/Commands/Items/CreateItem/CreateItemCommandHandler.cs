@@ -1,27 +1,27 @@
-﻿using Catalog.API.DTOs.Item;
-using Catalog.API.Extensions;
-using Catalog.API.SeedWork;
+﻿using Catalog.API.Applications.Dtos.Item;
+using Catalog.API.Extensions; 
 using Catalog.Domain.Aggregates.ItemAggregate;
 using Catalog.Domain.SeedWork;
-using MediatR;
+using Core.Results;
+using MediatR; 
 
 namespace Catalog.API.Applications.Commands.Items.CreateItem;
 
-public class CreateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateItemCommand, Result<ItemDto>>
+public class CreateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateItemCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    public async Task<Result<ItemDto>> Handle(CreateItemCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(CreateItemCommand request, CancellationToken cancellationToken)
     {
         var category = await _unitOfWork.Categories.GetCategoryByIdAsync(request.CategoryId);
         if (category is null)
         {
-            return Result<ItemDto>.Failure($"Category with id {request.CategoryId} not found.", 404);
+            return Result.Failure($"Category with id {request.CategoryId} not found.", ResponseStatus.NotFound);
         }
 
         var brand = await _unitOfWork.Brands.GetBrandByIdAsync(request.BrandId);
         if (brand is null)
         {
-            return Result<ItemDto>.Failure($"Brand with id {request.BrandId} not found.", 404);
+            return Result.Failure($"Brand with id {request.BrandId} not found.", ResponseStatus.NotFound);
         }
 
         var ownerReviews = request.OwnerReviews.ToOwnerReviews().ToList();
@@ -46,13 +46,13 @@ public class CreateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
         var response = await _unitOfWork.Items.CreateItemAsync(item);
         if (response is null)
         {
-            return Result<ItemDto>.Failure("We encountered an issue while creating the item. Please try again later or contact support if the problem persists.", 500);
+            return Result.Failure("We encountered an issue while creating the item. Please try again later or contact support if the problem persists.", ResponseStatus.InternalServerError);
         }
 
         var result = await _unitOfWork.SaveChangesAsync(cancellationToken);
         if (result <= 0)
         {
-            return Result<ItemDto>.Failure("We encountered an issue while creating the item. Please try again later or contact support if the problem persists.", 500);
+            return Result.Failure("We encountered an issue while creating the item. Please try again later or contact support if the problem persists.", ResponseStatus.InternalServerError);
         }
 
         var responseDto = new ItemDto(
@@ -72,6 +72,6 @@ public class CreateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
             response.IsActive,
             response.OwnerReviews.ToOwnerReviewsDto()!);
 
-        return Result<ItemDto>.SuccessResult(responseDto, [], 201);
+        return Result.Success(responseDto, ResponseStatus.Created);
     }
 }

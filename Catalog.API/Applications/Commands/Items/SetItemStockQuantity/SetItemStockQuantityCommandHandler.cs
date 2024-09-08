@@ -1,7 +1,7 @@
-﻿using Catalog.API.DTOs.ItemStock;
-using Catalog.API.SeedWork;
-using Catalog.API.Services;
-using Catalog.Domain.SeedWork; 
+﻿using Catalog.API.Applications.Dtos.ItemStock;
+using Catalog.API.Applications.Services; 
+using Catalog.Domain.SeedWork;
+using Core.Results;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Polly;
@@ -10,7 +10,7 @@ using System.Data;
 
 namespace Catalog.API.Applications.Commands.Items.SetItemStockQuantity;
 
-public class SetItemStockQuantityCommandHandler : IRequestHandler<SetItemStockQuantityCommand, Result<IEnumerable<ItemStockDto>>>
+public class SetItemStockQuantityCommandHandler : IRequestHandler<SetItemStockQuantityCommand, Result>
 {
     private readonly AsyncRetryPolicy _asyncRetryPolicy;
     private readonly IUnitOfWork _unitOfWork;
@@ -29,7 +29,7 @@ public class SetItemStockQuantityCommandHandler : IRequestHandler<SetItemStockQu
                                         service.Logger.LogInformation("Retry {retryCount} encountered an exception: {Message}. Waiting {timeSpan} before next retry.", retryCount, exception.Message, timeSpan));
     }
 
-    public async Task<Result<IEnumerable<ItemStockDto>>> Handle(SetItemStockQuantityCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(SetItemStockQuantityCommand request, CancellationToken cancellationToken)
     {
         var result = await _asyncRetryPolicy.ExecuteAsync(async () =>
         {
@@ -58,7 +58,7 @@ public class SetItemStockQuantityCommandHandler : IRequestHandler<SetItemStockQu
 
                     await _unitOfWork.RollbackTransactionAsync(cancellationToken);
 
-                    return Result<IEnumerable<ItemStockDto>>.Failure(message, 404).WithData(missingItemRequests.Select(x =>
+                    return Result.Failure(message, ResponseStatus.BadRequest).WithData(missingItemRequests.Select(x =>
                     {
                         return new ItemStockDto(x.ItemId, 0, "Data not found");
                     }).ToList());
@@ -84,7 +84,7 @@ public class SetItemStockQuantityCommandHandler : IRequestHandler<SetItemStockQu
                 if (numberOfErrors == 0)
                 {
                     await _unitOfWork.CommitTransactionAsync(cancellationToken);
-                    return Result<IEnumerable<ItemStockDto>>.SuccessResult([], [], 200);
+                    return Result.Success(null, ResponseStatus.Ok);
                 }
 
                 var messageError = numberOfErrors == 1
@@ -92,7 +92,7 @@ public class SetItemStockQuantityCommandHandler : IRequestHandler<SetItemStockQu
                        : $"There are {numberOfErrors} error items";
 
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                return Result<IEnumerable<ItemStockDto>>.Failure(messageError, 400).WithData(itemErrors);
+                return Result.Failure(messageError, ResponseStatus.BadRequest).WithData(itemErrors);
             }
             catch (DBConcurrencyException)
             {

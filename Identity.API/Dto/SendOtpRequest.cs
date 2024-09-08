@@ -1,4 +1,4 @@
-﻿using Identity.Contracts.Enumerations;
+﻿using Core.Enumerations; 
 
 namespace Identity.API.Dto;
 

@@ -3,7 +3,8 @@ using Account.API.Extensions;
 using Account.API.Validations.AddressValidations;
 using Account.API.Validations.BusinessLicenseValidations;
 using Account.API.Validations.StaffValidations;
-using CustomValidation;
+using Core.Extensions;
+using Core.Validations; 
 using FluentValidation;
 
 namespace Account.API.Validations.BusinessUserValidations;
@@ -13,7 +14,7 @@ public class CreateBusinessUserValidation : AbstractValidator<BusinessUserReques
     public CreateBusinessUserValidation()
     {
         RuleFor(x => x.Password)
-            .Must(PasswordValidator.IsValidPassword).WithMessage("Password must be at least 6 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.");
+            .Must(PasswordValidation.IsValidPassword).WithMessage("Password must be at least 6 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.");
 
         RuleFor(x => x.Email)  
             .Length(5, 254).WithMessage("The email must be between 3 and 254 characters long")
@@ -23,7 +24,7 @@ public class CreateBusinessUserValidation : AbstractValidator<BusinessUserReques
         RuleFor(x => x.PhoneNumber)
             .NotEmpty().WithMessage("Phone number can not be empty")
             .Length(3, 20).WithMessage("Phone number must be between 3 and 20 characters long")
-            .Must(PhoneNumberExtension.IsValidPhoneNumber).WithMessage("Phone number must consist of number only and start with '+'");
+            .Must(PhoneNumberValidation.IsValidPhoneNumber).WithMessage("Phone number must consist of number only and start with '+'");
 
         RuleFor(x => x.Address)
             .NotNull().WithMessage("Address can not be empty")
@@ -48,7 +49,7 @@ public class CreateBusinessUserValidation : AbstractValidator<BusinessUserReques
 
         RuleFor(x => x.WebsiteUrl) 
             .Length(3, 255).WithMessage("Website url must be between 3 and 255 characters long")
-            .Must(UrlExtension.IsValidUrl).WithMessage("Website url format is invalid")
+            .Must(UrlValidation.IsValidUrl).WithMessage("Website url format is invalid")
             .When(x => !string.IsNullOrWhiteSpace(x.WebsiteUrl));
 
         RuleFor(x => x.BusinessDescription) 
@@ -68,11 +69,5 @@ public class CreateBusinessUserValidation : AbstractValidator<BusinessUserReques
         {
             RuleForEach(e => e.Staffs).SetValidator(new CreateStaffValidation());
         });
-    }
-
-    private bool MustValidGuid(Guid id)
-    {
-        return id != Guid.Empty;
-    }
-     
+    } 
 }

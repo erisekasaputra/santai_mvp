@@ -1,5 +1,5 @@
-﻿using Identity.API.Enumerations;
-using Identity.Contracts.Enumerations;
+﻿using Core.Enumerations;
+using Identity.API.Enumerations; 
 
 namespace Identity.API.Dto;
 

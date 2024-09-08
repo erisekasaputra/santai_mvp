@@ -1,24 +1,24 @@
-﻿using Catalog.API.DTOs.Brand;
-using Catalog.API.Extensions;
-using Catalog.API.SeedWork;
+﻿ 
+using Catalog.API.Extensions; 
 using Catalog.Domain.SeedWork;
+using Core.Results;
 using MediatR;
 
 namespace Catalog.API.Applications.Queries.Brands.GetBrandById;
 
-public class GetBrandByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetBrandByIdQuery, Result<BrandDto>>
+public class GetBrandByIdQueryHandler(IUnitOfWork unitOfWork) : IRequestHandler<GetBrandByIdQuery, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    public async Task<Result<BrandDto>> Handle(GetBrandByIdQuery request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(GetBrandByIdQuery request, CancellationToken cancellationToken)
     {
         var brand = await _unitOfWork.Brands.GetBrandByIdAsync(request.Id);
 
         if (brand is null)
         {
-            return Result<BrandDto>.Failure($"Brand with id {request.Id} is not found", 404);
+            return Result.Failure($"Brand with id {request.Id} is not found", ResponseStatus.NotFound);
         }
 
-        return Result<BrandDto>.SuccessResult(brand.ToBrandDto(), []);
+        return Result.Success(brand.ToBrandDto(), ResponseStatus.Ok);
 
     }
 }

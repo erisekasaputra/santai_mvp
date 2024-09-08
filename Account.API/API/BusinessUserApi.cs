@@ -25,13 +25,14 @@ using Account.API.Applications.Queries.GetPaginatedStaffByUserId;
 using Account.API.Applications.Queries.GetPhoneNumberByStaffId;
 using Account.API.Applications.Queries.GetStaffByUserIdAndStaffId;
 using Account.API.Applications.Queries.GetTimeZoneByStaffId;
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
 using Account.API.CustomAttributes;
 using Account.API.Extensions;
-using Account.API.Infrastructures; 
-using Account.API.SeedWork;
-using Account.API.Services; 
-using FluentValidation;
-using Identity.Contracts.Enumerations;
+using Core.Enumerations;
+using Core.Messages;
+using Core.SeedWorks;
+using FluentValidation; 
 using Microsoft.AspNetCore.Mvc;
 namespace Account.API.API;
 
@@ -170,7 +171,8 @@ public static class BusinessUserApi
                 return TypedResults.Unauthorized();
             }
 
-            var result = await service.Mediator.Send(new GetDeviceIdByStaffIdQuery(userClaim.Sub));
+            var result = await service.Mediator.Send(
+                new GetDeviceIdByStaffIdQuery(userClaim.Sub));
 
             return result.ToIResult();
         }

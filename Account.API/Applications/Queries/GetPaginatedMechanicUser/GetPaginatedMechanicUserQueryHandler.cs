@@ -1,8 +1,9 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Infrastructures;
-using Account.API.Mapper;
-using Account.API.SeedWork;
-using Account.API.Services;
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
+using Account.API.Extensions;
+using Core.Results;
+using Core.Messages;
 using Account.Domain.Aggregates.DrivingLicenseAggregate;
 using Account.Domain.Aggregates.NationalIdentityAggregate;
 using Account.Domain.Aggregates.UserAggregate;
@@ -36,7 +37,7 @@ public class GetPaginatedMechanicUserQueryHandler(
 
             var userResponseDto = await ToMechanicUserResponseDto(users, cancellationToken);
 
-            var response = new PaginatedItemReponseDto<MechanicUserResponseDto>(request.PageNumber, request.PageSize, totalCount, totalPages, userResponseDto);
+            var response = new PaginatedResponseDto<MechanicUserResponseDto>(request.PageNumber, request.PageSize, totalCount, totalPages, userResponseDto);
 
             return Result.Success(response, ResponseStatus.Ok);
         }

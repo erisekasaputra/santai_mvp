@@ -1,13 +1,13 @@
-﻿using Identity.API.Abstraction;
+﻿using Core.Events;
+using Core.Models;
 using Identity.API.Domain.Entities;
 using Identity.API.Infrastructure;
-using Identity.Contracts.Entity; 
-using Identity.Contracts.IntegrationEvent;
+using Identity.API.Service.Interfaces; 
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore; 
-using System.Data; 
+using Microsoft.EntityFrameworkCore;
+using System.Data;
 namespace Identity.API.Consumers;
 
 public class BusinessUserDeletedIntegrationEventConsumer(

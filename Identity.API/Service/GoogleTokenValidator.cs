@@ -1,14 +1,14 @@
-﻿using Google.Apis.Auth;
-using Identity.API.Abstraction;
-using Identity.API.Configs;
-using Microsoft.Extensions.Options; 
+﻿using Core.Configurations;
+using Google.Apis.Auth; 
+using Identity.API.Service.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace Identity.API.Service;
 
 public class GoogleTokenValidator : IGoogleTokenValidator
 { 
     private readonly string _clientId; 
-    public GoogleTokenValidator(IOptionsMonitor<GoogleConfig> googleConfigs)
+    public GoogleTokenValidator(IOptionsMonitor<GoogleConfiguration> googleConfigs)
     {
         _clientId = googleConfigs.CurrentValue.ClientId; 
     }

@@ -1,5 +1,5 @@
-﻿using Identity.API.Domain.Events; 
-using Identity.Contracts.IntegrationEvent;
+﻿using Core.Events;
+using Identity.API.Domain.Events;  
 using MassTransit;
 using MediatR;
 
@@ -10,7 +10,8 @@ public class IdentityEmailAssignedToAUserIntegrationEventHandler(IPublishEndpoin
     private readonly IPublishEndpoint _publishEndpoint = publishEndpoint; 
     public async Task Handle(EmailAssignedToAUserDomainEvent notification, CancellationToken cancellationToken)
     {
-        var @event = new IdentityEmailAssignedToAUserIntegrationEvent(notification.Sub, notification.Email, notification.UserType);
+        var @event = new IdentityEmailAssignedToAUserIntegrationEvent(
+            notification.Sub, notification.Email, notification.UserType);
 
         await _publishEndpoint.Publish(@event, cancellationToken);
     }

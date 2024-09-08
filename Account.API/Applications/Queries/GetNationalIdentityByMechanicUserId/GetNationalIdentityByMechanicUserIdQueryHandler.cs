@@ -1,7 +1,8 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Infrastructures;
-using Account.API.SeedWork;
-using Account.API.Services;
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
+using Core.Results;
+using Core.Messages;
 using Account.Domain.SeedWork;
 using MediatR;
 

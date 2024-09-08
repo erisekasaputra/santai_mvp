@@ -1,8 +1,7 @@
-using FileHub.API.Abstraction;
-using FileHub.API.Configurations;
-using FileHub.API.Infrastructure;
-using FileHub.API.Validations;
-using FileHub.API.Validations.Abstraction;
+
+using Core.Configurations;
+using FileHub.API.Services;
+using FileHub.API.Services.Interfaces; 
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.Extensions.Options;
@@ -11,14 +10,12 @@ using System.Threading.RateLimiting;
 
 var builder = WebApplication.CreateBuilder(args); 
 
-builder.Services.Configure<StorageConfigs>(builder.Configuration.GetSection(StorageConfigs.SectionName)); 
-builder.Services.Configure<KmsConfigs>(builder.Configuration.GetSection(KmsConfigs.SectionName)); 
-builder.Services.Configure<CacheConfigs>(builder.Configuration.GetSection(CacheConfigs.SectionName)); 
-var storageConfigs = builder.Configuration.GetSection(StorageConfigs.SectionName).Get<StorageConfigs>();
+builder.Services.Configure<StorageConfiguration>(builder.Configuration.GetSection(StorageConfiguration.SectionName)); 
+builder.Services.Configure<EncryptionConfiguration>(builder.Configuration.GetSection(EncryptionConfiguration.SectionName)); 
+builder.Services.Configure<CacheConfiguration>(builder.Configuration.GetSection(CacheConfiguration.SectionName));
 
-
-
-builder.Services.AddSingleton<IFileValidation, FileValidator>();
+var storageConfigs = builder.Configuration.GetSection(StorageConfiguration.SectionName).Get<StorageConfiguration>();
+ 
 builder.Services.AddSingleton<ICacheService, CacheService>();
 
 if (storageConfigs?.UseMinio ?? false)
@@ -60,7 +57,7 @@ builder.Services.AddRateLimiter(options =>
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
-    var cacheOptions = sp.CreateScope().ServiceProvider.GetRequiredService<IOptionsMonitor<CacheConfigs>>(); 
+    var cacheOptions = sp.CreateScope().ServiceProvider.GetRequiredService<IOptionsMonitor<CacheConfiguration>>(); 
     var configurations = new ConfigurationOptions
     {
         EndPoints = { cacheOptions.CurrentValue.Host },

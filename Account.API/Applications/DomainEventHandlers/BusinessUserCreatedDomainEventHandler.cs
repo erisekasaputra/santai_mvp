@@ -1,8 +1,7 @@
-﻿using Account.API.Services;
+﻿using Account.API.Applications.Services.Interfaces;
 using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Events;
-using Identity.Contracts.EventEntity;
-using Identity.Contracts.IntegrationEvent; 
+using Core.Events;
 using MediatR;
 
 namespace Account.API.Applications.DomainEventHandlers;
@@ -20,11 +19,11 @@ public class BusinessUserCreatedDomainEventHandler(
         {
             var entity = notification.BusinessUser;
 
-            var staffEvents = new List<StaffEvent>();
+            var staffEvents = new List<StaffIntegrationEvent>();
 
             foreach (Staff staff in entity?.Staffs ?? [])
             {
-                var staffEvent = new StaffEvent(
+                var staffEvent = new StaffIntegrationEvent(
                     staff.Id,
                     staff.BusinessUserCode,
                     await DecryptAsync(staff.EncryptedPhoneNumber!),

@@ -1,7 +1,6 @@
-﻿using Account.API.Services;
+﻿using Account.API.Applications.Services.Interfaces;
 using Account.Domain.Events;
-using Identity.Contracts.EventEntity;
-using Identity.Contracts.IntegrationEvent;
+using Core.Events;
 using MediatR;
 
 namespace Account.API.Applications.DomainEventHandlers;
@@ -16,7 +15,7 @@ public class StaffCreatedDomainEventHandler(
     {
         var @event = notification.Staff;
 
-        var staffEvent = new StaffEvent(@event.Id, @event.BusinessUserCode, await DecryptAsync(@event.EncryptedPhoneNumber!), await DecryptNullableAsync(@event.EncryptedEmail), @event.Name, @event.TimeZoneId, @event.Password);
+        var staffEvent = new StaffIntegrationEvent(@event.Id, @event.BusinessUserCode, await DecryptAsync(@event.EncryptedPhoneNumber!), await DecryptNullableAsync(@event.EncryptedEmail), @event.Name, @event.TimeZoneId, @event.Password);
 
         await _mediator.Publish(new StaffUserCreatedIntegrationEvent(staffEvent), cancellationToken);
     }

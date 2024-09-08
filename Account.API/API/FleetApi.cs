@@ -5,10 +5,11 @@ using Account.API.Applications.Commands.FleetCommand.UpdateFleetByUserId;
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetFleetByIdByUserId;
 using Account.API.Applications.Queries.GetPaginatedFleetByUserId;
+using Account.API.Applications.Services;
 using Account.API.CustomAttributes;
 using Account.API.Extensions;
 using Account.API.SeedWork;
-using Account.API.Services;
+using Core.Messages;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 

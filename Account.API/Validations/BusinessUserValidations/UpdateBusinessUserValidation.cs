@@ -1,6 +1,7 @@
-﻿using Account.API.Applications.Dtos.RequestDtos;
-using Account.API.Extensions;
+﻿using Account.API.Applications.Dtos.RequestDtos; 
 using Account.API.Validations.AddressValidations;
+using Core.Extensions;
+using Core.Validations;
 using FluentValidation;
 
 namespace Account.API.Validations.BusinessUserValidations;
@@ -23,7 +24,7 @@ public class UpdateBusinessUserValidation : AbstractValidator<UpdateBusinessUser
 
         RuleFor(x => x.WebsiteUrl)
             .Length(3, 255).WithMessage("Website url must be between 3 and 255 characters long")
-            .Must(UrlExtension.IsValidUrl).WithMessage("Website url format is invalid")
+            .Must(UrlValidation.IsValidUrl).WithMessage("Website url format is invalid")
             .When(x => !string.IsNullOrWhiteSpace(x.WebsiteUrl));
 
         RuleFor(x => x.Description)

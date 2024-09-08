@@ -1,5 +1,6 @@
 ﻿using Account.API.Extensions;
 using Account.Domain.Enumerations;
+using Core.Extensions;
 
 namespace Account.API.Applications.Dtos.RequestDtos;
 

@@ -1,7 +1,9 @@
-﻿using FileHub.API.Abstraction;
+﻿using Core.Messages;
+using Core.Results;
+using Core.Utilities;
+using Core.Validations;
 using FileHub.API.SeedWork;
-using FileHub.API.Utilities;
-using FileHub.API.Validations.Abstraction;
+using FileHub.API.Services.Interfaces; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Minio.Exceptions;
@@ -14,18 +16,15 @@ namespace FileHub.API.Controllers;
 public class FilesController
 {
     private readonly IStorageService _storageService;
-    private readonly ILogger<FilesController> _logger;
-    private readonly IFileValidation _fileValidation;
+    private readonly ILogger<FilesController> _logger; 
     private readonly ICacheService _cacheService;
     public FilesController(
         IStorageService storageService,
-        ILogger<FilesController> logger,
-        IFileValidation fileValidation,
+        ILogger<FilesController> logger, 
         ICacheService cacheService)
     {
         _storageService = storageService;
-        _logger = logger;
-        _fileValidation = fileValidation;
+        _logger = logger; 
         _cacheService = cacheService;
     }
 
@@ -41,15 +40,17 @@ public class FilesController
                 return await Task.FromResult(TypedResults.BadRequest("Invalid request parameter"));
             }
 
-            if (!_fileValidation.IsValidImage(file))
+            if (!FileValidation.IsValidImage(file))
             {
-                return await Task.FromResult(TypedResults.BadRequest("Invalid file type. Only image files are allowed."));
+                return await Task.FromResult(
+                    TypedResults.BadRequest("Invalid file type. Only image files are allowed."));
             }
 
             if (!await _storageService.IsBucketPrivateExistsAsync())
             {
                 _logger.LogError("Private bucket does not configured yet");
-                return await Task.FromResult(TypedResults.InternalServerError(Messages.InternalServerError));
+                return await Task.FromResult(
+                    TypedResults.InternalServerError(Messages.InternalServerError));
             }
 
             var newFileName = UrlBuilder.Build(Guid.NewGuid().ToString(), Path.GetExtension(file.FileName));
@@ -78,12 +79,14 @@ public class FilesController
         {
             if (file is null)
             {
-                return await Task.FromResult(TypedResults.BadRequest("Invalid request parameter"));
+                return await Task.FromResult(
+                    TypedResults.BadRequest("Invalid request parameter"));
             }
 
-            if (!_fileValidation.IsValidImage(file))
+            if (!FileValidation.IsValidImage(file))
             {
-                return await Task.FromResult(TypedResults.BadRequest("Invalid file type. Only image files are allowed."));
+                return await Task.FromResult(
+                    TypedResults.BadRequest("Invalid file type. Only image files are allowed."));
             }
 
             if (!await _storageService.IsBucketPublicExistsAsync())
@@ -128,7 +131,7 @@ public class FilesController
             if (string.IsNullOrEmpty(resourceName))
             {
                 return TypedResults.BadRequest(
-                    Result.Failure("", ResponseStatus.BadRequest)
+                    Result.Failure("Data not found", ResponseStatus.BadRequest)
                     .WithError(new("ResourceName", "Object url must not empty")));
             }
 
@@ -137,7 +140,7 @@ public class FilesController
             if (bytes is null)
             {
                 return TypedResults.NotFound(
-                    Result.Failure("", ResponseStatus.NotFound)
+                    Result.Failure("Data not found", ResponseStatus.NotFound)
                     .WithError(new("ResourceName", "Object resource not found")));
             }
 

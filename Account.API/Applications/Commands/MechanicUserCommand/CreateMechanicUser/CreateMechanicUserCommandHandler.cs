@@ -1,10 +1,9 @@
 ﻿using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Dtos.ResponseDtos;
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
 using Account.API.Extensions;
-using Account.API.Mapper;
-using Account.API.Options;
-using Account.API.SeedWork;
-using Account.API.Services;
+using Core.Results;
 using Account.Domain.Aggregates.CertificationAggregate;
 using Account.Domain.Aggregates.ReferralAggregate;
 using Account.Domain.Aggregates.ReferredAggregate;
@@ -12,23 +11,26 @@ using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Enumerations;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
-using Account.Domain.ValueObjects; 
+using Account.Domain.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Options;
 using System.Data;
+using Core.Configurations;
+using Core.Extensions;
+using Core.Messages;
 
 namespace Account.API.Applications.Commands.MechanicUserCommand.CreateMechanicUser;
 
 public class CreateMechanicUserCommandHandler(
     IUnitOfWork unitOfWork,
     ApplicationService service,
-    IOptionsMonitor<ReferralProgramOption> referralOption,
+    IOptionsMonitor<ReferralProgramConfiguration> referralOption,
     IKeyManagementService kmsClient,
     IHashService hashService) : IRequestHandler<CreateMechanicUserCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _appService = service;
-    private readonly IOptionsMonitor<ReferralProgramOption> _referralOptions = referralOption;
+    private readonly IOptionsMonitor<ReferralProgramConfiguration> _referralOptions = referralOption;
     private readonly IKeyManagementService _kmsClient = kmsClient;
     private readonly IHashService _hashClient = hashService;
 
@@ -56,6 +58,10 @@ public class CreateMechanicUserCommandHandler(
             var hashedIdentityNumber = await HashAsync(request.NationalIdentity.IdentityNumber);
             var encryptedIdentityNumber = await EncryptAsync(request.NationalIdentity.IdentityNumber);
 
+            if (await _unitOfWork.BaseUsers.GetAnyByIdAsync(request.IdentityId))
+            {
+                return Result.Failure("User already registered", ResponseStatus.Conflict);
+            }
 
             // get all users that already registered with related request identities such as email, username, phonenumber, and identity id(from identity database)
             var conflictUsers = await _unitOfWork.BaseUsers.GetByIdentitiesAsNoTrackingAsync( 

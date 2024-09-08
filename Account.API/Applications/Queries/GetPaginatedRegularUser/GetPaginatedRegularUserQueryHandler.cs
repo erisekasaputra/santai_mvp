@@ -1,8 +1,9 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Infrastructures;
-using Account.API.Mapper;
-using Account.API.SeedWork;
-using Account.API.Services;
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
+using Account.API.Extensions;
+using Core.Results;
+using Core.Messages;
 using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.SeedWork;
 using MediatR;
@@ -32,7 +33,7 @@ public class GetPaginatedRegularUserQueryHandler(
 
             var userResponseDto = await ToRegularUserResponseDto(users);
 
-            var response = new PaginatedItemReponseDto<RegularUserResponseDto>(request.PageNumber, request.PageSize, totalCount, totalPages, userResponseDto);
+            var response = new PaginatedResponseDto<RegularUserResponseDto>(request.PageNumber, request.PageSize, totalCount, totalPages, userResponseDto);
 
             return Result.Success(response, ResponseStatus.Ok);
         }

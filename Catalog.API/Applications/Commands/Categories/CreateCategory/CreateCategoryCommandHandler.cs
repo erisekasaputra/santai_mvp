@@ -1,21 +1,21 @@
-﻿using Catalog.API.DTOs.Category;
-using Catalog.API.SeedWork;
+﻿using Catalog.API.Applications.Dtos.Category;
 using Catalog.Domain.Aggregates.CategoryAggregate;
 using Catalog.Domain.SeedWork;
+using Core.Results;
 using MediatR;
 
 namespace Catalog.API.Applications.Commands.Categories.CreateCategory;
 
-public class CreateCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateCategoryCommand, Result<CategoryDto>>
+public class CreateCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<CreateCategoryCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    public async Task<Result<CategoryDto>> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(CreateCategoryCommand request, CancellationToken cancellationToken)
     {
         var existingCategory = await _unitOfWork.Categories.GetCategoryByNameAsync(request.Name);
 
         if (existingCategory is not null)
         {
-            return Result<CategoryDto>.Failure($"Category {request.Name} already registered", 409);
+            return Result.Failure($"Category {request.Name} already registered", ResponseStatus.Conflict);
         }
 
         var category = new Category(
@@ -27,16 +27,16 @@ public class CreateCategoryCommandHandler(IUnitOfWork unitOfWork) : IRequestHand
 
         if (response is null)
         {
-            return Result<CategoryDto>.Failure("We encountered an issue while creating the category. Please try again later or contact support if the problem persists.", 500);
+            return Result.Failure("We encountered an issue while creating the category. Please try again later or contact support if the problem persists.", ResponseStatus.InternalServerError);
         }
 
         var result = await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         if (result <= 0)
         {
-            return Result<CategoryDto>.Failure("We encountered an issue while creating the category. Please try again later or contact support if the problem persists.", 500);
+            return Result.Failure("We encountered an issue while creating the category. Please try again later or contact support if the problem persists.", ResponseStatus.InternalServerError);
         }
 
-        return Result<CategoryDto>.SuccessResult(new CategoryDto(response.Id, response.Name, response.ImageUrl), [], 201);
+        return Result.Success(new CategoryDto(response.Id, response.Name, response.ImageUrl), ResponseStatus.Created);
     }
 }

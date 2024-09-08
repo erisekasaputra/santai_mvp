@@ -8,16 +8,16 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
-using Identity.Contracts.Enumerations;
-using Order.API.CustomDelegate;
+using Microsoft.IdentityModel.Tokens; 
 using Order.API.Applications.Services;
 using Order.Domain.SeedWork;
-using Order.Infrastructure;
-using Order.API.Configurations;
-using Order.API.SeedWorks;
+using Order.Infrastructure;  
 using Amazon.KeyManagementService;
 using Order.API.Applications.Services.Interfaces;
+using Order.API.CustomDelegates;
+using Core.Configurations;
+using Core.SeedWorks;
+using Core.Enumerations;
 
 namespace Order.API.Extensions;
 
@@ -35,7 +35,7 @@ public static class ServiceRegistration
 
     public static IServiceCollection AddRedisDatabase(this IServiceCollection services)
     {
-        var cacheOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<InMemoryDatabaseOption>>()
+        var cacheOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<CacheConfiguration>>()
             ?? throw new Exception("Please provide value for database option");
 
         services.AddSingleton<IConnectionMultiplexer>(sp =>
@@ -116,7 +116,7 @@ public static class ServiceRegistration
 
     public static IServiceCollection AddHttpClients(this IServiceCollection service)
     {
-        var clientConfig = service.BuildServiceProvider().GetService<IOptionsMonitor<AccountServiceClientConfiguration>>()
+        var clientConfig = service.BuildServiceProvider().GetService<IOptionsMonitor<AccountServiceConfiguration>>()
             ?? throw new Exception("Please provide value for database option");
 
 
@@ -139,7 +139,8 @@ public static class ServiceRegistration
         {
             options.UseSqlServer(databaseOption.CurrentValue.ConnectionString, action =>
             {
-                action.CommandTimeout(databaseOption.CurrentValue.CommandTimeOut); 
+                action.EnableRetryOnFailure();
+                action.CommandTimeout(databaseOption.CurrentValue.CommandTimeout); 
             });
         });
 
@@ -148,7 +149,7 @@ public static class ServiceRegistration
 
     public static IServiceCollection AddMassTransitContext(this IServiceCollection services)
     {
-        var messageBusOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<MessageBusOption>>()
+        var messageBusOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<MessagingConfiguration>>()
             ?? throw new Exception("Please provide value for message bus options");
 
         var options = messageBusOptions.CurrentValue;
@@ -210,7 +211,7 @@ public static class ServiceRegistration
 
                     receiveBuilder.UseDelayedRedelivery(redelivery =>
                     {
-                        redelivery.Intervals(TimeSpan.FromSeconds(options.DelayedRedeliveryInternval));
+                        redelivery.Intervals(TimeSpan.FromSeconds(options.DelayedRedeliveryInterval));
                     });
 
                     receiveBuilder.UseRateLimit(1000, TimeSpan.FromSeconds(2));
@@ -234,13 +235,13 @@ public static class ServiceRegistration
 
     public static WebApplicationBuilder AddOptionConfiguration(this WebApplicationBuilder builder)
     { 
-        builder.Services.Configure<AccountServiceClientConfiguration>(builder.Configuration.GetSection(AccountServiceClientConfiguration.SectionName));
+        builder.Services.Configure<AccountServiceConfiguration>(builder.Configuration.GetSection(AccountServiceConfiguration.SectionName));
         builder.Services.Configure<DatabaseConfiguration>(builder.Configuration.GetSection(DatabaseConfiguration.SectionName));
-        builder.Services.Configure<InMemoryDatabaseOption>(builder.Configuration.GetSection(InMemoryDatabaseOption.SectionName));
-        builder.Services.Configure<MessageBusOption>(builder.Configuration.GetSection(MessageBusOption.SectionName));
-        builder.Services.Configure<KeyManagementServiceOption>(builder.Configuration.GetSection(KeyManagementServiceOption.SectionName));
-        builder.Services.Configure<IdempotencyOptions>(builder.Configuration.GetSection(IdempotencyOptions.SectionName));
-        builder.Services.Configure<JwtOption>(builder.Configuration.GetSection(JwtOption.SectionName));
+        builder.Services.Configure<CacheConfiguration>(builder.Configuration.GetSection(CacheConfiguration.SectionName));
+        builder.Services.Configure<MessagingConfiguration>(builder.Configuration.GetSection(MessagingConfiguration.SectionName));
+        builder.Services.Configure<EncryptionConfiguration>(builder.Configuration.GetSection(EncryptionConfiguration.SectionName));
+        builder.Services.Configure<IdempotencyConfiguration>(builder.Configuration.GetSection(IdempotencyConfiguration.SectionName));
+        builder.Services.Configure<JwtConfiguration>(builder.Configuration.GetSection(JwtConfiguration.SectionName));
 
         return builder;
     }
@@ -255,7 +256,7 @@ public static class ServiceRegistration
             services.AddSingleton<IKeyManagementService>(sp =>
             {
                 var kmsClient = sp.GetRequiredService<IAmazonKeyManagementService>();
-                var kmsOptions = sp.GetRequiredService<IOptionsMonitor<KeyManagementServiceOption>>();
+                var kmsOptions = sp.GetRequiredService<IOptionsMonitor<EncryptionConfiguration>>();
                 return new CloudKeyManagementService(kmsClient, kmsOptions.CurrentValue.Id);
             });
         }
@@ -263,7 +264,7 @@ public static class ServiceRegistration
         {
             services.AddSingleton<IKeyManagementService>(sp =>
             {
-                var kmsOptions = sp.GetRequiredService<IOptionsMonitor<KeyManagementServiceOption>>();
+                var kmsOptions = sp.GetRequiredService<IOptionsMonitor<EncryptionConfiguration>>();
                 return new LocalKeyManagementService(kmsOptions.CurrentValue.SecretKey);
             });
         }
@@ -294,7 +295,7 @@ public static class ServiceRegistration
 
     public static IServiceCollection AddAuth(this IServiceCollection services)
     {
-        var jwtOption = services.BuildServiceProvider().GetService<IOptionsMonitor<JwtOption>>()
+        var jwtOption = services.BuildServiceProvider().GetService<IOptionsMonitor<JwtConfiguration>>()
            ?? throw new Exception("Please provide value for message bus options");
 
         var jwt = jwtOption.CurrentValue;

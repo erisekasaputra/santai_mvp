@@ -1,4 +1,4 @@
-﻿using Identity.Contracts.IntegrationEvent;
+﻿using Core.Events;  
 using MassTransit;
 using MediatR;
 

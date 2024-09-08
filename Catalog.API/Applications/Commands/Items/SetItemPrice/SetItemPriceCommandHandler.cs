@@ -1,8 +1,8 @@
 ﻿
-using Catalog.API.DTOs.ItemPrice;
-using Catalog.API.SeedWork;
-using Catalog.API.Services;
-using Catalog.Domain.SeedWork; 
+using Catalog.API.Applications.Dtos.ItemPrice;
+using Catalog.API.Applications.Services; 
+using Catalog.Domain.SeedWork;
+using Core.Results;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Polly;
@@ -11,7 +11,7 @@ using System.Data;
 
 namespace Catalog.API.Applications.Commands.Items.SetItemPrice;
 
-public class SetItemPriceCommandHandler : IRequestHandler<SetItemPriceCommand, Result<IEnumerable<ItemPriceDto>>>
+public class SetItemPriceCommandHandler : IRequestHandler<SetItemPriceCommand, Result>
 {
     private readonly AsyncRetryPolicy _asyncRetryPolicy;
     private readonly IUnitOfWork _unitOfWork;
@@ -30,7 +30,7 @@ public class SetItemPriceCommandHandler : IRequestHandler<SetItemPriceCommand, R
     }
 
 
-    public async Task<Result<IEnumerable<ItemPriceDto>>> Handle(SetItemPriceCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(SetItemPriceCommand request, CancellationToken cancellationToken)
     {
         var result = await _asyncRetryPolicy.ExecuteAsync(async () =>
         {
@@ -59,7 +59,7 @@ public class SetItemPriceCommandHandler : IRequestHandler<SetItemPriceCommand, R
 
                     await _unitOfWork.RollbackTransactionAsync(cancellationToken);
 
-                    return Result<IEnumerable<ItemPriceDto>>.Failure(message, 404).WithData(missingItemRequests.Select(x =>
+                    return Result.Failure(message, ResponseStatus.BadRequest).WithData(missingItemRequests.Select(x =>
                     {
                         return new ItemPriceDto(x.ItemId, 0, "Data not found");
                     }).ToList());
@@ -84,7 +84,7 @@ public class SetItemPriceCommandHandler : IRequestHandler<SetItemPriceCommand, R
                 if (numberOfErrors is 0)
                 {
                     await _unitOfWork.CommitTransactionAsync(cancellationToken);
-                    return Result<IEnumerable<ItemPriceDto>>.SuccessResult([], [], 200);
+                    return Result.Success(null, ResponseStatus.Ok);
                 }
 
                 var messageError = numberOfErrors == 1
@@ -92,7 +92,7 @@ public class SetItemPriceCommandHandler : IRequestHandler<SetItemPriceCommand, R
                        : $"There are {numberOfErrors} error items";
 
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                return Result<IEnumerable<ItemPriceDto>>.Failure(messageError, 400).WithData(itemErrors);
+                return Result.Failure(messageError, ResponseStatus.BadRequest).WithData(itemErrors);
             }
             catch (DBConcurrencyException)
             {

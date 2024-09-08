@@ -1,13 +1,13 @@
-﻿using Catalog.API.SeedWork;
-using Catalog.Domain.SeedWork; 
+﻿using Catalog.Domain.SeedWork;
+using Core.Results;
 using MediatR;
 
 namespace Catalog.API.Applications.Commands.Items.ActivateItem;
 
-public class ActivateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<ActivateItemCommand, Result<Unit>>
+public class ActivateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<ActivateItemCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    public async Task<Result<Unit>> Handle(ActivateItemCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(ActivateItemCommand request, CancellationToken cancellationToken)
     {
         var item = await _unitOfWork.Items.GetItemByIdAsync(request.Id);
 
@@ -20,6 +20,6 @@ public class ActivateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandle
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        return Result<Unit>.SuccessResult(Unit.Value, [], 204);
+        return Result.Success(Unit.Value, ResponseStatus.NoContent);
     }
 }

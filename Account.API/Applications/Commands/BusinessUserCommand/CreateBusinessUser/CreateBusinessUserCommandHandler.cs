@@ -1,8 +1,8 @@
 ﻿using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Options;
-using Account.API.SeedWork;
-using Account.API.Services;
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces; 
+using Core.Results;
 using Account.Domain.Aggregates.BusinessLicenseAggregate;
 using Account.Domain.Aggregates.ReferralAggregate;
 using Account.Domain.Aggregates.ReferredAggregate;
@@ -14,20 +14,22 @@ using Account.Domain.ValueObjects;
 using MediatR;
 using Microsoft.Extensions.Options;
 using System.Data;
+using Core.Configurations;
+using Core.Messages;
 
 namespace Account.API.Applications.Commands.BusinessUserCommand.CreateBusinessUser;
 
 public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUserCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IOptionsMonitor<ReferralProgramOption> _referralOptions;
+    private readonly IOptionsMonitor<ReferralProgramConfiguration> _referralOptions;
     private readonly ApplicationService _service;
     private readonly IKeyManagementService _kmsClient;
     private readonly IHashService _hashService;
 
     public CreateBusinessUserCommandHandler(
         IUnitOfWork unitOfWork,
-        IOptionsMonitor<ReferralProgramOption> referralOptions,
+        IOptionsMonitor<ReferralProgramConfiguration> referralOptions,
         ApplicationService service,
         IKeyManagementService kmsClient,
         IHashService hashService)

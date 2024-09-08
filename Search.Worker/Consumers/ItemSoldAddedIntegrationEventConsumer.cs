@@ -1,4 +1,5 @@
-﻿using Catalog.Contracts;
+﻿ 
+using Core.Events;
 using MassTransit;
 using MediatR;
 using Search.Worker.Applications.Commands.AddItemSoldQuantity;

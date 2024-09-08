@@ -57,15 +57,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Catalog.Contracts\Catalog.Contracts.csproj" />
     <ProjectReference Include="..\Catalog.Infrastructure\Catalog.Infrastructure.csproj" />
-    <ProjectReference Include="..\SantaiClaimType\SantaiClaimType.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Infrastructures\Messaging\" />
-    <Folder Include="Infrastructures\Persistence\" />
-    <Folder Include="Applications\IntegrationEvents\EventHandlers\Incoming\" />
+    <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
 </Project>

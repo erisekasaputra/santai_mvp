@@ -30,9 +30,13 @@ public class UnitOfWork : IUnitOfWork
         if (_transaction is not null)
         {
             throw new InvalidOperationException("Transaction already started.");
-        }
+        } 
 
-        _transaction = await _dbContext.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
+        var strategy = _dbContext.Database.CreateExecutionStrategy();
+        await strategy.ExecuteAsync(async () =>
+        {
+            _transaction = await _dbContext.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
+        }); 
     }
 
     public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
@@ -44,9 +48,12 @@ public class UnitOfWork : IUnitOfWork
                 throw new InvalidOperationException("No transaction started.");
             }
 
-            await SaveChangesAsync(cancellationToken);
-
-            await _transaction.CommitAsync(cancellationToken); 
+            var strategy = _dbContext.Database.CreateExecutionStrategy();
+            await strategy.ExecuteAsync(async () =>
+            {
+                await SaveChangesAsync(cancellationToken); 
+                await _transaction.CommitAsync(cancellationToken);
+            }); 
         }
         catch (Exception)
         {

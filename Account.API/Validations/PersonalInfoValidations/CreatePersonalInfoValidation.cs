@@ -1,5 +1,5 @@
-﻿using Account.API.Applications.Dtos.RequestDtos;
-using Account.API.Extensions;
+﻿using Account.API.Applications.Dtos.RequestDtos; 
+using Core.Validations;
 using FluentValidation;
 
 namespace Account.API.Validations.PersonalInfoValidations;
@@ -11,16 +11,16 @@ public class CreatePersonalInfoValidation : AbstractValidator<PersonalInfoReques
         RuleFor(x => x.FirstName)
             .NotEmpty().WithMessage("First name is required")
             .Length(2, 50).WithMessage("The name must be between 2 and 50 characters long")
-            .Must(NameExtension.IsValidName).WithMessage("The name must contain only alphabet, e.g: 'Michael'");
+            .Must(NameValidation.IsValidName).WithMessage("The name must contain only alphabet, e.g: 'Michael'");
 
         RuleFor(x => x.MiddleName)
             .Length(2, 50).WithMessage("The name must be between 2 and 50 characters long")
-            .Must(NameExtension.IsValidName).WithMessage("The name must contain only alphabet, e.g: 'John'")
+            .Must(NameValidation.IsValidName).WithMessage("The name must contain only alphabet, e.g: 'John'")
             .When(x => !string.IsNullOrWhiteSpace(x.MiddleName));
 
         RuleFor(x => x.LastName)
             .Length(2, 50).WithMessage("The name must be between 2 and 50 characters long")
-            .Must(NameExtension.IsValidName).WithMessage("The name must contain only alphabet, e.g: 'Doe'")
+            .Must(NameValidation.IsValidName).WithMessage("The name must contain only alphabet, e.g: 'Doe'")
             .When(x => !string.IsNullOrWhiteSpace(x.LastName)); 
 
         RuleFor(x => x.Gender)
@@ -29,7 +29,7 @@ public class CreatePersonalInfoValidation : AbstractValidator<PersonalInfoReques
 
         RuleFor(p => p.ProfilePictureUrl)
             .MaximumLength(255).WithMessage("URL path is too long; it must not exceed 255 characters.")
-            .Must(UrlExtension.IsValidImageUrl).WithMessage("Profile picture URL must be a valid image URL (jpg, jpeg, png).")
+            .Must(UrlValidation.IsValidImageUrl).WithMessage("Profile picture URL must be a valid image URL (jpg, jpeg, png).")
             .When(x => !string.IsNullOrWhiteSpace(x.ProfilePictureUrl));
     } 
 }

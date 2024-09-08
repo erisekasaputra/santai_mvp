@@ -1,8 +1,8 @@
-﻿using Identity.API.Abstraction;
-using StackExchange.Redis;
+﻿using StackExchange.Redis;
 using System.Text.Json;
 using System.Text;
 using Newtonsoft.Json.Linq;
+using Identity.API.Service.Interfaces;
 
 namespace Identity.API.Service;
 

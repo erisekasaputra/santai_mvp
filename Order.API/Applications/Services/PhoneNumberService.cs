@@ -1,4 +1,5 @@
-﻿using Order.API.SeedWorks;
+﻿using Core.Validations;
+using Order.API.SeedWorks;
 using PhoneNumbers;
 
 namespace Order.API.Applications.Services; 
@@ -9,7 +10,7 @@ public static class PhoneNumberService
     {
         try
         {
-            if (!RegionCodeValidator.IsValidRegionCode(regionCode))
+            if (!RegionCodeValidation.IsValidRegionCode(regionCode))
             {
                 return null;
             }

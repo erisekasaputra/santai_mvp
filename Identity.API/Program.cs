@@ -1,26 +1,28 @@
+using Core.Configurations;
+using Core.Enumerations;
+using Core.SeedWorks;
 using FluentValidation;
 using FluentValidation.AspNetCore;
-using Identity.API;
-using Identity.API.Abstraction;
-using Identity.API.Configs;
+using Identity.API; 
 using Identity.API.Consumers;
 using Identity.API.Domain.Entities;
 using Identity.API.Infrastructure;
 using Identity.API.Middleware;
 using Identity.API.SeedWork;
 using Identity.API.Service;
+using Identity.API.Service.Interfaces;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.RateLimiting;
-using Microsoft.EntityFrameworkCore; 
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.RateLimiting;  
+using System.Threading.RateLimiting;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -64,18 +66,19 @@ builder.Services.AddRateLimiter(options =>
     });
 });
 
-builder.Services.Configure<JwtConfig>(builder.Configuration.GetSection(JwtConfig.SectionName));
-builder.Services.Configure<GoogleConfig>(builder.Configuration.GetSection(GoogleConfig.SectionName));
-builder.Services.Configure<DatabaseConfig>(builder.Configuration.GetSection(DatabaseConfig.SectionName));
-builder.Services.Configure<CacheConfig>(builder.Configuration.GetSection(CacheConfig.SectionName));
-builder.Services.Configure<OtpConfig>(builder.Configuration.GetSection(OtpConfig.SectionName)); 
-builder.Services.Configure<IdempotencyConfig>(builder.Configuration.GetSection(IdempotencyConfig.SectionName));
+builder.Services.Configure<JwtConfiguration>(builder.Configuration.GetSection(JwtConfiguration.SectionName));
+builder.Services.Configure<GoogleConfiguration>(builder.Configuration.GetSection(GoogleConfiguration.SectionName));
+builder.Services.Configure<DatabaseConfiguration>(builder.Configuration.GetSection(DatabaseConfiguration.SectionName));
+builder.Services.Configure<CacheConfiguration>(builder.Configuration.GetSection(CacheConfiguration.SectionName));
+builder.Services.Configure<OtpConfiguration>(builder.Configuration.GetSection(OtpConfiguration.SectionName)); 
+builder.Services.Configure<IdempotencyConfiguration>(builder.Configuration.GetSection(IdempotencyConfiguration.SectionName));
+builder.Services.Configure<MessagingConfiguration>(builder.Configuration.GetSection(MessagingConfiguration.SectionName));
 
-var jwtOption = builder.Configuration.GetSection(JwtConfig.SectionName).Get<JwtConfig>();
-var googleOptions = builder.Configuration.GetSection(GoogleConfig.SectionName).Get<GoogleConfig>(); 
-var databaseOptions = builder.Configuration.GetSection(DatabaseConfig.SectionName).Get<DatabaseConfig>(); 
-var eventBusOptions = builder.Configuration.GetSection(EventBusConfig.SectionName).Get<EventBusConfig>();
-var otpOptions = builder.Configuration.GetSection(OtpConfig.SectionName).Get<OtpConfig>(); 
+var jwtOption = builder.Configuration.GetSection(JwtConfiguration.SectionName).Get<JwtConfiguration>();
+var googleOptions = builder.Configuration.GetSection(GoogleConfiguration.SectionName).Get<GoogleConfiguration>(); 
+var databaseOptions = builder.Configuration.GetSection(DatabaseConfiguration.SectionName).Get<DatabaseConfiguration>(); 
+var eventBusOptions = builder.Configuration.GetSection(MessagingConfiguration.SectionName).Get<MessagingConfiguration>();
+var otpOptions = builder.Configuration.GetSection(OtpConfiguration.SectionName).Get<OtpConfiguration>(); 
   
 builder.Services.AddSingleton<ActionMethodService>();
 
@@ -194,7 +197,7 @@ builder.Services.AddMassTransit(x =>
 
             receiveBuilder.UseDelayedRedelivery(redelivery =>
             {
-                redelivery.Intervals(TimeSpan.FromSeconds(eventBusOptions.DelayedRedeliveryInternval));
+                redelivery.Intervals(TimeSpan.FromSeconds(eventBusOptions.DelayedRedeliveryInterval));
             });
 
             receiveBuilder.UseRateLimit(1000, TimeSpan.FromSeconds(2));
@@ -254,7 +257,7 @@ builder.Services.AddAuthentication(authOption =>
 
 builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 {
-    var cacheOptions = sp.CreateScope().ServiceProvider.GetRequiredService<IOptionsMonitor<CacheConfig>>();
+    var cacheOptions = sp.CreateScope().ServiceProvider.GetRequiredService<IOptionsMonitor<CacheConfiguration>>();
 
     var configurations = new ConfigurationOptions
     {
@@ -273,13 +276,16 @@ builder.Services.AddSingleton<IConnectionMultiplexer>(sp =>
 
 builder.Services.AddAuthorization(options =>
 {
-    options.AddPolicy("AdministratorPolicy", policy => 
+    options.AddPolicy(PolicyName.AdministratorPolicy, policy => 
     {
-        policy.RequireRole("Administrator"); 
+        policy.RequireRole(UserType.Administrator.ToString()); 
     });
 }); 
 
 var app = builder.Build();
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseMiddleware<IdempotencyMiddleware>();
 
 using (var scope = app.Services.CreateScope())
 {
@@ -287,8 +293,6 @@ using (var scope = app.Services.CreateScope())
     await SeedDatabase.Initialize(services);
 }
 
-app.UseMiddleware<GlobalExceptionMiddleware>();
-//app.UseMiddleware<IdempotencyMiddleware>();
 
 app.UseRateLimiter();
 

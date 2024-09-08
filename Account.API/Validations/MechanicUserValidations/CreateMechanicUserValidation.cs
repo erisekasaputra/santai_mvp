@@ -1,10 +1,10 @@
-﻿using Account.API.Applications.Dtos.RequestDtos;
-using Account.API.Extensions;
+﻿using Account.API.Applications.Dtos.RequestDtos; 
 using Account.API.Validations.AddressValidations; 
 using Account.API.Validations.CertificationValidations;
 using Account.API.Validations.DrivingLicenseValidations;
 using Account.API.Validations.NationalIdentityValidations;
 using Account.API.Validations.PersonalInfoValidations;
+using Core.Extensions;
 using FluentValidation;
 
 namespace Account.API.Validations.MechanicUserValidations;
@@ -43,10 +43,5 @@ public class CreateMechanicUserValidation : AbstractValidator<MechanicUserReques
             RuleForEach(e => e.Certifications).SetValidator(new CreateCertificationValidation());
         }); 
     }
-
-
-    private bool MustValidGuid(Guid id)
-    {
-        return id != Guid.Empty && id != default;
-    }
+     
 }

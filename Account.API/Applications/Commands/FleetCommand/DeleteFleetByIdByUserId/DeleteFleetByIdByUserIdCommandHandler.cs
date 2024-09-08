@@ -1,24 +1,26 @@
-﻿using Account.API.Options;
-using Account.API.SeedWork;
-using Account.API.Services; 
+﻿using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
+using Core.Results; 
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Options;
+using Core.Configurations;
+using Core.Messages;
 
 namespace Account.API.Applications.Commands.FleetCommand.DeleteFleetByIdByUserId;
 
 public class DeleteFleetByIdByUserIdCommandHandler : IRequestHandler<DeleteFleetByIdByUserIdCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork;
-    private readonly IOptionsMonitor<ReferralProgramOption> _referralOptions;
+    private readonly IOptionsMonitor<ReferralProgramConfiguration> _referralOptions;
     private readonly ApplicationService _service;
     private readonly IKeyManagementService _kmsClient;
     private readonly IHashService _hashService;
 
     public DeleteFleetByIdByUserIdCommandHandler(
       IUnitOfWork unitOfWork,
-      IOptionsMonitor<ReferralProgramOption> referralOptions,
+      IOptionsMonitor<ReferralProgramConfiguration> referralOptions,
       ApplicationService service,
       IKeyManagementService kmsClient,
       IHashService hashService)

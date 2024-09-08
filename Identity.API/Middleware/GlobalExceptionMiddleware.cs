@@ -1,5 +1,5 @@
 ﻿
-using Identity.API.SeedWork;
+using Core.Messages; 
 
 namespace Identity.API.Middleware;
 

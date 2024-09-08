@@ -1,4 +1,4 @@
-﻿using Catalog.API.DTOs.OwnerReview;  
+﻿using Catalog.API.Applications.Dtos.OwnerReview; 
 using FluentValidation;
 
 namespace Catalog.API.Validations.Item;

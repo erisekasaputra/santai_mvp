@@ -1,6 +1,9 @@
+using Account.API;
 using Account.API.API;  
 using Account.API.Extensions;
 using Account.API.Middleware;
+using Account.Infrastructure;
+using Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,11 +21,11 @@ if (builder.Environment.IsDevelopment())
 builder.Services.AddJsonEnumConverterBehavior(); 
 builder.Services.AddAuth(); 
 builder.Services.AddHttpContextAccessor(); 
-builder.Services.AddMediatorService(); 
+builder.Services.AddMediatorService<IAccountAPIMarkerInterface>(); 
 builder.Services.AddRedisDatabase();  
 builder.Services.AddApplicationService(); 
-builder.Services.AddValidation(); 
-builder.Services.AddSqlDatabaseContext();   
+builder.Services.AddValidation<IAccountAPIMarkerInterface>(); 
+builder.Services.AddSqlDatabaseContext<AccountDbContext>();   
 builder.Services.AddMassTransitContext(); 
 builder.Services.AddDataEncryption(builder.Configuration); 
 

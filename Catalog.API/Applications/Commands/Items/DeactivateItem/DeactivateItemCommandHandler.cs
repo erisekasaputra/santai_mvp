@@ -1,14 +1,14 @@
-﻿using Catalog.API.SeedWork;
-using Catalog.Domain.SeedWork;
+﻿using Catalog.Domain.SeedWork;
+using Core.Results;
 using MediatR;
 
 namespace Catalog.API.Applications.Commands.Items.DeactivateItem;
 
-public class DeactivateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeactivateItemCommand, Result<Unit>>
+public class DeactivateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<DeactivateItemCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
 
-    public async Task<Result<Unit>> Handle(DeactivateItemCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(DeactivateItemCommand request, CancellationToken cancellationToken)
     {
         var item = await _unitOfWork.Items.GetItemByIdAsync(request.Id);
 
@@ -21,6 +21,6 @@ public class DeactivateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHand
             await _unitOfWork.SaveChangesAsync(cancellationToken);
         }
 
-        return Result<Unit>.SuccessResult(Unit.Value, [], 204);
+        return Result.Success(Unit.Value, ResponseStatus.NoContent);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Catalog.Contracts;
+﻿ 
+using Core.Events;
 using MediatR;
 
 namespace Search.Worker.Applications.Commands.CreateItem;

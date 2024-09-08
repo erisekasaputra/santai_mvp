@@ -1,23 +1,24 @@
 ﻿using Catalog.API.Applications.Commands.Items.ActivateItem;
 using Catalog.API.Applications.Commands.Items.AddItemSoldQuantity;
-using Catalog.API.Applications.Commands.Items.AddItemStockQuantity; 
+using Catalog.API.Applications.Commands.Items.AddItemStockQuantity;
 using Catalog.API.Applications.Commands.Items.CreateItem;
 using Catalog.API.Applications.Commands.Items.DeactivateItem;
 using Catalog.API.Applications.Commands.Items.DeleteItem;
 using Catalog.API.Applications.Commands.Items.ReduceItemSoldQuantity;
-using Catalog.API.Applications.Commands.Items.ReduceItemStockQuantity; 
+using Catalog.API.Applications.Commands.Items.ReduceItemStockQuantity;
 using Catalog.API.Applications.Commands.Items.SetItemPrice;
 using Catalog.API.Applications.Commands.Items.SetItemSoldQuantity;
 using Catalog.API.Applications.Commands.Items.SetItemStockQuantity;
 using Catalog.API.Applications.Commands.Items.UndeleteItem;
 using Catalog.API.Applications.Commands.Items.UpdateItem;
+using Catalog.API.Applications.Dtos.Item;
 using Catalog.API.Applications.Queries.Items.GetItemById;
 using Catalog.API.Applications.Queries.Items.GetItemPaginated;
-using Catalog.API.DTOs.Item;
-using Catalog.API.SeedWork;
-using Catalog.API.Services;
+using Catalog.API.Applications.Services;
+using Catalog.API.Extensions;
+using Core.Results;
 using FluentValidation;
-using Microsoft.AspNetCore.Mvc; 
+using Microsoft.AspNetCore.Mvc;
 namespace Catalog.API.API;
 
 public static class ItemAPI
@@ -61,24 +62,13 @@ public static class ItemAPI
             var validation = await validator.ValidateAsync(query);
 
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<ItemDto>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
-            var response = await service.Mediator.Send(query);
+            var response = await service.Mediator.Send(query); 
 
-            if (response.Success)
-            {
-                return TypedResults.Ok(response);
-            }
-
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                _ => TypedResults.BadRequest(response),
-            };
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -97,24 +87,14 @@ public static class ItemAPI
             var validation = await validator.ValidateAsync(itemPaginatedQuery);
 
             if (!validation.IsValid)
-            {
-                var errors = validation.Errors.Select(x => x.ErrorMessage).ToList();
-                var validationErrors = Result<ItemDto>.Failure(errors, 400);
-                return TypedResults.BadRequest(validationErrors);
+            { 
+                return TypedResults.BadRequest(validation.Errors);
             }
 
             var response = await service.Mediator.Send(itemPaginatedQuery);
 
-            if (response.Success)
-            {
-                return TypedResults.Ok(response);
-            }
 
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                _ => TypedResults.BadRequest(response),
-            };
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -138,17 +118,8 @@ public static class ItemAPI
 
             var response = await service.Mediator.Send(command);
 
-            if (response.Success)
-            {  
-                return TypedResults.Created(service.LinkGenerator.GetPathByName(nameof(GetItemById)), response);
-            }
 
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                409 => TypedResults.Conflict(response),
-                _ => TypedResults.BadRequest(response),
-            };
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -178,16 +149,8 @@ public static class ItemAPI
 
             var response = await service.Mediator.Send(command);
 
-            if (response.Success)
-            {
-                return TypedResults.NoContent();
-            }
 
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                _ => TypedResults.BadRequest(response),
-            };
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -210,9 +173,9 @@ public static class ItemAPI
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            await service.Mediator.Send(command);
-
-            return TypedResults.NoContent();
+            var response = await service.Mediator.Send(command);
+             
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -235,9 +198,9 @@ public static class ItemAPI
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            await service.Mediator.Send(command);
+            var response = await service.Mediator.Send(command); 
 
-            return TypedResults.NoContent();
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -260,9 +223,9 @@ public static class ItemAPI
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            await service.Mediator.Send(command);
+            var response = await service.Mediator.Send(command); 
 
-            return TypedResults.NoContent();
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -285,9 +248,9 @@ public static class ItemAPI
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            await service.Mediator.Send(command);
+            var response = await service.Mediator.Send(command); 
 
-            return TypedResults.NoContent();
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -309,18 +272,9 @@ public static class ItemAPI
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            var response = await service.Mediator.Send(command);
+            var response = await service.Mediator.Send(command); 
 
-            if (response.Success)
-            {
-                return TypedResults.NoContent();
-            }
-
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                _ => TypedResults.BadRequest(response),
-            };
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -342,18 +296,9 @@ public static class ItemAPI
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            var response = await service.Mediator.Send(command);
+            var response = await service.Mediator.Send(command); 
 
-            if (response.Success)
-            {
-                return TypedResults.NoContent();
-            }
-
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                _ => TypedResults.BadRequest(response),
-            }; 
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -375,18 +320,9 @@ public static class ItemAPI
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            var response = await service.Mediator.Send(command);
+            var response = await service.Mediator.Send(command); 
 
-            if (response.Success)
-            {
-                return TypedResults.NoContent();
-            }
-
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                _ => TypedResults.BadRequest(response),
-            }; 
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -409,18 +345,9 @@ public static class ItemAPI
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            var response = await service.Mediator.Send(command);
+            var response = await service.Mediator.Send(command); 
 
-            if (response.Success)
-            {
-                return TypedResults.NoContent();
-            }
-
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                _ => TypedResults.BadRequest(response),
-            };
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -442,18 +369,9 @@ public static class ItemAPI
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            var response = await service.Mediator.Send(command);
+            var response = await service.Mediator.Send(command); 
 
-            if (response.Success)
-            {
-                return TypedResults.NoContent();
-            }
-
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                _ => TypedResults.BadRequest(response),
-            };
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -475,18 +393,9 @@ public static class ItemAPI
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            var response = await service.Mediator.Send(command);
+            var response = await service.Mediator.Send(command); 
 
-            if (response.Success)
-            {
-                return TypedResults.NoContent();
-            }
-
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                _ => TypedResults.BadRequest(response),
-            };
+            return response.ToIResult();
         }
         catch (Exception ex)
         {
@@ -508,18 +417,9 @@ public static class ItemAPI
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            var response = await service.Mediator.Send(command);
+            var response = await service.Mediator.Send(command); 
 
-            if (response.Success)
-            {
-                return TypedResults.NoContent();
-            }
-
-            return response.StatusCode switch
-            {
-                404 => TypedResults.NotFound(response),
-                _ => TypedResults.BadRequest(response),
-            };
+            return response.ToIResult();
         }
         catch (Exception ex)
         {

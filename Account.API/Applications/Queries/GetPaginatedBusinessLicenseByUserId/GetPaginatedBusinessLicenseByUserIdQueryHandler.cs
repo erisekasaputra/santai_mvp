@@ -1,9 +1,9 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Infrastructures;
-using Account.API.SeedWork;
-using Account.API.Services;
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces; 
 using Account.Domain.Aggregates.BusinessLicenseAggregate;
-using Account.Domain.Aggregates.UserAggregate;
+using Core.Results;
+using Core.Messages;
 using Account.Domain.SeedWork;
 using MediatR;
 
@@ -44,7 +44,7 @@ public class GetPaginatedBusinessLicenseByUserIdQueryHandler(
                     businessLicense.Description));
             }
 
-            var paginatedResponse = new PaginatedItemReponseDto<BusinessLicenseResponseDto>(
+            var paginatedResponse = new PaginatedResponseDto<BusinessLicenseResponseDto>(
                 request.PageNumber,
                 request.PageSize,
                 totalCount,

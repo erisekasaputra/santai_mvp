@@ -1,4 +1,4 @@
-﻿using Account.API.SeedWork;
+﻿using Core.Results;
 using MediatR;
 
 namespace Account.API.Applications.Commands.BusinessUserCommand.CreateBusinessLicenseByUserId;

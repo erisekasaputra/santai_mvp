@@ -1,6 +1,6 @@
+using Core.Configurations;
 using Microsoft.AspNetCore.Http.Json;
-using Search.API.API;
-using Search.API.Configurations;
+using Search.API.API; 
 using Search.API.Domain.Repositories;
 using Search.API.Infrastructure;
 using Search.API.Infrastructure.Repositories;
@@ -26,7 +26,7 @@ builder.Services.AddControllers()
     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
-builder.Services.Configure<ElasticsearchOptions>(builder.Configuration.GetSection("Elasticsearch"));
+builder.Services.Configure<ElasticsearchConfiguration>(builder.Configuration.GetSection("Elasticsearch"));
 
 builder.Services.AddScoped<ElasticsearchContext>(); 
 

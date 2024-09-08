@@ -2,7 +2,7 @@
 using Account.Domain.Enumerations;
 using Microsoft.EntityFrameworkCore;
 using LinqKit;
-using Identity.Contracts.Enumerations;
+using Core.Enumerations;
 
 namespace Account.Infrastructure.Repositories;
 

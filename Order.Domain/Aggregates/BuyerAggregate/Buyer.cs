@@ -1,4 +1,5 @@
-﻿using Identity.Contracts.Enumerations;
+﻿
+using Core.Enumerations;
 using Order.Domain.Aggregates.OrderAggregate; 
 using Order.Domain.SeedWork;
 

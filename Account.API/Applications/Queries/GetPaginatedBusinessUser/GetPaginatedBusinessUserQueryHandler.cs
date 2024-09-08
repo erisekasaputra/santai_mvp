@@ -1,8 +1,9 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Infrastructures;
-using Account.API.Mapper;
-using Account.API.SeedWork;
-using Account.API.Services;
+using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
+using Account.API.Extensions;
+using Core.Results;
+using Core.Messages;
 using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.SeedWork;
 using MediatR;
@@ -127,7 +128,7 @@ public class GetPaginatedBusinessUserQueryHandler(
                     staffResponses)); 
             }
 
-            var paginatedResponse = new PaginatedItemReponseDto<BusinessUserResponseDto>(
+            var paginatedResponse = new PaginatedResponseDto<BusinessUserResponseDto>(
                 request.PageNumber,
                 request.PageSize,
                 totalCount,

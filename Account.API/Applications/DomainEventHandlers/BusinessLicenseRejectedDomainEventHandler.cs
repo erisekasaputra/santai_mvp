@@ -1,5 +1,5 @@
-﻿using Account.Contracts;
-using Account.Domain.Events;
+﻿using Account.Domain.Events;
+using Core.Events;
 using MediatR;
 
 namespace Account.API.Applications.DomainEventHandlers;

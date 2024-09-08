@@ -1,6 +1,6 @@
-﻿using Account.API.Services;
+﻿using Account.API.Applications.Services.Interfaces;
 using Account.Domain.Events;
-using Identity.Contracts.IntegrationEvent;
+using Core.Events;
 using MediatR;
 
 namespace Account.API.Applications.DomainEventHandlers;

@@ -1,5 +1,6 @@
 ﻿using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Extensions;
+using Core.Validations;
 using FluentValidation;
 
 namespace Account.API.Validations.FleetValidations;
@@ -64,7 +65,7 @@ public class CreateFleetValidation : AbstractValidator<CreateFleetRequestDto>
         // Owner Name: Required
         RuleFor(x => x.OwnerName)
             .NotEmpty().WithMessage("Owner name is required.")
-            .Must(NameExtension.IsValidName).WithMessage("Owner name must not contains any number or special characters")
+            .Must(NameValidation.IsValidName).WithMessage("Owner name must not contains any number or special characters")
             .MaximumLength(50).WithMessage("Owner name can not exceed more than 50 characters");
 
         // Owner Address: Required
@@ -89,7 +90,7 @@ public class CreateFleetValidation : AbstractValidator<CreateFleetRequestDto>
 
         RuleFor(x => x.ImageUrl)
             .Must(url =>
-                string.IsNullOrWhiteSpace(url) || UrlExtension.IsValidImageUrl(url))
+                string.IsNullOrWhiteSpace(url) || UrlValidation.IsValidImageUrl(url))
             .WithMessage("Image url format is invaid");
     }
 }

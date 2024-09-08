@@ -1,5 +1,5 @@
 ﻿using Account.Domain.Enumerations;
-using Identity.Contracts.Enumerations;
+using Core.Enumerations;
 
 namespace Account.Domain.Aggregates.UserAggregate;
 
@@ -8,7 +8,7 @@ public interface IUserRepository
     Task<BaseUser?> GetByIdAsync(Guid id);
     Task<BaseUser> CreateAsync(BaseUser user);
     void Update(BaseUser user);
-    void Delete(BaseUser user);
+    void Delete(BaseUser user); 
     Task<bool> GetAnyByIdAsync(Guid id);
     Task<BusinessUser?> GetBusinessUserByIdAsync(Guid id);
     Task<RegularUser?> GetRegularUserByIdAsync(Guid id);

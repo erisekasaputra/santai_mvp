@@ -1,21 +1,22 @@
-﻿using Identity.API.Abstraction;
-using Identity.API.Configs;
+﻿
+using Core.Configurations;
 using Identity.API.Domain.Entities;
 using Identity.API.SeedWork;
+using Identity.API.Service.Interfaces;
 using Identity.API.Utilities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims; 
+using System.Security.Claims;
 using System.Text;
 
 namespace Identity.API.Service;
 
 public class JwtTokenService : ITokenService
 {
-    private readonly IOptionsMonitor<JwtConfig> _jwtConfigs;
+    private readonly IOptionsMonitor<JwtConfiguration> _jwtConfigs;
     private readonly ICacheService _cacheService;
-    public JwtTokenService(IOptionsMonitor<JwtConfig> jwtConfigs, ICacheService cacheService)
+    public JwtTokenService(IOptionsMonitor<JwtConfiguration> jwtConfigs, ICacheService cacheService)
     {
         _jwtConfigs = jwtConfigs;
         _cacheService = cacheService;

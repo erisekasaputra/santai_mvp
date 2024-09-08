@@ -1,5 +1,5 @@
-﻿using Identity.API.Domain.Entities;
-using Identity.Contracts.Enumerations;
+﻿using Core.Enumerations;
+using Identity.API.Domain.Entities; 
 using MassTransit;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;

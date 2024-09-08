@@ -1,7 +1,7 @@
-﻿using CustomValidation;
+﻿ 
+using Core.Validations;
 using FluentValidation;
-using Identity.API.Dto;
-using Identity.API.Extensions; 
+using Identity.API.Dto; 
 
 namespace Identity.API.Validations;
 
@@ -11,12 +11,12 @@ public class RegisterUserRequestValidation : AbstractValidator<RegisterUserReque
     { 
         RuleFor(x => x.PhoneNumber)
             .NotEmpty().WithMessage("Phone number is required.")
-            .Must(PhoneNumberValidator.IsValid).WithMessage("Phone number must consist of digits only start with '+'.")
+            .Must(PhoneNumberValidation.IsValidPhoneNumber).WithMessage("Phone number must consist of digits only start with '+'.")
             .MinimumLength(8).WithMessage("Phone number must be at least 8 digits long.")
             .MaximumLength(20).WithMessage("Phone number must not exceed 20 digits.");
 
         RuleFor(x => x.Password)
-            .Must(PasswordValidator.IsValidPassword).WithMessage("Password must be at least 6 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.");
+            .Must(PasswordValidation.IsValidPassword).WithMessage("Password must be at least 6 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.");
          
         RuleFor(x => x.RegionCode)
             .NotEmpty().WithMessage("Region code is required.")

@@ -1,11 +1,11 @@
-﻿using Identity.API.Configs;
-using Identity.API.Domain.Entities; 
-using Identity.API.Infrastructure;
-using Identity.Contracts.Enumerations; 
+﻿using Core.Configurations;
+using Core.CustomClaims;
+using Core.Enumerations; 
+using Identity.API.Domain.Entities;
+using Identity.API.Infrastructure;  
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using SantaiClaimType;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 
@@ -17,7 +17,7 @@ public class SeedDatabase
     {
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-        var googleOption = serviceProvider.GetRequiredService<IOptionsMonitor<GoogleConfig>>();
+        var googleOption = serviceProvider.GetRequiredService<IOptionsMonitor<GoogleConfiguration>>();
         var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>(); 
 
         var strategy = dbContext.Database.CreateExecutionStrategy();

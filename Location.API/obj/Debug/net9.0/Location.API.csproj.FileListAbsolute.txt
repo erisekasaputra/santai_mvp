@@ -32,3 +32,46 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Location.API\obj\Debug\net9.0\Location.API.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Location.API\obj\Debug\net9.0\Location.API.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Location.API\obj\Debug\net9.0\ref\Location.API.dll
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\appsettings.Development.json
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\appsettings.json
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\Location.API.staticwebassets.endpoints.json
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\Location.API.exe
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\Location.API.deps.json
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\Location.API.runtimeconfig.json
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\Location.API.dll
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\Location.API.pdb
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.OpenApi.dll
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\Pipelines.Sockets.Unofficial.dll
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\StackExchange.Redis.dll
+C:\Santai.MVP\Location.API\bin\Debug\net9.0\System.Diagnostics.DiagnosticSource.dll
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.csproj.AssemblyReference.cache
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.AssemblyInfoInputs.cache
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.AssemblyInfo.cs
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.csproj.CoreCompileInputs.cache
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.sourcelink.json
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\scopedcss\bundle\Location.API.styles.css
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\staticwebassets.build.json
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\staticwebassets.development.json
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\staticwebassets.build.endpoints.json
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\staticwebassets\msbuild.Location.API.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\staticwebassets\msbuild.Location.API.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\staticwebassets\msbuild.build.Location.API.props
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.Location.API.props
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.Location.API.props
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\staticwebassets.pack.json
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\Location.AE471E07.Up2Date
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.dll
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\refint\Location.API.dll
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.pdb
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.genruntimeconfig.cache
+C:\Santai.MVP\Location.API\obj\Debug\net9.0\ref\Location.API.dll

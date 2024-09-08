@@ -1,6 +1,7 @@
-﻿using Account.API.Applications.Dtos.RequestDtos;
-using Account.API.Extensions;
+﻿using Account.API.Applications.Dtos.RequestDtos; 
 using Account.API.Validations.AddressValidations;
+using Core.Extensions;
+using Core.Validations;
 using FluentValidation;
 
 namespace Account.API.Validations.UserValidation;
@@ -12,7 +13,7 @@ public class UpdateStaffValidation : AbstractValidator<UpdateStaffRequestDto>
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name can not be empty")
             .Length(3, 50).WithMessage("The name must be between 3 and 50 characters long")
-            .Must(NameExtension.IsValidName).WithMessage("The name must contain only alphabet and can not have multiple spaces (only single space on each separated name), e.g: 'Michael John Doe'");
+            .Must(NameValidation.IsValidName).WithMessage("The name must contain only alphabet and can not have multiple spaces (only single space on each separated name), e.g: 'Michael John Doe'");
 
         RuleFor(x => x.TimeZoneId)
                    .NotEmpty().WithMessage("Time zone can not be empty")

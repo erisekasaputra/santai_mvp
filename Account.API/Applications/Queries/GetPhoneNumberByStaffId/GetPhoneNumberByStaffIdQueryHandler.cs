@@ -1,10 +1,11 @@
-﻿using Account.API.Infrastructures;
-using Account.API.Options;
-using Account.API.SeedWork;
-using Account.API.Services;
+﻿using Account.API.Applications.Services;
+using Account.API.Applications.Services.Interfaces;
+using Core.Results;
+using Core.Messages;
 using Account.Domain.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Options;
+using Core.Configurations;
 
 namespace Account.API.Applications.Queries.GetPhoneNumberByStaffId;
 
@@ -13,13 +14,13 @@ public class GetPhoneNumberByStaffIdQueryHandler(
     ApplicationService service,
     IKeyManagementService kmsClient,
     ICacheService cacheService,
-    IOptionsMonitor<InMemoryDatabaseOption> cacheOption) : IRequestHandler<GetPhoneNumberByStaffIdQuery, Result>
+    IOptionsMonitor<CacheConfiguration> cacheOption) : IRequestHandler<GetPhoneNumberByStaffIdQuery, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _service = service;
     private readonly IKeyManagementService _kmsClient = kmsClient;
     private readonly ICacheService _cacheService = cacheService;
-    private readonly IOptionsMonitor<InMemoryDatabaseOption> _cacheOptions = cacheOption;
+    private readonly IOptionsMonitor<CacheConfiguration> _cacheOptions = cacheOption;
     public async Task<Result> Handle(GetPhoneNumberByStaffIdQuery request, CancellationToken cancellationToken)
     {
 

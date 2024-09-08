@@ -1,5 +1,5 @@
-using MassTransit; 
-using Search.Worker.Configurations;
+using Core.Configurations;
+using MassTransit;  
 using Search.Worker.Consumers;
 using Search.Worker.Domain.Repositories;
 using Search.Worker.Infrastructure;
@@ -12,7 +12,7 @@ builder.Services.AddMediatR(configuration =>
     configuration.RegisterServicesFromAssembly(typeof(Program).Assembly);
 });
 
-builder.Services.Configure<ElasticsearchOptions>(builder.Configuration.GetSection("Elasticsearch"));
+builder.Services.Configure<ElasticsearchConfiguration>(builder.Configuration.GetSection("Elasticsearch"));
 
 builder.Services.AddScoped<ElasticsearchContext>();
 
