@@ -3,7 +3,8 @@ using Identity.API.Infrastructure;
 using Identity.Contracts.IntegrationEvent;
 using MassTransit;
 using MediatR;
-using Microsoft.AspNetCore.Identity; 
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Identity.API.Consumers;
 
@@ -20,31 +21,36 @@ public class RegularUserCreatedIntegrationEventConsumer(
 
     public async Task Consume(ConsumeContext<RegularUserCreatedIntegrationEvent> context)
     {
-        using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        var strategy = _dbContext.Database.CreateExecutionStrategy();
 
-        try
+        await strategy.ExecuteAsync(async () =>
         {
-            var userId = context.Message.UserId;
-            var userPhoneNumber = context.Message.PhoneNumber;
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-
-            if (user is null || userPhoneNumber != user.PhoneNumber)
+            try
             {
-                await _mediator.Publish(new RegularUserDeletedIntegrationEvent(userId));
-                return;
+                var userId = context.Message.UserId;
+                var userPhoneNumber = context.Message.PhoneNumber;
+
+                var user = await _userManager.FindByIdAsync(userId.ToString());
+
+                if (user is null || userPhoneNumber != user.PhoneNumber)
+                {
+                    await _mediator.Publish(new RegularUserDeletedIntegrationEvent(userId));
+                    return;
+                }
+
+                user.IsAccountRegistered = true;
+
+                await _userManager.UpdateAsync(user);
+
+                await transaction.CommitAsync();
             }
-
-            user.IsAccountRegistered = true;
-
-            await _userManager.UpdateAsync(user);
-
-            await transaction.CommitAsync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, ex.InnerException?.Message);
-            throw;
-        }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.InnerException?.Message);
+                throw;
+            }
+        });  
     }
 }

@@ -89,9 +89,7 @@ public static class ServiceRegistration
                 ReconnectRetryPolicy = new ExponentialRetry((int)TimeSpan
                     .FromSeconds(cacheOptions.CurrentValue.ReconnectRetryPolicy).TotalMilliseconds)
             };
-        });
-
-
+        }); 
 
         return services;
     }

@@ -18,30 +18,35 @@ public class MechanicUserDeletedIntegrationEventConsumer(
     private readonly ILogger<BusinessUserCreatedIntegrationEventConsumer> _logger = logger; 
     public async Task Consume(ConsumeContext<MechanicUserDeletedIntegrationEvent> context)
     {
-        using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+        var strategy = _dbContext.Database.CreateExecutionStrategy();
 
-        try
+        await strategy.ExecuteAsync(async () =>
         {
-            var userId = context.Message.UserId;
+            using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
 
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-
-            if (user is null)
+            try
             {
-                return;
+                var userId = context.Message.UserId;
+
+                var user = await _userManager.FindByIdAsync(userId.ToString());
+
+                if (user is null)
+                {
+                    return;
+                }
+
+                user.IsAccountRegistered = false;
+
+                await _userManager.UpdateAsync(user);
+
+                await transaction.CommitAsync();
             }
-
-            user.IsAccountRegistered = false;
-
-            await _userManager.UpdateAsync(user);
-
-            await transaction.CommitAsync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, ex.InnerException?.Message);
-            await transaction.RollbackAsync();
-            throw;
-        }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.InnerException?.Message);
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }); 
     }
 }

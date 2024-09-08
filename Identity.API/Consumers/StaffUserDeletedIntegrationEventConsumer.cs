@@ -1,8 +1,7 @@
 ﻿using Identity.API.Domain.Entities;
 using Identity.API.Infrastructure;
 using Identity.Contracts.IntegrationEvent;
-using MassTransit;
-using MediatR;
+using MassTransit; 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -20,28 +19,33 @@ public class StaffUserDeletedIntegrationEventConsumer(
 
     public async Task Consume(ConsumeContext<StaffUserDeletedIntegrationEvent> context)
     {
-        using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
-        try
+        var strategy = _dbContext.Database.CreateExecutionStrategy();
+
+        await strategy.ExecuteAsync(async () =>
         {
-            var userId = context.Message.UserId;
-
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-
-            if (user is null)
+            using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+            try
             {
-                return;
+                var userId = context.Message.UserId;
+
+                var user = await _userManager.FindByIdAsync(userId.ToString());
+
+                if (user is null)
+                {
+                    return;
+                }
+
+                await DeleteUser([user]);
+
+                await transaction.CommitAsync();
             }
-
-            await DeleteUser([user]);
-
-            await transaction.CommitAsync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, ex.InnerException?.Message);
-            await transaction.RollbackAsync();
-            throw;
-        }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.InnerException?.Message);
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }); 
     }
 
     public async Task DeleteUser(params ApplicationUser?[] users)

@@ -4,7 +4,7 @@ using Identity.Contracts.IntegrationEvent;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using System.Data;
+using Microsoft.EntityFrameworkCore; 
 
 namespace Identity.API.Consumers;
 
@@ -21,32 +21,37 @@ public class MechanicUserCreatedIntegrationEventConsumer(
 
     public async Task Consume(ConsumeContext<MechanicUserCreatedIntegrationEvent> context)
     {
-        using var transaction = await _dbContext.Database.BeginTransactionAsync(); 
+        var strategy = _dbContext.Database.CreateExecutionStrategy();
 
-        try
+        await strategy.ExecuteAsync(async () =>
         {
-            var userId = context.Message.UserId;
-            var userPhoneNumber = context.Message.PhoneNumber;
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
-            var user = await _userManager.FindByIdAsync(userId.ToString());
-
-            if (user is null || userPhoneNumber != user.PhoneNumber)
+            try
             {
-                await _mediator.Publish(new MechanicUserDeletedIntegrationEvent(userId));
-                return;
-            }  
+                var userId = context.Message.UserId;
+                var userPhoneNumber = context.Message.PhoneNumber;
 
-            user.IsAccountRegistered = true;
+                var user = await _userManager.FindByIdAsync(userId.ToString());
 
-            await _userManager.UpdateAsync(user);
+                if (user is null || userPhoneNumber != user.PhoneNumber)
+                {
+                    await _mediator.Publish(new MechanicUserDeletedIntegrationEvent(userId));
+                    return;
+                }
 
-            await transaction.CommitAsync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, ex.InnerException?.Message);
-            await transaction.RollbackAsync();
-            throw;
-        }
+                user.IsAccountRegistered = true;
+
+                await _userManager.UpdateAsync(user);
+
+                await transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.InnerException?.Message);
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }); 
     }
 }

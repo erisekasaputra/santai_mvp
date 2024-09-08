@@ -25,79 +25,83 @@ public class StaffUserCreatedIntegrationEventConsumer(
     private readonly ILogger<BusinessUserCreatedIntegrationEventConsumer> _logger = logger; 
     public async Task Consume(ConsumeContext<StaffUserCreatedIntegrationEvent> context)
     {
-        using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted); 
-        try
-        {  
-            var staff = context.Message.Staff;
+        var strategy = _dbContext.Database.CreateExecutionStrategy();
 
-            var duplicateStaff = await _dbContext.Users
-              .Where(x => staff.PhoneNumber == x.PhoneNumber)
-                  .FirstOrDefaultAsync(); 
-
-            if (duplicateStaff is not null && staff.Id != Guid.Parse(duplicateStaff.Id))
+        await strategy.ExecuteAsync(async () =>
+        {
+            using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+            try
             {
-                await _mediator.Publish(
-                    new PhoneNumberDuplicateIntegrationEvent(
-                        [new DuplicateUser(staff.Id, staff.PhoneNumber, UserType.StaffUser)]));
+                var staff = context.Message.Staff;
 
-                await _dbContext.SaveChangesAsync();
+                var duplicateStaff = await _dbContext.Users
+                  .Where(x => staff.PhoneNumber == x.PhoneNumber)
+                      .FirstOrDefaultAsync();
 
-                await transaction.CommitAsync();
+                if (duplicateStaff is not null && staff.Id != Guid.Parse(duplicateStaff.Id))
+                {
+                    await _mediator.Publish(
+                        new PhoneNumberDuplicateIntegrationEvent(
+                            [new DuplicateUser(staff.Id, staff.PhoneNumber, UserType.StaffUser)]));
 
-                return;
-            }
+                    await _dbContext.SaveChangesAsync();
 
-            if (duplicateStaff is not null && duplicateStaff.IsAccountRegistered) 
-            {
-                return;
-            }
+                    await transaction.CommitAsync();
 
-            if (duplicateStaff is not null && !duplicateStaff.IsAccountRegistered)
-            {
-                duplicateStaff.IsAccountRegistered = true;
+                    return;
+                }
 
-                await _userManager.UpdateAsync(duplicateStaff);
+                if (duplicateStaff is not null && duplicateStaff.IsAccountRegistered)
+                {
+                    return;
+                }
 
-                await _dbContext.SaveChangesAsync();
+                if (duplicateStaff is not null && !duplicateStaff.IsAccountRegistered)
+                {
+                    duplicateStaff.IsAccountRegistered = true;
 
-                await transaction.CommitAsync();
+                    await _userManager.UpdateAsync(duplicateStaff);
 
-                return;
-            }
+                    await _dbContext.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+
+                    return;
+                }
 
 
-            var user = new ApplicationUser()
-            {
-                Id = staff.Id.ToString(),
-                UserName = staff.PhoneNumber,
-                PhoneNumber = staff.PhoneNumber,
-                IsAccountRegistered = true,
-                BusinessCode = staff.BusinessCode,
-                UserType = UserType.BusinessUser
-            };
+                var user = new ApplicationUser()
+                {
+                    Id = staff.Id.ToString(),
+                    UserName = staff.PhoneNumber,
+                    PhoneNumber = staff.PhoneNumber,
+                    IsAccountRegistered = true,
+                    BusinessCode = staff.BusinessCode,
+                    UserType = UserType.BusinessUser
+                };
 
-            var result = await _userManager.CreateAsync(user, staff.Password);
+                var result = await _userManager.CreateAsync(user, staff.Password);
 
-            if (!result.Succeeded)
-            {  
-                _logger.LogError("An error occured during save new staff user {id}: {errors}", user.Id, result.Errors);
-                return;
-            }
+                if (!result.Succeeded)
+                {
+                    _logger.LogError("An error occured during save new staff user {id}: {errors}", user.Id, result.Errors);
+                    return;
+                }
 
-            var resultRole = await _userManager.AddToRoleAsync(user, user.UserType.ToString());
+                var resultRole = await _userManager.AddToRoleAsync(user, user.UserType.ToString());
 
-            if (!resultRole.Succeeded)
-            {
-                _logger.LogError("An error occured during save new staff user role {id}: {errors}", user.Id, resultRole.Errors);
-                return;
-            }
+                if (!resultRole.Succeeded)
+                {
+                    _logger.LogError("An error occured during save new staff user role {id}: {errors}", user.Id, resultRole.Errors);
+                    return;
+                }
 
-            if (string.IsNullOrWhiteSpace(user.PhoneNumber))
-            {
-                throw new ArgumentNullException(user.PhoneNumber);
-            }
+                if (string.IsNullOrWhiteSpace(user.PhoneNumber))
+                {
+                    throw new ArgumentNullException(user.PhoneNumber);
+                }
 
-            var claims = new List<Claim>()
+                var claims = new List<Claim>()
             {
                 new (JwtRegisteredClaimNames.Sub, user.Id),
                 new (ClaimTypes.Name, user.PhoneNumber),
@@ -106,28 +110,29 @@ public class StaffUserCreatedIntegrationEventConsumer(
                 new (ClaimTypes.Role, user.UserType.ToString())
             };
 
-            if (!string.IsNullOrWhiteSpace(user.BusinessCode))
-            {
-                claims.Add(new Claim(SantaiClaimTypes.BusinessCode, user.BusinessCode));
-            } 
+                if (!string.IsNullOrWhiteSpace(user.BusinessCode))
+                {
+                    claims.Add(new Claim(SantaiClaimTypes.BusinessCode, user.BusinessCode));
+                }
 
-            var resultClaim = await _userManager.AddClaimsAsync(user, claims);
+                var resultClaim = await _userManager.AddClaimsAsync(user, claims);
 
-            if (!resultClaim.Succeeded)
-            {
-                _logger.LogError("An error occured during save new staff user claim {id}: {errors}", user.Id, resultClaim.Errors);
-                return;
+                if (!resultClaim.Succeeded)
+                {
+                    _logger.LogError("An error occured during save new staff user claim {id}: {errors}", user.Id, resultClaim.Errors);
+                    return;
+                }
+
+                await _dbContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
             }
-
-            await _dbContext.SaveChangesAsync();
-
-            await transaction.CommitAsync(); 
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, ex.InnerException?.Message);
-            await transaction.RollbackAsync();
-            throw;
-        }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.InnerException?.Message);
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }); 
     }
 }

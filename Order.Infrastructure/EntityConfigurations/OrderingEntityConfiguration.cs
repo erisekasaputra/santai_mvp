@@ -34,11 +34,7 @@ public class OrderingEntityConfiguration : IEntityTypeConfiguration<Ordering>
         builder.HasOne(p => p.Coupon)
             .WithOne() 
             .HasForeignKey<Coupon>(e => e.OrderingId)
-            .OnDelete(DeleteBehavior.Cascade);  
-
-
-
-
+            .OnDelete(DeleteBehavior.Cascade); 
 
 
         builder.OwnsOne(p => p.Rating, buildAction =>
@@ -134,7 +130,9 @@ public class OrderingEntityConfiguration : IEntityTypeConfiguration<Ordering>
                 v => v.ToString(),
                 v => Enum.Parse<Currency>(v));
 
-
+        builder.Property(p => p.PaymentUrl)
+            .HasMaxLength(1000)
+            .IsRequired(false);
 
         builder.Property(o => o.MechanicWaitingAcceptTime)
             .IsRequired(false)

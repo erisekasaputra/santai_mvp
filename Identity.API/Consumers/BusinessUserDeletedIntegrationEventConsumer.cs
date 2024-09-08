@@ -25,39 +25,44 @@ public class BusinessUserDeletedIntegrationEventConsumer(
 
     public async Task Consume(ConsumeContext<BusinessUserDeletedIntegrationEvent> context)
     {
-        using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+        var strategy = _dbContext.Database.CreateExecutionStrategy();
 
-        var duplicateUsers = new List<DuplicateUser>();
-        var newUsers = new List<ApplicationUser>();
-
-        try
+        await strategy.ExecuteAsync(async () =>
         {
-            var businessUserId = context.Message.UserId.ToString();
-            var staffIds = context.Message.Staffs?.Select(
-                x => x.Id.ToString()) ?? [];
+            using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
 
-            var businessUser = await _dbContext.Users
-                .Where(x => x.Id == businessUserId)
-                    .FirstOrDefaultAsync(); 
+            var duplicateUsers = new List<DuplicateUser>();
+            var newUsers = new List<ApplicationUser>();
 
-            var staffUsers = await _dbContext.Users
-              .Where(x => staffIds.Contains(x.Id))
-                  .ToListAsync(); 
+            try
+            {
+                var businessUserId = context.Message.UserId.ToString();
+                var staffIds = context.Message.Staffs?.Select(
+                    x => x.Id.ToString()) ?? [];
 
-            var users = staffUsers.Append(businessUser);
- 
-            await DeleteUser([..users]);
+                var businessUser = await _dbContext.Users
+                    .Where(x => x.Id == businessUserId)
+                        .FirstOrDefaultAsync();
 
-            await _dbContext.SaveChangesAsync();
+                var staffUsers = await _dbContext.Users
+                  .Where(x => staffIds.Contains(x.Id))
+                      .ToListAsync();
 
-            await transaction.CommitAsync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, ex.InnerException?.Message);
-            await transaction.RollbackAsync();
-            throw;
-        }
+                var users = staffUsers.Append(businessUser);
+
+                await DeleteUser([.. users]);
+
+                await _dbContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.InnerException?.Message);
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }); 
     }
     public async Task DeleteUser(params ApplicationUser?[] users)
     {

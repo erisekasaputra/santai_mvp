@@ -31,6 +31,7 @@ public class Ordering : Entity
     public ICollection<string>? RatingImages { get; private set; }
     public ICollection<Fee> Fees { get; private set; } 
     public Cancellation? Cancellation { get; private set; } 
+    public string? PaymentUrl { get; private set; }
 
     public bool IsRated => Rating is not null && Rating.Value > 0.0M;
     public bool IsPaid => Payment is not null && Payment.Amount.Amount > 0.0M;
@@ -94,6 +95,16 @@ public class Ordering : Entity
         TotalCanceledByMechanic = 0;  
         RaiseOrderCreatedDomainEvent();
     } 
+
+    public void SetPaymentUrl(string url)
+    {
+        if (Status != OrderStatus.PaymentPending)
+        {
+            throw new DomainException($"Status order must be in {OrderStatus.PaymentPending}");
+        }
+        
+        PaymentUrl = url;   
+    }
       
     public void ApplyFee(Fee fee)
     {   

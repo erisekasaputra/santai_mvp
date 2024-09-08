@@ -77,9 +77,7 @@ public class UnitOfWork : IUnitOfWork
                 }
                 return e.Entity.DomainEvents;
             })
-            .ToList();
-
-        domainEntities.ForEach(e => e.Entity.ClearDomainEvents());
+            .ToList(); 
 
         foreach (var domainEvent in domainEvents)
         {
@@ -103,6 +101,15 @@ public class UnitOfWork : IUnitOfWork
     {
         await DispatchDomainEventsAsync(cancellationToken);
 
-        return await _dbContext.SaveChangesAsync(cancellationToken);
+        var changesResult = await _dbContext.SaveChangesAsync(cancellationToken); 
+
+        var domainEntities = _dbContext.ChangeTracker
+            .Entries<Entity>()
+            .Where(e => e.Entity.DomainEvents is not null && e.Entity.DomainEvents.Count > 0)
+            .ToList();
+
+        domainEntities.ForEach(e => e.Entity.ClearDomainEvents());
+
+        return changesResult;
     }
 }

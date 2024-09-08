@@ -25,140 +25,140 @@ public class BusinessUserCreatedIntegrationEventConsumer(
     private readonly UserManager<ApplicationUser> _userManager = userManager; 
     private readonly IMediator _mediator = mediator;
     private readonly ILogger<BusinessUserCreatedIntegrationEventConsumer> _logger = logger;
-     
-    static int NumberTried = 0;
-
+      
     public async Task Consume(ConsumeContext<BusinessUserCreatedIntegrationEvent> context)
     {
-        NumberTried++;
+        var strategy = _dbContext.Database.CreateExecutionStrategy();
 
-        using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
-
-        var duplicateUsers = new List<DuplicateUser>();
-        var users = new List<(ApplicationUser users, string password)>();
-
-        try
+        await strategy.ExecuteAsync(async () =>
         {
-            var businessUser = context.Message;
-            var staffUsers = businessUser.Staffs;
+            using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
 
-            var businessUserPhoneNumber = businessUser.PhoneNumber;
-            var staffPhoneNumber = staffUsers?.Select(x => x.PhoneNumber) ?? [];
+            var duplicateUsers = new List<DuplicateUser>();
+            var users = new List<(ApplicationUser users, string password)>();
 
-            var duplicateBusinessUser = await _dbContext.Users
-                .Where(x => x.PhoneNumber == businessUserPhoneNumber)
-                    .FirstOrDefaultAsync();
-
-
-            var duplicateStaffUsers = await _dbContext.Users
-              .Where(x => staffPhoneNumber.Contains(x.PhoneNumber)).ToListAsync();
-
-
-            if (duplicateBusinessUser is not null && businessUser.UserId != Guid.Parse(duplicateBusinessUser.Id))
+            try
             {
-                duplicateUsers.Add(new(businessUser.UserId, businessUser.PhoneNumber, UserType.BusinessUser));
-            }
+                var businessUser = context.Message;
+                var staffUsers = businessUser.Staffs;
 
-            if (duplicateBusinessUser is not null && !duplicateBusinessUser.IsAccountRegistered)
-            {
-                duplicateBusinessUser.IsAccountRegistered = true;
-                await _userManager.UpdateAsync(duplicateBusinessUser);
-            }
+                var businessUserPhoneNumber = businessUser.PhoneNumber;
+                var staffPhoneNumber = staffUsers?.Select(x => x.PhoneNumber) ?? [];
 
-            if (duplicateBusinessUser is null)
-            {
-                users.Add((new ApplicationUser()
+                var duplicateBusinessUser = await _dbContext.Users
+                    .Where(x => x.PhoneNumber == businessUserPhoneNumber)
+                        .FirstOrDefaultAsync();
+
+
+                var duplicateStaffUsers = await _dbContext.Users
+                  .Where(x => staffPhoneNumber.Contains(x.PhoneNumber)).ToListAsync();
+
+
+                if (duplicateBusinessUser is not null && businessUser.UserId != Guid.Parse(duplicateBusinessUser.Id))
                 {
-                    Id = businessUser.UserId.ToString(),
-                    UserName = businessUser.PhoneNumber,
-                    PhoneNumber = businessUser.PhoneNumber,
-                    IsAccountRegistered = true,
-                    BusinessCode = businessUser.BusinessCode,
-                    UserType = UserType.BusinessUser
-                },
-                businessUser.Password));
-            }
-
-            foreach (var staff in context.Message.Staffs ?? [])
-            {
-                var duplicateStaff = duplicateStaffUsers
-                    .Where(x => x.PhoneNumber == staff.PhoneNumber)
-                    .FirstOrDefault();
-
-                if (duplicateStaff is not null && staff.Id != Guid.Parse(duplicateStaff.Id))
-                {
-                    duplicateUsers.Add(new(staff.Id, staff.PhoneNumber, UserType.StaffUser));
+                    duplicateUsers.Add(new(businessUser.UserId, businessUser.PhoneNumber, UserType.BusinessUser));
                 }
 
-                if (duplicateStaff is not null && !duplicateStaff.IsAccountRegistered)
+                if (duplicateBusinessUser is not null && !duplicateBusinessUser.IsAccountRegistered)
                 {
-                    duplicateStaff.IsAccountRegistered = true;
-                    await _userManager.UpdateAsync(duplicateStaff);
+                    duplicateBusinessUser.IsAccountRegistered = true;
+                    await _userManager.UpdateAsync(duplicateBusinessUser);
                 }
 
-                if (duplicateStaff is null)
+                if (duplicateBusinessUser is null)
                 {
-                    users.Add((new()
+                    users.Add((new ApplicationUser()
                     {
-                        Id = staff.Id.ToString(),
-                        UserName = staff.PhoneNumber,
-                        PhoneNumber = staff.PhoneNumber,
+                        Id = businessUser.UserId.ToString(),
+                        UserName = businessUser.PhoneNumber,
+                        PhoneNumber = businessUser.PhoneNumber,
                         IsAccountRegistered = true,
-                        BusinessCode = staff.BusinessCode,
-                        UserType = UserType.StaffUser
+                        BusinessCode = businessUser.BusinessCode,
+                        UserType = UserType.BusinessUser
                     },
-                    staff.Password));
+                    businessUser.Password));
                 }
-            }
 
-
-            if (duplicateUsers.Count > 0)
-            {
-                await _mediator.Publish(
-                    new PhoneNumberDuplicateIntegrationEvent(duplicateUsers));
-            }
-
-            if (users.Count == 0)
-            {
-                await _dbContext.SaveChangesAsync();
-
-                await transaction.CommitAsync();
-
-                return;
-            }
-
-            foreach ((var user, var password) in users)
-            {
-                var result = await _userManager.CreateAsync(user, password);
-
-                if (!result.Succeeded)
+                foreach (var staff in context.Message.Staffs ?? [])
                 {
-                    foreach (var error in result.Errors)
+                    var duplicateStaff = duplicateStaffUsers
+                        .Where(x => x.PhoneNumber == staff.PhoneNumber)
+                        .FirstOrDefault();
+
+                    if (duplicateStaff is not null && staff.Id != Guid.Parse(duplicateStaff.Id))
                     {
-                        _logger.LogError("An error occured during save new staff user {id}: {errors}", user.Id, error);
+                        duplicateUsers.Add(new(staff.Id, staff.PhoneNumber, UserType.StaffUser));
                     }
 
-                    continue;
-                }
-
-                var resultRole = await _userManager.AddToRoleAsync(user, user.UserType.ToString());
-
-                if (!resultRole.Succeeded)
-                {
-                    foreach (var error in resultRole.Errors)
+                    if (duplicateStaff is not null && !duplicateStaff.IsAccountRegistered)
                     {
-                        _logger.LogError("An error occured during save new staff user role {id}: {errors}", user.Id, error);
+                        duplicateStaff.IsAccountRegistered = true;
+                        await _userManager.UpdateAsync(duplicateStaff);
                     }
 
-                    continue;
+                    if (duplicateStaff is null)
+                    {
+                        users.Add((new()
+                        {
+                            Id = staff.Id.ToString(),
+                            UserName = staff.PhoneNumber,
+                            PhoneNumber = staff.PhoneNumber,
+                            IsAccountRegistered = true,
+                            BusinessCode = staff.BusinessCode,
+                            UserType = UserType.StaffUser
+                        },
+                        staff.Password));
+                    }
                 }
 
-                if (string.IsNullOrWhiteSpace(user.PhoneNumber))
+
+                if (duplicateUsers.Count > 0)
                 {
-                    throw new ArgumentNullException(user.PhoneNumber);
+                    await _mediator.Publish(
+                        new PhoneNumberDuplicateIntegrationEvent(duplicateUsers));
                 }
 
-                var claims = new List<Claim>()
+                if (users.Count == 0)
+                {
+                    await _dbContext.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+
+                    return;
+                }
+
+                foreach ((var user, var password) in users)
+                {
+                    var result = await _userManager.CreateAsync(user, password);
+
+                    if (!result.Succeeded)
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            _logger.LogError("An error occured during save new staff user {id}: {errors}", user.Id, error);
+                        }
+
+                        continue;
+                    }
+
+                    var resultRole = await _userManager.AddToRoleAsync(user, user.UserType.ToString());
+
+                    if (!resultRole.Succeeded)
+                    {
+                        foreach (var error in resultRole.Errors)
+                        {
+                            _logger.LogError("An error occured during save new staff user role {id}: {errors}", user.Id, error);
+                        }
+
+                        continue;
+                    }
+
+                    if (string.IsNullOrWhiteSpace(user.PhoneNumber))
+                    {
+                        throw new ArgumentNullException(user.PhoneNumber);
+                    }
+
+                    var claims = new List<Claim>()
                 {
                     new (JwtRegisteredClaimNames.Sub, user.Id),
                     new (ClaimTypes.Name, user.PhoneNumber),
@@ -167,33 +167,34 @@ public class BusinessUserCreatedIntegrationEventConsumer(
                     new (ClaimTypes.Role, user.UserType.ToString())
                 };
 
-                if (!string.IsNullOrWhiteSpace(user.BusinessCode))
-                {
-                    claims.Add(new(SantaiClaimTypes.BusinessCode, user.BusinessCode));
-                }
-
-                var resultClaim = await _userManager.AddClaimsAsync(user, claims);
-
-                if (!resultClaim.Succeeded)
-                {
-                    foreach (var error in resultClaim.Errors)
+                    if (!string.IsNullOrWhiteSpace(user.BusinessCode))
                     {
-                        _logger.LogError("An error occured during save new staff user claim {id}: {errors}", user.Id, error.Description);
+                        claims.Add(new(SantaiClaimTypes.BusinessCode, user.BusinessCode));
                     }
 
-                    continue;
+                    var resultClaim = await _userManager.AddClaimsAsync(user, claims);
+
+                    if (!resultClaim.Succeeded)
+                    {
+                        foreach (var error in resultClaim.Errors)
+                        {
+                            _logger.LogError("An error occured during save new staff user claim {id}: {errors}", user.Id, error.Description);
+                        }
+
+                        continue;
+                    }
                 }
+
+                await _dbContext.SaveChangesAsync();
+
+                await transaction.CommitAsync();
             }
-
-            await _dbContext.SaveChangesAsync();
-
-            await transaction.CommitAsync();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, ex.InnerException?.Message);
-            await transaction.RollbackAsync();
-            throw;
-        }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.InnerException?.Message);
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }); 
     }
 }
