@@ -75,10 +75,10 @@ public static class ServiceRegistrationExtension
 
     public static IServiceCollection AddAuthenticationProviderService(this IServiceCollection services)
     {
-        var jwtOption = services.BuildServiceProvider().GetService<IOptionsMonitor<JwtConfiguration>>()?.CurrentValue
+        var jwtConfiguration = services.BuildServiceProvider().GetService<IOptionsMonitor<JwtConfiguration>>()?.CurrentValue
            ?? throw new Exception("Please provide value for jwt configuration");
 
-        var googleOption = services.BuildServiceProvider().GetService<IOptionsMonitor<GoogleSSOConfiguration>>()?.CurrentValue
+        var googleConfiguration = services.BuildServiceProvider().GetService<IOptionsMonitor<GoogleSSOConfiguration>>()?.CurrentValue
            ?? throw new Exception("Please provide value for google configuratoin");
 
         services.AddAuthentication(authOption =>
@@ -88,7 +88,7 @@ public static class ServiceRegistrationExtension
         })
         .AddJwtBearer(options =>
         {
-            var secretKey = Encoding.UTF8.GetBytes(jwtOption?.SecretKey ?? throw new Exception("Secret key for jwt can not be empty"));
+            var secretKey = Encoding.UTF8.GetBytes(jwtConfiguration?.SecretKey ?? throw new Exception("Secret key for jwt can not be empty"));
 
             options.TokenValidationParameters = new TokenValidationParameters()
             {
@@ -96,15 +96,15 @@ public static class ServiceRegistrationExtension
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtOption?.Issuer ?? throw new Exception("Issuer can not be null"),
-                ValidAudience = jwtOption?.Audience ?? throw new Exception("Audience can not be null"),
+                ValidIssuer = jwtConfiguration?.Issuer ?? throw new Exception("Issuer can not be null"),
+                ValidAudience = jwtConfiguration?.Audience ?? throw new Exception("Audience can not be null"),
                 IssuerSigningKey = new SymmetricSecurityKey(secretKey)
             };
         })
         .AddGoogle(googleOption =>
         {
-            googleOption.ClientId = googleOption?.ClientId ?? throw new Exception("Google client id can not be null");
-            googleOption.ClientSecret = googleOption?.ClientSecret ?? throw new Exception("Google client secret can not be null");
+            googleOption.ClientId = googleConfiguration?.ClientId ?? throw new Exception("Google client id can not be null");
+            googleOption.ClientSecret = googleConfiguration?.ClientSecret ?? throw new Exception("Google client secret can not be null");
         });
 
         services.AddAuthorization(options =>
