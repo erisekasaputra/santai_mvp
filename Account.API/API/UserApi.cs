@@ -33,7 +33,7 @@ public static class UserApi
         //app.MapPatch("/{userId}/phone-number/confirm", ConfirmUserPhoneNumberByUserId);
         
         app.MapPatch("/{userId}/staff/{staffId}/fleets", AssignFleetsToStaff)
-            .RequireAuthorization(PolicyName.BusinessUserPolicy, PolicyName.AdministratorPolicy);
+            .RequireAuthorization(PolicyName.BusinessUserPolicy.ToString(), PolicyName.AdministratorPolicy.ToString());
 
         app.MapGet("/email", GetEmailByUserId) 
             .RequireAuthorization()

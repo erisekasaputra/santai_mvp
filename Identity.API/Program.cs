@@ -3,10 +3,9 @@ using Identity.API;
 using Identity.API.Extensions;
 using Identity.API.Infrastructure;
 using Identity.API.Middleware;
-using Identity.API.SeedWork; 
+using Identity.API.SeedWork;  
 
-
-var builder = WebApplication.CreateBuilder(args);
+var builder = WebApplication.CreateBuilder(args); 
 
 builder.AddCoreOptionConfiguration();
 builder.AddLoggingContext(); 
@@ -31,7 +30,9 @@ builder.Services.ConfigureOtpService();
 builder.Services.AddSqlDatabaseContext<ApplicationDbContext>(isRetryable: true); 
 builder.Services.AddMasstransitContext<ApplicationDbContext>();
 builder.Services.AddIdentityService();
-builder.Services.AddAuthenticationProviderService();  
+builder.Services.AddAuth([.. AuthPolicies.GetAuthClients()]).AddGoogleSSO();  
+
+
 builder.Services.AddRedisDatabase();  
 
 var app = builder.Build();

@@ -1,4 +1,4 @@
-﻿namespace Identity.API.Domain.Entities;
+﻿namespace Core.Models;
 
 public class RefreshToken
 {

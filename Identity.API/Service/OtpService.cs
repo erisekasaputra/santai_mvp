@@ -1,11 +1,11 @@
 ﻿
 using Core.Configurations;
+using Core.SeedWorks;
 using Core.Services.Interfaces;
+using Core.Utilities;
 using Identity.API.Domain.Entities;
 using Identity.API.Domain.Enumerations;
-using Identity.API.SeedWork;
 using Identity.API.Service.Interfaces;
-using Identity.API.Utilities;
 using Microsoft.Extensions.Options;
 
 namespace Identity.API.Service;

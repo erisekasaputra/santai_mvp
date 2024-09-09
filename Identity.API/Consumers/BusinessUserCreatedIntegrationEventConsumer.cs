@@ -3,6 +3,7 @@ using Core.Enumerations;
 using Core.Events;
 using Core.Models; 
 using Identity.API.Domain.Entities;
+using Identity.API.Domain.Events;
 using Identity.API.Infrastructure; 
 using MassTransit;
 using MediatR;
@@ -33,7 +34,7 @@ public class BusinessUserCreatedIntegrationEventConsumer(
         {
             using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
 
-            var duplicateUsers = new List<DuplicateUser>();
+            var duplicateUsers = new List<ApplicationUser>();
             var users = new List<(ApplicationUser users, string password)>();
 
             try
@@ -55,7 +56,7 @@ public class BusinessUserCreatedIntegrationEventConsumer(
 
                 if (duplicateBusinessUser is not null && businessUser.UserId != Guid.Parse(duplicateBusinessUser.Id))
                 {
-                    duplicateUsers.Add(new(businessUser.UserId, businessUser.PhoneNumber, UserType.BusinessUser));
+                    duplicateUsers.Add(duplicateBusinessUser);
                 }
 
                 if (duplicateBusinessUser is not null && !duplicateBusinessUser.IsAccountRegistered)
@@ -78,6 +79,8 @@ public class BusinessUserCreatedIntegrationEventConsumer(
                     businessUser.Password));
                 }
 
+                var listUpdatedStaff = new List<ApplicationUser>();
+
                 foreach (var staff in context.Message.Staffs ?? [])
                 {
                     var duplicateStaff = duplicateStaffUsers
@@ -86,13 +89,13 @@ public class BusinessUserCreatedIntegrationEventConsumer(
 
                     if (duplicateStaff is not null && staff.Id != Guid.Parse(duplicateStaff.Id))
                     {
-                        duplicateUsers.Add(new(staff.Id, staff.PhoneNumber, UserType.StaffUser));
+                        duplicateUsers.Add(duplicateStaff);
                     }
 
                     if (duplicateStaff is not null && !duplicateStaff.IsAccountRegistered)
                     {
                         duplicateStaff.IsAccountRegistered = true;
-                        await _userManager.UpdateAsync(duplicateStaff);
+                        listUpdatedStaff.Add(duplicateStaff);
                     }
 
                     if (duplicateStaff is null)
@@ -108,13 +111,17 @@ public class BusinessUserCreatedIntegrationEventConsumer(
                         },
                         staff.Password));
                     }
-                }
+                } 
 
+                if (listUpdatedStaff.Any())
+                {
+                    _dbContext.UpdateRange(listUpdatedStaff);
+                }
 
                 if (duplicateUsers.Count > 0)
                 {
                     await _mediator.Publish(
-                        new PhoneNumberDuplicateIntegrationEvent(duplicateUsers));
+                        new PhoneNumberDuplicateDomainEvent(duplicateUsers));
                 }
 
                 if (users.Count == 0)

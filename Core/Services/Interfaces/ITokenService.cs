@@ -1,7 +1,7 @@
-﻿using Identity.API.Domain.Entities;
+﻿using Core.Models;
 using System.Security.Claims;
 
-namespace Identity.API.Service.Interfaces;
+namespace Core.Services.Interfaces;
 
 public interface ITokenService
 {

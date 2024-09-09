@@ -40,15 +40,15 @@ public static class ItemAPI
                 config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
             });
 
-        app.MapPost("/items", CreateNewItem).RequireAuthorization(PolicyName.AdministratorPolicy);
+        app.MapPost("/items", CreateNewItem).RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
-        app.MapPut("/items/{itemId}", UpdateItemById).RequireAuthorization(PolicyName.AdministratorPolicy);
+        app.MapPut("/items/{itemId}", UpdateItemById).RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
-        app.MapDelete("/items/{itemId}", DeleteItemById).RequireAuthorization(PolicyName.AdministratorPolicy);
-        app.MapPatch("/items/{itemId}/undelete", UndeleteItemById).RequireAuthorization(PolicyName.AdministratorPolicy);
+        app.MapDelete("/items/{itemId}", DeleteItemById).RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
+        app.MapPatch("/items/{itemId}/undelete", UndeleteItemById).RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
-        app.MapPatch("/items/{itemId}/activate", SetItemActivateById).RequireAuthorization(PolicyName.AdministratorPolicy);
-        app.MapPatch("/items/{itemId}/deactivate", SetItemDeactivateById).RequireAuthorization(PolicyName.AdministratorPolicy);
+        app.MapPatch("/items/{itemId}/activate", SetItemActivateById).RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
+        app.MapPatch("/items/{itemId}/deactivate", SetItemDeactivateById).RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
         app.MapPatch("/items/stock/reduce", ReduceItemsStock).RequireAuthorization();
         app.MapPatch("/items/stock/increase", IncreaseItemsStock).RequireAuthorization();
@@ -57,7 +57,7 @@ public static class ItemAPI
         app.MapPatch("/items/sold/increase", IncreaseItemsSold).RequireAuthorization();
         app.MapPatch("/items/sold", SetItemsSold).RequireAuthorization();
 
-        app.MapPatch("/items/price", SetItemsPrice).RequireAuthorization(PolicyName.AdministratorPolicy);
+        app.MapPatch("/items/price", SetItemsPrice).RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
         return app;
     }

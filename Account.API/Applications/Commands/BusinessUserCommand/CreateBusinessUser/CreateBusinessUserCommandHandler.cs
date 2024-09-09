@@ -47,16 +47,10 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
         {
             var errors = new List<ErrorDetail>();
 
-            await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken); 
-
-            // hash email to make it secure but still got unique requirement
-            var hashedEmail = await HashNullableAsync(request.Email);
+            await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);  
 
             // hash phone number to make it secure but still got unique requirement
-            var hashedPhoneNumber = await HashAsync(request.PhoneNumber);
-
-            // encrypt email to make it secure
-            var encryptedEmail = await EncryptNullableAsync(request.Email);
+            var hashedPhoneNumber = await HashAsync(request.PhoneNumber); 
             
             // encrypt phone number to make it secure 
             var encryptedPhoneNumber = await EncryptAsync(request.PhoneNumber);
@@ -77,8 +71,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
             string? encryptedTaxId = await EncryptNullableAsync(request.TaxId);
 
             // get all users that already registered with related request identities such as email, username, phonenumber, and identity id(from identity database)
-            var userConflict = await _unitOfWork.BaseUsers.GetByIdentitiesAsNoTrackingAsync( 
-                (IdentityParameter.Email, hashedEmail),
+            var userConflict = await _unitOfWork.BaseUsers.GetByIdentitiesAsNoTrackingAsync(  
                 (IdentityParameter.PhoneNumber, hashedPhoneNumber));
 
             // check if user with conlict identities is not null
@@ -86,8 +79,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
             {
                 // if it is not null, rollback the trasaction and get the conflict items
                 errors.AddRange(UserIdentityConflict(
-                    userConflict, 
-                    hashedEmail,
+                    userConflict,  
                     hashedPhoneNumber));
             }
 
@@ -128,9 +120,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
             int? referralValidMonth = _referralOptions.CurrentValue.ValidMonth;
 
             // create new instance of business user
-            var user = new BusinessUser( 
-                hashedEmail,
-                encryptedEmail,
+            var user = new BusinessUser(  
                 hashedPhoneNumber,
                 encryptedPhoneNumber,
                 address,
@@ -336,8 +326,8 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
                          staffRequest.Address.Country);
 
                     staffs.Add(new StaffResponseDto(
-                        staff.Id, 
-                        staffRequest.Email,
+                        staff.Id,  
+                        null,   
                         staffRequest.PhoneNumber,
                         staff.Name,
                         staffAddress,
@@ -350,8 +340,8 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
         }
 
         var businessUserResponseDto = new BusinessUserResponseDto(
-                user.Id, 
-                request.Email,
+                user.Id,  
+                null,
                 request.PhoneNumber,
                 request.TimeZoneId,
                 address,
@@ -378,11 +368,9 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
         if (staffs is null)  return null;     
 
         foreach (var staff in staffs) 
-        {
-            var hashedEmail = await HashNullableAsync(staff.Email);
+        { 
             var hashedPhoneNumber = await HashAsync(staff.PhoneNumber);
-
-            var encryptedEmail = await EncryptNullableAsync(staff.Email);
+             
             var encryptedPhoneNumber = await EncryptAsync(staff.PhoneNumber);
 
             var encryptedAddressLine1 = await EncryptAsync(staff.Address.AddressLine1);
@@ -400,9 +388,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
             newStaffs.Add(new Staff(
                 businessUserId,
-                code, 
-                hashedEmail,
-                encryptedEmail,
+                code,  
                 hashedPhoneNumber,
                 encryptedPhoneNumber,
                 staff.Name,
@@ -476,20 +462,10 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
     }
 
     private static List<ErrorDetail> UserIdentityConflict(
-        BaseUser user, 
-        string? email,
+        BaseUser user,  
         string phoneNumber)
     {
-        var conflicts = new List<ErrorDetail>();
-         
-        if (!string.IsNullOrWhiteSpace(email))
-        {
-            if (user.HashedEmail == email || user.NewHashedEmail == email)
-            {
-                conflicts.Add(new ($"BusinessUser.{nameof(user.HashedEmail)}", 
-                    "User email already registered"));
-            } 
-        }
+        var conflicts = new List<ErrorDetail>(); 
 
         if (user.HashedPhoneNumber == phoneNumber || user.NewHashedPhoneNumber == phoneNumber)
         {

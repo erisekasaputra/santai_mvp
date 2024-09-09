@@ -1,32 +1,58 @@
-﻿using System.Net.Http.Headers;
+﻿using Core.SeedWorks;
+using Core.Services.Interfaces;
+using System.Net.Http.Headers;
+using System.Security.Claims;
 
 namespace Order.API.CustomDelegates;
 
 public class TokenJwtHandler : DelegatingHandler
 {
-    private readonly IHttpContextAccessor _httpContextAccessor;
-    public TokenJwtHandler(IHttpContextAccessor httpContextAccessor)
+    private readonly ICacheService _cacheService;
+    private readonly ITokenService _tokenService;
+    public TokenJwtHandler(ICacheService cacheService, ITokenService tokenService)
     {
-        _httpContextAccessor = httpContextAccessor;
+        _cacheService = cacheService;
+        _tokenService = tokenService;
     }
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
     {
-        // Retrieve the token from the current context
-        var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].FirstOrDefault();
+        string keyTokenCache = CacheKey.OrderServiceCacheKey();
 
-        if (!string.IsNullOrEmpty(token))
+        var token = await _cacheService.GetAsync<string>(keyTokenCache);
+
+        if (string.IsNullOrWhiteSpace(token))
         {
-            if (token.StartsWith("Bearer", StringComparison.OrdinalIgnoreCase))
-            {
-                request.Headers.Authorization = new AuthenticationHeaderValue(token);
-            }
-            else
-            {
-                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
-            }
+            var claims = new List<Claim>();
+
+            var claimIdentity = new ClaimsIdentity(claims);
+
+            var generatedToken = _tokenService.GenerateAccessToken(claimIdentity);  
+
+            await _cacheService.SetAsync(keyTokenCache, generatedToken, TimeSpan.FromSeconds(3600));
+        }
+         
+        request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", token);
+         
+        var response = await base.SendAsync(request, cancellationToken);
+         
+        if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized)
+        { 
+            await _cacheService.DeleteAsync(keyTokenCache);
+
+            var claims = new List<Claim>();
+
+            var claimIdentity = new ClaimsIdentity(claims);
+
+            var newGeneratedToken = _tokenService.GenerateAccessToken(claimIdentity);
+             
+            await _cacheService.SetAsync(keyTokenCache, newGeneratedToken, TimeSpan.FromSeconds(3600));
+             
+            request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", newGeneratedToken);
+
+            response = await base.SendAsync(request, cancellationToken);
         }
 
-        return await base.SendAsync(request, cancellationToken);
+        return response;
     }
 }

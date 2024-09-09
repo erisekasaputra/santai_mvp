@@ -1,12 +1,9 @@
 ﻿using Amazon.KeyManagementService;
-using Core.Configurations;
-using Core.Enumerations;
-using Core.SeedWorks;
+using Core.Configurations; 
 using Core.Services.Interfaces;
 using Core.Services;
 using FluentValidation;
-using FluentValidation.AspNetCore;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using FluentValidation.AspNetCore; 
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http.Json;
 using Microsoft.EntityFrameworkCore;
@@ -18,6 +15,10 @@ using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 using System.Text;
 using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Authentication;
+using Core.Authentications;
+using System.Linq;
+
 namespace Core.Extensions;
 
 public static class ServiceRegistrationExtension
@@ -51,64 +52,77 @@ public static class ServiceRegistrationExtension
         return services;
     }
 
-    public static IServiceCollection AddAuth(this IServiceCollection services)
+    public static AuthenticationBuilder AddGoogleSSO(this AuthenticationBuilder builder)
     {
+        var googleConfiguration = builder.Services.BuildServiceProvider().GetService<IOptionsMonitor<GoogleSSOConfiguration>>()?.CurrentValue
+          ?? throw new Exception("Please provide value for google configuratoin");
+
+        builder.AddGoogle(googleOption =>
+        {
+            googleOption.ClientId = googleConfiguration?.ClientId ?? throw new Exception("Google client id can not be null");
+            googleOption.ClientSecret = googleConfiguration?.ClientSecret ?? throw new Exception("Google client secret can not be null");
+        });
+
+        return builder;
+    }
+
+
+    public static AuthenticationBuilder AddAuth(this IServiceCollection services, params AuthenticationClient[] clients)
+    {  
+        string? authenticationSchema = clients?.Where(x => x.AuthenticationScheme == AuthenticationClientScheme.UserAuthenticationScheme).FirstOrDefault()?.AuthenticationScheme.ToString() ?? throw new Exception("Default authentication scheme is empty");
+
         var jwtOption = services.BuildServiceProvider().GetService<IOptionsMonitor<JwtConfiguration>>()
            ?? throw new Exception("Please provide value for message bus options");
 
         var jwt = jwtOption.CurrentValue;
 
-        services.AddAuthentication(authOption =>
-        {
-            authOption.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            authOption.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(options =>
-        {
-            var secretKey = Encoding.UTF8.GetBytes(jwt?.SecretKey ?? throw new Exception("Secret key for jwt can not be empty"));
-
-            options.TokenValidationParameters = new TokenValidationParameters()
-            {
-                ClockSkew = TimeSpan.FromSeconds(0),
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = jwt?.Issuer ?? throw new Exception("Issuer can not be null"),
-                ValidAudience = jwt?.Audience ?? throw new Exception("Audience can not be null"),
-                IssuerSigningKey = new SymmetricSecurityKey(secretKey)
-            };
+        var authenticationBuilder = services.AddAuthentication(authOption =>
+        { 
+            authOption.DefaultAuthenticateScheme = !string.IsNullOrEmpty(authenticationSchema) ? authenticationSchema : throw new Exception("Default authentication scheme is empty"); 
+            authOption.DefaultChallengeScheme = !string.IsNullOrEmpty(authenticationSchema) ? authenticationSchema : throw new Exception("Default authentication scheme is empty");
         });
+         
 
+        foreach(var client in clients)
+        {
+            authenticationBuilder.AddJwtBearer(client.AuthenticationScheme.ToString(), options =>
+            {
+                var secretKey = Encoding.UTF8.GetBytes(jwt?.SecretKey ?? throw new Exception("Secret key for jwt can not be empty"));
+
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    RequireExpirationTime = true,
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true, 
+                    ValidIssuer = jwt?.Issuer ?? throw new Exception("Issuer can not be null"),
+                    ValidAudience = jwt?.Audience ?? throw new Exception("Audience can not be null"),
+                    IssuerSigningKey = new SymmetricSecurityKey(secretKey)
+                };
+            });
+        }
+         
         services.AddAuthorization(options =>
         {
-            options.AddPolicy(PolicyName.RegularUserPolicy, policy =>
+            foreach(var client in clients)
             {
-                policy.RequireRole(UserType.RegularUser.ToString());
-            });
-
-            options.AddPolicy(PolicyName.BusinessUserPolicy, policy =>
-            {
-                policy.RequireRole(UserType.BusinessUser.ToString());
-            });
-
-            options.AddPolicy(PolicyName.StaffUserPolicy, policy =>
-            {
-                policy.RequireRole(UserType.StaffUser.ToString());
-            });
-
-            options.AddPolicy(PolicyName.MechanicUserPolicy, policy =>
-            {
-                policy.RequireRole(UserType.MechanicUser.ToString());
-            });
-
-            options.AddPolicy(PolicyName.AdministratorPolicy, policy =>
-            {
-                policy.RequireRole(UserType.Administrator.ToString());
-            });
+                foreach(var policy in client.Policies)
+                {
+                    if (policy is not null)
+                    {
+                        options.AddPolicy(policy.PolicyName.ToString(), policyBuilder =>
+                        {
+                            policyBuilder.AuthenticationSchemes = [client.AuthenticationScheme.ToString()];
+                            policyBuilder.RequireAuthenticatedUser();
+                            policyBuilder.RequireRole(policy.PolicyRole.Select(x => x.ToString()));
+                        });  
+                    }
+                }
+            } 
         });
 
-        return services;
+        return authenticationBuilder;
     }
 
     public static IServiceCollection AddRedisDatabase(this IServiceCollection services)

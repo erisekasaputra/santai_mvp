@@ -2,6 +2,7 @@ using Account.API;
 using Account.API.API;  
 using Account.API.Extensions;
 using Account.API.Middleware;
+using Account.API.SeedWork;
 using Account.Infrastructure;
 using Core.Extensions;
 
@@ -18,15 +19,15 @@ if (builder.Environment.IsDevelopment())
     builder.Services.AddSwaggerGen(); 
 }
 
-builder.Services.AddJsonEnumConverterBehavior(); 
-builder.Services.AddAuth(); 
+builder.Services.AddJsonEnumConverterBehavior();
+builder.Services.AddAuth([.. AuthPolicies.GetAuthClients()]); 
 builder.Services.AddHttpContextAccessor(); 
 builder.Services.AddMediatorService<IAccountAPIMarkerInterface>(); 
 builder.Services.AddRedisDatabase();  
 builder.Services.AddApplicationService(); 
 builder.Services.AddValidation<IAccountAPIMarkerInterface>(); 
 builder.Services.AddSqlDatabaseContext<AccountDbContext>();   
-builder.Services.AddMassTransitContext(); 
+builder.Services.AddMassTransitContext<AccountDbContext>(); 
 builder.Services.AddDataEncryption(builder.Configuration); 
 
 var app = builder.Build();

@@ -39,16 +39,14 @@ public class Staff : Entity, IAggregateRoot
     
     public Staff( 
         Guid businessUserId,
-        string businessUserCode,
-        string? hashedEmail,
-        string? encryptedEmail,
+        string businessUserCode, 
         string hashedPhoneNumber,
         string encryptedPhoneNumber,
         string name,
         Address address,
         string timeZoneId,
         string? deviceId,
-        string password,
+        string password, 
         bool raiseCreatedEvent = true)
     { 
         BusinessUserId = businessUserId != default ? businessUserId : throw new ArgumentNullException(nameof(businessUserId)); 
@@ -58,19 +56,11 @@ public class Staff : Entity, IAggregateRoot
         Address = address ?? throw new ArgumentNullException(nameof(address));  
         DeviceId = deviceId ?? null; 
 
-        HashedPhoneNumber = hashedPhoneNumber ?? throw new ArgumentNullException(nameof(hashedPhoneNumber));
-        NewHashedPhoneNumber = hashedPhoneNumber;
-        EncryptedPhoneNumber = encryptedPhoneNumber ?? throw new ArgumentNullException(nameof(hashedPhoneNumber));
-        NewEncryptedPhoneNumber = encryptedPhoneNumber; 
-
-        if (hashedEmail is not null)
-        {
-            HashedEmail = hashedEmail;
-            EncryptedEmail = encryptedEmail;
-        }
+        HashedPhoneNumber = hashedPhoneNumber ?? throw new ArgumentNullException(nameof(hashedPhoneNumber)); 
+        EncryptedPhoneNumber = encryptedPhoneNumber ?? throw new ArgumentNullException(nameof(hashedPhoneNumber)); 
 
         IsEmailVerified = false; 
-        IsPhoneNumberVerified = false;
+        IsPhoneNumberVerified = true;
         Password = password;
 
         if (raiseCreatedEvent)

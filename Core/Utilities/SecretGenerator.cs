@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace Identity.API.Utilities;
+namespace Core.Utilities;
 
 public static class SecretGenerator
 {

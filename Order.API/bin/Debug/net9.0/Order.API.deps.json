@@ -359,6 +359,14 @@
           }
         }
       },
+      "Microsoft.AspNetCore.Authentication.Google/9.0.0-preview.7.24406.2": {
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.Authentication.Google.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.40602"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authentication.JwtBearer/9.0.0-preview.7.24406.2": {
         "dependencies": {
           "Microsoft.IdentityModel.Protocols.OpenIdConnect": "8.0.0"
@@ -1614,6 +1622,7 @@
           "FluentValidation.AspNetCore": "11.3.0",
           "FluentValidation.DependencyInjectionExtensions": "11.9.2",
           "MediatR": "12.4.0",
+          "Microsoft.AspNetCore.Authentication.Google": "9.0.0-preview.7.24406.2",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.0-preview.7.24406.2",
           "Microsoft.AspNetCore.Http.Features": "5.0.17",
           "Microsoft.AspNetCore.OutputCaching.StackExchangeRedis": "9.0.0-preview.7.24406.2",
@@ -1858,6 +1867,13 @@
       "sha512": "sha512-FYv95bNT4UwcNA+G/J1oX5OpRiSUxteXaUt2BJbRSdRNiIUNbggJF69wy6mnk2wYToaanpdXZdCwVylt96MpwQ==",
       "path": "mediatr.contracts/2.0.1",
       "hashPath": "mediatr.contracts.2.0.1.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Authentication.Google/9.0.0-preview.7.24406.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-U6G91muo7/44pJQrHJBhqLpZE9SmyNFsthz3lAR9Jj8kV3f01S0OLDwPi7XixsC85+ivqKkO6g5fuIlin6L0Zw==",
+      "path": "microsoft.aspnetcore.authentication.google/9.0.0-preview.7.24406.2",
+      "hashPath": "microsoft.aspnetcore.authentication.google.9.0.0-preview.7.24406.2.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Authentication.JwtBearer/9.0.0-preview.7.24406.2": {
       "type": "package",

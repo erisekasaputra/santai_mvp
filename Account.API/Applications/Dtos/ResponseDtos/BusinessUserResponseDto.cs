@@ -1,7 +1,7 @@
 ﻿namespace Account.API.Applications.Dtos.ResponseDtos;
 
 public record BusinessUserResponseDto(
-    Guid UserId, 
+    Guid UserId,  
     string? Email,
     string? PhoneNumber,
     string TimeZoneId,

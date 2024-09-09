@@ -223,6 +223,8 @@ C:\Santai.MVP\Identity.API\bin\Debug\net9.0\Identity.API.runtimeconfig.json
 C:\Santai.MVP\Identity.API\bin\Debug\net9.0\Identity.API.dll
 C:\Santai.MVP\Identity.API\bin\Debug\net9.0\Identity.API.pdb
 C:\Santai.MVP\Identity.API\bin\Debug\net9.0\AWSSDK.Core.dll
+C:\Santai.MVP\Identity.API\bin\Debug\net9.0\AWSSDK.Extensions.NETCore.Setup.dll
+C:\Santai.MVP\Identity.API\bin\Debug\net9.0\AWSSDK.KeyManagementService.dll
 C:\Santai.MVP\Identity.API\bin\Debug\net9.0\AWSSDK.SimpleNotificationService.dll
 C:\Santai.MVP\Identity.API\bin\Debug\net9.0\AWSSDK.SQS.dll
 C:\Santai.MVP\Identity.API\bin\Debug\net9.0\Azure.Core.dll
@@ -441,5 +443,3 @@ C:\Santai.MVP\Identity.API\obj\Debug\net9.0\refint\Identity.API.dll
 C:\Santai.MVP\Identity.API\obj\Debug\net9.0\Identity.API.pdb
 C:\Santai.MVP\Identity.API\obj\Debug\net9.0\Identity.API.genruntimeconfig.cache
 C:\Santai.MVP\Identity.API\obj\Debug\net9.0\ref\Identity.API.dll
-C:\Santai.MVP\Identity.API\bin\Debug\net9.0\AWSSDK.KeyManagementService.dll
-C:\Santai.MVP\Identity.API\bin\Debug\net9.0\AWSSDK.Extensions.NETCore.Setup.dll

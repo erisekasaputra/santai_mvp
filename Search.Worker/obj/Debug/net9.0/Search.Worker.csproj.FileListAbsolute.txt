@@ -237,9 +237,6 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Search.Worker\obj\Debug\net9.0\Search.Worker.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Search.Worker\obj\Debug\net9.0\Search.Worker.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Search.Worker\obj\Debug\net9.0\ref\Search.Worker.dll
-C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\osx-x64\native\librdkafka.dylib
-C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\win-x64\native\librdkafka.dll
-C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\appsettings.Development.json
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\appsettings.json
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\appsettings.Production.json
@@ -249,6 +246,8 @@ C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Search.Worker.runtimeconfig.json
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Search.Worker.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Search.Worker.pdb
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\AWSSDK.Core.dll
+C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\AWSSDK.Extensions.NETCore.Setup.dll
+C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\AWSSDK.KeyManagementService.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\AWSSDK.SimpleNotificationService.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\AWSSDK.SQS.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Azure.Core.dll
@@ -275,6 +274,8 @@ C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\MassTransit.KafkaIntegration.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\MassTransit.RabbitMqTransport.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\MediatR.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\MediatR.Contracts.dll
+C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.Google.dll
+C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Microsoft.AspNetCore.OutputCaching.StackExchangeRedis.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Microsoft.Build.Locator.dll
@@ -421,8 +422,10 @@ C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\linux-x64\native\alpine-li
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\linux-x64\native\centos8-librdkafka.so
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\linux-x64\native\librdkafka.so
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\osx-arm64\native\librdkafka.dylib
+C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\osx-x64\native\librdkafka.dylib
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\win-x64\native\libcrypto-3-x64.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\win-x64\native\libcurl.dll
+C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\win-x64\native\librdkafka.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\win-x64\native\librdkafkacpp.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\win-x64\native\libssl-3-x64.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\win-x64\native\msvcp140.dll
@@ -449,6 +452,7 @@ C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\win-arm64\native\sni.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\win-x64\native\sni.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\win-x86\native\sni.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Diagnostics.PerformanceCounter.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\win\lib\net8.0\System.Runtime.Caching.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Core.dll
@@ -465,6 +469,3 @@ C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\refint\Search.Worker.dll
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.pdb
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.genruntimeconfig.cache
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\ref\Search.Worker.dll
-C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\AWSSDK.KeyManagementService.dll
-C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\AWSSDK.Extensions.NETCore.Setup.dll
-C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

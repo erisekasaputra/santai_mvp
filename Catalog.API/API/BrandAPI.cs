@@ -29,17 +29,16 @@ public static class BrandAPI
             {
                 config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
                 config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
-            });
-
+            }); 
 
         app.MapPost("/brands", CreateNewBrand)
-            .RequireAuthorization(PolicyName.AdministratorPolicy);
+            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
         app.MapPut("/brands/{brandId}", UpdateBrandById)
-            .RequireAuthorization(PolicyName.AdministratorPolicy);
+            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
         app.MapDelete("/brands/{brandId}", DeleteBrandById)
-            .RequireAuthorization(PolicyName.AdministratorPolicy);
+            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
         return app;
     }

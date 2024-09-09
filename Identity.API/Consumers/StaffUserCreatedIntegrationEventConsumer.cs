@@ -1,8 +1,8 @@
 ﻿using Core.CustomClaims;
 using Core.Enumerations;
-using Core.Events;
-using Core.Models;
+using Core.Events; 
 using Identity.API.Domain.Entities;
+using Identity.API.Domain.Events;
 using Identity.API.Infrastructure; 
 using MassTransit;
 using MediatR;
@@ -41,8 +41,8 @@ public class StaffUserCreatedIntegrationEventConsumer(
                 if (duplicateStaff is not null && staff.Id != Guid.Parse(duplicateStaff.Id))
                 {
                     await _mediator.Publish(
-                        new PhoneNumberDuplicateIntegrationEvent(
-                            [new DuplicateUser(staff.Id, staff.PhoneNumber, UserType.StaffUser)]));
+                        new PhoneNumberDuplicateDomainEvent(
+                            [duplicateStaff]));
 
                     await _dbContext.SaveChangesAsync();
 

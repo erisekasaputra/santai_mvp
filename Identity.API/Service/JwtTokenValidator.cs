@@ -28,7 +28,8 @@ public class JwtTokenValidator : IJwtTokenValidator
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var validationParameters = new TokenValidationParameters
-        { 
+        {
+            RequireExpirationTime = true,
             ValidateIssuer = true,
             ValidIssuer = _issuer,
             ValidateAudience = true,
@@ -36,7 +37,7 @@ public class JwtTokenValidator : IJwtTokenValidator
             ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             IssuerSigningKey = new SymmetricSecurityKey(key),
-            ClockSkew = TimeSpan.FromSeconds(0), 
+            ClockSkew = TimeSpan.FromSeconds(0),
         };
 
         try

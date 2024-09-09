@@ -1,5 +1,6 @@
 using Core.Extensions; 
-using FileHub.API.Extensions;   
+using FileHub.API.Extensions;
+using FileHub.API.SeedWorks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,7 +10,7 @@ builder.Services.AddApplicationService();
 builder.Services.AddControllers();
 builder.Services.AddCustomRateLimiter();
 builder.Services.AddRedisDatabase();
-builder.Services.AddAuth();
+builder.Services.AddAuth([.. AuthPolicies.GetAuthClients()]);
 
 var app = builder.Build();
 

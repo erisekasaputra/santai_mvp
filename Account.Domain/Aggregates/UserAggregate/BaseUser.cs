@@ -63,7 +63,9 @@ public abstract class BaseUser : Entity, IAggregateRoot
         string hashedPhoneNumber,
         string encryptedPhoneNumber,
         Address address,
-        string timeZoneId)
+        string timeZoneId,
+        bool isEmailVerified = false,
+        bool isPhoneNumberVerified = false)
     {  
         HashedEmail = hashedEmail;
         EncryptedEmail = encryptedEmail;
@@ -73,10 +75,13 @@ public abstract class BaseUser : Entity, IAggregateRoot
         TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId)); 
         CreatedAtUtc = DateTime.UtcNow;
         UpdatedAtUtc = DateTime.UtcNow;
-        AccountStatus = AccountStatus.Active; 
+        AccountStatus = AccountStatus.Active;
 
-        NewEncryptedPhoneNumber = encryptedPhoneNumber;
-        NewHashedPhoneNumber = hashedPhoneNumber;
+        if (!isPhoneNumberVerified)
+        { 
+            NewHashedPhoneNumber = hashedPhoneNumber;
+            NewEncryptedPhoneNumber = encryptedPhoneNumber;
+        } 
 
         if (hashedEmail is not null)
         {
@@ -84,8 +89,8 @@ public abstract class BaseUser : Entity, IAggregateRoot
             NewEncryptedEmail = encryptedEmail;
         } 
         
-        IsEmailVerified = false;
-        IsPhoneNumberVerified = false; 
+        IsEmailVerified = isEmailVerified;
+        IsPhoneNumberVerified = isPhoneNumberVerified; 
          
         LoyaltyProgram = new LoyaltyProgram(Id, 0); 
     }

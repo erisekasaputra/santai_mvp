@@ -41,11 +41,11 @@ public static class MechanicUserApi
 
         app.MapPost("/", CreateMechanicUser)
             .WithMetadata(new IdempotencyAttribute(nameof(CreateMechanicUser)))
-            .RequireAuthorization(PolicyName.MechanicUserPolicy); 
+            .RequireAuthorization(PolicyName.MechanicUserPolicy.ToString()); 
 
 
         app.MapGet("/", GetPaginatedMechanicUser)
-             .RequireAuthorization(PolicyName.AdministratorPolicy)
+             .RequireAuthorization(PolicyName.AdministratorPolicy.ToString())
              .CacheOutput(config =>
              {
                  config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
@@ -54,10 +54,10 @@ public static class MechanicUserApi
 
         app.MapGet("/{mechanicUserId}", GetMechanicUserById)
             .CacheOutput()
-             .RequireAuthorization(PolicyName.MechanicUserPolicy, PolicyName.AdministratorPolicy); 
+             .RequireAuthorization(PolicyName.MechanicUserPolicy.ToString(), PolicyName.AdministratorPolicy.ToString()); 
 
         app.MapGet("/{mechanicUserId}/certifications", GetPaginatedCertificationsByMechanicUserId)
-             .RequireAuthorization(PolicyName.MechanicUserPolicy, PolicyName.AdministratorPolicy)
+             .RequireAuthorization(PolicyName.MechanicUserPolicy.ToString(), PolicyName.AdministratorPolicy.ToString())
              .CacheOutput(config =>
              {
                  config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
@@ -66,54 +66,54 @@ public static class MechanicUserApi
 
         app.MapGet("/{mechanicUserId}/driving-license", GetDrivingLicenseByMechanicUserId)
             .CacheOutput()
-            .RequireAuthorization(PolicyName.MechanicUserPolicy, PolicyName.AdministratorPolicy);
+            .RequireAuthorization(PolicyName.MechanicUserPolicy.ToString(), PolicyName.AdministratorPolicy.ToString());
 
         app.MapGet("/{mechanicUserId}/national-identity", GetNationalIdentityByMechanicUserId)
             .CacheOutput()
-            .RequireAuthorization(PolicyName.MechanicUserPolicy, PolicyName.AdministratorPolicy);
+            .RequireAuthorization(PolicyName.MechanicUserPolicy.ToString(), PolicyName.AdministratorPolicy.ToString());
 
 
 
         app.MapPatch("/{mechanicUserId}/rating", SetRating)
-             .RequireAuthorization(PolicyName.AdministratorPolicy);
+             .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
         app.MapPatch("/{mechanicUserId}/verify", VerifyMechanicUserByUserId)
-             .RequireAuthorization(PolicyName.AdministratorPolicy);
+             .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
         app.MapPatch("/{mechanicUserId}/driving-license/{drivingLicenseId}/confirm", ConfirmDrivingLicenseByUserId)
-             .RequireAuthorization(PolicyName.AdministratorPolicy);
+             .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
         app.MapPatch("/{mechanicUserId}/driving-license/{drivingLicenseId}/reject", RejectDrivingLicenseByUserId)
-             .RequireAuthorization(PolicyName.AdministratorPolicy);
+             .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
         app.MapPatch("/{mechanicUserId}/national-identity/{nationalIdentityId}/confirm", ConfirmNationalIdentityByUserId)
-             .RequireAuthorization(PolicyName.AdministratorPolicy);
+             .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
         app.MapPatch("/{mechanicUserId}/national-identity/{nationalIdentityId}/reject", RejectNationalIdentityByUserId)
-             .RequireAuthorization(PolicyName.AdministratorPolicy);
+             .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
         app.MapPatch("/device-id", SetDeviceIdByUserId)
-             .RequireAuthorization(PolicyName.MechanicUserPolicy);
+             .RequireAuthorization(PolicyName.MechanicUserPolicy.ToString());
 
         app.MapPatch("/{mechanicUserId}/device-id/reset", ResetDeviceIdByUserId)
-             .RequireAuthorization(PolicyName.MechanicUserPolicy, PolicyName.AdministratorPolicy);
+             .RequireAuthorization(PolicyName.MechanicUserPolicy.ToString(), PolicyName.AdministratorPolicy.ToString());
 
         app.MapPatch("/{mechanicUserId}/device-id/force-set", ForceSetDeviceIdByUserId)
-             .RequireAuthorization(PolicyName.MechanicUserPolicy, PolicyName.AdministratorPolicy);
+             .RequireAuthorization(PolicyName.MechanicUserPolicy.ToString(), PolicyName.AdministratorPolicy.ToString());
 
 
 
         app.MapPost("/driving-license", SetDrivingLicenseByUserId)
-            .RequireAuthorization(PolicyName.MechanicUserPolicy);
+            .RequireAuthorization(PolicyName.MechanicUserPolicy.ToString());
 
         app.MapPost("/national-identity", SetNationalIdentityByUserId)
-            .RequireAuthorization(PolicyName.MechanicUserPolicy);
+            .RequireAuthorization(PolicyName.MechanicUserPolicy.ToString());
 
         app.MapPut("/", UpdateMechanicUserByUserId) 
-            .RequireAuthorization(PolicyName.MechanicUserPolicy);
+            .RequireAuthorization(PolicyName.MechanicUserPolicy.ToString());
 
         app.MapDelete("/{mechanicUserId}", DeleteMechanicUserByUserId)  
-            .RequireAuthorization(PolicyName.AdministratorPolicy);
+            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
         return app;
     }

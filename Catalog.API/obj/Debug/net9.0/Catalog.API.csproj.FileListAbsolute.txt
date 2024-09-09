@@ -270,6 +270,8 @@ C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Catalog.API.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Catalog.API.pdb
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\AspNetCoreRateLimit.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\AWSSDK.Core.dll
+C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\AWSSDK.Extensions.NETCore.Setup.dll
+C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\AWSSDK.KeyManagementService.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\AWSSDK.SimpleNotificationService.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\AWSSDK.SQS.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Azure.Core.dll
@@ -300,6 +302,7 @@ C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\MassTransit.KafkaIntegration.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\MassTransit.RabbitMqTransport.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\MediatR.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\MediatR.Contracts.dll
+C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.Google.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.AspNetCore.OutputCaching.StackExchangeRedis.dll
@@ -524,5 +527,3 @@ C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\refint\Catalog.API.dll
 C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.pdb
 C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.genruntimeconfig.cache
 C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\ref\Catalog.API.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\AWSSDK.KeyManagementService.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\AWSSDK.Extensions.NETCore.Setup.dll

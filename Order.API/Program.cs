@@ -1,28 +1,33 @@
 using Order.API.Extensions;
 using Order.API.Middlewares;
+using Core.Extensions;
+using Order.API;
+using Order.Infrastructure;
+using Order.API.SeedWorks;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 
-builder.AddOptionConfiguration(); 
+builder.AddCoreOptionConfiguration(); 
 builder.AddLoggingContext(); 
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddApplicationService();
-builder.Services.AddMediatorService();
+builder.Services.AddMediatorService<IOrderApiMarkerInterface>();
 builder.Services.AddRedisDatabase();
 builder.Services.AddJsonEnumConverterBehavior(); 
 builder.Services.AddControllers(); 
-builder.Services.AddSqlDatabaseContext();
-builder.Services.AddMassTransitContext();
+builder.Services.AddSqlDatabaseContext<OrderDbContext>();
+builder.Services.AddMassTransitContext<OrderDbContext>();
+builder.Services.AddValidation<IOrderApiMarkerInterface>();
 builder.Services.AddHttpClients();   
 builder.Services.AddOpenApi();
 builder.Services.AddDataEncryption(builder.Configuration);
-builder.Services.AddAuth();
+builder.Services.AddAuth([.. AuthPolicies.GetAuthClients()]);
 
 var app = builder.Build();
-//app.UseAuthentication();
-//app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.UseMiddleware<IdempotencyMiddleware>(); 
 app.MapControllers();  

@@ -1,10 +1,10 @@
 ﻿namespace Core.SeedWorks;
 
-public class PolicyName
+public enum PolicyName
 {
-    public const string AdministratorPolicy = "AdministratorPolicy";
-    public const string MechanicUserPolicy = "MechanicUserPolicy";
-    public const string RegularUserPolicy = "RegularUserPolicy";
-    public const string BusinessUserPolicy = "BusinessUserPolicy";
-    public const string StaffUserPolicy = "StaffUserPolicy";
+    AdministratorPolicy,
+    MechanicUserPolicy,
+    RegularUserPolicy,
+    BusinessUserPolicy,
+    StaffUserPolicy,
 }

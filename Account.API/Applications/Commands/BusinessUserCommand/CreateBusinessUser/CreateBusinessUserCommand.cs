@@ -4,8 +4,7 @@ using MediatR;
 
 namespace Account.API.Applications.Commands.BusinessUserCommand.CreateBusinessUser;
 
-public record CreateBusinessUserCommand( 
-        string? Email,
+public record CreateBusinessUserCommand(  
         string PhoneNumber,
         string TimeZoneId,
         AddressRequestDto Address,

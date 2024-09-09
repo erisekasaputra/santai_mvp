@@ -1,5 +1,7 @@
-﻿using Core.Events;
+﻿using Core.Enumerations;
+using Core.Events;
 using Identity.API.Domain.Entities;
+using Identity.API.Domain.Events;
 using Identity.API.Infrastructure;  
 using MassTransit;
 using MediatR;
@@ -29,20 +31,40 @@ public class MechanicUserCreatedIntegrationEventConsumer(
 
             try
             {
-                var userId = context.Message.UserId;
+                var userId = context.Message.UserId; 
                 var userPhoneNumber = context.Message.PhoneNumber;
 
                 var user = await _userManager.FindByIdAsync(userId.ToString());
 
                 if (user is null || userPhoneNumber != user.PhoneNumber)
                 {
-                    await _mediator.Publish(new MechanicUserDeletedIntegrationEvent(userId));
+                    await _mediator.Publish(new MechanicUserDeletedDomainEvent(userId));
                     return;
+                }
+
+                if (!user.PhoneNumberConfirmed)
+                {
+                    await _mediator.Publish(new MechanicUserDeletedDomainEvent(Guid.Parse(user.Id)));
+
+                    await _dbContext.SaveChangesAsync();
+
+                    await transaction.CommitAsync();
+
+                    return;
+                }
+
+                await _mediator.Publish(new PhoneNumberConfirmedDomainEvent(userId, user.PhoneNumber!, UserType.MechanicUser));
+
+                if (!string.IsNullOrEmpty(user.Email))
+                {
+                    await _mediator.Publish(new EmailAssignedToAUserDomainEvent(userId, user.Email, UserType.MechanicUser));
                 }
 
                 user.IsAccountRegistered = true;
 
-                await _userManager.UpdateAsync(user);
+                await _userManager.UpdateAsync(user); 
+
+                await _dbContext.SaveChangesAsync();
 
                 await transaction.CommitAsync();
             }

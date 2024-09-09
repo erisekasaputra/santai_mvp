@@ -256,6 +256,7 @@ C:\Santai.MVP\Order.API\bin\Debug\net9.0\MassTransit.ExtensionsDependencyInjecti
 C:\Santai.MVP\Order.API\bin\Debug\net9.0\MassTransit.RabbitMqTransport.dll
 C:\Santai.MVP\Order.API\bin\Debug\net9.0\MediatR.dll
 C:\Santai.MVP\Order.API\bin\Debug\net9.0\MediatR.Contracts.dll
+C:\Santai.MVP\Order.API\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.Google.dll
 C:\Santai.MVP\Order.API\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Santai.MVP\Order.API\bin\Debug\net9.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
 C:\Santai.MVP\Order.API\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll

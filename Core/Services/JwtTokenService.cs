@@ -1,17 +1,16 @@
 ﻿
 using Core.Configurations;
+using Core.Models;
+using Core.SeedWorks;
 using Core.Services.Interfaces;
-using Identity.API.Domain.Entities;
-using Identity.API.SeedWork;
-using Identity.API.Service.Interfaces;
-using Identity.API.Utilities;
+using Core.Utilities;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Identity.API.Service;
+namespace Core.Services;
 
 public class JwtTokenService : ITokenService
 {
@@ -21,7 +20,7 @@ public class JwtTokenService : ITokenService
     {
         _jwtConfigs = jwtConfigs;
         _cacheService = cacheService;
-    } 
+    }
 
     public string GenerateAccessToken(ClaimsIdentity claims)
     {
@@ -30,14 +29,14 @@ public class JwtTokenService : ITokenService
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
-            Subject = claims,  
-            Expires = DateTime.UtcNow.AddHours(_jwtConfigs.CurrentValue.TotalSecondsAccessTokenLifetime),
+            Subject = claims,
+            Expires = DateTime.UtcNow.AddSeconds(_jwtConfigs.CurrentValue.TotalSecondsAccessTokenLifetime),
             Issuer = _jwtConfigs.CurrentValue.Issuer,
             Audience = _jwtConfigs.CurrentValue.Audience,
             SigningCredentials = credentials,
             IssuedAt = DateTime.UtcNow,
             NotBefore = DateTime.UtcNow
-        }; 
+        };
 
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
@@ -46,7 +45,7 @@ public class JwtTokenService : ITokenService
 
     public async Task<RefreshToken> GenerateRefreshTokenAsync(string userId)
     {
-        var newToken = SecretGenerator.GenerateRandomSecret();  
+        var newToken = SecretGenerator.GenerateRandomSecret();
         var tokenExpiry = DateTime.UtcNow.AddDays(_jwtConfigs.CurrentValue.TotalDaysRefreshTokenLifetime);
 
 
@@ -63,25 +62,25 @@ public class JwtTokenService : ITokenService
 
 
         return new RefreshToken()
-        { 
+        {
             Token = newToken,
             UserId = userId,
             ExpiryDateUtc = tokenExpiry
         };
     }
-     
+
 
     public async Task<RefreshToken?> GetStoredRefreshToken(string token)
     {
-        var key = CacheKey.RefreshTokenCacheKey(token.HashToken()); 
+        var key = CacheKey.RefreshTokenCacheKey(token.HashToken());
         var storedToken = await _cacheService.GetAsync<RefreshToken>(key);
 
         return storedToken;
     }
-     
+
 
     public async Task<RefreshToken?> RotateRefreshTokenAsync(string oldToken)
-    { 
+    {
         var storedRefreshToken = await GetStoredRefreshToken(oldToken);
 
         if (storedRefreshToken is null)
@@ -92,37 +91,37 @@ public class JwtTokenService : ITokenService
         if (!ValidateTokenAsync(storedRefreshToken))
         {
             throw new SecurityTokenException("Invalid or expired refresh token");
-        } 
-          
+        }
+
         await InvalidateRefreshToken(oldToken);
 
-        var newRefreshToken = await GenerateRefreshTokenAsync(storedRefreshToken.UserId); 
+        var newRefreshToken = await GenerateRefreshTokenAsync(storedRefreshToken.UserId);
 
         return newRefreshToken;
     }
 
     public async Task<bool> InvalidateRefreshToken(string oldToken)
-    {  
+    {
         var cacheKey = CacheKey.RefreshTokenCacheKey(oldToken.HashToken());
 
         return await _cacheService.DeleteAsync(cacheKey);
     }
 
     public bool ValidateTokenAsync(RefreshToken storedRefreshToken)
-    { 
-        if (storedRefreshToken is null) 
+    {
+        if (storedRefreshToken is null)
         {
             return false;
         }
 
-        return (storedRefreshToken.ExpiryDateUtc > DateTime.UtcNow);
+        return storedRefreshToken.ExpiryDateUtc > DateTime.UtcNow;
     }
 
     public async Task<bool> BlackListRefreshTokenAsync(string refreshToken)
     {
         return await _cacheService.SetAsync(
-            CacheKey.BlackListRefreshTokenKey(refreshToken), 
-                new { Blacklisted = true }, 
+            CacheKey.BlackListRefreshTokenKey(refreshToken),
+                new { Blacklisted = true },
                 TimeSpan.FromDays(_jwtConfigs.CurrentValue.TotalDaysRefreshTokenLifetime));
     }
 

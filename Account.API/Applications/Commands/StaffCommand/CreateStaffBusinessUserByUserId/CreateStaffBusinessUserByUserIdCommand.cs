@@ -6,8 +6,7 @@ namespace Account.API.Applications.Commands.StaffCommand.CreateStaffBusinessUser
 
 public record CreateStaffBusinessUserByUserIdCommand(
     Guid Id, 
-    string PhoneNumber,
-    string? Email,
+    string PhoneNumber, 
     string Name,
     AddressRequestDto Address,
     string TimeZoneId,

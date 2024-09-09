@@ -6,7 +6,7 @@ using Identity.API.Service;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting;
 using Core.Services;
-using Core.Services.Interfaces;  
+using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
 using Core.Configurations;
 using Microsoft.Extensions.Options;
@@ -14,7 +14,7 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Identity.API.Consumers;
 using Identity.API.Domain.Entities;
-using Identity.API.Infrastructure; 
+using Identity.API.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
@@ -60,83 +60,15 @@ public static class ServiceRegistrationExtension
     public static IServiceCollection AddApplicationService(this IServiceCollection services) 
     {
         services.AddTransient<GlobalExceptionMiddleware>();
-        services.AddSingleton<ActionMethodUtility>();
+        services.AddSingleton<ActionMethodUtility>(); 
         services.AddSingleton<ITokenService, JwtTokenService>();
-        services.AddSingleton<ITokenService, JwtTokenService>();
-        services.AddSingleton<IJwtTokenValidator, JwtTokenValidator>();
-
-        services.AddSingleton<IGoogleTokenValidator, MockGoogleTokenValidator>();
-
+        services.AddSingleton<IJwtTokenValidator, JwtTokenValidator>(); 
+        services.AddSingleton<IGoogleTokenValidator, MockGoogleTokenValidator>(); 
         services.AddSingleton<IOtpService, OtpService>();
         services.AddSingleton<ICacheService, CacheService>(); 
 
         return services;
-    }
-
-    public static IServiceCollection AddAuthenticationProviderService(this IServiceCollection services)
-    {
-        var jwtConfiguration = services.BuildServiceProvider().GetService<IOptionsMonitor<JwtConfiguration>>()?.CurrentValue
-           ?? throw new Exception("Please provide value for jwt configuration");
-
-        var googleConfiguration = services.BuildServiceProvider().GetService<IOptionsMonitor<GoogleSSOConfiguration>>()?.CurrentValue
-           ?? throw new Exception("Please provide value for google configuratoin");
-
-        services.AddAuthentication(authOption =>
-        {
-            authOption.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            authOption.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(options =>
-        {
-            var secretKey = Encoding.UTF8.GetBytes(jwtConfiguration?.SecretKey ?? throw new Exception("Secret key for jwt can not be empty"));
-
-            options.TokenValidationParameters = new TokenValidationParameters()
-            {
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidateLifetime = true,
-                ValidateIssuerSigningKey = true,
-                ValidIssuer = jwtConfiguration?.Issuer ?? throw new Exception("Issuer can not be null"),
-                ValidAudience = jwtConfiguration?.Audience ?? throw new Exception("Audience can not be null"),
-                IssuerSigningKey = new SymmetricSecurityKey(secretKey)
-            };
-        })
-        .AddGoogle(googleOption =>
-        {
-            googleOption.ClientId = googleConfiguration?.ClientId ?? throw new Exception("Google client id can not be null");
-            googleOption.ClientSecret = googleConfiguration?.ClientSecret ?? throw new Exception("Google client secret can not be null");
-        });
-
-        services.AddAuthorization(options =>
-        {
-            options.AddPolicy(PolicyName.RegularUserPolicy, policy =>
-            {
-                policy.RequireRole(UserType.RegularUser.ToString());
-            });
-
-            options.AddPolicy(PolicyName.BusinessUserPolicy, policy =>
-            {
-                policy.RequireRole(UserType.BusinessUser.ToString());
-            });
-
-            options.AddPolicy(PolicyName.StaffUserPolicy, policy =>
-            {
-                policy.RequireRole(UserType.StaffUser.ToString());
-            });
-
-            options.AddPolicy(PolicyName.MechanicUserPolicy, policy =>
-            {
-                policy.RequireRole(UserType.MechanicUser.ToString());
-            });
-
-            options.AddPolicy(PolicyName.AdministratorPolicy, policy =>
-            {
-                policy.RequireRole(UserType.Administrator.ToString());
-            });
-        });
-
-        return services;  
-    }
+    }  
 
     public static IServiceCollection AddIdentityService(this IServiceCollection services)
     {
@@ -200,7 +132,9 @@ public static class ServiceRegistrationExtension
 
                 configure.UseMessageRetry(retryCfg =>
                 {
-                    retryCfg.Interval(messagingOption.MessageRetryInterval, messagingOption.MessageRetryTimespan);
+                    retryCfg.Interval(
+                        messagingOption.MessageRetryInterval, 
+                        messagingOption.MessageRetryTimespan);
                 });
 
                 configure.UseTimeout(timeoutCfg =>

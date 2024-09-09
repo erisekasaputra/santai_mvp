@@ -32,13 +32,13 @@ public static class CategoryAPI
             });
 
         app.MapPost("/categories", CreateNewCategory)
-            .RequireAuthorization(PolicyName.AdministratorPolicy);
+            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
         app.MapPut("/categories/{categoryId}", UpdateCategoryById)
-            .RequireAuthorization(PolicyName.AdministratorPolicy);
+            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
         app.MapDelete("/categories/{categoryId}", DeleteCategoryById)
-            .RequireAuthorization(PolicyName.AdministratorPolicy);
+            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
 
         return app;
     }

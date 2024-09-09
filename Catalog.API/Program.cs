@@ -2,11 +2,11 @@ using Catalog.API;
 using Catalog.API.API; 
 using Catalog.API.Extensions;
 using Catalog.API.Middewares;
+using Catalog.API.SeedWorks;
 using Catalog.Infrastructure;
 using Core.Extensions;
 
-var builder = WebApplication.CreateBuilder(args);
-
+var builder = WebApplication.CreateBuilder(args); 
 builder.Configuration.AddEnvironmentVariables();
 builder.AddCoreOptionConfiguration();
 builder.AddLoggingContext();
@@ -20,10 +20,10 @@ builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddSqlDatabaseContext<CatalogDbContext>(); 
-builder.Services.AddMassTransitContext();
+builder.Services.AddMassTransitContext<CatalogDbContext>();
 builder.Services.AddRedisDatabase();
 builder.Services.AddApplicationService();
-builder.Services.AddAuth();
+builder.Services.AddAuth([.. AuthPolicies.GetAuthClients()]);
 
 var app = builder.Build();
 

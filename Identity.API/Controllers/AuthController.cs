@@ -4,6 +4,7 @@ using Core.Enumerations;
 using Core.Extensions;
 using Core.Messages;
 using Core.Results;
+using Core.Services.Interfaces;
 using Core.Utilities;
 using Core.Validations;
 using FluentValidation;

@@ -23,7 +23,7 @@ public static class ServiceRegistrationExtension
         return services;
     } 
 
-    public static IServiceCollection AddMassTransitContext(this IServiceCollection services)
+    public static IServiceCollection AddMassTransitContext<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
     {
         var messageBusOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<MessagingConfiguration>>()
             ?? throw new Exception("Please provide value for message bus options");
@@ -32,7 +32,7 @@ public static class ServiceRegistrationExtension
 
         services.AddMassTransit(x =>
         {
-            x.AddEntityFrameworkOutbox<CatalogDbContext>(o =>
+            x.AddEntityFrameworkOutbox<TDbContext>(o =>
             {
                 o.DuplicateDetectionWindow = TimeSpan.FromSeconds(30);
                 o.QueryDelay = TimeSpan.FromSeconds(1);

@@ -29,7 +29,7 @@ public static class FleetApi
 
         app.MapPost("/", CreateFleetByUserId)
             .WithMetadata(new IdempotencyAttribute(nameof(CreateFleetByUserId)))
-            .RequireAuthorization(PolicyName.AdministratorPolicy, PolicyName.BusinessUserPolicy, PolicyName.RegularUserPolicy, PolicyName.MechanicUserPolicy, PolicyName.StaffUserPolicy); 
+            .RequireAuthorization(); 
 
         app.MapGet("/", GetPaginatedFleetByUserId)
             .RequireAuthorization()
@@ -40,15 +40,15 @@ public static class FleetApi
             }); 
 
         app.MapGet("/{fleetId}", GetFleetByIdByUserId)
-            .RequireAuthorization(PolicyName.AdministratorPolicy, PolicyName.BusinessUserPolicy, PolicyName.RegularUserPolicy, PolicyName.MechanicUserPolicy, PolicyName.StaffUserPolicy)
+            .RequireAuthorization()
             .CacheOutput(); 
 
         app.MapDelete("/{fleetId}", DeleteFleetByIdByUserId)
-            .RequireAuthorization(PolicyName.AdministratorPolicy, PolicyName.BusinessUserPolicy, PolicyName.RegularUserPolicy, PolicyName.MechanicUserPolicy, PolicyName.StaffUserPolicy)
+            .RequireAuthorization()
             .RequireAuthorization(); 
         
         app.MapPut("/{fleetId}", UpdateFleetByUserId)
-            .RequireAuthorization(PolicyName.AdministratorPolicy, PolicyName.BusinessUserPolicy, PolicyName.RegularUserPolicy, PolicyName.MechanicUserPolicy, PolicyName.StaffUserPolicy)
+            .RequireAuthorization()
             .RequireAuthorization(); 
 
         return builder; 

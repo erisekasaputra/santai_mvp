@@ -35,11 +35,9 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
             } 
 
             var addressRequest = request.Address;
-
-            var hashedEmail = await HashNullableAsync(request.Email);
+             
             var hashedPhoneNumber = await HashAsync(request.PhoneNumber);
-
-            var encryptedEmail = await EncryptNullableAsync(request.Email);
+             
             var encryptedPhoneNumber = await EncryptAsync(request.PhoneNumber);
 
             var encryptedAddressLine1 = await EncryptAsync(addressRequest.AddressLine1);
@@ -56,18 +54,12 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
                 addressRequest.Country);
 
             var conflicts = await _unitOfWork.Staffs.GetByIdentitiesAsNoTrackingAsync( 
-                    (IdentityParameter.Email, [hashedEmail]),
                     (IdentityParameter.PhoneNumber, [hashedPhoneNumber]));
 
             if (conflicts is not null && conflicts.Any())
             {
                 var errorDetails = new List<ErrorDetail>();
-                var conflict = conflicts.First(); 
-
-                if (conflict.HashedEmail == hashedEmail || conflict.NewHashedEmail == hashedEmail)
-                {
-                    errorDetails.Add(new ("Staff.Email", "Email already registered"));
-                }
+                var conflict = conflicts.First();  
 
                 if (conflict.HashedPhoneNumber == hashedPhoneNumber || conflict.NewHashedPhoneNumber == hashedPhoneNumber)
                 {
@@ -86,9 +78,7 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
 
             var newStaff = new Staff(
                 entity.Id,
-                entity.Code,
-                hashedEmail,
-                encryptedEmail,
+                entity.Code, 
                 hashedPhoneNumber,
                 encryptedPhoneNumber,
                 request.Name,
@@ -128,8 +118,8 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
             request.Address.Country);
 
         var staffResponseDto = new StaffResponseDto(
-                staff.Id,  
-                request.Email,
+                staff.Id,   
+                null,
                 request.PhoneNumber,
                 request.Name,
                 addressResponseDto,

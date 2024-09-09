@@ -23,16 +23,16 @@ public static class ServiceRegistrationExtension
         return services;
     } 
 
-    public static IServiceCollection AddMassTransitContext(this IServiceCollection services)
+    public static IServiceCollection AddMassTransitContext<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
     { 
-        var messageBusOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<MessagingConfiguration>>() 
+        var messagingOption = services.BuildServiceProvider().GetService<IOptionsMonitor<MessagingConfiguration>>() 
             ?? throw new Exception("Please provide value for message bus options");
 
-        var options = messageBusOptions.CurrentValue;
+        var options = messagingOption.CurrentValue;
          
         services.AddMassTransit(x =>
         {
-            x.AddEntityFrameworkOutbox<AccountDbContext>(o =>
+            x.AddEntityFrameworkOutbox<TDbContext>(o =>
             {
                 o.DuplicateDetectionWindow = TimeSpan.FromSeconds(options.DuplicateDetectionWindows);
                 o.QueryDelay = TimeSpan.FromSeconds(options.QueryDelay);
@@ -42,9 +42,7 @@ public static class ServiceRegistrationExtension
                 o.UseBusOutbox();
             });
 
-            x.AddConsumer<IdentityEmailAssignedToAUserIntegrationEventConsumer>();
-            x.AddConsumer<IdentityPhoneNumberConfirmedIntegrationEventConsumer>();
-            x.AddConsumer<PhoneNumberDuplicateIntegrationEventConsumer>();
+            x.AddConsumersFromNamespaceContaining<IAccountAPIMarkerInterface>();
 
             x.UsingRabbitMq((context, configure) =>
             {  
@@ -56,8 +54,9 @@ public static class ServiceRegistrationExtension
 
                 configure.UseMessageRetry(retryCfg =>
                 {
-                    retryCfg.Interval(options.MessageRetryInterval, 
-                        TimeSpan.FromSeconds(options.MessageRetryTimespan));
+                    retryCfg.Interval(
+                        options.MessageRetryInterval,
+                        options.MessageRetryTimespan);
                 });
 
                 configure.UseTimeout(timeoutCfg =>
@@ -83,7 +82,7 @@ public static class ServiceRegistrationExtension
                 }
 
                 void ConfigureEndPoint(IReceiveEndpointConfigurator receiveBuilder, string queueName, Type consumerType)
-                { 
+                {
                     receiveBuilder.UseMessageRetry(retry =>
                     {
                         retry.Interval(options.MessageRetryInterval, TimeSpan.FromSeconds(options.MessageRetryTimespan));
@@ -96,9 +95,7 @@ public static class ServiceRegistrationExtension
 
                     receiveBuilder.UseRateLimit(1000, TimeSpan.FromSeconds(2));
                 }
-            });
-
-
+            }); 
         });
 
         return services;

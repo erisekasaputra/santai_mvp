@@ -25,9 +25,7 @@ public class BusinessUser : BaseUser
         EncryptedContactPerson = null!;
     }
 
-    public BusinessUser(  
-        string? email,
-        string? encryptedEmail,
+    public BusinessUser(   
         string phoneNumber,
         string encryptedPhoneNumber,
         Address address,
@@ -37,7 +35,7 @@ public class BusinessUser : BaseUser
         string? websiteUrl,
         string? description, 
         string timeZoneId,
-        string password) : base(email, encryptedEmail, phoneNumber, encryptedPhoneNumber, address, timeZoneId)
+        string password) : base(null, null, phoneNumber, encryptedPhoneNumber, address, timeZoneId, isEmailVerified: false, isPhoneNumberVerified: true)
     {  
         Code = UniqueIdGenerator.Generate(Id);
         BusinessName = businessName ?? throw new ArgumentNullException(nameof(businessName));
@@ -118,9 +116,7 @@ public class BusinessUser : BaseUser
         return (license, null, null);
     } 
 
-    public (Staff? newStaff, string? ErrorParameter, string? ErrorMessage) AddStaff( 
-        string hashedEmail,
-        string encryptedEmail,
+    public (Staff? newStaff, string? ErrorParameter, string? ErrorMessage) AddStaff(
         string hashedPhoneNumber,
         string encryptedPhoneNumber,
         string name,
@@ -135,19 +131,11 @@ public class BusinessUser : BaseUser
         if (Staffs.Any(x => x.HashedPhoneNumber == hashedPhoneNumber || x.NewHashedPhoneNumber == hashedPhoneNumber))
         {
             return (null, "Staff.PhoneNumber", $"Phone number is already registered"); 
-        }
-
-        if (Staffs.Any(x => x.HashedEmail == hashedEmail || x.NewHashedEmail == hashedEmail))
-        {
-            return (null, "Staff.Email", "Email is already registered"); 
-        } 
-
+        }  
         
         var staff = new Staff(
             Id,
-            Code,
-            hashedEmail,
-            encryptedEmail,
+            Code, 
             hashedPhoneNumber,
             encryptedPhoneNumber,
             name,
