@@ -10,35 +10,45 @@ using Catalog.API.Applications.Commands.Items.SetItemPrice;
 using Catalog.API.Applications.Commands.Items.SetItemSoldQuantity;
 using Catalog.API.Applications.Commands.Items.SetItemStockQuantity;
 using Catalog.API.Applications.Commands.Items.UndeleteItem;
-using Catalog.API.Applications.Commands.Items.UpdateItem;
-using Catalog.API.Applications.Dtos.Item;
+using Catalog.API.Applications.Commands.Items.UpdateItem; 
 using Catalog.API.Applications.Queries.Items.GetItemById;
 using Catalog.API.Applications.Queries.Items.GetItemPaginated;
 using Catalog.API.Applications.Services;
 using Catalog.API.Extensions;
-using Core.Results;
+using Core.Dtos;
+using Core.Messages; 
+using Core.SeedWorks;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 namespace Catalog.API.API;
 
 public static class ItemAPI
 {
+    const int _cacheExpiry = 10;
     public static IEndpointRouteBuilder ItemRouter(this IEndpointRouteBuilder route, string groupName)
     {
         var app = route.MapGroup(groupName);
 
-        app.MapGet("/items/{itemId}", GetItemById).RequireAuthorization();
-        app.MapGet("/items", GetPaginatedItem).RequireAuthorization();
+        app.MapGet("/items/{itemId}", GetItemById)
+            .RequireAuthorization()
+            .CacheOutput(config => config.Expire(TimeSpan.FromSeconds(_cacheExpiry)));
 
-        app.MapPost("/items", CreateNewItem).RequireAuthorization();
+        app.MapGet("/items", GetPaginatedItem)
+            .RequireAuthorization().CacheOutput(config =>
+            {
+                config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
+                config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
+            });
 
-        app.MapPut("/items/{itemId}", UpdateItemById).RequireAuthorization();
+        app.MapPost("/items", CreateNewItem).RequireAuthorization(PolicyName.AdministratorPolicy);
 
-        app.MapDelete("/items/{itemId}", DeleteItemById).RequireAuthorization();
-        app.MapPatch("/items/{itemId}/undelete", UndeleteItemById).RequireAuthorization();
+        app.MapPut("/items/{itemId}", UpdateItemById).RequireAuthorization(PolicyName.AdministratorPolicy);
 
-        app.MapPatch("/items/{itemId}/activate", SetItemActivateById).RequireAuthorization();
-        app.MapPatch("/items/{itemId}/deactivate", SetItemDeactivateById).RequireAuthorization();
+        app.MapDelete("/items/{itemId}", DeleteItemById).RequireAuthorization(PolicyName.AdministratorPolicy);
+        app.MapPatch("/items/{itemId}/undelete", UndeleteItemById).RequireAuthorization(PolicyName.AdministratorPolicy);
+
+        app.MapPatch("/items/{itemId}/activate", SetItemActivateById).RequireAuthorization(PolicyName.AdministratorPolicy);
+        app.MapPatch("/items/{itemId}/deactivate", SetItemDeactivateById).RequireAuthorization(PolicyName.AdministratorPolicy);
 
         app.MapPatch("/items/stock/reduce", ReduceItemsStock).RequireAuthorization();
         app.MapPatch("/items/stock/increase", IncreaseItemsStock).RequireAuthorization();
@@ -46,7 +56,8 @@ public static class ItemAPI
         app.MapPatch("/items/sold/reduce", ReduceItemsSold).RequireAuthorization();
         app.MapPatch("/items/sold/increase", IncreaseItemsSold).RequireAuthorization();
         app.MapPatch("/items/sold", SetItemsSold).RequireAuthorization();
-        app.MapPatch("/items/price", SetItemsPrice).RequireAuthorization();
+
+        app.MapPatch("/items/price", SetItemsPrice).RequireAuthorization(PolicyName.AdministratorPolicy);
 
         return app;
     }
@@ -73,33 +84,34 @@ public static class ItemAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
     private static async Task<IResult> GetPaginatedItem(
-        [AsParameters] GetItemPaginatedQuery itemPaginatedQuery, 
+        [AsParameters] PaginatedRequestDto paginatedRequest, 
         [FromServices] ApplicationService service,
         [FromServices] IValidator<GetItemPaginatedQuery> validator)
     {
         try
         {
-            var validation = await validator.ValidateAsync(itemPaginatedQuery);
+            var query = new GetItemPaginatedQuery(paginatedRequest.PageNumber, paginatedRequest.PageSize);
+
+            var validation = await validator.ValidateAsync(query);
 
             if (!validation.IsValid)
             { 
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            var response = await service.Mediator.Send(itemPaginatedQuery);
-
+            var response = await service.Mediator.Send(query); 
 
             return response.ToIResult();
         }
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -124,7 +136,7 @@ public static class ItemAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -155,7 +167,7 @@ public static class ItemAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -180,7 +192,7 @@ public static class ItemAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -205,7 +217,7 @@ public static class ItemAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -230,7 +242,7 @@ public static class ItemAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -255,7 +267,7 @@ public static class ItemAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -279,7 +291,7 @@ public static class ItemAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -303,7 +315,7 @@ public static class ItemAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
     
@@ -327,7 +339,7 @@ public static class ItemAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
      
@@ -352,7 +364,7 @@ public static class ItemAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -376,7 +388,7 @@ public static class ItemAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -400,7 +412,7 @@ public static class ItemAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 
@@ -424,7 +436,7 @@ public static class ItemAPI
         catch (Exception ex)
         {
             service.Logger.LogCritical("Critical failure: {ErrorMessage}", ex.Message);
-            return TypedResults.InternalServerError();
+            return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
 } 

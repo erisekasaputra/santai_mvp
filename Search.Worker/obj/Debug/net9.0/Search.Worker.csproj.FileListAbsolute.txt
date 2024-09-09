@@ -465,3 +465,6 @@ C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\refint\Search.Worker.dll
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.pdb
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.genruntimeconfig.cache
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\ref\Search.Worker.dll
+C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\AWSSDK.KeyManagementService.dll
+C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\AWSSDK.Extensions.NETCore.Setup.dll
+C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

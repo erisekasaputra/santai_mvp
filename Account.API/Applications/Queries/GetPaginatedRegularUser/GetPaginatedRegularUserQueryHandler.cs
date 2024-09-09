@@ -1,23 +1,24 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces;
+using Account.API.Applications.Services; 
 using Account.API.Extensions;
 using Core.Results;
 using Core.Messages;
 using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.SeedWork;
 using MediatR;
+using Core.Dtos;
+using Core.Services.Interfaces;
 
 namespace Account.API.Applications.Queries.GetPaginatedRegularUser;
 
 public class GetPaginatedRegularUserQueryHandler(
     IUnitOfWork unitOfWork,
-    IKeyManagementService kmsClient,
+    IEncryptionService kmsClient,
     ApplicationService service,
     ICacheService cacheService) : IRequestHandler<GetPaginatedRegularUserQuery, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly IKeyManagementService _kmsClient = kmsClient;
+    private readonly IEncryptionService _kmsClient = kmsClient;
     private readonly ICacheService _cacheService = cacheService;
     private readonly ApplicationService _appService = service;
     public async Task<Result> Handle(GetPaginatedRegularUserQuery request, CancellationToken cancellationToken)

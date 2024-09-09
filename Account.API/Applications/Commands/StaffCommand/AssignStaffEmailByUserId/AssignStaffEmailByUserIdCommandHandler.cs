@@ -1,23 +1,23 @@
-﻿using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces;
+﻿using Account.API.Applications.Services; 
 using Core.Results;
 using Core.Messages;
 using Account.Domain.Enumerations;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using MediatR;
+using Core.Services.Interfaces;
 
 namespace Account.API.Applications.Commands.StaffCommand.AssignStaffEmailByUserId;
 
 public class AssignStaffEmailByUserIdCommandHandler(
     IUnitOfWork unitOfWork,
     ApplicationService service,
-    IKeyManagementService kmsClient,
+    IEncryptionService kmsClient,
     IHashService hashService) : IRequestHandler<AssignStaffEmailByUserIdCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _service = service;
-    private readonly IKeyManagementService _kmsClient = kmsClient;
+    private readonly IEncryptionService _kmsClient = kmsClient;
     private readonly IHashService _hashService = hashService;
 
     public async Task<Result> Handle(AssignStaffEmailByUserIdCommand request, CancellationToken cancellationToken)

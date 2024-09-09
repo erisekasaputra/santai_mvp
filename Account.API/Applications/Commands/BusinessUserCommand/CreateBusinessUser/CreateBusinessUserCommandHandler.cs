@@ -1,7 +1,6 @@
 ﻿using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces; 
+using Account.API.Applications.Services; 
 using Core.Results;
 using Account.Domain.Aggregates.BusinessLicenseAggregate;
 using Account.Domain.Aggregates.ReferralAggregate;
@@ -16,6 +15,7 @@ using Microsoft.Extensions.Options;
 using System.Data;
 using Core.Configurations;
 using Core.Messages;
+using Core.Services.Interfaces;
 
 namespace Account.API.Applications.Commands.BusinessUserCommand.CreateBusinessUser;
 
@@ -24,14 +24,14 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
     private readonly IUnitOfWork _unitOfWork;
     private readonly IOptionsMonitor<ReferralProgramConfiguration> _referralOptions;
     private readonly ApplicationService _service;
-    private readonly IKeyManagementService _kmsClient;
+    private readonly IEncryptionService _kmsClient;
     private readonly IHashService _hashService;
 
     public CreateBusinessUserCommandHandler(
         IUnitOfWork unitOfWork,
         IOptionsMonitor<ReferralProgramConfiguration> referralOptions,
         ApplicationService service,
-        IKeyManagementService kmsClient,
+        IEncryptionService kmsClient,
         IHashService hashService)
     {
         _unitOfWork = unitOfWork;

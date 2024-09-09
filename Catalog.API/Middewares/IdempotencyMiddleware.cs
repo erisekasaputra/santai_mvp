@@ -1,6 +1,7 @@
-﻿using Catalog.API.Applications.Services.Interfaces; 
+﻿ 
 using Catalog.API.CustomAttributes;
 using Core.Configurations;
+using Core.Services.Interfaces;
 using Microsoft.Extensions.Options;
 
 namespace Catalog.API.Middewares;

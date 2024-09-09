@@ -1,22 +1,22 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces;
+using Account.API.Applications.Services; 
 using Core.Results;
 using Core.Messages; 
 using Account.Domain.SeedWork;
 using MediatR;
 using Core.Extensions;
+using Core.Services.Interfaces;
 
 namespace Account.API.Applications.Queries.GetFleetByIdByUserId;
 
 public class GetFleetByIdByUserIdQueryHandler(
     IUnitOfWork unitOfWork,
-    IKeyManagementService kmsClient,
+    IEncryptionService kmsClient,
     ApplicationService service,
     ICacheService cacheService) : IRequestHandler<GetFleetByIdByUserIdQuery, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly IKeyManagementService _kmsClient = kmsClient;
+    private readonly IEncryptionService _kmsClient = kmsClient;
     private readonly ICacheService _cacheService = cacheService;
     private readonly ApplicationService _appService = service;
     public async Task<Result> Handle(GetFleetByIdByUserIdQuery request, CancellationToken cancellationToken)

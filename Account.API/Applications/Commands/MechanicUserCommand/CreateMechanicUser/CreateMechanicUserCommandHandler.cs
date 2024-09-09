@@ -1,7 +1,6 @@
 ﻿using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces;
+using Account.API.Applications.Services; 
 using Account.API.Extensions;
 using Core.Results;
 using Account.Domain.Aggregates.CertificationAggregate;
@@ -18,6 +17,7 @@ using System.Data;
 using Core.Configurations;
 using Core.Extensions;
 using Core.Messages;
+using Core.Services.Interfaces;
 
 namespace Account.API.Applications.Commands.MechanicUserCommand.CreateMechanicUser;
 
@@ -25,13 +25,13 @@ public class CreateMechanicUserCommandHandler(
     IUnitOfWork unitOfWork,
     ApplicationService service,
     IOptionsMonitor<ReferralProgramConfiguration> referralOption,
-    IKeyManagementService kmsClient,
+    IEncryptionService kmsClient,
     IHashService hashService) : IRequestHandler<CreateMechanicUserCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _appService = service;
     private readonly IOptionsMonitor<ReferralProgramConfiguration> _referralOptions = referralOption;
-    private readonly IKeyManagementService _kmsClient = kmsClient;
+    private readonly IEncryptionService _kmsClient = kmsClient;
     private readonly IHashService _hashClient = hashService;
 
 

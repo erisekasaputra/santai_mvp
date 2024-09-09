@@ -11,16 +11,18 @@ using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 using Account.API.Applications.Queries.GetPaginatedRegularUser;
 using Account.API.CustomAttributes; 
-using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces;
+using Account.API.Applications.Services; 
 using Core.SeedWorks;
 using Core.Messages;
 using Core.Enumerations;
+using Core.Dtos;
+using Core.Services.Interfaces;
 
 namespace Account.API.API;
 
 public static class RegularUserApi
 {
+    const int _cacheExpiry = 10;
     public static IEndpointRouteBuilder MapRegularUserApi(this IEndpointRouteBuilder builder)
     {
         var app = builder.MapGroup("api/v1/users/regular");
@@ -29,7 +31,12 @@ public static class RegularUserApi
             .RequireAuthorization(PolicyName.RegularUserPolicy, PolicyName.AdministratorPolicy);
 
         app.MapGet("/", GetPaginatedRegularUser)
-            .RequireAuthorization(PolicyName.AdministratorPolicy);
+            .RequireAuthorization(PolicyName.AdministratorPolicy)
+            .CacheOutput(config =>
+            {
+                config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
+                config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
+            });
 
         app.MapPost("/", CreateRegularUser)
             .WithMetadata(new IdempotencyAttribute(nameof(CreateRegularUser)))
@@ -54,7 +61,7 @@ public static class RegularUserApi
     }
 
     private static async Task<IResult> GetPaginatedRegularUser(
-        [AsParameters] PaginatedItemRequestDto request,
+        [AsParameters] PaginatedRequestDto request,
         [FromServices] ApplicationService service,
         [FromServices] IUserInfoService userInfoService)
     {

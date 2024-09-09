@@ -7,9 +7,14 @@ using Account.API.Applications.Queries.GetFleetByIdByUserId;
 using Account.API.Applications.Queries.GetPaginatedFleetByUserId;
 using Account.API.Applications.Services;
 using Account.API.CustomAttributes;
-using Account.API.Extensions;
-using Account.API.SeedWork;
+using Account.API.Extensions; 
+using Core.Dtos;
+using Core.Enumerations;
 using Core.Messages;
+using Core.Models;
+using Core.SeedWorks;
+using Core.Services;
+using Core.Services.Interfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,21 +22,46 @@ namespace Account.API.API;
 
 public static class FleetApi
 {
+    const int _cacheExpiry = 10;
     public static IEndpointRouteBuilder MapFleetApi(this IEndpointRouteBuilder builder)
     {
         var app = builder.MapGroup("api/v1/users/{userId}/fleet"); 
 
         app.MapPost("/", CreateFleetByUserId)
-            .WithMetadata(new IdempotencyAttribute(nameof(CreateFleetByUserId))); 
+            .WithMetadata(new IdempotencyAttribute(nameof(CreateFleetByUserId)))
+            .RequireAuthorization(PolicyName.AdministratorPolicy, PolicyName.BusinessUserPolicy, PolicyName.RegularUserPolicy, PolicyName.MechanicUserPolicy, PolicyName.StaffUserPolicy); 
 
-        app.MapGet("/", GetPaginatedFleetByUserId); 
-        app.MapGet("/{fleetId}", GetFleetByIdByUserId).CacheOutput(); 
+        app.MapGet("/", GetPaginatedFleetByUserId)
+            .RequireAuthorization()
+            .CacheOutput(config =>
+            {
+                config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
+                config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
+            }); 
 
-        app.MapDelete("/{fleetId}", DeleteFleetByIdByUserId); 
+        app.MapGet("/{fleetId}", GetFleetByIdByUserId)
+            .RequireAuthorization(PolicyName.AdministratorPolicy, PolicyName.BusinessUserPolicy, PolicyName.RegularUserPolicy, PolicyName.MechanicUserPolicy, PolicyName.StaffUserPolicy)
+            .CacheOutput(); 
+
+        app.MapDelete("/{fleetId}", DeleteFleetByIdByUserId)
+            .RequireAuthorization(PolicyName.AdministratorPolicy, PolicyName.BusinessUserPolicy, PolicyName.RegularUserPolicy, PolicyName.MechanicUserPolicy, PolicyName.StaffUserPolicy)
+            .RequireAuthorization(); 
         
-        app.MapPut("/{fleetId}", UpdateFleetByUserId); 
+        app.MapPut("/{fleetId}", UpdateFleetByUserId)
+            .RequireAuthorization(PolicyName.AdministratorPolicy, PolicyName.BusinessUserPolicy, PolicyName.RegularUserPolicy, PolicyName.MechanicUserPolicy, PolicyName.StaffUserPolicy)
+            .RequireAuthorization(); 
 
         return builder; 
+    }
+
+    private static bool QueryUserIdEqualWithClaimUserId(UserClaim claim, Guid userId)
+    {
+        if (claim.CurrentUserType is not UserType.Administrator && userId != claim.Sub)
+        {
+            return false;
+        }
+
+        return true;
     }
 
     private static async Task<IResult> UpdateFleetByUserId(
@@ -39,11 +69,23 @@ public static class FleetApi
         Guid fleetId,
         [FromBody] UpdateFleetRequestDto request,
         [FromServices] ApplicationService service,
-        [FromServices] IValidator<UpdateFleetRequestDto> validator)
-    {
-        // later on , user id is from user claims at authentication level  
+        [FromServices] IValidator<UpdateFleetRequestDto> validator,
+        [FromServices] IUserInfoService userInfoService)
+    { 
         try
         {
+            var userClaim = userInfoService.GetUserInfoAsync();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }  
+
+            if (QueryUserIdEqualWithClaimUserId(userClaim, userId))
+            {
+                return TypedResults.Forbid();
+            }
+
+
             var validate = await validator.ValidateAsync(request);
             if (!validate.IsValid)
             {
@@ -86,11 +128,25 @@ public static class FleetApi
     private static async Task<IResult> DeleteFleetByIdByUserId(
         Guid userId,
         Guid fleetId,
-        [FromServices] ApplicationService service)
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
     {
         // later on , user id is from user claims at authentication level  
         try
-        { 
+        {
+
+            var userClaim = userInfoService.GetUserInfoAsync();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            if (QueryUserIdEqualWithClaimUserId(userClaim, userId))
+            {
+                return TypedResults.Forbid();
+            }
+
+
             var result = await service.Mediator.Send(
                 new DeleteFleetByIdByUserIdCommand(userId, fleetId));
 
@@ -107,11 +163,24 @@ public static class FleetApi
         Guid userId,
         [FromBody] CreateFleetRequestDto request,
         [FromServices] ApplicationService service,
-        [FromServices] IValidator<CreateFleetRequestDto> validator)
+        [FromServices] IValidator<CreateFleetRequestDto> validator,
+        [FromServices] IUserInfoService userInfoService)
     {
         // later on , user id is from user claims at authentication level  
         try
         {
+            var userClaim = userInfoService.GetUserInfoAsync();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            if (QueryUserIdEqualWithClaimUserId(userClaim, userId))
+            {
+                return TypedResults.Forbid();
+            }
+
+
             var validate = await validator.ValidateAsync(request);
             if (!validate.IsValid)
             {
@@ -153,10 +222,23 @@ public static class FleetApi
     private static async Task<IResult> GetFleetByIdByUserId(
         Guid userId,
         Guid fleetId,
-        [FromServices] ApplicationService service)
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService) 
     { 
         try
-        { 
+        {
+            var userClaim = userInfoService.GetUserInfoAsync();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            if (QueryUserIdEqualWithClaimUserId(userClaim, userId))
+            {
+                return TypedResults.Forbid();
+            }
+
+
             var result = await service.Mediator.Send(
                 new GetFleetByIdByUserIdQuery(userId, fleetId));
 
@@ -171,12 +253,24 @@ public static class FleetApi
 
     private static async Task<IResult> GetPaginatedFleetByUserId(
         Guid userId,
-        [AsParameters] PaginatedItemRequestDto request,
-        [FromServices] ApplicationService service)
+        [AsParameters] PaginatedRequestDto request,
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
     {
         // later on , user id is from user claims at authentication level  
         try
-        {  
+        {
+            var userClaim = userInfoService.GetUserInfoAsync();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            if (QueryUserIdEqualWithClaimUserId(userClaim, userId))
+            {
+                return TypedResults.Forbid();
+            }
+
             var result = await service.Mediator.Send(
                 new GetPaginatedFleetByUserIdQuery(userId, request.PageNumber, request.PageSize));
             return result.ToIResult();

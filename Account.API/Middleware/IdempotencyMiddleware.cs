@@ -1,6 +1,6 @@
-﻿using Account.API.Applications.Services.Interfaces;
-using Account.API.CustomAttributes;
+﻿using Account.API.CustomAttributes;
 using Core.Configurations;
+using Core.Services.Interfaces;
 using Microsoft.Extensions.Options;
 
 namespace Account.API.Middleware;

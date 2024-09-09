@@ -1,6 +1,5 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces;
+using Account.API.Applications.Services; 
 using Core.Results;
 using Account.Domain.Aggregates.FleetAggregate;
 using Account.Domain.Enumerations;
@@ -13,6 +12,7 @@ using Core.Configurations;
 using Core.Extensions;
 using Core.Enumerations;
 using Core.Messages;
+using Core.Services.Interfaces;
 
 namespace Account.API.Applications.Commands.FleetCommand.CreateFleetByUserId;
 
@@ -20,14 +20,14 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
 { 
     private readonly IUnitOfWork _unitOfWork; 
     private readonly ApplicationService _service;
-    private readonly IKeyManagementService _kmsClient;
+    private readonly IEncryptionService _kmsClient;
     private readonly IHashService _hashService;
 
     public CreateFleetByUserIdCommandHandler(
       IUnitOfWork unitOfWork,
       IOptionsMonitor<ReferralProgramConfiguration> referralOptions,
       ApplicationService service,
-      IKeyManagementService kmsClient,
+      IEncryptionService kmsClient,
       IHashService hashService)
     {
         _unitOfWork = unitOfWork; 

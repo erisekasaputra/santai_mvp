@@ -25,36 +25,52 @@ using Account.API.Applications.Queries.GetPaginatedStaffByUserId;
 using Account.API.Applications.Queries.GetPhoneNumberByStaffId;
 using Account.API.Applications.Queries.GetStaffByUserIdAndStaffId;
 using Account.API.Applications.Queries.GetTimeZoneByStaffId;
-using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces;
+using Account.API.Applications.Services; 
 using Account.API.CustomAttributes;
 using Account.API.Extensions;
+using Core.Dtos;
 using Core.Enumerations;
 using Core.Messages;
 using Core.SeedWorks;
+using Core.Services.Interfaces;
 using FluentValidation; 
 using Microsoft.AspNetCore.Mvc;
 namespace Account.API.API;
 
 public static class BusinessUserApi
 {
+    const int _cacheExpiry = 10;
     public static IEndpointRouteBuilder MapBusinessUserApi(this IEndpointRouteBuilder route)
     {
         var app = route.MapGroup("api/v1/users/business");
         
         app.MapGet("/", GetPaginatedBusinessUser)
-            .RequireAuthorization(
-                PolicyName.AdministratorPolicy);
+            .RequireAuthorization(PolicyName.AdministratorPolicy)
+            .CacheOutput(config =>
+            {
+                config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
+                config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
+            });
 
         app.MapGet("/{businessUserId}/staffs", GetPaginatedStaff) 
             .RequireAuthorization(
                 PolicyName.AdministratorPolicy, 
-                PolicyName.BusinessUserPolicy);
+                PolicyName.BusinessUserPolicy)
+            .CacheOutput(config =>
+            {
+                config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
+                config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
+            });
 
         app.MapGet("/{businessUserId}/business-licenses", GetPaginatedBusinessLicense)
             .RequireAuthorization(
                 PolicyName.AdministratorPolicy, 
-                PolicyName.BusinessUserPolicy);
+                PolicyName.BusinessUserPolicy)
+            .CacheOutput(config =>
+            {
+                config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
+                config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
+            });
 
         app.MapGet("/{businessUserId}", GetBusinessUserById)
             .CacheOutput()
@@ -291,7 +307,7 @@ public static class BusinessUserApi
 
     private static async Task<IResult> GetPaginatedBusinessLicense(
         Guid businessUserId, 
-        [AsParameters] PaginatedItemRequestDto request,
+        [AsParameters] PaginatedRequestDto request,
         [FromServices] ApplicationService service,
         [FromServices] IUserInfoService userInfoService)
     {
@@ -324,7 +340,7 @@ public static class BusinessUserApi
 
     private static async Task<IResult> GetPaginatedStaff(
         Guid businessUserId, 
-        [AsParameters] PaginatedItemRequestDto request,
+        [AsParameters] PaginatedRequestDto request,
         [FromServices] ApplicationService service,
         [FromServices] IUserInfoService userInfoService)
     {
@@ -356,7 +372,7 @@ public static class BusinessUserApi
     }
 
     private static async Task<IResult> GetPaginatedBusinessUser(
-        [AsParameters] PaginatedItemRequestDto request,
+        [AsParameters] PaginatedRequestDto request,
         [FromServices] ApplicationService service,
         [FromServices] IUserInfoService userInfoService)
     {

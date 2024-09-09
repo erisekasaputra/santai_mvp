@@ -1,4 +1,4 @@
-﻿using Identity.API.Enumerations;
+﻿using Identity.API.Domain.Enumerations;
 
 namespace Identity.API.Domain.Entities;
 

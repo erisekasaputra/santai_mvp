@@ -1,6 +1,5 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces;
+using Account.API.Applications.Services; 
 using Account.API.Extensions;
 using Core.Results;
 using Core.Messages;
@@ -11,17 +10,19 @@ using Account.Domain.Enumerations;
 using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects;
 using MediatR;
+using Core.Dtos;
+using Core.Services.Interfaces;
 
 namespace Account.API.Applications.Queries.GetPaginatedMechanicUser;
 
 public class GetPaginatedMechanicUserQueryHandler(
     IUnitOfWork unitOfWork,
-    IKeyManagementService kmsClient,
+    IEncryptionService kmsClient,
     ApplicationService service,
     ICacheService cacheService) : IRequestHandler<GetPaginatedMechanicUserQuery, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly IKeyManagementService _kmsClient = kmsClient;
+    private readonly IEncryptionService _kmsClient = kmsClient;
     private readonly ApplicationService _appService = service;
     private readonly ICacheService _cacheService = cacheService;
     public async Task<Result> Handle(GetPaginatedMechanicUserQuery request, CancellationToken cancellationToken)

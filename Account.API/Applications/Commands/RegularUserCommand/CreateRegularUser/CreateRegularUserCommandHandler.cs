@@ -1,6 +1,5 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces;
+using Account.API.Applications.Services; 
 using Account.API.Extensions;
 using Core.Results;
 using Core.Messages;
@@ -14,6 +13,7 @@ using MediatR;
 using Microsoft.Extensions.Options;
 using System.Data;
 using Core.Configurations;
+using Core.Services.Interfaces;
 
 namespace Account.API.Applications.Commands.RegularUserCommand.CreateRegularUser;
 
@@ -21,13 +21,13 @@ public class CreateRegularUserCommandHandler(
     IUnitOfWork unitOfWork,
     ApplicationService service,
     IOptionsMonitor<ReferralProgramConfiguration> referralOptions,
-    IKeyManagementService kmsClient,
+    IEncryptionService kmsClient,
     IHashService hashService) : IRequestHandler<CreateRegularUserCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _appService = service; 
     private readonly IOptionsMonitor<ReferralProgramConfiguration> _referralOptions = referralOptions;
-    private readonly IKeyManagementService _kmsClient = kmsClient;
+    private readonly IEncryptionService _kmsClient = kmsClient;
     private readonly IHashService _hashClient = hashService;
 
     public async Task<Result> Handle(CreateRegularUserCommand request, CancellationToken cancellationToken)

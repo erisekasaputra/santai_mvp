@@ -1,5 +1,6 @@
 ﻿using Core.Events;
 using Core.Models;
+using Core.Services.Interfaces;
 using Identity.API.Domain.Entities;
 using Identity.API.Infrastructure;
 using Identity.API.Service.Interfaces; 

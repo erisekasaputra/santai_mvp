@@ -1,5 +1,5 @@
 ﻿using Identity.API.Domain.Entities;
-using Identity.API.Enumerations;
+using Identity.API.Domain.Enumerations;
 
 namespace Identity.API.Service.Interfaces;
 

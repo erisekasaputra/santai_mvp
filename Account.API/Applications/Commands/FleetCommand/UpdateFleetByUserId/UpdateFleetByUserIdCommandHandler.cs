@@ -1,6 +1,5 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces;
+using Account.API.Applications.Services; 
 using Core.Results;
 using Account.Domain.Enumerations;
 using Account.Domain.Exceptions;
@@ -10,6 +9,7 @@ using Microsoft.Extensions.Options;
 using System.Data;
 using Core.Extensions;
 using Core.Messages;
+using Core.Services.Interfaces;
 
 namespace Account.API.Applications.Commands.FleetCommand.UpdateFleetByUserId;
 
@@ -17,13 +17,13 @@ public class UpdateFleetByUserIdCommandHandler : IRequestHandler<UpdateFleetByUs
 {
     private readonly IUnitOfWork _unitOfWork; 
     private readonly ApplicationService _service;
-    private readonly IKeyManagementService _kmsClient;
+    private readonly IEncryptionService _kmsClient;
     private readonly IHashService _hashService;
 
     public UpdateFleetByUserIdCommandHandler(
       IUnitOfWork unitOfWork, 
       ApplicationService service,
-      IKeyManagementService kmsClient,
+      IEncryptionService kmsClient,
       IHashService hashService)
     {
         _unitOfWork = unitOfWork; 

@@ -11,4 +11,5 @@ public class StorageConfiguration
     public string? CdnServiceUrl { get; set; }
     public string? Region { get; set; }
     public bool UseMinio { get; set; }
+    public int MultipartBodyLengthLimit { get; set; }
 }

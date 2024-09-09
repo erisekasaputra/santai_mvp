@@ -1,9 +1,11 @@
 ﻿using Core.Messages;
+using Core.Policies;
 using Core.Results;
+using Core.Services.Interfaces;
 using Core.Utilities;
-using Core.Validations;
-using FileHub.API.SeedWork;
-using FileHub.API.Services.Interfaces; 
+using Core.Validations; 
+using FileHub.API.SeedWorks;
+using FileHub.API.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.RateLimiting;
 using Minio.Exceptions;
@@ -30,7 +32,7 @@ public class FilesController
 
 
     [HttpPost("images/private")]
-    [EnableRateLimiting("FileUploadRateLimiterPolicy")]
+    [EnableRateLimiting(RateLimiterPolicy.FileUploadRateLimiterPolicy)]
     public async Task<IResult> SavePrivateImages(IFormFile file)
     {
         try
@@ -72,7 +74,7 @@ public class FilesController
 
 
     [HttpPost("images/public")]
-    [EnableRateLimiting("FileUploadRateLimiterPolicy")]
+    [EnableRateLimiting(RateLimiterPolicy.FileUploadRateLimiterPolicy)]
     public async Task<IResult> SavePublicImages(IFormFile file)
     {
         try
@@ -114,7 +116,7 @@ public class FilesController
 
 
     [HttpGet("images/private/{resourceName}")]
-    [EnableRateLimiting("FileReadRateLimiting")]
+    [EnableRateLimiting(RateLimiterPolicy.FileReadRateLimiterPolicy)]
     public async Task<IResult> Get(string resourceName)
     {
         try

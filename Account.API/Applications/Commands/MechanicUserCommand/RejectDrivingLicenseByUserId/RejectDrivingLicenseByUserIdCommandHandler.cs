@@ -1,10 +1,10 @@
-﻿using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces;
+﻿using Account.API.Applications.Services; 
 using Core.Results;
 using Core.Messages;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
-using MediatR; 
+using MediatR;
+using Core.Services.Interfaces;
 
 namespace Account.API.Applications.Commands.MechanicUserCommand.RejectDrivingLicenseByUserId;
 
@@ -12,13 +12,13 @@ public class RejectDrivingLicenseByUserIdCommandHandler : IRequestHandler<Reject
 {
     private readonly IUnitOfWork _unitOfWork; 
     private readonly ApplicationService _service;
-    private readonly IKeyManagementService _kmsClient;
+    private readonly IEncryptionService _kmsClient;
     private readonly IHashService _hashService;
 
     public RejectDrivingLicenseByUserIdCommandHandler(
         IUnitOfWork unitOfWork, 
         ApplicationService service,
-        IKeyManagementService kmsClient,
+        IEncryptionService kmsClient,
         IHashService hashService)
     {
         _unitOfWork = unitOfWork; 

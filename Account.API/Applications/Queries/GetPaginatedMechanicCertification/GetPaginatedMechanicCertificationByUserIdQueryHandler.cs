@@ -1,24 +1,25 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces;
+using Account.API.Applications.Services; 
 using Account.API.Extensions;
 using Core.Results;
 using Core.Messages;
 using Account.Domain.Aggregates.CertificationAggregate;
 using Account.Domain.SeedWork;
 using MediatR;
+using Core.Dtos;
+using Core.Services.Interfaces;
 
 namespace Account.API.Applications.Queries.GetPaginatedMechanicCertificationByUserId;
 
 public class GetPaginatedMechanicCertificationByUserIdQueryHandler(
     IUnitOfWork unitOfWork,
     ApplicationService service,
-    IKeyManagementService kmsClient,
+    IEncryptionService kmsClient,
     ICacheService cacheService) : IRequestHandler<GetPaginatedMechanicCertificationByUserIdQuery, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _appService = service;
-    private readonly IKeyManagementService _kmsClient = kmsClient;
+    private readonly IEncryptionService _kmsClient = kmsClient;
     private readonly ICacheService _cacheService = cacheService;
 
     public async Task<Result> Handle(GetPaginatedMechanicCertificationByUserIdQuery request, CancellationToken cancellationToken)

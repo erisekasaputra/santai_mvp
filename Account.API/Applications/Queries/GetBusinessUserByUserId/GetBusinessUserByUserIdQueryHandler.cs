@@ -1,6 +1,5 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces;
+using Account.API.Applications.Services; 
 using Account.API.Extensions;
 using Core.Results;
 using Core.Messages;
@@ -8,18 +7,19 @@ using Account.Domain.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Options;
 using Core.Configurations;
+using Core.Services.Interfaces;
 
 namespace Account.API.Applications.Queries.GetBusinessUserByUserId;
 
 public class GetBusinessUserByUserIdQueryHandler(
     IUnitOfWork unitOfWork,
     ApplicationService service,
-    IKeyManagementService kmsClient,  
+    IEncryptionService kmsClient,  
     IOptionsMonitor<CacheConfiguration> cacheOption) : IRequestHandler<GetBusinessUserByUserIdQuery, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _appService = service;
-    private readonly IKeyManagementService _kmsClient = kmsClient;   
+    private readonly IEncryptionService _kmsClient = kmsClient;   
     private readonly IOptionsMonitor<CacheConfiguration> _cacheOptions = cacheOption;
     public async Task<Result> Handle(GetBusinessUserByUserIdQuery request, CancellationToken cancellationToken)
     {

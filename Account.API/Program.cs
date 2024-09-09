@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
 
-builder.AddOptionConfiguration(); 
+builder.AddCoreOptionConfiguration(); 
 builder.AddLoggingContext();
 
 if (builder.Environment.IsDevelopment())

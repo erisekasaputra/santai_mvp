@@ -18,14 +18,15 @@ using Account.API.Applications.Queries.GetMechanicUserById;
 using Account.API.Applications.Queries.GetNationalIdentityByMechanicUserId;
 using Account.API.Applications.Queries.GetPaginatedMechanicCertificationByUserId;
 using Account.API.Applications.Queries.GetPaginatedMechanicUser;
-using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces;
+using Account.API.Applications.Services; 
 using Account.API.CustomAttributes;
 using Account.API.Extensions;
 using Core.Configurations;
+using Core.Dtos;
 using Core.Enumerations;
 using Core.Messages;
 using Core.SeedWorks;
+using Core.Services.Interfaces;
 using FluentValidation; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
@@ -33,6 +34,7 @@ namespace Account.API.API;
 
 public static class MechanicUserApi
 {
+    const int _cacheExpiry = 10;
     public static IEndpointRouteBuilder MapMechanicUserApi(this IEndpointRouteBuilder builder)
     {
         var app = builder.MapGroup("api/v1/users/mechanic"); 
@@ -43,14 +45,24 @@ public static class MechanicUserApi
 
 
         app.MapGet("/", GetPaginatedMechanicUser)
-             .RequireAuthorization(PolicyName.AdministratorPolicy);
-        
+             .RequireAuthorization(PolicyName.AdministratorPolicy)
+             .CacheOutput(config =>
+             {
+                 config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
+                 config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
+             });
+
         app.MapGet("/{mechanicUserId}", GetMechanicUserById)
             .CacheOutput()
              .RequireAuthorization(PolicyName.MechanicUserPolicy, PolicyName.AdministratorPolicy); 
 
         app.MapGet("/{mechanicUserId}/certifications", GetPaginatedCertificationsByMechanicUserId)
-             .RequireAuthorization(PolicyName.MechanicUserPolicy, PolicyName.AdministratorPolicy);
+             .RequireAuthorization(PolicyName.MechanicUserPolicy, PolicyName.AdministratorPolicy)
+             .CacheOutput(config =>
+             {
+                 config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
+                 config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
+             });
 
         app.MapGet("/{mechanicUserId}/driving-license", GetDrivingLicenseByMechanicUserId)
             .CacheOutput()
@@ -166,7 +178,7 @@ public static class MechanicUserApi
 
     private static async Task<IResult> GetPaginatedCertificationsByMechanicUserId(
         Guid mechanicUserId, 
-        [AsParameters] PaginatedItemRequestDto request,
+        [AsParameters] PaginatedRequestDto request,
         [FromServices] ApplicationService service,
         [FromServices] IUserInfoService userInfoService)
     {
@@ -199,7 +211,7 @@ public static class MechanicUserApi
     }
 
     private static async Task<IResult> GetPaginatedMechanicUser(
-        [AsParameters] PaginatedItemRequestDto request,
+        [AsParameters] PaginatedRequestDto request,
         [FromServices] ApplicationService service,
         [FromServices] IUserInfoService userInfoService)
     {
@@ -618,7 +630,7 @@ public static class MechanicUserApi
 
     private static async Task<IResult> GetMechanicUserById(
         Guid mechanicUserId,
-        [FromServices] IKeyManagementService _kms,
+        [FromServices] IEncryptionService _kms,
         [FromServices] IOptionsMonitor<EncryptionConfiguration> options,
         [FromServices] ApplicationService service,
         [FromServices] IUserInfoService userInfoService)

@@ -9,7 +9,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Identity.API.Dto.PasswordForgotRequest",
+        "Type": "Identity.API.Applications.Dto.PasswordForgotRequest",
         "IsRequired": true
       }
     ],
@@ -25,7 +25,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Identity.API.Dto.GoogleSignInRequest",
+        "Type": "Identity.API.Applications.Dto.GoogleSignInRequest",
         "IsRequired": true
       }
     ],
@@ -41,7 +41,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Identity.API.Dto.LoginStaffRequest",
+        "Type": "Identity.API.Applications.Dto.LoginStaffRequest",
         "IsRequired": true
       }
     ],
@@ -57,7 +57,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Identity.API.Dto.LoginUserRequest",
+        "Type": "Identity.API.Applications.Dto.LoginUserRequest",
         "IsRequired": true
       }
     ],
@@ -73,7 +73,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Identity.API.Dto.RefreshTokenRequest",
+        "Type": "Identity.API.Applications.Dto.RefreshTokenRequest",
         "IsRequired": true
       }
     ],
@@ -89,7 +89,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Identity.API.Dto.SendOtpRequest",
+        "Type": "Identity.API.Applications.Dto.SendOtpRequest",
         "IsRequired": true
       }
     ],
@@ -105,7 +105,7 @@
     "Parameters": [
       {
         "Name": "refreshTokenRequest",
-        "Type": "Identity.API.Dto.RefreshTokenRequest",
+        "Type": "Identity.API.Applications.Dto.RefreshTokenRequest",
         "IsRequired": true
       }
     ],
@@ -121,7 +121,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Identity.API.Dto.RegisterUserRequest",
+        "Type": "Identity.API.Applications.Dto.RegisterUserRequest",
         "IsRequired": true
       }
     ],
@@ -137,7 +137,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Identity.API.Dto.PasswordResetRequest",
+        "Type": "Identity.API.Applications.Dto.PasswordResetRequest",
         "IsRequired": true
       }
     ],
@@ -153,7 +153,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Identity.API.Dto.VerifyLoginRequest",
+        "Type": "Identity.API.Applications.Dto.VerifyLoginRequest",
         "IsRequired": true
       }
     ],
@@ -169,7 +169,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Identity.API.Dto.VerifyPhoneNumberRequest",
+        "Type": "Identity.API.Applications.Dto.VerifyPhoneNumberRequest",
         "IsRequired": true
       }
     ],
@@ -185,7 +185,7 @@
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Identity.API.Dto.RefreshTokenRequest",
+        "Type": "Identity.API.Applications.Dto.RefreshTokenRequest",
         "IsRequired": true
       }
     ],

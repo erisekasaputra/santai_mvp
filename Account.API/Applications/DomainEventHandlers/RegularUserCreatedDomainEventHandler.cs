@@ -1,15 +1,16 @@
-﻿using Account.API.Applications.Services.Interfaces;
+﻿ 
 using Account.Domain.Events;
 using Core.Events;
+using Core.Services.Interfaces;
 using MediatR;
 
 namespace Account.API.Applications.DomainEventHandlers;
 
 public class RegularUserCreatedDomainEventHandler(
     IMediator mediator,
-    IKeyManagementService kmsClient) : INotificationHandler<RegularUserCreatedDomainEvent>
+    IEncryptionService kmsClient) : INotificationHandler<RegularUserCreatedDomainEvent>
 {
-    private readonly IKeyManagementService _kmsClient = kmsClient;
+    private readonly IEncryptionService _kmsClient = kmsClient;
     private readonly IMediator _mediator = mediator;
     public async Task Handle(RegularUserCreatedDomainEvent notification, CancellationToken cancellationToken)
     {

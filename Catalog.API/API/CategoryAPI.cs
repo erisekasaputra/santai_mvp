@@ -5,6 +5,8 @@ using Catalog.API.Applications.Queries.Categories.GetCategoryById;
 using Catalog.API.Applications.Queries.Categories.GetCategoryPaginated;
 using Catalog.API.Applications.Services;
 using Catalog.API.Extensions;
+using Core.Dtos;
+using Core.SeedWorks;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,15 +14,31 @@ namespace Catalog.API.API;
 
 public static class CategoryAPI
 {
+    const int _cacheExpiry = 10;
     public static IEndpointRouteBuilder CategoryRouter(this IEndpointRouteBuilder route, string groupName)
     {
         var app = route.MapGroup(groupName);
 
-        app.MapGet("/categories/{categoryId}", GetCategoryById).RequireAuthorization();
-        app.MapGet("/categories", GetPaginatedCategory).RequireAuthorization();
-        app.MapPost("/categories", CreateNewCategory).RequireAuthorization();
-        app.MapPut("/categories/{categoryId}", UpdateCategoryById).RequireAuthorization();
-        app.MapDelete("/categories/{categoryId}", DeleteCategoryById).RequireAuthorization();
+        app.MapGet("/categories/{categoryId}", GetCategoryById)
+            .RequireAuthorization()
+            .CacheOutput(config => config.Expire(TimeSpan.FromSeconds(_cacheExpiry)));
+
+        app.MapGet("/categories", GetPaginatedCategory)
+            .RequireAuthorization()
+            .CacheOutput(config =>
+            {
+                config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
+                config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
+            });
+
+        app.MapPost("/categories", CreateNewCategory)
+            .RequireAuthorization(PolicyName.AdministratorPolicy);
+
+        app.MapPut("/categories/{categoryId}", UpdateCategoryById)
+            .RequireAuthorization(PolicyName.AdministratorPolicy);
+
+        app.MapDelete("/categories/{categoryId}", DeleteCategoryById)
+            .RequireAuthorization(PolicyName.AdministratorPolicy);
 
         return app;
     }
@@ -53,20 +71,21 @@ public static class CategoryAPI
     }
 
     private static async Task<IResult> GetPaginatedCategory(
-        [AsParameters] GetCategoryPaginatedQuery itemPaginatedQuery, 
+        [AsParameters] PaginatedRequestDto request, 
         [FromServices] ApplicationService service, 
         [FromServices] IValidator<GetCategoryPaginatedQuery> validator)
     {
         try
         {
-            var validation = await validator.ValidateAsync(itemPaginatedQuery);
+            var query = new GetCategoryPaginatedQuery(request.PageNumber, request.PageSize);
+            var validation = await validator.ValidateAsync(query);
 
             if (!validation.IsValid)
             { 
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            var response = await service.Mediator.Send(itemPaginatedQuery); 
+            var response = await service.Mediator.Send(query); 
 
             return response.ToIResult();
         }

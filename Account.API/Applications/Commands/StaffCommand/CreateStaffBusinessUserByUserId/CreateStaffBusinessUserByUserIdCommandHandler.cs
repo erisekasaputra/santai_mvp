@@ -1,6 +1,5 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces;
+using Account.API.Applications.Services; 
 using Core.Results;
 using Core.Messages;
 using Account.Domain.Aggregates.UserAggregate;
@@ -9,18 +8,19 @@ using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects;
 using MediatR;
+using Core.Services.Interfaces;
 
 namespace Account.API.Applications.Commands.StaffCommand.CreateStaffBusinessUserByUserId;
 
 public class CreateStaffBusinessUserByUserIdCommandHandler(
     IUnitOfWork unitOfWork,
     ApplicationService service,
-    IKeyManagementService kmsClient,
+    IEncryptionService kmsClient,
     IHashService hashService) : IRequestHandler<CreateStaffBusinessUserByUserIdCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _appService = service;
-    private readonly IKeyManagementService _kmsClient = kmsClient;
+    private readonly IEncryptionService _kmsClient = kmsClient;
     private readonly IHashService _hashClient = hashService;
 
     public async Task<Result> Handle(CreateStaffBusinessUserByUserIdCommand request, CancellationToken cancellationToken)

@@ -1,20 +1,20 @@
-﻿ 
+﻿
 using Core.CustomClaims;
 using Core.Enumerations;
 using Core.Extensions;
 using Core.Messages;
 using Core.Results;
+using Core.Utilities;
 using Core.Validations;
 using FluentValidation;
 using Google.Apis.Auth;
+using Identity.API.Applications.Dto;
 using Identity.API.CustomAttributes;
 using Identity.API.Domain.Entities;
+using Identity.API.Domain.Enumerations;
 using Identity.API.Domain.Events;
-using Identity.API.Dto;
-using Identity.API.Enumerations;
 using Identity.API.Extensions;
 using Identity.API.Infrastructure;
-using Identity.API.Service;
 using Identity.API.Service.Interfaces;
 using Identity.API.Utilities;
 using MassTransit;
@@ -59,7 +59,7 @@ public class AuthController : ControllerBase
     private readonly ApplicationDbContext _dbContext;
     private readonly IOtpService _otpService;
     private readonly HttpContext? _httpContext;
-    private readonly ActionMethodService _actionMethodService;
+    private readonly ActionMethodUtility _actionMethodService;
     private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
     private readonly IPasswordValidator<ApplicationUser> _passwordValidator;
     public AuthController(
@@ -74,7 +74,7 @@ public class AuthController : ControllerBase
         ApplicationDbContext dbContext,
         IOtpService otpService, 
         IHttpContextAccessor httpContextAccessor,
-        ActionMethodService actionMethodService,
+        ActionMethodUtility actionMethodService,
         IPublishEndpoint publishEndpoint,
         IPasswordHasher<ApplicationUser> passwordHasher,
         IPasswordValidator<ApplicationUser> passwordValidator)

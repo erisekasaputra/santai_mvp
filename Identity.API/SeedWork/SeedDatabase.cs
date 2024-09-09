@@ -17,7 +17,7 @@ public class SeedDatabase
     {
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = serviceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-        var googleOption = serviceProvider.GetRequiredService<IOptionsMonitor<GoogleConfiguration>>();
+        var googleOption = serviceProvider.GetRequiredService<IOptionsMonitor<GoogleSSOConfiguration>>();
         var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>(); 
 
         var strategy = dbContext.Database.CreateExecutionStrategy();

@@ -1,6 +1,6 @@
 ﻿using Core.Validations;
 using FluentValidation;
-using Identity.API.Dto;
+using Identity.API.Applications.Dto;
 using Identity.API.Extensions;
 
 namespace Identity.API.Validations;

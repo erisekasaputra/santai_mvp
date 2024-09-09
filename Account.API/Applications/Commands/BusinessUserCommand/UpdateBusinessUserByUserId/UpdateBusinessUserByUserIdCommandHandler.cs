@@ -1,22 +1,22 @@
-﻿using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces;
+﻿using Account.API.Applications.Services; 
 using Core.Results;
 using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects;
 using MediatR;
 using Core.Messages;
+using Core.Services.Interfaces;
 
 namespace Account.API.Applications.Commands.BusinessUserCommand.UpdateBusinessUserByUserId;
 
 public class UpdateBusinessUserByUserIdCommandHandler(
     IUnitOfWork unitOfWork,
     ApplicationService service,
-    IKeyManagementService kmsClient) : IRequestHandler<UpdateBusinessUserByUserIdCommand, Result>
+    IEncryptionService kmsClient) : IRequestHandler<UpdateBusinessUserByUserIdCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _service = service;
-    private readonly IKeyManagementService _kmsClient = kmsClient;
+    private readonly IEncryptionService _kmsClient = kmsClient;
     public async Task<Result> Handle(UpdateBusinessUserByUserIdCommand request, CancellationToken cancellationToken)
     {
         try

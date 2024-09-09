@@ -8,7 +8,7 @@ namespace Identity.API.Service;
 public class GoogleTokenValidator : IGoogleTokenValidator
 { 
     private readonly string _clientId; 
-    public GoogleTokenValidator(IOptionsMonitor<GoogleConfiguration> googleConfigs)
+    public GoogleTokenValidator(IOptionsMonitor<GoogleSSOConfiguration> googleConfigs)
     {
         _clientId = googleConfigs.CurrentValue.ClientId; 
     }

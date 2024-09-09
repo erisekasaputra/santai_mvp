@@ -1,5 +1,4 @@
-﻿using Account.API.Applications.Services;
-using Account.API.Applications.Services.Interfaces;
+﻿using Account.API.Applications.Services; 
 using Account.API.Extensions;
 using Core.Results;
 using Core.Messages;
@@ -7,17 +6,18 @@ using Account.Domain.Exceptions;
 using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects;
 using MediatR;
+using Core.Services.Interfaces;
 
 namespace Account.API.Applications.Commands.RegularUserCommand.UpdateRegularUserByUserId;
 
 public class UpdateRegularUserByUserIdCommandHandler(
     IUnitOfWork unitOfWork,
     ApplicationService service,
-    IKeyManagementService kmsClient) : IRequestHandler<UpdateRegularUserByUserIdCommand, Result>
+    IEncryptionService kmsClient) : IRequestHandler<UpdateRegularUserByUserIdCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _service = service;
-    private readonly IKeyManagementService _kmsClient = kmsClient;
+    private readonly IEncryptionService _kmsClient = kmsClient;
 
     public async Task<Result> Handle(UpdateRegularUserByUserIdCommand request, CancellationToken cancellationToken)
     {

@@ -5,6 +5,8 @@ using Catalog.API.Applications.Queries.Brands.GetBrandById;
 using Catalog.API.Applications.Queries.Brands.GetBrandPaginated;
 using Catalog.API.Applications.Services;
 using Catalog.API.Extensions;
+using Core.Dtos;
+using Core.SeedWorks;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,15 +14,32 @@ namespace Catalog.API.API;
 
 public static class BrandAPI
 {
+    const int _cacheExpiry = 10;
     public static IEndpointRouteBuilder BrandRouter(this IEndpointRouteBuilder route, string groupName)
     {
         var app = route.MapGroup(groupName);
 
-        app.MapGet("/brands/{brandId}", GetBrandById).RequireAuthorization();
-        app.MapGet("/brands", GetPaginatedBrand).RequireAuthorization();
-        app.MapPost("/brands", CreateNewBrand).RequireAuthorization();
-        app.MapPut("/brands/{brandId}", UpdateBrandById).RequireAuthorization();
-        app.MapDelete("/brands/{brandId}", DeleteBrandById).RequireAuthorization();
+        app.MapGet("/brands/{brandId}", GetBrandById)
+            .RequireAuthorization()
+            .CacheOutput(config => config.Expire(TimeSpan.FromSeconds(_cacheExpiry)));
+
+        app.MapGet("/brands", GetPaginatedBrand)
+            .RequireAuthorization()
+            .CacheOutput(config =>
+            {
+                config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
+                config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
+            });
+
+
+        app.MapPost("/brands", CreateNewBrand)
+            .RequireAuthorization(PolicyName.AdministratorPolicy);
+
+        app.MapPut("/brands/{brandId}", UpdateBrandById)
+            .RequireAuthorization(PolicyName.AdministratorPolicy);
+
+        app.MapDelete("/brands/{brandId}", DeleteBrandById)
+            .RequireAuthorization(PolicyName.AdministratorPolicy);
 
         return app;
     }
@@ -53,20 +72,22 @@ public static class BrandAPI
     }
 
     private static async Task<IResult> GetPaginatedBrand(
-        [AsParameters] GetBrandPaginatedQuery brandPaginatedQuery,
+        [AsParameters] PaginatedRequestDto paginatedRequest,
         [FromServices] ApplicationService service, 
         [FromServices] IValidator<GetBrandPaginatedQuery> validator)
     {
         try
         {
-            var validation = await validator.ValidateAsync(brandPaginatedQuery);
+            var paginatedQuery = new GetBrandPaginatedQuery(paginatedRequest.PageNumber, paginatedRequest.PageSize);
+
+            var validation = await validator.ValidateAsync(paginatedQuery);
 
             if (!validation.IsValid)
             { 
                 return TypedResults.BadRequest(validation.Errors);
             }
 
-            var response = await service.Mediator.Send(brandPaginatedQuery);
+            var response = await service.Mediator.Send(paginatedQuery);
 
             return response.ToIResult();
         }

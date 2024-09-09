@@ -1,22 +1,25 @@
+using Catalog.API;
 using Catalog.API.API; 
 using Catalog.API.Extensions;
 using Catalog.API.Middewares;
+using Catalog.Infrastructure;
+using Core.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
-builder.AddOptionConfiguration();
+builder.AddCoreOptionConfiguration();
 builder.AddLoggingContext();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddJsonEnumConverterBehavior();
-builder.Services.AddMediatorService();
-builder.Services.AddValidation(); 
+builder.Services.AddMediatorService<ICatalogAPIMarkerInterface>();
+builder.Services.AddValidation<ICatalogAPIMarkerInterface>(); 
 builder.Services.AddRouting();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSqlDatabaseContext(); 
+builder.Services.AddSqlDatabaseContext<CatalogDbContext>(); 
 builder.Services.AddMassTransitContext();
 builder.Services.AddRedisDatabase();
 builder.Services.AddApplicationService();

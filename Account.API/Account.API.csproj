@@ -10,8 +10,7 @@
   <ItemGroup>
     <PackageReference Include="AspNetCoreRateLimit" Version="5.0.0" />
     <PackageReference Include="AWSSDK.CognitoSync" Version="3.7.400.2" />
-    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.7.301" />
-    <PackageReference Include="AWSSDK.KeyManagementService" Version="3.7.400.2" />
+    <PackageReference Include="AWSSDK.KeyManagementService" Version="4.0.0-preview.2" />
     <PackageReference Include="AWSSDK.SecretsManager" Version="3.7.400.2" />
     <PackageReference Include="Azure.Identity" Version="1.13.0-beta.1" />
     <PackageReference Include="EntityFramework" Version="6.5.1" />
@@ -26,7 +25,6 @@
     <PackageReference Include="MassTransit.EntityFrameworkCore" Version="8.2.5-develop.1942" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.5-develop.1942" />
     <PackageReference Include="MediatR" Version="12.4.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.8" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-preview.6.24328.4" />
     <PackageReference Include="Microsoft.AspNetCore.OutputCaching.StackExchangeRedis" Version="9.0.0-preview.7.24406.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.0-preview.7.24405.3" />

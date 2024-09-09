@@ -1,7 +1,8 @@
 ﻿
 using Core.Configurations;
+using Core.Services.Interfaces;
 using Identity.API.Domain.Entities;
-using Identity.API.Enumerations;
+using Identity.API.Domain.Enumerations;
 using Identity.API.SeedWork;
 using Identity.API.Service.Interfaces;
 using Identity.API.Utilities;
