@@ -17,16 +17,26 @@ public class CustomSerializer
         return JsonSerializer.Deserialize<List<string>>(json) ?? [];
     }
 
-    public static string Serialize(object? data)
+    public static string Serialize(object data)
     {
         if (data is null) return string.Empty;
 
         return JsonSerializer.Serialize(data);
     }
-    public static T? Deserialize<T>(string? json)
+    public static T Deserialize<T>(string json) where T : notnull, new()
     {
-        if (string.IsNullOrWhiteSpace(json)) return default;
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            throw new ArgumentException("Input JSON string cannot be null or empty", nameof(json));
+        }
 
-        return JsonSerializer.Deserialize<T>(json) ?? default;
+        var result = JsonSerializer.Deserialize<T>(json);
+
+        if (result == null)
+        {
+            throw new InvalidOperationException($"Deserialization of type {typeof(T).Name} returned null.");
+        }
+
+        return result;
     }
 }

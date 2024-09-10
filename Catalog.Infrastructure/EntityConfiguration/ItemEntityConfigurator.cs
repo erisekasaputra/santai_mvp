@@ -45,18 +45,17 @@ public class ItemEntityConfigurator : IEntityTypeConfiguration<Item>
             .HasForeignKey(ci => ci.BrandId)
             .OnDelete(DeleteBehavior.SetNull); 
 
-        var converter = new ValueConverter<ICollection<OwnerReview>?, string>(
+        var converter = new ValueConverter<ICollection<OwnerReview>, string>(
              v => CustomSerializer.Serialize(v),
              v => CustomSerializer.Deserialize<List<OwnerReview>>(v)  
         );
 
-        var comparer = new ValueComparer<ICollection<OwnerReview>?>(
-            (c1, c2) =>
-                (c1 == null && c2 == null) || (c1 != null && c2 != null && c1.SequenceEqual(c2)), // Compare each OwnerReview by Title and Rating
-            c => c == null ? 0 : c.Aggregate(0, (a, v) => HashCode.Combine(a, v.Title.GetHashCode(), v.Rating.GetHashCode())), // Hash code based on Title and Rating
-            c => c == null ? null : c.Select(v => new OwnerReview(v.Title, v.Rating)).ToList() // Deep copy for snapshotting
+        var comparer = new ValueComparer<ICollection<OwnerReview>>(
+             (c1, c2) =>
+                 (c1 != null && c2 != null && c1.SequenceEqual(c2)), 
+             c => c == null ? 0 : c.Aggregate(0, (a, v) => HashCode.Combine(a, v.Title.GetHashCode(), v.Rating.GetHashCode())), 
+             c => c == null ? new List<OwnerReview>() : c.Select(v => new OwnerReview(v.Title, v.Rating)).ToList() 
         );
-
 
         builder.Property(i => i.OwnerReviews)
             .HasConversion(converter)

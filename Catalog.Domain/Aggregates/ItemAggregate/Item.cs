@@ -26,7 +26,7 @@ public class Item : Entity, IAggregateRoot
     public bool IsActive { get; private set; }  
     public bool IsDeleted { get; private set; } 
     public Money Price { get; private set; }  
-    public ICollection<OwnerReview>? OwnerReviews { get; private set; }
+    public ICollection<OwnerReview> OwnerReviews { get; private set; }
 
     public Item()
     {
@@ -62,6 +62,9 @@ public class Item : Entity, IAggregateRoot
         ArgumentException.ThrowIfNullOrEmpty(imageUrl); 
         ArgumentNullException.ThrowIfNull(category); 
         ArgumentNullException.ThrowIfNull(brand); 
+        ArgumentNullException.ThrowIfNull(ownerReviews);
+
+        if (ownerReviews.Count == 0) throw new DomainException("Owner review can not be empty");
          
         Name = name;
         Description = description;
@@ -105,6 +108,8 @@ public class Item : Entity, IAggregateRoot
         int stockQuantity,
         int soldQuantity)
     {
+        OwnerReviews ??= [];
+
         if (IsDeleted)
         {
             throw new DomainException("Can not update data when the data was deleted");
@@ -115,7 +120,10 @@ public class Item : Entity, IAggregateRoot
         ArgumentException.ThrowIfNullOrEmpty(sku);
         ArgumentException.ThrowIfNullOrEmpty(imageUrl); 
         ArgumentNullException.ThrowIfNull(category); 
-        ArgumentNullException.ThrowIfNull(brand); 
+        ArgumentNullException.ThrowIfNull(brand);
+        ArgumentNullException.ThrowIfNull(ownerReviews);
+
+        if (ownerReviews.Count == 0) throw new DomainException("Owner review can not be empty");
 
         Name = name;
         Description = description;
