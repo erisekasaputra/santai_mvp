@@ -1,5 +1,6 @@
-﻿using Order.Domain.Enumerations;
-using Order.Domain.Exceptions;
+﻿using Core.Enumerations;
+using Core.Exceptions;
+using Core.ValueObjects; 
 using Order.Domain.SeedWork;
 
 namespace Order.Domain.ValueObjects;

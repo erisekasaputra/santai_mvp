@@ -1,4 +1,5 @@
-﻿ 
+﻿
+using Core.Enumerations;
 using Core.Events;
 using MediatR;
 
@@ -10,6 +11,7 @@ public record CreateItemCommand (
     string Description,
     string Sku,
     decimal Price,
+    Currency Currency,
     string ImageUrl, 
     int StockQuantity,
     int SoldQuantity,

@@ -1,4 +1,6 @@
-﻿namespace Search.Worker.Domain.Models;
+﻿using Core.Enumerations;
+
+namespace Search.Worker.Domain.Models;
 
 public class Item(
     Guid id,
@@ -6,6 +8,7 @@ public class Item(
     string description,
     string sku,
     decimal price,
+    Currency currency,
     string imageUrl,
     int stockQuantity,
     int soldQuantity,
@@ -24,6 +27,7 @@ public class Item(
     public string Description { get; private set; } = description;
     public string Sku { get; private set; } = sku;
     public decimal Price { get; private set; } = price;
+    public Currency Currency { get; private set; } = currency;
     public string ImageUrl { get; private set; } = imageUrl;
     public int StockQuantity { get; private set; } = stockQuantity;
     public int SoldQuantity { get; private set; } = soldQuantity;
@@ -42,6 +46,7 @@ public class Item(
         string description,
         string sku,
         decimal price,
+        Currency currency,
         string imageUrl,
         int stockQuantity,
         int soldQuantity,
@@ -59,6 +64,7 @@ public class Item(
         Description = description;
         Sku = sku;
         Price = price;
+        Currency = currency;
         ImageUrl = imageUrl;
         StockQuantity = stockQuantity;
         SoldQuantity = soldQuantity;
@@ -109,9 +115,10 @@ public class Item(
         StockQuantity -= quantity;
     }
 
-    internal void SetItemPrice(decimal price)
+    internal void SetItemPrice(decimal price, Currency currency)
     {
         Price = price;
+        Currency = currency;
     }
 
     internal void SetSoldQuantity(int quantity)

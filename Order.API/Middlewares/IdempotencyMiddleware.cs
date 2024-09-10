@@ -1,6 +1,6 @@
 ﻿using Core.Configurations;
-using Microsoft.Extensions.Options;
-using Order.API.Applications.Services.Interfaces; 
+using Core.Services.Interfaces;
+using Microsoft.Extensions.Options; 
 using Order.API.CustomAttributes;
 
 namespace Order.API.Middlewares;

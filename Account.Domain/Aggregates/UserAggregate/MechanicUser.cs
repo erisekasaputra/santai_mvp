@@ -1,10 +1,10 @@
-﻿using Account.Domain.Aggregates.CertificationAggregate; 
-using Account.Domain.Exceptions;
+﻿using Account.Domain.Aggregates.CertificationAggregate;  
 using Account.Domain.ValueObjects;
 using Account.Domain.Enumerations;
 using Account.Domain.Aggregates.NationalIdentityAggregate;
 using Account.Domain.Aggregates.DrivingLicenseAggregate;
 using Account.Domain.Events;
+using Core.Exceptions;
 
 namespace Account.Domain.Aggregates.UserAggregate;
 

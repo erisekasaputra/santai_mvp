@@ -32,13 +32,13 @@ public static class BrandAPI
             }); 
 
         app.MapPost("/brands", CreateNewBrand)
-            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
+            .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
 
         app.MapPut("/brands/{brandId}", UpdateBrandById)
-            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
+            .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
 
         app.MapDelete("/brands/{brandId}", DeleteBrandById)
-            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
+            .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
 
         return app;
     }

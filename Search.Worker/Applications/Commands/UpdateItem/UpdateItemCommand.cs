@@ -1,4 +1,5 @@
 ﻿
+using Core.Enumerations;
 using Core.Events;
 using MediatR;
 
@@ -10,6 +11,7 @@ public record UpdateItemCommand(
     string Description,
     string Sku,
     decimal Price,
+    Currency Currency,
     string ImageUrl,
     DateTime CreatedAt,
     int StockQuantity,

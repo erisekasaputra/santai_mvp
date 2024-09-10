@@ -24,6 +24,7 @@ public class UpdateItemCommandHandler(IItemRepository itemRepository) : IRequest
             request.Description,
             request.Sku,
             request.Price,
+            request.Currency,
             request.ImageUrl,
             request.StockQuantity,
             request.SoldQuantity,

@@ -3,10 +3,10 @@ using Account.Domain.Aggregates.LoyaltyAggregate;
 using Account.Domain.Aggregates.ReferralAggregate;
 using Account.Domain.Aggregates.ReferredAggregate;
 using Account.Domain.Enumerations;
-using Account.Domain.Events;
-using Account.Domain.Exceptions;
+using Account.Domain.Events; 
 using Account.Domain.SeedWork;
-using Account.Domain.ValueObjects; 
+using Account.Domain.ValueObjects;
+using Core.Exceptions;
 
 namespace Account.Domain.Aggregates.UserAggregate;
 

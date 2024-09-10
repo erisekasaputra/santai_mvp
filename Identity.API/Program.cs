@@ -30,7 +30,7 @@ builder.Services.ConfigureOtpService();
 builder.Services.AddSqlDatabaseContext<ApplicationDbContext>(isRetryable: true); 
 builder.Services.AddMasstransitContext<ApplicationDbContext>();
 builder.Services.AddIdentityService();
-builder.Services.AddAuth([.. AuthPolicies.GetAuthClients()]).AddGoogleSSO();  
+builder.Services.AddAuth().AddGoogleSSO();  
 
 
 builder.Services.AddRedisDatabase();  

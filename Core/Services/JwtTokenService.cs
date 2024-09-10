@@ -46,8 +46,7 @@ public class JwtTokenService : ITokenService
     public async Task<RefreshToken> GenerateRefreshTokenAsync(string userId)
     {
         var newToken = SecretGenerator.GenerateRandomSecret();
-        var tokenExpiry = DateTime.UtcNow.AddDays(_jwtConfigs.CurrentValue.TotalDaysRefreshTokenLifetime);
-
+        var tokenExpiry = DateTime.UtcNow.AddDays(_jwtConfigs.CurrentValue.TotalDaysRefreshTokenLifetime); 
 
         var hashedRefreshToken = new RefreshToken()
         {
@@ -57,9 +56,7 @@ public class JwtTokenService : ITokenService
         };
 
         var key = CacheKey.RefreshTokenCacheKey(newToken.HashToken());
-        await _cacheService.SetAsync(key, hashedRefreshToken, TimeSpan.FromDays(_jwtConfigs.CurrentValue.TotalDaysRefreshTokenLifetime));
-
-
+        await _cacheService.SetAsync(key, hashedRefreshToken, TimeSpan.FromDays(_jwtConfigs.CurrentValue.TotalDaysRefreshTokenLifetime)); 
 
         return new RefreshToken()
         {
@@ -81,12 +78,7 @@ public class JwtTokenService : ITokenService
 
     public async Task<RefreshToken?> RotateRefreshTokenAsync(string oldToken)
     {
-        var storedRefreshToken = await GetStoredRefreshToken(oldToken);
-
-        if (storedRefreshToken is null)
-        {
-            throw new SecurityTokenException("Invalid or expired refresh token");
-        }
+        var storedRefreshToken = await GetStoredRefreshToken(oldToken) ?? throw new SecurityTokenException("Invalid or expired refresh token");
 
         if (!ValidateTokenAsync(storedRefreshToken))
         {

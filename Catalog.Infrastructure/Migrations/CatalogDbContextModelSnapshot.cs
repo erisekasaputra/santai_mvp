@@ -112,8 +112,9 @@ namespace Catalog.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18, 2)");
+                    b.Property<string>("OwnerReviews")
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(max)");
 
                     b.Property<string>("Sku")
                         .IsRequired()
@@ -133,31 +134,6 @@ namespace Catalog.Infrastructure.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Items");
-                });
-
-            modelBuilder.Entity("Catalog.Domain.Aggregates.OwnerReviewAggregate.OwnerReview", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasMaxLength(26)
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("ItemId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Rating")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ItemId");
-
-                    b.ToTable("OwnerReviews");
                 });
 
             modelBuilder.Entity("MassTransit.EntityFrameworkCoreIntegration.InboxState", b =>
@@ -344,17 +320,33 @@ namespace Catalog.Infrastructure.Migrations
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.SetNull);
 
+                    b.OwnsOne("Core.ValueObjects.Money", "Price", b1 =>
+                        {
+                            b1.Property<Guid>("ItemId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<decimal>("Amount")
+                                .HasPrecision(18, 4)
+                                .HasColumnType("decimal(18,4)");
+
+                            b1.Property<string>("Currency")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("ItemId");
+
+                            b1.ToTable("Items");
+
+                            b1.WithOwner()
+                                .HasForeignKey("ItemId");
+                        });
+
                     b.Navigation("Brand");
 
                     b.Navigation("Category");
-                });
 
-            modelBuilder.Entity("Catalog.Domain.Aggregates.OwnerReviewAggregate.OwnerReview", b =>
-                {
-                    b.HasOne("Catalog.Domain.Aggregates.ItemAggregate.Item", null)
-                        .WithMany("OwnerReviews")
-                        .HasForeignKey("ItemId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                    b.Navigation("Price")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Catalog.Domain.Aggregates.BrandAggregate.Brand", b =>
@@ -365,11 +357,6 @@ namespace Catalog.Infrastructure.Migrations
             modelBuilder.Entity("Catalog.Domain.Aggregates.CategoryAggregate.Category", b =>
                 {
                     b.Navigation("Items");
-                });
-
-            modelBuilder.Entity("Catalog.Domain.Aggregates.ItemAggregate.Item", b =>
-                {
-                    b.Navigation("OwnerReviews");
                 });
 #pragma warning restore 612, 618
         }

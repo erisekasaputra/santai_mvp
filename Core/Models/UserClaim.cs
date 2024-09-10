@@ -8,9 +8,16 @@ public class UserClaim
     public string PhoneNumber { get; set; }
     public string? Email { get; set; }
     public UserType CurrentUserType { get; set; }
-    public string? BusinessCode { get; set; }
+    public string? BusinessCode { get; set; } 
+    public string? UserRole { get; set; }    
 
-    public UserClaim(Guid sub, string phoneNumber, string? email, UserType userType, string? businessCode)
+    public UserClaim(
+        Guid sub,
+        string phoneNumber,
+        string? email,
+        UserType userType,
+        string? businessCode,
+        string? userRole)
     {
         if (userType == UserType.StaffUser || userType == UserType.BusinessUser)
         {
@@ -22,5 +29,6 @@ public class UserClaim
         Email = email;
         CurrentUserType = userType;
         BusinessCode = businessCode;
+        UserRole = userRole;
     }
 }

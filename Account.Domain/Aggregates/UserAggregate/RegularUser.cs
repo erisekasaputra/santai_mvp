@@ -1,6 +1,6 @@
-﻿using Account.Domain.Events;
-using Account.Domain.Exceptions;
+﻿using Account.Domain.Events; 
 using Account.Domain.ValueObjects;
+using Core.Exceptions;
 
 namespace Account.Domain.Aggregates.UserAggregate;
 

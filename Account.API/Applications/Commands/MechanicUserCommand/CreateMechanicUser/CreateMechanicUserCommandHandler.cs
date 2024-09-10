@@ -7,8 +7,7 @@ using Account.Domain.Aggregates.CertificationAggregate;
 using Account.Domain.Aggregates.ReferralAggregate;
 using Account.Domain.Aggregates.ReferredAggregate;
 using Account.Domain.Aggregates.UserAggregate;
-using Account.Domain.Enumerations;
-using Account.Domain.Exceptions;
+using Account.Domain.Enumerations; 
 using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects;
 using MediatR;
@@ -18,6 +17,7 @@ using Core.Configurations;
 using Core.Extensions;
 using Core.Messages;
 using Core.Services.Interfaces;
+using Core.Exceptions;
 
 namespace Account.API.Applications.Commands.MechanicUserCommand.CreateMechanicUser;
 

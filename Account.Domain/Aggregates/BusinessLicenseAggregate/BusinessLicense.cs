@@ -1,8 +1,8 @@
 ﻿using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Enumerations;
-using Account.Domain.Events;
-using Account.Domain.Exceptions;
+using Account.Domain.Events; 
 using Account.Domain.SeedWork;
+using Core.Exceptions;
 
 namespace Account.Domain.Aggregates.BusinessLicenseAggregate;
 

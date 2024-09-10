@@ -29,9 +29,9 @@ public class MechanicEntityConfiguration : IEntityTypeConfiguration<Mechanic>
 
             buildAction.Property(e => e.Comment)
                 .IsRequired(false); 
-        });
-         
+        }); 
 
+        builder.Ignore(p => p.EntityStateAction);
         builder.Ignore(p => p.DomainEvents);
         builder.Ignore(p => p.IsRated); 
     }

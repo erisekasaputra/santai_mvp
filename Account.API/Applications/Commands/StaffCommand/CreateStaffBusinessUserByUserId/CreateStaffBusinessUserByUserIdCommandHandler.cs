@@ -3,12 +3,12 @@ using Account.API.Applications.Services;
 using Core.Results;
 using Core.Messages;
 using Account.Domain.Aggregates.UserAggregate;
-using Account.Domain.Enumerations;
-using Account.Domain.Exceptions;
+using Account.Domain.Enumerations; 
 using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects;
 using MediatR;
 using Core.Services.Interfaces;
+using Core.Exceptions;
 
 namespace Account.API.Applications.Commands.StaffCommand.CreateStaffBusinessUserByUserId;
 

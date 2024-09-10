@@ -1,18 +1,20 @@
-﻿using MediatR; 
+﻿using Amazon.Util.Internal;
+using Core.Enumerations;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Order.Domain.Aggregates.OrderAggregate;
 using Order.Domain.SeedWork;
 using Order.Infrastructure.Repositories;
-using System.Data; 
+using System.Data;
 
 namespace Order.Infrastructure;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private OrderDbContext _dbContext;
+    private readonly OrderDbContext _dbContext;
 
-    private IMediator _mediator;
+    private readonly IMediator _mediator;
     
     private IDbContextTransaction? _transaction;
     
@@ -30,13 +32,9 @@ public class UnitOfWork : IUnitOfWork
         if (_transaction is not null)
         {
             throw new InvalidOperationException("Transaction already started.");
-        } 
-
-        var strategy = _dbContext.Database.CreateExecutionStrategy();
-        await strategy.ExecuteAsync(async () =>
-        {
-            _transaction = await _dbContext.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
-        }); 
+        }
+         
+        _transaction = await _dbContext.Database.BeginTransactionAsync(isolationLevel, cancellationToken); 
     }
 
     public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
@@ -48,24 +46,20 @@ public class UnitOfWork : IUnitOfWork
                 throw new InvalidOperationException("No transaction started.");
             }
 
-            var strategy = _dbContext.Database.CreateExecutionStrategy();
-            await strategy.ExecuteAsync(async () =>
-            {
-                await SaveChangesAsync(cancellationToken); 
-                await _transaction.CommitAsync(cancellationToken);
-            }); 
+            await SaveChangesAsync(cancellationToken);
+            await _transaction.CommitAsync(cancellationToken); 
         }
-        catch (Exception)
+        catch
         {
+            await RollbackTransactionAsync(cancellationToken);
             throw;
         }
         finally
         {
-            _transaction?.Dispose();
-            _transaction = null;
-        }
+            DisposeTransaction();
+        } 
     }
-
+     
     public async Task DispatchDomainEventsAsync(CancellationToken token = default)
     {
         var domainEntities = _dbContext.ChangeTracker
@@ -93,19 +87,47 @@ public class UnitOfWork : IUnitOfWork
     }
 
     public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
-    {
-        if (_transaction is null)
+    { 
+        try
         {
-            throw new InvalidOperationException("No transaction started.");
+            if (_transaction is null)
+            {
+                throw new InvalidOperationException("No transaction started.");
+            }
+             
+            await _transaction.RollbackAsync(cancellationToken); 
         }
-
-        await _transaction.RollbackAsync(cancellationToken);
-        _transaction.Dispose();
-        _transaction = null;
-    }
+        catch (Exception)
+        {
+            throw;
+        }
+        finally
+        {
+            _transaction?.Dispose();
+            _transaction = null;
+        }
+    } 
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
+        var entries = _dbContext.ChangeTracker.Entries();
+
+        foreach (var entry in entries)
+        {
+            if (entry.Entity is Entity entity)
+            {
+                entry.State = entity.EntityStateAction switch
+                {
+                    EntityStateAction.Deleted => EntityState.Deleted,
+                    EntityStateAction.Modified => EntityState.Modified,
+                    EntityStateAction.Added => EntityState.Added,
+                    _ => entry.State
+                };
+
+                entity.SetEntityState(EntityStateAction.NoAction);
+            }
+        } 
+
         await DispatchDomainEventsAsync(cancellationToken);
 
         var changesResult = await _dbContext.SaveChangesAsync(cancellationToken); 
@@ -115,8 +137,22 @@ public class UnitOfWork : IUnitOfWork
             .Where(e => e.Entity.DomainEvents is not null && e.Entity.DomainEvents.Count > 0)
             .ToList();
 
-        domainEntities.ForEach(e => e.Entity.ClearDomainEvents());
+        domainEntities.ForEach(e => e.Entity.ClearDomainEvents()); 
 
-        return changesResult;
+        return changesResult; 
+    }
+
+    public void Dispose()
+    {
+        if (_transaction != null)
+        {
+            RollbackTransactionAsync().GetAwaiter().GetResult();
+        }
+    }
+
+    private void DisposeTransaction()
+    {
+        _transaction?.Dispose();
+        _transaction = null;
     }
 }

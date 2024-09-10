@@ -258,9 +258,51 @@ namespace Order.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid>("OrderingId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("Id");
 
+                    b.HasIndex("OrderingId")
+                        .IsUnique();
+
                     b.ToTable("Cancellations");
+                });
+
+            modelBuilder.Entity("Order.Domain.Aggregates.OrderAggregate.CancellationFee", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("CancellationId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FeeDescription")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PercentageOrValueType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("ValueAmount")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("ValuePercentage")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CancellationId");
+
+                    b.ToTable("CancellationFee");
                 });
 
             modelBuilder.Entity("Order.Domain.Aggregates.OrderAggregate.Coupon", b =>
@@ -278,10 +320,22 @@ namespace Order.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("MinimumOrderValue")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
+
                     b.Property<Guid>("OrderingId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Percentage")
+                    b.Property<decimal>("ValueAmount")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("ValuePercentage")
                         .HasPrecision(18, 4)
                         .HasColumnType("decimal(18,4)");
 
@@ -299,6 +353,10 @@ namespace Order.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FeeDescription")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -306,13 +364,17 @@ namespace Order.Infrastructure.Migrations
                     b.Property<Guid>("OrderingId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Percentage")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
                     b.Property<string>("PercentageOrValueType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("ValueAmount")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<decimal>("ValuePercentage")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
 
                     b.HasKey("Id");
 
@@ -379,6 +441,10 @@ namespace Order.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<decimal>("UnitPrice")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("OrderingId");
@@ -392,21 +458,26 @@ namespace Order.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("BaseCurrency")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid?>("CancellationId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsScheduled")
                         .HasColumnType("bit");
 
                     b.Property<DateTime?>("MechanicWaitingAcceptTime")
                         .HasColumnType("datetime2");
+
+                    b.Property<decimal>("OrderAmount")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<string>("PaymentUrl")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<string>("RatingImages")
                         .IsUnicode(false)
@@ -424,8 +495,6 @@ namespace Order.Infrastructure.Migrations
                         .HasDefaultValue(0);
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CancellationId");
 
                     b.ToTable("Orderings");
                 });
@@ -508,6 +577,12 @@ namespace Order.Infrastructure.Migrations
 
             modelBuilder.Entity("Order.Domain.Aggregates.OrderAggregate.Cancellation", b =>
                 {
+                    b.HasOne("Order.Domain.Aggregates.OrderAggregate.Ordering", null)
+                        .WithOne("Cancellation")
+                        .HasForeignKey("Order.Domain.Aggregates.OrderAggregate.Cancellation", "OrderingId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.OwnsOne("Order.Domain.ValueObjects.Money", "CancellationRefund", b1 =>
                         {
                             b1.Property<Guid>("CancellationId")
@@ -530,6 +605,39 @@ namespace Order.Infrastructure.Migrations
                         });
 
                     b.Navigation("CancellationRefund");
+                });
+
+            modelBuilder.Entity("Order.Domain.Aggregates.OrderAggregate.CancellationFee", b =>
+                {
+                    b.HasOne("Order.Domain.Aggregates.OrderAggregate.Cancellation", null)
+                        .WithMany("CancellationCharges")
+                        .HasForeignKey("CancellationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Order.Domain.ValueObjects.Money", "FeeAmount", b1 =>
+                        {
+                            b1.Property<Guid>("CancellationFeeId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<decimal>("Amount")
+                                .HasPrecision(18, 4)
+                                .HasColumnType("decimal(18,4)");
+
+                            b1.Property<string>("Currency")
+                                .IsRequired()
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.HasKey("CancellationFeeId");
+
+                            b1.ToTable("CancellationFee");
+
+                            b1.WithOwner()
+                                .HasForeignKey("CancellationFeeId");
+                        });
+
+                    b.Navigation("FeeAmount")
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Order.Domain.Aggregates.OrderAggregate.Coupon", b =>
@@ -561,91 +669,17 @@ namespace Order.Infrastructure.Migrations
                                 .HasForeignKey("CouponId");
                         });
 
-                    b.OwnsOne("Order.Domain.ValueObjects.Money", "MinimumOrderValue", b1 =>
-                        {
-                            b1.Property<Guid>("CouponId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<decimal>("Amount")
-                                .HasPrecision(18, 4)
-                                .HasColumnType("decimal(18,4)");
-
-                            b1.Property<string>("Currency")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("CouponId");
-
-                            b1.ToTable("Coupons");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CouponId");
-                        });
-
-                    b.OwnsOne("Order.Domain.ValueObjects.Money", "Value", b1 =>
-                        {
-                            b1.Property<Guid>("CouponId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<decimal>("Amount")
-                                .HasPrecision(18, 4)
-                                .HasColumnType("decimal(18,4)");
-
-                            b1.Property<string>("Currency")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("CouponId");
-
-                            b1.ToTable("Coupons");
-
-                            b1.WithOwner()
-                                .HasForeignKey("CouponId");
-                        });
-
                     b.Navigation("DiscountAmount")
                         .IsRequired();
-
-                    b.Navigation("MinimumOrderValue")
-                        .IsRequired();
-
-                    b.Navigation("Value");
                 });
 
             modelBuilder.Entity("Order.Domain.Aggregates.OrderAggregate.Fee", b =>
                 {
-                    b.HasOne("Order.Domain.Aggregates.OrderAggregate.Cancellation", null)
-                        .WithMany("CancellationCharges")
-                        .HasForeignKey("OrderingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Order.Domain.Aggregates.OrderAggregate.Ordering", null)
                         .WithMany("Fees")
                         .HasForeignKey("OrderingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.OwnsOne("Order.Domain.ValueObjects.Money", "Amount", b1 =>
-                        {
-                            b1.Property<Guid>("FeeId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<decimal>("Amount")
-                                .HasPrecision(18, 4)
-                                .HasColumnType("decimal(18,4)");
-
-                            b1.Property<string>("Currency")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("FeeId");
-
-                            b1.ToTable("Fees");
-
-                            b1.WithOwner()
-                                .HasForeignKey("FeeId");
-                        });
 
                     b.OwnsOne("Order.Domain.ValueObjects.Money", "FeeAmount", b1 =>
                         {
@@ -668,8 +702,6 @@ namespace Order.Infrastructure.Migrations
                                 .HasForeignKey("FeeId");
                         });
 
-                    b.Navigation("Amount");
-
                     b.Navigation("FeeAmount")
                         .IsRequired();
                 });
@@ -691,49 +723,7 @@ namespace Order.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Order.Domain.ValueObjects.Money", "BaseUnitPrice", b1 =>
-                        {
-                            b1.Property<Guid>("LineItemId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<decimal>("Amount")
-                                .HasPrecision(18, 4)
-                                .HasColumnType("decimal(18,4)");
-
-                            b1.Property<string>("Currency")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("LineItemId");
-
-                            b1.ToTable("LineItems");
-
-                            b1.WithOwner()
-                                .HasForeignKey("LineItemId");
-                        });
-
                     b.OwnsOne("Order.Domain.ValueObjects.Money", "SubTotal", b1 =>
-                        {
-                            b1.Property<Guid>("LineItemId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<decimal>("Amount")
-                                .HasPrecision(18, 4)
-                                .HasColumnType("decimal(18,4)");
-
-                            b1.Property<string>("Currency")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("LineItemId");
-
-                            b1.ToTable("LineItems");
-
-                            b1.WithOwner()
-                                .HasForeignKey("LineItemId");
-                        });
-
-                    b.OwnsOne("Order.Domain.ValueObjects.Money", "UnitPrice", b1 =>
                         {
                             b1.Property<Guid>("LineItemId")
                                 .HasColumnType("uniqueidentifier");
@@ -795,46 +785,15 @@ namespace Order.Infrastructure.Migrations
                                 .IsRequired();
                         });
 
-                    b.Navigation("BaseUnitPrice")
-                        .IsRequired();
-
                     b.Navigation("SubTotal")
                         .IsRequired();
 
                     b.Navigation("Tax");
-
-                    b.Navigation("UnitPrice")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("Order.Domain.Aggregates.OrderAggregate.Ordering", b =>
                 {
-                    b.HasOne("Order.Domain.Aggregates.OrderAggregate.Cancellation", "Cancellation")
-                        .WithMany()
-                        .HasForeignKey("CancellationId");
-
                     b.OwnsOne("Order.Domain.ValueObjects.Money", "GrandTotal", b1 =>
-                        {
-                            b1.Property<Guid>("OrderingId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<decimal>("Amount")
-                                .HasPrecision(18, 4)
-                                .HasColumnType("decimal(18,4)");
-
-                            b1.Property<string>("Currency")
-                                .IsRequired()
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.HasKey("OrderingId");
-
-                            b1.ToTable("Orderings");
-
-                            b1.WithOwner()
-                                .HasForeignKey("OrderingId");
-                        });
-
-                    b.OwnsOne("Order.Domain.ValueObjects.Money", "OrderAmount", b1 =>
                         {
                             b1.Property<Guid>("OrderingId")
                                 .HasColumnType("uniqueidentifier");
@@ -902,12 +861,7 @@ namespace Order.Infrastructure.Migrations
                     b.Navigation("Address")
                         .IsRequired();
 
-                    b.Navigation("Cancellation");
-
                     b.Navigation("GrandTotal")
-                        .IsRequired();
-
-                    b.Navigation("OrderAmount")
                         .IsRequired();
 
                     b.Navigation("Rating");
@@ -957,6 +911,8 @@ namespace Order.Infrastructure.Migrations
                 {
                     b.Navigation("Buyer")
                         .IsRequired();
+
+                    b.Navigation("Cancellation");
 
                     b.Navigation("Coupon");
 

@@ -6,7 +6,8 @@ public enum UserType
     RegularUser = 2,
     BusinessUser = 3,
     MechanicUser = 4,
-    StaffUser = 5
+    StaffUser = 5,
+    ServiceToService = 6
 }
 
 public static class GetUserTypeConfiguration

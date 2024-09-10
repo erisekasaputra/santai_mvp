@@ -1,12 +1,12 @@
 ﻿using Account.API.Applications.Services; 
-using Core.Results; 
-using Account.Domain.Exceptions;
+using Core.Results;  
 using Account.Domain.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Options;
 using Core.Configurations;
 using Core.Messages;
 using Core.Services.Interfaces;
+using Core.Exceptions;
 
 namespace Account.API.Applications.Commands.FleetCommand.DeleteFleetByIdByUserId;
 

@@ -11,7 +11,7 @@ public class ItemPriceSetDomainEventHandler(IMediator mediator) : INotificationH
 
     public async Task Handle(ItemPriceSetDomainEvent notification, CancellationToken cancellationToken)
     {
-        var @event = new ItemPriceSetIntegrationEvent(notification.Id, notification.Amount);
+        var @event = new ItemPriceSetIntegrationEvent(notification.Id, notification.Amount, notification.Currency);
 
         await _mediator.Publish(@event, cancellationToken);
     }

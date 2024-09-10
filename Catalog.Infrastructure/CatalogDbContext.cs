@@ -1,7 +1,6 @@
 ﻿using Catalog.Domain.Aggregates.BrandAggregate;
 using Catalog.Domain.Aggregates.CategoryAggregate;
-using Catalog.Domain.Aggregates.ItemAggregate;
-using Catalog.Domain.Aggregates.OwnerReviewAggregate;
+using Catalog.Domain.Aggregates.ItemAggregate; 
 using Catalog.Infrastructure.EntityConfiguration;
 using MassTransit; 
 using Microsoft.EntityFrameworkCore;
@@ -14,14 +13,10 @@ public class CatalogDbContext : DbContext
 {
     public DbSet<Item> Items { get; set; }
     public DbSet<Category> Categories { get; set; }
-    public DbSet<Brand> Brands { get; set; }
+    public DbSet<Brand> Brands { get; set; } 
 
-    public DbSet<OwnerReview> OwnerReviews { get; set; } 
-
-    private IDbContextTransaction? _currentTransaction;
-
-    public IDbContextTransaction? GetCurrentTransaction() => _currentTransaction;
-
+    private IDbContextTransaction? _currentTransaction; 
+    public IDbContextTransaction? GetCurrentTransaction() => _currentTransaction; 
     public bool HasActiveTransaction => _currentTransaction != null;
 
     public CatalogDbContext(DbContextOptions<CatalogDbContext> options) : base(options)
@@ -107,9 +102,7 @@ public class CatalogDbContext : DbContext
 
         modelBuilder.ApplyConfiguration(new CategoryEntityConfigurator());
 
-        modelBuilder.ApplyConfiguration(new BrandEntityConfigurator());
-
-        modelBuilder.ApplyConfiguration(new OwnerReviewEntityConfigurator());
+        modelBuilder.ApplyConfiguration(new BrandEntityConfigurator()); 
         
         base.OnModelCreating(modelBuilder);
     }  

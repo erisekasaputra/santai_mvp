@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Enumerations;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Order.Domain.Aggregates.OrderAggregate;
 using Order.Domain.Enumerations; 
@@ -30,16 +31,17 @@ public class PaymentEntityConfiguration : IEntityTypeConfiguration<Payment>
         builder.OwnsOne(p => p.Amount, buildAction =>
         {
             buildAction.Property(e => e.Amount)
-                .IsRequired()
+                .IsRequired()  
                 .HasPrecision(18, 4);
 
-            buildAction.Property(e => e.Currency)
+            buildAction.Property(e => e.Currency) 
                 .HasConversion(
                     val => val.ToString(),
                     val => Enum.Parse<Currency>(val))
                 .IsRequired();
-        });  
+        });
 
+        builder.Ignore(p => p.EntityStateAction);
         builder.Ignore(p => p.DomainEvents); 
     }
 }

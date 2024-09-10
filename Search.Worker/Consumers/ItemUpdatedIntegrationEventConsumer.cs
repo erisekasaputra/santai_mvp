@@ -19,6 +19,7 @@ internal class ItemUpdatedIntegrationEventConsumer(IMediator mediator) : IConsum
             @event.Description,
             @event.Sku,
             @event.Price,
+            @event.Currency,
             @event.ImageUrl,
             @event.CreatedAt,
             @event.StockQuantity,

@@ -28,10 +28,10 @@ public static class RegularUserApi
         var app = builder.MapGroup("api/v1/users/regular");
 
         app.MapGet("/{regularUserId}", GetRegularUserByUserId).CacheOutput()
-            .RequireAuthorization(PolicyName.RegularUserPolicy.ToString(), PolicyName.AdministratorPolicy.ToString());
+            .RequireAuthorization(PolicyName.RegularUserAndAdministratorUserPolicy.ToString());
 
         app.MapGet("/", GetPaginatedRegularUser)
-            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString())
+            .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString())
             .CacheOutput(config =>
             {
                 config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
@@ -40,22 +40,22 @@ public static class RegularUserApi
 
         app.MapPost("/", CreateRegularUser)
             .WithMetadata(new IdempotencyAttribute(nameof(CreateRegularUser)))
-            .RequireAuthorization(PolicyName.RegularUserPolicy.ToString());
+            .RequireAuthorization(PolicyName.RegularUserOnlyPolicy.ToString());
         
         app.MapPut("/", UpdateRegularUserByUserId)
-            .RequireAuthorization(PolicyName.RegularUserPolicy.ToString());
+            .RequireAuthorization(PolicyName.RegularUserOnlyPolicy.ToString());
         
         app.MapPatch("/device-id", SetDeviceIdByUserId)
-            .RequireAuthorization(PolicyName.RegularUserPolicy.ToString());
+            .RequireAuthorization(PolicyName.RegularUserOnlyPolicy.ToString());
 
         app.MapPatch("/device-id/force-set", ForceSetDeviceIdByUserId)
-            .RequireAuthorization(PolicyName.RegularUserPolicy.ToString());
+            .RequireAuthorization(PolicyName.RegularUserOnlyPolicy.ToString());
 
         app.MapPatch("/device-id/reset", ResetDeviceIdByUserId) 
-            .RequireAuthorization(PolicyName.RegularUserPolicy.ToString());
+            .RequireAuthorization(PolicyName.RegularUserOnlyPolicy.ToString());
 
         app.MapDelete("/{regularUserId}", DeleteRegularUserByUserId)
-            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
+            .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
 
         return app;
     }

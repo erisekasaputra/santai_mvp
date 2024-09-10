@@ -34,6 +34,7 @@ public class UpdateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
         }
 
         var ownerReviews = request.OwnerReviews.ToOwnerReviews().ToList(); 
+
         item.Update(
             request.Name,
             request.Description,
@@ -46,10 +47,12 @@ public class UpdateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
             request.IsActive,
             ownerReviews!,
             request.Price,
+            request.Currency,
             request.StockQuantity,
             request.SoldQuantity); 
 
         _unitOfWork.Items.UpdateItem(item);
+
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Result.Success(Unit.Value, ResponseStatus.NoContent);

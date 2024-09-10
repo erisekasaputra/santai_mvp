@@ -4,9 +4,11 @@ using Microsoft.EntityFrameworkCore;
 using Order.API.Applications.Services;
 using Order.Domain.SeedWork;
 using Order.Infrastructure;   
-using Order.API.Applications.Services.Interfaces;
 using Order.API.CustomDelegates;
-using Core.Configurations; 
+using Core.Configurations;
+using Core.Services;
+using Core.Services.Interfaces;
+using Order.API.Applications.Services.Interfaces;
 
 namespace Order.API.Extensions;
 
@@ -14,11 +16,12 @@ public static class ServiceRegistration
 {  
     public static IServiceCollection AddApplicationService(this IServiceCollection services)
     {
+        services.AddTransient<ITokenService, JwtTokenService>();
         services.AddTransient<TokenJwtHandler>(); 
         services.AddScoped<IPaymentService, PaymentService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>(); 
-        services.AddScoped<IUserInfoService, UserService>(); 
-        services.AddSingleton<ICacheService, OrderCacheService>();
+        services.AddScoped<IUserInfoService, UserInfoService>(); 
+        services.AddSingleton<ICacheService, CacheService>();
 
         return services;
     }
@@ -28,7 +31,7 @@ public static class ServiceRegistration
         var clientConfig = service.BuildServiceProvider().GetService<IOptionsMonitor<AccountServiceConfiguration>>()
             ?? throw new Exception("Please provide value for database option");
           
-        service.AddHttpClient<IAccountService, AccountService>(client =>
+        service.AddHttpClient<IAccountServiceAPI, AccountServiceAPI>(client =>
         {
             client.BaseAddress = new Uri(clientConfig?.CurrentValue.Host ?? throw new Exception("Account service client host is not set"));
         })

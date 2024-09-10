@@ -25,6 +25,7 @@ public class BuyerEntityConfiguration : IEntityTypeConfiguration<Buyer>
                 val => val.ToString(),
                 val => Enum.Parse<UserType>(val));
 
-        builder.Ignore(p => p.DomainEvents);
+        builder.Ignore(p => p.EntityStateAction);
+        builder.Ignore(p => p.DomainEvents); 
     }
 }

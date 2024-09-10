@@ -1,8 +1,7 @@
 using Catalog.API;
 using Catalog.API.API; 
 using Catalog.API.Extensions;
-using Catalog.API.Middewares;
-using Catalog.API.SeedWorks;
+using Catalog.API.Middewares; 
 using Catalog.Infrastructure;
 using Core.Extensions;
 
@@ -23,7 +22,7 @@ builder.Services.AddSqlDatabaseContext<CatalogDbContext>();
 builder.Services.AddMassTransitContext<CatalogDbContext>();
 builder.Services.AddRedisDatabase();
 builder.Services.AddApplicationService();
-builder.Services.AddAuth([.. AuthPolicies.GetAuthClients()]);
+builder.Services.AddAuth();
 
 var app = builder.Build();
 

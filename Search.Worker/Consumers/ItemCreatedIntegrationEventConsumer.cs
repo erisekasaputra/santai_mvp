@@ -10,7 +10,7 @@ internal class ItemCreatedIntegrationEventConsumer(IMediator mediator) : IConsum
 {  
     private readonly IMediator _mediator = mediator; 
     public async Task Consume(ConsumeContext<ItemCreatedIntegrationEvent> context)
-    {  
+    { 
         var @event = context.Message;
 
         var command = new CreateItemCommand(
@@ -19,6 +19,7 @@ internal class ItemCreatedIntegrationEventConsumer(IMediator mediator) : IConsum
             @event.Description,
             @event.Sku,
             @event.Price,
+            @event.Currency,
             @event.ImageUrl, 
             @event.StockQuantity,
             @event.SoldQuantity,

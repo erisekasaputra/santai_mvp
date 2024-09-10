@@ -7,6 +7,6 @@ public class SetItemStockQuantityCommandValidator : AbstractValidator<SetItemSto
 {
     public SetItemStockQuantityCommandValidator()
     { 
-        RuleForEach(x => x.ItemIds).SetValidator(new SetItemStockQuantityRequestValidator());
+        RuleForEach(x => x.Items).SetValidator(new SetItemStockQuantityRequestValidator());
     }
 }

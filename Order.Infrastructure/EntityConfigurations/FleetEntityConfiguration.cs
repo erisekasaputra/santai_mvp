@@ -26,6 +26,7 @@ public class FleetEntityConfiguration : IEntityTypeConfiguration<Fleet>
             .IsRequired()
             .HasMaxLength(255);
 
+        builder.Ignore(p => p.EntityStateAction);
         builder.Ignore(p => p.DomainEvents);
     }
 }

@@ -41,14 +41,14 @@ public class AddItemStockQuantityCommandHandler : IRequestHandler<AddItemStockQu
                 await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
 
                 // Extract the item IDs from the request
-                var itemIds = request.ItemIds.Select(x => x.ItemId).ToList();
+                var itemIds = request.Items.Select(x => x.ItemId).ToList();
 
                 // Retrieve the items with row locks
                 var items = await _unitOfWork.Items.GetItemsWithLockAsync(itemIds);
 
                 // Find the missing item IDs
                 var retrievedItemIds = items.Select(item => item.Id).ToHashSet();
-                var missingItemRequests = request.ItemIds.Where(x => !retrievedItemIds.Contains(x.ItemId)).ToList();
+                var missingItemRequests = request.Items.Where(x => !retrievedItemIds.Contains(x.ItemId)).ToList();
 
                 if (missingItemRequests.Count > 0)
                 {
@@ -67,7 +67,7 @@ public class AddItemStockQuantityCommandHandler : IRequestHandler<AddItemStockQu
 
                 foreach (var item in items)
                 {
-                    var quantity = request.ItemIds.First(x => x.ItemId == item.Id).Quantity;
+                    var quantity = request.Items.First(x => x.ItemId == item.Id).Quantity;
 
                     try
                     {

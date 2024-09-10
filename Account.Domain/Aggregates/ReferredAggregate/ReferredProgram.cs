@@ -1,6 +1,6 @@
-﻿using Account.Domain.Aggregates.UserAggregate;
-using Account.Domain.Exceptions;
+﻿using Account.Domain.Aggregates.UserAggregate; 
 using Account.Domain.SeedWork;
+using Core.Exceptions;
 
 namespace Account.Domain.Aggregates.ReferredAggregate;
 

@@ -45,7 +45,7 @@ public static class BusinessUserApi
         var app = route.MapGroup("api/v1/users/business");
         
         app.MapGet("/", GetPaginatedBusinessUser)
-            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString())
+            .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString())
             .CacheOutput(config =>
             {
                 config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
@@ -54,8 +54,7 @@ public static class BusinessUserApi
 
         app.MapGet("/{businessUserId}/staffs", GetPaginatedStaff) 
             .RequireAuthorization(
-                PolicyName.AdministratorPolicy.ToString(), 
-                PolicyName.BusinessUserPolicy.ToString())
+                PolicyName.BusinessUserAndAdministratorUserPolicy.ToString())
             .CacheOutput(config =>
             {
                 config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
@@ -64,8 +63,7 @@ public static class BusinessUserApi
 
         app.MapGet("/{businessUserId}/business-licenses", GetPaginatedBusinessLicense)
             .RequireAuthorization(
-                PolicyName.AdministratorPolicy.ToString(), 
-                PolicyName.BusinessUserPolicy.ToString())
+                PolicyName.BusinessUserAndAdministratorUserPolicy.ToString())
             .CacheOutput(config =>
             {
                 config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
@@ -75,102 +73,95 @@ public static class BusinessUserApi
         app.MapGet("/{businessUserId}", GetBusinessUserById)
             .CacheOutput()
             .RequireAuthorization(
-                PolicyName.AdministratorPolicy.ToString(),
-                PolicyName.BusinessUserPolicy.ToString());
+                PolicyName.BusinessUserAndAdministratorUserPolicy.ToString());
 
         app.MapGet("/{businessUserId}/staffs/{staffId}", GetStaffByUserIdAndStaffId)
             .CacheOutput()
             .RequireAuthorization(
-                PolicyName.AdministratorPolicy.ToString(), 
-                PolicyName.BusinessUserPolicy.ToString(), 
-                PolicyName.StaffUserPolicy.ToString()); 
+                PolicyName.BusinessUserAndStaffUserAndAdministratorUserPolicy.ToString()); 
 
 
 
         app.MapGet("/staffs/email", GetEmailByStaffId)
             .CacheOutput()
             .RequireAuthorization(
-                PolicyName.StaffUserPolicy.ToString());
+                PolicyName.StaffUserOnlyPolicy.ToString());
 
         app.MapGet("/staffs/phone-number", GetPhoneNumberByStaffId)
             .CacheOutput()
             .RequireAuthorization(
-                PolicyName.StaffUserPolicy.ToString());
+                PolicyName.StaffUserOnlyPolicy.ToString());
 
         app.MapGet("/staffs/time-zone", GetTimeZoneByStaffId)
             .CacheOutput()
             .RequireAuthorization(
-                PolicyName.StaffUserPolicy.ToString());
+                PolicyName.StaffUserOnlyPolicy.ToString());
 
         app.MapGet("/staffs/device-id", GetDeviceIdByStaffId)
             .CacheOutput()
             .RequireAuthorization(
-                PolicyName.StaffUserPolicy.ToString());
+                PolicyName.StaffUserOnlyPolicy.ToString());
 
 
         app.MapPut("/{businessUserId}", UpdateBusinessUser)
             .RequireAuthorization(
-                PolicyName.AdministratorPolicy.ToString(), 
-                PolicyName.BusinessUserPolicy.ToString());
+                PolicyName.BusinessUserAndAdministratorUserPolicy.ToString());
 
         app.MapPut("/{businessUserId}/staffs/{staffId}", UpdateStaffByStaffId)
             .RequireAuthorization(
-                PolicyName.AdministratorPolicy.ToString(),
-                PolicyName.BusinessUserPolicy.ToString(), 
-                PolicyName.StaffUserPolicy.ToString());
+                PolicyName.BusinessUserAndStaffUserAndAdministratorUserPolicy.ToString());
 
 
         app.MapPost("/", CreateBusinessUser)
             .WithMetadata(new IdempotencyAttribute(nameof(CreateBusinessUser)))
-            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
+            .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
 
         app.MapPost("/{businessUserId}/staffs", CreateStaffBusinessUserById)
             .WithMetadata(new IdempotencyAttribute(nameof(CreateStaffBusinessUserById)))
             .RequireAuthorization(
-                PolicyName.BusinessUserPolicy.ToString(), 
-                PolicyName.AdministratorPolicy.ToString());
+                PolicyName.BusinessUserAndAdministratorUserPolicy.ToString());
 
         app.MapPost("/{businessUserId}/business-licenses", CreateBusinessLicenseBusinessUserById)
             .WithMetadata(new IdempotencyAttribute(nameof(CreateBusinessLicenseBusinessUserById)))
-            .RequireAuthorization(PolicyName.BusinessUserPolicy.ToString(), PolicyName.AdministratorPolicy.ToString());
+            .RequireAuthorization(PolicyName.BusinessUserAndAdministratorUserPolicy.ToString());
 
 
         app.MapPatch("/staffs/device-id", SetDeviceIdByStaffId)
-            .RequireAuthorization(PolicyName.StaffUserPolicy.ToString());
+            .RequireAuthorization(PolicyName.StaffUserOnlyPolicy.ToString());
 
         app.MapPatch("/staffs/{staffId}/device-id/reset", ResetDeviceIdByStaffId)
-            .RequireAuthorization(PolicyName.StaffUserPolicy.ToString(), PolicyName.AdministratorPolicy.ToString());
+            .RequireAuthorization(PolicyName.StaffUserAndAdministratorUserPolicy.ToString());
 
         app.MapPatch("/staffs/{staffId}/device-id/force-set", ForceSetDeviceIdByStaffId)
-            .RequireAuthorization(PolicyName.StaffUserPolicy.ToString(), PolicyName.AdministratorPolicy.ToString());
+            .RequireAuthorization(PolicyName.StaffUserAndAdministratorUserPolicy.ToString());
 
         app.MapPatch("/staffs/email", SetStaffEmailByStaffId)
-            .RequireAuthorization(PolicyName.StaffUserPolicy.ToString());
+            .RequireAuthorization(PolicyName.StaffUserOnlyPolicy.ToString());
 
         app.MapPatch("/staffs/email/confirm", ConfirmStaffEmailByStaffId)
-            .RequireAuthorization(PolicyName.StaffUserPolicy.ToString());
+            .RequireAuthorization(PolicyName.StaffUserOnlyPolicy.ToString());
 
         app.MapPatch("/staffs/phone-number", SetStaffPhoneNumberByStaffId)
-            .RequireAuthorization(PolicyName.StaffUserPolicy.ToString());
+            .RequireAuthorization(PolicyName.StaffUserOnlyPolicy.ToString());
 
         app.MapPatch("/staffs/phone-number/confirm", ConfirmStaffPhoneNumberByStaffId)
-            .RequireAuthorization(PolicyName.StaffUserPolicy.ToString());
+            .RequireAuthorization(PolicyName.StaffUserOnlyPolicy.ToString());
 
         app.MapPatch("/{businessUserId}/business-licenses/{businessLicenseId}/reject", RejectBusinessLicenseByUserId)
-            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
+            .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
 
         app.MapPatch("/{businessUserId}/business-licenses/{businessLicenseId}/confirm", ConfirmBusinessLicenseByUserId)
-            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
+            .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
 
 
         app.MapDelete("/{businessUserId}", DeleteBusinessUserById)
-            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString());
+            .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
 
         app.MapDelete("/{businessUserId}/staffs/{staffId}", RemoveStaffBusinessUserById)
-            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString(), PolicyName.BusinessUserPolicy.ToString());
+            .RequireAuthorization(PolicyName.BusinessUserAndAdministratorUserPolicy.ToString());
 
         app.MapDelete("/{businessUserId}/business-licenses/{businessLicenseId}", RemoveBusinessLicenseBusinessUserById)
-            .RequireAuthorization(PolicyName.AdministratorPolicy.ToString(), PolicyName.BusinessUserPolicy.ToString());
+            .RequireAuthorization(PolicyName.BusinessUserAndAdministratorUserPolicy.ToString());
 
         return route;
     }

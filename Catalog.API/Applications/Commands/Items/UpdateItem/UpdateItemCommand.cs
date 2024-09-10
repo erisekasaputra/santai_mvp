@@ -1,5 +1,6 @@
 ﻿
 using Catalog.API.Applications.Dtos.OwnerReview;
+using Core.Enumerations;
 using Core.Results;
 using MediatR;
 
@@ -11,6 +12,7 @@ public record UpdateItemCommand(
     string Description,
     string Sku,
     decimal Price,
+    Currency Currency,
     string ImageUrl,
     int StockQuantity,
     int SoldQuantity,

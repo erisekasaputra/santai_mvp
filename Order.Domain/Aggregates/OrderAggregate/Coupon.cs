@@ -1,7 +1,8 @@
-﻿using Order.Domain.Enumerations;
-using Order.Domain.Exceptions;
-using Order.Domain.SeedWork;
-using Order.Domain.ValueObjects;
+﻿using Core.Enumerations;
+using Core.Exceptions;
+using Core.ValueObjects;
+using Order.Domain.Enumerations;
+using Order.Domain.SeedWork; 
 
 namespace Order.Domain.Aggregates.OrderAggregate;
 
@@ -10,43 +11,43 @@ public class Coupon : Entity
     public Guid OrderingId { get; private set; }
     public string CouponCode { get; private set; }
     public PercentageOrValueType CouponValueType { get; private set; }
-    public decimal? Percentage { get; private set; }
-    public Money? Value { get; private set; }
-    public Money MinimumOrderValue { get; private set; }
+    public Currency Currency { get; private set; }
+    public decimal ValuePercentage { get; private set; }
+    public decimal ValueAmount { get; private set; } 
+    public decimal MinimumOrderValue { get; private set; }
     public Money DiscountAmount { get; private set; }
+    
     public Coupon()
     {
-        CouponCode = string.Empty;
-        MinimumOrderValue = null!;
+        CouponCode = string.Empty; 
         DiscountAmount = null!;
     }
+
     private Coupon(
         Guid orderingId,
         string couponCode,
         PercentageOrValueType couponValueType,
-        decimal percentage,
-        Money? value,
-        Money minimumOrderValue)
+        Currency currency,
+        decimal value, 
+        decimal minimumOrderValue)
     {
-        if (couponValueType == PercentageOrValueType.Percentage && (percentage < 1 || percentage > 100))
+        if (couponValueType == PercentageOrValueType.Percentage && (value < 1.00M || value > 100.00M))
             throw new DomainException("Discount percentage must be between 1 and 100.");
 
-        if (couponValueType == PercentageOrValueType.Value && (value is null || value.Amount < 1))
+        if (couponValueType == PercentageOrValueType.Value && value < 1)
             throw new DomainException("Discount value cannot be zero or negative.");
 
-        if (minimumOrderValue.Amount < 0)
-            throw new DomainException("Minimum order value cannot be negative.");
+        if (minimumOrderValue < 0)
+            throw new DomainException("Minimum order value cannot be negative."); 
 
-        if (couponValueType == PercentageOrValueType.Value && value is not null && value.Currency != minimumOrderValue.Currency)
-            throw new DomainException("Coupon value currency should be the same as minimum order currency");
-
+        Currency = currency;
         OrderingId = orderingId;
         CouponCode = couponCode;
         CouponValueType = couponValueType;
-        Percentage = couponValueType == PercentageOrValueType.Percentage ? percentage : 0;
-        Value = couponValueType == PercentageOrValueType.Value ? value : null;
+        ValuePercentage = couponValueType == PercentageOrValueType.Percentage ? value : 0;
+        ValueAmount = couponValueType == PercentageOrValueType.Value ? value : 0;
         MinimumOrderValue = minimumOrderValue;
-        DiscountAmount = new Money(0, minimumOrderValue.Currency);
+        DiscountAmount = new Money(0, currency);
     }
 
     public static Coupon CreatePercentageDiscount(
@@ -54,9 +55,9 @@ public class Coupon : Entity
         string couponCode,
         decimal percentage,
         decimal minimumOrderAmount,
-        Currency minimumOrderCurrency)
+        Currency currency)
     {
-        return new Coupon(orderingId, couponCode, PercentageOrValueType.Percentage, percentage, null, new Money(minimumOrderAmount, minimumOrderCurrency));
+        return new Coupon(orderingId, couponCode, PercentageOrValueType.Percentage, currency, percentage, minimumOrderAmount);
     }
 
     public static Coupon CreateValueDiscount(
@@ -66,40 +67,40 @@ public class Coupon : Entity
         Currency currency,
         decimal minimumOrderAmount)
     {
-        return new Coupon(orderingId, couponCode, PercentageOrValueType.Value, 0, new Money(amount, currency), new Money(minimumOrderAmount, currency));
+        return new Coupon(orderingId, couponCode, PercentageOrValueType.Value, currency, amount, minimumOrderAmount);
     }
 
-    public Money Apply(Money orderAmount)
+    public Money Apply(decimal orderAmount, Currency orderCurrency)
     {
-        if (orderAmount.Amount < 0)
+        if (orderAmount < 0)
             throw new DomainException("Amount cannot be negative.");
 
-        if (orderAmount.Amount < MinimumOrderValue.Amount)
-            return new Money(0, orderAmount.Currency);
+        if (orderAmount < MinimumOrderValue)
+            return new Money(0, orderCurrency);
 
-        if (orderAmount.Currency != DiscountAmount.Currency)
+        if (orderCurrency != Currency)
         {
             throw new DomainException("Order amount currency should be the same as discount amount currency");
         }
 
         Money discountAmount;
 
-        if (CouponValueType == PercentageOrValueType.Percentage && Percentage > 0 && Percentage.HasValue && Percentage.Value > 0)
+        if (CouponValueType == PercentageOrValueType.Percentage && ValuePercentage > 0)
         {
-            var percentageAmount = new Money(orderAmount.Amount * (Percentage.Value / 100), orderAmount.Currency);
+            var percentageAmount = new Money(orderAmount * (ValuePercentage / 100), orderCurrency);
             discountAmount = percentageAmount;
         }
-        else if (CouponValueType == PercentageOrValueType.Value && Value is not null)
+        else if (CouponValueType == PercentageOrValueType.Value && ValueAmount > 0)
         {
-            discountAmount = new Money(Value.Amount, Value.Currency);
+            discountAmount = new Money(ValueAmount, Currency);
         }
         else
         {
-            discountAmount = new Money(0, orderAmount.Currency);
+            discountAmount = new Money(0, orderCurrency);
         }
-
+         
         DiscountAmount = discountAmount;
 
-        return discountAmount > orderAmount ? throw new DomainException("Discount amount can not greater than order amount") : discountAmount;
+        return discountAmount.Amount > orderAmount ? throw new DomainException("Discount amount can not greater than order amount") : discountAmount;
     }
 }

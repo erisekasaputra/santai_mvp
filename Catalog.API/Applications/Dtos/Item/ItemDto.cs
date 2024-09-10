@@ -1,5 +1,5 @@
 ﻿using Catalog.API.Applications.Dtos.OwnerReview;
-
+using Core.Enumerations;
 namespace Catalog.API.Applications.Dtos.Item;
 
 public record ItemDto(
@@ -8,6 +8,7 @@ public record ItemDto(
     string Description,
     string Sku,
     decimal Price,
+    Currency Currency,
     string ImageUrl,
     DateTime CreatedAt,
     int StockQuantity,

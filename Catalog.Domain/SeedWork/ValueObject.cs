@@ -1,7 +1,7 @@
 ﻿namespace Catalog.Domain.SeedWork;
 
 
-public abstract class ValueObject
+public abstract class ValueObject 
 {
     protected abstract IEnumerable<object> GetEqualityComponents();
 

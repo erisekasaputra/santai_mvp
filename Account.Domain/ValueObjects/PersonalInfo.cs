@@ -1,6 +1,6 @@
-﻿using Account.Domain.Enumerations;
-using Account.Domain.Exceptions;
+﻿using Account.Domain.Enumerations; 
 using Account.Domain.SeedWork;
+using Core.Exceptions;
 
 namespace Account.Domain.ValueObjects;
 

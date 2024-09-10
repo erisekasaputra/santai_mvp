@@ -18,12 +18,9 @@ namespace Account.Infrastructure;
 
 public class UnitOfWork : IUnitOfWork
 {
-    private AccountDbContext _context;
-
-    private IDbContextTransaction? _transaction;
-    
-    private IMediator _mediator;
-
+    private readonly AccountDbContext _context;
+    private readonly IMediator _mediator;
+    private IDbContextTransaction? _transaction; 
     public IUserRepository BaseUsers { get; }
     public IBusinessLicenseRepository BusinessLicenses { get; }
     public ICertificationRepository Certifications { get; }
@@ -70,18 +67,17 @@ public class UnitOfWork : IUnitOfWork
                 throw new InvalidOperationException("No transaction started.");
             }
              
-            await SaveChangesAsync(cancellationToken);
-
+            await SaveChangesAsync(cancellationToken); 
             await _transaction.CommitAsync(cancellationToken);  
-        }
-        catch (Exception)
-        { 
+        } 
+        catch
+        {
+            await RollbackTransactionAsync(cancellationToken);
             throw;
         }
         finally
         {
-            _transaction?.Dispose();
-            _transaction = null;
+            DisposeTransaction();
         }
     }
 
@@ -113,14 +109,24 @@ public class UnitOfWork : IUnitOfWork
 
     public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
     {
-        if (_transaction == null)
+        try
         {
-            throw new InvalidOperationException("No transaction started.");
-        }
+            if (_transaction is null)
+            {
+                throw new InvalidOperationException("No transaction started.");
+            }
 
-        await _transaction.RollbackAsync(cancellationToken);
-        _transaction.Dispose();
-        _transaction = null;
+            await _transaction.RollbackAsync(cancellationToken);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+        finally
+        {
+            _transaction?.Dispose();
+            _transaction = null;
+        } 
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
@@ -138,4 +144,17 @@ public class UnitOfWork : IUnitOfWork
 
         return changesResult;
     } 
+    public void Dispose()
+    {
+        if (_transaction != null)
+        {
+            RollbackTransactionAsync().GetAwaiter().GetResult();
+        }
+    }
+
+    private void DisposeTransaction()
+    {
+        _transaction?.Dispose();
+        _transaction = null;
+    }
 }

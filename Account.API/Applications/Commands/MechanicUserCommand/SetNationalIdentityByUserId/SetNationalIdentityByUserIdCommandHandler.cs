@@ -1,12 +1,11 @@
 ﻿using Account.API.Applications.Services; 
 using Core.Results;
 using Core.Messages;
-using Account.Domain.Aggregates.NationalIdentityAggregate;
-using Account.Domain.Exceptions;
+using Account.Domain.Aggregates.NationalIdentityAggregate; 
 using Account.Domain.SeedWork;
-using MediatR;
-using Microsoft.Extensions.Options;
+using MediatR; 
 using Core.Services.Interfaces;
+using Core.Exceptions;
 
 namespace Account.API.Applications.Commands.MechanicUserCommand.SetNationalIdentityByUserId;
 

@@ -1,6 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Catalog.Domain.Aggregates.ItemAggregate; 
+using Catalog.Domain.Aggregates.ItemAggregate;
+using Core.Enumerations; 
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Core.Utilities;
+using Catalog.Domain.Aggregates.OwnerReviewAggregate;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Catalog.Infrastructure.EntityConfiguration; 
 public class ItemEntityConfigurator : IEntityTypeConfiguration<Item>
@@ -38,16 +43,41 @@ public class ItemEntityConfigurator : IEntityTypeConfiguration<Item>
         builder.HasOne(ci => ci.Brand)
             .WithMany(ic => ic.Items)
             .HasForeignKey(ci => ci.BrandId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.SetNull); 
 
-        builder.HasMany(i => i.OwnerReviews)
-            .WithOne()
-            .HasForeignKey("ItemId")
-            .OnDelete(DeleteBehavior.Cascade);  
+        var converter = new ValueConverter<ICollection<OwnerReview>?, string>(
+             v => CustomSerializer.Serialize(v),
+             v => CustomSerializer.Deserialize<List<OwnerReview>>(v)  
+        );
 
-        builder.Property(ci => ci.LastPrice).HasColumnType("decimal(18, 2)");
+        var comparer = new ValueComparer<ICollection<OwnerReview>?>(
+            (c1, c2) =>
+                (c1 == null && c2 == null) || (c1 != null && c2 != null && c1.SequenceEqual(c2)), // Compare each OwnerReview by Title and Rating
+            c => c == null ? 0 : c.Aggregate(0, (a, v) => HashCode.Combine(a, v.Title.GetHashCode(), v.Rating.GetHashCode())), // Hash code based on Title and Rating
+            c => c == null ? null : c.Select(v => new OwnerReview(v.Title, v.Rating)).ToList() // Deep copy for snapshotting
+        );
 
-        builder.Property(ci => ci.Price).HasColumnType("decimal(18, 2)");
+
+        builder.Property(i => i.OwnerReviews)
+            .HasConversion(converter)
+            .IsUnicode(false)
+            .Metadata.SetValueComparer(comparer); 
+
+        builder.Property(ci => ci.LastPrice)
+            .HasColumnType("decimal(18, 2)");
+
+        builder.OwnsOne(p => p.Price, buildAction =>
+        { 
+            buildAction.Property(e => e.Amount)
+                .IsRequired()
+                .HasPrecision(18, 4);
+
+            buildAction.Property(e => e.Currency)
+                .HasConversion(
+                    val => val.ToString(),
+                    val => Enum.Parse<Currency>(val))
+                .IsRequired();
+        }); 
         
         builder.Ignore(x => x.DomainEvents);
     }

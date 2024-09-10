@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Enumerations;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Order.Domain.Aggregates.OrderAggregate;
-using Order.Domain.Enumerations;
+using Order.Domain.Aggregates.OrderAggregate; 
 
 namespace Order.Infrastructure.EntityConfigurations;
 
@@ -13,7 +13,7 @@ public class CancellationEntityConfiguration : IEntityTypeConfiguration<Cancella
 
         builder.HasMany(p => p.CancellationCharges)
             .WithOne()
-            .HasForeignKey(p => p.OrderingId)
+            .HasForeignKey(p => p.CancellationId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.OwnsOne(p => p.CancellationRefund, buildAction =>
@@ -29,6 +29,7 @@ public class CancellationEntityConfiguration : IEntityTypeConfiguration<Cancella
                 .IsRequired();
         });
 
+        builder.Ignore(p => p.EntityStateAction);
         builder.Ignore(p => p.DomainEvents);
     }
 }

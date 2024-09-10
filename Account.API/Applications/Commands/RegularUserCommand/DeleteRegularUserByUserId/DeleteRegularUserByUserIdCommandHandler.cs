@@ -1,10 +1,10 @@
 ﻿using Account.API.Applications.Services;
 using Core.Results;
-using Core.Messages;
-using Account.Domain.Exceptions;
+using Core.Messages; 
 using Account.Domain.SeedWork;
 using MediatR;
 using System.Data;
+using Core.Exceptions;
 
 namespace Account.API.Applications.Commands.RegularUserCommand.DeleteRegularUserByUserId;
 

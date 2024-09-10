@@ -13,7 +13,7 @@ internal class ItemPriceSetIntegrationEventConsumer(IMediator mediator) : IConsu
     {
         var @event = context.Message;
 
-        var command = new SetItemPriceCommand(@event.Id, @event.Amount);
+        var command = new SetItemPriceCommand(@event.Id, @event.Amount, @event.Currency);
 
         await _mediator.Send(command);
     }

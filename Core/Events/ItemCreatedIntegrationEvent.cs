@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using Core.Enumerations;
+using MediatR;
 
 namespace Core.Events;
 
@@ -8,6 +9,7 @@ public record ItemCreatedIntegrationEvent(
     string Description,
     string Sku,
     decimal Price,
+    Currency Currency,
     string ImageUrl,
     int StockQuantity,
     int SoldQuantity,

@@ -1,48 +1,32 @@
 ﻿using Catalog.Domain.Aggregates.BrandAggregate;
 using Catalog.Domain.Aggregates.CategoryAggregate;
-using Catalog.Domain.Aggregates.OwnerReviewAggregate;
-using Catalog.Domain.Events;
-using Catalog.Domain.Exceptions;
-using Catalog.Domain.SeedWork; 
+using Catalog.Domain.Aggregates.OwnerReviewAggregate; 
+using Catalog.Domain.Events; 
+using Catalog.Domain.SeedWork;
+using Core.Enumerations;
+using Core.Exceptions;
+using Core.ValueObjects;
 
 namespace Catalog.Domain.Aggregates.ItemAggregate;
 
 public class Item : Entity, IAggregateRoot
 { 
-    public string Name { get; private set; }
-
-    public string Description { get; private set; }
-
-    public decimal LastPrice { get; private set; }
-
-    public decimal Price { get; private set; }
-
-    public string Sku { get; private set; }
-
-    public string ImageUrl { get; private set; } 
-
-    public int StockQuantity { get; private set; }
-
-    public int SoldQuantity { get; private set; }
-
-    public Guid? BrandId { get; set; } 
-
-    public Guid? CategoryId { get; private set; } 
-
-    public Brand? Brand { get; private set; }
-
-    public Category? Category { get; private set; } 
-
+    public string Name { get; private set; } 
+    public string Description { get; private set; }  
+    public string Sku { get; private set; } 
+    public string ImageUrl { get; private set; }  
+    public int StockQuantity { get; private set; }  
+    public int SoldQuantity { get; private set; } 
+    public Guid? BrandId { get; set; }  
+    public Guid? CategoryId { get; private set; }  
+    public Brand? Brand { get; private set; } 
+    public Category? Category { get; private set; }  
     public DateTime CreatedAt { get; private set; }
-
-    public bool IsActive { get; private set; }
-
-    public bool IsDeleted { get; private set; }
-
-
-    private readonly IList<OwnerReview> _ownerReviews;
-
-    public IReadOnlyCollection<OwnerReview> OwnerReviews => _ownerReviews.AsReadOnly(); 
+    public decimal LastPrice { get; private set; }  
+    public bool IsActive { get; private set; }  
+    public bool IsDeleted { get; private set; } 
+    public Money Price { get; private set; }  
+    public ICollection<OwnerReview>? OwnerReviews { get; private set; }
 
     public Item()
     {
@@ -50,13 +34,15 @@ public class Item : Entity, IAggregateRoot
         Name = string.Empty;
         Description = string.Empty;
         ImageUrl = string.Empty;
-        _ownerReviews = [];
+        OwnerReviews = [];
+        Price = null!;
     }
       
     public Item(
         string name,
         string description,
         decimal price,
+        Currency currency,
         string sku,
         string imageUrl,
         DateTime createdAt,
@@ -68,7 +54,9 @@ public class Item : Entity, IAggregateRoot
         Brand brand,
         bool isActive,
         ICollection<OwnerReview> ownerReviews) : this()
-    { 
+    {
+        OwnerReviews ??= [];
+
         ArgumentException.ThrowIfNullOrEmpty(name);
         ArgumentException.ThrowIfNullOrEmpty(description);
         ArgumentException.ThrowIfNullOrEmpty(imageUrl); 
@@ -77,7 +65,7 @@ public class Item : Entity, IAggregateRoot
          
         Name = name;
         Description = description;
-        Price = price;
+        Price = new Money(price, currency);
         Sku = sku;
         ImageUrl = imageUrl;
         CreatedAt = createdAt;
@@ -89,13 +77,13 @@ public class Item : Entity, IAggregateRoot
         Brand = brand;
         IsActive = isActive;
         IsDeleted = false;
-         
-        if (ownerReviews is not null)
+
+        foreach (var ownerReview in ownerReviews) 
         {
-            var filteredOwnerReview = ownerReviews.GroupBy(r => r.Title).Select(g => g.First()).ToList();
-            foreach (var ownerReview in filteredOwnerReview)
+            var reviewExists = OwnerReviews.Where(x => x.Equals(ownerReview)).Any();
+            if (!reviewExists)
             {
-                _ownerReviews.Add(ownerReview);
+                OwnerReviews.Add(ownerReview);
             }
         }
 
@@ -113,6 +101,7 @@ public class Item : Entity, IAggregateRoot
         bool isActive,
         ICollection<OwnerReview> ownerReviews,
         decimal price,
+        Currency currency,
         int stockQuantity,
         int soldQuantity)
     {
@@ -137,19 +126,27 @@ public class Item : Entity, IAggregateRoot
         BrandId = brandId;
         Brand = brand;
         IsActive = isActive;
-        Price = price;
+
+        LastPrice = Price.Amount; 
+        if (price != Price.Amount)
+        {
+            Price.SetAmount(price, currency);
+        }
+
         StockQuantity = stockQuantity;
         SoldQuantity = soldQuantity;
 
-        _ownerReviews.Clear();
-        if (ownerReviews is not null)
+        OwnerReviews ??= []; 
+        OwnerReviews.Clear(); 
+
+        foreach (var ownerReview in ownerReviews)
         {
-            var filteredOwnerReview = ownerReviews.GroupBy(r => r.Title).Select(g => g.First()).ToList();
-            foreach (var ownerReview in filteredOwnerReview)
+            var reviewExists = OwnerReviews.Where(x => x.Equals(ownerReview)).Any();
+            if (!reviewExists)
             {
-                _ownerReviews.Add(ownerReview);
-            }   
-        }
+                OwnerReviews.Add(ownerReview);
+            }
+        }   
 
         RaiseItemUpdatedDomainEvent(this);
     }
@@ -273,7 +270,7 @@ public class Item : Entity, IAggregateRoot
         RaiseItemSoldSetDomainEvent(Id, amount);
     } 
     
-    public void SetPrice(decimal amount)
+    public void SetPrice(decimal amount, Currency currency)
     {
         if (IsDeleted)
         {
@@ -282,15 +279,15 @@ public class Item : Entity, IAggregateRoot
 
         ArgumentOutOfRangeException.ThrowIfLessThanOrEqual(amount, 0, "Can not set price to less than or equal with zero.");
 
-        LastPrice = Price;
-        Price = amount;
+        LastPrice = Price.Amount;
+        Price.SetAmount(amount, currency);
 
-        RaiseItemPriceSetDomainEvent(Id, amount);
+        RaiseItemPriceSetDomainEvent(Id, amount, currency);
     }
 
-    private void RaiseItemPriceSetDomainEvent(Guid id, decimal price)
+    private void RaiseItemPriceSetDomainEvent(Guid id, decimal price, Currency currency)
     {
-        AddDomainEvent(new ItemPriceSetDomainEvent(id, price));
+        AddDomainEvent(new ItemPriceSetDomainEvent(id, price, currency));
     }
 
     private void RaiseItemSoldSetDomainEvent(Guid id, int quantity)

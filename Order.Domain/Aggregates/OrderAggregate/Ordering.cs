@@ -1,10 +1,11 @@
 ﻿
 using Core.Enumerations;
+using Core.Exceptions;
+using Core.ValueObjects;
 using Order.Domain.Aggregates.BuyerAggregate;
 using Order.Domain.Aggregates.MechanicAggregate;
 using Order.Domain.Enumerations;
-using Order.Domain.Events;
-using Order.Domain.Exceptions;
+using Order.Domain.Events; 
 using Order.Domain.SeedWork;
 using Order.Domain.ValueObjects;
 
@@ -12,7 +13,6 @@ namespace Order.Domain.Aggregates.OrderAggregate;
 
 public class Ordering : Entity
 {  
-    public Currency BaseCurrency { get; private set; }
     public Address Address { get; private set; } 
     public Buyer Buyer { get; private set; } 
     public Mechanic? Mechanic { get; private set; } 
@@ -25,15 +25,15 @@ public class Ordering : Entity
     public int TotalCanceledByMechanic { get; private set; } 
     public DateTime CreatedAtUtc { get; private init; }  
     public Payment? Payment { get; private set; }
-    public Money OrderAmount { get; private set; }
+    public Currency Currency { get; private set; }
+    public decimal OrderAmount { get; private set; }
     public Coupon? Coupon { get; private set; }
     public Money GrandTotal { get; private set; } 
     public Rating? Rating { get; private set; }
     public ICollection<string>? RatingImages { get; private set; }
     public ICollection<Fee> Fees { get; private set; } 
     public Cancellation? Cancellation { get; private set; } 
-    public string? PaymentUrl { get; private set; }
-
+    public string? PaymentUrl { get; private set; } 
     public bool IsRated => Rating is not null && Rating.Value > 0.0M;
     public bool IsPaid => Payment is not null && Payment.Amount.Amount > 0.0M;
     public Ordering()
@@ -41,8 +41,7 @@ public class Ordering : Entity
         Address = null!;
         Buyer = null!;
         LineItems = null!;
-        Fleets = null!;
-        OrderAmount = null!;
+        Fleets = null!; 
         GrandTotal = null!;
         Fees = null!; 
     }
@@ -62,8 +61,8 @@ public class Ordering : Entity
             throw new DomainException("Scheduled date can not in the past and can not be null");
         }
 
-        BaseCurrency = currency; 
-        OrderAmount = new Money(0, currency);
+        Currency = currency;
+        OrderAmount = 0;
         GrandTotal = new Money(0, currency); 
         Address = new Address(addressLine, latitude, longitude);
         Buyer = new Buyer(Id, buyerId, buyerName, buyerType);
@@ -116,14 +115,14 @@ public class Ordering : Entity
 
         if (fee.PercentageOrValueType == PercentageOrValueType.Value)
         {
-            if (fee.Amount is null)
+            if (fee.ValueAmount <= 0)
             {
                 throw new DomainException("Fee amount can not be null");
             }
 
-            if (fee.Amount.Currency != BaseCurrency)
+            if (fee.Currency != Currency)
             {
-                throw new DomainException($"Fee currency {fee.Amount.Currency} does not match order currency ({BaseCurrency}).");
+                throw new DomainException($"Fee currency {fee.Currency} does not match order currency ({Currency}).");
             } 
         }
 
@@ -135,11 +134,11 @@ public class Ordering : Entity
         }
 
         Fees.Add(fee);
-    }
+    } 
 
     public void CalculateGrandTotal()
     {
-        if (GrandTotal.Currency != OrderAmount.Currency)
+        if (GrandTotal.Currency != Currency)
         {
             throw new DomainException("Grand total currency with Order Amount currency is missmatch, incosistent state has occured");
         }
@@ -150,46 +149,48 @@ public class Ordering : Entity
         }
 
         var totalAmount = LineItems.Sum(lineItem => lineItem.CalculateTotalPrice().Amount);
-        OrderAmount.SetAmount(totalAmount);
+        OrderAmount = totalAmount;
 
-        if (OrderAmount.Amount <= 0)
+        if (OrderAmount <= 0)
         {
             throw new DomainException("Order amount can not less than or equal with 0");
         }
 
-        GrandTotal.SetAmount(totalAmount); 
-        GrandTotal -= Coupon?.Apply(GrandTotal) ?? new Money(0, OrderAmount.Currency);
+        GrandTotal.SetAmount(totalAmount, Currency); 
+        GrandTotal -= Coupon?.Apply(totalAmount, Currency) ?? new Money(0, Currency);
 
         var holdedGrandTotal = GrandTotal;
 
         foreach (var fee in Fees)
         {
-            GrandTotal += fee.Apply(holdedGrandTotal);
+            GrandTotal += fee.Apply(holdedGrandTotal.Amount, Currency);
         }
     }
 
-    public void AddOrderItem(Guid id, string name, string sku, decimal price, Currency currency, int quantity)
+    public void AddOrderItem(LineItem lineItem)
     {
         LineItems ??= [];
 
-        if (currency != BaseCurrency)
+        if (lineItem is null)
         {
-            throw new DomainException($"Item price currency ({currency}) does not match order currency ({BaseCurrency}).");
+            throw new DomainException("Line item can not be null");
         }
 
-        var lineItemPrice = new Money(price, currency); 
+        if (lineItem.SubTotal.Currency != Currency)
+        {
+            throw new DomainException($"Item price currency ({lineItem.SubTotal.Currency}) does not match order currency ({Currency}).");
+        } 
 
-        var orderItem = new LineItem(id, Id, name, sku, lineItemPrice, quantity) ?? throw new DomainException("Order item cannot be null.");
-
-        var items = LineItems.Where(x => x.Id == orderItem.Id).FirstOrDefault();
+        var items = LineItems.Where(x => x.Id == lineItem.Id).FirstOrDefault();
 
         if (items is not null)
         {
-            items.AddQuantity(orderItem.Quantity);
+            items.AddQuantity(lineItem.Quantity);
             return;
         }
 
-        LineItems.Add(orderItem); 
+        lineItem.SetEntityState(EntityStateAction.Added);
+        LineItems.Add(lineItem); 
     }
 
     public void ApplyDiscount(Coupon coupon)
@@ -199,20 +200,15 @@ public class Ordering : Entity
 
         if (coupon.CouponValueType == PercentageOrValueType.Value)
         {
-            if (coupon.Value is null)
+            if (coupon.ValueAmount <= 0)
             {
                 throw new DomainException("Coupon value can not be null");
-            }
-
-            if (coupon.Value.Currency != BaseCurrency)
-            {
-                throw new DomainException($"Coupon currency {coupon.Value.Currency} does not match order currency ({BaseCurrency})."); 
-            }
+            } 
         }
 
-        if (coupon.MinimumOrderValue.Currency != BaseCurrency) 
+        if (coupon.Currency != Currency) 
         { 
-            throw new DomainException($"Minimum order currency does not match order currency ({BaseCurrency}).");
+            throw new DomainException($"Coupon currency does not match order currency ({Currency}).");
         }
 
         if (Coupon is not null)
@@ -228,9 +224,14 @@ public class Ordering : Entity
         if (tax is null)
             throw new ArgumentNullException(nameof(tax), "Tax cannot be null."); 
 
-        if (tax.TaxAmount.Currency != BaseCurrency)
+        if (tax.Rate <= 0)
         {
-            throw new DomainException($"Tax currency does not match order currency ({BaseCurrency}).");
+            throw new DomainException("Tax can not be null"); 
+        }
+
+        if (tax.TaxAmount.Currency != Currency)
+        {
+            throw new DomainException($"Tax currency does not match order currency ({Currency}).");
         }
 
         foreach (var item in LineItems)
@@ -239,33 +240,23 @@ public class Ordering : Entity
         }
     }
 
-    public void AddFleet(
-        Guid id,
-        string brand,
-        string model,
-        string registrationNumber,
-        string imageUrl)
+    public void AddFleet(Fleet fleet)
     {
-        if (id == Guid.Empty)
-            throw new ArgumentNullException(nameof(id), "Fleet id cannot be null.");
+        if (fleet.Id == Guid.Empty)
+            throw new ArgumentNullException(nameof(fleet.Id), "Fleet id cannot be null.");
 
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(nameof(brand), "Brand can not be empty");
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(nameof(model), "Model can not be empty");
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(nameof(registrationNumber), "Registration number can not be empty");
-        ArgumentNullException.ThrowIfNullOrWhiteSpace(nameof(imageUrl), "Image url can not be empty");
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(nameof(fleet.Brand), "Brand can not be empty");
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(nameof(fleet.Model), "Model can not be empty");
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(nameof(fleet.RegistrationNumber), "Registration number can not be empty");
+        ArgumentNullException.ThrowIfNullOrWhiteSpace(nameof(fleet.ImageUrl), "Image url can not be empty");
 
-        if (Fleets.Where(x => x.Id == id).ToList().Count > 0)
+        if (Fleets.Where(x => x.Id == fleet.Id).ToList().Count > 0)
         {
             return;
         }
 
-        Fleets.Add(new (
-            Id,
-            id,
-            brand,
-            model,
-            registrationNumber,
-            imageUrl));
+        fleet.SetEntityState(EntityStateAction.Added);
+        Fleets.Add(fleet);
     } 
 
     private bool IsCancelableByBuyer(Guid buyerId, out string errorMessage) 
@@ -436,7 +427,7 @@ public class Ordering : Entity
             throw new DomainException(errorMessage);
         }
 
-        Cancellation = new Cancellation();  
+        Cancellation = new Cancellation(Id);  
 
         if (IsChargeableCancellation())
         {
@@ -659,12 +650,7 @@ public class Ordering : Entity
 
   
 
-    public void SetPaymentPaid(
-        decimal amount,
-        Currency currency,
-        DateTime transactionAt,
-        string? paymentMethod,
-        string? bankReference)
+    public void SetPaymentPaid(Payment payment)
     {
         if (Status is OrderStatus.OrderCanceledByUser)
         {
@@ -676,24 +662,23 @@ public class Ordering : Entity
             throw new DomainException($"Could not set payment to {OrderStatus.PaymentPending}");
         }
 
-        if (amount != GrandTotal.Amount)
+        if (payment.Amount.Amount != GrandTotal.Amount)
         {
             throw new DomainException("Paid amount is not equal with grand total amount");
         }
 
-        if (currency != BaseCurrency)
+        if (payment.Amount.Currency != Currency)
         {
             throw new DomainException("Currency for payment is not equal with order currency"); 
         }
 
-        Payment = new Payment(
-            Id,
-            amount,
-            currency,
-            transactionAt,
-            paymentMethod,
-            bankReference);
-
+        if (Payment is not null)
+        {
+            throw new DomainException("Payment already paid");
+        }
+         
+        Payment = payment;
+        Payment.SetEntityState(EntityStateAction.Added);
         Status = OrderStatus.PaymentPaid;  
         RaiseOrderPaymentPaidDomainEvent();
     }
@@ -777,16 +762,24 @@ public class Ordering : Entity
     }
 
    
-    public void AssignMechanic(Guid mechanicId, string name, decimal performance, int mechanicWaitingAcceptTimeInSeconds = 60)
+    public void AssignMechanic(
+        Mechanic mechanic, 
+        int mechanicWaitingAcceptTimeInSeconds = 60)
     {
-        if (!IsOrderMechanicAssignable(mechanicId, out string errorMessage))
+        if (mechanic is null)
+        {
+            throw new DomainException("Mechanic can not be null");
+        }
+
+        if (!IsOrderMechanicAssignable(mechanic.Id, out string errorMessage))
         {
             throw new DomainException(errorMessage);
         }
 
         MechanicWaitingAcceptTime = DateTime.UtcNow.AddSeconds(mechanicWaitingAcceptTimeInSeconds); 
         Status = OrderStatus.MechanicAssigned; 
-        Mechanic = new Mechanic(Id, mechanicId, name, performance);
+        Mechanic = mechanic;
+        Mechanic.SetEntityState(EntityStateAction.Added);
 
         RaiseMechanicAssignedDomainEvent();
     }

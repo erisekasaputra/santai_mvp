@@ -18,7 +18,7 @@ public class CategoryRepository(CatalogDbContext dbContext, MetaTableHelper meta
 
     public async Task<Category?> GetCategoryByIdAsync(Guid id)
     {
-        return await _context.Categories
+        return await _context.Categories 
             .Where(w => !w.IsDeleted)
             .FirstOrDefaultAsync(c => c.Id == id);
     }

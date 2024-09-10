@@ -13,24 +13,15 @@ namespace Catalog.Infrastructure;
 public class UnitOfWork : IUnitOfWork
 {
     public readonly CatalogDbContext _context;
-    public readonly MetaTableHelper _metaTableHelper;
-    
-    public IItemRepository Items => _itemRepository ??= new ItemRepository(_context, _metaTableHelper);
-
-    public ICategoryRepository Categories => _categoryRepository ??= new CategoryRepository(_context, _metaTableHelper);
-
-    public IBrandRepository Brands => _brandRepository ??= new BrandRepository(_context, _metaTableHelper); 
-
-    public IItemRepository _itemRepository;
-
-    public ICategoryRepository _categoryRepository;
-
-    public IBrandRepository _brandRepository;
-
-    private IDbContextTransaction? _transaction;
-
-    private readonly IMediator _mediator;
-
+    public readonly MetaTableHelper _metaTableHelper; 
+    public IItemRepository Items => _itemRepository ??= new ItemRepository(_context, _metaTableHelper); 
+    public ICategoryRepository Categories => _categoryRepository ??= new CategoryRepository(_context, _metaTableHelper); 
+    public IBrandRepository Brands => _brandRepository ??= new BrandRepository(_context, _metaTableHelper);  
+    public IItemRepository _itemRepository; 
+    public ICategoryRepository _categoryRepository; 
+    public IBrandRepository _brandRepository;  
+    private IDbContextTransaction? _transaction; 
+    private readonly IMediator _mediator; 
     public UnitOfWork(CatalogDbContext context, IMediator mediator, MetaTableHelper metaTableHelper)
     {
         _context = context;
@@ -40,8 +31,19 @@ public class UnitOfWork : IUnitOfWork
         _brandRepository = new BrandRepository(_context, metaTableHelper);
         _mediator = mediator;
     }
-    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+
+    public async Task BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)
     {
+        if (_transaction is not null)
+        {
+            throw new InvalidOperationException("Transaction already started.");
+        }
+
+        _transaction = await _context.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
+    }
+
+    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    { 
         await DispatchDomainEventsAsync(cancellationToken);
 
         var changesResult = await _context.SaveChangesAsync(cancellationToken);
@@ -58,18 +60,19 @@ public class UnitOfWork : IUnitOfWork
 
     public void Dispose()
     {
-        _context.Dispose();
-    }
-
-    public async Task BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)
-    {
-        if (_transaction is not null)
+        if (_transaction != null)
         {
-            throw new InvalidOperationException("Transaction already started.");
+            RollbackTransactionAsync().GetAwaiter().GetResult();
         }
-
-        _transaction = await _context.Database.BeginTransactionAsync(isolationLevel, cancellationToken);
     }
+
+    private void DisposeTransaction()
+    {
+        _transaction?.Dispose();
+        _transaction = null;
+    }
+
+
 
     public async Task CommitTransactionAsync(CancellationToken cancellationToken = default)
     {
@@ -80,35 +83,40 @@ public class UnitOfWork : IUnitOfWork
                 throw new InvalidOperationException("No transaction started.");
             }
 
-            await DispatchDomainEventsAsync(cancellationToken);
-
-            await _context.SaveChangesAsync(cancellationToken);
-
-            await _transaction.CommitAsync(cancellationToken);
-            
-            _transaction.Dispose();
-            
-            _transaction = null;
-        }
-        catch (Exception)
+            await SaveChangesAsync(cancellationToken);
+            await _transaction.CommitAsync(cancellationToken); 
+        } 
+        catch
         {
             await RollbackTransactionAsync(cancellationToken);
             throw;
+        }
+        finally
+        {
+            DisposeTransaction();
         }
     }
 
     public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
     {
-        if (_transaction == null)
+        try
         {
-            throw new InvalidOperationException("No transaction started.");
+            if (_transaction is null)
+            {
+                throw new InvalidOperationException("No transaction started.");
+            }
+
+            await _transaction.RollbackAsync(cancellationToken); 
         }
-
-        await _transaction.RollbackAsync(cancellationToken);
-
-        _transaction.Dispose();
-        
-        _transaction = null;
+        catch (Exception)
+        { 
+            throw;
+        }
+        finally 
+        {
+            _transaction?.Dispose();
+            _transaction = null;
+        }
     }
 
     public async Task DispatchDomainEventsAsync(CancellationToken token = default)

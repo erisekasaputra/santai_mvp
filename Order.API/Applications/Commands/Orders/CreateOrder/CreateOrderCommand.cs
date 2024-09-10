@@ -14,6 +14,6 @@ public record CreateOrderCommand(
     UserType UserType,
     bool IsOrderScheduled,
     DateTime? ScheduledOn,
-    string CouponCode,
+    string? CouponCode,
     IEnumerable<LineItemRequest> LineItems,
     IEnumerable<FleetRequest> Fleets) : IRequest<Result>;

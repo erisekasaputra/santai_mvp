@@ -23,7 +23,7 @@ builder.Services.AddValidation<IOrderApiMarkerInterface>();
 builder.Services.AddHttpClients();   
 builder.Services.AddOpenApi();
 builder.Services.AddDataEncryption(builder.Configuration);
-builder.Services.AddAuth([.. AuthPolicies.GetAuthClients()]);
+builder.Services.AddAuth();
 
 var app = builder.Build();
 app.UseAuthentication();

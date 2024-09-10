@@ -1,6 +1,5 @@
 ﻿using Catalog.Domain.Aggregates.ItemAggregate; 
-using Catalog.Infrastructure.Helpers;
-using Microsoft.Data.SqlClient;
+using Catalog.Infrastructure.Helpers; 
 using Microsoft.EntityFrameworkCore; 
 
 namespace Catalog.Infrastructure.Repositories;
@@ -22,8 +21,7 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
         return await _context.Items
             .Where (x => !x.IsDeleted)
             .Include(p => p.Category)
-            .Include(p => p.Brand)
-            .Include(p => p.OwnerReviews)
+            .Include(p => p.Brand) 
             .FirstOrDefaultAsync(e => e.Id == id);
     }
   
@@ -31,8 +29,7 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
     {
         return await _context.Items
             .Include(p => p.Category)
-            .Include(p => p.Brand)
-            .Include(p => p.OwnerReviews)
+            .Include(p => p.Brand) 
             .FirstOrDefaultAsync(e => e.Id == id);
     }
 
@@ -48,6 +45,7 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
             .Take(pageSize)
             .Where(w => !w.IsDeleted)
             .Include(d => d.Category)
+            .Include(d => d.Brand)
             .AsNoTracking()
             .OrderBy(x => x.Name)
             .ToListAsync();
@@ -61,26 +59,8 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
     } 
 
     public async Task<ICollection<Item>> GetItemsWithLockAsync(IEnumerable<Guid> itemIds)
-    {
-        var tableName = _metaTableHelper.GetTableName<Item>();
-        var itemIdColumn = _metaTableHelper.GetColumnName<Item>(nameof(Item.Id)); 
-
-        var parameterNames = itemIds.Select((id, index) =>
-        {
-            return $"@p{index}";
-
-        }).ToArray();
-
-        var sql = @$"SELECT *
-                        FROM {tableName} WITH (UPDLOCK, ROWLOCK) WHERE {itemIdColumn} IN ({string.Join(", ", parameterNames)}) AND IsDeleted = 0; ";
-
-        var parameters = itemIds.Select((id, index) =>
-        { 
-            return new SqlParameter($"@p{index}", id);
-
-        }).ToArray();
-         
-        return await _context.Items.FromSqlRaw(sql, parameters).ToListAsync(); 
+    { 
+        return await _context.Items.Where(x => itemIds.Contains(x.Id)).ToListAsync(); 
     }
 
     public async Task MarkBrandIdToNullByDeletingBrandByIdAsync(Guid brandId)
@@ -95,5 +75,5 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
         await _context.Items.Where(x => x.CategoryId == categoryId)
             .ExecuteUpdateAsync(u => 
                 u.SetProperty(p => p.CategoryId, nulling));
-    }  
+    } 
 }

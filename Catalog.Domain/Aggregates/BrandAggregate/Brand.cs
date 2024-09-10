@@ -1,7 +1,7 @@
 ﻿using Catalog.Domain.Aggregates.ItemAggregate;
-using Catalog.Domain.Events;
-using Catalog.Domain.Exceptions;
+using Catalog.Domain.Events; 
 using Catalog.Domain.SeedWork;
+using Core.Exceptions;
 
 namespace Catalog.Domain.Aggregates.BrandAggregate;
 

@@ -27,6 +27,7 @@ public class UserInfoService : IUserInfoService
             var email = httpContext.User.FindFirstValue(ClaimTypes.Email);
             var businessCode = httpContext.User.FindFirstValue(SantaiClaimTypes.BusinessCode);
             var rawUserType = httpContext.User.FindFirstValue(SantaiClaimTypes.UserType);
+            var role = httpContext.User.FindFirstValue(ClaimTypes.Role);
 
             if (string.IsNullOrWhiteSpace(rawUserType))
             {
@@ -45,7 +46,7 @@ public class UserInfoService : IUserInfoService
                 return null;
             }
 
-            var userClaim = new UserClaim(Guid.Parse(sub), phoneNumber, email, userType, businessCode);
+            var userClaim = new UserClaim(Guid.Parse(sub), phoneNumber, email, userType, businessCode, role);
 
             return userClaim;
         }

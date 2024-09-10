@@ -10,7 +10,7 @@ builder.Services.AddApplicationService();
 builder.Services.AddControllers();
 builder.Services.AddCustomRateLimiter();
 builder.Services.AddRedisDatabase();
-builder.Services.AddAuth([.. AuthPolicies.GetAuthClients()]);
+builder.Services.AddAuth();
 
 var app = builder.Build();
 

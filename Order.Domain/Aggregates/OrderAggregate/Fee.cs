@@ -1,7 +1,8 @@
-﻿using Order.Domain.Enumerations;
-using Order.Domain.Exceptions;
-using Order.Domain.SeedWork;
-using Order.Domain.ValueObjects;
+﻿using Core.Enumerations;
+using Core.Exceptions;
+using Core.ValueObjects;
+using Order.Domain.Enumerations; 
+using Order.Domain.SeedWork; 
 
 namespace Order.Domain.Aggregates.OrderAggregate;
 
@@ -10,8 +11,9 @@ public class Fee : Entity
     public Guid OrderingId { get; private set; }
     public PercentageOrValueType PercentageOrValueType { get; private set; }
     public FeeDescription FeeDescription { get; private set; }
-    public decimal? Percentage { get; private set; }
-    public Money? Amount { get; private set; } 
+    public Currency Currency { get; private set; }
+    public decimal ValuePercentage { get; private set; }
+    public decimal ValueAmount { get; private set; } 
     public Money FeeAmount { get; private set; }
     public Fee()
     {
@@ -28,6 +30,7 @@ public class Fee : Entity
         FeeAmount = new Money(0, currency);
         PercentageOrValueType = percentageOrValueType;
         FeeDescription = feeDescription;
+        Currency = currency;
          
         if (percentageOrValueType == PercentageOrValueType.Percentage)
         {
@@ -35,7 +38,7 @@ public class Fee : Entity
             {
                 throw new DomainException("Percentage must be between 1 and 100");
             } 
-            Percentage = amount;
+            ValuePercentage = amount; 
             return;
         }
 
@@ -46,7 +49,7 @@ public class Fee : Entity
                 throw new DomainException("Amount can not less than or equal with 0");
             }
 
-            Amount = new Money(amount, currency);
+            ValueAmount = amount;
             return;
         }    
     } 
@@ -61,36 +64,36 @@ public class Fee : Entity
         return new Fee(orderingId, feeDescription, PercentageOrValueType.Percentage, percentage, currency);
     }
 
-    public Money Apply(Money orderAmount)
+    public Money Apply(decimal orderAmount, Currency orderCurrency)
     {
         Money feeAmount;
 
-        if (PercentageOrValueType == PercentageOrValueType.Value && Amount is not null) 
+        if (PercentageOrValueType == PercentageOrValueType.Value && ValueAmount > 0) 
         { 
-            if (Amount.Currency != orderAmount.Currency)
+            if (Currency != orderCurrency)
             {
-                throw new DomainException($"Fee currency ({Amount.Currency}) does not match order currency ({orderAmount.Currency}).");
+                throw new DomainException($"Fee currency ({Currency}) does not match order currency ({orderCurrency}).");
             }
 
-            feeAmount = Amount; 
+            feeAmount = new Money(ValueAmount, Currency); 
 
-            if (orderAmount.Amount < feeAmount.Amount)
+            if (orderAmount < feeAmount.Amount)
             {
                 throw new DomainException("Fee amount can not greather than order amount");
             }
         } 
-        else if (PercentageOrValueType == PercentageOrValueType.Percentage && Percentage.HasValue && Percentage.Value > 0)
+        else if (PercentageOrValueType == PercentageOrValueType.Percentage && ValuePercentage > 0)
         {
-            feeAmount = new Money(orderAmount.Amount * (Percentage.Value / 100), orderAmount.Currency);
+            feeAmount = new Money(orderAmount * (ValuePercentage / 100), orderCurrency);
 
-            if (orderAmount.Amount < feeAmount.Amount)
+            if (orderAmount < feeAmount.Amount)
             {
                 throw new DomainException("Fee amount can not greather than order amount");
             }
         } 
         else
         {
-            feeAmount = new Money(0, orderAmount.Currency);
+            feeAmount = new Money(0, orderCurrency);
         } 
 
         FeeAmount = feeAmount;

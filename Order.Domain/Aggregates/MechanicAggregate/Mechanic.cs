@@ -1,5 +1,5 @@
-﻿using Order.Domain.Aggregates.OrderAggregate;
-using Order.Domain.Exceptions;
+﻿using Core.Exceptions;
+using Order.Domain.Aggregates.OrderAggregate; 
 using Order.Domain.SeedWork;
 using Order.Domain.ValueObjects;
 
@@ -24,7 +24,7 @@ public class Mechanic : Entity
     public Mechanic(Guid orderingId, Guid mechanicId, string name, decimal perfomance)
     {
         OrderingId = orderingId;
-        Id = mechanicId;
+        MechanicId = mechanicId;
         Name = name;  
         Performance = perfomance;
 

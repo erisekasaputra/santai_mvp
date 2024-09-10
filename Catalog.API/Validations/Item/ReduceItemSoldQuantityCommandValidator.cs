@@ -7,6 +7,6 @@ public class ReduceItemSoldQuantityCommandValidator : AbstractValidator<ReduceIt
 {
     public ReduceItemSoldQuantityCommandValidator()
     {
-        RuleForEach(x => x.ItemIds).SetValidator(new ReduceItemSoldQuantityRequestValidator());
+        RuleForEach(x => x.Items).SetValidator(new ReduceItemSoldQuantityRequestValidator());
     }
 }

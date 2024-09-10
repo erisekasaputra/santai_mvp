@@ -20,7 +20,7 @@ if (builder.Environment.IsDevelopment())
 }
 
 builder.Services.AddJsonEnumConverterBehavior();
-builder.Services.AddAuth([.. AuthPolicies.GetAuthClients()]); 
+builder.Services.AddAuth(); 
 builder.Services.AddHttpContextAccessor(); 
 builder.Services.AddMediatorService<IAccountAPIMarkerInterface>(); 
 builder.Services.AddRedisDatabase();  

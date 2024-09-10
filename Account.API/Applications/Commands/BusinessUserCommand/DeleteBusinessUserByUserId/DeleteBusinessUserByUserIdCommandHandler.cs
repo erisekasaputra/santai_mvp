@@ -1,10 +1,10 @@
 ﻿using Account.API.Applications.Services;
-using Core.Results;
-using Account.Domain.Exceptions;
+using Core.Results; 
 using Account.Domain.SeedWork;
 using MediatR;
 using System.Data;
 using Core.Messages;
+using Core.Exceptions;
 
 namespace Account.API.Applications.Commands.BusinessUserCommand.DeleteBusinessUserByUserId;
 
