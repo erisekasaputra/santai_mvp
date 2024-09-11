@@ -33,8 +33,7 @@ public static class ServiceRegistrationExtension
         });
 
         return services;
-    }
-
+    } 
 
     public static IServiceCollection AddJsonEnumConverterBehavior(this IServiceCollection services)
     {

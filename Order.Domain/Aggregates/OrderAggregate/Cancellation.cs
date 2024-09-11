@@ -1,8 +1,8 @@
-﻿using Core.Exceptions;
-using Core.Enumerations;
+﻿using Core.Exceptions; 
 using Core.ValueObjects;
 using Order.Domain.Enumerations; 
-using Order.Domain.SeedWork; 
+using Order.Domain.SeedWork;
+using Microsoft.EntityFrameworkCore;
 
 namespace Order.Domain.Aggregates.OrderAggregate;
 
@@ -48,7 +48,7 @@ public class Cancellation : Entity
                     cancellationFee = CancellationFee.CreateByValue(Id, fee.FeeDescription, fee.ValueAmount, fee.Currency);
                 }
                  
-                cancellationFee.SetEntityState(EntityStateAction.Added);  
+                cancellationFee.SetEntityState(EntityState.Added);  
                 CancellationCharges.Add(cancellationFee);
             }
         }

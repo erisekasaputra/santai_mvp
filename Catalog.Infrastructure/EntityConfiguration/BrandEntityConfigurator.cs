@@ -22,5 +22,6 @@ public class BrandEntityConfigurator : IEntityTypeConfiguration<Brand>
             .HasMaxLength(500);
          
         builder.Ignore(x => x.DomainEvents);
+        builder.Ignore(x => x.EntityStateAction);
     }
 }

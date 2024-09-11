@@ -97,7 +97,7 @@ public class FleetEntityConfiguration : IEntityTypeConfiguration<Fleet>
                .HasMaxLength(255);
         });  
 
-        e.Ignore(p => p.DomainEvents); 
-         
+        e.Ignore(p => p.DomainEvents);
+        e.Ignore(p => p.EntityStateAction); 
     }
 }  

@@ -166,7 +166,6 @@ C:\Santai.MVP\Search.API\bin\Debug\net9.0\System.ClientModel.dll
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\System.CodeDom.dll
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\System.Data.SqlClient.dll
-C:\Santai.MVP\Search.API\bin\Debug\net9.0\System.Diagnostics.DiagnosticSource.dll
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\System.Diagnostics.PerformanceCounter.dll
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\System.Drawing.Common.dll
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\System.Private.Windows.Core.dll
@@ -249,3 +248,7 @@ C:\Santai.MVP\Search.API\obj\Debug\net9.0\refint\Search.API.dll
 C:\Santai.MVP\Search.API\obj\Debug\net9.0\Search.API.pdb
 C:\Santai.MVP\Search.API\obj\Debug\net9.0\Search.API.genruntimeconfig.cache
 C:\Santai.MVP\Search.API\obj\Debug\net9.0\ref\Search.API.dll
+C:\Santai.MVP\Search.API\bin\Debug\net9.0\Microsoft.Extensions.Http.Polly.dll
+C:\Santai.MVP\Search.API\bin\Debug\net9.0\Polly.dll
+C:\Santai.MVP\Search.API\bin\Debug\net9.0\Polly.Core.dll
+C:\Santai.MVP\Search.API\bin\Debug\net9.0\Polly.Extensions.Http.dll

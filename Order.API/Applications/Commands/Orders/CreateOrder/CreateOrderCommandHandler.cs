@@ -70,20 +70,21 @@ public class CreateOrderCommandHandler(
 
             await _unitOfWork.Orders.CreateAsync(order, cancellationToken);
 
+            Result? paymentResult;
             if (order.IsShouldRequestPayment)
             {
                 //await _paymentService.Checkout(order);
+                paymentResult = await _mediator.Send(new PayOrderCommand(order.Id), cancellationToken);
             }
-
-            await _unitOfWork.CommitTransactionAsync(cancellationToken);
-
-            var paidResult = await _mediator.Send(new PayOrderCommand(order.Id), cancellationToken);
-            var cancelOrderResult = await _mediator.Send(new CancelOrderCommand(order.Id, order.Buyer.BuyerId), cancellationToken);
+            else
+            {
+                paymentResult = Result.Success("No need payment", ResponseStatus.Ok);
+            } 
+            await _unitOfWork.CommitTransactionAsync(cancellationToken); 
 
             return Result.Success(new
             {
-                PaidResult = paidResult,
-                CancelOrderResult = cancelOrderResult
+                paymentResult
             }, ResponseStatus.Ok);
         }
         catch(ArgumentNullException ex)

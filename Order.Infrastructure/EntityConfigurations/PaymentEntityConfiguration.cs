@@ -1,8 +1,7 @@
 ﻿using Core.Enumerations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Order.Domain.Aggregates.OrderAggregate;
-using Order.Domain.Enumerations; 
+using Order.Domain.Aggregates.OrderAggregate; 
 
 namespace Order.Infrastructure.EntityConfigurations;
 

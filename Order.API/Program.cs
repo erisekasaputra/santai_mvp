@@ -29,7 +29,7 @@ var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseMiddleware<IdempotencyMiddleware>(); 
+//app.UseMiddleware<IdempotencyMiddleware>(); 
 app.MapControllers();  
 if (app.Environment.IsDevelopment())
 { 

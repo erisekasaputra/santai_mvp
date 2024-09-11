@@ -49,5 +49,6 @@ public class CertificationEntityConfiguration : IEntityTypeConfiguration<Certifi
             .OnDelete(DeleteBehavior.Cascade);
 
         e.Ignore(p => p.DomainEvents);
+        e.Ignore(p => p.EntityStateAction);
     }
 }

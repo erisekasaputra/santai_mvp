@@ -22,5 +22,6 @@ public class CategoryEntityConfigurator : IEntityTypeConfiguration<Category>
             .HasMaxLength(500); 
 
         builder.Ignore(x => x.DomainEvents);
+        builder.Ignore(x => x.EntityStateAction);
     }
 }

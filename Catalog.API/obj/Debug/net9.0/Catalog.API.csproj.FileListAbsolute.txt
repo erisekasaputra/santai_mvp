@@ -378,7 +378,6 @@ C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.Composition.Runtime.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.Composition.TypedParts.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.Data.SqlClient.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.Diagnostics.DiagnosticSource.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.Drawing.Common.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.Private.Windows.Core.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
@@ -527,3 +526,5 @@ C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\refint\Catalog.API.dll
 C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.pdb
 C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.genruntimeconfig.cache
 C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\ref\Catalog.API.dll
+C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.Http.Polly.dll
+C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Polly.Extensions.Http.dll

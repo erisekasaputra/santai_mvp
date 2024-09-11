@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Account.Domain.SeedWork;
 
@@ -10,12 +11,20 @@ public abstract class Entity
 
     public Guid Id { get; set; }
 
+    public EntityState EntityStateAction { get; set; } = EntityState.Unchanged;
+
     protected Entity()
     {
         Id = Guid.NewGuid();    
         _domainEvents = [];
+        EntityStateAction = EntityState.Unchanged;
     }
      
+    public void SetEntityState(EntityState entityState)
+    {
+        EntityStateAction = entityState;
+    }
+
     public void AddDomainEvent(INotification eventItem)
     {
         _domainEvents ??= [];

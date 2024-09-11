@@ -79,5 +79,6 @@ public class ItemEntityConfigurator : IEntityTypeConfiguration<Item>
         }); 
         
         builder.Ignore(x => x.DomainEvents);
+        builder.Ignore(x => x.EntityStateAction);
     }
 }

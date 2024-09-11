@@ -54,5 +54,6 @@ public class NationalIdentityEntityConfiguration : IEntityTypeConfiguration<Nati
             .OnDelete(DeleteBehavior.Cascade);
 
         e.Ignore(p => p.DomainEvents);
+        e.Ignore(p => p.EntityStateAction);
     }
 }

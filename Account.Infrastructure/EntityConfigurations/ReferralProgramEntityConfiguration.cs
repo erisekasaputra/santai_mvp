@@ -30,5 +30,6 @@ public class ReferralProgramEntityConfiguration : IEntityTypeConfiguration<Refer
             .OnDelete(DeleteBehavior.Cascade);
 
         e.Ignore(p => p.DomainEvents);
+        e.Ignore(p => p.EntityStateAction);
     }
 }

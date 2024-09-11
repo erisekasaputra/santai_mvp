@@ -43,17 +43,29 @@ public class UnitOfWork : IUnitOfWork
     }
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-    { 
-        await DispatchDomainEventsAsync(cancellationToken);
+    {
+        var entries = _context.ChangeTracker.Entries();
+
+        foreach (var entry in entries)
+        {
+            if (entry.Entity is Entity entity)
+            {
+                entry.State = entity.EntityStateAction switch
+                {
+                    EntityState.Detached => EntityState.Detached,
+                    EntityState.Deleted => EntityState.Deleted,
+                    EntityState.Modified => EntityState.Modified,
+                    EntityState.Added => EntityState.Added,
+                    _ => entry.State
+                };
+
+                entity.SetEntityState(EntityState.Unchanged);
+            }
+        } 
 
         var changesResult = await _context.SaveChangesAsync(cancellationToken);
 
-        var domainEntities = _context.ChangeTracker
-            .Entries<Entity>()
-            .Where(e => e.Entity.DomainEvents is not null && e.Entity.DomainEvents.Count > 0)
-            .ToList();
-
-        domainEntities.ForEach(e => e.Entity.ClearDomainEvents());
+        await DispatchDomainEventsAsync(cancellationToken); 
 
         return changesResult;
     }
@@ -143,5 +155,7 @@ public class UnitOfWork : IUnitOfWork
         { 
             await _mediator.Publish(domainEvent, token);
         }
+
+        domainEntities.ForEach(e => e.Entity.ClearDomainEvents());
     }
 }

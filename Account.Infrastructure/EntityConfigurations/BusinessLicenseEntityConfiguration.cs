@@ -55,5 +55,6 @@ public class BusinessLicenseEntityConfiguration : IEntityTypeConfiguration<Busin
         e.HasQueryFilter(p => p.VerificationStatus != VerificationState.Rejected);
 
         e.Ignore(p => p.DomainEvents);
+        e.Ignore(p => p.EntityStateAction);
     }
 }

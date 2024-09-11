@@ -62,5 +62,6 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<BaseUser>
         });
          
         e.Ignore(p => p.DomainEvents);
+        e.Ignore(p => p.EntityStateAction);
     }
 }

@@ -315,7 +315,6 @@ C:\Santai.MVP\Identity.API\bin\Debug\net9.0\System.Composition.Runtime.dll
 C:\Santai.MVP\Identity.API\bin\Debug\net9.0\System.Composition.TypedParts.dll
 C:\Santai.MVP\Identity.API\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
 C:\Santai.MVP\Identity.API\bin\Debug\net9.0\System.Data.SqlClient.dll
-C:\Santai.MVP\Identity.API\bin\Debug\net9.0\System.Diagnostics.DiagnosticSource.dll
 C:\Santai.MVP\Identity.API\bin\Debug\net9.0\System.Drawing.Common.dll
 C:\Santai.MVP\Identity.API\bin\Debug\net9.0\System.Private.Windows.Core.dll
 C:\Santai.MVP\Identity.API\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
@@ -443,3 +442,7 @@ C:\Santai.MVP\Identity.API\obj\Debug\net9.0\refint\Identity.API.dll
 C:\Santai.MVP\Identity.API\obj\Debug\net9.0\Identity.API.pdb
 C:\Santai.MVP\Identity.API\obj\Debug\net9.0\Identity.API.genruntimeconfig.cache
 C:\Santai.MVP\Identity.API\obj\Debug\net9.0\ref\Identity.API.dll
+C:\Santai.MVP\Identity.API\bin\Debug\net9.0\Microsoft.Extensions.Http.Polly.dll
+C:\Santai.MVP\Identity.API\bin\Debug\net9.0\Polly.dll
+C:\Santai.MVP\Identity.API\bin\Debug\net9.0\Polly.Core.dll
+C:\Santai.MVP\Identity.API\bin\Debug\net9.0\Polly.Extensions.Http.dll

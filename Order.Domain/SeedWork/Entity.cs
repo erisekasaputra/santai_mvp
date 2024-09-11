@@ -1,5 +1,5 @@
-﻿using Core.Enumerations;
-using MediatR;
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Order.Domain.SeedWork;
 
@@ -11,18 +11,18 @@ public abstract class Entity
 
     public Guid Id { get; set; }
 
-    public EntityStateAction EntityStateAction { get; set; } = EntityStateAction.NoAction;
+    public EntityState EntityStateAction { get; set; } = EntityState.Unchanged;
 
     protected Entity()
     {
         Id = Guid.NewGuid();
         _domainEvents = [];
-        EntityStateAction = EntityStateAction.NoAction;
+        EntityStateAction = EntityState.Unchanged;
     }
 
-    public void SetEntityState(EntityStateAction entityStateAction)
+    public void SetEntityState(EntityState entityState)
     {
-        EntityStateAction = entityStateAction;
+        EntityStateAction = entityState;
     }
 
     public void AddDomainEvent(INotification eventItem)

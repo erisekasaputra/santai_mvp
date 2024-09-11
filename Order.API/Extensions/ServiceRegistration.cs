@@ -9,6 +9,8 @@ using Core.Configurations;
 using Core.Services;
 using Core.Services.Interfaces;
 using Order.API.Applications.Services.Interfaces;
+using Polly.Extensions.Http;
+using Polly;
 
 namespace Order.API.Extensions;
 
@@ -30,11 +32,17 @@ public static class ServiceRegistration
     {
         var clientConfig = service.BuildServiceProvider().GetService<IOptionsMonitor<AccountServiceConfiguration>>()
             ?? throw new Exception("Please provide value for database option");
-          
+
+
+        var retryPolicy = HttpPolicyExtensions
+            .HandleTransientHttpError()
+            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
+
         service.AddHttpClient<IAccountServiceAPI, AccountServiceAPI>(client =>
         {
             client.BaseAddress = new Uri(clientConfig?.CurrentValue.Host ?? throw new Exception("Account service client host is not set"));
         })
+        .AddPolicyHandler(retryPolicy)
         .AddHttpMessageHandler<TokenJwtHandler>(); 
 
         return service;

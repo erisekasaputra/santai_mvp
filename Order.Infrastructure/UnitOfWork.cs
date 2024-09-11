@@ -83,7 +83,9 @@ public class UnitOfWork : IUnitOfWork
         foreach (var domainEvent in domainEvents)
         {
             await _mediator.Publish(domainEvent, token);
-        }
+        } 
+
+        domainEntities.ForEach(e => e.Entity.ClearDomainEvents());
     }
 
     public async Task RollbackTransactionAsync(CancellationToken cancellationToken = default)
@@ -118,26 +120,20 @@ public class UnitOfWork : IUnitOfWork
             {
                 entry.State = entity.EntityStateAction switch
                 {
-                    EntityStateAction.Deleted => EntityState.Deleted,
-                    EntityStateAction.Modified => EntityState.Modified,
-                    EntityStateAction.Added => EntityState.Added,
+                    EntityState.Detached => EntityState.Detached,
+                    EntityState.Deleted => EntityState.Deleted,
+                    EntityState.Modified => EntityState.Modified,
+                    EntityState.Added => EntityState.Added,
                     _ => entry.State
                 };
 
-                entity.SetEntityState(EntityStateAction.NoAction);
+                entity.SetEntityState(EntityState.Unchanged);
             }
-        } 
+        }
 
         await DispatchDomainEventsAsync(cancellationToken);
 
         var changesResult = await _dbContext.SaveChangesAsync(cancellationToken); 
-
-        var domainEntities = _dbContext.ChangeTracker
-            .Entries<Entity>()
-            .Where(e => e.Entity.DomainEvents is not null && e.Entity.DomainEvents.Count > 0)
-            .ToList();
-
-        domainEntities.ForEach(e => e.Entity.ClearDomainEvents()); 
 
         return changesResult; 
     }

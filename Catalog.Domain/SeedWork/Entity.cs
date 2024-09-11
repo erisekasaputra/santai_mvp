@@ -1,18 +1,25 @@
-﻿using MediatR; 
+﻿using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Catalog.Domain.SeedWork;
 
 public abstract class Entity
 {
     private List<INotification> _domainEvents;
-    public IReadOnlyCollection<INotification>? DomainEvents => _domainEvents?.AsReadOnly();
-
+    public IReadOnlyCollection<INotification>? DomainEvents => _domainEvents?.AsReadOnly(); 
     public Guid Id { get; set; }
+    public EntityState EntityStateAction { get; set; } = EntityState.Unchanged;
 
     protected Entity()
     {
         Id = Guid.NewGuid();
         _domainEvents = [];
+        EntityStateAction = EntityState.Unchanged;
+    }
+
+    public void SetEntityState(EntityState entityState)
+    {
+        EntityStateAction = entityState;
     }
 
     public void AddDomainEvent(INotification eventItem)

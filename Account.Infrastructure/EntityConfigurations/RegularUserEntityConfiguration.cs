@@ -45,6 +45,10 @@ public class RegularUserEntityConfiguration : IEntityTypeConfiguration<RegularUs
                 .HasConversion(
                     v => v == null ? null : v.Trim(),
                     v => v == null ? null : v.Trim());
-        }); 
+        });
+
+
+        //e.Ignore(p => p.DomainEvents); // no need domain event because the parent entity (BaseUser is implementing DomainEvent ignorance)
+        e.Ignore(p => p.EntityStateAction);
     }
 }

@@ -1,7 +1,7 @@
-﻿
-using Core.Enumerations;
+﻿using Core.Enumerations;
 using Core.Exceptions;
 using Core.ValueObjects;
+using Microsoft.EntityFrameworkCore;
 using Order.Domain.Aggregates.BuyerAggregate;
 using Order.Domain.Aggregates.MechanicAggregate;
 using Order.Domain.Enumerations;
@@ -71,6 +71,7 @@ public class Ordering : Entity
         GrandTotal = null!;
         Fees = null!; 
     }
+
     public Ordering(
         Currency currency,
         string addressLine,
@@ -154,9 +155,9 @@ public class Ordering : Entity
         }
 
         Payment = payment;
-        Payment.SetEntityState(EntityStateAction.Added);
+        Payment.SetEntityState(EntityState.Added);
 
-        if (IsScheduled && payment.CreatedAt > ScheduledOnUtc) 
+        if (IsScheduled && payment.CreatedAt >= ScheduledOnUtc) 
         {
             ScheduledOnUtc = payment.CreatedAt;
         }
@@ -261,7 +262,7 @@ public class Ordering : Entity
             return;
         }
 
-        lineItem.SetEntityState(EntityStateAction.Added);
+        lineItem.SetEntityState(EntityState.Added);
         LineItems.Add(lineItem); 
     }
 
@@ -327,7 +328,7 @@ public class Ordering : Entity
             return;
         }
 
-        fleet.SetEntityState(EntityStateAction.Added);
+        fleet.SetEntityState(EntityState.Added);
         Fleets.Add(fleet);
     }   
 
@@ -481,7 +482,7 @@ public class Ordering : Entity
         }
 
         Cancellation = new Cancellation(Id);
-        Cancellation.SetEntityState(EntityStateAction.Added);
+        Cancellation.SetEntityState(EntityState.Added);
 
         if (IsChargeableCancellation())
         {
@@ -798,7 +799,7 @@ public class Ordering : Entity
         MechanicWaitingAcceptTime = DateTime.UtcNow.AddSeconds(mechanicWaitingAcceptTimeInSeconds); 
         Status = OrderStatus.MechanicAssigned; 
         Mechanic = mechanic;
-        Mechanic.SetEntityState(EntityStateAction.Added); 
+        Mechanic.SetEntityState(EntityState.Added); 
         RaiseMechanicAssignedDomainEvent();
     }
 
@@ -895,8 +896,10 @@ public class Ordering : Entity
     private void RaiseOrderCanceledByMechanicDomainEvent()
     {
     } 
+
     private void RaiseOrderPaymentPaidDomainEvent()
     {
+        AddDomainEvent(new OrderPaymentPaidDomainEvent(this));
     }
 
     private void RaiseOrderFindingMechanicDomainEvent()
@@ -909,6 +912,6 @@ public class Ordering : Entity
     }
     private void RaiseOrderRejectedByMechanicDomainEvent()
     {
-        AddDomainEvent(new OrderRejectedDomainEvent(this));
+        AddDomainEvent(new OrderRejectedByMechanicDomainEvent(this));
     }
 }
