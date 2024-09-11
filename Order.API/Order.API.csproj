@@ -55,6 +55,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Applications\Commands\Orders\NewFolder\" />
     <Folder Include="Applications\Consumers\" />
     <Folder Include="Applications\Queries\" />
   </ItemGroup>

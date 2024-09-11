@@ -475,6 +475,9 @@ namespace Order.Infrastructure.Migrations
                         .HasPrecision(18, 4)
                         .HasColumnType("decimal(18,4)");
 
+                    b.Property<DateTime>("PaymentExpiration")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("PaymentUrl")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
@@ -583,7 +586,7 @@ namespace Order.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Order.Domain.ValueObjects.Money", "CancellationRefund", b1 =>
+                    b.OwnsOne("Core.ValueObjects.Money", "CancellationRefund", b1 =>
                         {
                             b1.Property<Guid>("CancellationId")
                                 .HasColumnType("uniqueidentifier");
@@ -615,7 +618,7 @@ namespace Order.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Order.Domain.ValueObjects.Money", "FeeAmount", b1 =>
+                    b.OwnsOne("Core.ValueObjects.Money", "FeeAmount", b1 =>
                         {
                             b1.Property<Guid>("CancellationFeeId")
                                 .HasColumnType("uniqueidentifier");
@@ -648,7 +651,7 @@ namespace Order.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Order.Domain.ValueObjects.Money", "DiscountAmount", b1 =>
+                    b.OwnsOne("Core.ValueObjects.Money", "DiscountAmount", b1 =>
                         {
                             b1.Property<Guid>("CouponId")
                                 .HasColumnType("uniqueidentifier");
@@ -681,7 +684,7 @@ namespace Order.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Order.Domain.ValueObjects.Money", "FeeAmount", b1 =>
+                    b.OwnsOne("Core.ValueObjects.Money", "FeeAmount", b1 =>
                         {
                             b1.Property<Guid>("FeeId")
                                 .HasColumnType("uniqueidentifier");
@@ -723,7 +726,7 @@ namespace Order.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Order.Domain.ValueObjects.Money", "SubTotal", b1 =>
+                    b.OwnsOne("Core.ValueObjects.Money", "SubTotal", b1 =>
                         {
                             b1.Property<Guid>("LineItemId")
                                 .HasColumnType("uniqueidentifier");
@@ -760,7 +763,7 @@ namespace Order.Infrastructure.Migrations
                             b1.WithOwner()
                                 .HasForeignKey("LineItemId");
 
-                            b1.OwnsOne("Order.Domain.ValueObjects.Money", "TaxAmount", b2 =>
+                            b1.OwnsOne("Core.ValueObjects.Money", "TaxAmount", b2 =>
                                 {
                                     b2.Property<Guid>("TaxLineItemId")
                                         .HasColumnType("uniqueidentifier");
@@ -793,7 +796,7 @@ namespace Order.Infrastructure.Migrations
 
             modelBuilder.Entity("Order.Domain.Aggregates.OrderAggregate.Ordering", b =>
                 {
-                    b.OwnsOne("Order.Domain.ValueObjects.Money", "GrandTotal", b1 =>
+                    b.OwnsOne("Core.ValueObjects.Money", "GrandTotal", b1 =>
                         {
                             b1.Property<Guid>("OrderingId")
                                 .HasColumnType("uniqueidentifier");
@@ -875,7 +878,7 @@ namespace Order.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.OwnsOne("Order.Domain.ValueObjects.Money", "Amount", b1 =>
+                    b.OwnsOne("Core.ValueObjects.Money", "Amount", b1 =>
                         {
                             b1.Property<Guid>("PaymentId")
                                 .HasColumnType("uniqueidentifier");

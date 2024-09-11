@@ -146,7 +146,9 @@ public class OrderingEntityConfiguration : IEntityTypeConfiguration<Ordering>
 
         builder.Ignore(p => p.EntityStateAction);
         builder.Ignore(x => x.DomainEvents);
+        builder.Ignore(x => x.IsShouldRequestPayment);
         builder.Ignore(x => x.IsPaid);
         builder.Ignore(x => x.IsRated);
+        builder.Ignore(x => x.IsPaymentExpire);
     }
 }

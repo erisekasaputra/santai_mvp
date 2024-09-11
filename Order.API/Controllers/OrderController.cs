@@ -5,7 +5,9 @@ using Core.Services.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
+using Order.API.Applications.Commands.Orders.CancelOrder;
 using Order.API.Applications.Commands.Orders.CreateOrder;
+using Order.API.Applications.Commands.Orders.PayOrder;
 using Order.API.Applications.Dtos.Requests;
 using Order.API.Applications.Services.Interfaces;
 using Order.API.CustomAttributes;
@@ -70,24 +72,30 @@ public class OrderController : ControllerBase
         }
     }
 
-    [HttpGet("test")]
+
+
+    [HttpGet("test-create")]
     public async Task<IResult> TestCreate()
     {
         try
-        {
+        { 
+            var lineItemId1 = Guid.NewGuid();
+            var fleetId1 = Guid.NewGuid();
+            var buyerId = Guid.NewGuid();
+
             var lineItems = new List<LineItemRequest>
             {
-                new (Guid.NewGuid(), 10)
+                new (lineItemId1, 10)
             };
 
             var fleets = new List<FleetRequest>()
             {
-                new(Guid.NewGuid())
+                new(fleetId1)
             };
-
-            var result = await _mediator.Send(
+             
+            var createResult = await _mediator.Send(
                 new CreateOrderCommand(
-                    Guid.NewGuid(),
+                    buyerId,
                     "Jalan hayam wuruk",
                     1.001,
                     1.1,
@@ -96,9 +104,12 @@ public class OrderController : ControllerBase
                     null,
                     null,
                     lineItems,
-                    fleets));
+                    fleets)); 
 
-            return result.ToIResult();
+            return TypedResults.Ok(new
+            {
+                CreateResult = createResult
+            });
         }
         catch (Exception ex)
         {

@@ -12,5 +12,6 @@ public enum OrderStatus
     ServiceInProgress,
     ServiceCompleted,
     ServiceIncompleted,
-    OrderCanceledByUser,
+    OrderCancelledByUser,
+    OrderRejectedOrCancelledByMechanic,
 }

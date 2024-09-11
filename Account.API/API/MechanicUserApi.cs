@@ -124,7 +124,7 @@ public static class MechanicUserApi
         [FromServices] IUserInfoService userInfoService)
     {
         try
-        { 
+        {
             var userClaim = userInfoService.GetUserInfoAsync();
             if (userClaim is null)
             {

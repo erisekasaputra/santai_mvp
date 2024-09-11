@@ -28,7 +28,7 @@
   {
     "ContainingType": "Order.API.Controllers.OrderController",
     "Method": "TestCreate",
-    "RelativePath": "api/v1/orders/test",
+    "RelativePath": "api/v1/orders/test-create",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

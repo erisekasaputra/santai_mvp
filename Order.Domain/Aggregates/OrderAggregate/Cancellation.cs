@@ -1,4 +1,5 @@
 ﻿using Core.Exceptions;
+using Core.Enumerations;
 using Core.ValueObjects;
 using Order.Domain.Enumerations; 
 using Order.Domain.SeedWork; 
@@ -26,24 +27,31 @@ public class Cancellation : Entity
     {
         CancellationCharges ??= [];
 
-        if (cancellationCharges == null || cancellationCharges.ToList().Count <= 0)
+        if (cancellationCharges == null || !cancellationCharges.Any())
         {
             throw new DomainException("Cancellation charges cannot be null.");
         }
 
-        CancellationCharges = cancellationCharges
-            .Where(x => x.PercentageOrValueType == PercentageOrValueType.Percentage ||
-                        x.PercentageOrValueType == PercentageOrValueType.Value)
-            .Select(x =>
+        foreach (var fee in cancellationCharges)
+        {
+            if (fee.PercentageOrValueType == PercentageOrValueType.Percentage ||
+                fee.PercentageOrValueType == PercentageOrValueType.Value)
             {
-                if (x.PercentageOrValueType == PercentageOrValueType.Percentage)
+                CancellationFee cancellationFee; 
+                 
+                if (fee.PercentageOrValueType == PercentageOrValueType.Percentage)
                 {
-                    return CancellationFee.CreateByPercentage(Id, x.FeeDescription, x.ValuePercentage, x.Currency);
+                    cancellationFee = CancellationFee.CreateByPercentage(Id, fee.FeeDescription, fee.ValuePercentage, fee.Currency);
+                }
+                else  
+                {
+                    cancellationFee = CancellationFee.CreateByValue(Id, fee.FeeDescription, fee.ValueAmount, fee.Currency);
                 }
                  
-                return CancellationFee.CreateByValue(Id, x.FeeDescription, x.ValueAmount, x.Currency);
-            })
-            .ToList();
+                cancellationFee.SetEntityState(EntityStateAction.Added);  
+                CancellationCharges.Add(cancellationFee);
+            }
+        }
     }
 
     public void ApplyCancellationRefund(Money refund)
