@@ -1,0 +1,12 @@
+C:\Santai.MVP\SantaiCore\bin\Debug\net9.0\SantaiCore.deps.json
+C:\Santai.MVP\SantaiCore\bin\Debug\net9.0\SantaiCore.dll
+C:\Santai.MVP\SantaiCore\bin\Debug\net9.0\SantaiCore.pdb
+C:\Santai.MVP\SantaiCore\obj\Debug\net9.0\SantaiCore.GeneratedMSBuildEditorConfig.editorconfig
+C:\Santai.MVP\SantaiCore\obj\Debug\net9.0\SantaiCore.AssemblyInfoInputs.cache
+C:\Santai.MVP\SantaiCore\obj\Debug\net9.0\SantaiCore.AssemblyInfo.cs
+C:\Santai.MVP\SantaiCore\obj\Debug\net9.0\SantaiCore.csproj.CoreCompileInputs.cache
+C:\Santai.MVP\SantaiCore\obj\Debug\net9.0\SantaiCore.sourcelink.json
+C:\Santai.MVP\SantaiCore\obj\Debug\net9.0\SantaiCore.dll
+C:\Santai.MVP\SantaiCore\obj\Debug\net9.0\refint\SantaiCore.dll
+C:\Santai.MVP\SantaiCore\obj\Debug\net9.0\SantaiCore.pdb
+C:\Santai.MVP\SantaiCore\obj\Debug\net9.0\ref\SantaiCore.dll

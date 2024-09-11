@@ -37,8 +37,8 @@ builder.Services.AddRedisDatabase();
 
 var app = builder.Build();
 
-app.UseMiddleware<GlobalExceptionMiddleware>();
-app.UseMiddleware<IdempotencyMiddleware>();  
+//app.UseMiddleware<GlobalExceptionMiddleware>();
+//app.UseMiddleware<IdempotencyMiddleware>();  
 app.UseRateLimiter(); 
 app.UseHsts(); 
 app.UseSwagger(); 

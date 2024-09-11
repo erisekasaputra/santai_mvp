@@ -259,14 +259,6 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.API\obj\Debug\net9.0\Catalog.API.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.API\obj\Debug\net9.0\Catalog.API.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.API\obj\Debug\net9.0\ref\Catalog.API.dll
-C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.csproj.AssemblyReference.cache
-C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.GeneratedMSBuildEditorConfig.editorconfig
-C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.AssemblyInfoInputs.cache
-C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.AssemblyInfo.cs
-C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.csproj.CoreCompileInputs.cache
-C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.MvcApplicationPartsAssemblyInfo.cs
-C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.MvcApplicationPartsAssemblyInfo.cache
-C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.sourcelink.json
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\appsettings.Development.json
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\appsettings.json
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\appsettings.Production.json
@@ -329,23 +321,8 @@ C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Design.
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.InMemory.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.SqlServer.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.Abstractions.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.Memory.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.Configuration.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.Configuration.Abstractions.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.Configuration.Binder.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.DependencyModel.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.Diagnostics.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.Http.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.Logging.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.Options.ConfigurationExtensions.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Identity.Client.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Identity.Client.Extensions.Msal.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
@@ -381,12 +358,9 @@ C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.Data.SqlClient.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.Drawing.Common.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.Private.Windows.Core.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.IO.Pipelines.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.Memory.Data.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.Runtime.Caching.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.Text.Encodings.Web.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\System.Text.Json.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\TimeZoneConverter.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Ulid.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\cs\Microsoft.CodeAnalysis.resources.dll
@@ -501,7 +475,6 @@ C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\runtimes\win-x86\native\sni.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\runtimes\win\lib\net8.0\System.Runtime.Caching.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\runtimes\browser\lib\net9.0\System.Text.Encodings.Web.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Account.Domain.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Catalog.Domain.dll
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Catalog.Infrastructure.dll
@@ -510,6 +483,14 @@ C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Catalog.Infrastructure.pdb
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Core.pdb
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Account.Domain.pdb
 C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Catalog.Domain.pdb
+C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.csproj.AssemblyReference.cache
+C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.AssemblyInfoInputs.cache
+C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.AssemblyInfo.cs
+C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.csproj.CoreCompileInputs.cache
+C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.sourcelink.json
 C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\scopedcss\bundle\Catalog.API.styles.css
 C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\staticwebassets.build.json
 C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\staticwebassets.development.json
@@ -526,5 +507,3 @@ C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\refint\Catalog.API.dll
 C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.pdb
 C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.genruntimeconfig.cache
 C:\Santai.MVP\Catalog.API\obj\Debug\net9.0\ref\Catalog.API.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Microsoft.Extensions.Http.Polly.dll
-C:\Santai.MVP\Catalog.API\bin\Debug\net9.0\Polly.Extensions.Http.dll

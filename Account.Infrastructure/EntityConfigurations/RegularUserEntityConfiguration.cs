@@ -48,7 +48,6 @@ public class RegularUserEntityConfiguration : IEntityTypeConfiguration<RegularUs
         });
 
 
-        //e.Ignore(p => p.DomainEvents); // no need domain event because the parent entity (BaseUser is implementing DomainEvent ignorance)
-        e.Ignore(p => p.EntityStateAction);
+        //e.Ignore(p => p.DomainEvents); // no need domain event because the parent entity (BaseUser is implementing DomainEvent ignorance) 
     }
 }

@@ -18,6 +18,7 @@ public static class ToIResultExtension
             { ResponseStatus: ResponseStatus.NotFound } => TypedResults.NotFound(result),
             { ResponseStatus: ResponseStatus.Unauthorized } => TypedResults.Unauthorized(),
             { ResponseStatus: ResponseStatus.Conflict } => TypedResults.Conflict(result),
+            { ResponseStatus: ResponseStatus.UnprocessableEntity } => TypedResults.UnprocessableEntity(result),
             _ => TypedResults.InternalServerError(),
         };
     }

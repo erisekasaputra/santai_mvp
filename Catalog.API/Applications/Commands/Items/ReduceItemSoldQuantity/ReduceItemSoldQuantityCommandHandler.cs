@@ -56,7 +56,7 @@ public class ReduceItemSoldQuantityCommandHandler : IRequestHandler<ReduceItemSo
 
                     await _unitOfWork.RollbackTransactionAsync(cancellationToken);
 
-                    return Result.Failure(message, ResponseStatus.BadRequest)
+                    return Result.Failure(message, ResponseStatus.UnprocessableEntity)
                     .WithData(missingItemRequests.Select(x =>
                     {
                         return new ItemSoldDto(x.ItemId, 0, "Data not found");
@@ -90,7 +90,8 @@ public class ReduceItemSoldQuantityCommandHandler : IRequestHandler<ReduceItemSo
                        : $"There are {failedItems} items with error result";
 
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                return Result.Failure(messageInsufficient, ResponseStatus.BadRequest).WithData(itemErrors);
+                return Result.Failure(messageInsufficient, ResponseStatus.UnprocessableEntity)
+                    .WithData(itemErrors);
             }
             catch (DBConcurrencyException)
             {

@@ -16,6 +16,36 @@ public class UserInfoService : IUserInfoService
         _httpContextAccessor = httpContextAccessor;
     }
 
+    public ServiceClaim? GetServiceInfoAsync()
+    {
+        var httpContext = _httpContextAccessor.HttpContext;
+
+        if (httpContext != null && httpContext.User.Identity?.IsAuthenticated == true)
+        {  
+            var rawUserType = httpContext.User.FindFirstValue(SantaiClaimTypes.UserType); 
+            var rawUserRole = httpContext.User.FindFirstValue(ClaimTypes.Role); 
+
+            if (string.IsNullOrWhiteSpace(rawUserType) 
+                || string.IsNullOrWhiteSpace(rawUserRole))
+            {
+                return null;
+            }
+             
+            var userType = Enum.Parse<UserType>(rawUserType); 
+            var userRole = Enum.Parse<UserType>(rawUserRole); 
+
+            if (userRole != UserType.ServiceToService)
+            {
+                return null;
+            }
+
+            var userClaim = new ServiceClaim(userType); 
+            return userClaim;
+        }
+
+        return null;
+    }
+
     public UserClaim? GetUserInfoAsync()
     {
         var httpContext = _httpContextAccessor.HttpContext;

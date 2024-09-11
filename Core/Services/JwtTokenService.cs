@@ -1,5 +1,6 @@
 ﻿
 using Core.Configurations;
+using Core.Enumerations;
 using Core.Models;
 using Core.SeedWorks;
 using Core.Services.Interfaces;
@@ -41,6 +42,50 @@ public class JwtTokenService : ITokenService
         var tokenHandler = new JwtSecurityTokenHandler();
         var token = tokenHandler.CreateToken(tokenDescriptor);
         return tokenHandler.WriteToken(token);
+    }
+
+    public async Task<string> GenerateAccessTokenForServiceToService(
+        string serviceKey, 
+        bool forceNewToken = false)
+    {
+        var token = await _cacheService.GetAsync<string>(serviceKey); 
+
+        if (token is not null && !forceNewToken)
+        {
+            return token;
+        }
+
+        var claims = new List<Claim>()
+        {
+            new (JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString()),
+            new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new (ClaimTypes.Role, UserType.ServiceToService.ToString())
+        };
+
+        var claimIdentity = new ClaimsIdentity(claims); 
+
+        var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfigs.CurrentValue.SecretKey));
+        var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = claimIdentity,
+            Expires = DateTime.UtcNow.AddSeconds(_jwtConfigs.CurrentValue.TotalSecondsAccessTokenLifetime),
+            Issuer = _jwtConfigs.CurrentValue.Issuer,
+            Audience = _jwtConfigs.CurrentValue.Audience,
+            SigningCredentials = credentials,
+            IssuedAt = DateTime.UtcNow,
+            NotBefore = DateTime.UtcNow
+        };
+
+        var tokenHandler = new JwtSecurityTokenHandler();
+        var newToken = tokenHandler.CreateToken(tokenDescriptor);
+
+        await _cacheService.DeleteAsync(serviceKey);
+        
+        await _cacheService.SetAsync(serviceKey, newToken, TimeSpan.FromSeconds(_jwtConfigs.CurrentValue.TotalSecondsAccessTokenLifetime));
+
+        return tokenHandler.WriteToken(newToken);
     }
 
     public async Task<RefreshToken> GenerateRefreshTokenAsync(string userId)

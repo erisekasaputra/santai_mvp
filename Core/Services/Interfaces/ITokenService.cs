@@ -6,6 +6,9 @@ namespace Core.Services.Interfaces;
 public interface ITokenService
 {
     string GenerateAccessToken(ClaimsIdentity claims);
+    Task<string> GenerateAccessTokenForServiceToService(
+        string serviceKey,
+        bool forceNewToken = false);
     Task<RefreshToken> GenerateRefreshTokenAsync(string userId);
     Task<RefreshToken?> GetStoredRefreshToken(string token);
     Task<RefreshToken?> RotateRefreshTokenAsync(string oldToken);

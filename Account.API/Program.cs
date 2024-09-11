@@ -1,8 +1,7 @@
 using Account.API;
 using Account.API.API;  
 using Account.API.Extensions;
-using Account.API.Middleware;
-using Account.API.SeedWork;
+using Account.API.Middleware; 
 using Account.Infrastructure;
 using Core.Extensions;
 

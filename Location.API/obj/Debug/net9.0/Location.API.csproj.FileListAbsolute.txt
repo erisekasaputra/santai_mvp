@@ -41,16 +41,10 @@ C:\Santai.MVP\Location.API\bin\Debug\net9.0\Location.API.runtimeconfig.json
 C:\Santai.MVP\Location.API\bin\Debug\net9.0\Location.API.dll
 C:\Santai.MVP\Location.API\bin\Debug\net9.0\Location.API.pdb
 C:\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
-C:\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.Abstractions.dll
 C:\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
-C:\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
-C:\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
-C:\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
-C:\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll
 C:\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.OpenApi.dll
 C:\Santai.MVP\Location.API\bin\Debug\net9.0\Pipelines.Sockets.Unofficial.dll
 C:\Santai.MVP\Location.API\bin\Debug\net9.0\StackExchange.Redis.dll
-C:\Santai.MVP\Location.API\bin\Debug\net9.0\System.Diagnostics.DiagnosticSource.dll
 C:\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.csproj.AssemblyReference.cache
 C:\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.GeneratedMSBuildEditorConfig.editorconfig
 C:\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.AssemblyInfoInputs.cache
