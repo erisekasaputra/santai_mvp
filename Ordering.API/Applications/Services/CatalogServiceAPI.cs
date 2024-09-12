@@ -1,15 +1,14 @@
-﻿using Newtonsoft.Json;
+﻿using Core.Exceptions;
+using Newtonsoft.Json;
 using Ordering.API.Applications.Dtos.Responses;
 using Ordering.API.Applications.Services.Interfaces;
-using System.Net;
-using System.Text.Json;
+using System.Net; 
 
 namespace Ordering.API.Applications.Services;
 
 public class CatalogServiceAPI : ICatalogServiceAPI
 {
-    private readonly HttpClient _httpClient;
-
+    private readonly HttpClient _httpClient; 
     public CatalogServiceAPI(HttpClient httpClient)
     {
         _httpClient = httpClient;
@@ -51,11 +50,14 @@ public class CatalogServiceAPI : ICatalogServiceAPI
         }
         catch (HttpRequestException ex)
         {
-            throw new Exception("An error occurred while fetching time zone data from the account service.", ex);
+            throw new CatalogServiceHttpRequestException(
+                message: "Custom message: Failed to communicate with the Account Service.",
+                inner: ex
+            );
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            throw new Exception("An error occurred while fetching time zone data from the account service.", ex);
+            throw;
         }
     }
 }

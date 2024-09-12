@@ -3,6 +3,7 @@ using Core.Messages;
 using Core.Results;
 using Core.Services.Interfaces;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Ordering.API.Applications.Commands.Orders.CreateOrder;
@@ -76,6 +77,7 @@ public class OrderController : ControllerBase
     }
 
 
+    [Authorize]
     [HttpGet("test-create")]
     public async Task<IResult> TestCreate() 
     {

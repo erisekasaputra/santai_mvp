@@ -1,13 +1,15 @@
-﻿using Catalog.API.Applications.Services; 
+﻿using Catalog.API.Applications.Consumers;
+using Catalog.API.Applications.Services;
 using Catalog.Domain.SeedWork;
 using Catalog.Infrastructure;
 using Catalog.Infrastructure.Helpers;
-using Core.Configurations; 
+using Core.Configurations;
+using Core.Events;
 using Core.Services;
-using Core.Services.Interfaces; 
-using MassTransit; 
+using Core.Services.Interfaces;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options; 
+using Microsoft.Extensions.Options;
 
 namespace Catalog.API.Extensions;
 
@@ -42,7 +44,15 @@ public static class ServiceRegistrationExtension
                 o.UseBusOutbox();
             });
 
-            //x.AddConsumersFromNamespaceContaining<ICatalogAPIMarkerInterface>();
+            var consumers = new (string QueueName, Type ConsumerType)[]
+            {
+                ("catalog-service-order-failed-recovery-stock-integration-event-queue", typeof(OrderFailedRecoveryStockIntegrationEventConsumer))
+            };
+
+            foreach ((_, Type consumerType) in consumers) 
+            {
+                x.AddConsumer(consumerType);
+            }
 
             x.UsingRabbitMq((context, configure) =>
             {
@@ -67,15 +77,8 @@ public static class ServiceRegistrationExtension
                     timeoutCfg.Timeout = TimeSpan.FromSeconds(5);
                 });
 
-                configure.ConfigureEndpoints(context);
-
-
-
-                var consumers = new (string QueueName, Type ConsumerType)[]
-                {
-                    //("identity-email-assigned-to-a-user-integration-event-queue", typeof(IdentityEmailAssignedToAUserIntegrationEventConsumer))
-                };
-
+                configure.ConfigureEndpoints(context); 
+               
                 foreach (var (queueName, consumerType) in consumers)
                 {
                     configure.ReceiveEndpoint(queueName, receiveBuilder =>

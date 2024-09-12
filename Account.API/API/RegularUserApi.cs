@@ -67,7 +67,7 @@ public static class RegularUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -92,7 +92,7 @@ public static class RegularUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync(); 
+            var userClaim = userInfoService.GetUserInfo(); 
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -123,7 +123,7 @@ public static class RegularUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -147,7 +147,7 @@ public static class RegularUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -179,7 +179,7 @@ public static class RegularUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -203,7 +203,7 @@ public static class RegularUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized(); 
@@ -237,7 +237,7 @@ public static class RegularUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -267,7 +267,7 @@ public static class RegularUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();

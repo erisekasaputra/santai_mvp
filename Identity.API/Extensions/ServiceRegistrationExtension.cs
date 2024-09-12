@@ -14,13 +14,7 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Identity.API.Consumers;
 using Identity.API.Domain.Entities;
-using Identity.API.Infrastructure;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Core.Enumerations;
-using Core.SeedWorks;
-
+using Identity.API.Infrastructure; 
 namespace Identity.API.Extensions;
 
 public static class ServiceRegistrationExtension
@@ -110,7 +104,15 @@ public static class ServiceRegistrationExtension
                 throw new Exception("Messaging configuration has not been set");
             }
 
-            x.AddConsumersFromNamespaceContaining<IIdentityMarkerInterface>();
+            var consumers = new (string QueueName, Type ConsumerType)[]
+            {
+                ("identity-service-business-user-created-integration-event-queue", typeof(BusinessUserCreatedIntegrationEventConsumer))
+            };
+
+            foreach ((_, Type consumerType) in consumers)
+            {
+                x.AddConsumer(consumerType);
+            }
 
             x.AddEntityFrameworkOutbox<TDbContext>(o =>
             {
@@ -121,6 +123,8 @@ public static class ServiceRegistrationExtension
                 o.UseSqlServer();
                 o.UseBusOutbox();
             });
+
+           
 
             x.UsingRabbitMq((context, configure) =>
             {
@@ -142,12 +146,7 @@ public static class ServiceRegistrationExtension
                     timeoutCfg.Timeout = TimeSpan.FromSeconds(messagingOption.MessageTimeout);
                 });
 
-                configure.ConfigureEndpoints(context);
-
-                var consumers = new (string QueueName, Type ConsumerType)[]
-                {
-                    ("business-user-created-integration-event-queue", typeof(BusinessUserCreatedIntegrationEventConsumer))
-                };
+                configure.ConfigureEndpoints(context); 
 
                 foreach (var (queueName, consumerType) in consumers)
                 {

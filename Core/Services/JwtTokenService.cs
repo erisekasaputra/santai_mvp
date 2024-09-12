@@ -1,5 +1,5 @@
-﻿
-using Core.Configurations;
+﻿using Core.Configurations;
+using Core.CustomClaims;
 using Core.Enumerations;
 using Core.Models;
 using Core.SeedWorks;
@@ -45,6 +45,7 @@ public class JwtTokenService : ITokenService
     }
 
     public async Task<string> GenerateAccessTokenForServiceToService(
+        UserType userType,
         string serviceKey, 
         bool forceNewToken = false)
     {
@@ -59,6 +60,7 @@ public class JwtTokenService : ITokenService
         {
             new (JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString()),
             new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            new (SantaiClaimTypes.UserType, userType.ToString()),
             new (ClaimTypes.Role, UserType.ServiceToService.ToString())
         };
 

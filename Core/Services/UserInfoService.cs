@@ -16,7 +16,7 @@ public class UserInfoService : IUserInfoService
         _httpContextAccessor = httpContextAccessor;
     }
 
-    public ServiceClaim? GetServiceInfoAsync()
+    public ServiceClaim? GetServiceInfo()
     {
         var httpContext = _httpContextAccessor.HttpContext;
 
@@ -46,7 +46,7 @@ public class UserInfoService : IUserInfoService
         return null;
     }
 
-    public UserClaim? GetUserInfoAsync()
+    public UserClaim? GetUserInfo()
     {
         var httpContext = _httpContextAccessor.HttpContext;
 

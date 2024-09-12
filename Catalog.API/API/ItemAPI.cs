@@ -301,7 +301,7 @@ public static class ItemAPI
     {
         try
         {
-            var claim = userInfoService.GetUserInfoAsync();
+            var claim = userInfoService.GetUserInfo();
 
             var validation = await validator.ValidateAsync(command);
             if (!validation.IsValid)

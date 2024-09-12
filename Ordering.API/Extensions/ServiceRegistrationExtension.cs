@@ -14,7 +14,7 @@ using Polly;
 
 namespace Ordering.API.Extensions;
 
-public static class ServiceRegistration
+public static class ServiceRegistrationExtension
 {
     public static IServiceCollection AddApplicationService(this IServiceCollection services)
     {
@@ -79,7 +79,15 @@ public static class ServiceRegistration
                 o.UseBusOutbox();
             });
 
-            x.AddConsumersFromNamespaceContaining<IOrderAPIMarkerInterface>();
+            var consumers = new (string QueueName, Type ConsumerType)[]
+            {
+                //("identity-email-assigned-to-a-user-integration-event-queue", typeof(IdentityEmailAssignedToAUserIntegrationEventConsumer))
+            }; 
+
+            foreach ((_, Type consumerType) in consumers)
+            {
+                x.AddConsumer(consumerType);
+            }
 
             x.UsingRabbitMq((context, configure) =>
             {
@@ -102,10 +110,7 @@ public static class ServiceRegistration
 
                 configure.ConfigureEndpoints(context);
 
-                var consumers = new (string QueueName, Type ConsumerType)[]
-                {
-                    //("identity-email-assigned-to-a-user-integration-event-queue", typeof(IdentityEmailAssignedToAUserIntegrationEventConsumer))
-                };
+                
 
                 foreach (var (queueName, consumerType) in consumers)
                 {

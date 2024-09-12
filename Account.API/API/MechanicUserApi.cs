@@ -125,7 +125,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -154,7 +154,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -184,7 +184,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -217,7 +217,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -244,7 +244,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -269,7 +269,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -305,7 +305,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -341,7 +341,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -378,7 +378,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -416,7 +416,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -447,7 +447,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -468,7 +468,7 @@ public static class MechanicUserApi
         }
         catch (Exception ex)
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -487,7 +487,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -512,7 +512,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -537,7 +537,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -562,7 +562,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -586,7 +586,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -611,7 +611,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -637,7 +637,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -667,7 +667,7 @@ public static class MechanicUserApi
     {
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();

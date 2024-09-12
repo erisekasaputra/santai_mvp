@@ -72,7 +72,7 @@ public static class FleetApi
     { 
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -133,7 +133,7 @@ public static class FleetApi
         try
         {
 
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -167,7 +167,7 @@ public static class FleetApi
         // later on , user id is from user claims at authentication level  
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -225,7 +225,7 @@ public static class FleetApi
     { 
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -258,7 +258,7 @@ public static class FleetApi
         // later on , user id is from user claims at authentication level  
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();

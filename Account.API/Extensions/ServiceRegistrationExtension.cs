@@ -42,7 +42,18 @@ public static class ServiceRegistrationExtension
                 o.UseBusOutbox();
             });
 
-            x.AddConsumersFromNamespaceContaining<IAccountAPIMarkerInterface>();
+            var consumers = new (string QueueName, Type ConsumerType)[]
+                {
+                    ("account-service-identity-email-assigned-to-a-user-integration-event-queue", typeof(IdentityEmailAssignedToAUserIntegrationEventConsumer)),
+                    ("account-service-identity-phone-number-confirmed-integration-event-queue", typeof(IdentityPhoneNumberConfirmedIntegrationEventConsumer)),
+                    ("account-service-phone-number-duplicate-integration-event-queue", typeof(PhoneNumberDuplicateIntegrationEventConsumer))
+                };
+
+            foreach((_, Type consumerType) in consumers)
+            {
+                x.AddConsumer(consumerType); 
+            }
+
 
             x.UsingRabbitMq((context, configure) =>
             {  
@@ -65,13 +76,6 @@ public static class ServiceRegistrationExtension
                 });
 
                 configure.ConfigureEndpoints(context);  
-
-                var consumers = new (string QueueName, Type ConsumerType)[]
-                {
-                    ("identity-email-assigned-to-a-user-integration-event-queue", typeof(IdentityEmailAssignedToAUserIntegrationEventConsumer)),
-                    ("identity-phone-number-confirmed-integration-event-queue", typeof(IdentityPhoneNumberConfirmedIntegrationEventConsumer)),
-                    ("phone-number-duplicate-integration-event-queue", typeof(PhoneNumberDuplicateIntegrationEventConsumer))
-                };
 
                 foreach (var (queueName, consumerType) in consumers)
                 {

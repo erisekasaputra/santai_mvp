@@ -60,7 +60,7 @@ public static class UserApi
     {
         try
         {
-            var userClaim = userInfoService.GetServiceInfoAsync();
+            var userClaim = userInfoService.GetServiceInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -113,7 +113,7 @@ public static class UserApi
     { 
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -136,7 +136,7 @@ public static class UserApi
     { 
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -159,7 +159,7 @@ public static class UserApi
     { 
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -185,7 +185,7 @@ public static class UserApi
     { 
         try
         {
-            var userClaim = userInfoService.GetUserInfoAsync();
+            var userClaim = userInfoService.GetUserInfo();
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
@@ -218,7 +218,7 @@ public static class UserApi
     //    // later on , user id is from user claims at authentication level  
     //    try
     //    {
-    //        var userClaim = userInfoService.GetUserInfoAsync();
+    //        var userClaim = userInfoService.GetUserInfo();
     //        if (userClaim is null)
     //        {
     //            return TypedResults.Unauthorized();
@@ -250,7 +250,7 @@ public static class UserApi
     //    // later on , user id is from user claims at authentication level  
     //    try
     //    {
-    //        var userClaim = userInfoService.GetUserInfoAsync();
+    //        var userClaim = userInfoService.GetUserInfo();
     //        if (userClaim is null)
     //        {
     //            return TypedResults.Unauthorized();
@@ -276,7 +276,7 @@ public static class UserApi
     //    // later on , user id is from user claims at authentication level  
     //    try
     //    {
-    //        var userClaim = userInfoService.GetUserInfoAsync();
+    //        var userClaim = userInfoService.GetUserInfo();
     //        if (userClaim is null)
     //        {
     //            return TypedResults.Unauthorized();
@@ -306,7 +306,7 @@ public static class UserApi
     //{ 
     //    try
     //    {
-    //        var userClaim = userInfoService.GetUserInfoAsync();
+    //        var userClaim = userInfoService.GetUserInfo();
     //        if (userClaim is null)
     //        {
     //            return TypedResults.Unauthorized();

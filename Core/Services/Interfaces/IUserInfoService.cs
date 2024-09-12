@@ -4,6 +4,6 @@ namespace Core.Services.Interfaces;
 
 public interface IUserInfoService
 {
-    UserClaim? GetUserInfoAsync();
-    ServiceClaim? GetServiceInfoAsync();
+    UserClaim? GetUserInfo();
+    ServiceClaim? GetServiceInfo();
 }

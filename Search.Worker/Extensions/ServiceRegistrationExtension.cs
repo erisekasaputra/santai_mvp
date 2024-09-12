@@ -26,24 +26,31 @@ public static class ServiceRegistrationExtension
 
         services.AddMassTransit(x =>
         {
-            x.AddConsumer<ItemCreatedIntegrationEventConsumer>();
-            x.AddConsumer<ItemUpdatedIntegrationEventConsumer>();
-            x.AddConsumer<ItemDeletedIntegrationEventConsumer>();
-            x.AddConsumer<ItemUndeletedIntegrationEventConsumer>();
-            x.AddConsumer<ItemActivatedIntegrationEventConsumer>();
-            x.AddConsumer<ItemInactivatedIntegrationEventConsumer>();
-            x.AddConsumer<ItemPriceSetIntegrationEventConsumer>();
-            x.AddConsumer<ItemSoldAddedIntegrationEventConsumer>();
-            x.AddConsumer<ItemSoldReducedIntegrationEventConsumer>();
-            x.AddConsumer<ItemSoldSetIntegrationEventConsumer>();
-            x.AddConsumer<ItemStockAddedIntegrationEventConsumer>();
-            x.AddConsumer<ItemStockReducedIntegrationEventConsumer>();
-            x.AddConsumer<ItemStockSetIntegrationEventConsumer>();
-            x.AddConsumer<BrandDeletedIntegrationEventConsumer>();
-            x.AddConsumer<BrandUpdatedIntegrationEventConsumer>();
-            x.AddConsumer<CategoryDeletedIntegrationEventConsumer>();
-            x.AddConsumer<CategoryUpdatedIntegrationEventConsumer>();
+            var consumers = new (string QueueName, Type ConsumerType)[]
+            {
+                ("search-worker-service-item-created-integration-event-queue", typeof(ItemCreatedIntegrationEventConsumer)),
+                ("search-worker-service-item-updated-integration-event-queue", typeof(ItemUpdatedIntegrationEventConsumer)),
+                ("search-worker-service-item-deleted-integration-event-queue", typeof(ItemDeletedIntegrationEventConsumer)),
+                ("search-worker-service-item-undeleted-integration-event-queue", typeof(ItemUndeletedIntegrationEventConsumer)),
+                ("search-worker-service-item-activated-integration-event-queue", typeof(ItemActivatedIntegrationEventConsumer)),
+                ("search-worker-service-item-inactivated-integration-event-queue", typeof(ItemInactivatedIntegrationEventConsumer)),
+                ("search-worker-service-item-price-set-integration-event-queue", typeof(ItemPriceSetIntegrationEventConsumer)),
+                ("search-worker-service-item-sold-added-integration-event-queue", typeof(ItemSoldAddedIntegrationEventConsumer)),
+                ("search-worker-service-item-sold-reduced-integration-event-queue", typeof(ItemSoldReducedIntegrationEventConsumer)),
+                ("search-worker-service-item-sold-set-integration-event-queue", typeof(ItemSoldSetIntegrationEventConsumer)),
+                ("search-worker-service-item-stock-added-integration-event-queue", typeof(ItemStockAddedIntegrationEventConsumer)),
+                ("search-worker-service-item-stock-reduced-integration-event-queue", typeof(ItemStockReducedIntegrationEventConsumer)),
+                ("search-worker-service-item-stock-set-integration-event-queue", typeof(ItemStockSetIntegrationEventConsumer)),
+                ("search-worker-service-brand-deleted-integration-event-queue", typeof(BrandDeletedIntegrationEventConsumer)),
+                ("search-worker-service-brand-updated-integration-event-queue", typeof(BrandUpdatedIntegrationEventConsumer)),
+                ("search-worker-service-category-deleted-integration-event-queue", typeof(CategoryDeletedIntegrationEventConsumer)),
+                ("search-worker-service-category-updated-integration-event-queue", typeof(CategoryUpdatedIntegrationEventConsumer))
+            };
 
+            foreach ((_, Type consumerType) in consumers)
+            {
+                x.AddConsumer(consumerType);
+            }
 
             x.UsingRabbitMq((context, config) =>
             {
@@ -63,29 +70,7 @@ public static class ServiceRegistrationExtension
                 config.UseTimeout(timeoutCfg =>
                 {
                     timeoutCfg.Timeout = TimeSpan.FromSeconds(10);
-                });
-
-
-                var consumers = new (string QueueName, Type ConsumerType)[]
-                {
-                    ("item-created-integration-event-queue", typeof(ItemCreatedIntegrationEventConsumer)),
-                    ("item-updated-integration-event-queue", typeof(ItemUpdatedIntegrationEventConsumer)),
-                    ("item-deleted-integration-event-queue", typeof(ItemDeletedIntegrationEventConsumer)),
-                    ("item-undeleted-integration-event-queue", typeof(ItemUndeletedIntegrationEventConsumer)),
-                    ("item-activated-integration-event-queue", typeof(ItemActivatedIntegrationEventConsumer)),
-                    ("item-inactivated-integration-event-queue", typeof(ItemInactivatedIntegrationEventConsumer)),
-                    ("item-price-set-integration-event-queue", typeof(ItemPriceSetIntegrationEventConsumer)),
-                    ("item-sold-added-integration-event-queue", typeof(ItemSoldAddedIntegrationEventConsumer)),
-                    ("item-sold-reduced-integration-event-queue", typeof(ItemSoldReducedIntegrationEventConsumer)),
-                    ("item-sold-set-integration-event-queue", typeof(ItemSoldSetIntegrationEventConsumer)),
-                    ("item-stock-added-integration-event-queue", typeof(ItemStockAddedIntegrationEventConsumer)),
-                    ("item-stock-reduced-integration-event-queue", typeof(ItemStockReducedIntegrationEventConsumer)),
-                    ("item-stock-set-integration-event-queue", typeof(ItemStockSetIntegrationEventConsumer)),
-                    ("brand-deleted-integration-event-queue", typeof(BrandDeletedIntegrationEventConsumer)),
-                    ("brand-updated-integration-event-queue", typeof(BrandUpdatedIntegrationEventConsumer)),
-                    ("category-deleted-integration-event-queue", typeof(CategoryDeletedIntegrationEventConsumer)),
-                    ("category-updated-integration-event-queue", typeof(CategoryUpdatedIntegrationEventConsumer))
-                };
+                });  
 
                 config.ConfigureEndpoints(context);
 
