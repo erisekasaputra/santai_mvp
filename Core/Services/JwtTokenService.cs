@@ -81,11 +81,13 @@ public class JwtTokenService : ITokenService
         var tokenHandler = new JwtSecurityTokenHandler();
         var newToken = tokenHandler.CreateToken(tokenDescriptor);
 
+        var generatedToken = tokenHandler.WriteToken(newToken); 
+
         await _cacheService.DeleteAsync(serviceKey);
         
-        await _cacheService.SetAsync(serviceKey, newToken, TimeSpan.FromSeconds(_jwtConfigs.CurrentValue.TotalSecondsAccessTokenLifetime));
+        await _cacheService.SetAsync(serviceKey, generatedToken, TimeSpan.FromSeconds(_jwtConfigs.CurrentValue.TotalSecondsAccessTokenLifetime));
 
-        return tokenHandler.WriteToken(newToken);
+        return generatedToken;
     }
 
     public async Task<RefreshToken> GenerateRefreshTokenAsync(string userId)

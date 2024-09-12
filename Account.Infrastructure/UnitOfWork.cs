@@ -152,9 +152,10 @@ public class UnitOfWork : IUnitOfWork
             }
         }  
 
+        await DispatchDomainEventsAsync(cancellationToken);   
+
         var changesResult = await _context.SaveChangesAsync(cancellationToken);
 
-        await DispatchDomainEventsAsync(cancellationToken);   
 
         return changesResult;
     } 

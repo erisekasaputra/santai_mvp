@@ -1,4 +1,5 @@
-﻿using Ordering.API.Applications.Dtos.Responses;
+﻿using Newtonsoft.Json;
+using Ordering.API.Applications.Dtos.Responses;
 using Ordering.API.Applications.Services.Interfaces;
 using System.Net;
 using System.Text.Json;
@@ -14,7 +15,7 @@ public class CatalogServiceAPI : ICatalogServiceAPI
         _httpClient = httpClient;
     }
 
-    public async Task<(ResultResponseDto<CatalogItemResponseDto>? ResultItemResponse, bool IsSuccess)> SubstractStockAndGetDetailItems(
+    public async Task<(ResultResponseDto<List<CatalogItemResponseDto>>? ResultItemResponse, bool IsSuccess)> SubstractStockAndGetDetailItems(
         IEnumerable<(Guid ItemId, int Quantity)> substractItems)
     {
         try
@@ -34,19 +35,19 @@ public class CatalogServiceAPI : ICatalogServiceAPI
 
             var content = await response.Content.ReadAsStringAsync();
 
-            if (response.StatusCode is HttpStatusCode.Conflict or HttpStatusCode.UnprocessableEntity)
+            if (response.StatusCode is HttpStatusCode.NotFound or HttpStatusCode.UnprocessableEntity)
             {
                 if (string.IsNullOrWhiteSpace(content))
                 {
                     return (null, false);
                 }
 
-                return (JsonSerializer.Deserialize<ResultResponseDto<CatalogItemResponseDto>?>(content), false);
+                return (JsonConvert.DeserializeObject<ResultResponseDto<List<CatalogItemResponseDto>>?>(content), false);
             }
 
             response.EnsureSuccessStatusCode();  
 
-            return (JsonSerializer.Deserialize<ResultResponseDto<CatalogItemResponseDto>?>(content), true);
+            return (JsonConvert.DeserializeObject<ResultResponseDto<List<CatalogItemResponseDto>>?>(content), true);
         }
         catch (HttpRequestException ex)
         {

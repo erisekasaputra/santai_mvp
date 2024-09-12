@@ -11,7 +11,7 @@ internal class ItemStockReducedIntegrationEventConsumer(IMediator mediator) : IC
     private readonly IMediator _mediator = mediator;
     public async Task Consume(ConsumeContext<ItemStockReducedIntegrationEvent> context)
     {
-        var @event = context.Message;
+        var @event = context.Message; 
 
         var command = new ReduceItemStockQuantityCommand(@event.Id, @event.Quantity);
 

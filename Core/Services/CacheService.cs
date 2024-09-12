@@ -15,8 +15,7 @@ public class CacheService : ICacheService
     public async Task<T?> GetAsync<T>(string key)
     {
         try
-        {
-
+        {  
             var db = _connectionMultiplexer.GetDatabase();
 
             var cacheData = await db.StringGetAsync(key);
@@ -26,10 +25,8 @@ public class CacheService : ICacheService
                 return default;
             }
 
-            var bytes = Encoding.UTF8.GetBytes(cacheData!);
-
-            using var stream = new MemoryStream(bytes);
-
+            var stream = new MemoryStream(cacheData!);
+             
             return await JsonSerializer.DeserializeAsync<T>(stream);
         }
         catch (RedisException)

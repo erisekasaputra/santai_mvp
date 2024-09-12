@@ -81,7 +81,7 @@ public class OrderController : ControllerBase
     {
         try
         {
-            var lineItemId1 = Guid.NewGuid();
+            var lineItemId1 = Guid.Parse("efebd86d-21e3-4f85-9449-b0aa95ac8ab3");
             var fleetId1 = Guid.NewGuid();
             var buyerId = Guid.NewGuid();
 

@@ -29,7 +29,7 @@ public class CatalogItemResponseDto
         decimal? price,
         Currency? currency,
         string? imageUrl,
-        DateTime createdAt,
+        DateTime? createdAt,
         int? stockQuantity,
         int? soldQuantity,
         Guid? categoryId,

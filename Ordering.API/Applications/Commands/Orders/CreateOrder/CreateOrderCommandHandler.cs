@@ -31,6 +31,7 @@ public class CreateOrderCommandHandler(
         Guid orderId;
         try
         {
+            
             (var items, var isSuccess) = await _catalogService.SubstractStockAndGetDetailItems(command.LineItems.Select(x => (x.Id, x.Quantity)));
 
             if (!isSuccess) 

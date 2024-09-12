@@ -52,7 +52,7 @@ public class AddItemSoldQuantityCommandHandler : IRequestHandler<AddItemSoldQuan
 
                     await _unitOfWork.RollbackTransactionAsync(cancellationToken);
 
-                    return Result.Failure(message, ResponseStatus.Conflict)
+                    return Result.Failure(message, ResponseStatus.NotFound)
                         .WithData(missingItems.ToFailedItemsDto());
                 }
 

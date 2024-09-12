@@ -44,7 +44,7 @@ public class UnitOfWork : IUnitOfWork
 
     public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
-        var entries = _context.ChangeTracker.Entries();
+        var entries = _context.ChangeTracker.Entries(); 
 
         foreach (var entry in entries)
         {
@@ -61,11 +61,11 @@ public class UnitOfWork : IUnitOfWork
 
                 entity.SetEntityState(EntityState.Unchanged);
             }
-        } 
+        }
 
-        var changesResult = await _context.SaveChangesAsync(cancellationToken);
+        await DispatchDomainEventsAsync(cancellationToken);
 
-        await DispatchDomainEventsAsync(cancellationToken); 
+        var changesResult = await _context.SaveChangesAsync(cancellationToken); 
 
         return changesResult;
     }
