@@ -12,7 +12,7 @@ public static class ItemMapperExtension
         {
             yield return item.ToItemDto();
         } 
-    }
+    }  
 
     public static ItemDto ToItemDto(this Item item)
     { 
@@ -34,5 +34,31 @@ public static class ItemMapperExtension
             item.IsActive,
             item.OwnerReviews.ToOwnerReviewsDto()!
         );
-    }
+    } 
+
+
+    public static IEnumerable<ItemNotFoundDto> ToFailedItemsDto(this IEnumerable<Guid> items)
+    {
+        foreach (var item in items)
+        {
+            yield return new ItemNotFoundDto(
+                item,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null,
+                null
+            );
+        }
+    } 
 }

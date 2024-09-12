@@ -8,7 +8,7 @@ using Ordering.Domain.Aggregates.OrderAggregate;
 using Ordering.Domain.Enumerations;
 using Ordering.Domain.SeedWork;
 using Ordering.Domain.ValueObjects;
-using System.Data;
+using System.Data; 
 
 namespace Ordering.API.Applications.Commands.Orders.CreateOrder;
 
@@ -31,6 +31,19 @@ public class CreateOrderCommandHandler(
         Guid orderId;
         try
         {
+            (var items, var isSuccess) = await _catalogService.SubstractStockAndGetDetailItems(command.LineItems.Select(x => (x.Id, x.Quantity)));
+
+            if (!isSuccess) 
+            {
+                if (items is null)
+                {
+                    return Result.Failure("An error has occured during check the item stock", ResponseStatus.InternalServerError);
+                }
+
+                return Result.Failure("Can not proceed several items", ResponseStatus.BadRequest)
+                    .WithData(items);
+            } 
+
             var order = new Order(
                 command.Currency,
                 command.Address,

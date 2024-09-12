@@ -6,13 +6,16 @@ public class Result
     public object? Data { get; set; }
     public string? Message { get; set; }
     public ResponseStatus ResponseStatus { get; set; }
-    public List<ErrorDetail> Errors { get; set; } = [];
-
-    public List<string>? Links { get; set; } = [];
+    public List<ErrorDetail> Errors { get; set; } = []; 
+    public List<string>? Links { get; set; } = []; 
 
     public Result WithData(object data)
     {
-        Data = data;
+        if (Data is null)
+        {
+            Data = data;
+        }
+
         return this;
     }
 

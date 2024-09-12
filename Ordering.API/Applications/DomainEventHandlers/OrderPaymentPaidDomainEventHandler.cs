@@ -1,11 +1,6 @@
 ﻿using Core.Events;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Ordering.Domain.Events;
-using Ordering.Domain.SeedWork; 
-//using Polly;
-//using Polly.Retry;
-using System.Data;
+using MediatR; 
+using Ordering.Domain.Events;  
 
 namespace Ordering.API.Applications.DomainEventHandlers;
 

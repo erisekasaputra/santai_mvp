@@ -1,7 +1,10 @@
 ﻿
+using Catalog.API.Applications.Dtos.Item;
 using Catalog.API.Applications.Dtos.ItemPrice;
-using Catalog.API.Applications.Services; 
+using Catalog.API.Applications.Services;
+using Catalog.API.Extensions;
 using Catalog.Domain.SeedWork;
+using Core.Exceptions;
 using Core.Results;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -37,35 +40,35 @@ public class SetItemPriceCommandHandler : IRequestHandler<SetItemPriceCommand, R
             try
             {
                 int numberOfErrors = 0;
-                var itemErrors = new List<ItemPriceDto>();
+            
 
                 await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
 
+
+
+
+
                 // Extract the item IDs from the request
-                var itemIds = request.Items.Select(x => x.ItemId).ToList();
+                var requestItemIds = request.Items.Select(x => x.ItemId).ToList();
 
-                // Retrieve the items with row locks
-                var items = await _unitOfWork.Items.GetItemsWithLockAsync(itemIds);
+                var items = await _unitOfWork.Items.GetItemsWithLockAsync(requestItemIds);
 
-                // Find the missing item IDs
-                var retrievedItemIds = items.Select(item => item.Id).ToHashSet();
-                var missingItemRequests = request.Items.Where(x => !retrievedItemIds.Contains(x.ItemId)).ToList();
+                var missingItems = requestItemIds.Except(items.Select(x => x.Id).ToList()).ToList();
 
-                if (missingItemRequests.Count > 0)
+                if (missingItems.Count > 0)
                 {
-                    var message = missingItemRequests.Count == 1
-                        ? $"There is one missing item"
-                        : $"There are {missingItemRequests.Count} missing items";
+                    var message = "There are serveral missing items";
 
                     await _unitOfWork.RollbackTransactionAsync(cancellationToken);
 
-                    return Result.Failure(message, ResponseStatus.UnprocessableEntity)
-                    .WithData(missingItemRequests.Select(x =>
-                    {
-                        return new ItemPriceDto(x.ItemId, 0, null, "Data not found");
-                    }).ToList());
+                    return Result.Failure(message, ResponseStatus.Conflict)
+                        .WithData(missingItems.ToFailedItemsDto());
                 }
 
+
+
+
+                var itemErrors = new List<ItemDto>();
                 foreach (var item in items)
                 {
                     var selectedItem = request.Items.First(x => x.ItemId == item.Id); 
@@ -75,26 +78,23 @@ public class SetItemPriceCommandHandler : IRequestHandler<SetItemPriceCommand, R
                         item.SetPrice(selectedItem.Amount, selectedItem.Currency);
                         _unitOfWork.Items.UpdateItem(item);
                     }
-                    catch (Exception ex)
+                    catch (DomainException)
                     {
-                        itemErrors.Add(new ItemPriceDto(
-                            item.Id,
-                            selectedItem.Amount,
-                            selectedItem.Currency,
-                            ex.Message));
-                        numberOfErrors++;
+                        itemErrors.Add(item.ToItemDto());
+                    }
+                    catch (Exception)
+                    {
+                        itemErrors.Add(item.ToItemDto());
                     }
                 }
 
                 if (numberOfErrors is 0)
                 {
                     await _unitOfWork.CommitTransactionAsync(cancellationToken);
-                    return Result.Success(null, ResponseStatus.Ok);
+                    return Result.Success(items.ToItemsDto(), ResponseStatus.Ok);
                 }
 
-                var messageError = numberOfErrors == 1
-                       ? $"There is one error item"
-                       : $"There are {numberOfErrors} error items";
+                var messageError = "There are several items with error result";
 
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result.Failure(messageError, ResponseStatus.UnprocessableEntity)

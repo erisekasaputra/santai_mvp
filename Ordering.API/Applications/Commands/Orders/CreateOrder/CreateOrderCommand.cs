@@ -1,5 +1,4 @@
-﻿
-using Core.Enumerations;
+﻿using Core.Enumerations;
 using Core.Results;
 using MediatR;
 using Ordering.API.Applications.Dtos.Requests;

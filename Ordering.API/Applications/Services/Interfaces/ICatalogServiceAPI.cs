@@ -4,6 +4,6 @@ namespace Ordering.API.Applications.Services.Interfaces;
 
 public interface ICatalogServiceAPI
 {
-    Task<(IEnumerable<CatalogItemsResponseDto>?, string? errorMessage)> SubstractStockAndGetDetailItems(
+    Task<(ResultResponseDto<CatalogItemResponseDto>? ResultItemResponse, bool IsSuccess)> SubstractStockAndGetDetailItems(
         IEnumerable<(Guid ItemId, int Quantity)> substractItems);
 }
