@@ -89,7 +89,7 @@ public class OrderController : ControllerBase
 
             var lineItems = new List<LineItemRequest>
             {
-                new (lineItemId1, 10)
+                new (lineItemId1, 1)
             };
 
             var fleets = new List<FleetRequest>()

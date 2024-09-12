@@ -7,8 +7,8 @@ namespace Ordering.Domain.Aggregates.OrderAggregate;
 
 public class Payment : Entity
 {
-    public Guid OrderingId { get; private set; }
-    public Order Ordering { get; private set; }
+    public Guid OrderId { get; private set; }
+    public Order Order { get; private set; }
     public Money Amount { get; set; }
     public DateTime? TransactionAt { get; private set; }
     public string? PaymentMethod { get; private set; }
@@ -17,24 +17,24 @@ public class Payment : Entity
 
     public Payment()
     {
-        Ordering = null!;
+        Order = null!;
         Amount = null!;
     } 
     public Payment(
-        Guid orderingId,
+        Guid orderId,
         decimal amount,
         Currency currency,
         DateTime transactionAt,
         string? paymentMethod,
         string? bankReference)
     {
-        OrderingId = orderingId;
+        OrderId = orderId;
         Amount = new Money(amount, currency);
         TransactionAt = transactionAt;
         PaymentMethod = paymentMethod;
         BankReference = bankReference;
         CreatedAt = DateTime.UtcNow;
-        Ordering = null!;
+        Order = null!;
     }
 
     public void SetPayment(decimal amount, Currency currency)

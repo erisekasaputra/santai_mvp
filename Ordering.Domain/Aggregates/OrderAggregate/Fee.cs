@@ -8,7 +8,7 @@ namespace Ordering.Domain.Aggregates.OrderAggregate;
 
 public class Fee : Entity
 {
-    public Guid OrderingId { get; private set; }
+    public Guid OrderId { get; private set; }
     public PercentageOrValueType PercentageOrValueType { get; private set; }
     public FeeDescription FeeDescription { get; private set; }
     public Currency Currency { get; private set; }
@@ -19,14 +19,19 @@ public class Fee : Entity
     {
         FeeAmount = null!;
     }
-    private Fee(Guid orderingId, FeeDescription feeDescription, PercentageOrValueType percentageOrValueType, decimal amount, Currency currency)
+    private Fee(
+        Guid orderId,
+        FeeDescription feeDescription,
+        PercentageOrValueType percentageOrValueType,
+        decimal amount,
+        Currency currency)
     {
         if (amount <= 0)
         {
             throw new DomainException("Amount can not less than or equal with 0");
         }
 
-        OrderingId = orderingId;
+        OrderId = orderId;
         FeeAmount = new Money(0, currency);
         PercentageOrValueType = percentageOrValueType;
         FeeDescription = feeDescription;

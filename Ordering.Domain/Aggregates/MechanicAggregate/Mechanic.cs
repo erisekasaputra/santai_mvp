@@ -7,8 +7,8 @@ namespace Ordering.Domain.Aggregates.MechanicAggregate;
 
 public class Mechanic : Entity
 {
-    public Guid OrderingId { get; private set; }
-    public Order? Ordering { get; private set; }
+    public Guid OrderId { get; private set; }
+    public Order? Order { get; private set; }
     public Guid MechanicId { get; private set; }
     public string Name { get; private set; }
     public Rating? Rating { get; private set; }
@@ -20,9 +20,13 @@ public class Mechanic : Entity
         Name = string.Empty;
     }
 
-    public Mechanic(Guid orderingId, Guid mechanicId, string name, decimal perfomance)
+    public Mechanic(
+        Guid orderId,
+        Guid mechanicId,
+        string name,
+        decimal perfomance)
     {
-        OrderingId = orderingId;
+        OrderId = orderId;
         MechanicId = mechanicId;
         Name = name;
         Performance = perfomance;

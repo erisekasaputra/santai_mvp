@@ -8,7 +8,7 @@ namespace Ordering.Domain.Aggregates.OrderAggregate;
 
 public class Cancellation : Entity
 {
-    public Guid OrderingId { get; private set; }
+    public Guid OrderId { get; private set; }
     public ICollection<CancellationFee> CancellationCharges { get; private set; }
     public Money? CancellationRefund { get; private set; } 
     public Cancellation()
@@ -16,9 +16,9 @@ public class Cancellation : Entity
         CancellationCharges = [];
     }
 
-    public Cancellation(Guid orderingId)
+    public Cancellation(Guid orderId)
     {
-        OrderingId = orderingId;
+        OrderId = orderId;
         CancellationCharges = [];
     }
 

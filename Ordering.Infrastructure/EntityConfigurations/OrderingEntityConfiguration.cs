@@ -17,23 +17,23 @@ public class OrderingEntityConfiguration : IEntityTypeConfiguration<Order>
         builder.HasKey(x => x.Id);
 
         builder.HasOne(o => o.Buyer)
-            .WithOne(p => p.Ordering)
-            .HasForeignKey<Buyer>(o => o.OrderingId)
+            .WithOne(p => p.Order)
+            .HasForeignKey<Buyer>(o => o.OrderId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(o => o.Mechanic)
-            .WithOne(p => p.Ordering)
-            .HasForeignKey<Mechanic>(o => o.OrderingId)
+            .WithOne(p => p.Order)
+            .HasForeignKey<Mechanic>(o => o.OrderId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(o => o.Payment)
-           .WithOne(p => p.Ordering)
-           .HasForeignKey<Payment>(o => o.OrderingId)
+           .WithOne(p => p.Order)
+           .HasForeignKey<Payment>(o => o.OrderId)
            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasOne(p => p.Coupon)
             .WithOne()
-            .HasForeignKey<Coupon>(e => e.OrderingId)
+            .HasForeignKey<Coupon>(e => e.OrderId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(o => o.Currency)
@@ -84,17 +84,17 @@ public class OrderingEntityConfiguration : IEntityTypeConfiguration<Order>
 
         builder.HasMany(o => o.LineItems)
             .WithOne()
-            .HasForeignKey(p => p.OrderingId)
+            .HasForeignKey(p => p.OrderId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(o => o.Fleets)
             .WithOne()
-            .HasForeignKey(p => p.OrderingId)
+            .HasForeignKey(p => p.OrderId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(o => o.Fees)
             .WithOne()
-            .HasForeignKey(p => p.OrderingId)
+            .HasForeignKey(p => p.OrderId)
             .OnDelete(DeleteBehavior.Cascade);
 
         var converter = new ValueConverter<ICollection<string>?, string>(
@@ -116,7 +116,7 @@ public class OrderingEntityConfiguration : IEntityTypeConfiguration<Order>
 
         builder.HasOne(o => o.Cancellation)
             .WithOne()
-            .HasForeignKey<Cancellation>(o => o.OrderingId)
+            .HasForeignKey<Cancellation>(o => o.OrderId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(p => p.PaymentUrl)

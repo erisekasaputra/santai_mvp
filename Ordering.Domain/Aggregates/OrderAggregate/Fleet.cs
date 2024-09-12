@@ -4,7 +4,8 @@ namespace Ordering.Domain.Aggregates.OrderAggregate;
 
 public class Fleet : Entity
 {
-    public Guid OrderingId { get; private set; }
+    public Guid FleetId { get; set; }
+    public Guid OrderId { get; private set; }
     public string Brand { get; private set; }
     public string Model { get; private set; }
     public string RegistrationNumber { get; private set; }
@@ -16,10 +17,16 @@ public class Fleet : Entity
         RegistrationNumber = string.Empty;
         ImageUrl = string.Empty;
     }
-    public Fleet(Guid orderingId, Guid fleetId, string brand, string model, string registrationNumber, string imageUrl)
+    public Fleet(
+        Guid orderingId,
+        Guid fleetId,
+        string brand,
+        string model,
+        string registrationNumber,
+        string imageUrl)
     {
-        OrderingId = orderingId;
-        Id = fleetId;
+        OrderId = orderingId;
+        FleetId = fleetId;
         Brand = brand;
         Model = model;
         RegistrationNumber = registrationNumber;

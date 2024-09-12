@@ -108,8 +108,7 @@ public static class ServiceRegistrationExtension
                     timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout);
                 });
 
-                configure.ConfigureEndpoints(context);
-
+                configure.ConfigureEndpoints(context); 
                 
 
                 foreach (var (queueName, consumerType) in consumers)

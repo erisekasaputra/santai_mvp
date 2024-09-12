@@ -7,7 +7,7 @@ using Ordering.Domain.SeedWork;
 namespace Ordering.Domain.Aggregates.OrderAggregate;
 public class Coupon : Entity
 {
-    public Guid OrderingId { get; private set; }
+    public Guid OrderId { get; private set; }
     public string CouponCode { get; private set; }
     public PercentageOrValueType CouponValueType { get; private set; }
     public Currency Currency { get; private set; }
@@ -23,7 +23,7 @@ public class Coupon : Entity
     }
 
     private Coupon(
-        Guid orderingId,
+        Guid orderId,
         string couponCode,
         PercentageOrValueType couponValueType,
         Currency currency,
@@ -40,7 +40,7 @@ public class Coupon : Entity
             throw new DomainException("Minimum order value cannot be negative.");
 
         Currency = currency;
-        OrderingId = orderingId;
+        OrderId = orderId;
         CouponCode = couponCode;
         CouponValueType = couponValueType;
         ValuePercentage = couponValueType == PercentageOrValueType.Percentage ? value : 0;

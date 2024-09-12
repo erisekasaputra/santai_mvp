@@ -63,8 +63,7 @@ public class CreateOrderCommandHandler(
                 "Eris", // get from account service
                 command.BuyerType,
                 command.IsOrderScheduled,
-                command.ScheduledOn); 
-
+                command.ScheduledOn);  
 
             foreach (var lineItem in items?.Data ?? [])
             { 
@@ -83,7 +82,7 @@ public class CreateOrderCommandHandler(
                         lineItem.Price!.Value,
                         lineItem.Currency!.Value,
                         requestItems.First(x => x.Id == lineItem.Id).Quantity));
-            }
+            }  
 
             foreach (var fleet in command.Fleets)
             {
@@ -108,9 +107,9 @@ public class CreateOrderCommandHandler(
             if (order.IsShouldRequestPayment)
             {
                 //await _paymentService.Checkout(order); 
-            } 
+            }  
 
-            await _unitOfWork.CommitTransactionAsync(cancellationToken);
+            await _unitOfWork.CommitTransactionAsync(cancellationToken); 
 
             return Result.Success(order.ToOrderResponseDto(), ResponseStatus.Created);
         }
@@ -168,10 +167,16 @@ public class CreateOrderCommandHandler(
     private async Task RollbackAndRecoveryStockAsync(IEnumerable<LineItemRequest> items, CancellationToken cancellationToken)
     {
         await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+         
+
+        await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken); 
+
         await _publishEndpoint.Publish(
             new OrderFailedRecoveryStockIntegrationEvent(
                 items.Select(x => new CatalogItemStockIntegrationEvent(x.Id, x.Quantity))),
             cancellationToken);
+
+        await _unitOfWork.CommitTransactionAsync();
     }
 
     private async Task RollbackAsync(CancellationToken cancellationToken)

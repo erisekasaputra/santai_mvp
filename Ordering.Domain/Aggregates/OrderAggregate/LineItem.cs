@@ -9,12 +9,13 @@ namespace Ordering.Domain.Aggregates.OrderAggregate;
 
 public class LineItem : Entity
 {
+    public Guid LineItemId { get; set; }
     public string Name { get; private set; }
     public string Sku { get; private set; }
     public decimal UnitPrice { get; private set; }
     public int Quantity { get; private set; }
     public Tax? Tax { get; private set; }
-    public Guid OrderingId { get; private set; }
+    public Guid OrderId { get; private set; }
     public Money SubTotal { get; private set; }
     public LineItem()
     {
@@ -43,8 +44,8 @@ public class LineItem : Entity
         if (quantity <= 0)
             throw new DomainException("Quantity must be greater than zero.");
 
-        Id = id;
-        OrderingId = orderId;
+        LineItemId = id;
+        OrderId = orderId;
         Name = name;
         Sku = sku;
         UnitPrice = price;
