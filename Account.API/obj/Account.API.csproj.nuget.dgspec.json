@@ -105,6 +105,22 @@
               "target": "Package",
               "version": "[2.65.0, )"
             },
+            "Hangfire": {
+              "target": "Package",
+              "version": "[1.8.14, )"
+            },
+            "Hangfire.AspNetCore": {
+              "target": "Package",
+              "version": "[1.8.14, )"
+            },
+            "Hangfire.Core": {
+              "target": "Package",
+              "version": "[1.8.14, )"
+            },
+            "Hangfire.SqlServer": {
+              "target": "Package",
+              "version": "[1.8.14, )"
+            },
             "MassTransit": {
               "target": "Package",
               "version": "[8.2.5-develop.1942, )"

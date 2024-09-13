@@ -27,7 +27,7 @@ public static class Mapper
                 order.PaymentExpiration,
                 order.Currency,
                 order.OrderAmount,
-                order.Coupon?.ToCouponDto(),
+                order.Discount?.ToDiscountDto(),
                 order.GrandTotal.Amount,
                 order.Rating?.ToRatingDto(),
                 order.RatingImages,
@@ -95,9 +95,9 @@ public static class Mapper
     {
         return new PaymentResponseDto();
     }
-    public static CouponResponseDto ToCouponDto(this Coupon coupon)
+    public static DiscountResponseDto ToDiscountDto(this Discount coupon)
     {
-        return new CouponResponseDto(
+        return new DiscountResponseDto(
             coupon.CouponCode,
             coupon.CouponValueType,
             coupon.Currency,

@@ -12,5 +12,6 @@ public record BusinessUserResponseDto(
     string? WebsiteUrl,
     string? BusinessDescription,
     LoyaltyProgramResponseDto? Loyalty,
+    IEnumerable<FleetResponseDto> Fleets,
     IEnumerable<BusinessLicenseResponseDto>? BusinessLicenses,
     IEnumerable<StaffResponseDto>? Staffs);

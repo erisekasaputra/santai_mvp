@@ -20,7 +20,7 @@ public class OrderResponseDto
     public DateTime PaymentExpiration { get; private set; }
     public Currency Currency { get; private set; }  
     public decimal OrderAmount { get; private set; }
-    public CouponResponseDto? Coupon { get; private set; }
+    public DiscountResponseDto? Discount { get; private set; }
     public decimal GrandTotal { get; private set; }
     public RatingResponseDto? OrderRating { get; private set; }
     public IEnumerable<string>? RatingImages { get; private set; }
@@ -47,7 +47,7 @@ public class OrderResponseDto
         DateTime paymentExpiration,
         Currency currency,
         decimal orderAmount,
-        CouponResponseDto? coupon,
+        DiscountResponseDto? coupon,
         decimal grandTotal,
         RatingResponseDto? orderRating,
         IEnumerable<string>? ratingImages,
@@ -70,7 +70,7 @@ public class OrderResponseDto
         PaymentExpiration = paymentExpiration;
         Currency = currency;
         OrderAmount = orderAmount;
-        Coupon = coupon;
+        Discount = coupon;
         GrandTotal = grandTotal;
         OrderRating = orderRating;
         RatingImages = ratingImages;

@@ -12,7 +12,7 @@ public interface IUserRepository
     Task<bool> GetAnyByIdAsync(Guid id);
     Task<BusinessUser?> GetBusinessUserByIdAsync(Guid id);
     Task<RegularUser?> GetRegularUserByIdAsync(Guid id);
-    Task<MechanicUser?> GetMechanicUserByIdAsync(Guid id); 
+    Task<MechanicUser?> GetMechanicUserByIdAsync(Guid id);
     Task<BaseUser?> GetByIdentitiesAsNoTrackingAsync(params (IdentityParameter, string?)[] identity);
     Task<BaseUser?> GetByIdentitiesExcludingIdAsNoTrackingAsync(Guid id, params (IdentityParameter, string?)[] identity);
     Task<bool> GetAnyByIdentitiesAsNoTrackingAsync(params (IdentityParameter, string?)[] identity);

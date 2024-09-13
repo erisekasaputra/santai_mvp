@@ -5,6 +5,7 @@ using Account.Infrastructure;
 using Core.Configurations; 
 using Core.Services;
 using Core.Services.Interfaces;
+using Hangfire;
 using MassTransit; 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options; 
@@ -19,7 +20,7 @@ public static class ServiceRegistrationExtension
         services.AddScoped<ApplicationService>();
         services.AddScoped<IUnitOfWork, UnitOfWork>(); 
         services.AddSingleton<ICacheService, CacheService>();
-
+        services.AddScoped<OrderJobService>(); 
         return services;
     } 
 
@@ -104,4 +105,17 @@ public static class ServiceRegistrationExtension
 
         return services;
     } 
+
+    public static IServiceCollection AddHangfireContext(this IServiceCollection services)
+    {
+        var messagingOption = services.BuildServiceProvider().GetService<IOptionsMonitor<DatabaseConfiguration>>()
+         ?? throw new Exception("Please provide value for message bus options");
+          
+        services.AddHangfire(config =>
+            config.UseSqlServerStorage(messagingOption.CurrentValue.ConnectionString));
+         
+        services.AddHangfireServer(); 
+
+        return services;
+    }
 }

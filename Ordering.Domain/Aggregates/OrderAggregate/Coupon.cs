@@ -5,7 +5,7 @@ using Ordering.Domain.Enumerations;
 using Ordering.Domain.SeedWork;
 
 namespace Ordering.Domain.Aggregates.OrderAggregate;
-public class Coupon : Entity
+public class Discount : Entity
 {
     public Guid OrderId { get; private set; }
     public string CouponCode { get; private set; }
@@ -16,13 +16,13 @@ public class Coupon : Entity
     public decimal MinimumOrderValue { get; private set; }
     public Money DiscountAmount { get; private set; }
 
-    public Coupon()
+    public Discount()
     {
         CouponCode = string.Empty;
         DiscountAmount = null!;
     }
 
-    private Coupon(
+    private Discount(
         Guid orderId,
         string couponCode,
         PercentageOrValueType couponValueType,
@@ -49,24 +49,24 @@ public class Coupon : Entity
         DiscountAmount = new Money(0, currency);
     }
 
-    public static Coupon CreatePercentageDiscount(
+    public static Discount CreatePercentageDiscount(
         Guid orderingId,
         string couponCode,
         decimal percentage,
         decimal minimumOrderAmount,
         Currency currency)
     {
-        return new Coupon(orderingId, couponCode, PercentageOrValueType.Percentage, currency, percentage, minimumOrderAmount);
+        return new Discount(orderingId, couponCode, PercentageOrValueType.Percentage, currency, percentage, minimumOrderAmount);
     }
 
-    public static Coupon CreateValueDiscount(
+    public static Discount CreateValueDiscount(
         Guid orderingId,
         string couponCode,
         decimal amount,
         Currency currency,
         decimal minimumOrderAmount)
     {
-        return new Coupon(orderingId, couponCode, PercentageOrValueType.Value, currency, amount, minimumOrderAmount);
+        return new Discount(orderingId, couponCode, PercentageOrValueType.Value, currency, amount, minimumOrderAmount);
     }
 
     public Money Apply(decimal orderAmount, Currency orderCurrency)

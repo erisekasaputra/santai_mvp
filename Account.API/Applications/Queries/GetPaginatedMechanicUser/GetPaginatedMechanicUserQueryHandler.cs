@@ -81,6 +81,7 @@ public class GetPaginatedMechanicUserQueryHandler(
                 await DecryptNullableAsync(user.EncryptedEmail),
                 await DecryptNullableAsync(user.EncryptedPhoneNumber),
                 user.TimeZoneId,
+                user.PersonalInfo.ToPersonalInfoResponseDto(user.TimeZoneId),
                 user.LoyaltyProgram.ToLoyaltyProgramResponseDto(),
                 address,
                 certifications,

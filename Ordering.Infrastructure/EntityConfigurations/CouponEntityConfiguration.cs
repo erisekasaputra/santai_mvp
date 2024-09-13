@@ -6,9 +6,9 @@ using Ordering.Domain.Enumerations;
 
 namespace Ordering.Infrastructure.EntityConfigurations;
 
-public class CouponEntityConfiguration : IEntityTypeConfiguration<Coupon>
+public class CouponEntityConfiguration : IEntityTypeConfiguration<Discount>
 {
-    public void Configure(EntityTypeBuilder<Coupon> builder)
+    public void Configure(EntityTypeBuilder<Discount> builder)
     {
         builder.HasKey(p => p.Id);
 

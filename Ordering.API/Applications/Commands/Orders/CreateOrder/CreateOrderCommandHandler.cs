@@ -5,9 +5,9 @@ using Core.Messages;
 using Core.Results;
 using Core.Utilities;
 using MassTransit;
-using MediatR;
-using Microsoft.IdentityModel.Logging;
+using MediatR; 
 using Ordering.API.Applications.Dtos.Requests;
+using Ordering.API.Applications.Dtos.Responses;
 using Ordering.API.Applications.Services.Interfaces;
 using Ordering.API.Extensions;
 using Ordering.Domain.Aggregates.OrderAggregate;
@@ -15,9 +15,7 @@ using Ordering.Domain.Enumerations;
 using Ordering.Domain.SeedWork;
 using Ordering.Domain.ValueObjects;
 using System.Data; 
-
 namespace Ordering.API.Applications.Commands.Orders.CreateOrder;
-
 public class CreateOrderCommandHandler(
     ILogger<CreateOrderCommandHandler> logger,
     IPaymentService paymentService,
@@ -38,91 +36,87 @@ public class CreateOrderCommandHandler(
         var requestItems = command.LineItems;
         await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken); 
         try
-        { 
-            (var items, var isSuccess) = await _catalogService.SubstractStockAndGetDetailItems(requestItems.Select(x => (x.Id, x.Quantity)));
-
-            if (!isSuccess) 
-            {
-                if (items is null)
-                {
-                    await RollbackAsync(cancellationToken);
-                    return Result.Failure("An error has occured during check the item stock", ResponseStatus.InternalServerError);
-                }
-                 
-                await RollbackAsync(cancellationToken);
-                return Result.Failure("Can not proceed several items", ResponseStatus.BadRequest)
-                    .WithData(items);
-            } 
-
-            var order = new Order(
-                command.Currency,
-                command.Address,
-                command.Latitude,
-                command.Longitude,
-                command.BuyerId,
-                "Eris", // get from account service
-                command.BuyerType,
-                command.IsOrderScheduled,
-                command.ScheduledOn);  
-
-            foreach (var lineItem in items?.Data ?? [])
+        {  
+            if (command.BuyerType is UserType.BusinessUser)
             { 
-                if (IsNullCatalogItems(lineItem.Name, lineItem.Sku, lineItem.Price, lineItem.Currency))
-                {
-                    await RollbackAndRecoveryStockAsync(requestItems, cancellationToken);
-                    return Result.Failure(
-                        Messages.InternalServerError, ResponseStatus.InternalServerError);
+                (var buyer, var isAccountResponseSuccess) = await GetUserAccountAndFleetDetail<AccountIdentityBusinessUserResponseDto>(
+                    command.BuyerId, 
+                    command.Fleets); 
+
+                (var isAccountValidationSuccess, var result) = await IsAccountResponseSuccess( 
+                    isAccountResponseSuccess, 
+                    buyer, 
+                    cancellationToken); 
+
+                if (!isAccountValidationSuccess)
+                { 
+                    return result;
                 } 
 
-                order.AddOrderItem(
-                    new(lineItem.Id,
-                        order.Id,
-                        lineItem.Name!,
-                        lineItem.Sku!,
-                        lineItem.Price!.Value,
-                        lineItem.Currency!.Value,
-                        requestItems.First(x => x.Id == lineItem.Id).Quantity));
-            }  
-
-            foreach (var fleet in command.Fleets)
+                return await CreateOrderByRelatedUserType(
+                    command,
+                    buyer?.Data?.BusinessName,
+                    buyer?.Data?.Fleets,
+                    cancellationToken); 
+            }
+            else if (command.BuyerType is UserType.StaffUser)
             {
-                order.AddFleet(new(order.Id, fleet.Id, "Yamaha", "R1", "AG1L", "https://facebook.com/image.png"));
+                (var buyer, var isAccountResponseSuccess) = await GetUserAccountAndFleetDetail<AccountIdentityStaffUserResponseDto>(
+                    command.BuyerId, 
+                    command.Fleets);
+
+                (var isAccountValidationSuccess, var result) = await IsAccountResponseSuccess( 
+                    isAccountResponseSuccess, 
+                    buyer, 
+                    cancellationToken);
+
+                if (!isAccountValidationSuccess)
+                {
+                    return result;
+                }
+                return await CreateOrderByRelatedUserType(
+                    command,
+                    buyer?.Data?.Name,
+                    buyer?.Data?.Fleets,
+                    cancellationToken);  
+            }
+            else if (command.BuyerType is UserType.RegularUser)
+            {
+                (var buyer, var isAccountResponseSuccess) = await GetUserAccountAndFleetDetail<AccountIdentityRegularUserResponseDto>(
+                    command.BuyerId, 
+                    command.Fleets);
+
+                (var isAccountValidationSuccess, var result) = await IsAccountResponseSuccess( 
+                    isAccountResponseSuccess, 
+                    buyer, 
+                    cancellationToken);
+
+                if (!isAccountValidationSuccess)
+                {
+                    return result;
+                }
+
+                return await CreateOrderByRelatedUserType(
+                    command, 
+                    buyer?.Data?.PersonalInfo.ToFullName,
+                    buyer?.Data?.Fleets,
+                    cancellationToken); 
             }
 
-            if (!string.IsNullOrWhiteSpace(command.CouponCode))
-            {
-                order.ApplyDiscount(Coupon.CreateValueDiscount(order.Id, command.CouponCode, 10, command.Currency, 10));
-            }
-
-            order.ApplyTax(new Tax(10, command.Currency));
-
-            order.ApplyFee(Fee.CreateByValue(order.Id, FeeDescription.MechanicFee, 10, command.Currency));
-            
-            order.ApplyFee(Fee.CreateByValue(order.Id, FeeDescription.ServiceFee, 10, command.Currency));
-
-            order.CalculateGrandTotal(); 
-
-            await _unitOfWork.Orders.CreateAsync(order, cancellationToken);
-             
-            if (order.IsShouldRequestPayment)
-            {
-                //await _paymentService.Checkout(order); 
-            }  
-
-            await _unitOfWork.CommitTransactionAsync(cancellationToken); 
-
-            return Result.Success(order.ToOrderResponseDto(), ResponseStatus.Created);
+            return Result.Failure(
+                   "Session user type with existing user in database does not match",
+                   ResponseStatus.InternalServerError);
         }
         catch (AccountServiceHttpRequestException ex)
         { 
             LoggerHelper.LogError(_logger, ex);
-            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+            await RollbackAsync(cancellationToken);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
         catch (CatalogServiceHttpRequestException ex)
         {  
             LoggerHelper.LogError(_logger, ex);
-            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+            await RollbackAsync(cancellationToken);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
         catch (PaymentServiceHttpRequestException ex)
@@ -155,6 +149,134 @@ public class CreateOrderCommandHandler(
         }
     }
 
+    private async Task<(bool isSuccess, Result accountResult)> IsAccountResponseSuccess<T>( 
+        bool isAccountResponseSuccess,
+        ResultResponseDto<T>? buyer,
+        CancellationToken cancellationToken)
+    { 
+        if (!isAccountResponseSuccess)
+        {
+            if (buyer is null)
+            {
+                await RollbackAsync(cancellationToken); 
+                return (false, Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+            }
+
+            await RollbackAsync(cancellationToken);
+            return (false, Result.Failure(buyer.Message ?? Messages.UnknownError, ResponseStatus.BadRequest));
+        }
+
+        if (buyer is null)
+        {
+            await RollbackAsync(cancellationToken); 
+            return (false, Result.Failure("User data not found", ResponseStatus.NotFound));
+        }  
+
+        return (true, Result.Success(null, ResponseStatus.Ok));
+    }
+
+    private async Task<(ResultResponseDto<T>? buyer, bool isAccountResponseSuccess)> GetUserAccountAndFleetDetail<T>(
+        Guid buyerId, 
+        IEnumerable<FleetRequest> requestFleets)
+    {
+        return await _accountService.GetUserDetail<T>(buyerId, requestFleets.Select(x => x.Id)); 
+    }
+
+    private async Task<Result> CreateOrderByRelatedUserType(
+        CreateOrderCommand command,  
+        string? buyerName,
+        IEnumerable<AccountIdentityFleetResponseDto>? fleets,
+        CancellationToken cancellationToken)
+    {
+        var lineItems = command.LineItems.Select(x => (x.Id, x.Quantity)); 
+         
+        if (fleets is null || !fleets.Any() || string.IsNullOrWhiteSpace(buyerName)) 
+        { 
+            await RollbackAsync(cancellationToken);
+            return Result.Failure("Data not found for fleet or buyer name", ResponseStatus.NotFound);
+        }
+
+        (var items, var isCatalogResponseSuccess) = await _catalogService.SubstractStockAndGetDetailItems(lineItems);
+
+        if (!isCatalogResponseSuccess)
+        {
+            if (items is null)
+            {
+                await RollbackAsync(cancellationToken);
+                return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
+            }
+
+            await RollbackAsync(cancellationToken);
+            return Result.Failure(items.Message ?? Messages.UnknownError, ResponseStatus.BadRequest)
+                .WithData(items);
+        }
+
+        var order = new Order(
+        command.Currency,
+        command.Address,
+            command.Latitude,
+            command.Longitude,
+            command.BuyerId,
+            buyerName,
+            command.BuyerType,
+            command.IsOrderScheduled,
+            command.ScheduledOn);
+
+        foreach (var lineItem in items?.Data ?? [])
+        {
+            if (IsNullCatalogItems(lineItem.Name, lineItem.Sku, lineItem.Price, lineItem.Currency))
+            {
+                await RollbackAndRecoveryStockAsync(command.LineItems, cancellationToken);
+                return Result.Failure(
+                    Messages.InternalServerError, ResponseStatus.InternalServerError);
+            }
+
+            order.AddOrderItem(
+                new(lineItem.Id,
+                    order.Id,
+                    lineItem.Name!,
+                    lineItem.Sku!,
+                    lineItem.Price!.Value,
+                    lineItem.Currency!.Value,
+                    command.LineItems.First(x => x.Id == lineItem.Id).Quantity));
+        }
+  
+        foreach (var fleet in fleets)
+        {
+            order.AddFleet(new(
+                order.Id,
+                fleet.Id,
+                fleet.Brand,
+                fleet.Model,
+                fleet.RegistrationNumber,
+                fleet.ImageUrl));
+        }
+
+        if (!string.IsNullOrWhiteSpace(command.CouponCode))
+        {
+            order.ApplyDiscount(Discount.CreateValueDiscount(order.Id, command.CouponCode, 10, command.Currency, 10));
+        }
+
+        order.ApplyTax(new Tax(10, command.Currency));
+
+        order.ApplyFee(Fee.CreateByValue(order.Id, FeeDescription.MechanicFee, 10, command.Currency));
+
+        order.ApplyFee(Fee.CreateByValue(order.Id, FeeDescription.ServiceFee, 10, command.Currency));
+
+        order.CalculateGrandTotal();
+
+        await _unitOfWork.Orders.CreateAsync(order, cancellationToken);
+
+        if (order.IsShouldRequestPayment)
+        {
+            //await _paymentService.Checkout(order); 
+        }
+
+        await _unitOfWork.CommitTransactionAsync(cancellationToken);
+
+        return Result.Success(order.ToOrderResponseDto(), ResponseStatus.Created);
+    }
+
     private static bool IsNullCatalogItems(string? name, string? sku, decimal? price, Currency? currency)
     {
         if (string.IsNullOrWhiteSpace(name)) return true;
@@ -166,8 +288,7 @@ public class CreateOrderCommandHandler(
 
     private async Task RollbackAndRecoveryStockAsync(IEnumerable<LineItemRequest> items, CancellationToken cancellationToken)
     {
-        await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-         
+        await _unitOfWork.RollbackTransactionAsync(cancellationToken); 
 
         await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken); 
 
@@ -176,7 +297,7 @@ public class CreateOrderCommandHandler(
                 items.Select(x => new CatalogItemStockIntegrationEvent(x.Id, x.Quantity))),
             cancellationToken);
 
-        await _unitOfWork.CommitTransactionAsync();
+        await _unitOfWork.CommitTransactionAsync(cancellationToken);
     }
 
     private async Task RollbackAsync(CancellationToken cancellationToken)

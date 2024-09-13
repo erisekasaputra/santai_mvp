@@ -55,13 +55,55 @@ public class GetPaginatedStaffByUserIdQueryHandler(
                      staff.Address.Country
                 );
 
+
+
+
+
+                List<FleetResponseDto> fleets = [];
+
+                if (staff.Fleets is not null && staff.Fleets.Count > 0)
+                {
+                    foreach (var fleet in staff.Fleets)
+                    { 
+                        var registrationNumber = await DecryptAsync(fleet.EncryptedRegistrationNumber);
+                        var chassisNumber = await DecryptAsync(fleet.EncryptedChassisNumber);
+                        var engineNumber = await DecryptAsync(fleet.EncryptedEngineNumber);
+                        var insuranceNumber = await DecryptAsync(fleet.EncryptedInsuranceNumber);
+                        var ownerName = await DecryptAsync(fleet.Owner.EncryptedOwnerName);
+                        var ownerAddress = await DecryptAsync(fleet.Owner.EncryptedOwnerAddress);
+
+                        fleets.Add(new FleetResponseDto(
+                            fleet.Id,
+                            registrationNumber,
+                            fleet.VehicleType,
+                            fleet.Brand,
+                            fleet.Model,
+                            fleet.YearOfManufacture,
+                            chassisNumber,
+                            engineNumber,
+                            insuranceNumber,
+                            fleet.IsInsuranceValid,
+                            fleet.LastInspectionDateUtc,
+                            fleet.OdometerReading,
+                            fleet.FuelType,
+                            ownerName,
+                            ownerAddress,
+                            fleet.UsageStatus,
+                            fleet.OwnershipStatus,
+                            fleet.TransmissionType,
+                            fleet.ImageUrl));
+                    }
+                }
+
+
                 staffResponses.Add(new StaffResponseDto(
                         staff.Id, 
                         decryptedStaffEmail,
                         decryptedStaffPhoneNumber,
                         staff.Name,
                         staffAddress,
-                        staff.TimeZoneId
+                        staff.TimeZoneId,
+                        fleets
                     ));
             }
 

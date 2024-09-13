@@ -29,7 +29,7 @@ public class Order : Entity
     public DateTime PaymentExpiration { get; private set; }
     public Currency Currency { get; private set; }
     public decimal OrderAmount { get; private set; }
-    public Coupon? Coupon { get; private set; }
+    public Discount? Discount { get; private set; }
     public Money GrandTotal { get; private set; }
     public Rating? Rating { get; private set; }
     public ICollection<string>? RatingImages { get; private set; }
@@ -231,7 +231,7 @@ public class Order : Entity
         }
 
         GrandTotal.SetAmount(totalAmount, Currency);
-        GrandTotal -= Coupon?.Apply(totalAmount, Currency) ?? new Money(0, Currency);
+        GrandTotal -= Discount?.Apply(totalAmount, Currency) ?? new Money(0, Currency);
 
         var holdedGrandTotal = GrandTotal;
 
@@ -267,7 +267,7 @@ public class Order : Entity
         LineItems.Add(lineItem);
     }
 
-    public void ApplyDiscount(Coupon coupon)
+    public void ApplyDiscount(Discount coupon)
     {
         if (coupon is null)
             throw new ArgumentNullException(nameof(coupon), "Coupon cannot be null.");
@@ -285,12 +285,12 @@ public class Order : Entity
             throw new DomainException($"Coupon currency does not match order currency ({Currency}).");
         }
 
-        if (Coupon is not null)
+        if (Discount is not null)
         {
             return;
         }
 
-        Coupon = coupon;
+        Discount = coupon;
     }
 
     public void ApplyTax(Tax tax)

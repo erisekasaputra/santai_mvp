@@ -106,7 +106,9 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
         }
     }
 
-    private static StaffResponseDto ToStaffResponseDto(Staff staff, CreateStaffBusinessUserByUserIdCommand request)
+    private static StaffResponseDto ToStaffResponseDto(
+        Staff staff,
+        CreateStaffBusinessUserByUserIdCommand request)
     {
         var addressResponseDto = new AddressResponseDto(
             request.Address.AddressLine1,
@@ -115,7 +117,7 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
             request.Address.City,
             request.Address.State,
             request.Address.PostalCode,
-            request.Address.Country);
+            request.Address.Country); 
 
         var staffResponseDto = new StaffResponseDto(
                 staff.Id,   
@@ -123,7 +125,8 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
                 request.PhoneNumber,
                 request.Name,
                 addressResponseDto,
-                request.TimeZoneId 
+                request.TimeZoneId,
+                []
             );
 
         return staffResponseDto;

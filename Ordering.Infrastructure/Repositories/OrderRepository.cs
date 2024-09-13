@@ -26,7 +26,7 @@ public class OrderRepository : IOrderRepository
             .Include(order => order.Cancellation)
             .Include(order => order.Mechanic)
             .Include(order => order.Buyer)
-            .Include(order => order.Coupon)
+            .Include(order => order.Discount)
             .Include(order => order.Fees)
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync(cancellationToken);

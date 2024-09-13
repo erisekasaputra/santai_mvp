@@ -1,7 +1,7 @@
-﻿using Core.Results;
-using Core.Messages;
+﻿using Core.Results; 
 using MediatR;
+using Account.API.Applications.Dtos.RequestDtos;
 
 namespace Account.API.Applications.Queries.GetBusinessUserByUserId;
 
-public record GetBusinessUserByUserIdQuery(Guid Id) : IRequest<Result>;
+public record GetBusinessUserByUserIdQuery(Guid Id, FleetsRequestDto? FleetsRequest = null) : IRequest<Result>;

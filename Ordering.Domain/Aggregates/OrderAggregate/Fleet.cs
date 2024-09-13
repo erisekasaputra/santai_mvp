@@ -9,7 +9,7 @@ public class Fleet : Entity
     public string Brand { get; private set; }
     public string Model { get; private set; }
     public string RegistrationNumber { get; private set; }
-    public string ImageUrl { get; private set; }
+    public string? ImageUrl { get; private set; }
     public Fleet()
     {
         Brand = string.Empty;
@@ -23,7 +23,7 @@ public class Fleet : Entity
         string brand,
         string model,
         string registrationNumber,
-        string imageUrl)
+        string? imageUrl)
     {
         OrderId = orderingId;
         FleetId = fleetId;

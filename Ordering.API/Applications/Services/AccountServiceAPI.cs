@@ -1,5 +1,7 @@
-﻿using Ordering.API.Applications.Dtos.Responses;
-using Ordering.API.Applications.Services.Interfaces; 
+﻿using Core.Exceptions;
+using Ordering.API.Applications.Dtos.Responses;
+using Ordering.API.Applications.Services.Interfaces;
+using System.Net;
 using System.Text.Json;
 
 namespace Ordering.API.Applications.Services;
@@ -13,7 +15,7 @@ public class AccountServiceAPI : IAccountServiceAPI
         _httpClient = httpClient;
     }
 
-    public async Task<UserInfoResponseDto?> GetUserDetail(Guid userId)
+    public async Task<(ResultResponseDto<TDataType>?, bool isSuccess)> GetUserDetail<TDataType>(Guid userId, IEnumerable<Guid> fleetIds)
     {
         try
         {
@@ -21,19 +23,25 @@ public class AccountServiceAPI : IAccountServiceAPI
 
             var response = await _httpClient.GetAsync(endpoint);
 
-            response.EnsureSuccessStatusCode();
+            string content;
 
-            var content = await response.Content.ReadAsStringAsync();
+            if (response.StatusCode is HttpStatusCode.NotFound or HttpStatusCode.BadRequest)
+            {
+                content = await response.Content.ReadAsStringAsync(); 
+                var result = JsonSerializer.Deserialize<ResultResponseDto<TDataType>>(content); 
+                return (null, false);
+            }
 
-            return JsonSerializer.Deserialize<UserInfoResponseDto>(content);
-        }
-        catch (HttpRequestException ex)
-        {
-            throw new Exception("An error occurred while fetching time zone data from the account service.", ex);
-        }
+            response.EnsureSuccessStatusCode(); 
+            content = await response.Content.ReadAsStringAsync(); 
+            return (JsonSerializer.Deserialize<ResultResponseDto<TDataType>>(content), true);
+        } 
         catch (Exception ex)
         {
-            throw new Exception("An error occurred while fetching time zone data from the account service.", ex);
+            throw new CatalogServiceHttpRequestException(
+                message: "Custom message: Failed to communicate with the Account Service.",
+                inner: ex
+            );
         }
     }
 }

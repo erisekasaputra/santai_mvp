@@ -74,7 +74,7 @@ public class LineItem : Entity
         Quantity -= quantity;
     }
 
-    public void ApplyDiscount(Coupon coupon)
+    public void ApplyDiscount(Discount coupon)
     {
         if (coupon is null)
             throw new DomainException("Coupon cannot be null.");

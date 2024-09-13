@@ -75,7 +75,9 @@ public class StaffRepository : IStaffRepository
 
     public Task<Staff?> GetByBusinessUserIdAndStaffIdAsync(Guid userId, Guid staffId)
     {
-        return _context.Staffs.FirstOrDefaultAsync(x => x.BusinessUserId == userId && x.Id == staffId);
+        return _context.Staffs
+            .Include(x => x.Fleets)
+            .FirstOrDefaultAsync(x => x.BusinessUserId == userId && x.Id == staffId);
     }
      
 
@@ -92,7 +94,9 @@ public class StaffRepository : IStaffRepository
 
     public async Task<Staff?> GetByIdAsync(Guid id)
     {
-        return await _context.Staffs.FirstOrDefaultAsync(x => x.Id == id);
+        return await _context.Staffs
+            .Include(x => x.Fleets)
+            .FirstOrDefaultAsync(x => x.Id == id);
     } 
 
     public void Update(Staff staff)

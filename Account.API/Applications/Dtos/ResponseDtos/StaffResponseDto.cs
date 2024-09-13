@@ -5,4 +5,5 @@ public record StaffResponseDto(
     string? PhoneNumber,
     string Name,
     AddressResponseDto Address,
-    string TimeZoneId);
+    string TimeZoneId,
+    IEnumerable<FleetResponseDto> Fleets);

@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "D7bZFUTNkps=",
+  "dgSpecHash": "ib6TYbXX3o8=",
   "success": true,
   "projectFilePath": "C:\\Santai.MVP\\Account.API\\Account.API.csproj",
   "expectedPackageFiles": [
@@ -30,6 +30,11 @@
     "C:\\Users\\erise\\.nuget\\packages\\grpc.net.clientfactory\\2.65.0\\grpc.net.clientfactory.2.65.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\grpc.net.common\\2.65.0\\grpc.net.common.2.65.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\grpc.tools\\2.65.0\\grpc.tools.2.65.0.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\hangfire\\1.8.14\\hangfire.1.8.14.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\hangfire.aspnetcore\\1.8.14\\hangfire.aspnetcore.1.8.14.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\hangfire.core\\1.8.14\\hangfire.core.1.8.14.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\hangfire.netcore\\1.8.14\\hangfire.netcore.1.8.14.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\hangfire.sqlserver\\1.8.14\\hangfire.sqlserver.1.8.14.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\humanizer.core\\2.14.1\\humanizer.core.2.14.1.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\libphonenumber-csharp\\8.13.45\\libphonenumber-csharp.8.13.45.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\linqkit\\1.3.0\\linqkit.1.3.0.nupkg.sha512",

@@ -1,9 +1,11 @@
 using Account.API;
-using Account.API.API;  
+using Account.API.API;
+using Account.API.Applications.Services;
 using Account.API.Extensions;
 using Account.API.Middleware; 
 using Account.Infrastructure;
 using Core.Extensions;
+using Hangfire;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,6 +32,22 @@ builder.Services.AddMassTransitContext<AccountDbContext>();
 builder.Services.AddDataEncryption(builder.Configuration); 
 
 var app = builder.Build();
+
+app.UseHangfireDashboard();  
+var recurringJobManager = app.Services.GetRequiredService<IRecurringJobManager>();
+var orderJobService = app.Services.GetRequiredService<OrderJobService>();
+
+recurringJobManager.AddOrUpdate(
+    "OrderWaitingMechanicAssign",  
+    () => orderJobService.OrderWaitingMechanicAssignSync(),   
+    "* * * * * *" 
+);
+
+recurringJobManager.AddOrUpdate(
+    "OrderWaitingMechanicConfirm",
+    () => orderJobService.OrderWaitingMechanicConfirmSync(),
+    "* * * * * *"
+);
 
 app.UseAuthentication(); 
 app.UseAuthorization();

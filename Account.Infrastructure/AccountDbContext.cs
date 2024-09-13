@@ -4,12 +4,13 @@ using Account.Domain.Aggregates.DrivingLicenseAggregate;
 using Account.Domain.Aggregates.FleetAggregate;
 using Account.Domain.Aggregates.LoyaltyAggregate;
 using Account.Domain.Aggregates.NationalIdentityAggregate;
+using Account.Domain.Aggregates.OrderTaskAggregate;
 using Account.Domain.Aggregates.ReferralAggregate;
 using Account.Domain.Aggregates.ReferredAggregate;
 using Account.Domain.Aggregates.UserAggregate;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage; 
+using Microsoft.EntityFrameworkCore.Storage;
 using System.Data;
 
 namespace Account.Infrastructure;
@@ -26,6 +27,10 @@ public class AccountDbContext : DbContext
     public DbSet<Certification> Certifications { get; set; }
     public DbSet<Staff> Staffs { get; set; }
     public DbSet<Fleet> Fleets { get; set; }
+    public DbSet<MechanicOrderTask> MechanicOrderTasks { get; set; } 
+    public DbSet<OrderTaskWaitingMechanicAssign> OrderTaskWaitingMechanicAssigns { get; set; } 
+    public DbSet<OrderTaskWaitingMechanicConfirm> OrderTaskWaitingMechanicConfirms { get; set; } 
+    public DbSet<MechanicOrderTaskAborted> MechanicOrderTaskAborteds { get; set; } 
 
     private IDbContextTransaction? _currentTransaction;
 

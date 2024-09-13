@@ -12,7 +12,7 @@ public class OrderDbContext : DbContext
 {
     public DbSet<Buyer> Buyers { get; set; }
     public DbSet<Cancellation> Cancellations { get; set; }
-    public DbSet<Coupon> Coupons { get; set; }
+    public DbSet<Discount> Discount { get; set; }
     public DbSet<Fee> Fees { get; set; }
     public DbSet<Fleet> Fleets { get; set; }
     public DbSet<LineItem> LineItems { get; set; }

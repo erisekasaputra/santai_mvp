@@ -3,7 +3,7 @@ using Ordering.Domain.Enumerations;
 
 namespace Ordering.API.Applications.Dtos.Responses;
 
-public class CouponResponseDto
+public class DiscountResponseDto
 { 
     public string CouponCode { get; private set; }
     public PercentageOrValueType Parameter { get; private set; }
@@ -12,7 +12,7 @@ public class CouponResponseDto
     public decimal ValueAmount { get; private set; }
     public decimal MinimumOrderValue { get; private set; }
     public decimal DiscountAmount { get; private set; }
-    public CouponResponseDto(
+    public DiscountResponseDto(
         string couponCode,
         PercentageOrValueType parameter,
         Currency currency,

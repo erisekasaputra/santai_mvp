@@ -329,6 +329,7 @@ public class CreateMechanicUserCommandHandler(
             request.Email,
             request.PhoneNumber,
             request.TimeZoneId,
+            user.PersonalInfo.ToPersonalInfoResponseDto(user.TimeZoneId),
             user.LoyaltyProgram.ToLoyaltyProgramResponseDto(),
             addressResponseDto,
             certificatonResponseDto,

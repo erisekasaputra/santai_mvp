@@ -1,6 +1,8 @@
-﻿using Account.API.Applications.Commands.MechanicUserCommand.ConfirmDrivingLicenseByUserId;
+﻿using Account.API.Applications.Commands.MechanicUserCommand.ActivateMechanicStatusByUserId;
+using Account.API.Applications.Commands.MechanicUserCommand.ConfirmDrivingLicenseByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.ConfirmNationalIdentityByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.CreateMechanicUser;
+using Account.API.Applications.Commands.MechanicUserCommand.DeactivateMechanicStatusByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.DeleteMechanicUserByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.ForceSetDeviceIdByMechanicUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.RejectDrivingLicenseByUserId;
@@ -21,11 +23,13 @@ using Account.API.Applications.Queries.GetPaginatedMechanicUser;
 using Account.API.Applications.Services; 
 using Account.API.CustomAttributes;
 using Account.API.Extensions;
+using Account.Domain.Aggregates.UserAggregate;
 using Core.Configurations;
 using Core.Dtos;
 using Core.Enumerations;
 using Core.Messages;
 using Core.SeedWorks;
+using Core.Services;
 using Core.Services.Interfaces;
 using FluentValidation; 
 using Microsoft.AspNetCore.Mvc;
@@ -62,7 +66,7 @@ public static class MechanicUserApi
              {
                  config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
                  config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
-             });
+             }); 
 
         app.MapGet("/{mechanicUserId}/driving-license", GetDrivingLicenseByMechanicUserId)
             .CacheOutput()
@@ -73,6 +77,11 @@ public static class MechanicUserApi
             .RequireAuthorization(PolicyName.MechanicUserAndAdministratorUserPolicy.ToString());
 
 
+        app.MapPatch("/status/activate", ActivateMechanicStatus)
+            .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());
+        
+        app.MapPatch("/status/deactivate", DeactivateMechanicStatus)
+            .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());
 
         app.MapPatch("/{mechanicUserId}/rating", SetRating)
              .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
@@ -116,6 +125,52 @@ public static class MechanicUserApi
             .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
 
         return app;
+    }
+
+    private static async Task<IResult> ActivateMechanicStatus( 
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
+    {
+        try
+        {
+            var userClaim = userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            } 
+
+            var result = await service.Mediator.Send(new ActivateMechanicStatusByUserIdCommand(userClaim.Sub));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+    private static async Task<IResult> DeactivateMechanicStatus( 
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
+    {
+        try
+        {
+            var userClaim = userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+             
+            var result = await service.Mediator.Send(new DeactivateMechanicStatusByUserIdCommand(userClaim.Sub));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
     }
 
     private static async Task<IResult> GetNationalIdentityByMechanicUserId(

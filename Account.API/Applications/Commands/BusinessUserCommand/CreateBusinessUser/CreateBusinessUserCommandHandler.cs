@@ -237,8 +237,9 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
             await _unitOfWork.BaseUsers.CreateAsync(user);
 
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
-            
-            return Result.Success(ToBusinessUserResponseDto(user, request), ResponseStatus.Created); 
+
+            var result = ToBusinessUserResponseDto(user, request);
+            return Result.Success(result, ResponseStatus.Created); 
         }
         catch (DomainException ex)
         {
@@ -315,7 +316,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
                 // if not null then proccess it 
                 if (staffRequest is not null)
-                {
+                { 
                     var staffAddress = new AddressResponseDto(
                          staffRequest.Address.AddressLine1,
                          staffRequest.Address.AddressLine2,
@@ -331,13 +332,14 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
                         staffRequest.PhoneNumber,
                         staff.Name,
                         staffAddress,
-                        user.TimeZoneId));
+                        user.TimeZoneId,
+                        []));
                 } 
                 
                 // incrementing index for next looping
                 index++;
             }
-        }
+        } 
 
         var businessUserResponseDto = new BusinessUserResponseDto(
                 user.Id,  
@@ -350,7 +352,8 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
                 request.TaxId,
                 request.WebsiteUrl,
                 request.BusinessDescription,
-                loyalty,
+                loyalty, 
+                [],
                 businessLicenses,
                 staffs
             );

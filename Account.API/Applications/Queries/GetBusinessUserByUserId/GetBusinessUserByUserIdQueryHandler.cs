@@ -24,7 +24,9 @@ public class GetBusinessUserByUserIdQueryHandler(
     public async Task<Result> Handle(GetBusinessUserByUserIdQuery request, CancellationToken cancellationToken)
     {
         try
-        { 
+        {
+            var fleetIds = request.FleetsRequest?.FleetIds;
+
             var user = await _unitOfWork.BaseUsers.GetBusinessUserByIdAsync(request.Id); 
             if (user is null)
             {
@@ -39,12 +41,9 @@ public class GetBusinessUserByUserIdQueryHandler(
             var decryptedAddressLine2 = await DecryptNullableAsync(user.Address.EncryptedAddressLine2);
             var decryptedAddressLine3 = await DecryptNullableAsync(user.Address.EncryptedAddressLine3);
 
-            var address = new AddressResponseDto(
-                    // decrypted from existing entity
-                    decryptedAddressLine1,
-                    // decrypted from existing entity
-                    decryptedAddressLine2,
-                    // decrypted from existing entity
+            var address = new AddressResponseDto( 
+                    decryptedAddressLine1, 
+                    decryptedAddressLine2, 
                     decryptedAddressLine3,
                     user.Address.City,
                     user.Address.State,
@@ -95,7 +94,49 @@ public class GetBusinessUserByUserIdQueryHandler(
                          staff.Address.State,
                          staff.Address.PostalCode,
                          staff.Address.Country
-                    ); 
+                    );
+
+
+                    List<FleetResponseDto> staffFleets = [];
+
+                    if (staff.Fleets is not null && staff.Fleets.Count > 0)
+                    {
+                        foreach (var staffFleet in staff.Fleets)
+                        {
+                            if (fleetIds is not null && fleetIds.Any() && !fleetIds.Contains(staffFleet.Id))
+                            {
+                                continue;
+                            }
+
+                            var staffFleetRegistrationNumber = await DecryptAsync(staffFleet.EncryptedRegistrationNumber);
+                            var staffFleetChassisNumber = await DecryptAsync(staffFleet.EncryptedChassisNumber);
+                            var staffFleetEngineNumber = await DecryptAsync(staffFleet.EncryptedEngineNumber);
+                            var staffFleetInsuranceNumber = await DecryptAsync(staffFleet.EncryptedInsuranceNumber);
+                            var staffFleetOwnerName = await DecryptAsync(staffFleet.Owner.EncryptedOwnerName);
+                            var staffFleetOwnerAddress = await DecryptAsync(staffFleet.Owner.EncryptedOwnerAddress);
+
+                            staffFleets.Add(new FleetResponseDto(
+                                staffFleet.Id,
+                                staffFleetRegistrationNumber,
+                                staffFleet.VehicleType,
+                                staffFleet.Brand,
+                                staffFleet.Model,
+                                staffFleet.YearOfManufacture,
+                                staffFleetChassisNumber,
+                                staffFleetEngineNumber,
+                                staffFleetInsuranceNumber,
+                                staffFleet.IsInsuranceValid,
+                                staffFleet.LastInspectionDateUtc,
+                                staffFleet.OdometerReading,
+                                staffFleet.FuelType,
+                                staffFleetOwnerName,
+                                staffFleetOwnerAddress,
+                                staffFleet.UsageStatus,
+                                staffFleet.OwnershipStatus,
+                                staffFleet.TransmissionType,
+                                staffFleet.ImageUrl));
+                        }
+                    }
 
                     staffResponses.Add(new StaffResponseDto( 
                             staff.Id, 
@@ -103,10 +144,54 @@ public class GetBusinessUserByUserIdQueryHandler(
                             decryptedStaffPhoneNumber,
                             staff.Name,
                             staffAddress,
-                            staff.TimeZoneId
+                            staff.TimeZoneId,
+                            staffFleets
                         ));
                 }
             }
+
+
+            List<FleetResponseDto> fleets = [];
+
+            if (user.Fleets is not null && user.Fleets.Count > 0)
+            {
+                foreach (var fleet in user.Fleets)
+                {
+                    if (fleetIds is not null && fleetIds.Any() && !fleetIds.Contains(fleet.Id))
+                    {
+                        continue;
+                    }
+
+                    var registrationNumber = await DecryptAsync(fleet.EncryptedRegistrationNumber);
+                    var chassisNumber = await DecryptAsync(fleet.EncryptedChassisNumber);
+                    var engineNumber = await DecryptAsync(fleet.EncryptedEngineNumber);
+                    var insuranceNumber = await DecryptAsync(fleet.EncryptedInsuranceNumber);
+                    var ownerName = await DecryptAsync(fleet.Owner.EncryptedOwnerName);
+                    var ownerAddress = await DecryptAsync(fleet.Owner.EncryptedOwnerAddress);
+
+                    fleets.Add(new FleetResponseDto(
+                        fleet.Id,
+                        registrationNumber,
+                        fleet.VehicleType,
+                        fleet.Brand,
+                        fleet.Model,
+                        fleet.YearOfManufacture,
+                        chassisNumber,
+                        engineNumber,
+                        insuranceNumber,
+                        fleet.IsInsuranceValid,
+                        fleet.LastInspectionDateUtc,
+                        fleet.OdometerReading,
+                        fleet.FuelType,
+                        ownerName,
+                        ownerAddress,
+                        fleet.UsageStatus,
+                        fleet.OwnershipStatus,
+                        fleet.TransmissionType,
+                        fleet.ImageUrl));
+                }
+            }
+
 
             var userDto = new BusinessUserResponseDto(
                 user.Id, 
@@ -119,7 +204,8 @@ public class GetBusinessUserByUserIdQueryHandler(
                 decryptedTaxId,
                 user.WebsiteUrl,
                 user.Description,
-                user.LoyaltyProgram.ToLoyaltyProgramResponseDto(),
+                user.LoyaltyProgram.ToLoyaltyProgramResponseDto(), 
+                fleets,
                 businessLicenseResponses,
                 staffResponses); 
 

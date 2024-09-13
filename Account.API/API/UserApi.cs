@@ -55,6 +55,7 @@ public static class UserApi
 
     private static async Task<IResult> GetByUserId(
         Guid userId,
+        [AsParameters] FleetsRequestDto? fleetsRequest,
         [FromServices] ApplicationService service,
         [FromServices] IUserInfoService userInfoService)
     {
@@ -70,21 +71,21 @@ public static class UserApi
             if (userClaim.CurrentUserType == UserType.StaffUser)
             {
                 result = await service.Mediator.Send(
-                    new GetStaffByIdQuery(userId));
+                    new GetStaffByIdQuery(userId, fleetsRequest));
 
                 return result.ToIResult();
             }
             else if (userClaim.CurrentUserType == UserType.BusinessUser)
             {
                 result = await service.Mediator.Send(
-                   new GetBusinessUserByUserIdQuery(userId));
+                   new GetBusinessUserByUserIdQuery(userId, fleetsRequest));
 
                 return result.ToIResult();
             }
             else if (userClaim.CurrentUserType == UserType.RegularUser)
             {
                 result = await service.Mediator.Send(
-                   new GetRegularUserByUserIdQuery(userId));
+                   new GetRegularUserByUserIdQuery(userId, fleetsRequest));
 
                 return result.ToIResult();
             }

@@ -475,6 +475,36 @@ namespace Account.Infrastructure.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.OrderTask", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float(24)");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float(24)");
+
+                    b.Property<Guid>("MechanicId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MechanicId")
+                        .IsUnique();
+
+                    b.HasIndex("OrderId")
+                        .IsUnique()
+                        .HasFilter("[OrderId] IS NOT NULL");
+
+                    b.ToTable("OrderTasks");
+                });
+
             modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.Staff", b =>
                 {
                     b.Property<Guid>("Id")
@@ -971,6 +1001,15 @@ namespace Account.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.OrderTask", b =>
+                {
+                    b.HasOne("Account.Domain.Aggregates.UserAggregate.MechanicUser", null)
+                        .WithOne("OrderTask")
+                        .HasForeignKey("Account.Domain.Aggregates.UserAggregate.OrderTask", "MechanicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.Staff", b =>
                 {
                     b.HasOne("Account.Domain.Aggregates.UserAggregate.BusinessUser", "BusinessUser")
@@ -1164,6 +1203,9 @@ namespace Account.Infrastructure.Migrations
                     b.Navigation("DrivingLicenses");
 
                     b.Navigation("NationalIdentities");
+
+                    b.Navigation("OrderTask")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

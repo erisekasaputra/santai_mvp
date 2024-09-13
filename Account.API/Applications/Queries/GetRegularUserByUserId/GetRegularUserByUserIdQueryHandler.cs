@@ -5,9 +5,7 @@ using Core.Results;
 using Core.Messages;
 using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.SeedWork;
-using MediatR;
-using Microsoft.Extensions.Options;
-using Core.Configurations;
+using MediatR; 
 using Core.Services.Interfaces;
 
 namespace Account.API.Applications.Queries.GetRegularUserByUserId;
@@ -15,15 +13,11 @@ namespace Account.API.Applications.Queries.GetRegularUserByUserId;
 public class GetRegularUserByUserIdQueryHandler(
     IUnitOfWork unitOfWork,
     ApplicationService service,
-    IEncryptionService kmsClient,
-    ICacheService cacheService,
-    IOptionsMonitor<CacheConfiguration> cacheOption) : IRequestHandler<GetRegularUserByUserIdQuery, Result>
+    IEncryptionService kmsClient) : IRequestHandler<GetRegularUserByUserIdQuery, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ApplicationService _service = service;
-    private readonly IEncryptionService _kmsClient = kmsClient;
-    private readonly ICacheService _cacheService = cacheService;
-    private readonly IOptionsMonitor<CacheConfiguration> _cacheOptions = cacheOption;
+    private readonly IEncryptionService _kmsClient = kmsClient;  
 
     public async Task<Result> Handle(GetRegularUserByUserIdQuery request, CancellationToken cancellationToken)
     {
@@ -36,7 +30,7 @@ public class GetRegularUserByUserIdQueryHandler(
                 return Result.Failure($"User '{request.UserId}' not found", ResponseStatus.NotFound);
             }
 
-            var userDto = await ToRegularUserResponseDto(user);
+            var userDto = await ToRegularUserResponseDto(user, request.FleetsRequest?.FleetIds);
              
             return Result.Success(userDto);
         }
@@ -47,13 +41,54 @@ public class GetRegularUserByUserIdQueryHandler(
         }
     }
 
-    private async Task<RegularUserResponseDto> ToRegularUserResponseDto(RegularUser user)
+    private async Task<RegularUserResponseDto> ToRegularUserResponseDto(RegularUser user, IEnumerable<Guid>? fleetIds = null)
     {
         var decryptedEmail = await DecryptNullableAsync(user.EncryptedEmail);
         var decryptedPhoneNumber = await DecryptNullableAsync(user.EncryptedPhoneNumber);
         var decryptedAddressLine1 = await DecryptAsync(user.Address.EncryptedAddressLine1);
         var decryptedAddressLine2 = await DecryptNullableAsync(user.Address.EncryptedAddressLine2);
         var decryptedAddressLine3 = await DecryptNullableAsync(user.Address.EncryptedAddressLine3);
+
+        List<FleetResponseDto> fleets = [];
+
+        if (user.Fleets is not null && user.Fleets.Count > 0) 
+        { 
+            foreach(var fleet in user.Fleets)
+            {
+                if (fleetIds is not null && fleetIds.Any() && !fleetIds.Contains(fleet.Id))
+                {
+                    continue;
+                } 
+
+                var registrationNumber = await DecryptAsync(fleet.EncryptedRegistrationNumber);
+                var chassisNumber = await DecryptAsync(fleet.EncryptedChassisNumber);
+                var engineNumber = await DecryptAsync(fleet.EncryptedEngineNumber);
+                var insuranceNumber = await DecryptAsync(fleet.EncryptedInsuranceNumber);
+                var ownerName = await DecryptAsync(fleet.Owner.EncryptedOwnerName);
+                var ownerAddress = await DecryptAsync(fleet.Owner.EncryptedOwnerAddress);
+
+                fleets.Add(new FleetResponseDto(
+                    fleet.Id,
+                    registrationNumber,
+                    fleet.VehicleType,
+                    fleet.Brand,
+                    fleet.Model,
+                    fleet.YearOfManufacture,
+                    chassisNumber,
+                    engineNumber,
+                    insuranceNumber,
+                    fleet.IsInsuranceValid,
+                    fleet.LastInspectionDateUtc,
+                    fleet.OdometerReading,
+                    fleet.FuelType,
+                    ownerName,
+                    ownerAddress,
+                    fleet.UsageStatus,
+                    fleet.OwnershipStatus,
+                    fleet.TransmissionType,
+                    fleet.ImageUrl));
+            }
+        } 
 
         var address = new AddressResponseDto(
             decryptedAddressLine1,
@@ -70,7 +105,8 @@ public class GetRegularUserByUserIdQueryHandler(
                 decryptedPhoneNumber,
                 user.TimeZoneId,
                 address,
-                user.PersonalInfo.ToPersonalInfoResponseDto(user.TimeZoneId));
+                user.PersonalInfo.ToPersonalInfoResponseDto(user.TimeZoneId),
+                fleets);
     }
 
     private async Task<string> DecryptAsync(string cipherText)

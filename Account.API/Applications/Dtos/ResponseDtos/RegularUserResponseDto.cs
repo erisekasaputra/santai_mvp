@@ -6,4 +6,5 @@ public record RegularUserResponseDto(
     string? PhoneNumber,
     string TimeZoneId,
     AddressResponseDto Address,
-    PersonalInfoResponseDto PersonalInfo);
+    PersonalInfoResponseDto PersonalInfo,
+    IEnumerable<FleetResponseDto> Fleets);

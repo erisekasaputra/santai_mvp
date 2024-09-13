@@ -2,7 +2,7 @@
 using Account.Domain.Enumerations;
 using Microsoft.EntityFrameworkCore;
 using LinqKit;
-using Core.Enumerations;
+using Core.Enumerations; 
 
 namespace Account.Infrastructure.Repositories;
 
@@ -46,10 +46,10 @@ public class UserRepository : IUserRepository
     public async Task<BusinessUser?> GetBusinessUserByIdAsync(Guid id)
     {
         return await _context.BaseUsers.OfType<BusinessUser>()
-            .Include(x => x.BusinessLicenses)
-            .Include(x => x.Staffs) 
+            .Include(x => x.BusinessLicenses) 
             .Include(x => x.ReferralProgram)
-            .Include(x => x.LoyaltyProgram) 
+            .Include(x => x.LoyaltyProgram)
+            .Include(x => x.Fleets)
             .AsSplitQuery()
             .FirstOrDefaultAsync(x => x.Id == id);
     } 
@@ -58,7 +58,8 @@ public class UserRepository : IUserRepository
     {
         return await _context.BaseUsers.OfType<RegularUser>()
             .Include(x => x.LoyaltyProgram)
-            .Include(x => x.ReferralProgram) 
+            .Include(x => x.ReferralProgram)
+            .Include(x => x.Fleets)
             .FirstOrDefaultAsync(x => x.Id == id);
     } 
 
@@ -69,7 +70,8 @@ public class UserRepository : IUserRepository
             .Include(x => x.ReferralProgram)
             .Include(x => x.NationalIdentities)
             .Include(x => x.DrivingLicenses)
-            .Include(x => x.Certifications) 
+            .Include(x => x.Certifications)
+            .Include(x => x.MechanicOrderTask)
             .FirstOrDefaultAsync(x => x.Id == id);
     }
 
@@ -139,7 +141,10 @@ public class UserRepository : IUserRepository
 
     public Task<BaseUser?> GetByIdAsync(Guid id)
     {
-        return _context.BaseUsers.FirstOrDefaultAsync(x => x.Id == id);
+        return _context.BaseUsers
+            .Include(x => x.LoyaltyProgram)
+            .Include(x => x.ReferralProgram)    
+            .FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public async Task<bool> GetAnyByIdAsync(Guid id)
@@ -262,6 +267,7 @@ public class UserRepository : IUserRepository
             .OfType<MechanicUser>()
             .Include(x => x.ReferralProgram)
             .Include(x => x.LoyaltyProgram)  
+            .Include(x => x.MechanicOrderTask)
             .OrderByDescending(x => x.AccountStatus == AccountStatus.Active)
             .OrderByDescending(x => x.IsVerified)
             .OrderBy(x => x.PersonalInfo.FirstName)
@@ -310,5 +316,5 @@ public class UserRepository : IUserRepository
            .Where(x => x.Id == id)
            .Select(x => x.DeviceId)
            .FirstOrDefaultAsync();
-    }
+    } 
 }

@@ -31,9 +31,9 @@ public class OrderingEntityConfiguration : IEntityTypeConfiguration<Order>
            .HasForeignKey<Payment>(o => o.OrderId)
            .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasOne(p => p.Coupon)
+        builder.HasOne(p => p.Discount)
             .WithOne()
-            .HasForeignKey<Coupon>(e => e.OrderId)
+            .HasForeignKey<Discount>(e => e.OrderId)
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Property(o => o.Currency)

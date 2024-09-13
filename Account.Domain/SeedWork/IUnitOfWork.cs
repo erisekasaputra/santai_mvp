@@ -4,6 +4,7 @@ using Account.Domain.Aggregates.DrivingLicenseAggregate;
 using Account.Domain.Aggregates.FleetAggregate;
 using Account.Domain.Aggregates.LoyaltyAggregate;
 using Account.Domain.Aggregates.NationalIdentityAggregate;
+using Account.Domain.Aggregates.OrderTaskAggregate;
 using Account.Domain.Aggregates.ReferralAggregate;
 using Account.Domain.Aggregates.ReferredAggregate;
 using Account.Domain.Aggregates.UserAggregate; 
@@ -32,6 +33,8 @@ public interface IUnitOfWork
     IStaffRepository Staffs { get; }
 
     IFleetRepository Fleets { get; }
+
+    IOrderTaskRepository OrderTasks { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 

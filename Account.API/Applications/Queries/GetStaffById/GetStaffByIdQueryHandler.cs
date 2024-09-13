@@ -20,6 +20,8 @@ public class GetStaffByIdQueryHandler(
     {
         try
         {
+            var fleetIds = request.FleetsRequest?.FleetIds;
+
             var staff = await _unitOfWork.Staffs.GetByIdAsync(request.StaffId);
 
             if (staff is null)
@@ -34,6 +36,46 @@ public class GetStaffByIdQueryHandler(
             var decryptedAddressLine2 = await DecryptNullableAsync(staff.Address.EncryptedAddressLine2);
             var decryptedAddressLine3 = await DecryptNullableAsync(staff.Address.EncryptedAddressLine3);
 
+            List<FleetResponseDto> fleets = [];
+
+            if (staff.Fleets is not null && staff.Fleets.Count > 0)
+            {
+                foreach (var fleet in staff.Fleets)
+                {
+                    if (fleetIds is not null && fleetIds.Any() && !fleetIds.Contains(fleet.Id))
+                    {
+                        continue;
+                    }
+
+                    var registrationNumber = await DecryptAsync(fleet.EncryptedRegistrationNumber);
+                    var chassisNumber = await DecryptAsync(fleet.EncryptedChassisNumber);
+                    var engineNumber = await DecryptAsync(fleet.EncryptedEngineNumber);
+                    var insuranceNumber = await DecryptAsync(fleet.EncryptedInsuranceNumber);
+                    var ownerName = await DecryptAsync(fleet.Owner.EncryptedOwnerName);
+                    var ownerAddress = await DecryptAsync(fleet.Owner.EncryptedOwnerAddress);
+
+                    fleets.Add(new FleetResponseDto(
+                        fleet.Id,
+                        registrationNumber,
+                        fleet.VehicleType,
+                        fleet.Brand,
+                        fleet.Model,
+                        fleet.YearOfManufacture,
+                        chassisNumber,
+                        engineNumber,
+                        insuranceNumber,
+                        fleet.IsInsuranceValid,
+                        fleet.LastInspectionDateUtc,
+                        fleet.OdometerReading,
+                        fleet.FuelType,
+                        ownerName,
+                        ownerAddress,
+                        fleet.UsageStatus,
+                        fleet.OwnershipStatus,
+                        fleet.TransmissionType,
+                        fleet.ImageUrl));
+                }
+            }
 
             var addressDto = new AddressResponseDto(
                 decryptedAddressLine1,
@@ -50,7 +92,8 @@ public class GetStaffByIdQueryHandler(
                     decryptedPhoneNumber,
                     staff.Name,
                     addressDto,
-                    staff.TimeZoneId);
+                    staff.TimeZoneId,
+                    fleets);
 
             return Result.Success(staffDto, ResponseStatus.Ok);
         }

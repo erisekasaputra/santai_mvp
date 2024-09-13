@@ -5,6 +5,7 @@ public record MechanicUserResponseDto(
     string? Email,
     string? PhoneNumber,
     string TimeZoneId,
+    PersonalInfoResponseDto personalInfoResponseDto,
     LoyaltyProgramResponseDto LoyaltyProgram,
     AddressResponseDto Address,
     IEnumerable<CertificationResponseDto>? Certifications,

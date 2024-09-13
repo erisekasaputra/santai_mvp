@@ -1,31 +1,29 @@
-﻿using Account.Domain.Aggregates.CertificationAggregate;  
+﻿using Account.Domain.Aggregates.CertificationAggregate;
 using Account.Domain.ValueObjects;
 using Account.Domain.Enumerations;
 using Account.Domain.Aggregates.NationalIdentityAggregate;
 using Account.Domain.Aggregates.DrivingLicenseAggregate;
 using Account.Domain.Events;
 using Core.Exceptions;
+using Account.Domain.Aggregates.OrderTaskAggregate;
 
 namespace Account.Domain.Aggregates.UserAggregate;
 
 public class MechanicUser : BaseUser
 {  
-    public PersonalInfo PersonalInfo { get; private set; }
-
-    public ICollection<Certification>? Certifications { get; private set; }
-
-    public ICollection<DrivingLicense>? DrivingLicenses { get; private set; } // Navigation properties
-
-    public ICollection<NationalIdentity>? NationalIdentities { get; private set; } // Navigation properties
-
-    public decimal Rating { get; private set; }
-     
-    public bool IsVerified { get; private set; }
-
+    public PersonalInfo PersonalInfo { get; private set; } 
+    public ICollection<Certification>? Certifications { get; private set; } 
+    public ICollection<DrivingLicense>? DrivingLicenses { get; private set; } // Navigation properties 
+    public ICollection<NationalIdentity>? NationalIdentities { get; private set; } // Navigation properties 
+    public decimal Rating { get; private set; }  
+    public bool IsVerified { get; private set; } 
     public string? DeviceId { get; private set; }
+    public MechanicOrderTask MechanicOrderTask { get; private set; }
+    public bool IsActive { get; private set; }
 
     protected MechanicUser() : base()
     {
+        MechanicOrderTask = null!;
         PersonalInfo = null!;
     }
 
@@ -45,8 +43,45 @@ public class MechanicUser : BaseUser
         Rating = 5;
         IsVerified = false;
         DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
-
+        MechanicOrderTask = new MechanicOrderTask(Id, null, 0, 0);
+        IsActive = false;
         RaiseMechanicUserCreatedDomainEvent(this);
+    }
+
+    public void Activate()
+    {
+        if (!IsVerified)
+        {
+            throw new DomainException("Can not activate you account if the document has not verified");
+        }
+
+        if (IsActive) 
+        {
+            throw new DomainException("Mechanic account has been activated");
+        }
+
+        IsActive = true;
+        RaiseMechanicActivatedDomainEvent();
+    }
+
+    private void RaiseMechanicActivatedDomainEvent()
+    {
+        AddDomainEvent(new MechanicActivatedDomainEvent(this));
+    }
+
+    public void Deactivate()
+    {
+        if (!IsActive)
+        {
+            throw new DomainException("Mechanic account has been deactivated"); 
+        }
+
+        if (MechanicOrderTask.IsOrderAssigned)
+        {
+            throw new DomainException("Can not turn off status, you have an active order");
+        }
+
+        IsActive = false;
     }
 
     public void Update(PersonalInfo personalInfo, Address address, string timeZoneId)

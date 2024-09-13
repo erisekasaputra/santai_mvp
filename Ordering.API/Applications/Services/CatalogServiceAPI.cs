@@ -51,7 +51,7 @@ public class CatalogServiceAPI : ICatalogServiceAPI
         catch (HttpRequestException ex)
         {
             throw new CatalogServiceHttpRequestException(
-                message: "Custom message: Failed to communicate with the Account Service.",
+                message: "Custom message: Failed to communicate with the Catalog Service.",
                 inner: ex
             );
         }

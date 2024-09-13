@@ -12,6 +12,7 @@ public class CacheService : ICacheService
     {
         _connectionMultiplexer = connectionMultiplexer;
     }
+
     public async Task<T?> GetAsync<T>(string key)
     {
         try
@@ -122,5 +123,5 @@ public class CacheService : ICacheService
         var db = _connectionMultiplexer.GetDatabase();
 
         return await db.KeyDeleteAsync(key);
-    }
+    } 
 }
