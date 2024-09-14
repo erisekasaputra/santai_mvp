@@ -46,11 +46,14 @@ public static class ServiceRegistrationExtension
             });
 
             var consumers = new (string QueueName, Type ConsumerType)[]
-                {
-                    ("account-service-identity-email-assigned-to-a-user-integration-event-queue", typeof(IdentityEmailAssignedToAUserIntegrationEventConsumer)),
-                    ("account-service-identity-phone-number-confirmed-integration-event-queue", typeof(IdentityPhoneNumberConfirmedIntegrationEventConsumer)),
-                    ("account-service-phone-number-duplicate-integration-event-queue", typeof(PhoneNumberDuplicateIntegrationEventConsumer))
-                };
+            {
+                ("account-service-identity-email-assigned-to-a-user-integration-event-queue", typeof(IdentityEmailAssignedToAUserIntegrationEventConsumer)),
+                ("account-service-identity-phone-number-confirmed-integration-event-queue", typeof(IdentityPhoneNumberConfirmedIntegrationEventConsumer)),
+                ("account-service-phone-number-duplicate-integration-event-queue", typeof(PhoneNumberDuplicateIntegrationEventConsumer)),
+                ("account-service-order-finding-mechanic-integration-event-queue", typeof(OrderFindingMechanicIntegrationEventConsumer)),
+                ("account-service-order-cancelled-by-mechanic-integration-event-queue", typeof(OrderCancelledByMechanicIntegrationEventConsumer)),
+                ("account-service-order-cancelled-by-user-integration-event-queue", typeof(OrderCancelledByUserIntegrationEventConsumer)) 
+            };
 
             foreach((_, Type consumerType) in consumers)
             {

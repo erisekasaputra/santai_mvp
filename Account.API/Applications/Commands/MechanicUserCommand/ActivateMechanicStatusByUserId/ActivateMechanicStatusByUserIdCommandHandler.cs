@@ -51,6 +51,7 @@ public class ActivateMechanicStatusByUserIdCommandHandler : IRequestHandler<Acti
 
                 if (!mechanic.IsVerified)
                 {
+                    await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                     return Result.Failure("Mechanic verification document is still waiting for verification", ResponseStatus.BadRequest);
                 }
 

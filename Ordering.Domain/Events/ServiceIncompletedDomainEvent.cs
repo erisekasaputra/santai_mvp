@@ -3,4 +3,4 @@ using Ordering.Domain.Aggregates.OrderAggregate;
 
 namespace Ordering.Domain.Events;
 
-public record OrderRejectedByMechanicDomainEvent(Order Order) : INotification;
+public record ServiceIncompletedDomainEvent(Order Order) : INotification;

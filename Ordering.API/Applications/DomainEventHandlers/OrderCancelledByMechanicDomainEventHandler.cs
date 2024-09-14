@@ -1,19 +1,12 @@
 ﻿using Core.Events;
 using MediatR; 
-using Ordering.Domain.Events;
-using Ordering.Domain.SeedWork;
-
-
-//using Polly;
-//using Polly.Retry;
-using System.Data;
+using Ordering.Domain.Events;  
 
 namespace Ordering.API.Applications.DomainEventHandlers;
 
 public class OrderCancelledByMechanicDomainEventHandler : INotificationHandler<OrderCancelledByMechanicDomainEvent>
 { 
-    private readonly IMediator _mediator; 
-
+    private readonly IMediator _mediator;  
     public OrderCancelledByMechanicDomainEventHandler( 
         IMediator mediator)
     { 
@@ -21,7 +14,10 @@ public class OrderCancelledByMechanicDomainEventHandler : INotificationHandler<O
     }
 
     public async Task Handle(OrderCancelledByMechanicDomainEvent notification, CancellationToken cancellationToken)
-    {
-        await _mediator.Publish(new OrderCancelledByMechanicIntegrationEvent(), cancellationToken);
+    { 
+        await _mediator.Publish(
+            new OrderCancelledByMechanicIntegrationEvent(
+                notification.Order.Id,
+                notification.Order.Mechanic!.MechanicId), cancellationToken);
     }
 }

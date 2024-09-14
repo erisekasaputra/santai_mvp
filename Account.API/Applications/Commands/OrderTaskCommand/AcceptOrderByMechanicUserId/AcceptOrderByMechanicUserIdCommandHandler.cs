@@ -1,9 +1,5 @@
-﻿using Account.API.Applications.Commands.MechanicUserCommand.ActivateMechanicStatusByUserId;
-using Account.API.Applications.Commands.OrderTaskCommand.RejectOrderMechanicByUserId;
-using Account.API.Applications.Services.Interfaces;
-using Account.Domain.Aggregates.UserAggregate;
+﻿using Account.API.Applications.Services.Interfaces;
 using Account.Domain.SeedWork;
-using Amazon.SecretsManager.Model.Internal.MarshallTransformations;
 using Core.Exceptions;
 using Core.Messages;
 using Core.Results;
@@ -36,11 +32,11 @@ public class AcceptOrderByMechanicUserIdCommandHandler : IRequestHandler<AcceptO
             .Handle<DBConcurrencyException>()
             .Or<DbUpdateException>()
             .Or<DbException>()
-            .WaitAndRetryAsync(5, retryAttempt =>
+            .WaitAndRetryAsync(3, retryAttempt =>
                 TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
                 onRetry: (exception, timeSpan, retryCount, context) =>
                 {
-                    Console.WriteLine($"Retry on {retryCount} failed. Waiting {timeSpan} before try again. Error: {exception.Message}");
+                    LoggerHelper.LogError(logger, exception);
                 });
     }
 
@@ -49,29 +45,33 @@ public class AcceptOrderByMechanicUserIdCommandHandler : IRequestHandler<AcceptO
         try
         {
             var result = await _asyncRetryPolicy.ExecuteAsync(async () =>
-            {
+            { 
                 await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
                 try
                 {
                     var mechanic = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.MechanicId);
                     if (mechanic is null)
                     {
+                        await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                         return Result.Failure("Mechanic not found", ResponseStatus.NotFound);
                     }
 
                     if (!mechanic.IsVerified)
                     {
+                        await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                         return Result.Failure("Mechanic verification document is still waiting for verification", ResponseStatus.BadRequest);
                     }
 
                     var mechanicTask = await _unitOfWork.OrderTasks.GetMechanicTaskByMechanicIdAsync(request.MechanicId);
                     if (mechanicTask is null)
                     {
+                        await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                         return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
                     }
 
                     if (!mechanicTask.OrderId.HasValue)
                     {
+                        await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                         return Result.Failure("You dont have any waiting order", ResponseStatus.BadRequest);
                     }
 
@@ -80,6 +80,7 @@ public class AcceptOrderByMechanicUserIdCommandHandler : IRequestHandler<AcceptO
 
                     if (orderWaitingMechanicAssign is null)
                     {
+                        await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                         return Result.Failure("Order not found", ResponseStatus.NotFound);
                     }
                     orderWaitingMechanicAssign.AcceptOrderByMechanic(); 

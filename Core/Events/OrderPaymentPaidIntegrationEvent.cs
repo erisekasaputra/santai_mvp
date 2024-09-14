@@ -1,5 +1,9 @@
-﻿using MediatR;
+﻿using Core.Enumerations;
+using MediatR;
 
 namespace Core.Events;
 
-public record OrderPaymentPaidIntegrationEvent : INotification;
+public record OrderPaymentPaidIntegrationEvent(
+    Guid OrderId,
+    decimal Amount,
+    Currency Currency) : INotification;

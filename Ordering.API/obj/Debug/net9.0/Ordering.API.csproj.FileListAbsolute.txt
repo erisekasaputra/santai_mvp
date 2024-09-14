@@ -46,6 +46,7 @@ C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Relati
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.SqlServer.dll
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.Extensions.DependencyModel.dll
+C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.Extensions.Http.Polly.dll
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.Identity.Client.dll
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.Identity.Client.Extensions.Msal.dll
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
@@ -58,7 +59,11 @@ C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.OpenApi.dll
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.SqlServer.Server.dll
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.Win32.SystemEvents.dll
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Mono.TextTemplating.dll
+C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Newtonsoft.Json.dll
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Pipelines.Sockets.Unofficial.dll
+C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Polly.dll
+C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Polly.Core.dll
+C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Polly.Extensions.Http.dll
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\RabbitMQ.Client.dll
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\StackExchange.Redis.dll
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\System.ClientModel.dll
@@ -195,8 +200,3 @@ C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\refint\Ordering.API.dll
 C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.pdb
 C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.genruntimeconfig.cache
 C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\ref\Ordering.API.dll
-C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.Extensions.Http.Polly.dll
-C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Polly.dll
-C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Polly.Core.dll
-C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Polly.Extensions.Http.dll
-C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Newtonsoft.Json.dll

@@ -121,11 +121,7 @@ public class OrderingEntityConfiguration : IEntityTypeConfiguration<Order>
 
         builder.Property(p => p.PaymentUrl)
             .HasMaxLength(1000)
-            .IsRequired(false);
-
-        builder.Property(o => o.MechanicWaitingAcceptTime)
-            .IsRequired(false)
-            .HasColumnType("datetime2");
+            .IsRequired(false); 
 
         builder.Property(o => o.ScheduledOnUtc)
             .IsRequired(false)

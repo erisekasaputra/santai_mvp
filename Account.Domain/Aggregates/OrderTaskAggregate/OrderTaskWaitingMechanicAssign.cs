@@ -23,7 +23,7 @@ public class OrderTaskWaitingMechanicAssign : Entity
 
     public OrderTaskWaitingMechanicAssign(
         Guid orderid, double latitude, double longitude)
-    {
+    { 
         OrderId = orderid;
         RetryAttemp = 1;
         Latitude = latitude;
