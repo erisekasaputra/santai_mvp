@@ -6,79 +6,6 @@ using System.Data;
 
 namespace Account.API.Applications.Services;
 
-//public class OrderWaitingMechanicConfirmExpiryJob : BackgroundService
-//{
-//    private readonly IServiceScopeFactory _scopeFactory; 
-//    private readonly IMechanicCache _mechanicCache;
-//    private readonly ILogger<OrderWaitingMechanicConfirmExpiryJob> _logger;
-
-//    public OrderWaitingMechanicConfirmExpiryJob( 
-//        IServiceScopeFactory serviceScopeFactory, 
-//        IMechanicCache mechanicCache,
-//        ILogger<OrderWaitingMechanicConfirmExpiryJob> logger)
-//    {
-//        _scopeFactory = serviceScopeFactory; 
-//        _mechanicCache = mechanicCache;
-//        _logger = logger;
-//    } 
-
-//    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-//    {
-
-//        using var scope = _scopeFactory.CreateScope(); 
-//        var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-
-//        while (!stoppingToken.IsCancellationRequested) 
-//        {
-//            try
-//            {
-//                await _mechanicCache.Ping();  
-//                await unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable, stoppingToken); 
-                
-//                var orders = await unitOfWork.OrderTasks.GetOrdersExpiredMechanicConfirmationSkipLockedAsync(30); 
-//                if (orders is not null)
-//                {
-//                    foreach (var order in orders)
-//                    {
-
-//                        var mechanicTask = await unitOfWork.OrderTasks.GetMechanicTaskByMechanicIdSkipLockedAsync(order.MechanicId);
-//                        if (mechanicTask is null)
-//                        {
-//                            continue;
-//                        }
-
-//                        var orderWaitingConfirm = await unitOfWork.OrderTasks.GetOrderByOrderIdWithSkipLockedAsync(order.OrderId);
-//                        if (orderWaitingConfirm is null)
-//                        {
-//                            continue;
-//                        }
-
-//                        mechanicTask.ResetOrder();
-//                        order.SetExpire();
-
-//                        unitOfWork.OrderTasks.UpdateMechanicTask(mechanicTask);
-
-//                        orderWaitingConfirm.DestroyMechanic();
-//                        unitOfWork.OrderTasks.UpdateOrderConfirm(orderWaitingConfirm);
-//                    }
-
-//                    unitOfWork.OrderTasks.UpdateRangeOrdersConfirm(orders);
-//                }
-
-//                await unitOfWork.CommitTransactionAsync(stoppingToken);
-//            }
-//            catch (Exception ex)
-//            {
-//                await unitOfWork.RollbackTransactionAsync(stoppingToken);
-//                LoggerHelper.LogError(_logger, ex);
-//            }
-
-//            await Task.Delay(2000);
-//        } 
-//    }
-//}
-
- 
 public class OrderWaitingMechanicConfirmExpiryJob : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
@@ -182,3 +109,80 @@ public class OrderWaitingMechanicConfirmExpiryJob : BackgroundService
         }
     }
 }
+
+
+
+
+
+//public class OrderWaitingMechanicConfirmExpiryJob : BackgroundService
+//{
+//    private readonly IServiceScopeFactory _scopeFactory; 
+//    private readonly IMechanicCache _mechanicCache;
+//    private readonly ILogger<OrderWaitingMechanicConfirmExpiryJob> _logger;
+
+//    public OrderWaitingMechanicConfirmExpiryJob( 
+//        IServiceScopeFactory serviceScopeFactory, 
+//        IMechanicCache mechanicCache,
+//        ILogger<OrderWaitingMechanicConfirmExpiryJob> logger)
+//    {
+//        _scopeFactory = serviceScopeFactory; 
+//        _mechanicCache = mechanicCache;
+//        _logger = logger;
+//    } 
+
+//    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+//    {
+
+//        using var scope = _scopeFactory.CreateScope(); 
+//        var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+
+//        while (!stoppingToken.IsCancellationRequested) 
+//        {
+//            try
+//            {
+//                await _mechanicCache.Ping();  
+//                await unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable, stoppingToken); 
+
+//                var orders = await unitOfWork.OrderTasks.GetOrdersExpiredMechanicConfirmationSkipLockedAsync(30); 
+//                if (orders is not null)
+//                {
+//                    foreach (var order in orders)
+//                    {
+
+//                        var mechanicTask = await unitOfWork.OrderTasks.GetMechanicTaskByMechanicIdSkipLockedAsync(order.MechanicId);
+//                        if (mechanicTask is null)
+//                        {
+//                            continue;
+//                        }
+
+//                        var orderWaitingConfirm = await unitOfWork.OrderTasks.GetOrderByOrderIdWithSkipLockedAsync(order.OrderId);
+//                        if (orderWaitingConfirm is null)
+//                        {
+//                            continue;
+//                        }
+
+//                        mechanicTask.ResetOrder();
+//                        order.SetExpire();
+
+//                        unitOfWork.OrderTasks.UpdateMechanicTask(mechanicTask);
+
+//                        orderWaitingConfirm.DestroyMechanic();
+//                        unitOfWork.OrderTasks.UpdateOrderConfirm(orderWaitingConfirm);
+//                    }
+
+//                    unitOfWork.OrderTasks.UpdateRangeOrdersConfirm(orders);
+//                }
+
+//                await unitOfWork.CommitTransactionAsync(stoppingToken);
+//            }
+//            catch (Exception ex)
+//            {
+//                await unitOfWork.RollbackTransactionAsync(stoppingToken);
+//                LoggerHelper.LogError(_logger, ex);
+//            }
+
+//            await Task.Delay(2000);
+//        } 
+//    }
+//}
+
