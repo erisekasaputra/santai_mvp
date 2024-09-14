@@ -11,10 +11,12 @@ using Ordering.API.Applications.Dtos.Responses;
 using Ordering.API.Applications.Services.Interfaces;
 using Ordering.API.Extensions;
 using Ordering.Domain.Aggregates.OrderAggregate;
+using Ordering.Domain.Aggregates.ScheduledOrderAggregate;
 using Ordering.Domain.Enumerations;
 using Ordering.Domain.SeedWork;
 using Ordering.Domain.ValueObjects;
-using System.Data; 
+using System.Data;
+using System.Security.Cryptography.Xml;
 namespace Ordering.API.Applications.Commands.Orders.CreateOrder;
 public class CreateOrderCommandHandler(
     ILogger<CreateOrderCommandHandler> logger,
@@ -270,6 +272,12 @@ public class CreateOrderCommandHandler(
         if (order.IsShouldRequestPayment)
         {
             //await _paymentService.Checkout(order); 
+        }
+
+        if (order.IsScheduled)
+        {
+            var scheduledOrderWorker = new ScheduledOrder(order.Id, order.ScheduledOnUtc!.Value);
+            await _unitOfWork.ScheduledOrders.CraeteAsync(scheduledOrderWorker);
         }
 
         await _unitOfWork.CommitTransactionAsync(cancellationToken);

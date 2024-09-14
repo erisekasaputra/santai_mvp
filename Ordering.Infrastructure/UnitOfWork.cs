@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage; 
 using Ordering.Domain.Aggregates.OrderAggregate;
+using Ordering.Domain.Aggregates.ScheduledOrderAggregate;
 using Ordering.Domain.SeedWork;
 using Ordering.Infrastructure.Repositories;
 using System.Data;
@@ -18,11 +19,14 @@ public class UnitOfWork : IUnitOfWork
 
     public IOrderRepository Orders { get; }
 
+    public IScheduledOrderRepository ScheduledOrders { get; }
+
     public UnitOfWork(OrderDbContext dbContext, IMediator mediator)
     {
         _dbContext = dbContext;
         _mediator = mediator;
         Orders = new OrderRepository(dbContext);
+        ScheduledOrders = new ScheduledOrderRepository(dbContext);
     }
 
     public async Task BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)

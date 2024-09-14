@@ -1,14 +1,14 @@
 ﻿using Core.Enumerations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Ordering.Domain.Aggregates.OrderAggregate;
+using Ordering.Domain.Aggregates.CouponAggregate;
 using Ordering.Domain.Enumerations;
 
 namespace Ordering.Infrastructure.EntityConfigurations;
 
-public class CouponEntityConfiguration : IEntityTypeConfiguration<Discount>
+public class CouponEntityConfiguration : IEntityTypeConfiguration<Coupon>
 {
-    public void Configure(EntityTypeBuilder<Discount> builder)
+    public void Configure(EntityTypeBuilder<Coupon> builder)
     {
         builder.HasKey(p => p.Id);
 
@@ -38,20 +38,7 @@ public class CouponEntityConfiguration : IEntityTypeConfiguration<Discount>
 
         builder.Property(e => e.MinimumOrderValue)
             .IsRequired()
-            .HasPrecision(18, 4);
-
-        builder.OwnsOne(p => p.DiscountAmount, buildAction =>
-        {
-            buildAction.Property(e => e.Amount)
-                .IsRequired()
-                .HasPrecision(18, 4);
-
-            buildAction.Property(e => e.Currency)
-                .HasConversion(
-                    val => val.ToString(),
-                    val => Enum.Parse<Currency>(val))
-                .IsRequired();
-        });
+            .HasPrecision(18, 4);  
 
         builder.Ignore(p => p.EntityStateAction);
         builder.Ignore(p => p.DomainEvents);

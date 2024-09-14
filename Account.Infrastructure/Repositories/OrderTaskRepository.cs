@@ -70,7 +70,7 @@ public class OrderTaskRepository : IOrderTaskRepository
                 WITH (UPDLOCK, ROWLOCK, READPAST) 
                     WHERE [{nameof(OrderTaskWaitingMechanicAssign.IsOrderCompleted)}] = 0 
                     AND [{nameof(OrderTaskWaitingMechanicAssign.IsMechanicAssigned)}] = 0
-                ORDER BY [CreatedAt] ASC;";
+                ORDER BY [{nameof(OrderTaskWaitingMechanicAssign.CreatedAt)}] ASC;";
 
         var orders = await _dbContext
             .OrderTaskWaitingMechanicAssigns
@@ -92,7 +92,7 @@ public class OrderTaskRepository : IOrderTaskRepository
                             WHERE [{nameof(OrderTaskWaitingMechanicConfirm.IsProcessed)}] = 0  
                             AND [{nameof(OrderTaskWaitingMechanicConfirm.IsExpiryProcessed)}] = 0 
                             AND GETUTCDATE() >= [ExpiredAt] 
-                        ORDER BY [CreatedAt] ASC;";
+                        ORDER BY [{nameof(OrderTaskWaitingMechanicConfirm.CreatedAt)}] ASC;";
 
         var orders = await _dbContext
             .OrderTaskWaitingMechanicConfirms

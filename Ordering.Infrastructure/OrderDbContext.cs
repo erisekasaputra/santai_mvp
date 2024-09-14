@@ -2,8 +2,10 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage; 
 using Ordering.Domain.Aggregates.BuyerAggregate;
+using Ordering.Domain.Aggregates.CouponAggregate;
 using Ordering.Domain.Aggregates.MechanicAggregate;
 using Ordering.Domain.Aggregates.OrderAggregate;
+using Ordering.Domain.Aggregates.ScheduledOrderAggregate;
 using System.Data;
 
 namespace Ordering.Infrastructure;
@@ -19,6 +21,8 @@ public class OrderDbContext : DbContext
     public DbSet<Mechanic> Mechanics { get; set; }
     public DbSet<Order> Orders { get; set; }
     public DbSet<Payment> Payments { get; set; }
+    public DbSet<ScheduledOrder> ScheduledOrders { get; set; }
+    public DbSet<Coupon> Coupons { get; set; }
 
     private IDbContextTransaction? _currentTransaction;
 
