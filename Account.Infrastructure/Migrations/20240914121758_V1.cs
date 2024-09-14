@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Account.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class V8 : Migration
+    public partial class V1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -81,6 +81,44 @@ namespace Account.Infrastructure.Migrations
                 {
                     table.PrimaryKey("PK_InboxState", x => x.Id);
                     table.UniqueConstraint("AK_InboxState_MessageId_ConsumerId", x => new { x.MessageId, x.ConsumerId });
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderTaskWaitingMechanicAssigns",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MechanicId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    MechanicConfirmationExpire = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Latitude = table.Column<double>(type: "float(24)", nullable: false),
+                    Longitude = table.Column<double>(type: "float(24)", nullable: false),
+                    RetryAttemp = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsMechanicAssigned = table.Column<bool>(type: "bit", nullable: false),
+                    IsOrderCompleted = table.Column<bool>(type: "bit", nullable: false),
+                    IsAcceptedByMechanic = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderTaskWaitingMechanicAssigns", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderTaskWaitingMechanicConfirms",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MechanicId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    IsExpiryProcessed = table.Column<bool>(type: "bit", nullable: false),
+                    ExpiredAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    IsProcessed = table.Column<bool>(type: "bit", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderTaskWaitingMechanicConfirms", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -214,6 +252,28 @@ namespace Account.Infrastructure.Migrations
                     table.ForeignKey(
                         name: "FK_LoyaltyPrograms_BaseUsers_LoyaltyUserId",
                         column: x => x.LoyaltyUserId,
+                        principalTable: "BaseUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "MechanicOrderTasks",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    MechanicId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    Latitude = table.Column<double>(type: "float(24)", nullable: false),
+                    Longitude = table.Column<double>(type: "float(24)", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_MechanicOrderTasks", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_MechanicOrderTasks_BaseUsers_MechanicId",
+                        column: x => x.MechanicId,
                         principalTable: "BaseUsers",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -463,11 +523,36 @@ namespace Account.Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
+                name: "IX_MechanicOrderTasks_MechanicId",
+                table: "MechanicOrderTasks",
+                column: "MechanicId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_MechanicOrderTasks_OrderId",
+                table: "MechanicOrderTasks",
+                column: "OrderId",
+                unique: true,
+                filter: "[OrderId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_NationalIdentities_UserId_VerificationStatus",
                 table: "NationalIdentities",
                 columns: new[] { "UserId", "VerificationStatus" },
                 unique: true,
                 filter: "[VerificationStatus] =  'Accepted' ");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderTaskWaitingMechanicAssigns_OrderId",
+                table: "OrderTaskWaitingMechanicAssigns",
+                column: "OrderId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OrderTaskWaitingMechanicConfirms_OrderId",
+                table: "OrderTaskWaitingMechanicConfirms",
+                column: "OrderId",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_OutboxMessage_EnqueueTime",
@@ -563,7 +648,16 @@ namespace Account.Infrastructure.Migrations
                 name: "LoyaltyPrograms");
 
             migrationBuilder.DropTable(
+                name: "MechanicOrderTasks");
+
+            migrationBuilder.DropTable(
                 name: "NationalIdentities");
+
+            migrationBuilder.DropTable(
+                name: "OrderTaskWaitingMechanicAssigns");
+
+            migrationBuilder.DropTable(
+                name: "OrderTaskWaitingMechanicConfirms");
 
             migrationBuilder.DropTable(
                 name: "OutboxMessage");

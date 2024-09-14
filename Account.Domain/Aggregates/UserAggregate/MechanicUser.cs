@@ -6,6 +6,7 @@ using Account.Domain.Aggregates.DrivingLicenseAggregate;
 using Account.Domain.Events;
 using Core.Exceptions;
 using Account.Domain.Aggregates.OrderTaskAggregate;
+using Microsoft.EntityFrameworkCore;
 
 namespace Account.Domain.Aggregates.UserAggregate;
 
@@ -18,12 +19,10 @@ public class MechanicUser : BaseUser
     public decimal Rating { get; private set; }  
     public bool IsVerified { get; private set; } 
     public string? DeviceId { get; private set; }
-    public MechanicOrderTask MechanicOrderTask { get; private set; }
-    public bool IsActive { get; private set; }
+    public MechanicOrderTask? MechanicOrderTask { get; private set; } 
 
     protected MechanicUser() : base()
-    {
-        MechanicOrderTask = null!;
+    { 
         PersonalInfo = null!;
     }
 
@@ -43,46 +42,9 @@ public class MechanicUser : BaseUser
         Rating = 5;
         IsVerified = false;
         DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
-        MechanicOrderTask = new MechanicOrderTask(Id, null, 0, 0);
-        IsActive = false;
+        MechanicOrderTask = null;
         RaiseMechanicUserCreatedDomainEvent(this);
-    }
-
-    public void Activate()
-    {
-        if (!IsVerified)
-        {
-            throw new DomainException("Can not activate you account if the document has not verified");
-        }
-
-        if (IsActive) 
-        {
-            throw new DomainException("Mechanic account has been activated");
-        }
-
-        IsActive = true;
-        RaiseMechanicActivatedDomainEvent();
-    }
-
-    private void RaiseMechanicActivatedDomainEvent()
-    {
-        AddDomainEvent(new MechanicActivatedDomainEvent(this));
-    }
-
-    public void Deactivate()
-    {
-        if (!IsActive)
-        {
-            throw new DomainException("Mechanic account has been deactivated"); 
-        }
-
-        if (MechanicOrderTask.IsOrderAssigned)
-        {
-            throw new DomainException("Can not turn off status, you have an active order");
-        }
-
-        IsActive = false;
-    }
+    } 
 
     public void Update(PersonalInfo personalInfo, Address address, string timeZoneId)
     {
@@ -117,7 +79,7 @@ public class MechanicUser : BaseUser
     }
 
     public void Delete()
-    {
+    { 
         AddDomainEvent(new MechanicUserDeletedDomainEvent(Id));
     }
 
@@ -317,8 +279,9 @@ public class MechanicUser : BaseUser
             throw new DomainException("National identity is waiting for verification.");
         }
 
-        IsVerified = true;
-
+        IsVerified = true; 
+        MechanicOrderTask = new (Id, null, 0, 0);
+        MechanicOrderTask.SetEntityState(EntityState.Added);
         RaiseMechanicDocumentVerifiedDomainEvent(this);
     }
 

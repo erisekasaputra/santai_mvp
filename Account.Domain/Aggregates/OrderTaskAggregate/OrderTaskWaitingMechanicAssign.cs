@@ -1,6 +1,5 @@
-﻿using Account.Domain.Events;
-using Account.Domain.SeedWork;
-using Core.Exceptions;
+﻿using Account.Domain.SeedWork;
+using Core.Exceptions; 
 
 namespace Account.Domain.Aggregates.OrderTaskAggregate;
 
@@ -15,6 +14,7 @@ public class OrderTaskWaitingMechanicAssign : Entity
     public DateTime CreatedAt { get; private set; }
     public bool IsMechanicAssigned { get; private set; }
     public bool IsOrderCompleted { get; private set; }
+    public bool IsAcceptedByMechanic { get; private set; }
 
     public OrderTaskWaitingMechanicAssign()
     {
@@ -32,6 +32,12 @@ public class OrderTaskWaitingMechanicAssign : Entity
         MechanicConfirmationExpire = null;
         IsMechanicAssigned = false;
         IsOrderCompleted = false;
+        IsAcceptedByMechanic = false;
+    }
+
+    public void AcceptOrderByMechanic()
+    {
+        IsAcceptedByMechanic = true;
     }
 
     public void CompleteOrder()
@@ -41,8 +47,7 @@ public class OrderTaskWaitingMechanicAssign : Entity
             throw new DomainException("Mechanic has bot been assigned");
         }
 
-        IsOrderCompleted = true;
-        RaiseOrderCompletedDomainEvent();
+        IsOrderCompleted = true; 
     }
 
     public void IncreaseRetryAttemp()
@@ -55,50 +60,29 @@ public class OrderTaskWaitingMechanicAssign : Entity
         RetryAttemp++;
     }
 
-    public void CancelByMechanic()
-    {
+    public void DestroyMechanic()
+    {  
         RetryAttemp = 1;
         MechanicId = null;
         IsMechanicAssigned = false;
-    }
-
-    public void RejectByMechanic()
-    {
-        RetryAttemp = 1;
-        MechanicId = null;
-        IsMechanicAssigned = false;
-    }
+        IsAcceptedByMechanic = false;
+    } 
 
     public void AssignMechanic(Guid mechanicId)
     {
         if (IsOrderCompleted)
         {
-            throw new InvalidOperationException("Order has completed");
+            throw new DomainException("Order has completed");
         }
 
         if (mechanicId == Guid.Empty)
         {
             throw new ArgumentNullException(nameof(mechanicId));
-        }
+        } 
 
-        if (MechanicId is not null && MechanicId != Guid.Empty)
-        {
-            throw new InvalidOperationException($"Mechanic has been assigned to an order {OrderId}");
-        }
-
-        MechanicConfirmationExpire = DateTime.UtcNow.AddSeconds(60);
+        MechanicConfirmationExpire = DateTime.UtcNow.AddSeconds(62);
         IsMechanicAssigned = true;
-        MechanicId = mechanicId;  
-        RaiseMechanicAssignedDomainEvent();
-    }
-
-    private void RaiseOrderCompletedDomainEvent()
-    {
-        AddDomainEvent(new OrderCompletedDomainEvent(OrderId));
-    }
-
-    private void RaiseMechanicAssignedDomainEvent()
-    {
-        AddDomainEvent(new MechanicAssignedDomainEvent(OrderId, MechanicId!.Value));
-    }
+        MechanicId = mechanicId;
+        IsAcceptedByMechanic = false;
+    } 
 }

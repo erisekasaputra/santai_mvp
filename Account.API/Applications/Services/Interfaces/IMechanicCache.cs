@@ -13,4 +13,6 @@ public interface IMechanicCache
     Task<MechanicAvailabilityCache?> FindAvailableMechanicAsync(
         double latitude, double longitude, double radius);
     Task<MechanicAvailabilityCache?> GetMechanicAsync(Guid mechanicId);
+    Task<bool> Ping();
+    Task<bool> UnassignOrderFromMechanicAsync(Guid mechanicId);
 }

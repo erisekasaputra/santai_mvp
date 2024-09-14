@@ -2,20 +2,28 @@
 using Account.API.Applications.Services.Interfaces;
 using Account.Domain.SeedWork; 
 using MassTransit;
-using StackExchange.Redis;
+using Polly;
+using StackExchange.Redis; 
+using System.Data;
 
 namespace Account.API.Applications.Services;
 
 public class MechanicCache : IMechanicCache
 {
     public IUnitOfWork _unitOfWork;
-    private readonly IConnectionMultiplexer _connectionMultiplexer;
+    private readonly IConnectionMultiplexer _connectionMultiplexer; 
+    private readonly AsyncPolicy _asyncPolicy;
     public MechanicCache(
         IConnectionMultiplexer connectionMultiplexer,
         IUnitOfWork unitOfWork)
     {
         _unitOfWork = unitOfWork;
         _connectionMultiplexer = connectionMultiplexer;
+        _asyncPolicy = Policy.Handle<DBConcurrencyException>()
+                             .Or<RedisConnectionException>() 
+                             .WaitAndRetryAsync(3, retryAttempt =>
+                                 TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))  
+                             );
     }
 
     public async Task UpdateLocationAsync(MechanicAvailabilityCache mechanic)
@@ -115,19 +123,35 @@ public class MechanicCache : IMechanicCache
         }
     }
 
+    public async Task<bool> Ping()
+    {
+        try
+        { 
+            var db = _connectionMultiplexer.GetDatabase();
+             
+            var ping = await db.PingAsync(); 
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw new RedisException(ex.Message);
+        }
+    }
 
     public async Task<Guid> AssignOrderToMechanicAsync(MechanicAvailabilityCache mechanic, Guid orderId)
     {
-        if (orderId == Guid.Empty)
+        var result = await _asyncPolicy.ExecuteAsync(async () =>
         {
-            throw new ArgumentNullException(nameof(orderId));
-        }
+            if (orderId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(orderId));
+            }
 
-        var db = _connectionMultiplexer.GetDatabase();
-        var hashKey = $"mechanics:{mechanic.MechanicId}";
-
-        // Lua script to check if OrderId is null or empty and set it atomically
-        string luaScript = @"
+            var db = _connectionMultiplexer.GetDatabase();
+            var hashKey = $"mechanics:{mechanic.MechanicId}";
+              
+            string luaScript = @"
             local currentOrderId = redis.call('HGET', KEYS[1], ARGV[1])
             if (currentOrderId == false or currentOrderId == '' or currentOrderId == nil) then
                 redis.call('HSET', KEYS[1], ARGV[1], ARGV[2])
@@ -136,16 +160,17 @@ public class MechanicCache : IMechanicCache
                 return 0 -- Failure, OrderId already set
             end";
 
-        // Execute the Lua script with the hash key and the OrderId field name and value
-        var result = (int)await db.ScriptEvaluateAsync(luaScript, [hashKey], [nameof(mechanic.OrderId), orderId.ToString()]);
+            var result = (int)await db.ScriptEvaluateAsync(luaScript, [hashKey], [nameof(mechanic.OrderId), orderId.ToString()]);
+             
+            if (result == 0)
+            {
+                throw new DBConcurrencyException();
+            }
 
-        // Check result: 1 for success, 0 for failure
-        if (result == 0)
-        {
-            throw new ConcurrencyException();
-        }
+            return orderId;
+        }); 
 
-        return orderId;
+        return result;
     }
 
 
@@ -153,8 +178,8 @@ public class MechanicCache : IMechanicCache
         double latitude, double longitude, double radius)
     {
         var db = _connectionMultiplexer.GetDatabase();
-        var geoKey = "mechanics:location:geo";
-         
+        var geoKey = "mechanics:location:geo"; 
+
         var results = await db.GeoRadiusAsync(geoKey, longitude, latitude, radius, GeoUnit.Kilometers);
 
         if (results.Length == 0)
@@ -181,7 +206,7 @@ public class MechanicCache : IMechanicCache
                         MechanicId = mechanicId,
                         Latitude = latitude,
                         Longitude = longitude,
-                        OrderId = mechanicFromSql.MechanicOrderTask.OrderId
+                        OrderId = mechanicFromSql?.MechanicOrderTask?.OrderId
                     };
 
                     await CreateMechanicHsetAsync(newMechanicCache); 
@@ -229,4 +254,40 @@ public class MechanicCache : IMechanicCache
 
         return mechanic;
     }
+
+    public async Task<bool> UnassignOrderFromMechanicAsync(Guid mechanicId)
+    { 
+        var result = await _asyncPolicy.ExecuteAsync(async () =>
+        {
+            if (mechanicId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(mechanicId));
+            }
+
+            var db = _connectionMultiplexer.GetDatabase();
+            var hashKey = $"mechanics:{mechanicId}";
+
+            string luaScript = @"
+                local currentOrderId = redis.call('HGET', KEYS[1], ARGV[1])
+                if (currentOrderId == ARGV[2]) then
+                    redis.call('HDEL', KEYS[1], ARGV[1])
+                    return 1 -- Success, OrderId was unassigned
+                else
+                    return 0 -- Failure, OrderId didn't match
+                end";
+
+            var result = (int)await db.ScriptEvaluateAsync(luaScript,
+                [hashKey],
+                ["OrderId", string.Empty]); 
+
+            if (result == 0)
+            {
+                throw new DBConcurrencyException();
+            }
+
+            return true;
+        });
+
+        return result;
+    } 
 }

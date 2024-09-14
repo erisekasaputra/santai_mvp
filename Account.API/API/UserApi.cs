@@ -5,8 +5,7 @@ using Account.API.Applications.Queries.GetEmailByUserId;
 using Account.API.Applications.Queries.GetMechanicUserById;
 using Account.API.Applications.Queries.GetPhoneNumberByUserId;
 using Account.API.Applications.Queries.GetRegularUserByUserId;
-using Account.API.Applications.Queries.GetStaffById;
-using Account.API.Applications.Queries.GetStaffByUserIdAndStaffId;
+using Account.API.Applications.Queries.GetStaffById; 
 using Account.API.Applications.Queries.GetTimeZoneByUserId;
 using Account.API.Applications.Services; 
 using Account.API.Extensions; 
@@ -55,7 +54,7 @@ public static class UserApi
 
     private static async Task<IResult> GetByUserId(
         Guid userId,
-        [AsParameters] FleetsRequestDto? fleetsRequest,
+        [AsParameters] FleetsRequestDto fleetsRequest,
         [FromServices] ApplicationService service,
         [FromServices] IUserInfoService userInfoService)
     {

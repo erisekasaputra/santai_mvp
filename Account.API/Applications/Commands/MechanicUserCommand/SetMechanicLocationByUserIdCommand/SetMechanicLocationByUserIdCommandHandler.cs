@@ -1,33 +1,37 @@
-﻿using Account.API.Applications.Services;
-using Account.Domain.SeedWork;
+﻿using Account.API.Applications.Models; 
+using Account.API.Applications.Services.Interfaces; 
 using Core.Exceptions;
 using Core.Messages;
-using Core.Results;
-using Core.Services.Interfaces;
+using Core.Results;   
+using Core.Utilities;
 using MediatR;
 
 namespace Account.API.Applications.Commands.MechanicUserCommand.SetMechanicLocationByUserIdCommand;
 
 public class SetMechanicLocationByUserIdCommandHandler : IRequestHandler<SetMechanicLocationByUserIdCommand, Result>
-{
-    private readonly IUnitOfWork _unitOfWork;
-    private readonly ApplicationService _service; 
-    private readonly ICacheService _cacheService;
+{ 
+    private readonly IMechanicCache _cacheService;
+    private readonly ILogger<SetMechanicLocationByUserIdCommandHandler> _logger;
 
-    public SetMechanicLocationByUserIdCommandHandler(
-        IUnitOfWork unitOfWork,
-        ApplicationService service,
-        ICacheService cacheService)
-    {
-        _unitOfWork = unitOfWork;
-        _service = service;
+    public SetMechanicLocationByUserIdCommandHandler( 
+        IMechanicCache cacheService,
+        ILogger<SetMechanicLocationByUserIdCommandHandler> logger)
+    { 
         _cacheService = cacheService;   
+        _logger = logger;
     }
     public async Task<Result> Handle(SetMechanicLocationByUserIdCommand request, CancellationToken cancellationToken)
     {
         try
         {
-             
+            var mechanic = new MechanicAvailabilityCache()
+            {
+                MechanicId = request.MechanicId,
+                Latitude = request.Latitude,
+                Longitude = request.Longitude, 
+            };
+
+            await _cacheService.UpdateLocationAsync(mechanic);
 
             return Result.Success(null, ResponseStatus.NoContent);
         }
@@ -37,7 +41,7 @@ public class SetMechanicLocationByUserIdCommandHandler : IRequestHandler<SetMech
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex, ex.InnerException?.Message);
+            LoggerHelper.LogError(_logger, ex);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

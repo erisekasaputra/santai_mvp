@@ -329,6 +329,115 @@ namespace Account.Infrastructure.Migrations
                     b.ToTable("NationalIdentities");
                 });
 
+            modelBuilder.Entity("Account.Domain.Aggregates.OrderTaskAggregate.MechanicOrderTask", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float(24)");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float(24)");
+
+                    b.Property<Guid>("MechanicId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MechanicId")
+                        .IsUnique();
+
+                    b.HasIndex("OrderId")
+                        .IsUnique()
+                        .HasFilter("[OrderId] IS NOT NULL");
+
+                    b.ToTable("MechanicOrderTasks");
+                });
+
+            modelBuilder.Entity("Account.Domain.Aggregates.OrderTaskAggregate.OrderTaskWaitingMechanicAssign", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsAcceptedByMechanic")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsMechanicAssigned")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsOrderCompleted")
+                        .HasColumnType("bit");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float(24)");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float(24)");
+
+                    b.Property<DateTime?>("MechanicConfirmationExpire")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid?>("MechanicId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("RetryAttemp")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
+                    b.ToTable("OrderTaskWaitingMechanicAssigns");
+                });
+
+            modelBuilder.Entity("Account.Domain.Aggregates.OrderTaskAggregate.OrderTaskWaitingMechanicConfirm", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ExpiredAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<bool>("IsExpiryProcessed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsProcessed")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("MechanicId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
+                    b.ToTable("OrderTaskWaitingMechanicConfirms");
+                });
+
             modelBuilder.Entity("Account.Domain.Aggregates.ReferralAggregate.ReferralProgram", b =>
                 {
                     b.Property<Guid>("Id")
@@ -473,36 +582,6 @@ namespace Account.Infrastructure.Migrations
                     b.HasDiscriminator<string>("UserType").HasValue("BaseUser");
 
                     b.UseTphMappingStrategy();
-                });
-
-            modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.OrderTask", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("Latitude")
-                        .HasColumnType("float(24)");
-
-                    b.Property<double>("Longitude")
-                        .HasColumnType("float(24)");
-
-                    b.Property<Guid>("MechanicId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid?>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MechanicId")
-                        .IsUnique();
-
-                    b.HasIndex("OrderId")
-                        .IsUnique()
-                        .HasFilter("[OrderId] IS NOT NULL");
-
-                    b.ToTable("OrderTasks");
                 });
 
             modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.Staff", b =>
@@ -927,6 +1006,15 @@ namespace Account.Infrastructure.Migrations
                     b.Navigation("MechanicUser");
                 });
 
+            modelBuilder.Entity("Account.Domain.Aggregates.OrderTaskAggregate.MechanicOrderTask", b =>
+                {
+                    b.HasOne("Account.Domain.Aggregates.UserAggregate.MechanicUser", null)
+                        .WithOne("MechanicOrderTask")
+                        .HasForeignKey("Account.Domain.Aggregates.OrderTaskAggregate.MechanicOrderTask", "MechanicId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Account.Domain.Aggregates.ReferralAggregate.ReferralProgram", b =>
                 {
                     b.HasOne("Account.Domain.Aggregates.UserAggregate.BaseUser", "BaseUser")
@@ -998,15 +1086,6 @@ namespace Account.Infrastructure.Migrations
                         });
 
                     b.Navigation("Address")
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.OrderTask", b =>
-                {
-                    b.HasOne("Account.Domain.Aggregates.UserAggregate.MechanicUser", null)
-                        .WithOne("OrderTask")
-                        .HasForeignKey("Account.Domain.Aggregates.UserAggregate.OrderTask", "MechanicId")
-                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
@@ -1202,10 +1281,9 @@ namespace Account.Infrastructure.Migrations
 
                     b.Navigation("DrivingLicenses");
 
-                    b.Navigation("NationalIdentities");
+                    b.Navigation("MechanicOrderTask");
 
-                    b.Navigation("OrderTask")
-                        .IsRequired();
+                    b.Navigation("NationalIdentities");
                 });
 #pragma warning restore 612, 618
         }

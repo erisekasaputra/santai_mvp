@@ -13,6 +13,22 @@ public class CacheService : ICacheService
         _connectionMultiplexer = connectionMultiplexer;
     }
 
+    public async Task<bool> Ping()
+    {
+        try
+        {
+            var db = _connectionMultiplexer.GetDatabase();
+
+            var ping = await db.PingAsync();
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw new RedisException(ex.Message);
+        }
+    }
+
     public async Task<T?> GetAsync<T>(string key)
     {
         try

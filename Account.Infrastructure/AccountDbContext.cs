@@ -29,8 +29,7 @@ public class AccountDbContext : DbContext
     public DbSet<Fleet> Fleets { get; set; }
     public DbSet<MechanicOrderTask> MechanicOrderTasks { get; set; } 
     public DbSet<OrderTaskWaitingMechanicAssign> OrderTaskWaitingMechanicAssigns { get; set; } 
-    public DbSet<OrderTaskWaitingMechanicConfirm> OrderTaskWaitingMechanicConfirms { get; set; } 
-    public DbSet<MechanicOrderTaskAborted> MechanicOrderTaskAborteds { get; set; } 
+    public DbSet<OrderTaskWaitingMechanicConfirm> OrderTaskWaitingMechanicConfirms { get; set; }  
 
     private IDbContextTransaction? _currentTransaction;
 

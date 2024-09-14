@@ -1,11 +1,9 @@
 using Account.API;
-using Account.API.API;
-using Account.API.Applications.Services;
+using Account.API.API; 
 using Account.API.Extensions;
 using Account.API.Middleware; 
 using Account.Infrastructure;
-using Core.Extensions;
-using Hangfire;
+using Core.Extensions; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,36 +22,19 @@ builder.Services.AddJsonEnumConverterBehavior();
 builder.Services.AddAuth(); 
 builder.Services.AddHttpContextAccessor(); 
 builder.Services.AddMediatorService<IAccountAPIMarkerInterface>(); 
-builder.Services.AddRedisDatabase();  
-builder.Services.AddApplicationService(); 
+builder.Services.AddRedisDatabase();
+builder.Services.AddApplicationService();
 builder.Services.AddValidation<IAccountAPIMarkerInterface>(); 
 builder.Services.AddSqlDatabaseContext<AccountDbContext>();   
 builder.Services.AddMassTransitContext<AccountDbContext>(); 
 builder.Services.AddDataEncryption(builder.Configuration); 
 
-var app = builder.Build();
-
-app.UseHangfireDashboard();  
-var recurringJobManager = app.Services.GetRequiredService<IRecurringJobManager>();
-var orderJobService = app.Services.GetRequiredService<OrderJobService>();
-
-recurringJobManager.AddOrUpdate(
-    "OrderWaitingMechanicAssign",  
-    () => orderJobService.OrderWaitingMechanicAssignSync(),   
-    "* * * * * *" 
-);
-
-recurringJobManager.AddOrUpdate(
-    "OrderWaitingMechanicConfirm",
-    () => orderJobService.OrderWaitingMechanicConfirmSync(),
-    "* * * * * *"
-);
+var app = builder.Build(); 
 
 app.UseAuthentication(); 
 app.UseAuthorization();
 app.UseMiddleware<IdempotencyMiddleware>(); 
-
-
+  
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger(); 

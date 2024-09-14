@@ -1,15 +1,18 @@
-﻿using Account.Domain.SeedWork;
+﻿using Account.Domain.Events;
+using Account.Domain.SeedWork;
 using Core.Exceptions;
+using System.Data;
 
 namespace Account.Domain.Aggregates.OrderTaskAggregate;
 
 public class MechanicOrderTask : Entity
 {
     public Guid MechanicId { get; private set; }
-    public Guid? OrderId { get; private set; }
+    public Guid? OrderId { get; private set; } 
     public double Latitude { get; private set; }
     public double Longitude { get; private set; }
     public bool IsOrderAssigned { get; private set; }  
+    public bool IsActive { get; private set; }
     public MechanicOrderTask()
     {
 
@@ -26,14 +29,47 @@ public class MechanicOrderTask : Entity
         Latitude = latitude;
         Longitude = longitude;
         IsOrderAssigned = false; 
-    } 
+    }
 
-    public void ResetOrder()
+    public void Activate()
+    { 
+        if (IsActive)
+        {
+            throw new DomainException("Mechanic account has been activated");
+        }
+
+        IsActive = true;
+        RaiseMechanicActivatedDomainEvent();
+    }
+
+    private void RaiseMechanicActivatedDomainEvent()
     {
+        AddDomainEvent(new MechanicActivatedDomainEvent(this));
+    }
+
+    public void Deactivate()
+    {
+        if (!IsActive)
+        {
+            throw new DomainException("Mechanic account has been deactivated");
+        } 
+
+        IsActive = false;
+        RaiseMechanicDeactivatedDomainEvent();
+    }
+
+    private void RaiseMechanicDeactivatedDomainEvent()
+    {
+        AddDomainEvent(new MechanicDeactivatedDomainEvent(this));
+    }
+
+    public bool ResetOrder()
+    {  
         IsOrderAssigned = false; 
         OrderId = null;
         Latitude = 0;
-        Longitude = 0; 
+        Longitude = 0;
+        return true;
     }
 
     public void AssignOrder(
@@ -48,7 +84,7 @@ public class MechanicOrderTask : Entity
 
         if (IsOrderAssigned)
         {
-            throw new DomainException("Order has been assigned to this mechanic");
+            throw new DBConcurrencyException("Order has been assigned to this mechanic");
         }
 
         OrderId = orderId;

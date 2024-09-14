@@ -1,6 +1,6 @@
-﻿using Account.Domain.Aggregates.UserAggregate;
+﻿using Account.Domain.Aggregates.OrderTaskAggregate; 
 using MediatR;
 
 namespace Account.Domain.Events;
 
-public record MechanicActivatedDomainEvent(MechanicUser User) : INotification;
+public record MechanicActivatedDomainEvent(MechanicOrderTask User) : INotification;

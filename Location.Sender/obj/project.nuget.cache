@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "6kkgPkmEW/g=",
+  "success": true,
+  "projectFilePath": "C:\\Santai.MVP\\Location.Sender\\Location.Sender.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\erise\\.nuget\\packages\\microsoft.aspnetcore.openapi\\9.0.0-rc.1.24452.1\\microsoft.aspnetcore.openapi.9.0.0-rc.1.24452.1.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512"
+  ],
+  "logs": []
+}

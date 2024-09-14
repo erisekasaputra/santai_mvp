@@ -1,38 +1,37 @@
-﻿using Account.API.Applications.Services; 
-using Core.Results; 
+﻿using Core.Results; 
 using Account.Domain.SeedWork;
 using MediatR; 
-using Core.Messages;
-using Core.Services.Interfaces;
+using Core.Messages; 
 using Core.Exceptions;
+using Account.API.Applications.Services.Interfaces;
+using Core.Utilities;
 
 namespace Account.API.Applications.Commands.MechanicUserCommand.DeleteMechanicUserByUserId;
 
 public class DeleteMechanicUserByUserIdCommandHandler : IRequestHandler<DeleteMechanicUserByUserIdCommand, Result>
 {
 
-    private readonly IUnitOfWork _unitOfWork; 
-    private readonly ApplicationService _service;
-    private readonly IEncryptionService _kmsClient;
-    private readonly IHashService _hashService;
-
+    private readonly IUnitOfWork _unitOfWork;  
+    private readonly IMechanicCache _cache;
+    private readonly ILogger<DeleteMechanicUserByUserIdCommandHandler> _logger;
     public DeleteMechanicUserByUserIdCommandHandler(
-        IUnitOfWork unitOfWork, 
-        ApplicationService service,
-        IEncryptionService kmsClient,
-        IHashService hashService)
+        IUnitOfWork unitOfWork,  
+        IMechanicCache mechanicCache,
+        ILogger<DeleteMechanicUserByUserIdCommandHandler> logger)
     {
-        _unitOfWork = unitOfWork; 
-        _service = service;
-        _kmsClient = kmsClient;
-        _hashService = hashService;
+        _unitOfWork = unitOfWork;  
+        _cache = mechanicCache;
+        _logger = logger;
     }
 
 
     public async Task<Result> Handle(DeleteMechanicUserByUserIdCommand request, CancellationToken cancellationToken)
     {
+        await _unitOfWork.BeginTransactionAsync(System.Data.IsolationLevel.ReadCommitted, cancellationToken);
         try
         {
+            await _cache.Ping();
+
             var mechanicUser = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.UserId);
 
             if (mechanicUser is null)
@@ -43,19 +42,21 @@ public class DeleteMechanicUserByUserIdCommandHandler : IRequestHandler<DeleteMe
 
             mechanicUser.Delete();
 
-            _unitOfWork.BaseUsers.Delete(mechanicUser);
-
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await _cache.RemoveGeoAsync(request.UserId);
+            await _cache.RemoveHsetAsync(request.UserId); 
+            _unitOfWork.BaseUsers.Delete(mechanicUser); 
+            await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
             return Result.Success(null, ResponseStatus.NoContent);
         }
         catch (DomainException ex)
-        {
+        { 
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);
         }
         catch (Exception ex)
         {
-            _service.Logger.LogError(ex, ex.InnerException?.Message);
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+            LoggerHelper.LogError(_logger, ex);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     } 
