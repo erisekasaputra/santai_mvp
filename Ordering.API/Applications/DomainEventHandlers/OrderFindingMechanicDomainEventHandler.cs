@@ -16,6 +16,7 @@ public class OrderFindingMechanicDomainEventHandler : INotificationHandler<Order
     {
         var @event = new OrderFindingMechanicIntegrationEvent(
             notification.Order.Id, 
+            notification.Order.Buyer.BuyerId, 
             notification.Order.Address.Latitude,
             notification.Order.Address.Longitude);
 

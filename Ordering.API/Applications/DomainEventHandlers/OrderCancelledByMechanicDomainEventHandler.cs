@@ -18,6 +18,7 @@ public class OrderCancelledByMechanicDomainEventHandler : INotificationHandler<O
         await _mediator.Publish(
             new OrderCancelledByMechanicIntegrationEvent(
                 notification.Order.Id,
+                notification.Order.Buyer.BuyerId,
                 notification.Order.Mechanic!.MechanicId), cancellationToken);
     }
 }

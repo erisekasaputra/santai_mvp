@@ -1,12 +1,14 @@
-﻿using Core.Events;
+﻿using Core.Events; 
+using MassTransit;
 using MediatR;
 
 namespace Ordering.API.Applications.IntegrationEventHandlers;
 
-public class ServiceProcessedIntegrationEventHandler : INotificationHandler<ServiceProcessedIntegrationEvent>
+public class ServiceProcessedIntegrationEventHandler(IPublishEndpoint publishEndpoint) : INotificationHandler<ServiceProcessedIntegrationEvent>
 {
+    private readonly IPublishEndpoint _endpoint = publishEndpoint;
     public async Task Handle(ServiceProcessedIntegrationEvent notification, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        await _endpoint.Publish(notification, cancellationToken);
     }
 }

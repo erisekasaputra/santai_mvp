@@ -2,4 +2,4 @@
 
 namespace Core.Events;
 
-public record OrderCancelledByMechanicIntegrationEvent(Guid OrderId, Guid MechanicId) : INotification;
+public record OrderCancelledByMechanicIntegrationEvent(Guid OrderId, Guid BuyerId, Guid MechanicId) : INotification;

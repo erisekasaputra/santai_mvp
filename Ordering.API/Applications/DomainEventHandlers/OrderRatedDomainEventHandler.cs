@@ -11,6 +11,7 @@ public class OrderRatedDomainEventHandler(IMediator mediator) : INotificationHan
     {
         await _mediator.Send(new OrderRatedIntegrationEvent(
             notification.Order.Id,
+            notification.Order.Buyer.BuyerId,
             notification.Order.Rating!.Value,
             notification.Order.Rating!.Comment), cancellationToken);
     }

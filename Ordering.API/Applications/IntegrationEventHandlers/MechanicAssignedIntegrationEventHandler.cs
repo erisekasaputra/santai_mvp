@@ -1,12 +1,14 @@
-﻿using Core.Events;
+﻿using Core.Events; 
+using MassTransit;
 using MediatR;
 
 namespace Ordering.API.Applications.IntegrationEventHandlers;
 
-public class MechanicAssignedIntegrationEventHandler : INotificationHandler<MechanicAssignedIntegrationEvent>
+public class MechanicAssignedIntegrationEventHandler(IPublishEndpoint publishEndpoint) : INotificationHandler<MechanicAssignedIntegrationEvent>
 {
-    public Task Handle(MechanicAssignedIntegrationEvent notification, CancellationToken cancellationToken)
+    private readonly IPublishEndpoint _endpoint = publishEndpoint;
+    public async Task Handle(MechanicAssignedIntegrationEvent notification, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        await _endpoint.Publish(notification, cancellationToken);
     }
 }

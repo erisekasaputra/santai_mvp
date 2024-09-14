@@ -2,4 +2,7 @@
 
 namespace Core.Events;
 
-public record MechanicDispatchedIntegrationEvent : INotification;
+public record MechanicDispatchedIntegrationEvent(
+    Guid OrderId,
+    Guid BuyerId,
+    Guid MechanicId) : INotification;
