@@ -8,7 +8,7 @@ namespace Ordering.API.Applications.Services;
 public class ScheduledOrderWorker : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory;
-    private readonly ILogger<ScheduledOrderWorker> _logger
+    private readonly ILogger<ScheduledOrderWorker> _logger;
     public ScheduledOrderWorker(
         IServiceScopeFactory serviceScopeFactory,
         ILogger<ScheduledOrderWorker> logger)
@@ -36,7 +36,15 @@ public class ScheduledOrderWorker : BackgroundService
                 {
                     foreach (var order in orders) 
                     {
-                        
+                        // need to be tune up for performance   
+                        var orderAggregate = await unitOfWork.Orders.GetByIdAsync(order.Id, stoppingToken);
+
+                        if (orderAggregate is not null && orderAggregate.IsPaid)
+                        {
+                            orderAggregate.SetFindingMechanic();
+
+                            unitOfWork.Orders.Update(orderAggregate);
+                        }
                     }
                 }
 
@@ -47,6 +55,8 @@ public class ScheduledOrderWorker : BackgroundService
                 LoggerHelper.LogError(_logger, ex);
                 await unitOfWork.RollbackTransactionAsync(stoppingToken);
             }
+
+            await Task.Delay(1000, stoppingToken);
         }
     }
 }

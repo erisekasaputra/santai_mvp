@@ -41,9 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Applications\Commands\Orders\FindingMechanic\" />
     <Folder Include="Applications\Commands\Orders\AssignOrderMechanic\" />
-    <Folder Include="Applications\Commands\Orders\AcceptOrderByMechanic\" />
     <Folder Include="Applications\Commands\Orders\CancelOrderByMechanic\" />
     <Folder Include="Applications\Consumers\" />
     <Folder Include="Applications\IntegrationEventHandlers\" />

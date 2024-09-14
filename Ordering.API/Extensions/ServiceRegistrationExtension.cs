@@ -24,7 +24,7 @@ public static class ServiceRegistrationExtension
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped<IUserInfoService, UserInfoService>();
         services.AddSingleton<ICacheService, CacheService>();
-
+        services.AddHostedService<ScheduledOrderWorker>();
         return services;
     }
 
