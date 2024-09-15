@@ -11,6 +11,12 @@ public static class ReferralProgramMapperExtension
         {
             return null;
         }
+
+        if (referralProgram.ValidDateUtc <= DateTime.UtcNow)
+        {
+            return null;
+        }
+
         return new ReferralProgramResponseDto(referralProgram.ReferralCode, referralProgram.RewardPoint);
     }
 }
