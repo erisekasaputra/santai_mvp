@@ -16,6 +16,7 @@ using Core.Configurations;
 using Core.Messages;
 using Core.Services.Interfaces;
 using Core.Exceptions;
+using Account.API.Extensions;
 
 namespace Account.API.Applications.Commands.BusinessUserCommand.CreateBusinessUser;
 
@@ -266,8 +267,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
             request.Address.State,
             request.Address.PostalCode,
             request.Address.Country);
-
-        var loyalty = new LoyaltyProgramResponseDto(user.Id, user.LoyaltyProgram.LoyaltyPoints, user.LoyaltyProgram.LoyaltyTier);
+         
 
         // get original data business licenses from request user
         var businessLicenseRequestList = request.BusinessLicenses.ToList();
@@ -352,7 +352,8 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
                 request.TaxId,
                 request.WebsiteUrl,
                 request.BusinessDescription,
-                loyalty, 
+                user.LoyaltyProgram.ToLoyaltyProgramResponseDto(),
+                user.ReferralProgram.ToReferralProgramResponseDto(),
                 [],
                 businessLicenses,
                 staffs

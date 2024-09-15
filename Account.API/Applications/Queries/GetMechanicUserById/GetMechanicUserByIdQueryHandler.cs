@@ -61,7 +61,8 @@ public class GetMechanicUserByIdQueryHandler(
                 user.TimeZoneId,
                 user.PersonalInfo.ToPersonalInfoResponseDto(user.TimeZoneId),
                 user.LoyaltyProgram.ToLoyaltyProgramResponseDto(),
-                address,
+                user.ReferralProgram.ToReferralProgramResponseDto(),
+                address, 
                 certifications,
                 drivingLicense,
                 nationalIdentity

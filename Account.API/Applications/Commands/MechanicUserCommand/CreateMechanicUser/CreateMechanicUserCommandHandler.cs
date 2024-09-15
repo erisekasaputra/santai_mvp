@@ -331,6 +331,7 @@ public class CreateMechanicUserCommandHandler(
             request.TimeZoneId,
             user.PersonalInfo.ToPersonalInfoResponseDto(user.TimeZoneId),
             user.LoyaltyProgram.ToLoyaltyProgramResponseDto(),
+            user.ReferralProgram.ToReferralProgramResponseDto(),
             addressResponseDto,
             certificatonResponseDto,
             drivingLicenseResponseDto,

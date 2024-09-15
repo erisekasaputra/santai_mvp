@@ -164,6 +164,7 @@ public class GetPaginatedBusinessUserQueryHandler(
                     user.WebsiteUrl,
                     user.Description,
                     user.LoyaltyProgram.ToLoyaltyProgramResponseDto(),
+                    user.ReferralProgram.ToReferralProgramResponseDto(),
                     fleets,
                     businessLicenseResponses,
                     staffResponses)); 

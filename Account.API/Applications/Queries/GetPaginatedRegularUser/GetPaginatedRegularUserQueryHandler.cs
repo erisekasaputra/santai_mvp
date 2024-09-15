@@ -107,6 +107,8 @@ public class GetPaginatedRegularUserQueryHandler(
                     decryptedPhoneNumber,
                     user.TimeZoneId,
                     address,
+                    user.LoyaltyProgram.ToLoyaltyProgramResponseDto(),
+                    user.ReferralProgram.ToReferralProgramResponseDto(),
                     user.PersonalInfo.ToPersonalInfoResponseDto(user.TimeZoneId),
                     fleets));
         }

@@ -6,5 +6,7 @@ public record RegularUserResponseDto(
     string? PhoneNumber,
     string TimeZoneId,
     AddressResponseDto Address,
+    LoyaltyProgramResponseDto? LoyaltyProgram,
+    ReferralProgramResponseDto? Referral,
     PersonalInfoResponseDto PersonalInfo,
     IEnumerable<FleetResponseDto> Fleets);

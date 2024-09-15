@@ -206,6 +206,8 @@ public class CreateRegularUserCommandHandler(
             request.PhoneNumber,
             user.TimeZoneId,
             addressResponseDto,
+            user.LoyaltyProgram.ToLoyaltyProgramResponseDto(),
+            user.ReferralProgram.ToReferralProgramResponseDto(),
             personalInfoResponseDto,
             fleets);
 

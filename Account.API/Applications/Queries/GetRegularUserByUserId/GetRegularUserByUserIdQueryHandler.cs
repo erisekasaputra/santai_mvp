@@ -98,13 +98,15 @@ public class GetRegularUserByUserIdQueryHandler(
             user.Address.State,
             user.Address.PostalCode,
             user.Address.Country);
-
+         
         return new RegularUserResponseDto(
                 user.Id,  
                 decryptedEmail,
                 decryptedPhoneNumber,
                 user.TimeZoneId,
                 address,
+                user.LoyaltyProgram.ToLoyaltyProgramResponseDto(),
+                user.ReferralProgram.ToReferralProgramResponseDto(),
                 user.PersonalInfo.ToPersonalInfoResponseDto(user.TimeZoneId),
                 fleets);
     }

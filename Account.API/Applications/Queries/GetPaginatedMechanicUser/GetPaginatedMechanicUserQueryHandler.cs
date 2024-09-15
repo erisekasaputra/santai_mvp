@@ -83,6 +83,7 @@ public class GetPaginatedMechanicUserQueryHandler(
                 user.TimeZoneId,
                 user.PersonalInfo.ToPersonalInfoResponseDto(user.TimeZoneId),
                 user.LoyaltyProgram.ToLoyaltyProgramResponseDto(),
+                user.ReferralProgram.ToReferralProgramResponseDto(),
                 address,
                 certifications,
                 drivingLicense,
