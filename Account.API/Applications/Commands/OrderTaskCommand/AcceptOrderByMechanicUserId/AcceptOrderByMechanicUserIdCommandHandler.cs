@@ -62,6 +62,10 @@ public class AcceptOrderByMechanicUserIdCommandHandler : IRequestHandler<AcceptO
                         return Result.Failure("Mechanic verification document is still waiting for verification", ResponseStatus.BadRequest);
                     }
 
+
+
+
+
                     var mechanicTask = await _unitOfWork.OrderTasks.GetMechanicTaskByMechanicIdAsync(request.MechanicId);
                     if (mechanicTask is null)
                     {
@@ -75,6 +79,10 @@ public class AcceptOrderByMechanicUserIdCommandHandler : IRequestHandler<AcceptO
                         return Result.Failure("You dont have any waiting order", ResponseStatus.BadRequest);
                     }
 
+
+
+
+
                     // Retrieve the mechanic task
                     var orderWaitingMechanicAssign = await _unitOfWork.OrderTasks.GetOrderWaitingMechanicAssignByOrderIdAsync(mechanicTask.OrderId.Value);
 
@@ -83,12 +91,12 @@ public class AcceptOrderByMechanicUserIdCommandHandler : IRequestHandler<AcceptO
                         await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                         return Result.Failure("Order not found", ResponseStatus.NotFound);
                     }
-                    orderWaitingMechanicAssign.AcceptOrderByMechanic(); 
+                    orderWaitingMechanicAssign.AcceptOrderByMechanic(mechanicTask.MechanicId); 
 
                     var orderWaitingMechanicConfirm = await _unitOfWork.OrderTasks.GetOrderWaitingMechanicConfirmByOrderIdAsync(mechanicTask.OrderId.Value);
                     if (orderWaitingMechanicConfirm is not null)
                     {
-                        orderWaitingMechanicConfirm.SetDelete();
+                        orderWaitingMechanicConfirm.SetDelete(mechanicTask.MechanicId);
                         _unitOfWork.OrderTasks.UpdateOrderConfirm(orderWaitingMechanicConfirm);
                     }  
 

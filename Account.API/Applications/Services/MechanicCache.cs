@@ -34,16 +34,20 @@ public class MechanicCache : IMechanicCache
 
             var geoKey = "mechanics:geo";
             var hashKey = $"mechanics:{mechanic.MechanicId}";
-             
-            await db.GeoAddAsync(geoKey, mechanic.Longitude, mechanic.Latitude, mechanic.MechanicId.ToString());
-             
-            var hashEntries = new HashEntry[]
-            {
-                new (nameof(mechanic.Latitude), mechanic.Latitude),
-                new (nameof(mechanic.Longitude), mechanic.Longitude) 
-            };
 
-            await db.HashSetAsync(hashKey, hashEntries);
+            var existingMechanicLocation = await db.GeoPositionAsync(geoKey, mechanic.MechanicId.ToString());
+            if (existingMechanicLocation != null) 
+            { 
+                await db.GeoAddAsync(geoKey, mechanic.Longitude, mechanic.Latitude, mechanic.MechanicId.ToString());
+             
+                var hashEntries = new HashEntry[]
+                {
+                    new (nameof(mechanic.Latitude), mechanic.Latitude),
+                    new (nameof(mechanic.Longitude), mechanic.Longitude) 
+                };
+
+                await db.HashSetAsync(hashKey, hashEntries);
+            }
         }
         catch (Exception)
         {
@@ -178,7 +182,7 @@ public class MechanicCache : IMechanicCache
         double latitude, double longitude, double radius)
     {
         var db = _connectionMultiplexer.GetDatabase();
-        var geoKey = "mechanics:location:geo"; 
+        var geoKey = "mechanics:geo"; 
 
         var results = await db.GeoRadiusAsync(geoKey, longitude, latitude, radius, GeoUnit.Kilometers);
 

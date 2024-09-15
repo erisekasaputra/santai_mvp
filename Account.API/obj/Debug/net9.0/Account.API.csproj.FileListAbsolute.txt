@@ -360,6 +360,7 @@ C:\Santai.MVP\Account.API\bin\Debug\net9.0\System.Drawing.Common.dll
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\System.Private.Windows.Core.dll
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\System.Memory.Data.dll
+C:\Santai.MVP\Account.API\bin\Debug\net9.0\System.Net.WebSockets.WebSocketProtocol.dll
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\System.Runtime.Caching.dll
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\TimeZoneConverter.dll
@@ -481,4 +482,3 @@ C:\Santai.MVP\Account.API\obj\Debug\net9.0\refint\Account.API.dll
 C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.pdb
 C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.genruntimeconfig.cache
 C:\Santai.MVP\Account.API\obj\Debug\net9.0\ref\Account.API.dll
-C:\Santai.MVP\Account.API\bin\Debug\net9.0\System.Net.WebSockets.WebSocketProtocol.dll

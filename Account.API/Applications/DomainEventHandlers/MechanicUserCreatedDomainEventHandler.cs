@@ -15,7 +15,8 @@ public class MechanicUserCreatedDomainEventHandler(
     public async Task Handle(MechanicUserCreatedDomainEvent notification, CancellationToken cancellationToken)
     {
         var @event = notification.MechanicUser;
-        await _mediator.Publish(new MechanicUserCreatedIntegrationEvent(@event.Id, await DecryptNullableAsync(@event.EncryptedPhoneNumber)), cancellationToken);
+        await _mediator.Publish(new MechanicUserCreatedIntegrationEvent(
+            @event.Id, await DecryptNullableAsync(@event.EncryptedPhoneNumber)), cancellationToken);
     }
 
     private async Task<string?> DecryptNullableAsync(string? value)

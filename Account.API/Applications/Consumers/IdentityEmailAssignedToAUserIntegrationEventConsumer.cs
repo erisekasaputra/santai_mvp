@@ -26,7 +26,10 @@ public class IdentityEmailAssignedToAUserIntegrationEventConsumer(
             if (!responseStaff.IsSuccess)
             {
                 _logger.LogError("An error occured. error: '{Message}'. When assigning the email: {email} for registered staff user id: {Id}", responseStaff.Message, user.Email, user.Id);
+                 
+                throw new Exception(responseStaff.Message);
             }
+
             return;
         }
 
@@ -36,6 +39,8 @@ public class IdentityEmailAssignedToAUserIntegrationEventConsumer(
         if (!response.IsSuccess)
         {
             _logger.LogError("An error occured. error: '{Message}'. When assigning the email: {email} for registered user id: {Id}", response.Message, user.Email, user.Id);
+             
+            throw new Exception(response.Message);
         }
     }
 }

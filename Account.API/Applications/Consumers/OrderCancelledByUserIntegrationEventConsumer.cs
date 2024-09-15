@@ -14,6 +14,11 @@ public class OrderCancelledByUserIntegrationEventConsumer(
     {
         var command = new CancelOrderByUserByOrderIdCommand(context.Message.OrderId);
 
-        await _mediator.Send(command);
+        var result = await _mediator.Send(command);
+
+        if (!result.IsSuccess)
+        {
+            throw new Exception(result.Message);
+        }
     }
 }

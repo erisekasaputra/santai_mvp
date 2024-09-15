@@ -1,4 +1,5 @@
-﻿using Account.Domain.SeedWork;
+﻿using Account.Domain.Events;
+using Account.Domain.SeedWork;
 using Core.Exceptions; 
 
 namespace Account.Domain.Aggregates.OrderTaskAggregate;
@@ -35,16 +36,39 @@ public class OrderTaskWaitingMechanicAssign : Entity
         IsAcceptedByMechanic = false;
     }
 
-    public void AcceptOrderByMechanic()
+    public void AcceptOrderByMechanic(Guid mechanicId)
     {
+        if (MechanicId is null || !IsMechanicAssigned)
+        {
+            throw new DomainException("Mechanic has not been assigned");
+        }
+
+        if (mechanicId != MechanicId)
+        {
+            throw new DomainException("Can not accepting order");
+        }
+
+
         IsAcceptedByMechanic = true;
+
+        RaiseAccountMechanicOrderAcceptedDomainEvent();
     }
 
-    public void CompleteOrder()
+    private void RaiseAccountMechanicOrderAcceptedDomainEvent()
+    {
+        AddDomainEvent(new AccountMechanicOrderAcceptedDomainEvent(OrderId, MechanicId!.Value));
+    }
+
+    public void CompleteOrder(Guid mechanicId)
     {
         if (!IsMechanicAssigned)
         {
             throw new DomainException("Mechanic has bot been assigned");
+        }
+
+        if (mechanicId == MechanicId) 
+        { 
+            throw new DomainException("Can not accepting order");
         }
 
         IsOrderCompleted = true; 
@@ -60,13 +84,27 @@ public class OrderTaskWaitingMechanicAssign : Entity
         RetryAttemp++;
     }
 
+    public void DestroyMechanic(Guid mechanicId)
+    {  
+        if (MechanicId != mechanicId)
+        {
+            throw new DomainException("Mechanic id is missmatch");
+        }
+
+        RetryAttemp = 1;
+        MechanicId = null;
+        IsMechanicAssigned = false;
+        IsAcceptedByMechanic = false;
+    }
+
+
     public void DestroyMechanic()
     {  
         RetryAttemp = 1;
         MechanicId = null;
         IsMechanicAssigned = false;
         IsAcceptedByMechanic = false;
-    } 
+    }
 
     public void AssignMechanic(Guid mechanicId)
     {

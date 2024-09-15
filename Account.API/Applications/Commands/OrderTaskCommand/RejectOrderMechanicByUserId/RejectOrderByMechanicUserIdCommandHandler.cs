@@ -77,6 +77,8 @@ public class RejectOrderByMechanicUserIdCommandHandler : IRequestHandler<RejectO
                         return Result.Failure("You dont have any waiting order", ResponseStatus.BadRequest);
                     }
 
+                    
+                    
                     // Retrieve the mechanic task
                     var orderWaitingMechanicAssign = await _unitOfWork.OrderTasks.GetOrderWaitingMechanicAssignByOrderIdAsync(mechanicTask.OrderId.Value);
 
@@ -85,19 +87,29 @@ public class RejectOrderByMechanicUserIdCommandHandler : IRequestHandler<RejectO
                         await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                         return Result.Failure("Order not found", ResponseStatus.NotFound);
                     }
-                    orderWaitingMechanicAssign.DestroyMechanic();
+                    orderWaitingMechanicAssign.DestroyMechanic(mechanicTask.MechanicId);
+
+
+
+
 
                     var orderWaitingMechanicConfirm = await _unitOfWork.OrderTasks.GetOrderWaitingMechanicConfirmByOrderIdAsync(mechanicTask.OrderId.Value); 
                     if (orderWaitingMechanicConfirm is not null)
                     {
-                        orderWaitingMechanicConfirm.SetDelete();           
+                        orderWaitingMechanicConfirm.SetDelete(mechanicTask.MechanicId);           
                         _unitOfWork.OrderTasks.UpdateOrderConfirm(orderWaitingMechanicConfirm);
                     } 
+
+
+
+
 
                     _unitOfWork.OrderTasks.UpdateOrderAssign(orderWaitingMechanicAssign); 
 
                     await _mechanicCache.Ping();
                     await _mechanicCache.UnassignOrderFromMechanicAsync(mechanicTask.MechanicId);
+
+
 
                     await _unitOfWork.CommitTransactionAsync();
 

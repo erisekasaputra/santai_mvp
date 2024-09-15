@@ -1295,6 +1295,38 @@
   },
   {
     "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "ConfirmOrderByMechanicUserId",
+    "RelativePath": "api/v1/users/mechanic/order/confirm",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "RejectOrderByMechanicUserId",
+    "RelativePath": "api/v1/users/mechanic/order/reject",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
     "Method": "ActivateMechanicStatus",
     "RelativePath": "api/v1/users/mechanic/status/activate",
     "HttpMethod": "PATCH",

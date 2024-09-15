@@ -14,6 +14,8 @@ using Account.API.Applications.Commands.MechanicUserCommand.SetNationalIdentityB
 using Account.API.Applications.Commands.MechanicUserCommand.SetRatingByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.UpdateMechanicUserByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.VerifyMechanicUserByUserId;
+using Account.API.Applications.Commands.OrderTaskCommand.AcceptOrderByMechanicUserId;
+using Account.API.Applications.Commands.OrderTaskCommand.RejectOrderMechanicByUserId;
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetDrivingLicenseByMechanicUserId;
 using Account.API.Applications.Queries.GetMechanicUserById;
@@ -110,7 +112,11 @@ public static class MechanicUserApi
         app.MapPatch("/{mechanicUserId}/device-id/force-set", ForceSetDeviceIdByUserId)
              .RequireAuthorization(PolicyName.MechanicUserAndAdministratorUserPolicy.ToString());
 
+        app.MapPatch("/order/confirm", ConfirmOrderByMechanicUserId)
+             .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());
 
+        app.MapPatch("/order/reject", RejectOrderByMechanicUserId)
+             .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());  
 
         app.MapPost("/driving-license", SetDrivingLicenseByUserId)
             .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());
@@ -126,6 +132,54 @@ public static class MechanicUserApi
 
         return app;
     }
+
+    private static async Task<IResult> ConfirmOrderByMechanicUserId(
+      [FromServices] ApplicationService service,
+      [FromServices] IUserInfoService userInfoService)
+    {
+        try
+        {
+            var userClaim = userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            var result = await service.Mediator.Send(new AcceptOrderByMechanicUserIdCommand(userClaim.Sub));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+
+    private static async Task<IResult> RejectOrderByMechanicUserId(
+      [FromServices] ApplicationService service,
+      [FromServices] IUserInfoService userInfoService)
+    {
+        try
+        {
+            var userClaim = userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            var result = await service.Mediator.Send(new RejectOrderByMechanicUserIdCommand(userClaim.Sub));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
 
     private static async Task<IResult> ActivateMechanicStatus( 
         [FromServices] ApplicationService service,

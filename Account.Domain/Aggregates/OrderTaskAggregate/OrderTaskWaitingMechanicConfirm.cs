@@ -1,4 +1,5 @@
-﻿using Account.Domain.SeedWork; 
+﻿using Account.Domain.SeedWork;
+using Core.Exceptions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Account.Domain.Aggregates.OrderTaskAggregate;
@@ -28,8 +29,13 @@ public class OrderTaskWaitingMechanicConfirm : Entity
         CreatedAt = DateTime.UtcNow;
     }   
      
-    public void SetDelete()
+    public void SetDelete(Guid mechanicId)
     {
+        if (MechanicId != mechanicId) 
+        {
+            throw new DomainException("Can not delete order waiting confirm task because mechanic id is missmatch");
+        }
+
         SetExpire();
     }
 

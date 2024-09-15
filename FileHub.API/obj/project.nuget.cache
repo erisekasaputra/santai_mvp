@@ -1,13 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "hONuZfRicdA=",
+  "dgSpecHash": "r1XM1Ayyezg=",
   "success": true,
   "projectFilePath": "C:\\Santai.MVP\\FileHub.API\\FileHub.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.core\\4.0.0-preview.2\\awssdk.core.4.0.0-preview.2.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.extensions.netcore.setup\\4.0.0-preview.2\\awssdk.extensions.netcore.setup.4.0.0-preview.2.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.keymanagementservice\\4.0.0-preview.2\\awssdk.keymanagementservice.4.0.0-preview.2.nupkg.sha512",
-    "C:\\Users\\erise\\.nuget\\packages\\awssdk.s3\\3.7.400.5\\awssdk.s3.3.7.400.5.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\awssdk.s3\\3.7.402.11\\awssdk.s3.3.7.402.11.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\azure.core\\1.41.0\\azure.core.1.41.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\azure.core.experimental\\0.1.0-preview.34\\azure.core.experimental.0.1.0-preview.34.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\azure.identity\\1.13.0-beta.1\\azure.identity.1.13.0-beta.1.nupkg.sha512",

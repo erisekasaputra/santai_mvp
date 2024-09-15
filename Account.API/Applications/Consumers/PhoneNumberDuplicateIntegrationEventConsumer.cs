@@ -26,6 +26,8 @@ public class PhoneNumberDuplicateIntegrationEventConsumer(
                 if (!response.IsSuccess)
                 {
                     _logger.LogError("An error occured. error: '{Message}'. When reseting the phone number: {phoneNumber} for registered user id: {Id}", response.Message, user.PhoneNumber, user.Id);
+                     
+                    throw new Exception(response.Message);
                 }
             }
 
@@ -37,6 +39,8 @@ public class PhoneNumberDuplicateIntegrationEventConsumer(
                 if (!response.IsSuccess)
                 {
                     _logger.LogError("An error occured. error: '{Message}'. When reseting the phone number: {phoneNumber} for registered user id: {Id}", response.Message, user.PhoneNumber, user.Id);
+                     
+                    throw new Exception(response.Message);
                 }
             }
         }

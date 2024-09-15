@@ -12,6 +12,12 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
     public async Task Consume(ConsumeContext<OrderCancelledByMechanicIntegrationEvent> context)
     {
         var command = new CancelOrderByMechanicByIdByOrderIdCommand(context.Message.MechanicId, context.Message.OrderId);
-        await _mediator.Send(command);
+          
+        var result = await _mediator.Send(command);
+
+        if (!result.IsSuccess) 
+        {
+            throw new Exception(result.Message);
+        }
     }
 }

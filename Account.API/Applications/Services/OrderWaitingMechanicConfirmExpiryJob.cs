@@ -23,7 +23,7 @@ public class OrderWaitingMechanicConfirmExpiryJob : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     { 
-        var delayMilliseconds = 2000;
+        var delayMilliseconds = 1000;
         while (!stoppingToken.IsCancellationRequested)
         {
             using var scope = _scopeFactory.CreateScope();
@@ -70,7 +70,7 @@ public class OrderWaitingMechanicConfirmExpiryJob : BackgroundService
                 await unitOfWork.RollbackTransactionAsync(stoppingToken);
                 LoggerHelper.LogError(_logger, ex);
                  
-                delayMilliseconds = Math.Min(delayMilliseconds * 2, 10000); 
+                delayMilliseconds = Math.Min(delayMilliseconds * 2, 5000); 
             }
              
 
@@ -99,7 +99,7 @@ public class OrderWaitingMechanicConfirmExpiryJob : BackgroundService
 
             // Update mechanic task and order in unit of work
             unitOfWork.OrderTasks.UpdateMechanicTask(mechanicTask);
-            orderWaitingMechanicAssign.DestroyMechanic();
+            orderWaitingMechanicAssign.DestroyMechanic(); 
             unitOfWork.OrderTasks.UpdateOrderAssign(orderWaitingMechanicAssign);
         }
         catch (Exception ex)

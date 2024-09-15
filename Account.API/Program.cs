@@ -28,7 +28,8 @@ builder.Services.AddApplicationService();
 builder.Services.AddValidation<IAccountAPIMarkerInterface>(); 
 builder.Services.AddSqlDatabaseContext<AccountDbContext>();   
 builder.Services.AddMassTransitContext<AccountDbContext>(); 
-builder.Services.AddDataEncryption(builder.Configuration); 
+builder.Services.AddDataEncryption(builder.Configuration);
+builder.Services.AddSignalR();
 
 var app = builder.Build(); 
 

@@ -53,10 +53,10 @@
           }
         }
       },
-      "AWSSDK.S3/3.7.400.5": {
+      "AWSSDK.S3/3.7.402.11": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.7.400.5, 4.0.0)"
+          "AWSSDK.Core": "[3.7.400.20, 4.0.0)"
         },
         "compile": {
           "lib/net8.0/AWSSDK.S3.dll": {
@@ -1711,17 +1711,17 @@
         "tools/uninstall.ps1"
       ]
     },
-    "AWSSDK.S3/3.7.400.5": {
-      "sha512": "l4F7DsrZJOk2hKwlx2RpdRhbimQumvhs23v4EV3heFMv/dtiqKKstVSODRcbOWALL9+/AjCKV148pSixUk48gA==",
+    "AWSSDK.S3/3.7.402.11": {
+      "sha512": "P2Syd8q1E5VkqrdmbpzbQi6wgIvHSWKsqmPKAeJOrSBfnG7fE3XIYLaHXguHvSz46unDAFP4g5IPvPOZRUOGnw==",
       "type": "package",
-      "path": "awssdk.s3/3.7.400.5",
+      "path": "awssdk.s3/3.7.402.11",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "analyzers/dotnet/cs/AWSSDK.S3.CodeAnalysis.dll",
         "analyzers/dotnet/cs/SharedAnalysisCode.dll",
-        "awssdk.s3.3.7.400.5.nupkg.sha512",
+        "awssdk.s3.3.7.402.11.nupkg.sha512",
         "awssdk.s3.nuspec",
         "images/AWSLogo.png",
         "lib/net35/AWSSDK.S3.dll",
@@ -4612,7 +4612,7 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
-      "AWSSDK.S3 >= 3.7.400.5",
+      "AWSSDK.S3 >= 3.7.402.11",
       "Core >= 1.0.0",
       "Microsoft.AspNetCore.Mvc.Versioning >= 5.1.0",
       "Microsoft.AspNetCore.OpenApi >= 9.0.0-preview.6.24328.4",
@@ -4679,7 +4679,7 @@
         "dependencies": {
           "AWSSDK.S3": {
             "target": "Package",
-            "version": "[3.7.400.5, )"
+            "version": "[3.7.402.11, )"
           },
           "Microsoft.AspNetCore.Mvc.Versioning": {
             "target": "Package",

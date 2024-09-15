@@ -2,13 +2,13 @@
 using Account.API.Applications.Services;
 using Account.API.Applications.Services.Interfaces;
 using Account.Domain.SeedWork;
-using Account.Infrastructure; 
-using Core.Configurations; 
+using Account.Infrastructure;
+using Core.Configurations;
 using Core.Services;
-using Core.Services.Interfaces; 
-using MassTransit; 
+using Core.Services.Interfaces;
+using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options; 
+using Microsoft.Extensions.Options;
 
 namespace Account.API.Extensions;
 
@@ -24,14 +24,7 @@ public static class ServiceRegistrationExtension
         services.AddHostedService<OrderWaitingMechanicAssignJob>();
         services.AddHostedService<OrderWaitingMechanicConfirmExpiryJob>();
         return services;
-    } 
-
-    public static IServiceCollection AddSignalRServer(this IServiceCollection services)
-    {
-        services.AddSignalR();
-
-        return services;
-    }
+    }  
 
     public static IServiceCollection AddMassTransitContext<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
     { 

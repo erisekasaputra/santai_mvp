@@ -30,7 +30,7 @@ public class OrderCreatedDomainEventHandler(IMediator mediator) : INotificationH
             x.Tax?.TaxAmount.Amount ?? 0,
             x.SubTotal.Amount));
 
-        await _mediator.Send(new OrderCreatedIntegrationEvent(
+        await _mediator.Publish(new OrderCreatedIntegrationEvent(
             notification.Order.Id,
             notification.Order.Buyer.BuyerId,
             notification.Order.Buyer.Name,

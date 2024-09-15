@@ -110,7 +110,10 @@ public class OrderWaitingMechanicAssignJob : BackgroundService
 
                 unitOfWork.OrderTasks.UpdateMechanicTask(mechanicFromSql);
                 await unitOfWork.OrderTasks.CreateOrderTaskWaitingMechanicConfirmAsync(
-                    new OrderTaskWaitingMechanicConfirm(order.OrderId, mechanic.MechanicId, order.MechanicConfirmationExpire!.Value));
+                    new OrderTaskWaitingMechanicConfirm(
+                        order.OrderId, 
+                        mechanic.MechanicId, 
+                        order.MechanicConfirmationExpire!.Value));
 
 
                 mechanicOrdersAssigned.Add((mechanic, order.OrderId));

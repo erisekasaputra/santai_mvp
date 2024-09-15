@@ -12,6 +12,11 @@ public class OrderFindingMechanicIntegrationEventConsumer(
     public async Task Consume(ConsumeContext<OrderFindingMechanicIntegrationEvent> context)
     {
         var order = context.Message;
-        await _mediator.Send(new CreateOrderTaskCommand(order.OrderId, order.Latitude, order.Longitude));
+        var result = await _mediator.Send(new CreateOrderTaskCommand(order.OrderId, order.Latitude, order.Longitude));
+
+        if (!result.IsSuccess)
+        {
+            throw new Exception(result.Message);
+        }
     }
 }

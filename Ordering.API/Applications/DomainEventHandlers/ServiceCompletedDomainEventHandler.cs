@@ -9,7 +9,7 @@ public class ServiceCompletedDomainEventHandler(IMediator mediator) : INotificat
     private readonly IMediator _mediator = mediator;
     public async Task Handle(ServiceCompletedDomainEvent notification, CancellationToken cancellationToken)
     {
-        await _mediator.Send(new ServiceCompletedIntegrationEvent(
+        await _mediator.Publish(new ServiceCompletedIntegrationEvent(
             notification.Order.Id,
             notification.Order.Buyer.BuyerId,
             notification.Order.Mechanic!.MechanicId), cancellationToken);
