@@ -7,6 +7,7 @@ using Core.Configurations;
 using Core.Messages;
 using Core.Services.Interfaces;
 using Core.Exceptions;
+using System.Data;
 
 namespace Account.API.Applications.Commands.FleetCommand.AssignFleetsToStaff;
 
@@ -38,7 +39,7 @@ public class AssignFleetsToStaffCommandHandler : IRequestHandler<AssignFleetsToS
     {
         try
         { 
-            await _unitOfWork.BeginTransactionAsync(System.Data.IsolationLevel.ReadCommitted, cancellationToken);
+            await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
 
             if (request is null || !request.FleetIds.Any())
             {

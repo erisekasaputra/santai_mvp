@@ -1,5 +1,4 @@
-﻿using Account.API.Applications.Commands.OrderTaskCommand.CreateOrderTask;
-using Azure;
+﻿using Account.API.Applications.Commands.OrderTaskCommand.CreateOrderTask; 
 using Core.Events;
 using Core.Results;
 using MassTransit;

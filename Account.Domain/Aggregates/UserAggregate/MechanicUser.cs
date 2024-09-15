@@ -285,7 +285,7 @@ public class MechanicUser : BaseUser
         }
 
         IsVerified = true; 
-        MechanicOrderTask = new (Id, null, 0, 0);
+        MechanicOrderTask = new (Id, null);
         MechanicOrderTask.SetEntityState(EntityState.Added);
         RaiseMechanicDocumentVerifiedDomainEvent(this);
     }

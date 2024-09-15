@@ -8,9 +8,7 @@ namespace Account.Domain.Aggregates.OrderTaskAggregate;
 public class MechanicOrderTask : Entity
 {
     public Guid MechanicId { get; private set; }
-    public Guid? OrderId { get; private set; } 
-    public double Latitude { get; private set; }
-    public double Longitude { get; private set; }
+    public Guid? OrderId { get; private set; }  
     public bool IsOrderAssigned { get; private set; }  
     public bool IsActive { get; private set; }
     public MechanicOrderTask()
@@ -20,14 +18,10 @@ public class MechanicOrderTask : Entity
 
     public MechanicOrderTask(
         Guid mechanicId,
-        Guid? orderId,
-        double latitude,
-        double longitude)
+        Guid? orderId)
     {
         MechanicId = mechanicId;
-        OrderId = orderId;
-        Latitude = latitude;
-        Longitude = longitude;
+        OrderId = orderId; 
         IsOrderAssigned = false; 
     }
 
@@ -66,9 +60,7 @@ public class MechanicOrderTask : Entity
     public bool ResetOrder()
     {  
         IsOrderAssigned = false; 
-        OrderId = null;
-        Latitude = 0;
-        Longitude = 0;
+        OrderId = null; 
         return true;
     }
 
@@ -84,12 +76,10 @@ public class MechanicOrderTask : Entity
 
         if (IsOrderAssigned)
         {
-            throw new DBConcurrencyException("Order has been assigned to this mechanic");
+            throw new InvalidOperationException("Order has been assigned to this mechanic");
         }
 
-        OrderId = orderId;
-        Latitude = latitude;
-        Longitude = longitude;
+        OrderId = orderId; 
         IsOrderAssigned = true; 
     } 
 }

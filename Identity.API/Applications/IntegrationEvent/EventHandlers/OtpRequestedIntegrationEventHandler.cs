@@ -1,68 +1,16 @@
-﻿using Core.Events;
-using Identity.API.Domain.Events;
+﻿using Core.Events; 
 using MassTransit;
 using MediatR;
 
 namespace Identity.API.Applications.IntegrationEvent.EventHandlers;
 
-public class OtpRequestedIntegrationEventHandler : INotificationHandler<OtpRequestedDomainEvent>
+public class OtpRequestedIntegrationEventHandler(IPublishEndpoint publishEndpoint) : INotificationHandler<OtpRequestedIntegrationEvent>
 {
-    private readonly IPublishEndpoint _publisher;
+    private readonly IPublishEndpoint _publisher = publishEndpoint; 
 
-    public OtpRequestedIntegrationEventHandler(IPublishEndpoint publishEndpoint)
-    {
-        _publisher = publishEndpoint;
-    }
-
-
-    public async Task Handle(OtpRequestedDomainEvent notification, CancellationToken cancellationToken)
-    {
-        var integrationEvent = new OtpRequestedIntegrationEvent(notification.PhoneNumber, notification.Email, notification.Token, notification.Provider);
-
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine(integrationEvent.Token);
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-        Console.WriteLine();
-
-        await _publisher.Publish(integrationEvent, cancellationToken);
+    public async Task Handle(OtpRequestedIntegrationEvent notification, CancellationToken cancellationToken)
+    { 
+        await _publisher.Publish(notification, cancellationToken);
     }
 }
+ 

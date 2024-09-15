@@ -12,13 +12,7 @@ public class MechanicOrderTaskEnttiyConfiguration : IEntityTypeConfiguration<Mec
 
         e.HasIndex(p => p.OrderId).IsUnique();
 
-        e.Property(p => p.OrderId).IsRequired(false);
-         
-        e.Property(p => p.Longitude)
-            .HasColumnType("float(24)");
-         
-        e.Property(p => p.Latitude)
-            .HasColumnType("float(24)");
+        e.Property(p => p.OrderId).IsRequired(false); 
 
         e.Ignore(p => p.DomainEvents);
         e.Ignore(p => p.EntityStateAction); 

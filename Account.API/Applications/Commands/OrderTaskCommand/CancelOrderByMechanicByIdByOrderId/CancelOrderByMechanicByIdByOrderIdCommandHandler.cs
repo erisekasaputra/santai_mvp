@@ -118,7 +118,7 @@ public class CancelOrderByMechanicByIdByOrderIdCommandHandler : IRequestHandler<
                     _unitOfWork.OrderTasks.UpdateOrderAssign(orderWaitingMechanicAssign);
 
                     await _mechanicCache.Ping();
-                    await _mechanicCache.UnassignOrderFromMechanicAsync(mechanicTask.MechanicId);
+                    await _mechanicCache.UnassignOrderFromMechanicAsync(mechanicTask.MechanicId, mechanicTask.OrderId.Value);
 
 
 

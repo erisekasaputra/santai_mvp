@@ -1,19 +1,16 @@
 ﻿
-using Core.Events;
-using Identity.API.Domain.Events;
+using Core.Events; 
 using MassTransit;
 using MediatR;
 
 namespace Identity.API.Applications.IntegrationEvent.EventHandlers;
 
-public class RegularUserDeletedIntegrationEventHandler(IPublishEndpoint publishEndpoint) : INotificationHandler<RegularUserDeleteDomainEvent>
+public class RegularUserDeletedIntegrationEventHandler(IPublishEndpoint publishEndpoint) : INotificationHandler<RegularUserDeletedIntegrationEvent>
 {
     private readonly IPublishEndpoint _publishEndpoint = publishEndpoint;
 
-    public async Task Handle(RegularUserDeleteDomainEvent notification, CancellationToken cancellationToken)
-    {
-        var @event = new RegularUserDeletedIntegrationEvent(notification.UserId);
-
-        await _publishEndpoint.Publish(@event, cancellationToken);
+    public async Task Handle(RegularUserDeletedIntegrationEvent notification, CancellationToken cancellationToken)
+    { 
+        await _publishEndpoint.Publish(notification, cancellationToken);
     }
 }

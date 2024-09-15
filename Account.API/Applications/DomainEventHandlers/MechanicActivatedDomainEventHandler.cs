@@ -20,6 +20,7 @@ public class MechanicActivatedDomainEventHandler(
             Longitude = 0,  
         };
 
+        await _cache.Ping();
         await _cache.CreateGeoAsync(mechanic);
         await _cache.CreateMechanicHsetAsync(mechanic);
     }

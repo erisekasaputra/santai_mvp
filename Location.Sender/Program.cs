@@ -32,9 +32,9 @@ catch(Exception ex)
 
 await Task.Run( async() =>
 {
-    while (true)
+    while (true)   
     { 
-        await mechanic1.SendAsync("UpdateLocation", -8.143145, 112.209617);
+        await mechanic1.SendAsync("UpdateLocation", -8.143145, 112.2096);
 
         Console.WriteLine("Location Sent from Mechanic 1");
 

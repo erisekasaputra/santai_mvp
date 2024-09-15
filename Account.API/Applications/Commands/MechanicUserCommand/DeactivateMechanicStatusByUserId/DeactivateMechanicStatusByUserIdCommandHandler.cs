@@ -27,8 +27,8 @@ public class DeactivateMechanicStatusByUserIdCommandHandler : IRequestHandler<De
         _asyncRetryPolicy = Policy
             .Handle<DBConcurrencyException>()
             .Or<DbUpdateException>() 
-            .WaitAndRetryAsync(3, retryAttempt =>
-                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+            .WaitAndRetryAsync(2, retryAttempt =>
+                TimeSpan.FromSeconds(Math.Pow(1, retryAttempt)),
                 onRetry: (exception, timeSpan, retryCount, context) =>
                 {
                     Console.WriteLine($"Retry on {retryCount} failed. Waiting {timeSpan} before try again. Error: {exception.Message}");
@@ -40,7 +40,7 @@ public class DeactivateMechanicStatusByUserIdCommandHandler : IRequestHandler<De
         {
             var result = await _asyncRetryPolicy.ExecuteAsync(async () =>
             {
-                await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
+                await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
                 try
                 {
                     var mechanic = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.MechanicId); 
@@ -59,8 +59,8 @@ public class DeactivateMechanicStatusByUserIdCommandHandler : IRequestHandler<De
                     var mechanicUser = await _unitOfWork.OrderTasks.GetMechanicTaskByMechanicIdUnassignedOrderAsync(request.MechanicId);
 
                     if (mechanicUser is null)
-                    { 
-                        throw new DBConcurrencyException();
+                    {
+                        return Result.Failure("Can not proceed your request", ResponseStatus.BadRequest);
                     }
 
                     mechanicUser.Deactivate();

@@ -3,26 +3,22 @@ using Account.API.Applications.Services.Interfaces;
 using Account.Domain.SeedWork; 
 using MassTransit;
 using Polly;
-using StackExchange.Redis; 
-using System.Data;
+using StackExchange.Redis;  
 
 namespace Account.API.Applications.Services;
 
 public class MechanicCache : IMechanicCache
-{
-    public IUnitOfWork _unitOfWork;
+{ 
     private readonly IConnectionMultiplexer _connectionMultiplexer; 
     private readonly AsyncPolicy _asyncPolicy;
     public MechanicCache(
-        IConnectionMultiplexer connectionMultiplexer,
-        IUnitOfWork unitOfWork)
-    {
-        _unitOfWork = unitOfWork;
+        IConnectionMultiplexer connectionMultiplexer)
+    { 
         _connectionMultiplexer = connectionMultiplexer;
-        _asyncPolicy = Policy.Handle<DBConcurrencyException>()
+        _asyncPolicy = Policy.Handle<InvalidOperationException>()
                              .Or<RedisConnectionException>() 
-                             .WaitAndRetryAsync(3, retryAttempt =>
-                                 TimeSpan.FromSeconds(Math.Pow(2, retryAttempt))  
+                             .WaitAndRetryAsync(1, retryAttempt =>
+                                 TimeSpan.FromSeconds(Math.Pow(1, retryAttempt))  
                              );
     }
 
@@ -95,10 +91,8 @@ public class MechanicCache : IMechanicCache
     {
         try
         {
-            var db = _connectionMultiplexer.GetDatabase();
-             
-            var hashKey = $"mechanics:{mechanicId}";
-             
+            var db = _connectionMultiplexer.GetDatabase(); 
+            var hashKey = $"mechanics:{mechanicId}";  
             await db.KeyDeleteAsync(hashKey);   
         }
         catch (Exception)
@@ -111,10 +105,8 @@ public class MechanicCache : IMechanicCache
     {
         try
         {
-            var db = _connectionMultiplexer.GetDatabase();
-             
+            var db = _connectionMultiplexer.GetDatabase(); 
             var hashKey = $"mechanics:{mechanic.MechanicId}"; 
-
             var hashEntries = new HashEntry[]
             {
                 new (nameof(mechanic.OrderId), mechanic.OrderId.ToString()),
@@ -172,7 +164,7 @@ public class MechanicCache : IMechanicCache
              
             if (result == 0)
             {
-                throw new DBConcurrencyException();
+                throw new InvalidOperationException();
             }
 
             return orderId;
@@ -183,7 +175,7 @@ public class MechanicCache : IMechanicCache
 
 
     public async Task<MechanicAvailabilityCache?> FindAvailableMechanicAsync(
-        double latitude, double longitude, double radius)
+        Guid orderId, double latitude, double longitude, double radius)
     {
         var db = _connectionMultiplexer.GetDatabase();
         var geoKey = "mechanics:geo"; 
@@ -197,29 +189,23 @@ public class MechanicCache : IMechanicCache
          
         foreach (var result in results)
         {
-            var mechanicId = Guid.Parse(result.Member.ToString());
-            var mechanic = await GetMechanicAsync(mechanicId);
+            var mechanicId = Guid.Parse(result.Member.ToString()); 
 
-            if (mechanic is not null && ( mechanic.OrderId is null || mechanic.OrderId == Guid.Empty))
+            var blocked = await IsMechanicBlockedFromOrder(mechanicId, orderId); 
+            if (blocked)
+            {
+                continue;
+            }
+
+            var mechanic = await GetMechanicAsync(mechanicId); 
+            if (mechanic is not null && (mechanic.OrderId is null || mechanic.OrderId == Guid.Empty))
             { 
                 return mechanic;
             }
             else
             {
-                var mechanicFromSql = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(mechanicId); 
-                if (mechanicFromSql is not null)
-                {
-                    var newMechanicCache = new MechanicAvailabilityCache()
-                    {
-                        MechanicId = mechanicId,
-                        Latitude = latitude,
-                        Longitude = longitude,
-                        OrderId = mechanicFromSql?.MechanicOrderTask?.OrderId
-                    };
-
-                    await CreateMechanicHsetAsync(newMechanicCache); 
-                    return newMechanicCache;
-                }
+                await RemoveGeoAsync(mechanicId);
+                continue;
             }
         }
          
@@ -263,39 +249,101 @@ public class MechanicCache : IMechanicCache
         return mechanic;
     }
 
-    public async Task<bool> UnassignOrderFromMechanicAsync(Guid mechanicId)
-    { 
-        var result = await _asyncPolicy.ExecuteAsync(async () =>
+    public async Task<bool> IsMechanicBlockedFromOrder(Guid mechanicId, Guid orderId)
+    {
+        var db = _connectionMultiplexer.GetDatabase();
+        var setKey = $"mechanics_blacklist_orders:{mechanicId}";
+         
+        var isBlocked = await db.SetContainsAsync(setKey, orderId.ToString());
+
+        return isBlocked;
+    }
+
+
+
+    private async Task BlockOrder(Guid mechanicId, Guid orderId)
+    {
+        try
         {
-            if (mechanicId == Guid.Empty)
-            {
-                throw new ArgumentNullException(nameof(mechanicId));
-            }
-
             var db = _connectionMultiplexer.GetDatabase();
-            var hashKey = $"mechanics:{mechanicId}";
+            var setKey = $"mechanics_blacklist_orders:{mechanicId}";
+            await db.SetAddAsync(setKey, orderId.ToString());
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
 
-            string luaScript = @"
-                local currentOrderId = redis.call('HGET', KEYS[1], ARGV[1])
-                if (currentOrderId == ARGV[2]) then
-                    redis.call('HDEL', KEYS[1], ARGV[1])
-                    return 1 -- Success, OrderId was unassigned
-                else
-                    return 0 -- Failure, OrderId didn't match
-                end";
-
-            var result = (int)await db.ScriptEvaluateAsync(luaScript,
-                [hashKey],
-                ["OrderId", string.Empty]); 
-
-            if (result == 0)
+    public async Task<bool> UnassignOrderFromMechanicAsync(Guid mechanicId, Guid orderId)
+    { 
+        try
+        {
+            var result = await _asyncPolicy.ExecuteAsync(async () =>
             {
-                throw new DBConcurrencyException();
-            }
+                if (mechanicId == Guid.Empty)
+                {
+                    throw new ArgumentNullException(nameof(mechanicId));
+                }
 
-            return true;
-        });
+                var mechanic = await GetMechanicAsync(mechanicId);
 
-        return result;
+                if (mechanic is null)
+                {
+                    return true;
+                }
+
+                if (mechanic.OrderId is null)
+                {
+                    return true;
+                }
+
+                if (orderId != mechanic.OrderId)
+                {
+                    return false;
+                }
+
+                await BlockOrder(mechanicId, orderId); 
+                var db = _connectionMultiplexer.GetDatabase();
+                var hashKey = $"mechanics:{mechanicId}";
+
+                //string luaScript = @"
+                //    local currentOrderId = redis.call('HGET', KEYS[1], ARGV[1])
+                //    if (currentOrderId == ARGV[2]) then
+                //        redis.call('HDEL', KEYS[1], ARGV[1])
+                //        return 1 -- Success, OrderId was unassigned
+                //    else
+                //        return 0 -- Failure, OrderId didn't match
+                //    end";
+
+                //var result = (int)await db.ScriptEvaluateAsync(luaScript,
+                //    [hashKey],
+                //    ["OrderId", string.Empty]); 
+
+
+                var hashEntries = new HashEntry[]
+                {
+                    new (nameof(MechanicAvailabilityCache.OrderId), string.Empty) 
+                };
+                await db.HashSetAsync(hashKey, hashEntries);
+
+                //if (result == 0)
+                //{
+                //    return false;
+                //}
+
+                return true;
+            }); 
+
+            return result;
+        } 
+        catch (Exception ex) when (ex is InvalidOperationException or RedisException) 
+        { 
+            return false;
+        } 
+        catch (Exception)
+        {
+            return false;
+        }
     } 
 }

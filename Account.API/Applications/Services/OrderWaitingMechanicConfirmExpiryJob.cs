@@ -23,7 +23,7 @@ public class OrderWaitingMechanicConfirmExpiryJob : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     { 
-        var delayMilliseconds = 1000;
+        var delayMilliseconds = 5000;
         while (!stoppingToken.IsCancellationRequested)
         {
             using var scope = _scopeFactory.CreateScope();
@@ -38,20 +38,16 @@ public class OrderWaitingMechanicConfirmExpiryJob : BackgroundService
 
                 var orders = await unitOfWork.OrderTasks.GetOrdersExpiredMechanicConfirmationSkipLockedAsync(30);
                 if (orders is not null && orders.Any())
-                {
-                    var orderProcessingTasks = new List<Task>();
-
+                {  
                     foreach (var order in orders)
-                    { 
-                        orderProcessingTasks.Add(ProcessExpiredOrderAsync(order, unitOfWork, stoppingToken)); 
-                    }
-                     
-                    await Task.WhenAll(orderProcessingTasks);
+                    {
+                        await ProcessExpiredOrderAsync(order, unitOfWork, stoppingToken);
+                    } 
 
                     await _mechanicCache.Ping();
                     foreach(var order in orders)
                     {
-                        await _mechanicCache.UnassignOrderFromMechanicAsync(order.MechanicId);
+                        await _mechanicCache.UnassignOrderFromMechanicAsync(order.MechanicId, order.OrderId);
                     }
 
                     unitOfWork.OrderTasks.UpdateRangeOrdersConfirm(orders); 
@@ -94,6 +90,7 @@ public class OrderWaitingMechanicConfirmExpiryJob : BackgroundService
             if (orderWaitingMechanicAssign is null) return;
 
             // Reset the mechanic task and mark the order as expired
+
             mechanicTask.ResetOrder();
             orderWaitingConfirm.SetExpire();
 

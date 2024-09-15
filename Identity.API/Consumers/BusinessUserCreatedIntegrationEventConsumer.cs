@@ -1,6 +1,7 @@
 ﻿using Core.CustomClaims;
 using Core.Enumerations;
-using Core.Events; 
+using Core.Events;
+using Core.Models;
 using Identity.API.Domain.Entities;
 using Identity.API.Domain.Events;
 using Identity.API.Infrastructure; 
@@ -33,7 +34,7 @@ public class BusinessUserCreatedIntegrationEventConsumer(
         {
             using var transaction = await _dbContext.Database.BeginTransactionAsync(IsolationLevel.ReadCommitted);
 
-            var duplicateUsers = new List<ApplicationUser>();
+            var duplicateUsers = new List<DuplicateUser>();
             var users = new List<(ApplicationUser users, string password)>();
 
             try
@@ -53,18 +54,20 @@ public class BusinessUserCreatedIntegrationEventConsumer(
                   .Where(x => staffPhoneNumber.Contains(x.PhoneNumber)).ToListAsync();
 
 
-                if (duplicateBusinessUser is not null && businessUser.UserId != Guid.Parse(duplicateBusinessUser.Id))
+                if (duplicateBusinessUser is not null)
                 {
-                    duplicateUsers.Add(duplicateBusinessUser);
+                    if (businessUser.UserId != Guid.Parse(duplicateBusinessUser.Id))
+                    {
+                        var duplicateUser = new DuplicateUser(businessUser.UserId, businessUser.PhoneNumber, UserType.BusinessUser);
+                        duplicateUsers.Add(duplicateUser); 
+                    }
+                    else if(!duplicateBusinessUser.IsAccountRegistered)
+                    { 
+                        duplicateBusinessUser.IsAccountRegistered = true;
+                        await _userManager.UpdateAsync(duplicateBusinessUser);
+                    }
                 }
-
-                if (duplicateBusinessUser is not null && !duplicateBusinessUser.IsAccountRegistered)
-                {
-                    duplicateBusinessUser.IsAccountRegistered = true;
-                    await _userManager.UpdateAsync(duplicateBusinessUser);
-                }
-
-                if (duplicateBusinessUser is null)
+                else 
                 {
                     users.Add((new ApplicationUser()
                     {
@@ -78,6 +81,16 @@ public class BusinessUserCreatedIntegrationEventConsumer(
                     businessUser.Password));
                 }
 
+
+
+
+
+
+
+
+
+
+
                 var listUpdatedStaff = new List<ApplicationUser>();
 
                 foreach (var staff in context.Message.Staffs ?? [])
@@ -86,18 +99,20 @@ public class BusinessUserCreatedIntegrationEventConsumer(
                         .Where(x => x.PhoneNumber == staff.PhoneNumber)
                         .FirstOrDefault();
 
-                    if (duplicateStaff is not null && staff.Id != Guid.Parse(duplicateStaff.Id))
+                    if (duplicateStaff is not null)
                     {
-                        duplicateUsers.Add(duplicateStaff);
+                        if (staff.Id != Guid.Parse(duplicateStaff.Id))
+                        {
+                            var duplicateUser = new DuplicateUser(staff.Id, staff.PhoneNumber, UserType.StaffUser);
+                            duplicateUsers.Add(duplicateUser);
+                        }
+                        else if (!duplicateStaff.IsAccountRegistered)
+                        {
+                            duplicateStaff.IsAccountRegistered = true;
+                            listUpdatedStaff.Add(duplicateStaff);
+                        }
                     }
-
-                    if (duplicateStaff is not null && !duplicateStaff.IsAccountRegistered)
-                    {
-                        duplicateStaff.IsAccountRegistered = true;
-                        listUpdatedStaff.Add(duplicateStaff);
-                    }
-
-                    if (duplicateStaff is null)
+                    else 
                     {
                         users.Add((new()
                         {

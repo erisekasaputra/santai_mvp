@@ -2,8 +2,7 @@
 
 namespace Account.API.Applications.Dtos.RequestDtos;
 
-public class BusinessUserRequestDto( 
-    string? email,
+public class BusinessUserRequestDto(  
     string phoneNumber, 
     string timeZoneId,
     AddressRequestDto address,
@@ -16,8 +15,7 @@ public class BusinessUserRequestDto(
     string password,
     IEnumerable<BusinessLicenseRequestDto> businessLicenses,
     IEnumerable<StaffRequestDto> staffs)
-{ 
-    public string? Email { get; set; } = email?.CleanAndLowering(); 
+{  
     public string PhoneNumber { get; set; } = phoneNumber.Clean();
     public string TimeZoneId { get; } = timeZoneId.Clean();
     public AddressRequestDto Address { get; } = address;

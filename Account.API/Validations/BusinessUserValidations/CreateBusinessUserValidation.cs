@@ -15,12 +15,7 @@ public class CreateBusinessUserValidation : AbstractValidator<BusinessUserReques
     {
         RuleFor(x => x.Password)
             .Must(PasswordValidation.IsValidPassword).WithMessage("Password must be at least 6 characters long and contain at least one digit, one lowercase letter, and one uppercase letter.");
-
-        RuleFor(x => x.Email)  
-            .Length(5, 254).WithMessage("The email must be between 3 and 254 characters long")
-            .EmailAddress().WithMessage("Email format is invalid")
-            .When(x => !string.IsNullOrWhiteSpace(x.Email));
-
+         
         RuleFor(x => x.PhoneNumber)
             .NotEmpty().WithMessage("Phone number can not be empty")
             .Length(3, 20).WithMessage("Phone number must be between 3 and 20 characters long")

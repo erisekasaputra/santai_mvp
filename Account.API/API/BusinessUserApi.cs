@@ -764,7 +764,7 @@ public static class BusinessUserApi
                 return TypedResults.Forbid();
             } 
 
-            var result = await service.Mediator.Send(new RemoveStaffByUserIdCommand(businessUserId, staffId));
+            var result = await service.Mediator.Send(new RemoveStaffByUserIdCommand(staffId));
 
             return result.ToIResult();
         }

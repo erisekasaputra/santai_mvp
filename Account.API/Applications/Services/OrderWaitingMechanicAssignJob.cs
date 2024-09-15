@@ -39,15 +39,11 @@ public class OrderWaitingMechanicAssignJob : BackgroundService
                 var orders = await unitOfWork.OrderTasks.GetOrdersUnassignedMechanicSkipLockedAsync(30);
 
                 if (orders is not null && orders.Any())
-                {
-                    var orderProcessingTasks = new List<Task>();
-
+                { 
                     foreach (var order in orders)
                     {
-                        orderProcessingTasks.Add(ProcessOrder(order, mechanicOrdersAssigned, unitOfWork, stoppingToken));
-                    }
-
-                    await Task.WhenAll(orderProcessingTasks);
+                        await ProcessOrder(order, mechanicOrdersAssigned, unitOfWork, stoppingToken);
+                    } 
 
                     await _mechanicCache.Ping();
 
@@ -70,7 +66,7 @@ public class OrderWaitingMechanicAssignJob : BackgroundService
                 LoggerHelper.LogError(_logger, ex);
             }
 
-            await Task.Delay(2000, stoppingToken);
+            await Task.Delay(5000, stoppingToken);
         }
     }
 
@@ -82,7 +78,12 @@ public class OrderWaitingMechanicAssignJob : BackgroundService
     {
         try
         { 
-            var mechanic = await _mechanicCache.FindAvailableMechanicAsync(order.Latitude, order.Longitude, order.RetryAttemp * 5); 
+            var mechanic = await _mechanicCache.FindAvailableMechanicAsync(
+                order.OrderId,
+                order.Latitude, 
+                order.Longitude, 
+                order.RetryAttemp * 5); 
+
             if (mechanic == null)
             {
                 order.IncreaseRetryAttemp();
