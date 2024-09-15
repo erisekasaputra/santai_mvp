@@ -9,8 +9,7 @@ namespace Account.Domain.Aggregates.UserAggregate;
 public class Staff : Entity, IAggregateRoot
 { 
     public Guid BusinessUserId { get; private init; }
-    public string BusinessUserCode { get; private init; }
-    public BusinessUser? BusinessUser { get; set; } // Only for navigation properties, does not have to be instantiated 
+    public string BusinessUserCode { get; private init; } 
     public string? HashedPhoneNumber { get; private set; } 
     public string? EncryptedPhoneNumber { get; private set; }
     public string? NewHashedPhoneNumber { get; private set; } 

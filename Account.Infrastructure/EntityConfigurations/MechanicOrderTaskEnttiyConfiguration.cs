@@ -21,7 +21,6 @@ public class MechanicOrderTaskEnttiyConfiguration : IEntityTypeConfiguration<Mec
             .HasColumnType("float(24)");
 
         e.Ignore(p => p.DomainEvents);
-        e.Ignore(p => p.EntityStateAction);
-        e.Ignore(x => x.IsOrderAssigned);
+        e.Ignore(p => p.EntityStateAction); 
     }
 }

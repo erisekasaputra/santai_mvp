@@ -138,9 +138,9 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
         });
          
         e.HasMany(s => s.Fleets)
-            .WithOne(f => f.Staff)
+            .WithOne()
             .HasForeignKey(f => f.StaffId)
-            .OnDelete(DeleteBehavior.SetNull);
+            .OnDelete(DeleteBehavior.NoAction);
 
         e.Ignore(p => p.Password); 
         e.Ignore(p => p.DomainEvents);

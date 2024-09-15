@@ -6,7 +6,9 @@ using Search.API.Infrastructure;
 using Search.API.Infrastructure.Repositories; 
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.Configure<ElasticsearchConfiguration>(builder.Configuration.GetSection("Elasticsearch")); 
+builder.Configuration.AddEnvironmentVariables();
+
+builder.Services.Configure<ElasticsearchConfiguration>(builder.Configuration.GetSection("Elasticsearch"));
 
 builder.Services.AddOpenApi(); 
 builder.Services.AddSwaggerGen();

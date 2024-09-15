@@ -1,5 +1,7 @@
 ﻿using Account.API.Applications.Commands.OrderTaskCommand.CancelOrderByMechanicByIdByOrderId;
+using Azure;
 using Core.Events;
+using Core.Results;
 using MassTransit;
 using MediatR;
 
@@ -17,7 +19,10 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
 
         if (!result.IsSuccess) 
         {
-            throw new Exception(result.Message);
+            if (result.ResponseStatus is not ResponseStatus.NotFound and ResponseStatus.BadRequest)
+            {
+                throw new Exception(result.Message);
+            }
         }
     }
 }

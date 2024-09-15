@@ -8,41 +8,5 @@
     "Order": 0,
     "Parameters": [],
     "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Ordering.API.Controllers.OrderController",
-    "Method": "GetOrderById",
-    "RelativePath": "api/v1/orders",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "orderId",
-        "Type": "System.Guid",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Ordering.API.Controllers.OrderController",
-    "Method": "Test",
-    "RelativePath": "api/v1/orders/test",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Ordering.API.Controllers.OrderController",
-    "Method": "TestCreate",
-    "RelativePath": "api/v1/orders/test-create",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
   }
 ]

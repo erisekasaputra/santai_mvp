@@ -85,7 +85,7 @@ public class AssignFleetsToStaffCommandHandler : IRequestHandler<AssignFleetsToS
 
             foreach (var fleet in fleets)
             {
-                fleet.AssignStaff(staff);
+                fleet.AssignStaff(staff.BusinessUserId, staff.Id);
                 _unitOfWork.Fleets.Update(fleet);
             }
 

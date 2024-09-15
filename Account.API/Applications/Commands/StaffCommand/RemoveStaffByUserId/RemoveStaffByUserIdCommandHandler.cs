@@ -14,8 +14,10 @@ public class RemoveStaffByUserIdCommandHandler(IUnitOfWork unitOfWork, Applicati
 
     public async Task<Result> Handle(RemoveStaffByUserIdCommand request, CancellationToken cancellationToken)
     {
+        await _unitOfWork.BeginTransactionAsync(System.Data.IsolationLevel.ReadCommitted, cancellationToken);
         try
         {
+
             var staff = await _unitOfWork.Staffs.GetByBusinessUserIdAndStaffIdAsync(request.BusinessUserId, request.StaffId);
             if (staff is null)
             {
@@ -23,18 +25,28 @@ public class RemoveStaffByUserIdCommandHandler(IUnitOfWork unitOfWork, Applicati
                     .WithError(new("Staff.Id", "User not found"));
             }
 
-            _unitOfWork.Staffs.Delete(staff);
+            var fleets = await _unitOfWork.Fleets.GetByStaffIdAsync(staff.Id); 
+            if(fleets is not null && fleets.Any())
+            {
+                foreach (var f in fleets)
+                {
+                    f.RemoveStaff();
+                }
+                _unitOfWork.Fleets.UpdateRange(fleets); 
+            }
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
-            
+            _unitOfWork.Staffs.Delete(staff); 
+            await _unitOfWork.CommitTransactionAsync(cancellationToken); 
             return Result.Success(null, ResponseStatus.NoContent);
         }
         catch (DomainException ex)
         {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);
         }
         catch (Exception ex)
         {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             _service.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }

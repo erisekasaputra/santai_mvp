@@ -148,9 +148,6 @@ namespace Account.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("BaseUserId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("Brand")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -247,8 +244,6 @@ namespace Account.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BaseUserId");
-
                     b.HasIndex("HashedChassisNumber")
                         .IsUnique();
 
@@ -259,6 +254,8 @@ namespace Account.Infrastructure.Migrations
                         .IsUnique();
 
                     b.HasIndex("StaffId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Fleets");
                 });
@@ -336,6 +333,9 @@ namespace Account.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsActive")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsOrderAssigned")
                         .HasColumnType("bit");
 
                     b.Property<double>("Latitude")
@@ -944,14 +944,15 @@ namespace Account.Infrastructure.Migrations
 
             modelBuilder.Entity("Account.Domain.Aggregates.FleetAggregate.Fleet", b =>
                 {
-                    b.HasOne("Account.Domain.Aggregates.UserAggregate.BaseUser", "BaseUser")
-                        .WithMany("Fleets")
-                        .HasForeignKey("BaseUserId");
-
-                    b.HasOne("Account.Domain.Aggregates.UserAggregate.Staff", "Staff")
+                    b.HasOne("Account.Domain.Aggregates.UserAggregate.Staff", null)
                         .WithMany("Fleets")
                         .HasForeignKey("StaffId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Account.Domain.Aggregates.UserAggregate.BaseUser", null)
+                        .WithMany("Fleets")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.OwnsOne("Account.Domain.Aggregates.FleetAggregate.Owner", "Owner", b1 =>
                         {
@@ -976,12 +977,8 @@ namespace Account.Infrastructure.Migrations
                                 .HasForeignKey("FleetId");
                         });
 
-                    b.Navigation("BaseUser");
-
                     b.Navigation("Owner")
                         .IsRequired();
-
-                    b.Navigation("Staff");
                 });
 
             modelBuilder.Entity("Account.Domain.Aggregates.LoyaltyAggregate.LoyaltyProgram", b =>
@@ -1091,7 +1088,7 @@ namespace Account.Infrastructure.Migrations
 
             modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.Staff", b =>
                 {
-                    b.HasOne("Account.Domain.Aggregates.UserAggregate.BusinessUser", "BusinessUser")
+                    b.HasOne("Account.Domain.Aggregates.UserAggregate.BusinessUser", null)
                         .WithMany("Staffs")
                         .HasForeignKey("BusinessUserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -1145,8 +1142,6 @@ namespace Account.Infrastructure.Migrations
 
                     b.Navigation("Address")
                         .IsRequired();
-
-                    b.Navigation("BusinessUser");
                 });
 
             modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.MechanicUser", b =>

@@ -26,7 +26,7 @@ public class MechanicCache : IMechanicCache
                              );
     }
 
-    public async Task UpdateLocationAsync(MechanicAvailabilityCache mechanic)
+    public async Task<bool> UpdateLocationAsync(MechanicAvailabilityCache mechanic)
     {
         try
         {
@@ -47,10 +47,14 @@ public class MechanicCache : IMechanicCache
                 };
 
                 await db.HashSetAsync(hashKey, hashEntries);
+
+                return true;
             }
+
+            return false;
         }
         catch (Exception)
-        {
+        { 
             throw;
         }
     }

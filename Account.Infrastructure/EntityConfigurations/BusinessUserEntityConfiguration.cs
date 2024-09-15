@@ -53,7 +53,7 @@ public class BusinessUserEntityConfiguration : IEntityTypeConfiguration<Business
             .HasColumnType("nvarchar(1000)");
          
         e.HasMany(b => b.Staffs)
-            .WithOne(s => s.BusinessUser)
+            .WithOne()
             .HasForeignKey(s => s.BusinessUserId)
             .OnDelete(DeleteBehavior.Cascade);   
         

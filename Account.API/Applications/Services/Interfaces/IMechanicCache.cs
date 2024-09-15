@@ -4,7 +4,7 @@ namespace Account.API.Applications.Services.Interfaces;
 
 public interface IMechanicCache
 {
-    Task UpdateLocationAsync(MechanicAvailabilityCache mechanic);
+    Task<bool> UpdateLocationAsync(MechanicAvailabilityCache mechanic);
     Task CreateGeoAsync(MechanicAvailabilityCache mechanic);
     Task RemoveGeoAsync(Guid mechanicId);
     Task RemoveHsetAsync(Guid mechanicId);

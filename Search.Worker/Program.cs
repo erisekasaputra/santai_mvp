@@ -1,7 +1,8 @@
 using Core.Extensions; 
 using Search.Worker; 
 using Search.Worker.Extensions;   
-var builder = Host.CreateApplicationBuilder(args); 
+var builder = Host.CreateApplicationBuilder(args);
+builder.Configuration.AddEnvironmentVariables();
 builder.AddHostedCoreOptionConfiguration();
 builder.Services.AddMasstransitContext();
 builder.Services.AddMediatorService<ISearchWorkerMarkerInterface>();

@@ -49,8 +49,7 @@ public class UserRepository : IUserRepository
             .Include(x => x.BusinessLicenses) 
             .Include(x => x.ReferralProgram)
             .Include(x => x.LoyaltyProgram)
-            .Include(x => x.Fleets)
-            .AsSplitQuery()
+            .Include(x => x.Fleets) 
             .FirstOrDefaultAsync(x => x.Id == id);
     } 
     

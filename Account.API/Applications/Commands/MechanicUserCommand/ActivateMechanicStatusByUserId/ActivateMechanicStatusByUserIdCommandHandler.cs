@@ -68,8 +68,9 @@ public class ActivateMechanicStatusByUserIdCommandHandler : IRequestHandler<Acti
                     await _unitOfWork.CommitTransactionAsync(cancellationToken); 
                     return Result.Success(null, ResponseStatus.NoContent); 
                 }
-                catch(Exception)
-                { 
+                catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
                     await _unitOfWork.RollbackTransactionAsync(cancellationToken);    
                     throw;
                 }

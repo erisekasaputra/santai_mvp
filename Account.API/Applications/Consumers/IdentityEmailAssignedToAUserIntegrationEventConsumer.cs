@@ -1,7 +1,8 @@
 ﻿using Account.API.Applications.Commands.StaffCommand.AssignStaffEmailByUserId; 
 using Account.API.Applications.Commands.UserCommand.AssignUserEmailByUserId; 
 using Core.Enumerations;
-using Core.Events; 
+using Core.Events;
+using Core.Results;
 using MassTransit;
 using MediatR;
 
@@ -26,8 +27,11 @@ public class IdentityEmailAssignedToAUserIntegrationEventConsumer(
             if (!responseStaff.IsSuccess)
             {
                 _logger.LogError("An error occured. error: '{Message}'. When assigning the email: {email} for registered staff user id: {Id}", responseStaff.Message, user.Email, user.Id);
-                 
-                throw new Exception(responseStaff.Message);
+
+                if (responseStaff.ResponseStatus is not ResponseStatus.NotFound and ResponseStatus.BadRequest)
+                {
+                    throw new Exception(responseStaff.Message);
+                } 
             }
 
             return;
@@ -39,8 +43,11 @@ public class IdentityEmailAssignedToAUserIntegrationEventConsumer(
         if (!response.IsSuccess)
         {
             _logger.LogError("An error occured. error: '{Message}'. When assigning the email: {email} for registered user id: {Id}", response.Message, user.Email, user.Id);
-             
-            throw new Exception(response.Message);
+
+            if (response.ResponseStatus is not ResponseStatus.NotFound and ResponseStatus.BadRequest)
+            {
+                throw new Exception(response.Message);
+            }
         }
     }
 }

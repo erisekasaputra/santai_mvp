@@ -1,6 +1,6 @@
 ﻿using Account.Domain.Aggregates.OrderTaskAggregate;
-using Microsoft.EntityFrameworkCore;
-using System.Data.SqlClient;
+using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore; 
 
 namespace Account.Infrastructure.Repositories;
 
@@ -15,21 +15,16 @@ public class OrderTaskRepository : IOrderTaskRepository
     public async Task<MechanicOrderTask?> GetMechanicTaskByMechanicIdSkipLockedAsync(Guid mechanicId)
     { 
         var mechanic = await _dbContext.MechanicOrderTasks 
-           .FromSqlRaw(@"SELECT *
-               FROM [MechanicOrderTasks] 
-               WITH (UPDLOCK, ROWLOCK, READPAST) 
-               WHERE [MechanicId] = @id; ", new SqlParameter("@id", mechanicId))
+           .FromSqlRaw("SELECT * FROM [MechanicOrderTasks] WITH (UPDLOCK, ROWLOCK, READPAST) WHERE [MechanicId] = @id ", new SqlParameter("@id", mechanicId))
            .FirstOrDefaultAsync();
 
         return mechanic;
     }
 
     public async Task<MechanicOrderTask?> GetMechanicTaskByMechanicIdAsync(Guid mechanicId)
-    {
+    { 
         var mechanic = await _dbContext.MechanicOrderTasks
-           .FromSqlRaw(@"SELECT *
-               FROM [MechanicOrderTasks]  
-               WHERE [MechanicId] = @id; ", new SqlParameter("@id", mechanicId))
+           .FromSqlRaw("SELECT * FROM [MechanicOrderTasks] WHERE [MechanicId] = @id ", new SqlParameter("@id", mechanicId))
            .FirstOrDefaultAsync();
 
         return mechanic;
@@ -38,10 +33,7 @@ public class OrderTaskRepository : IOrderTaskRepository
     public async Task<MechanicOrderTask?> GetMechanicTaskByMechanicIdSkipLockedUnassignedOrderAsync(Guid mechanicId)
     {
         var mechanic = await _dbContext.MechanicOrderTasks
-           .FromSqlRaw(@"SELECT *
-               FROM [MechanicOrderTasks] 
-               WITH (UPDLOCK, ROWLOCK, READPAST) 
-               WHERE [MechanicId] = @id AND [IsOrderAssigned] = 0;", new SqlParameter("@id", mechanicId))
+           .FromSqlRaw("SELECT * FROM [MechanicOrderTasks] WITH (UPDLOCK, ROWLOCK, READPAST) WHERE [MechanicId] = @id AND [IsOrderAssigned] = 0 ", new SqlParameter("@id", mechanicId))
            .FirstOrDefaultAsync();
 
         return mechanic;
@@ -50,9 +42,7 @@ public class OrderTaskRepository : IOrderTaskRepository
     public async Task<MechanicOrderTask?> GetMechanicTaskByMechanicIdUnassignedOrderAsync(Guid mechanicId)
     {
         var mechanic = await _dbContext.MechanicOrderTasks
-           .FromSqlRaw(@"SELECT *
-               FROM [MechanicOrderTasks]  
-               WHERE [MechanicId] = @id AND [IsOrderAssigned] = 0;", new SqlParameter("@id", mechanicId))
+           .FromSqlRaw("SELECT * FROM [MechanicOrderTasks] WHERE [MechanicId] = @id AND [IsOrderAssigned] = 0 ", new SqlParameter("@id", mechanicId))
            .FirstOrDefaultAsync();
 
         return mechanic;
@@ -65,12 +55,7 @@ public class OrderTaskRepository : IOrderTaskRepository
             rowNumber = 1;
         }
 
-        var query = $@"SELECT TOP {rowNumber} *
-                FROM [{nameof(_dbContext.OrderTaskWaitingMechanicAssigns)}] 
-                WITH (UPDLOCK, ROWLOCK, READPAST) 
-                    WHERE [{nameof(OrderTaskWaitingMechanicAssign.IsOrderCompleted)}] = 0 
-                    AND [{nameof(OrderTaskWaitingMechanicAssign.IsMechanicAssigned)}] = 0
-                ORDER BY [{nameof(OrderTaskWaitingMechanicAssign.CreatedAt)}] ASC;";
+        var query = $"SELECT TOP {rowNumber} * FROM [{nameof(_dbContext.OrderTaskWaitingMechanicAssigns)}] WITH (UPDLOCK, ROWLOCK, READPAST) WHERE [{nameof(OrderTaskWaitingMechanicAssign.IsOrderCompleted)}] = 0 AND [{nameof(OrderTaskWaitingMechanicAssign.IsMechanicAssigned)}] = 0 ORDER BY [{nameof(OrderTaskWaitingMechanicAssign.CreatedAt)}] ASC ";
 
         var orders = await _dbContext
             .OrderTaskWaitingMechanicAssigns
@@ -86,13 +71,7 @@ public class OrderTaskRepository : IOrderTaskRepository
             rowNumber = 1;
         } 
 
-        var query = $@"SELECT TOP {rowNumber} *
-                        FROM [{nameof(_dbContext.OrderTaskWaitingMechanicConfirms)}] 
-                        WITH (UPDLOCK, ROWLOCK, READPAST) 
-                            WHERE [{nameof(OrderTaskWaitingMechanicConfirm.IsProcessed)}] = 0  
-                            AND [{nameof(OrderTaskWaitingMechanicConfirm.IsExpiryProcessed)}] = 0 
-                            AND GETUTCDATE() >= [ExpiredAt] 
-                        ORDER BY [{nameof(OrderTaskWaitingMechanicConfirm.CreatedAt)}] ASC;";
+        var query = $"SELECT TOP {rowNumber} * FROM [{nameof(_dbContext.OrderTaskWaitingMechanicConfirms)}] WITH (UPDLOCK, ROWLOCK, READPAST) WHERE [{nameof(OrderTaskWaitingMechanicConfirm.IsProcessed)}] = 0 AND [{nameof(OrderTaskWaitingMechanicConfirm.IsExpiryProcessed)}] = 0 AND GETUTCDATE() >= [ExpiredAt] ORDER BY [{nameof(OrderTaskWaitingMechanicConfirm.CreatedAt)}] ASC ";
 
         var orders = await _dbContext
             .OrderTaskWaitingMechanicConfirms
@@ -130,10 +109,7 @@ public class OrderTaskRepository : IOrderTaskRepository
     public async Task<OrderTaskWaitingMechanicAssign?> GetOrderWaitingMechanicAssignByOrderIdWithSkipLockedAsync(Guid orderId)
     { 
         var mechanic = await _dbContext.OrderTaskWaitingMechanicAssigns
-           .FromSqlRaw(@"SELECT *
-               FROM [OrderTaskWaitingMechanicAssigns] 
-               WITH (UPDLOCK, ROWLOCK, READPAST) 
-               WHERE [OrderId] = @id", new SqlParameter("@id", orderId))
+           .FromSqlRaw("SELECT * FROM [OrderTaskWaitingMechanicAssigns] WITH (UPDLOCK, ROWLOCK, READPAST) WHERE [OrderId] = @id ", new SqlParameter("@id", orderId))
            .FirstOrDefaultAsync();
 
         return mechanic;
@@ -142,9 +118,7 @@ public class OrderTaskRepository : IOrderTaskRepository
     public async Task<OrderTaskWaitingMechanicAssign?> GetOrderWaitingMechanicAssignByOrderIdAsync(Guid orderId)
     {
         var mechanic = await _dbContext.OrderTaskWaitingMechanicAssigns
-           .FromSqlRaw(@"SELECT *
-               FROM [OrderTaskWaitingMechanicAssigns]  
-               WHERE [OrderId] = @id", new SqlParameter("@id", orderId))
+           .FromSqlRaw("SELECT * FROM [OrderTaskWaitingMechanicAssigns] WHERE [OrderId] = @id ", new SqlParameter("@id", orderId))
            .FirstOrDefaultAsync();
 
         return mechanic;
@@ -163,10 +137,7 @@ public class OrderTaskRepository : IOrderTaskRepository
     public async Task<OrderTaskWaitingMechanicConfirm?> GetOrderWaitingMechanicConfirmByOrderIdWithSkipLockedAsync(Guid orderId)
     {
         var mechanic = await _dbContext.OrderTaskWaitingMechanicConfirms
-          .FromSqlRaw(@"SELECT *
-               FROM [OrderTaskWaitingMechanicConfirms] 
-               WITH (UPDLOCK, ROWLOCK, READPAST) 
-               WHERE [OrderId] = @id", new SqlParameter("@id", orderId))
+          .FromSqlRaw("SELECT * FROM [OrderTaskWaitingMechanicConfirms] WITH (UPDLOCK, ROWLOCK, READPAST) WHERE [OrderId] = @id ", new SqlParameter("@id", orderId))
           .FirstOrDefaultAsync();
 
         return mechanic;
@@ -175,9 +146,7 @@ public class OrderTaskRepository : IOrderTaskRepository
     public async Task<OrderTaskWaitingMechanicConfirm?> GetOrderWaitingMechanicConfirmByOrderIdAsync(Guid orderId)
     {
         var mechanic = await _dbContext.OrderTaskWaitingMechanicConfirms
-          .FromSqlRaw(@"SELECT *
-               FROM [OrderTaskWaitingMechanicConfirms]  
-               WHERE [OrderId] = @id", new SqlParameter("@id", orderId))
+          .FromSqlRaw("SELECT * FROM [OrderTaskWaitingMechanicConfirms] WHERE [OrderId] = @id ", new SqlParameter("@id", orderId))
           .FirstOrDefaultAsync();
 
         return mechanic;

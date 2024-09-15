@@ -1,16 +1,15 @@
 using Core.Extensions; 
 using Identity.API;  
 using Identity.API.Extensions;
-using Identity.API.Infrastructure;
-using Identity.API.Middleware;
+using Identity.API.Infrastructure; 
 using Identity.API.SeedWork;  
 
 var builder = WebApplication.CreateBuilder(args); 
 
+builder.Configuration.AddEnvironmentVariables();
 builder.AddCoreOptionConfiguration();
 builder.AddLoggingContext(); 
 
-builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddJsonEnumConverterBehavior(); 

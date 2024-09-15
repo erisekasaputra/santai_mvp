@@ -14,4 +14,6 @@ public interface IFleetRepository
     Task<Fleet?> GetByIdentityExcludingUserIdAsync(Guid userId, params (FleetLegalParameter parameter, string hashedValue)[] clauses);
     Task<IEnumerable<Fleet>> GetByIdsAsync(IEnumerable<Guid> ids);
     Task DeleteByUserId(Guid id);
+    Task<IEnumerable<Fleet>> GetByStaffIdAsync(Guid staffId);
+    void UpdateRange(IEnumerable<Fleet> fleets);
 }

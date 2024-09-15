@@ -14,13 +14,13 @@ public class BusinessUserDeletedIntegrationEventConsumer(
     ApplicationDbContext dbContext,
     UserManager<ApplicationUser> userManager,
     IMediator mediator,
-    ILogger<BusinessUserCreatedIntegrationEventConsumer> logger,
+    ILogger<BusinessUserDeletedIntegrationEventConsumer> logger,
     ICacheService cacheService) : IConsumer<BusinessUserDeletedIntegrationEvent>
 {
     private readonly ApplicationDbContext _dbContext = dbContext;
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly IMediator _mediator = mediator;
-    private readonly ILogger<BusinessUserCreatedIntegrationEventConsumer> _logger = logger;
+    private readonly ILogger<BusinessUserDeletedIntegrationEventConsumer> _logger = logger;
     private readonly ICacheService _cacheService = cacheService;
 
     public async Task Consume(ConsumeContext<BusinessUserDeletedIntegrationEvent> context)

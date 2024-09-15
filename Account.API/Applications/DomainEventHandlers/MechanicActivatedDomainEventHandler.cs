@@ -14,7 +14,7 @@ public class MechanicActivatedDomainEventHandler(
     {
         var mechanic = new MechanicAvailabilityCache()
         {
-            MechanicId = notification.User.Id,
+            MechanicId = notification.User.MechanicId,
             OrderId = null,
             Latitude = 0,
             Longitude = 0,  

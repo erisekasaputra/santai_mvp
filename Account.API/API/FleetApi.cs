@@ -78,7 +78,7 @@ public static class FleetApi
                 return TypedResults.Unauthorized();
             }  
 
-            if (QueryUserIdEqualWithClaimUserId(userClaim, userId))
+            if (!QueryUserIdEqualWithClaimUserId(userClaim, userId))
             {
                 return TypedResults.Forbid();
             }
@@ -139,7 +139,7 @@ public static class FleetApi
                 return TypedResults.Unauthorized();
             }
 
-            if (QueryUserIdEqualWithClaimUserId(userClaim, userId))
+            if (!QueryUserIdEqualWithClaimUserId(userClaim, userId))
             {
                 return TypedResults.Forbid();
             }
@@ -173,7 +173,7 @@ public static class FleetApi
                 return TypedResults.Unauthorized();
             }
 
-            if (QueryUserIdEqualWithClaimUserId(userClaim, userId))
+            if (!QueryUserIdEqualWithClaimUserId(userClaim, userId))
             {
                 return TypedResults.Forbid();
             }
@@ -231,7 +231,7 @@ public static class FleetApi
                 return TypedResults.Unauthorized();
             }
 
-            if (QueryUserIdEqualWithClaimUserId(userClaim, userId))
+            if (!QueryUserIdEqualWithClaimUserId(userClaim, userId))
             {
                 return TypedResults.Forbid();
             }
@@ -264,7 +264,7 @@ public static class FleetApi
                 return TypedResults.Unauthorized();
             }
 
-            if (QueryUserIdEqualWithClaimUserId(userClaim, userId))
+            if (!QueryUserIdEqualWithClaimUserId(userClaim, userId))
             {
                 return TypedResults.Forbid();
             }

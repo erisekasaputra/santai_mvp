@@ -1,7 +1,9 @@
 ﻿ 
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using Account.Domain.Aggregates.UserAggregate; 
+using Account.Domain.Aggregates.UserAggregate;
+using Account.Domain.Aggregates.LoyaltyAggregate;
+using Account.Domain.Aggregates.ReferralAggregate;
 
 namespace Account.Infrastructure.EntityConfigurations;
 
@@ -42,7 +44,23 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<BaseUser>
         e.Property(p => p.AccountStatus).HasConversion<string>();
 
         e.Property(p => p.TimeZoneId)
-            .HasMaxLength(40).IsRequired(); 
+            .HasMaxLength(40).IsRequired();
+
+        e.HasMany(s => s.Fleets)
+           .WithOne()
+           .HasForeignKey(f => f.UserId)
+           .OnDelete(DeleteBehavior.Cascade);
+
+        e.HasOne(s => s.LoyaltyProgram)
+           .WithOne(f => f.BaseUser)
+           .HasForeignKey<LoyaltyProgram>(f => f.LoyaltyUserId)
+           .OnDelete(DeleteBehavior.Cascade);
+
+        e.HasOne(s => s.ReferralProgram)
+           .WithOne(f => f.BaseUser)
+           .HasForeignKey<ReferralProgram>(f => f.UserId)
+           .OnDelete(DeleteBehavior.Cascade); 
+         
 
         e.OwnsOne(p => p.Address, address =>
         {

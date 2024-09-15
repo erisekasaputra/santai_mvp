@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "bxrTUDiQsOw=",
+  "dgSpecHash": "ENNOwZMLbFw=",
   "success": true,
   "projectFilePath": "C:\\Santai.MVP\\Search.Worker\\Search.Worker.csproj",
   "expectedPackageFiles": [
@@ -100,6 +100,7 @@
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.netcore.targets\\1.1.3\\microsoft.netcore.targets.1.1.3.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.21.0\\microsoft.visualstudio.azure.containers.tools.targets.1.21.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.win32.systemevents\\9.0.0-preview.7.24405.7\\microsoft.win32.systemevents.9.0.0-preview.7.24405.7.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\mono.texttemplating\\3.0.0-preview-0052-g5d0f76c785\\mono.texttemplating.3.0.0-preview-0052-g5d0f76c785.nupkg.sha512",

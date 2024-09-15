@@ -2,19 +2,16 @@
 using Account.Domain.Enumerations; 
 using Account.Domain.SeedWork;
 using Core.Exceptions;
+using System.Runtime.Intrinsics.Arm;
 
 namespace Account.Domain.Aggregates.FleetAggregate;
 
 
 public class Fleet : Entity, IAggregateRoot
 {
-    public Guid? UserId { get; private set; }
+    public Guid? UserId { get; private set; } 
 
-    public BaseUser? BaseUser { get; private set; } 
-
-    public Guid? StaffId { get; private set; }
-
-    public Staff? Staff { get; private set; }
+    public Guid? StaffId { get; private set; } 
 
     public string HashedRegistrationNumber { get; private set; }
 
@@ -185,19 +182,23 @@ public class Fleet : Entity, IAggregateRoot
         ImageUrl = imageUrl;
     }
 
-    public void AssignStaff(Staff staff)
-    {
-        if (staff is null)
+    public void AssignStaff(Guid businessUserId, Guid staffId)
+    { 
+        if (UserId is null)
         {
-            throw new DomainException("Staff must not be empty");
+            throw new DomainException("Business user is not set for this fleet");
         }
 
-        if (staff.BusinessUserId != UserId)
+        if (UserId != businessUserId)
         {
-            throw new DomainException("The staff member must belong to the same business user as the origin");
-        } 
+            throw new DomainException("Fleet can not assign to staff if the staff not belong to same business account");
+        }
 
-        Staff = staff;
-        StaffId = staff.Id;
+        StaffId = staffId;
     } 
+
+    public void RemoveStaff()
+    {
+        StaffId = null;
+    }
 }

@@ -3,7 +3,7 @@ using FileHub.API.Extensions;
 using FileHub.API.SeedWorks;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Configuration.AddEnvironmentVariables();
 builder.AddCoreOptionConfiguration();
 builder.AddLoggingContext();
 builder.Services.AddApplicationService();

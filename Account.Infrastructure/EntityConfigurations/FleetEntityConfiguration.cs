@@ -17,8 +17,7 @@ public class FleetEntityConfiguration : IEntityTypeConfiguration<Fleet>
             .IsUnique();
 
         e.HasIndex(p => p.HashedChassisNumber)
-            .IsUnique();
-         
+            .IsUnique(); 
          
         e.Property(v => v.HashedRegistrationNumber)
             .HasMaxLength(255);

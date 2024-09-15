@@ -17,12 +17,12 @@ public class StaffUserCreatedIntegrationEventConsumer(
     ApplicationDbContext dbContext,
     UserManager<ApplicationUser> userManager,
     IMediator mediator,
-    ILogger<BusinessUserCreatedIntegrationEventConsumer> logger) : IConsumer<StaffUserCreatedIntegrationEvent>
+    ILogger<StaffUserCreatedIntegrationEventConsumer> logger) : IConsumer<StaffUserCreatedIntegrationEvent>
 {
     private readonly ApplicationDbContext _dbContext = dbContext;
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly IMediator _mediator = mediator;
-    private readonly ILogger<BusinessUserCreatedIntegrationEventConsumer> _logger = logger; 
+    private readonly ILogger<StaffUserCreatedIntegrationEventConsumer> _logger = logger; 
     public async Task Consume(ConsumeContext<StaffUserCreatedIntegrationEvent> context)
     {
         var strategy = _dbContext.Database.CreateExecutionStrategy();

@@ -1,5 +1,7 @@
 ﻿using Account.API.Applications.Commands.OrderTaskCommand.CreateOrderTask;
+using Azure;
 using Core.Events;
+using Core.Results;
 using MassTransit;
 using MediatR;
 
@@ -16,7 +18,10 @@ public class OrderFindingMechanicIntegrationEventConsumer(
 
         if (!result.IsSuccess)
         {
-            throw new Exception(result.Message);
+            if (result.ResponseStatus is not ResponseStatus.NotFound and ResponseStatus.BadRequest)
+            {
+                throw new Exception(result.Message);
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ public class MechanicDeactivatedDomainEventHandler(
     private readonly IMechanicCache _cache = cache;
     public async Task Handle(MechanicDeactivatedDomainEvent request, CancellationToken cancellationToken)
     { 
-        await _cache.RemoveGeoAsync(request.User.Id);
-        await _cache.RemoveHsetAsync(request.User.Id);
+        await _cache.RemoveGeoAsync(request.User.MechanicId);
+        await _cache.RemoveHsetAsync(request.User.MechanicId);
     }
 }

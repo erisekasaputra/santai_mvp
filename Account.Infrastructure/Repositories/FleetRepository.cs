@@ -124,6 +124,11 @@ public class FleetRepository : IFleetRepository
         return await _context.Fleets.Where(x => ids.Contains(x.Id)).ToListAsync();
     }
 
+    public async Task<IEnumerable<Fleet>> GetByStaffIdAsync(Guid staffId)
+    { 
+        return await _context.Fleets.Where(x => x.StaffId == staffId).ToListAsync();    
+    }
+
     public async Task<Fleet?> GetByUserIdAndIdAsync(Guid userId, Guid fleetId)
     {
         return await _context.Fleets
@@ -155,5 +160,10 @@ public class FleetRepository : IFleetRepository
     public void Update(Fleet fleet)
     {
         _context.Fleets.Update(fleet);
+    }
+
+    public void UpdateRange(IEnumerable<Fleet> fleets)
+    {
+        _context.Fleets.UpdateRange(fleets);    
     }
 }

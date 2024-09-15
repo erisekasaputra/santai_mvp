@@ -11,11 +11,11 @@ namespace Identity.API.Consumers;
 public class MechanicUserDeletedIntegrationEventConsumer(
     ApplicationDbContext dbContext,
     UserManager<ApplicationUser> userManager,
-    ILogger<BusinessUserCreatedIntegrationEventConsumer> logger) : IConsumer<MechanicUserDeletedIntegrationEvent>
+    ILogger<MechanicUserDeletedIntegrationEventConsumer> logger) : IConsumer<MechanicUserDeletedIntegrationEvent>
 {
     private readonly ApplicationDbContext _dbContext = dbContext;
     private readonly UserManager<ApplicationUser> _userManager = userManager; 
-    private readonly ILogger<BusinessUserCreatedIntegrationEventConsumer> _logger = logger; 
+    private readonly ILogger<MechanicUserDeletedIntegrationEventConsumer> _logger = logger; 
     public async Task Consume(ConsumeContext<MechanicUserDeletedIntegrationEvent> context)
     {
         var strategy = _dbContext.Database.CreateExecutionStrategy();

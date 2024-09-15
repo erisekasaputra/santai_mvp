@@ -14,12 +14,12 @@ public class RegularUserCreatedIntegrationEventConsumer(
     ApplicationDbContext dbContext,
     UserManager<ApplicationUser> userManager,
     IMediator mediator,
-    ILogger<BusinessUserCreatedIntegrationEventConsumer> logger) : IConsumer<RegularUserCreatedIntegrationEvent>
+    ILogger<RegularUserCreatedIntegrationEventConsumer> logger) : IConsumer<RegularUserCreatedIntegrationEvent>
 {
     private readonly ApplicationDbContext _dbContext = dbContext;
     private readonly UserManager<ApplicationUser> _userManager = userManager;
     private readonly IMediator _mediator = mediator;
-    private readonly ILogger<BusinessUserCreatedIntegrationEventConsumer> _logger = logger;  
+    private readonly ILogger<RegularUserCreatedIntegrationEventConsumer> _logger = logger;  
 
     public async Task Consume(ConsumeContext<RegularUserCreatedIntegrationEvent> context)
     {

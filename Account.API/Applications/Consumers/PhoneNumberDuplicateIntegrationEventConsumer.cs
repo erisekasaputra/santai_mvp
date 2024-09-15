@@ -1,7 +1,8 @@
 ﻿using Account.API.Applications.Commands.StaffCommand.ResetPhoneNumberByStaffId;
 using Account.API.Applications.Commands.UserCommand.ResetPhoneNumberByUserId;
 using Core.Enumerations;
-using Core.Events; 
+using Core.Events;
+using Core.Results;
 using MassTransit;
 using MediatR;
 
@@ -26,8 +27,11 @@ public class PhoneNumberDuplicateIntegrationEventConsumer(
                 if (!response.IsSuccess)
                 {
                     _logger.LogError("An error occured. error: '{Message}'. When reseting the phone number: {phoneNumber} for registered user id: {Id}", response.Message, user.PhoneNumber, user.Id);
-                     
-                    throw new Exception(response.Message);
+
+                    if (response.ResponseStatus is not ResponseStatus.NotFound and ResponseStatus.BadRequest)
+                    {
+                        throw new Exception(response.Message);
+                    } 
                 }
             }
 
@@ -39,8 +43,11 @@ public class PhoneNumberDuplicateIntegrationEventConsumer(
                 if (!response.IsSuccess)
                 {
                     _logger.LogError("An error occured. error: '{Message}'. When reseting the phone number: {phoneNumber} for registered user id: {Id}", response.Message, user.PhoneNumber, user.Id);
-                     
-                    throw new Exception(response.Message);
+
+                    if (response.ResponseStatus is not ResponseStatus.NotFound and ResponseStatus.BadRequest)
+                    {
+                        throw new Exception(response.Message);
+                    }
                 }
             }
         }

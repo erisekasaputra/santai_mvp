@@ -19,12 +19,7 @@ public class ScheduledOrderRepository : IScheduledOrderRepository
         }
 
 
-        var query = $@"SELECT TOP {rowNumber} *
-                        FROM [{nameof(_context.ScheduledOrders)}] 
-                        WITH (UPDLOCK, ROWLOCK, READPAST) 
-                            WHERE [{nameof(ScheduledOrder.IsEventProcessed)}] = 0   
-                            AND GETUTCDATE() >= [{nameof(ScheduledOrder.ScheduledAt)}] 
-                        ORDER BY [{nameof(ScheduledOrder.ScheduledAt)}] ASC;";
+        var query = $"SELECT TOP {rowNumber} * FROM [{nameof(_context.ScheduledOrders)}] WITH (UPDLOCK, ROWLOCK, READPAST) WHERE [{nameof(ScheduledOrder.IsEventProcessed)}] = 0 AND GETUTCDATE() >= [{nameof(ScheduledOrder.ScheduledAt)}] ORDER BY [{nameof(ScheduledOrder.ScheduledAt)}] ASC ";
 
         var orders = await _context
             .ScheduledOrders

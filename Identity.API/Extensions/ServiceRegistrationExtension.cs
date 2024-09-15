@@ -106,7 +106,14 @@ public static class ServiceRegistrationExtension
 
             var consumers = new (string QueueName, Type ConsumerType)[]
             {
-                ("identity-service-business-user-created-integration-event-queue", typeof(BusinessUserCreatedIntegrationEventConsumer))
+                ("identity-service-business-user-created-integration-event-queue", typeof(BusinessUserCreatedIntegrationEventConsumer)),
+                ("identity-service-business-user-deleted-integration-event-queue", typeof(BusinessUserDeletedIntegrationEventConsumer)),
+                ("identity-service-mechanic-user-created-integration-event-queue", typeof(MechanicUserCreatedIntegrationEventConsumer)),
+                ("identity-service-mechanic-user-deleted-integration-event-queue", typeof(MechanicUserDeletedIntegrationEventConsumer)),
+                ("identity-service-regular-user-created-integration-event-queue", typeof(RegularUserCreatedIntegrationEventConsumer)),
+                ("identity-service-regular-user-deleted-integration-event-queue", typeof(RegularUserDeletedIntegrationEventConsumer)),
+                ("identity-service-staff-user-created-integration-event-queue", typeof(StaffUserCreatedIntegrationEventConsumer)),
+                ("identity-service-staff-user-deleted-integration-event-queue", typeof(StaffUserDeletedIntegrationEventConsumer)),
             };
 
             foreach ((_, Type consumerType) in consumers)
