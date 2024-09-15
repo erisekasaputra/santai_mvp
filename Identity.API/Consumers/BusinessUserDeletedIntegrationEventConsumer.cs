@@ -76,7 +76,7 @@ public class BusinessUserDeletedIntegrationEventConsumer(
             // Fetch roles, claims, and logins concurrently
             var rolesTask = _userManager.GetRolesAsync(user);
             var claimsTask = _userManager.GetClaimsAsync(user);
-            var loginsTask = _userManager.GetLoginsAsync(user);
+            var loginsTask = _userManager.GetLoginsAsync(user); 
 
             // Wait for all tasks to complete
             await Task.WhenAll(rolesTask, claimsTask, loginsTask);

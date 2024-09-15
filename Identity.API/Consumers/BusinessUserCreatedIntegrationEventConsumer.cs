@@ -1,7 +1,6 @@
 ﻿using Core.CustomClaims;
 using Core.Enumerations;
-using Core.Events;
-using Core.Models; 
+using Core.Events; 
 using Identity.API.Domain.Entities;
 using Identity.API.Domain.Events;
 using Identity.API.Infrastructure; 
@@ -113,7 +112,7 @@ public class BusinessUserCreatedIntegrationEventConsumer(
                     }
                 } 
 
-                if (listUpdatedStaff.Any())
+                if (listUpdatedStaff.Count > 0)
                 {
                     _dbContext.UpdateRange(listUpdatedStaff);
                 }
@@ -165,13 +164,13 @@ public class BusinessUserCreatedIntegrationEventConsumer(
                     }
 
                     var claims = new List<Claim>()
-                {
-                    new (JwtRegisteredClaimNames.Sub, user.Id),
-                    new (ClaimTypes.Name, user.PhoneNumber),
-                    new (ClaimTypes.MobilePhone, user.PhoneNumber),
-                    new (SantaiClaimTypes.UserType, user.UserType.ToString()),
-                    new (ClaimTypes.Role, user.UserType.ToString())
-                };
+                    {
+                        new (JwtRegisteredClaimNames.Sub, user.Id),
+                        new (ClaimTypes.Name, user.PhoneNumber),
+                        new (ClaimTypes.MobilePhone, user.PhoneNumber),
+                        new (SantaiClaimTypes.UserType, user.UserType.ToString()),
+                        new (ClaimTypes.Role, user.UserType.ToString())
+                    };
 
                     if (!string.IsNullOrWhiteSpace(user.BusinessCode))
                     {

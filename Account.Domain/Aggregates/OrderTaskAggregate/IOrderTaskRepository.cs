@@ -19,4 +19,5 @@ public interface IOrderTaskRepository
     Task<MechanicOrderTask?> GetMechanicTaskByMechanicIdAsync(Guid mechanicId);
     Task<OrderTaskWaitingMechanicAssign?> GetOrderWaitingMechanicAssignByOrderIdAsync(Guid orderId);
     Task<OrderTaskWaitingMechanicConfirm?> GetOrderWaitingMechanicConfirmByOrderIdAsync(Guid orderId);
+    void RemoveMechanicTask(MechanicOrderTask task);
 }

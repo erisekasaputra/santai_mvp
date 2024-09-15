@@ -24,7 +24,7 @@ catch(Exception ex)
 
 
 await connection.SendAsync("UpdateLocation", Guid.NewGuid(), -8.143145, 112.209617);
-await connection.SendAsync("UpdateLocation", Guid.NewGuid(), -8.143145, 112.209617);
-await connection.SendAsync("UpdateLocation", Guid.NewGuid(), -8.143145, 112.209617);
+await connection.SendAsync("UpdateLocation", Guid.NewGuid(), -8.126070, 112.220602);
+await connection.SendAsync("UpdateLocation", Guid.NewGuid(), -8.156657, 112.174672);
 
 app.Run(); 

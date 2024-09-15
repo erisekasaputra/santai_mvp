@@ -39,6 +39,8 @@ public class RegularUserDeletedIntegrationEventConsumer(
 
                 await _userManager.UpdateAsync(user);
 
+                await _dbContext.SaveChangesAsync();
+
                 await transaction.CommitAsync();
             }
             catch (Exception ex)

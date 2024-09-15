@@ -182,4 +182,9 @@ public class OrderTaskRepository : IOrderTaskRepository
 
         return mechanic;
     }
+
+    public void RemoveMechanicTask(MechanicOrderTask task)
+    { 
+        _dbContext.MechanicOrderTasks.Remove(task);
+    }
 }

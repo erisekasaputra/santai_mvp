@@ -45,6 +45,14 @@ public class DeleteMechanicUserByUserIdCommandHandler : IRequestHandler<DeleteMe
             await _cache.RemoveGeoAsync(request.UserId);
             await _cache.RemoveHsetAsync(request.UserId); 
             _unitOfWork.BaseUsers.Delete(mechanicUser); 
+
+            var mechanicTask = await _unitOfWork.OrderTasks.GetMechanicTaskByMechanicIdAsync(request.UserId);
+
+            if (mechanicTask is not null)
+            {
+                _unitOfWork.OrderTasks.RemoveMechanicTask(mechanicTask);
+            }
+
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
             return Result.Success(null, ResponseStatus.NoContent);

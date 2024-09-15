@@ -80,6 +80,11 @@ public class MechanicUser : BaseUser
 
     public void Delete()
     { 
+        if (MechanicOrderTask is not null && MechanicOrderTask.OrderId is not null)
+        {
+            throw new DomainException("Mechanic has active order, can not delete");
+        }
+
         AddDomainEvent(new MechanicUserDeletedDomainEvent(Id));
     }
 
