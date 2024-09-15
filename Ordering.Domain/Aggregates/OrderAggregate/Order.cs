@@ -87,11 +87,15 @@ public class Order : Entity
         GrandTotal = new Money(0, currency);
         Address = new Address(addressLine, latitude, longitude);
         Buyer = new Buyer(Id, buyerId, buyerName, buyerType);
+        Mechanic = null;
+        Payment = null;
         LineItems = [];
         Fleets = [];
         RatingImages = [];
         Fees = [];
         ScheduledOnUtc = null;
+        Discount = null;
+        Rating = null;
 
         IsScheduled = isScheduled;
         if (isScheduled) ScheduledOnUtc = scheduledOnUtc; 
@@ -707,12 +711,7 @@ public class Order : Entity
         {
             throw new DomainException($"Coupon currency does not match order currency ({Currency}).");
         }
-
-        if (Discount is not null)
-        {
-            return;
-        }
-
+         
         Discount = coupon;
     }
 

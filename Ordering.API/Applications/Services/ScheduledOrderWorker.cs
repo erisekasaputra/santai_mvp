@@ -1,4 +1,5 @@
 ﻿
+using Core.Exceptions;
 using Core.Utilities;
 using Ordering.Domain.SeedWork;
 using System.Data;
@@ -35,19 +36,28 @@ public class ScheduledOrderWorker : BackgroundService
                 if (orders is not null && orders.Any())
                 {
                     foreach (var order in orders) 
-                    {
-                        // need to be tune up for performance   
+                    { 
                         var orderAggregate = await unitOfWork.Orders.GetByIdAsync(order.Id, stoppingToken);
 
                         if (orderAggregate is not null && orderAggregate.IsPaid)
                         {
-                            orderAggregate.SetFindingMechanic();
-
-                            unitOfWork.Orders.Update(orderAggregate);
+                            try
+                            {
+                                orderAggregate.SetFindingMechanic();
+                                order.MarkAsProcessed();
+                                unitOfWork.Orders.Update(orderAggregate);
+                            }
+                            catch (DomainException) 
+                            {
+                                order.MarkAsProcessed();
+                                unitOfWork.Orders.Update(orderAggregate);  
+                            } 
                         }
                     }
-                }
 
+                    unitOfWork.ScheduledOrders.UpdateOnTimeOrderWithPublishedEvent(orders);
+                }
+                 
                 await unitOfWork.CommitTransactionAsync(stoppingToken);
             }
             catch (Exception ex) 

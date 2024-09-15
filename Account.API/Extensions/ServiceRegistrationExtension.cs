@@ -26,6 +26,13 @@ public static class ServiceRegistrationExtension
         return services;
     } 
 
+    public static IServiceCollection AddSignalRServer(this IServiceCollection services)
+    {
+        services.AddSignalR();
+
+        return services;
+    }
+
     public static IServiceCollection AddMassTransitContext<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
     { 
         var messagingOption = services.BuildServiceProvider().GetService<IOptionsMonitor<MessagingConfiguration>>() 

@@ -1,5 +1,6 @@
 using Account.API;
-using Account.API.API; 
+using Account.API.API;
+using Account.API.Applications.Services;
 using Account.API.Extensions;
 using Account.API.Middleware; 
 using Account.Infrastructure;
@@ -50,7 +51,11 @@ app.MapBusinessUserApi();
 app.MapUserApi(); 
 app.MapRegularUserApi(); 
 app.MapMechanicUserApi(); 
-app.MapFleetApi();  
+app.MapFleetApi();
+
+
+app.MapHub<LocationHub>("/mechanic/location");
+app.MapControllers();
 
 app.Run();
 
