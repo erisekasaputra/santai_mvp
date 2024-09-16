@@ -25,7 +25,7 @@ public class OrderWaitingMechanicAssignJob : BackgroundService
             using var scope = _scopeFactory.CreateScope(); 
             _mechanicCache = scope.ServiceProvider.GetRequiredService<IMechanicCache>(); 
             await _mechanicCache.ProcessOrdersWaitingMechanicAssignFromQueueAsync();
-            await Task.Delay(50000);
+            await Task.Delay(1000);
         }
     }
 } 

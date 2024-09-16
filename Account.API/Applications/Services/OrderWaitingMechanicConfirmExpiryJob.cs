@@ -19,13 +19,13 @@ public class OrderWaitingMechanicConfirmExpiryJob : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        //while (!stoppingToken.IsCancellationRequested)
-        //{
-        //    using var scope = _scopeFactory.CreateScope();
-        //    _mechanicCache = scope.ServiceProvider.GetRequiredService<IMechanicCache>();
-        //    await _mechanicCache.ProcessOrdersWaitingMechanicConfirmExpiryFromQueueAsync();
-        //    await Task.Delay(5000, stoppingToken);
-        //}
+        while (!stoppingToken.IsCancellationRequested)
+        {
+            using var scope = _scopeFactory.CreateScope();
+            _mechanicCache = scope.ServiceProvider.GetRequiredService<IMechanicCache>();
+            await _mechanicCache.ProcessOrdersWaitingMechanicConfirmExpiryFromQueueAsync();
+            await Task.Delay(1000, stoppingToken);
+        }
     }
 }
  

@@ -1,5 +1,6 @@
 ﻿using Account.API.Applications.Models;
-using Account.API.Applications.Services.Interfaces; 
+using Account.API.Applications.Services.Interfaces;
+using Account.API.SeedWork;
 using Core.Configurations; 
 using Microsoft.Extensions.Options;
 using Polly;
@@ -11,7 +12,7 @@ using System.Net;
 namespace Account.API.Applications.Services;
 
 public class MechanicCache : IMechanicCache
-{ 
+{  
     private readonly IConnectionMultiplexer _connectionMultiplexer; 
     private readonly AsyncPolicy _asyncPolicy;
     private readonly ILogger<MechanicCache> _logger;
@@ -36,7 +37,7 @@ public class MechanicCache : IMechanicCache
     }
     private async Task<(bool isAcquired, string? resourceLock)> AcquireLockAsync(string mechanicId)
     {
-        var lockResource = $"lock:mechanic:{mechanicId}";
+        var lockResource = CacheKey.LockMechanicPrefix(mechanicId);
         var mechanicLock = await _redLockFactory.CreateLockAsync(lockResource, TimeSpan.FromMinutes(10));
 
         if (mechanicLock.IsAcquired)
@@ -47,11 +48,16 @@ public class MechanicCache : IMechanicCache
         return (false, null);
     }
 
+    private async Task DeleteKeyRedlockAsync(string lockResource)
+    {
+        var db = _connectionMultiplexer.GetDatabase(); 
+        await db.KeyDeleteAsync(CacheKey.RedlockPrefix(lockResource));
+    }
+
     private async Task DeleteKeyAsync(string lockResource)
     {
         var db = _connectionMultiplexer.GetDatabase();
-         
-        await db.KeyDeleteAsync("redlock:"+lockResource);
+        await db.KeyDeleteAsync(lockResource);
     }
 
 
@@ -82,8 +88,8 @@ public class MechanicCache : IMechanicCache
         {
             var db = _connectionMultiplexer.GetDatabase();
 
-            var geoKey = "mechanics:geo";
-            var hashKey = $"mechanics:{mechanic.MechanicId}";
+            var geoKey = CacheKey.MechanicGeo();
+            var hashKey = CacheKey.MechanicExistencePrefix(mechanic.MechanicId);
 
             var existingMechanicLocation = await db.GeoPositionAsync(geoKey, mechanic.MechanicId.ToString());
             if (existingMechanicLocation is not null) 
@@ -141,7 +147,7 @@ public class MechanicCache : IMechanicCache
     public async Task<MechanicExistence?> GetMechanicHashSetAsync(string mechanicId)
     {
         var db = _connectionMultiplexer.GetDatabase();
-        var hashKey = $"mechanics:{mechanicId}";
+        var hashKey = CacheKey.MechanicExistencePrefix(mechanicId);
         var hashEntries = await db.HashGetAllAsync(hashKey);
 
         if (hashEntries.Length == 0)
@@ -162,7 +168,7 @@ public class MechanicCache : IMechanicCache
     public async Task<OrderTask?> GetOrderTaskAsync(string orderId)
     {
         var db = _connectionMultiplexer.GetDatabase();
-        var hashKey = $"orders:waiting_mechanic_assign:data:{orderId}";
+        var hashKey = CacheKey.OrderWaitingMechanicAssignDataPrefix(orderId);
         var hashEntries = await db.HashGetAllAsync(hashKey);
 
         if (hashEntries.Length == 0)
@@ -180,7 +186,7 @@ public class MechanicCache : IMechanicCache
     public async Task<OrderTaskMechanicConfirm?> GetOrderWaitingMechanicConfirmAsync(string orderId)
     {
         var db = _connectionMultiplexer.GetDatabase();
-        var hashKey = $"mechanics:{orderId}";
+        var hashKey = CacheKey.OrderWaitingMechanicConfirmDataPrefix(orderId);
         var hashEntries = await db.HashGetAllAsync(hashKey);
 
         if (hashEntries.Length == 0)
@@ -199,7 +205,7 @@ public class MechanicCache : IMechanicCache
         try
         {
             var db = _connectionMultiplexer.GetDatabase();
-            var geoKey = "mechanics:geo";
+            var geoKey = CacheKey.MechanicGeo();
             await db.GeoAddAsync(geoKey, mechanic.Longitude, mechanic.Latitude, mechanic.MechanicId.ToString());
         }
         catch (Exception)
@@ -213,7 +219,7 @@ public class MechanicCache : IMechanicCache
         try
         {
             var db = _connectionMultiplexer.GetDatabase(); 
-            var hashKey = $"mechanics:{mechanic.MechanicId}"; 
+            var hashKey = CacheKey.MechanicExistencePrefix(mechanic.MechanicId) ; 
             var hashEntries = new HashEntry[]
             {
                 new (nameof(mechanic.OrderId), mechanic.OrderId),
@@ -236,7 +242,7 @@ public class MechanicCache : IMechanicCache
         try
         {
             var db = _connectionMultiplexer.GetDatabase();
-            var hashKey = $"orders:waiting_mechanic_assign:data:{order.OrderId}";
+            var hashKey = CacheKey.OrderWaitingMechanicAssignDataPrefix(order.OrderId);
             var hashEntries = new HashEntry[]
             {
                 new (nameof(order.BuyerId), order.BuyerId),
@@ -324,8 +330,8 @@ public class MechanicCache : IMechanicCache
         try
         {
             var db = _connectionMultiplexer.GetDatabase();  
-            await db.ListRemoveAsync("orders:waiting_mechanic_assign:queue", orderTask.OrderId);
-            await db.ListRightPushAsync("orders:waiting_mechanic_assign:queue", orderTask.OrderId);
+            await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderTask.OrderId);
+            await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderTask.OrderId);
             await CreateOrderHashSetAsync(orderTask);
         }
         catch (Exception)
@@ -338,8 +344,8 @@ public class MechanicCache : IMechanicCache
     {
         try
         {
-            await db.ListRemoveAsync("orders:waiting_mechanic_assign:queue", orderId); 
-            await db.ListRightPushAsync("orders:waiting_mechanic_assign:queue", orderId); 
+            await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId); 
+            await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId); 
         }
         catch (Exception)
         {
@@ -349,7 +355,7 @@ public class MechanicCache : IMechanicCache
     public async Task<bool> AcceptOrderByMechanic(string orderId, string mechanicId)
     {
         var db = _connectionMultiplexer.GetDatabase();
-        var key = $"lock:order:{orderId}";
+        var key = CacheKey.LockOrderPrefix(orderId);
         using var lockAcquired = await _redLockFactory.CreateLockAsync(key, TimeSpan.FromSeconds(10));
         if (lockAcquired.IsAcquired)
         {
@@ -361,7 +367,7 @@ public class MechanicCache : IMechanicCache
 
             if (confirmation.ExpiredAtUtc > DateTime.UtcNow) // not expired already
             {
-                var resource = $"orders:waiting_mechanic_confirm:data:{confirmation.OrderId}";
+                var resource = CacheKey.OrderWaitingMechanicConfirmDataPrefix(confirmation.OrderId);
                 await db.KeyDeleteAsync(resource);
 
                 var order = await GetOrderTaskAsync(orderId);
@@ -396,7 +402,7 @@ public class MechanicCache : IMechanicCache
             }
             else
             {  
-                var resource = $"orders:waiting_mechanic_confirm:data:{confirmation.OrderId}";
+                var resource = CacheKey.OrderWaitingMechanicConfirmDataPrefix(confirmation.OrderId);
                 await db.KeyDeleteAsync(resource);
 
 
@@ -423,8 +429,8 @@ public class MechanicCache : IMechanicCache
                     await BlockMechanicToAnOrder(confirmation.MechanicId, orderId);
                 }
 
-                await db.ListRemoveAsync("order:waiting_mechanic_assign:queue", confirmation.OrderId);
-                await db.ListRightPushAsync("order:waiting_mechanic_assign:queue", confirmation.OrderId);
+                await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), confirmation.OrderId);
+                await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), confirmation.OrderId);
 
                 return false;
             }
@@ -436,7 +442,7 @@ public class MechanicCache : IMechanicCache
     public async Task<bool> RejectOrderByMechanic(string mechanicId, string orderId)
     {
         var db = _connectionMultiplexer.GetDatabase();
-        var key = $"lock:order:{orderId}";
+        var key = CacheKey.LockOrderPrefix(orderId);
         using var lockAcquired = await _redLockFactory.CreateLockAsync(key, TimeSpan.FromSeconds(10));
         if (lockAcquired.IsAcquired)
         {
@@ -486,7 +492,7 @@ public class MechanicCache : IMechanicCache
             }
             else  
             {
-                var resource = $"orders:waiting_mechanic_confirm:data:{confirmation.OrderId}";
+                var resource = CacheKey.OrderWaitingMechanicConfirmDataPrefix(confirmation.OrderId);
                 await db.KeyDeleteAsync(resource);
 
 
@@ -513,8 +519,8 @@ public class MechanicCache : IMechanicCache
                     await BlockMechanicToAnOrder(confirmation.MechanicId, orderId);
                 }
                  
-                await db.ListRemoveAsync("order:waiting_mechanic_assign:queue", confirmation.OrderId);
-                await db.ListRightPushAsync("order:waiting_mechanic_assign:queue", confirmation.OrderId);
+                await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), confirmation.OrderId);
+                await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), confirmation.OrderId);
 
                 return false;
             }  
@@ -526,7 +532,7 @@ public class MechanicCache : IMechanicCache
     public async Task<bool> CancelOrderByMechanic(string mechanicId, string orderId)
     {
         var db = _connectionMultiplexer.GetDatabase();
-        var key = $"lock:order:{orderId}";
+        var key = CacheKey.LockOrderPrefix(orderId);
         using var lockAcquired = await _redLockFactory.CreateLockAsync(key, TimeSpan.FromSeconds(10));
         if (lockAcquired.IsAcquired)
         {
@@ -570,7 +576,7 @@ public class MechanicCache : IMechanicCache
 
     public async Task<bool> CancelOrderByUser(string buyerId, string orderId)
     {  
-        var key = $"lock:order:{orderId}";
+        var key = CacheKey.LockOrderPrefix(orderId);
         using var lockAcquired = await _redLockFactory.CreateLockAsync(key, TimeSpan.FromSeconds(10));
         if (lockAcquired.IsAcquired)
         {   
@@ -596,7 +602,7 @@ public class MechanicCache : IMechanicCache
                     mechanic.ResetOrder();
                     mechanic.SetMechanicStatus(MechanicStatus.Available);
                     await CreateMechanicHashSetAsync(mechanic); 
-                    await DeleteKeyAsync($"lock:mechanic:{mechanic.MechanicId}");
+                    await DeleteKeyRedlockAsync(CacheKey.LockMechanicPrefix(mechanic.MechanicId));
                 } 
             }
 
@@ -622,7 +628,7 @@ public class MechanicCache : IMechanicCache
     public async Task ProcessOrdersWaitingMechanicConfirmExpiryFromQueueAsync()
     {
         var db = _connectionMultiplexer.GetDatabase();
-        var orderId = await db.ListLeftPopAsync("orders:waiting_mechanic_confirm:queue");
+        var orderId = await db.ListLeftPopAsync(CacheKey.OrderWaitingMechanicConfirmQueue());
 
         if (string.IsNullOrEmpty(orderId) || !orderId.HasValue || orderId.IsNullOrEmpty)
         {
@@ -637,7 +643,7 @@ public class MechanicCache : IMechanicCache
 
     private async Task TryProcessExpiryMechanicConfirmationAsync(IDatabase db, string orderId)
     {
-        var key = $"lock:order:{orderId}";
+        var key = CacheKey.LockOrderPrefix(orderId);
         using var lockAcquired = await _redLockFactory.CreateLockAsync(key, TimeSpan.FromSeconds(10)); 
         if (lockAcquired.IsAcquired)
         {
@@ -649,12 +655,12 @@ public class MechanicCache : IMechanicCache
 
             if (confirmation.ExpiredAtUtc > DateTime.UtcNow) // not expired already
             {
-                await db.ListRemoveAsync("orders:waiting_mechanic_confirm:queue", confirmation.OrderId);
-                await db.ListRightPushAsync("orders:waiting_mechanic_confirm:queue", confirmation.OrderId);
+                await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicConfirmQueue(), confirmation.OrderId);
+                await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicConfirmQueue(), confirmation.OrderId);
             }
             else // has expired, process it 
             {
-                var resource = $"orders:waiting_mechanic_confirm:data:{confirmation.OrderId}";
+                var resource = CacheKey.OrderWaitingMechanicConfirmDataPrefix(confirmation.OrderId);
                 await db.KeyDeleteAsync(resource);
 
                
@@ -683,14 +689,15 @@ public class MechanicCache : IMechanicCache
 
                 await BlockMechanicToAnOrder(confirmation.MechanicId, orderId); 
 
-                await db.ListRemoveAsync("order:waiting_mechanic_assign:queue", confirmation.OrderId);
-                await db.ListRightPushAsync("order:waiting_mechanic_assign:queue", confirmation.OrderId);
+                await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), confirmation.OrderId);
+                await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), confirmation.OrderId);
             }
 
             return;
         }
 
-        await db.ListRightPushAsync("orders:waiting_mechanic_confirm:queue", orderId.ToString());
+        await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicConfirmQueue(), orderId.ToString());
+        await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicConfirmQueue(), orderId.ToString());
     }
 
 
@@ -710,7 +717,7 @@ public class MechanicCache : IMechanicCache
     {
         var db = _connectionMultiplexer.GetDatabase();
 
-        var orderId = await db.ListLeftPopAsync("orders:waiting_mechanic_assign:queue");
+        var orderId = await db.ListLeftPopAsync(CacheKey.OrderWaitingMechanicAssignQueue());
         if (orderId == string.Empty || string.IsNullOrEmpty(orderId) || orderId.IsNullOrEmpty)
         {
             return;
@@ -723,13 +730,13 @@ public class MechanicCache : IMechanicCache
     {
         try
         {
-            var key = $"lock:order:{orderId}";
+            var key = CacheKey.LockOrderPrefix(orderId);
             using var lockAcquired = await _redLockFactory.CreateLockAsync(key, TimeSpan.FromSeconds(30));
 
             if (!lockAcquired.IsAcquired)
             {
-                await db.ListRemoveAsync("orders:waiting_mechanic_assign:queue", orderId);
-                await db.ListRightPushAsync("orders:waiting_mechanic_assign:queue", orderId);
+                await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
+                await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
                 return;
             }
 
@@ -743,7 +750,7 @@ public class MechanicCache : IMechanicCache
             }
 
             var mechanics = await db.GeoRadiusAsync(
-                "mechanics:geo", order.Longitude, order.Latitude, 30, GeoUnit.Miles, count: 100, order: Order.Ascending);
+                CacheKey.MechanicGeo(), order.Longitude, order.Latitude, 30, GeoUnit.Miles, count: 100, order: Order.Ascending);
 
             foreach (var mechanic in mechanics)
             {
@@ -774,11 +781,11 @@ public class MechanicCache : IMechanicCache
                     if (mechanicData.Status is MechanicStatus.Available)
                     {
                         order.SetOrderStatus(OrderTaskStatus.MechanicAssigned);
-                        order.SetMechanic(mechanicId.ToString());
+                        order.SetMechanic(mechanicId);
                         await CreateOrderHashSetAsync(order);
 
 
-                        mechanicData.SetOrder(orderId.ToString());
+                        mechanicData.SetOrder(orderId);
                         mechanicData.SetMechanicStatus(MechanicStatus.Bussy);
                         await CreateMechanicHashSetAsync(mechanicData);
 
@@ -794,27 +801,27 @@ public class MechanicCache : IMechanicCache
                 }
             }
              
-            await db.ListRemoveAsync("orders:waiting_mechanic_assign:queue", orderId);
-            await db.ListRightPushAsync("orders:waiting_mechanic_assign:queue", orderId);
+            await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
+            await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
         }
         catch (Exception)
         {
-            await db.ListRemoveAsync("orders:waiting_mechanic_assign:queue", orderId);
-            await db.ListRightPushAsync("orders:waiting_mechanic_assign:queue", orderId);
+            await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
+            await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
         }
     }
      
     public async Task OrderWaitingConfirmMechanic(IDatabase db, OrderTask order, MechanicExistence mechanic)
     { 
-        await db.ListRemoveAsync("orders:waiting_mechanic_confirm:queue", order.OrderId.ToString());
-        await db.ListRightPushAsync("orders:waiting_mechanic_confirm:queue", order.OrderId.ToString());
+        await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicConfirmQueue(), order.OrderId);
+        await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicConfirmQueue(), order.OrderId);
 
-        var resource = $"orders:waiting_mechanic_confirm:data:{order.OrderId}";  
+        var resource = CacheKey.OrderWaitingMechanicConfirmDataPrefix(order.OrderId);  
         var hashEntries = new HashEntry[]
         {
-            new (nameof(OrderTaskMechanicConfirm.OrderId), order.OrderId.ToString()),
-            new (nameof(OrderTaskMechanicConfirm.MechanicId), mechanic.MechanicId.ToString()),
-            new (nameof(OrderTaskMechanicConfirm.ExpiredAtUtc), DateTime.UtcNow.AddSeconds(60).ToString())
+            new (nameof(OrderTaskMechanicConfirm.OrderId), order.OrderId),
+            new (nameof(OrderTaskMechanicConfirm.MechanicId), mechanic.MechanicId),
+            new (nameof(OrderTaskMechanicConfirm.ExpiredAtUtc), DateTime.UtcNow.AddSeconds(180).ToString())
         };
 
         await db.HashSetAsync(resource, hashEntries); 
@@ -823,8 +830,8 @@ public class MechanicCache : IMechanicCache
     public async Task<bool> IsMechanicBlockedFromOrder(string mechanicId, string orderId)
     {
         var db = _connectionMultiplexer.GetDatabase();
-        var setKey = $"mechanics:order:blacklist:{mechanicId}"; 
-        var isBlocked = await db.SetContainsAsync(setKey, orderId.ToString());
+        var setKey = CacheKey.MechanicOrderBlacklistPrefix(mechanicId);
+        var isBlocked = await db.SetContainsAsync(setKey, orderId);
 
         return isBlocked;
     } 
@@ -834,7 +841,7 @@ public class MechanicCache : IMechanicCache
         try
         {
             var db = _connectionMultiplexer.GetDatabase();
-            var setKey = $"mechanics:order:blacklist:{mechanicId}";
+            var setKey = CacheKey.MechanicOrderBlacklistPrefix(mechanicId);
             await db.SetAddAsync(setKey, orderId.ToString());
         }
         catch (Exception)
