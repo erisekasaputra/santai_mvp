@@ -2,7 +2,14 @@
 
 public class OrderTaskMechanicConfirm
 {
-    public required Guid OrderId { get; set; }
-    public required Guid MechanicId { get; set; }
-    public required DateTime ExpiredAtUtc { get; set; }
+    public string OrderId { get; private set; }
+    public string MechanicId { get; private set; }
+    public DateTime ExpiredAtUtc { get; private set; }
+
+    public OrderTaskMechanicConfirm(string orderId, string mechanicId, DateTime expiredAtUtc)
+    {
+        OrderId = orderId;
+        MechanicId = mechanicId;
+        ExpiredAtUtc = expiredAtUtc;
+    }
 }

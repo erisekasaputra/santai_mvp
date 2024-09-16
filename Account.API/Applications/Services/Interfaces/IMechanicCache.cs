@@ -8,22 +8,22 @@ namespace Account.API.Applications.Services.Interfaces;
 public interface IMechanicCache
 {
     Task<bool> UpdateLocationAsync(MechanicExistence mechanic);
-    Task<MechanicExistence?> GetMechanicHashSetAsync(Guid mechanicId);
-    Task<OrderTask?> GetOrderTaskAsync(Guid orderId);
-    Task<OrderTaskMechanicConfirm?> GetOrderWaitingMechanicConfirmAsync(Guid orderId);
+    Task<MechanicExistence?> GetMechanicHashSetAsync(string mechanicId);
+    Task<OrderTask?> GetOrderTaskAsync(string orderId);
+    Task<OrderTaskMechanicConfirm?> GetOrderWaitingMechanicConfirmAsync(string orderId);
     Task CreateGeoAsync(MechanicExistence mechanic);
     Task CreateMechanicHashSetAsync(MechanicExistence mechanic);
     Task CreateOrderHashSetAsync(OrderTask order);
-    Task<bool> Activate(Guid mechanicId);
-    Task<bool> Deactivate(Guid mechanicId);
+    Task<bool> Activate(string mechanicId);
+    Task<bool> Deactivate(string mechanicId);
     Task<bool> PingAsync();
     Task CreateOrderToQueueAndHash(OrderTask orderTask);
-    Task<bool> AcceptOrderByMechanic(Guid orderId, Guid mechanicId);
-    Task<bool> RejectOrderByMechanic(Guid mechanicId, Guid orderId);
-    Task<bool> CancelOrderByMechanic(Guid mechanicId, Guid orderId);
-    Task<bool> CancelOrderByUser(Guid buyerId, Guid orderId);
+    Task<bool> AcceptOrderByMechanic(string orderId, string mechanicId);
+    Task<bool> RejectOrderByMechanic(string mechanicId, string orderId);
+    Task<bool> CancelOrderByMechanic(string mechanicId, string orderId);
+    Task<bool> CancelOrderByUser(string buyerId, string orderId);
     Task ProcessOrdersWaitingMechanicConfirmExpiryFromQueueAsync(); 
     Task ProcessOrdersWaitingMechanicAssignFromQueueAsync();
     Task OrderWaitingConfirmMechanic(IDatabase db, OrderTask order, MechanicExistence mechanic);
-    Task<bool> IsMechanicBlockedFromOrder(Guid mechanicId, Guid orderId);
+    Task<bool> IsMechanicBlockedFromOrder(string mechanicId, string orderId);
 }

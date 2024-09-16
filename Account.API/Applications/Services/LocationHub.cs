@@ -31,21 +31,16 @@ public class LocationHub : Hub
     }
 
 
-    public async Task UpdateLocation(double Latitude, double Longitude)
+    public async Task UpdateLocation(double latitude, double longitude)
     {
         var user = _userInfoService.GetUserInfo(); 
         if (user is null)
         {
             Context.Abort(); 
             return; 
-        } 
+        }
 
-        var mechanic = new MechanicExistence()
-        {
-            MechanicId = user.Sub,
-            Latitude = Latitude,
-            Longitude = Longitude
-        };
+        var mechanic = new MechanicExistence(user.Sub.ToString(), string.Empty, latitude, longitude, MechanicStatus.Available);
 
         var result = await _cache.UpdateLocationAsync(mechanic);   
         if (!result)

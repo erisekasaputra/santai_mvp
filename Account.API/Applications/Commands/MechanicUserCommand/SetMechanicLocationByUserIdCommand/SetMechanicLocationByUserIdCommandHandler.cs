@@ -24,12 +24,7 @@ public class SetMechanicLocationByUserIdCommandHandler : IRequestHandler<SetMech
     {
         try
         {
-            var mechanic = new MechanicExistence()
-            {
-                MechanicId = request.MechanicId,
-                Latitude = request.Latitude,
-                Longitude = request.Longitude, 
-            };
+            var mechanic = new MechanicExistence(request.MechanicId.ToString(), null, request.Latitude, request.Longitude, MechanicStatus.Available);
 
             await _cacheService.UpdateLocationAsync(mechanic);
 

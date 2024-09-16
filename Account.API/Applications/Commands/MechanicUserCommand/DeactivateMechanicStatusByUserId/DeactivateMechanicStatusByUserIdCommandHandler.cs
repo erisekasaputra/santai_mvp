@@ -1,4 +1,5 @@
-﻿using Account.API.Applications.Commands.MechanicUserCommand.ActivateMechanicStatusByUserId; 
+﻿using Account.API.Applications.Commands.MechanicUserCommand.ActivateMechanicStatusByUserId;
+using Account.API.Applications.Services.Interfaces;
 using Account.Domain.SeedWork;
 using Core.Exceptions;
 using Core.Messages;
@@ -17,11 +18,14 @@ public class DeactivateMechanicStatusByUserIdCommandHandler : IRequestHandler<De
     private readonly IUnitOfWork _unitOfWork;
     private readonly AsyncRetryPolicy _asyncRetryPolicy;
     private readonly ILogger<ActivateMechanicStatusByUserIdCommandHandler> _logger;
+    private readonly IMechanicCache _cache;
 
     public DeactivateMechanicStatusByUserIdCommandHandler(
         IUnitOfWork unitOfWork,
-        ILogger<ActivateMechanicStatusByUserIdCommandHandler> logger)
+        ILogger<ActivateMechanicStatusByUserIdCommandHandler> logger,
+        IMechanicCache cache)
     {
+        _cache = cache;
         _unitOfWork = unitOfWork;
         _logger = logger;
         _asyncRetryPolicy = Policy
@@ -38,38 +42,19 @@ public class DeactivateMechanicStatusByUserIdCommandHandler : IRequestHandler<De
     {
         try
         {
-            var result = await _asyncRetryPolicy.ExecuteAsync(async () =>
+            var result = await _asyncRetryPolicy.ExecuteAsync<Result>(async () =>
             {
-                await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
+                await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, cancellationToken);
                 try
                 {
-                    var mechanic = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.MechanicId); 
-                    if (mechanic is null)
+                    var result = await _cache.Deactivate(request.MechanicId.ToString());
+
+                    if (result)
                     {
-                        await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                        return Result.Failure("Mechanic not found", ResponseStatus.NotFound);
+                        return Result.Success(null, ResponseStatus.NoContent);
                     }
 
-                    if (!mechanic.IsVerified)
-                    {
-                        await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                        return Result.Failure("Mechanic verification document is still waiting for verification", ResponseStatus.BadRequest);
-                    } 
-
-                    var mechanicUser = await _unitOfWork.OrderTasks.GetMechanicTaskByMechanicIdUnassignedOrderAsync(request.MechanicId);
-
-                    if (mechanicUser is null)
-                    {
-                        return Result.Failure("Can not proceed your request", ResponseStatus.BadRequest);
-                    }
-
-                    mechanicUser.Deactivate();
-
-                    _unitOfWork.OrderTasks.UpdateMechanicTask(mechanicUser);
-
-                    await _unitOfWork.CommitTransactionAsync(cancellationToken);
-
-                    return Result.Success(null, ResponseStatus.NoContent);
+                    throw new InvalidOperationException();
                 }
                 catch (Exception)
                 {

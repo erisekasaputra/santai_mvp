@@ -30,8 +30,7 @@ public class DeleteMechanicUserByUserIdCommandHandler : IRequestHandler<DeleteMe
         await _unitOfWork.BeginTransactionAsync(System.Data.IsolationLevel.ReadCommitted, cancellationToken);
         try
         {
-            await _cache.Ping();
-
+            await _cache.PingAsync(); 
             var mechanicUser = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.UserId);
 
             if (mechanicUser is null)
@@ -42,17 +41,9 @@ public class DeleteMechanicUserByUserIdCommandHandler : IRequestHandler<DeleteMe
 
             mechanicUser.Delete();
 
-            await _cache.RemoveGeoAsync(request.UserId);
-            await _cache.RemoveHsetAsync(request.UserId); 
-            _unitOfWork.BaseUsers.Delete(mechanicUser); 
+            await _cache.Deactivate(request.UserId.ToString()); 
 
-            var mechanicTask = await _unitOfWork.OrderTasks.GetMechanicTaskByMechanicIdAsync(request.UserId);
-
-            if (mechanicTask is not null)
-            {
-                _unitOfWork.OrderTasks.RemoveMechanicTask(mechanicTask);
-            }
-
+            _unitOfWork.BaseUsers.Delete(mechanicUser);   
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
             return Result.Success(null, ResponseStatus.NoContent);

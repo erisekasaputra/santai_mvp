@@ -32,3 +32,40 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\History.API\obj\Debug\net9.0\History.API.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\History.API\obj\Debug\net9.0\History.API.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\History.API\obj\Debug\net9.0\ref\History.API.dll
+C:\Santai.MVP\History.API\bin\Debug\net9.0\appsettings.Development.json
+C:\Santai.MVP\History.API\bin\Debug\net9.0\appsettings.json
+C:\Santai.MVP\History.API\bin\Debug\net9.0\History.API.staticwebassets.endpoints.json
+C:\Santai.MVP\History.API\bin\Debug\net9.0\History.API.exe
+C:\Santai.MVP\History.API\bin\Debug\net9.0\History.API.deps.json
+C:\Santai.MVP\History.API\bin\Debug\net9.0\History.API.runtimeconfig.json
+C:\Santai.MVP\History.API\bin\Debug\net9.0\History.API.dll
+C:\Santai.MVP\History.API\bin\Debug\net9.0\History.API.pdb
+C:\Santai.MVP\History.API\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
+C:\Santai.MVP\History.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+C:\Santai.MVP\History.API\bin\Debug\net9.0\Microsoft.OpenApi.dll
+C:\Santai.MVP\History.API\bin\Debug\net9.0\Pipelines.Sockets.Unofficial.dll
+C:\Santai.MVP\History.API\bin\Debug\net9.0\StackExchange.Redis.dll
+C:\Santai.MVP\History.API\obj\Debug\net9.0\History.API.csproj.AssemblyReference.cache
+C:\Santai.MVP\History.API\obj\Debug\net9.0\History.API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Santai.MVP\History.API\obj\Debug\net9.0\History.API.AssemblyInfoInputs.cache
+C:\Santai.MVP\History.API\obj\Debug\net9.0\History.API.AssemblyInfo.cs
+C:\Santai.MVP\History.API\obj\Debug\net9.0\History.API.csproj.CoreCompileInputs.cache
+C:\Santai.MVP\History.API\obj\Debug\net9.0\History.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Santai.MVP\History.API\obj\Debug\net9.0\History.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Santai.MVP\History.API\obj\Debug\net9.0\History.API.sourcelink.json
+C:\Santai.MVP\History.API\obj\Debug\net9.0\scopedcss\bundle\History.API.styles.css
+C:\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets.build.json
+C:\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets.development.json
+C:\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets.build.endpoints.json
+C:\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets\msbuild.History.API.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets\msbuild.History.API.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+C:\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets\msbuild.build.History.API.props
+C:\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.History.API.props
+C:\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.History.API.props
+C:\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets.pack.json
+C:\Santai.MVP\History.API\obj\Debug\net9.0\History..64CC3CFB.Up2Date
+C:\Santai.MVP\History.API\obj\Debug\net9.0\History.API.dll
+C:\Santai.MVP\History.API\obj\Debug\net9.0\refint\History.API.dll
+C:\Santai.MVP\History.API\obj\Debug\net9.0\History.API.pdb
+C:\Santai.MVP\History.API\obj\Debug\net9.0\History.API.genruntimeconfig.cache
+C:\Santai.MVP\History.API\obj\Debug\net9.0\ref\History.API.dll

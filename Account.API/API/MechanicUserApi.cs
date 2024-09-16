@@ -112,10 +112,10 @@ public static class MechanicUserApi
         app.MapPatch("/{mechanicUserId}/device-id/force-set", ForceSetDeviceIdByUserId)
              .RequireAuthorization(PolicyName.MechanicUserAndAdministratorUserPolicy.ToString());
 
-        app.MapPatch("/order/confirm", ConfirmOrderByMechanicUserId)
+        app.MapPatch("/order/confirm/{orderId}", ConfirmOrderByMechanicUserId)
              .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());
 
-        app.MapPatch("/order/reject", RejectOrderByMechanicUserId)
+        app.MapPatch("/order/reject/{orderId}", RejectOrderByMechanicUserId)
              .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());  
 
         app.MapPost("/driving-license", SetDrivingLicenseByUserId)
@@ -134,8 +134,9 @@ public static class MechanicUserApi
     }
 
     private static async Task<IResult> ConfirmOrderByMechanicUserId(
-      [FromServices] ApplicationService service,
-      [FromServices] IUserInfoService userInfoService)
+        Guid orderId,
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
     {
         try
         {
@@ -145,7 +146,7 @@ public static class MechanicUserApi
                 return TypedResults.Unauthorized();
             }
 
-            var result = await service.Mediator.Send(new AcceptOrderByMechanicUserIdCommand(userClaim.Sub));
+            var result = await service.Mediator.Send(new AcceptOrderByMechanicUserIdCommand(orderId, userClaim.Sub));
 
             return result.ToIResult();
         }
@@ -158,8 +159,9 @@ public static class MechanicUserApi
 
 
     private static async Task<IResult> RejectOrderByMechanicUserId(
-      [FromServices] ApplicationService service,
-      [FromServices] IUserInfoService userInfoService)
+        Guid orderId,
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
     {
         try
         {
@@ -169,7 +171,7 @@ public static class MechanicUserApi
                 return TypedResults.Unauthorized();
             }
 
-            var result = await service.Mediator.Send(new RejectOrderByMechanicUserIdCommand(userClaim.Sub));
+            var result = await service.Mediator.Send(new RejectOrderByMechanicUserIdCommand(orderId, userClaim.Sub));
 
             return result.ToIResult();
         }

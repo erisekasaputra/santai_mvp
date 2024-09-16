@@ -1,4 +1,4 @@
-﻿using Account.Domain.Aggregates.OrderTaskAggregate;
+﻿ 
 using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Enumerations;
 using Microsoft.EntityFrameworkCore;
@@ -55,12 +55,7 @@ public class MechanicUserEntityConfiguration : IEntityTypeConfiguration<Mechanic
                 .HasConversion(
                     v => v == null ? null : v.Trim(),
                     v => v == null ? null : v.Trim());
-        });
-
-        e.HasOne(x => x.MechanicOrderTask)
-            .WithOne()
-            .HasForeignKey<MechanicOrderTask>(x => x.MechanicId)
-            .OnDelete(DeleteBehavior.Cascade);
+        }); 
 
         //e.Ignore(p => p.DomainEvents); // no need domain event because the parent entity (BaseUser is implementing DomainEvent ignorance) 
     }

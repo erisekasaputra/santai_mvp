@@ -3,8 +3,7 @@ using Account.Domain.Aggregates.CertificationAggregate;
 using Account.Domain.Aggregates.DrivingLicenseAggregate;
 using Account.Domain.Aggregates.FleetAggregate;
 using Account.Domain.Aggregates.LoyaltyAggregate;
-using Account.Domain.Aggregates.NationalIdentityAggregate;
-using Account.Domain.Aggregates.OrderTaskAggregate;
+using Account.Domain.Aggregates.NationalIdentityAggregate; 
 using Account.Domain.Aggregates.ReferralAggregate;
 using Account.Domain.Aggregates.ReferredAggregate;
 using Account.Domain.Aggregates.UserAggregate;
@@ -31,8 +30,7 @@ public class UnitOfWork : IUnitOfWork
     public IReferralProgramRepository ReferralPrograms { get; }
     public IReferredProgramRepository ReferredPrograms { get; }
     public IStaffRepository Staffs { get; } 
-    public IFleetRepository Fleets { get; } 
-    public IOrderTaskRepository OrderTasks { get; }
+    public IFleetRepository Fleets { get; }  
 
     public UnitOfWork(AccountDbContext context, IMediator mediator)
     {
@@ -47,8 +45,7 @@ public class UnitOfWork : IUnitOfWork
         ReferralPrograms = new ReferralProgramRepository(context);
         ReferredPrograms = new ReferredProgramRepository(context);
         Staffs = new StaffRepository(context);
-        Fleets = new FleetRepository(context);
-        OrderTasks = new OrderTaskRepository(context);
+        Fleets = new FleetRepository(context); 
     }
 
     public async Task BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)

@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Account.API.Applications.Commands.OrderTaskCommand.CreateOrderTask;
 
-public record CreateOrderTaskCommand(Guid OrderId, double Latitude, double Longitude) : IRequest<Result>;
+public record CreateOrderTaskCommand(Guid BuyerId, Guid OrderId, double Latitude, double Longitude) : IRequest<Result>;

@@ -14,7 +14,7 @@ public class OrderCancelledByUserIntegrationEventConsumer(
     private readonly IMediator _mediator = mediator; 
     public async Task Consume(ConsumeContext<OrderCancelledByUserIntegrationEvent> context)
     {
-        var command = new CancelOrderByUserByOrderIdCommand(context.Message.OrderId);
+        var command = new CancelOrderByUserByOrderIdCommand(context.Message.UserId, context.Message.OrderId);
 
         var result = await _mediator.Send(command);
 

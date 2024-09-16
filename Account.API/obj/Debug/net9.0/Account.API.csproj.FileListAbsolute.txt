@@ -482,3 +482,5 @@ C:\Santai.MVP\Account.API\obj\Debug\net9.0\refint\Account.API.dll
 C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.pdb
 C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.genruntimeconfig.cache
 C:\Santai.MVP\Account.API\obj\Debug\net9.0\ref\Account.API.dll
+C:\Santai.MVP\Account.API\bin\Debug\net9.0\RedLockNet.Abstractions.dll
+C:\Santai.MVP\Account.API\bin\Debug\net9.0\RedLockNet.SERedis.dll

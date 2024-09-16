@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using Polly;
 using Account.Domain.SeedWork;
 using Core.Utilities;
+using Core.Exceptions;
+using Core.Messages;
 
 namespace Account.API.Applications.Commands.OrderTaskCommand.CancelOrderByUserByOrderId;
 
@@ -40,6 +42,39 @@ public class CancelOrderByUserByOrderIdCommandHandler : IRequestHandler<CancelOr
 
     public async Task<Result> Handle(CancelOrderByUserByOrderIdCommand request, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var result = await _asyncRetryPolicy.ExecuteAsync<Result>(async () =>
+            {
+                await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, cancellationToken);
+                try
+                {
+                    var result = await _mechanicCache.CancelOrderByUser(request.BuyerId.ToString(), request.OrderId.ToString());
+
+                    if (result)
+                    {
+                        return Result.Success(null, ResponseStatus.NoContent);
+                    }
+
+                    throw new InvalidOperationException();
+                }
+                catch (Exception)
+                {
+                    await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                    throw;
+                }
+            });
+
+            return result;
+        }
+        catch (DomainException ex)
+        {
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
+        }
     }
 }

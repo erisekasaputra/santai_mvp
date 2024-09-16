@@ -20,12 +20,12 @@ public class OrderWaitingMechanicAssignJob : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     { 
-        while (!stoppingToken.IsCancellationRequested)
+        while (true)
         {
             using var scope = _scopeFactory.CreateScope(); 
             _mechanicCache = scope.ServiceProvider.GetRequiredService<IMechanicCache>(); 
             await _mechanicCache.ProcessOrdersWaitingMechanicAssignFromQueueAsync();
-            await Task.Delay(1000, stoppingToken);
+            await Task.Delay(50000);
         }
     }
 } 

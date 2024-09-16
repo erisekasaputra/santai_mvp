@@ -1,56 +1,42 @@
-﻿using Account.Domain.Aggregates.OrderTaskAggregate;
-using Account.Domain.SeedWork;
+﻿using Account.API.Applications.Models;
+using Account.API.Applications.Services.Interfaces;  
 using Core.Results;
 using Core.Utilities;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using Polly;
-using Polly.Retry;
-using System.Data;
-using System.Data.Common;
+using MediatR; 
+using Polly; 
+using StackExchange.Redis; 
 
 namespace Account.API.Applications.Commands.OrderTaskCommand.CreateOrderTask;
 
 public class CreateOrderTaskCommandHandler: IRequestHandler<CreateOrderTaskCommand, Result>
-{
-    private readonly IUnitOfWork _unitOfWork;
+{ 
     private readonly ILogger<CreateOrderTaskCommandHandler> _logger;
     private readonly AsyncPolicy _asyncPolicy;
-
-    public CreateOrderTaskCommandHandler(
-       IUnitOfWork unitOfWork,
-       ILogger<CreateOrderTaskCommandHandler> logger)
+    private readonly IMechanicCache _cache;
+    public CreateOrderTaskCommandHandler( 
+       ILogger<CreateOrderTaskCommandHandler> logger,
+       IMechanicCache mechanicCache)
     {
-        _unitOfWork = unitOfWork;
+        _cache = mechanicCache; 
         _logger = logger;
         _asyncPolicy = Policy
-            .Handle<DBConcurrencyException>()
-            .Or<DbUpdateException>()
-            .Or<DbException>()
-            .WaitAndRetryAsync(5, retryAttempt =>
-                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+            .Handle<InvalidOperationException>() 
+            .Or<RedisException>() 
+            .Or<RedisConnectionException>() 
+            .WaitAndRetryAsync(1, retryAttempt =>
+                TimeSpan.FromSeconds(Math.Pow(1, retryAttempt)),
                 onRetry: (exception, timeSpan, retryCount, context) =>
                 {
                     LoggerHelper.LogError(logger, exception);
                 });
-    }
+    } 
 
     public async Task<Result> Handle(CreateOrderTaskCommand request, CancellationToken cancellationToken)
     {
         try
         {
-            var result = await _asyncPolicy.ExecuteAsync(async () =>
-            {  
-                var order = new OrderTaskWaitingMechanicAssign(request.OrderId, request.Latitude, request.Longitude);
-
-                await _unitOfWork.OrderTasks.CreateOrderTaskWaitingMechanicAssignAsync(order); 
-
-                await _unitOfWork.SaveChangesAsync();
-
-                return Result.Success(null, ResponseStatus.NoContent);
-            });
-
-            return result;
+            await _cache.CreateOrderToQueueAndHash(new OrderTask(request.BuyerId.ToString(), request.OrderId.ToString(), string.Empty, request.Latitude, request.Longitude, OrderTaskStatus.WaitingMechanic)); 
+            return Result.Success(null, ResponseStatus.Created); 
         } 
         catch(Exception ex) 
         {
