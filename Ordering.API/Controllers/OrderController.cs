@@ -4,13 +4,11 @@ using Core.Services.Interfaces;
 using Core.Utilities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.AspNetCore.Mvc; 
 using Ordering.API.Applications.Commands.Orders.CreateOrder;
 using Ordering.API.Applications.Dtos.Requests;
 using Ordering.API.Applications.Services.Interfaces;
-using Ordering.API.CustomAttributes;
-using Ordering.API.Extensions;
+using Ordering.API.CustomAttributes; 
 
 namespace Ordering.API.Controllers;
 
@@ -55,9 +53,11 @@ public class OrderController : ControllerBase
                 return TypedResults.Forbid();
             } 
 
-            var createResult = await _mediator.Send(
+            for(int i = 0; i < 20; i++)
+            {
+                await _mediator.Send(
                 new CreateOrderCommand(
-                    userClaim.Sub, 
+                    userClaim.Sub,
                     userClaim.CurrentUserType,
                     request.AddressLine,
                     request.Latitude,
@@ -67,9 +67,10 @@ public class OrderController : ControllerBase
                     request.ScheduledAt,
                     request.CouponCode,
                     request.LineItems,
-                    request.Fleets));
+                    request.Fleets)); 
+            }
 
-            return createResult.ToIResult();
+            return TypedResults.Ok();
         }
         catch (Exception ex)
         {

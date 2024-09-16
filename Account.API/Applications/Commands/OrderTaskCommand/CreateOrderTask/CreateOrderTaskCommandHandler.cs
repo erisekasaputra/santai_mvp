@@ -40,14 +40,12 @@ public class CreateOrderTaskCommandHandler: IRequestHandler<CreateOrderTaskComma
         try
         {
             var result = await _asyncPolicy.ExecuteAsync(async () =>
-            { 
-                await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
-
+            {  
                 var order = new OrderTaskWaitingMechanicAssign(request.OrderId, request.Latitude, request.Longitude);
 
-                await _unitOfWork.OrderTasks.CreateOrderTaskWaitingMechanicAssignAsync(order);
+                await _unitOfWork.OrderTasks.CreateOrderTaskWaitingMechanicAssignAsync(order); 
 
-                await _unitOfWork.CommitTransactionAsync(cancellationToken);
+                await _unitOfWork.SaveChangesAsync();
 
                 return Result.Success(null, ResponseStatus.NoContent);
             });

@@ -15,8 +15,7 @@ using Ordering.Domain.Aggregates.ScheduledOrderAggregate;
 using Ordering.Domain.Enumerations;
 using Ordering.Domain.SeedWork;
 using Ordering.Domain.ValueObjects;
-using System.Data;
-using System.Security.Cryptography.Xml;
+using System.Data; 
 namespace Ordering.API.Applications.Commands.Orders.CreateOrder;
 public class CreateOrderCommandHandler(
     ILogger<CreateOrderCommandHandler> logger,

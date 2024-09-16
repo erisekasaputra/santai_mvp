@@ -12,7 +12,7 @@ public class MechanicActivatedDomainEventHandler(
 
     public async Task Handle(MechanicActivatedDomainEvent notification, CancellationToken cancellationToken)
     {
-        var mechanic = new MechanicAvailabilityCache()
+        var mechanic = new MechanicExistence()
         {
             MechanicId = notification.User.MechanicId,
             OrderId = null,

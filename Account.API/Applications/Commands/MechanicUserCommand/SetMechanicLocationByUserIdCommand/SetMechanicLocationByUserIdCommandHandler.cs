@@ -24,7 +24,7 @@ public class SetMechanicLocationByUserIdCommandHandler : IRequestHandler<SetMech
     {
         try
         {
-            var mechanic = new MechanicAvailabilityCache()
+            var mechanic = new MechanicExistence()
             {
                 MechanicId = request.MechanicId,
                 Latitude = request.Latitude,

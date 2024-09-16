@@ -17,10 +17,15 @@ public class JwtTokenService : ITokenService
 {
     private readonly IOptionsMonitor<JwtConfiguration> _jwtConfigs;
     private readonly ICacheService _cacheService;
-    public JwtTokenService(IOptionsMonitor<JwtConfiguration> jwtConfigs, ICacheService cacheService)
+    private readonly IUserInfoService _userInfoService;
+    public JwtTokenService(
+        IOptionsMonitor<JwtConfiguration> jwtConfigs, 
+        ICacheService cacheService,
+        IUserInfoService userInfoService)
     {
         _jwtConfigs = jwtConfigs;
         _cacheService = cacheService;
+        _userInfoService = userInfoService;
     }
 
     public string GenerateAccessToken(ClaimsIdentity claims)
@@ -44,28 +49,23 @@ public class JwtTokenService : ITokenService
         return tokenHandler.WriteToken(token);
     }
 
-    public async Task<string> GenerateAccessTokenForServiceToService(
-        UserType userType,
-        string serviceKey, 
-        bool forceNewToken = false)
+    public string GenerateAccessTokenForServiceToService()
     {
-        var token = await _cacheService.GetAsync<string>(serviceKey); 
-
-        if (token is not null && !forceNewToken)
+        var userClaim = _userInfoService.GetUserInfo(); 
+        if (userClaim is null)
         {
-            return token;
+            return string.Empty;
         }
 
         var claims = new List<Claim>()
         {
-            new (JwtRegisteredClaimNames.Sub, Guid.NewGuid().ToString()),
+            new (JwtRegisteredClaimNames.Sub, userClaim.Sub.ToString()),
             new (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-            new (SantaiClaimTypes.UserType, userType.ToString()),
+            new (SantaiClaimTypes.UserType, userClaim.CurrentUserType.ToString()),
             new (ClaimTypes.Role, UserType.ServiceToService.ToString())
         };
 
-        var claimIdentity = new ClaimsIdentity(claims); 
-
+        var claimIdentity = new ClaimsIdentity(claims);  
         var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtConfigs.CurrentValue.SecretKey));
         var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
 
@@ -83,11 +83,7 @@ public class JwtTokenService : ITokenService
         var tokenHandler = new JwtSecurityTokenHandler();
         var newToken = tokenHandler.CreateToken(tokenDescriptor);
 
-        var generatedToken = tokenHandler.WriteToken(newToken); 
-
-        await _cacheService.DeleteAsync(serviceKey);
-        
-        await _cacheService.SetAsync(serviceKey, generatedToken, TimeSpan.FromSeconds(_jwtConfigs.CurrentValue.TotalSecondsAccessTokenLifetime));
+        var generatedToken = tokenHandler.WriteToken(newToken);  
 
         return generatedToken;
     }

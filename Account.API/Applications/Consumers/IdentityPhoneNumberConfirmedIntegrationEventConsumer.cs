@@ -32,12 +32,7 @@ public class IdentityPhoneNumberConfirmedIntegrationEventConsumer : IConsumer<Id
 
             if (!responseStaff.IsSuccess)
             {
-                _logger.LogError("An error occured. error: '{Message}'. When confirming the phone number: {phoneNumber} for registered staff user id: {Id}", responseStaff.Message, user.PhoneNumber, user.Id);
-
-                if (responseStaff.ResponseStatus is not ResponseStatus.NotFound and ResponseStatus.BadRequest)
-                {
-                    throw new Exception(responseStaff.Message);
-                }
+                _logger.LogError("An error occured. error: '{Message}'. When confirming the phone number: {phoneNumber} for registered staff user id: {Id}", responseStaff.Message, user.PhoneNumber, user.Id); 
             }
 
             return;
@@ -51,12 +46,7 @@ public class IdentityPhoneNumberConfirmedIntegrationEventConsumer : IConsumer<Id
 
             if (!response.IsSuccess)
             {
-                _logger.LogError("An error occured. error: '{Message}'. When confirming the phone number: {phoneNumber} for registered user id: {Id}", response.Message, user.PhoneNumber, user.Id);
-
-                if (response.ResponseStatus is not ResponseStatus.NotFound and ResponseStatus.BadRequest)
-                {
-                    throw new Exception(response.Message);
-                }
+                _logger.LogError("An error occured. error: '{Message}'. When confirming the phone number: {phoneNumber} for registered user id: {Id}", response.Message, user.PhoneNumber, user.Id); 
             }
 
             return;

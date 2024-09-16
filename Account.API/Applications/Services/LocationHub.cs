@@ -40,7 +40,7 @@ public class LocationHub : Hub
             return; 
         } 
 
-        var mechanic = new MechanicAvailabilityCache()
+        var mechanic = new MechanicExistence()
         {
             MechanicId = user.Sub,
             Latitude = Latitude,

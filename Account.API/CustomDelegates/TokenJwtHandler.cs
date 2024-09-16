@@ -11,9 +11,8 @@ public class TokenJwtHandler : DelegatingHandler
     }
 
     protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
-    {
-        // Retrieve the token from the current context
-        var token = _httpContextAccessor.HttpContext?.Request.Headers["Authorization"].FirstOrDefault();
+    { 
+        var token = _httpContextAccessor.HttpContext?.Request.Headers.Authorization.FirstOrDefault();
 
         if (!string.IsNullOrEmpty(token))
         {

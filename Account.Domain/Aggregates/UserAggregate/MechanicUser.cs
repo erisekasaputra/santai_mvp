@@ -4,9 +4,7 @@ using Account.Domain.Enumerations;
 using Account.Domain.Aggregates.NationalIdentityAggregate;
 using Account.Domain.Aggregates.DrivingLicenseAggregate;
 using Account.Domain.Events;
-using Core.Exceptions;
-using Account.Domain.Aggregates.OrderTaskAggregate;
-using Microsoft.EntityFrameworkCore;
+using Core.Exceptions; 
 
 namespace Account.Domain.Aggregates.UserAggregate;
 
@@ -18,8 +16,7 @@ public class MechanicUser : BaseUser
     public ICollection<NationalIdentity>? NationalIdentities { get; private set; } // Navigation properties 
     public decimal Rating { get; private set; }  
     public bool IsVerified { get; private set; } 
-    public string? DeviceId { get; private set; }
-    public MechanicOrderTask? MechanicOrderTask { get; private set; } 
+    public string? DeviceId { get; private set; } 
 
     protected MechanicUser() : base()
     { 
@@ -41,8 +38,7 @@ public class MechanicUser : BaseUser
         PersonalInfo = personalInfo;
         Rating = 5;
         IsVerified = false;
-        DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
-        MechanicOrderTask = null;
+        DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId)); 
         RaiseMechanicUserCreatedDomainEvent(this);
     } 
 
@@ -79,12 +75,7 @@ public class MechanicUser : BaseUser
     }
 
     public void Delete()
-    { 
-        if (MechanicOrderTask is not null && MechanicOrderTask.OrderId is not null)
-        {
-            throw new DomainException("Mechanic has active order, can not delete");
-        }
-
+    {  
         AddDomainEvent(new MechanicUserDeletedDomainEvent(Id));
     }
 
@@ -284,9 +275,7 @@ public class MechanicUser : BaseUser
             throw new DomainException("National identity is waiting for verification.");
         }
 
-        IsVerified = true; 
-        MechanicOrderTask = new (Id, null);
-        MechanicOrderTask.SetEntityState(EntityState.Added);
+        IsVerified = true;  
         RaiseMechanicDocumentVerifiedDomainEvent(this);
     }
 

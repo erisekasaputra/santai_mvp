@@ -1,9 +1,7 @@
 ﻿using Core.Exceptions;
 using Newtonsoft.Json;
 using Ordering.API.Applications.Dtos.Responses;
-using Ordering.API.Applications.Services.Interfaces;
-using System.Net;
-using System.Text.Json;
+using Ordering.API.Applications.Services.Interfaces; 
 
 namespace Ordering.API.Applications.Services;
 
@@ -23,18 +21,9 @@ public class AccountServiceAPI : IAccountServiceAPI
             var endpoint = $"/api/v1/users/{userId}"; 
 
             var response = await _httpClient.GetAsync(endpoint);
-
-            string content;
-
-            if (response.StatusCode is HttpStatusCode.NotFound or HttpStatusCode.BadRequest)
-            {
-                content = await response.Content.ReadAsStringAsync(); 
-                var result = JsonConvert.DeserializeObject<ResultResponseDto<TDataType>>(content); 
-                return (null, false);
-            }
-
+              
             response.EnsureSuccessStatusCode(); 
-            content = await response.Content.ReadAsStringAsync(); 
+            string content = await response.Content.ReadAsStringAsync(); 
             return (JsonConvert.DeserializeObject<ResultResponseDto<TDataType>>(content), true);
         } 
         catch (Exception ex)
