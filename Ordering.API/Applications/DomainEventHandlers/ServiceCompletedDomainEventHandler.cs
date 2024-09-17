@@ -10,8 +10,8 @@ public class ServiceCompletedDomainEventHandler(IMediator mediator) : INotificat
     public async Task Handle(ServiceCompletedDomainEvent notification, CancellationToken cancellationToken)
     {
         await _mediator.Publish(new ServiceCompletedIntegrationEvent(
-            notification.Order.Id,
-            notification.Order.Buyer.BuyerId,
-            notification.Order.Mechanic!.MechanicId), cancellationToken);
+            notification.OrderId,
+            notification.BuyerId,
+            notification.MechanicId), cancellationToken);
     }
 }

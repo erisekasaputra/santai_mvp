@@ -3,4 +3,4 @@ using Ordering.Domain.Aggregates.OrderAggregate;
 
 namespace Ordering.Domain.Events;
 
-public record MechanicAssignedDomainEvent(Order Order) : INotification;
+public record MechanicAssignedDomainEvent(Guid OrderId , Guid BuyerId, Guid MechanicId) : INotification;

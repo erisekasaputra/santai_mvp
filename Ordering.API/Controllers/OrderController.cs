@@ -277,7 +277,7 @@ public class OrderController : ControllerBase
         }
     }
 
-    [HttpPatch("{orderId}/service/fleet/{fleetId}failed")]
+    [HttpPatch("{orderId}/service/fleet/{fleetId}/failed")]
     public async Task<IResult> SetServiceIncompleted(
         Guid orderId,
         Guid fleetId,

@@ -26,7 +26,7 @@ public class BusinessUserDeletedDomainEventHandler(
                 var businessLicense = new StaffIntegrationEvent(
                     staff.Id,
                     staff.BusinessUserCode,
-                    await DecryptAsync(staff.EncryptedPhoneNumber!),
+                    await DecryptAsync(staff.EncryptedPhoneNumber ?? string.Empty),
                     await DecryptNullableAsync(staff.EncryptedEmail),
                     staff.Name,
                     staff.TimeZoneId,
@@ -64,7 +64,7 @@ public class BusinessUserDeletedDomainEventHandler(
 
     private async Task<string?> DecryptNullableAsync(string? value)
     {
-        if (value == null) return null;
+        if (string.IsNullOrEmpty(value)) return null;
 
         return await _kmsClient.DecryptAsync(value);
     }

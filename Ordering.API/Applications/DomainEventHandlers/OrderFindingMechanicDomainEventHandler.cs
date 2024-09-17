@@ -15,10 +15,10 @@ public class OrderFindingMechanicDomainEventHandler : INotificationHandler<Order
     public async Task Handle(OrderFindingMechanicDomainEvent notification, CancellationToken cancellationToken)
     {
         var @event = new OrderFindingMechanicIntegrationEvent(
-            notification.Order.Id, 
-            notification.Order.Buyer.BuyerId, 
-            notification.Order.Address.Latitude,
-            notification.Order.Address.Longitude);
+            notification.OrderId, 
+            notification.BuyerId, 
+            notification.Latitude,
+            notification.Longitude);
 
         await _mediator.Publish(@event, cancellationToken);
     }

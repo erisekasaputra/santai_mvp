@@ -54,7 +54,22 @@ public class CreateOrderCommandHandler(
 
             if (!isAccountValidationSuccess)
                 return result;
-            
+
+            if (buyer is null || buyer.Data is null)
+            {
+                return Result.Failure("User data not found", ResponseStatus.NotFound);
+            }
+
+            if (buyer.Data.UnknownFleets.Any())
+            {
+                return Result.Failure("There are severals fleet that does not exists", 
+                    ResponseStatus.UnprocessableEntity)
+                    .WithError(new ErrorDetail("Fleets", "There are severals fleets not found"))
+                    .WithData(new 
+                    {
+                        Ids = buyer.Data.UnknownFleets
+                    });
+            } 
 
             return await CreateOrderByRelatedUserType(
                 command,
@@ -164,8 +179,9 @@ public class CreateOrderCommandHandler(
             }
 
             await RollbackAsync(cancellationToken);
-            return Result.Failure(items.Message ?? Messages.UnknownError, ResponseStatus.BadRequest)
-                .WithData(items);
+            return Result.Failure(items.Message ?? Messages.UnknownError, ResponseStatus.UnprocessableEntity)
+                .WithError(new ErrorDetail("LineItems", "There are severals line items could not be processed"))
+                .WithData(items.Data);
         }
 
         var order = new Order(  

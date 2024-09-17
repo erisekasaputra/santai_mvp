@@ -1,6 +1,7 @@
-﻿using MediatR;
+﻿using Core.Enumerations;
+using MediatR;
 using Ordering.Domain.Aggregates.OrderAggregate;
 
 namespace Ordering.Domain.Events;
 
-public record OrderPaymentPaidDomainEvent(Order Order) : INotification;
+public record OrderPaymentPaidDomainEvent(Guid OrderId, Guid BuyerId, decimal Amount, Currency Currency) : INotification;

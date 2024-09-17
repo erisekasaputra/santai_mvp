@@ -16,8 +16,9 @@ public interface IMechanicCache
     Task<bool> RejectOrderByMechanic(string mechanicId, string orderId);
     Task<bool> CancelOrderByMechanic(string mechanicId, string orderId);
     Task<bool> CancelOrderByUser(string buyerId, string orderId);
+    Task<bool> CompleteOrder(string orderId, string mechanicId);
     Task ProcessOrdersWaitingMechanicConfirmExpiryFromQueueAsync(); 
-    Task ProcessOrdersWaitingMechanicAssignFromQueueAsync();
+    Task ProcessOrdersWaitingMechanicAssignFromQueueAsync(); 
     
     
     

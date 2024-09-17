@@ -1,6 +1,5 @@
-﻿using MediatR;
-using Ordering.Domain.Aggregates.OrderAggregate;
+﻿using MediatR; 
 
 namespace Ordering.Domain.Events;
 
-public record OrderCancelledByBuyerDomainEvent(Order Order) : INotification;
+public record OrderCancelledByBuyerDomainEvent(Guid OrderId, Guid BuyerId, Guid? MechanicId) : INotification;

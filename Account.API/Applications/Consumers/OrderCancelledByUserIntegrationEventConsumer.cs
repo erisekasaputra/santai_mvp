@@ -16,7 +16,7 @@ public class OrderCancelledByUserIntegrationEventConsumer(
 
         if (result)
         {
-            throw new Exception("Failed when cancelling the order {context.Message.OrderId} by buyer");
+            throw new Exception($"Failed when cancelling the order {context.Message.OrderId} by buyer");
         }
     }
 }

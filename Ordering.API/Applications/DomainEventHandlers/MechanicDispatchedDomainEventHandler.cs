@@ -10,9 +10,9 @@ public class MechanicDispatchedDomainEventHandler(IMediator mediator) : INotific
     public async Task Handle(MechanicDispatchedDomainEvent notification, CancellationToken cancellationToken)
     {
         await _mediator.Publish(new MechanicDispatchedIntegrationEvent(
-            notification.Order.Id,
-            notification.Order.Buyer.BuyerId,
-            notification.Order.Mechanic!.MechanicId), cancellationToken);
+            notification.OrderId,
+            notification.BuyerId,
+            notification.MechanicId), cancellationToken);
     }
 }
 

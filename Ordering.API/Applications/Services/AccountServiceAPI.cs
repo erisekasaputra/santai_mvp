@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Ordering.API.Applications.Dtos.Responses;
 using Ordering.API.Applications.Services.Interfaces;
+using System.Text;
 namespace Ordering.API.Applications.Services;
 
 public class AccountServiceAPI : IAccountServiceAPI
@@ -17,11 +18,17 @@ public class AccountServiceAPI : IAccountServiceAPI
     {
         try
         {
-            var endpoint = $"/api/v1/users/{userId}"; 
+            var endpoint = $"/api/v1/users/{userId}/info";
 
-            var response = await _httpClient.GetAsync(endpoint);
-              
-            //response.EnsureSuccessStatusCode(); 
+            var bodyContext = new 
+            {
+                Fleets = fleetIds
+            }; 
+
+            var jsonContent = JsonConvert.SerializeObject(bodyContext); 
+            var stringContent = new StringContent(jsonContent, Encoding.UTF8, "application/json"); 
+            var response = await _httpClient.PostAsync(endpoint, stringContent);
+            response.EnsureSuccessStatusCode();
             string content = await response.Content.ReadAsStringAsync(); 
             return (JsonConvert.DeserializeObject<ResultResponseDto<TDataType>>(content), true);
         } 

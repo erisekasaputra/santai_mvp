@@ -3,4 +3,7 @@ using Ordering.Domain.Aggregates.OrderAggregate;
 
 namespace Ordering.Domain.Events;
 
-public record ServiceIncompletedDomainEvent(Order Order) : INotification;
+public record ServiceIncompletedDomainEvent(
+    Guid OrderId,
+    Guid BuyerId,
+    Guid MechanicId) : INotification;

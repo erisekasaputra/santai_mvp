@@ -150,6 +150,32 @@
   },
   {
     "ContainingType": "Ordering.API.Controllers.OrderController",
+    "Method": "SetServiceIncompleted",
+    "RelativePath": "api/v1/orders/{orderId}/service/fleet/{fleetId}/failed",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "fleetId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Ordering.API.Applications.Dtos.Requests.OrderSecretRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Ordering.API.Controllers.OrderController",
     "Method": "SetServiceInProgress",
     "RelativePath": "api/v1/orders/{orderId}/service/fleet/{fleetId}/start",
     "HttpMethod": "PATCH",
@@ -178,32 +204,6 @@
     "ContainingType": "Ordering.API.Controllers.OrderController",
     "Method": "SetServiceCompleted",
     "RelativePath": "api/v1/orders/{orderId}/service/fleet/{fleetId}/success",
-    "HttpMethod": "PATCH",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "orderId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "fleetId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Ordering.API.Applications.Dtos.Requests.OrderSecretRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Ordering.API.Controllers.OrderController",
-    "Method": "SetServiceIncompleted",
-    "RelativePath": "api/v1/orders/{orderId}/service/fleet/{fleetId}failed",
     "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,

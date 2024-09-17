@@ -241,11 +241,9 @@ public static class ServiceRegistrationExtension
                 if (isRetryable)
                 {
                     action.EnableRetryOnFailure();
-                } 
+                }
                 action.CommandTimeout(databaseOption.CurrentValue.CommandTimeout);
-            })  
-            .EnableSensitiveDataLogging() // Logs parameter values
-            .LogTo(Console.WriteLine, LogLevel.Error);
+            });
         });
 
         return services;

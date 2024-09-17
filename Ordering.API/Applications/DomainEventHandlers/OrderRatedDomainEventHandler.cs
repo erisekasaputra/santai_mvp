@@ -10,9 +10,9 @@ public class OrderRatedDomainEventHandler(IMediator mediator) : INotificationHan
     public async Task Handle(OrderRatedDomainEvent notification, CancellationToken cancellationToken)
     {
         await _mediator.Publish(new OrderRatedIntegrationEvent(
-            notification.Order.Id,
-            notification.Order.Buyer.BuyerId,
-            notification.Order.Rating!.Value,
-            notification.Order.Rating!.Comment), cancellationToken);
+            notification.OrderId,
+            notification.BuyerId,
+            notification.Value,
+            notification.Comment), cancellationToken);
     }
 }

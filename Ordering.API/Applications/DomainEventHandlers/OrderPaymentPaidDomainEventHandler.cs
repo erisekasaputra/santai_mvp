@@ -16,9 +16,9 @@ public class OrderPaymentPaidDomainEventHandler : INotificationHandler<OrderPaym
     public async Task Handle(OrderPaymentPaidDomainEvent notification, CancellationToken cancellationToken)
     {
         await _mediator.Publish(new OrderPaymentPaidIntegrationEvent(
-            notification.Order.Id,
-            notification.Order.Buyer.BuyerId,
-            notification.Order.Payment!.Amount.Amount,
-            notification.Order.Payment!.Amount.Currency), cancellationToken); 
+            notification.OrderId,
+            notification.BuyerId,
+            notification.Amount,
+            notification.Currency), cancellationToken); 
     }
 }

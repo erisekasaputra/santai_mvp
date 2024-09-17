@@ -1,16 +1,11 @@
 ﻿using Account.API.Applications.Commands.FleetCommand.AssignFleetsToStaff;
-using Account.API.Applications.Dtos.RequestDtos;
-using Account.API.Applications.Queries.GetBusinessUserByUserId;
-using Account.API.Applications.Queries.GetEmailByUserId;
-using Account.API.Applications.Queries.GetMechanicUserById;
-using Account.API.Applications.Queries.GetPhoneNumberByUserId;
-using Account.API.Applications.Queries.GetRegularUserByUserId;
-using Account.API.Applications.Queries.GetStaffById; 
+using Account.API.Applications.Dtos.RequestDtos; 
+using Account.API.Applications.Queries.GetEmailByUserId; 
+using Account.API.Applications.Queries.GetPhoneNumberByUserId; 
 using Account.API.Applications.Queries.GetTimeZoneByUserId;
 using Account.API.Applications.Queries.GetUserByUserTypeAndUserId;
 using Account.API.Applications.Services; 
-using Account.API.Extensions;
-using Amazon.SecretsManager.Model.Internal.MarshallTransformations;
+using Account.API.Extensions; 
 using Core.Enumerations;
 using Core.Messages;
 using Core.Results;
@@ -43,7 +38,7 @@ public static class UserApi
             .RequireAuthorization()
             .CacheOutput();
 
-        app.MapGet("{userId}", GetByUserId)
+        app.MapPost("{userId}/info", GetByUserId)
             .RequireAuthorization(PolicyName.ServiceToServiceOnlyPolicy.ToString())
             .CacheOutput(config =>
             {
@@ -56,7 +51,7 @@ public static class UserApi
 
     private static async Task<IResult> GetByUserId(
         Guid userId,
-        [AsParameters] FleetsRequestDto request,
+        [FromBody] FleetsRequestDto request,
         [FromServices] ApplicationService service,
         [FromServices] IUserInfoService userInfoService)
     {

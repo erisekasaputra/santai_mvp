@@ -10,8 +10,8 @@ public class OrderCancelledByBuyerDomainEventHandler(IMediator mediator) : INoti
     public async Task Handle(OrderCancelledByBuyerDomainEvent notification, CancellationToken cancellationToken)
     {
         await _mediator.Publish(new OrderCancelledByBuyerIntegrationEvent(
-            notification.Order.Id,
-            notification.Order.Buyer.BuyerId,
-            notification.Order.Mechanic?.MechanicId), cancellationToken);
+            notification.OrderId,
+            notification.BuyerId,
+            notification.MechanicId), cancellationToken);
     }
 }

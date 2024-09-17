@@ -9,12 +9,9 @@ public class Result
     public List<ErrorDetail> Errors { get; set; } = []; 
     public List<string>? Links { get; set; } = []; 
 
-    public Result WithData(object data)
+    public Result WithData(object? data)
     {
-        if (Data is null)
-        {
-            Data = data;
-        }
+        Data = data;
 
         return this;
     }

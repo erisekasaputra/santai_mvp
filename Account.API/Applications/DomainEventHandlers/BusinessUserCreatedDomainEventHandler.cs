@@ -44,7 +44,7 @@ public class BusinessUserCreatedDomainEventHandler(
             var @event = new BusinessUserCreatedIntegrationEvent(
                 entity.Id,
                 await DecryptNullableAsync(entity.EncryptedEmail),
-                await DecryptAsync(entity.EncryptedPhoneNumber!),
+                await DecryptAsync(entity.EncryptedPhoneNumber ?? string.Empty),
                 entity.TimeZoneId,
                 entity.Code,
                 entity.BusinessName,
@@ -67,7 +67,7 @@ public class BusinessUserCreatedDomainEventHandler(
 
     private async Task<string?> DecryptNullableAsync(string? value)
     {
-        if (value == null) return null;
+        if (string.IsNullOrEmpty(value)) return null;
 
         return await _kmsClient.DecryptAsync(value);
     }

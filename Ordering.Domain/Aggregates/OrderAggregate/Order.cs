@@ -120,7 +120,7 @@ public class Order : Entity
         if (!IsScheduled && !IsShouldRequestPayment)
         {  
             Status = OrderStatus.FindingMechanic;    
-            RaiseOrderFindingMechanicDomainEvent();
+            RaiseOrderFindingMechanicDomainEvent(Id, buyerId, latitude, longitude);
         }
     }
 
@@ -138,7 +138,7 @@ public class Order : Entity
             if (Status is not OrderStatus.PaymentPending) throw new DomainException($"Could not set payment to {OrderStatus.PaymentPaid}"); 
         }
 
-        if (payment.Amount.Amount != GrandTotal.Amount) throw new DomainException("Paid amount is not equal with grand total amount");
+        if (payment.Amount.Amount <= GrandTotal.Amount) throw new DomainException("Paid amount can not less than total order");
 
         if (payment.Amount.Currency != Currency) throw new DomainException("Currency for payment is not equal with order currency");
 
@@ -153,12 +153,12 @@ public class Order : Entity
         if (IsShouldRequestPayment)
         {
             Status = OrderStatus.PaymentPaid;
-            RaiseOrderPaymentPaidDomainEvent();
+            RaiseOrderPaymentPaidDomainEvent(Id, Buyer.BuyerId, payment.Amount.Amount, payment.Amount.Currency);
 
             if (!IsScheduled)
             {
                 Status = OrderStatus.FindingMechanic;
-                RaiseOrderFindingMechanicDomainEvent();
+                RaiseOrderFindingMechanicDomainEvent(Id, Buyer.BuyerId, Address.Latitude, Address.Longitude);
             }
         }
     }
@@ -289,7 +289,8 @@ public class Order : Entity
         }
 
         Status = OrderStatus.OrderCancelledByUser;
-        RaiseOrderCancelledByBuyerDomainEvent();
+        RaiseOrderCancelledByBuyerDomainEvent(Id, buyerId, Mechanic?.MechanicId);
+        Mechanic = null;
     }
 
     public void SetServiceInProgress(Guid mechanicId, string secret, Guid fleetId)
@@ -314,7 +315,7 @@ public class Order : Entity
             throw new DomainException("Fleet ID must not be empty");
         }
 
-        var fleetExists = Fleets.Where(x => x.Id == fleetId).ToList().Count > 0;
+        var fleetExists = Fleets.Where(x => x.FleetId == fleetId).ToList().Count > 0;
 
         if (!fleetExists)
         {
@@ -337,7 +338,7 @@ public class Order : Entity
         }
 
         Status = OrderStatus.ServiceInProgress; 
-        RaiseServiceProcessedDomainEvent();
+        RaiseServiceProcessedDomainEvent(Id, Buyer.BuyerId, mechanicId);
     }
 
     public void SetServiceCompleted(Guid mechanicId, string secret, Guid fleetId)
@@ -362,7 +363,7 @@ public class Order : Entity
             throw new DomainException("Fleet ID must not be empty");
         }
 
-        var fleetExists = Fleets.Where(x => x.Id == fleetId).ToList().Count > 0;
+        var fleetExists = Fleets.Where(x => x.FleetId == fleetId).ToList().Count > 0;
 
         if (!fleetExists)
         {
@@ -385,7 +386,7 @@ public class Order : Entity
         }
 
         Status = OrderStatus.ServiceCompleted;
-        RaiseServiceCompletedDomainEvent();
+        RaiseServiceCompletedDomainEvent(Id, Buyer.BuyerId, mechanicId);
     }
 
     public void SetServiceIncompleted(Guid mechanicId, string secret, Guid fleetId)
@@ -410,7 +411,7 @@ public class Order : Entity
             throw new DomainException("Fleet ID must not be empty");
         }
 
-        var fleetExists = Fleets.Where(x => x.Id == fleetId).ToList().Count > 0;
+        var fleetExists = Fleets.Where(x => x.FleetId == fleetId).ToList().Count > 0;
 
         if (!fleetExists)
         {
@@ -433,7 +434,7 @@ public class Order : Entity
         }
          
         Status = OrderStatus.ServiceIncompleted;
-        RaiseServiceIncompletedDomainEvent();
+        RaiseServiceIncompletedDomainEvent(Id, Buyer.BuyerId, mechanicId);
     }
 
 
@@ -455,7 +456,7 @@ public class Order : Entity
         }
 
         Status = OrderStatus.FindingMechanic;
-        RaiseOrderFindingMechanicDomainEvent();
+        RaiseOrderFindingMechanicDomainEvent(Id, Buyer.BuyerId, Address.Latitude, Address.Longitude);
     }
 
     public void SetOrderRating(decimal rating, string comment, IEnumerable<string>? images)
@@ -477,7 +478,7 @@ public class Order : Entity
 
         Rating = new Rating(rating, comment);
         RatingImages = images?.ToList();
-        RaiseOrderRatedDomainEvent();
+        RaiseOrderRatedDomainEvent(Id, Buyer.BuyerId, rating, comment);
     }
 
     private bool IsOrderMechanicAssignable(Guid mechanicId, out string errorMessage)
@@ -524,7 +525,7 @@ public class Order : Entity
             throw new DomainException("Mechanic can not be null");
         }
 
-        if (!IsOrderMechanicAssignable(mechanic.Id, out string errorMessage))
+        if (!IsOrderMechanicAssignable(mechanic.MechanicId, out string errorMessage))
         {
             throw new DomainException(errorMessage);
         }
@@ -532,7 +533,7 @@ public class Order : Entity
         Status = OrderStatus.MechanicAssigned;
         Mechanic = mechanic;
         Mechanic.SetEntityState(EntityState.Added);
-        RaiseMechanicAssignedDomainEvent();
+        RaiseMechanicAssignedDomainEvent(Id, Buyer.BuyerId, mechanic.MechanicId);
     }
 
     public void SetDispatchMechanic(Guid mechanicId)
@@ -558,7 +559,7 @@ public class Order : Entity
         }
 
         Status = OrderStatus.MechanicDispatched; 
-        RaiseMechanicDispatchedDomainEvent();
+        RaiseMechanicDispatchedDomainEvent(Id, Buyer.BuyerId, mechanicId);
     }
 
     public void SetArrivedMechanic(Guid mechanicId)
@@ -584,7 +585,7 @@ public class Order : Entity
         }
 
         Status = OrderStatus.MechanicArrived;
-        RaiseMechanicArrivedDomainEvent();
+        RaiseMechanicArrivedDomainEvent(Id, Buyer.BuyerId, mechanicId);
     }
      
       
@@ -675,7 +676,7 @@ public class Order : Entity
             throw new DomainException($"Item price currency ({lineItem.SubTotal.Currency}) does not match order currency ({Currency}).");
         }
 
-        var items = LineItems.Where(x => x.Id == lineItem.Id).FirstOrDefault();
+        var items = LineItems.Where(x => x.LineItemId == lineItem.LineItemId).FirstOrDefault();
 
         if (items is not null)
         {
@@ -731,15 +732,16 @@ public class Order : Entity
 
     public void AddFleet(Fleet fleet)
     {
-        if (fleet.Id == Guid.Empty)
-            throw new ArgumentNullException(nameof(fleet.Id), "Fleet id cannot be null.");
+        if (fleet.FleetId == Guid.Empty)
+            throw new ArgumentNullException(nameof(fleet.FleetId), "Fleet id cannot be null.");
 
-        ArgumentException.ThrowIfNullOrWhiteSpace(nameof(fleet.Brand), "Brand can not be empty");
-        ArgumentException.ThrowIfNullOrWhiteSpace(nameof(fleet.Model), "Model can not be empty");
-        ArgumentException.ThrowIfNullOrWhiteSpace(nameof(fleet.RegistrationNumber), "Registration number can not be empty");
-        ArgumentException.ThrowIfNullOrWhiteSpace(nameof(fleet.ImageUrl), "Image url can not be empty");
+        if (fleet is null) throw new ArgumentNullException(nameof(fleet));
+        if (fleet.Brand is null) throw new ArgumentNullException(nameof(fleet));
+        if (fleet.Model is null) throw new ArgumentNullException(nameof(fleet));
+        if (fleet.RegistrationNumber is null) throw new ArgumentNullException(nameof(fleet));
+        if (fleet.ImageUrl is null) throw new ArgumentNullException(nameof(fleet));   
 
-        if (Fleets.Where(x => x.Id == fleet.Id).ToList().Count > 0)
+        if (Fleets.Where(x => x.FleetId == fleet.FleetId).ToList().Count > 0)
         {
             return;
         }
@@ -748,42 +750,42 @@ public class Order : Entity
         Fleets.Add(fleet);
     }
 
-    private void RaiseServiceCompletedDomainEvent()
+    private void RaiseServiceCompletedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId)
     {
-        AddDomainEvent(new ServiceCompletedDomainEvent(this));
+        AddDomainEvent(new ServiceCompletedDomainEvent(orderId, buyerId, mechanicId));
     }
      
-    private void RaiseServiceIncompletedDomainEvent()
+    private void RaiseServiceIncompletedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId)
     {
-        AddDomainEvent(new ServiceIncompletedDomainEvent(this));
+        AddDomainEvent(new ServiceIncompletedDomainEvent(orderId, buyerId, mechanicId));
     } 
-    private void RaiseServiceProcessedDomainEvent()
+    private void RaiseServiceProcessedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId)
     {
-        AddDomainEvent(new ServiceProcessedDomainEvent(this));
+        AddDomainEvent(new ServiceProcessedDomainEvent(orderId, buyerId, mechanicId));
     }
 
-    private void RaiseMechanicArrivedDomainEvent()
+    private void RaiseMechanicArrivedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId)
     {
-        AddDomainEvent(new MechanicArrivedDomainEvent(this));
+        AddDomainEvent(new MechanicArrivedDomainEvent(orderId, buyerId, mechanicId));
     }
 
-    private void RaiseMechanicDispatchedDomainEvent()
+    private void RaiseMechanicDispatchedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId)
     {
-        AddDomainEvent(new MechanicDispatchedDomainEvent(this));
+        AddDomainEvent(new MechanicDispatchedDomainEvent(orderId, buyerId, mechanicId));
     }
 
-    private void RaiseOrderRatedDomainEvent()
+    private void RaiseOrderRatedDomainEvent(Guid orderId, Guid buyerId, decimal value, string? comment)
     {
-        AddDomainEvent(new OrderRatedDomainEvent(this));
+        AddDomainEvent(new OrderRatedDomainEvent(orderId, buyerId, value, comment));
     } 
-    private void RaiseOrderCancelledByBuyerDomainEvent()
+    private void RaiseOrderCancelledByBuyerDomainEvent(Guid orderId, Guid buyerId, Guid? mechanicId)
     { 
-        AddDomainEvent(new OrderCancelledByBuyerDomainEvent(this));
+        AddDomainEvent(new OrderCancelledByBuyerDomainEvent(orderId, buyerId, mechanicId));
     }
 
-    private void RaiseMechanicAssignedDomainEvent()
+    private void RaiseMechanicAssignedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId)
     {
-        AddDomainEvent(new MechanicAssignedDomainEvent(this));
+        AddDomainEvent(new MechanicAssignedDomainEvent(orderId, buyerId, mechanicId));
     }
 
     private void RaiseOrderCancelledByMechanicDomainEvent(Guid mechanicId)
@@ -791,14 +793,14 @@ public class Order : Entity
         AddDomainEvent(new OrderCancelledByMechanicDomainEvent(Id, Buyer.BuyerId, mechanicId));
     }
 
-    private void RaiseOrderPaymentPaidDomainEvent()
+    private void RaiseOrderPaymentPaidDomainEvent(Guid orderId, Guid buyerId, decimal amount, Currency currency)
     {  
-        AddDomainEvent(new OrderPaymentPaidDomainEvent(this));
+        AddDomainEvent(new OrderPaymentPaidDomainEvent(orderId, buyerId, amount, currency));
     }
 
-    private void RaiseOrderFindingMechanicDomainEvent()
+    private void RaiseOrderFindingMechanicDomainEvent(Guid orderId, Guid buyerId, double latitude, double longitude)
     {
-        AddDomainEvent(new OrderFindingMechanicDomainEvent(this));
+        AddDomainEvent(new OrderFindingMechanicDomainEvent(orderId, buyerId, latitude, longitude));
     }
     public void RaiseOrderCreatedDomainEvent()
     {
