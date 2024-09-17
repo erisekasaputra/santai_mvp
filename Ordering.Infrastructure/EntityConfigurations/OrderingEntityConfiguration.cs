@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Ordering.Domain.Aggregates.BuyerAggregate;
 using Ordering.Domain.Aggregates.MechanicAggregate;
 using Ordering.Domain.Aggregates.OrderAggregate;
+using Ordering.Domain.Enumerations;
 
 namespace Ordering.Infrastructure.EntityConfigurations;
 
@@ -55,6 +56,12 @@ public class OrderingEntityConfiguration : IEntityTypeConfiguration<Order>
         builder.Property(p => p.OrderAmount)
             .IsRequired(true)
             .HasPrecision(18, 4);
+
+        builder.Property(p => p.Status)
+            .HasConversion(
+                v => v.ToString(),
+                v => Enum.Parse<OrderStatus>(v))
+            .IsRequired(true);
 
         builder.OwnsOne(o => o.GrandTotal, buildAction =>
         {

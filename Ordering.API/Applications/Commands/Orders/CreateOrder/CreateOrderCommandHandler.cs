@@ -3,6 +3,7 @@ using Core.Events;
 using Core.Exceptions;
 using Core.Messages;
 using Core.Results;
+using Core.Services.Interfaces;
 using Core.Utilities;
 using MassTransit;
 using MediatR; 
@@ -23,7 +24,8 @@ public class CreateOrderCommandHandler(
     IUnitOfWork unitOfWork,
     IAccountServiceAPI accountService,
     ICatalogServiceAPI catalogService,
-    IPublishEndpoint publishEndpoint) : IRequestHandler<CreateOrderCommand, Result>
+    IPublishEndpoint publishEndpoint,
+    IEncryptionService encryptionService) : IRequestHandler<CreateOrderCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ILogger<CreateOrderCommandHandler> _logger = logger;
@@ -31,6 +33,8 @@ public class CreateOrderCommandHandler(
     private readonly IAccountServiceAPI _accountService = accountService; 
     private readonly ICatalogServiceAPI _catalogService = catalogService;
     private readonly IPublishEndpoint _publishEndpoint = publishEndpoint;
+    private readonly IEncryptionService _encryptionService = encryptionService;
+
 
     public async Task<Result> Handle(CreateOrderCommand command, CancellationToken cancellationToken)
     {
@@ -212,16 +216,19 @@ public class CreateOrderCommandHandler(
                 .WithData(items);
         }
 
-        var order = new Order(
-        command.Currency,
-        command.Address,
+        var order = new Order(  
+            command.Currency,
+            command.Address,
             command.Latitude,
             command.Longitude,
             command.BuyerId,
             buyerName,
             command.BuyerType,
             command.IsOrderScheduled,
-            command.ScheduledOn);
+            command.ScheduledOn); 
+
+        order.SetSecretKey(
+            await _encryptionService.EncryptAsync($"{order.Id}{order.Buyer.BuyerId}{order.GrandTotal.Amount}"));
 
         foreach (var lineItem in items?.Data ?? [])
         {
@@ -279,9 +286,11 @@ public class CreateOrderCommandHandler(
             await _unitOfWork.ScheduledOrders.CraeteAsync(scheduledOrderWorker);
         }
 
+        var orderDto = order.ToOrderResponseDto();
+
         await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
-        return Result.Success(order.ToOrderResponseDto(), ResponseStatus.Created);
+        return Result.Success(orderDto, ResponseStatus.Created);
     }
 
     private static bool IsNullCatalogItems(string? name, string? sku, decimal? price, Currency? currency)

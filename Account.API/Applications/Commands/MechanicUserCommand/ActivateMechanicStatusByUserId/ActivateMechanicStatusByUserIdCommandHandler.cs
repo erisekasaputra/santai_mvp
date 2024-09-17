@@ -43,37 +43,53 @@ public class ActivateMechanicStatusByUserIdCommandHandler : IRequestHandler<Acti
     }
     public async Task<Result> Handle(ActivateMechanicStatusByUserIdCommand request, CancellationToken cancellationToken)
     {
+        await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, cancellationToken);
         try
         {
+            var mechanic = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.MechanicId);
+            
+            if (mechanic is null)
+            {
+                return Result.Failure("Mechanic not found", ResponseStatus.NotFound);    
+            }
+
             var result = await _asyncRetryPolicy.ExecuteAsync<Result>(async () =>
             {
-                await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, cancellationToken);
-                try
+                if (!mechanic.IsVerified)
                 {
-                    var result = await _cache.Activate(request.MechanicId.ToString());
-
-                    if (result)
-                    {
-                        return Result.Success(null, ResponseStatus.NoContent);
-                    }
-
-                    throw new InvalidOperationException();
+                    return Result.Failure("You account has not been verified", ResponseStatus.BadRequest);
                 }
-                catch (Exception)
+
+                var result = await _cache.Activate(request.MechanicId.ToString());
+
+                if (result)
                 {
-                    await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                    throw;
+
+                    return Result.Success(null, ResponseStatus.NoContent);
                 }
+
+                throw new InvalidOperationException();
             });
+
+            if (result.IsSuccess)
+            {
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
+            }
+            else
+            {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+            }
 
             return result;
         }
         catch (DomainException ex)
         {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);
         }
         catch (Exception ex)
         {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             LoggerHelper.LogError(_logger, ex);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }

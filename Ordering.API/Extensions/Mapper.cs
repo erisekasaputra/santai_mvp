@@ -12,6 +12,7 @@ public static class Mapper
     {
         return new OrderResponseDto(
                 order.Id,
+                order.Secret,
                 order.Address.AddressLine,
                 order.Address.Latitude,
                 order.Address.Longitude,

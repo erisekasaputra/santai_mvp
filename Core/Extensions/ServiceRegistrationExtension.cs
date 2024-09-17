@@ -271,7 +271,7 @@ public static class ServiceRegistrationExtension
     } 
 
     public static IServiceCollection AddDataEncryption(this IServiceCollection services, IConfiguration configuration)
-    {
+    { 
         bool production = false;
         if (production)
         {

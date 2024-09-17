@@ -1,26 +1,20 @@
-﻿using Core.Enumerations;
+﻿using Core.Results; 
+using MediatR;  
+using Ordering.Domain.SeedWork; 
 using Core.Exceptions;
 using Core.Messages;
-using Core.Results;
-using MediatR;
-using Ordering.API.Applications.Commands.Orders.CreateOrder;
-using Ordering.API.Applications.Services.Interfaces;
-using Ordering.Domain.SeedWork;
 using System.Data;
 
-namespace Ordering.API.Applications.Commands.Orders.CancelOrderByUser;
+namespace Ordering.API.Applications.Commands.Orders.SetServiceInProgressByOrderIdAndMechanicId;
 
-public class CancelOrderByUserCommandHandler(
-    ILogger<CreateOrderCommandHandler> logger,
-    IPaymentService paymentService,
-    IUnitOfWork unitOfWork) : IRequestHandler<CancelOrderByUserCommand, Result>
+public class SetServiceInProgressByOrderIdAndMechanicIdCommandHandler(
+    ILogger<SetServiceInProgressByOrderIdAndMechanicIdCommandHandler> logger, 
+    IUnitOfWork unitOfWork) : IRequestHandler<SetServiceInProgressByOrderIdAndMechanicIdCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly ILogger<CreateOrderCommandHandler> _logger = logger;
-    private readonly IPaymentService _paymentService = paymentService;
-
-    private const Currency GlobalCurrency = Currency.MYR;
-    public async Task<Result> Handle(CancelOrderByUserCommand request, CancellationToken cancellationToken)
+    private readonly ILogger<SetServiceInProgressByOrderIdAndMechanicIdCommandHandler> _logger = logger; 
+     
+    public async Task<Result> Handle(SetServiceInProgressByOrderIdAndMechanicIdCommand request, CancellationToken cancellationToken)
     {
         await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
         try
@@ -32,13 +26,13 @@ public class CancelOrderByUserCommandHandler(
                 return Result.Failure("Data not found", ResponseStatus.NotFound);
             }
 
-            order.CancelByBuyer(request.BuyerId);
+            order.SetServiceInProgress(request.MechanicId, request.Secret, request.FleetId);
 
             _unitOfWork.Orders.Update(order);
 
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
-            return Result.Success("We are sorry you are cancelling the order", ResponseStatus.Ok);
+            return Result.Success(null, ResponseStatus.NoContent);
         }
         catch (ArgumentNullException ex)
         {

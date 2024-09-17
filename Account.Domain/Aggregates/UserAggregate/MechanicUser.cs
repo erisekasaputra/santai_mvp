@@ -224,6 +224,10 @@ public class MechanicUser : BaseUser
         Rating = rating;
     }
 
+    public override string ToString()
+    {
+        return PersonalInfo is null ? string.Empty : $"{PersonalInfo.FirstName} {PersonalInfo.MiddleName} {PersonalInfo.LastName}";
+    }
     public void VerifyDocument()
     {
         if ((DrivingLicenses is null || DrivingLicenses.Count == 0) 

@@ -1,4 +1,5 @@
 ﻿using Account.API.Applications.Services.Interfaces;
+using Account.Domain.Events;
 using Account.Domain.SeedWork;
 using Amazon.SecretsManager.Model.Internal.MarshallTransformations;
 using Core.Exceptions;
@@ -20,12 +21,15 @@ public class AcceptOrderByMechanicUserIdCommandHandler : IRequestHandler<AcceptO
     private readonly AsyncRetryPolicy _asyncRetryPolicy;
     private readonly ILogger<AcceptOrderByMechanicUserIdCommandHandler> _logger;
     private readonly IMechanicCache _mechanicCache;
+    private readonly IMediator _mediator;
 
     public AcceptOrderByMechanicUserIdCommandHandler(
         IUnitOfWork unitOfWork,
         ILogger<AcceptOrderByMechanicUserIdCommandHandler> logger,
-        IMechanicCache mechanicCache)
+        IMechanicCache mechanicCache,
+        IMediator mediator)
     {
+        _mediator = mediator;
         _unitOfWork = unitOfWork;
         _logger = logger;
         _mechanicCache = mechanicCache;
@@ -41,38 +45,55 @@ public class AcceptOrderByMechanicUserIdCommandHandler : IRequestHandler<AcceptO
 
     public async Task<Result> Handle(AcceptOrderByMechanicUserIdCommand request, CancellationToken cancellationToken)
     {
+        await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, cancellationToken);
         try
         {
-            var result = await _asyncRetryPolicy.ExecuteAsync<Result>(async () =>
-            { 
-                await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, cancellationToken);
-                try
-                {
-                    var result = await _mechanicCache.AcceptOrderByMechanic(request.OrderId.ToString(), request.MechanicId.ToString());
+            var mechanic = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.MechanicId);
+            if (mechanic is null)
+            {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                return Result.Failure("Mechanic not found", ResponseStatus.NotFound);
+            }
 
+            var result = await _asyncRetryPolicy.ExecuteAsync<Result>(async () =>
+            {  
+                try
+                {  
+                    var result = await _mechanicCache.AcceptOrderByMechanic(request.OrderId.ToString(), request.MechanicId.ToString()); 
                     if (result)
-                    {
+                    { 
+                        var @event = new AccountMechanicOrderAcceptedDomainEvent(request.OrderId, request.MechanicId, mechanic.ToString(), mechanic.Rating);
                         return Result.Success(null, ResponseStatus.NoContent);
                     }
 
                     throw new InvalidOperationException();
                 }
                 catch (Exception)
-                {
-                    await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                { 
                     throw;
                 }
             });
+
+            if (result.IsSuccess)
+            {
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
+            }
+            else
+            {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+            }
 
             return result;
         }
         catch (DomainException ex)
         {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);
         }
         catch (Exception ex)
         {
             LoggerHelper.LogError(_logger, ex);
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

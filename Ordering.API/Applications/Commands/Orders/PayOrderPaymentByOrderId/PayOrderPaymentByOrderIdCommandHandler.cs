@@ -2,32 +2,28 @@
 using Core.Exceptions;
 using Core.Messages;
 using Core.Results;
-using MediatR; 
+using MediatR;
 using Ordering.API.Applications.Commands.Orders.CreateOrder;
-using Ordering.API.Applications.Services.Interfaces;
+using Ordering.API.Applications.Commands.Orders.PayOrderPaymentByOrderId; 
 using Ordering.Domain.Aggregates.OrderAggregate;
 using Ordering.Domain.SeedWork;
 using System.Data;
 
 namespace Ordering.API.Applications.Commands.Orders.PayOrder;
 
-public class PayOrderCommandHandler(
-    ILogger<CreateOrderCommandHandler> logger,
-    IPaymentService paymentService,
-    IUnitOfWork unitOfWork) : IRequestHandler<PayOrderCommand, Result>
+public class PayOrderPaymentByOrderIdCommandHandler(
+    ILogger<CreateOrderCommandHandler> logger, 
+    IUnitOfWork unitOfWork) : IRequestHandler<PayOrderPaymentByOrderIdCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly ILogger<CreateOrderCommandHandler> _logger = logger;
-    private readonly IPaymentService _paymentService = paymentService;
-    private const Currency GlobalCurrency = Currency.MYR;
+    private readonly ILogger<CreateOrderCommandHandler> _logger = logger; 
 
-    public async Task<Result> Handle(PayOrderCommand request, CancellationToken cancellationToken)
+    public async Task<Result> Handle(PayOrderPaymentByOrderIdCommand request, CancellationToken cancellationToken)
     {
         await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
         try
         {
-            var order = await _unitOfWork.Orders.GetByIdAsync(request.OrderId, cancellationToken);
-
+            var order = await _unitOfWork.Orders.GetByIdAsync(request.OrderId, cancellationToken); 
             if (order is null)
             {
                 return Result.Failure("Data not found", ResponseStatus.NotFound);
@@ -45,7 +41,7 @@ public class PayOrderCommandHandler(
 
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
-            return Result.Success("Thank you for your payment", ResponseStatus.Ok);
+            return Result.Success("OK", ResponseStatus.Ok);
         }
         catch (ArgumentNullException ex)
         {

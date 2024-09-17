@@ -5,6 +5,7 @@ namespace Ordering.API.Applications.Dtos.Responses;
 public class OrderResponseDto
 { 
     public Guid OrderId { get; private set; }
+    public string Secret { get; private set; }
     public string AddressLine { get; private set; }
     public double Latitude { get; private set; }
     public double Longitude { get; private set; }
@@ -32,6 +33,7 @@ public class OrderResponseDto
 
     public OrderResponseDto(
         Guid orderId,
+        string secret,
         string addressLine,
         double latitude,
         double longitude,
@@ -57,7 +59,10 @@ public class OrderResponseDto
         bool isRated,
         bool isPaymentExpire)
     {
+        if (string.IsNullOrEmpty(secret)) throw new ArgumentNullException(nameof(secret));
+
         OrderId = orderId;
+        Secret = secret;
         AddressLine = addressLine;
         Latitude = latitude;
         Longitude = longitude; 

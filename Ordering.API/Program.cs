@@ -12,6 +12,7 @@ builder.AddCoreOptionConfiguration();
 builder.AddLoggingContext();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddApplicationService();
+builder.Services.AddDataEncryption(builder.Configuration);
 builder.Services.AddMediatorService<IOrderAPIMarkerInterface>();
 builder.Services.AddRedisDatabase();
 builder.Services.AddControllers();
@@ -19,8 +20,7 @@ builder.Services.AddSqlDatabaseContext<OrderDbContext>();
 builder.Services.AddMassTransitContext<OrderDbContext>();
 builder.Services.AddValidation<IOrderAPIMarkerInterface>();
 builder.Services.AddHttpClients();
-builder.Services.AddOpenApi();
-builder.Services.AddDataEncryption(builder.Configuration);
+builder.Services.AddOpenApi(); 
 builder.Services.AddAuth();
 
 var app = builder.Build();

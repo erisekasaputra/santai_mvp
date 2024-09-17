@@ -13,8 +13,9 @@ namespace Ordering.Domain.Aggregates.OrderAggregate;
 
 public class Order : Entity
 {
-    public Address Address { get; private set; }
-    public Buyer Buyer { get; private set; }
+    public string Secret { get; set; }
+    public Address Address { get; private init; }
+    public Buyer Buyer { get; private init; }
     public Mechanic? Mechanic { get; private set; } 
     public OrderStatus Status { get; private set; }
     public ICollection<LineItem> LineItems { get; private set; }
@@ -58,6 +59,7 @@ public class Order : Entity
 
     public Order()
     {
+        Secret = string.Empty;
         Address = null!;
         Buyer = null!;
         LineItems = null!;
@@ -66,7 +68,7 @@ public class Order : Entity
         Fees = null!;
     }
 
-    public Order(
+    public Order( 
         Currency currency,
         string addressLine,
         double latitude,
@@ -77,6 +79,7 @@ public class Order : Entity
         bool isScheduled,
         DateTime? scheduledOnUtc)
     {
+        Secret = string.Empty;
         if (isScheduled && scheduledOnUtc is null || scheduledOnUtc <= DateTime.UtcNow)
         {
             throw new DomainException("Scheduled date can not in the past and can not be null");
@@ -119,6 +122,11 @@ public class Order : Entity
             Status = OrderStatus.FindingMechanic;    
             RaiseOrderFindingMechanicDomainEvent();
         }
+    }
+
+    public void SetSecretKey(string secret)
+    {
+        Secret = secret;
     }
 
     public void SetPaymentPaid(Payment payment)
@@ -284,7 +292,7 @@ public class Order : Entity
         RaiseOrderCancelledByBuyerDomainEvent();
     }
 
-    public void SetServiceInProgress(Guid mechanicId, Guid buyerId, Guid fleetId)
+    public void SetServiceInProgress(Guid mechanicId, string secret, Guid fleetId)
     {
         if (Status is OrderStatus.OrderCancelledByUser)
         {
@@ -299,12 +307,7 @@ public class Order : Entity
         if (mechanicId == Guid.Empty)
         {
             throw new DomainException("Mechanic ID must no be empty");
-        }
-
-        if (buyerId == Guid.Empty)
-        {
-            throw new DomainException("Buyer ID must no be empty");
-        }
+        } 
 
         if (fleetId == Guid.Empty)
         {
@@ -328,16 +331,16 @@ public class Order : Entity
             throw new DomainException("Mechanic ID is missmatch");
         }
 
-        if (!Buyer.BuyerId.Equals(buyerId))
+        if (!Secret.Equals(secret))
         {
-            throw new DomainException("Buyer ID is missmatch");
+            throw new DomainException("Order secret is missmatch");
         }
 
         Status = OrderStatus.ServiceInProgress; 
         RaiseServiceProcessedDomainEvent();
     }
 
-    public void SetServiceCompleted(Guid mechanicId, Guid buyerId, Guid fleetId)
+    public void SetServiceCompleted(Guid mechanicId, string secret, Guid fleetId)
     {
         if (Status is OrderStatus.OrderCancelledByUser)
         {
@@ -352,12 +355,7 @@ public class Order : Entity
         if (mechanicId == Guid.Empty)
         {
             throw new DomainException("Mechanic ID must no be empty");
-        }
-
-        if (buyerId == Guid.Empty)
-        {
-            throw new DomainException("Buyer ID must no be empty");
-        }
+        } 
 
         if (fleetId == Guid.Empty)
         {
@@ -381,7 +379,7 @@ public class Order : Entity
             throw new DomainException("Mechanic ID is missmatch");
         }
 
-        if (!Buyer.BuyerId.Equals(buyerId))
+        if (!Secret.Equals(secret))
         {
             throw new DomainException("Buyer ID is missmatch");
         }
@@ -390,7 +388,7 @@ public class Order : Entity
         RaiseServiceCompletedDomainEvent();
     }
 
-    public void SetServiceIncompleted(Guid mechanicId, Guid buyerId, Guid fleetId)
+    public void SetServiceIncompleted(Guid mechanicId, string secret, Guid fleetId)
     {
         if (Status is OrderStatus.OrderCancelledByUser)
         {
@@ -405,12 +403,7 @@ public class Order : Entity
         if (mechanicId == Guid.Empty)
         {
             throw new DomainException("Mechanic ID must no be empty");
-        }
-
-        if (buyerId == Guid.Empty)
-        {
-            throw new DomainException("Buyer ID must no be empty");
-        }
+        } 
 
         if (fleetId == Guid.Empty)
         {
@@ -429,16 +422,16 @@ public class Order : Entity
             throw new DomainException("Mechanic has not been set");
         }
 
+        if (Secret != secret)
+        {
+            throw new Exception("Order secret is missmatch");
+        }  
+
         if (!Mechanic.MechanicId.Equals(mechanicId))
         {
             throw new DomainException("Mechanic ID is missmatch");
         }
-
-        if (!Buyer.BuyerId.Equals(buyerId))
-        {
-            throw new DomainException("Buyer ID is missmatch");
-        }
-
+         
         Status = OrderStatus.ServiceIncompleted;
         RaiseServiceIncompletedDomainEvent();
     }

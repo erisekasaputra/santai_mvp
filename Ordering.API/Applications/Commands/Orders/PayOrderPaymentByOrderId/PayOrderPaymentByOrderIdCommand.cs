@@ -2,10 +2,10 @@
 using Core.Results;
 using MediatR;
 
-namespace Ordering.API.Applications.Commands.Orders.PayOrder;
+namespace Ordering.API.Applications.Commands.Orders.PayOrderPaymentByOrderId;
 
-public record PayOrderCommand(
-    Guid OrderId, 
+public record PayOrderPaymentByOrderIdCommand(
+    Guid OrderId,
     decimal Amount,
     Currency Currency,
     DateTime PaidAt,

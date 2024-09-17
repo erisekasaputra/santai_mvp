@@ -11,7 +11,7 @@ public class AccountMechanicOrderAcceptedDomainEventHandler(
     public async Task Handle(AccountMechanicOrderAcceptedDomainEvent notification, CancellationToken cancellationToken)
     {
         await _mediator.Publish(
-            new AccountMechanicOrderAcceptedIntegrationEvent(notification.OrderId, notification.MechanicId),
+            new AccountMechanicOrderAcceptedIntegrationEvent(notification.OrderId, notification.MechanicId, notification.Name, notification.Performance),
             cancellationToken);
     }
 }

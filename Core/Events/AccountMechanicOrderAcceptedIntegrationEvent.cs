@@ -3,4 +3,4 @@ using MediatR;
 
 namespace Core.Events;
 
-public record AccountMechanicOrderAcceptedIntegrationEvent(Guid OrderId, Guid MechanicId) : INotification;
+public record AccountMechanicOrderAcceptedIntegrationEvent(Guid OrderId, Guid MechanicId, string Name, decimal Performance) : INotification;

@@ -29,10 +29,8 @@ public class DeactivateMechanicStatusByUserIdCommandHandler : IRequestHandler<De
         _cache = cache;
         _unitOfWork = unitOfWork;
         _logger = logger;
-        _asyncRetryPolicy = Policy
-            .Handle<DBConcurrencyException>()
-            .Or<DbUpdateException>()
-            .Or<DbException>()
+        _asyncRetryPolicy = Policy 
+            .Handle<DbException>() 
             .Or<InvalidOperationException>()
             .WaitAndRetryAsync(3, retryAttempt =>
                 TimeSpan.FromSeconds(Math.Pow(1, retryAttempt)),
@@ -43,38 +41,54 @@ public class DeactivateMechanicStatusByUserIdCommandHandler : IRequestHandler<De
     }
     public async Task<Result> Handle(DeactivateMechanicStatusByUserIdCommand request, CancellationToken cancellationToken)
     {
+        await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, cancellationToken);
         try
         {
+            var mechanic = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.MechanicId); 
+            if (mechanic is null)
+            {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                return Result.Failure("Mechanic not found", ResponseStatus.NotFound);
+            }
+
+
             var result = await _asyncRetryPolicy.ExecuteAsync<Result>(async () =>
             {
-                await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, cancellationToken);
-                try
+                if (!mechanic.IsVerified)
                 {
-                    var result = await _cache.Deactivate(request.MechanicId.ToString());
-
-                    if (result)
-                    {
-                        return Result.Success(null, ResponseStatus.NoContent);
-                    }
-
-                    throw new InvalidOperationException();
+                    return Result.Failure("You account has not been verified", ResponseStatus.BadRequest);
                 }
-                catch (Exception)
-                {
-                    await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                    throw;
+
+                var result = await _cache.Deactivate(request.MechanicId.ToString());
+
+                if (result)
+                { 
+                    return Result.Success(null, ResponseStatus.NoContent);
                 }
+
+                throw new InvalidOperationException();
             });
+
+            if (result.IsSuccess) 
+            {
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
+            }
+            else
+            {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+            }
 
             return result;
         }
         catch (DomainException ex)
         {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);
         }
         catch (Exception ex)
         {
             LoggerHelper.LogError(_logger, ex);
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
     }

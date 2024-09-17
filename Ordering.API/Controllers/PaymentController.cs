@@ -1,4 +1,4 @@
-﻿using Core.Enumerations;
+﻿ 
 using Core.Messages;
 using Core.Results;
 using Core.Services.Interfaces;
@@ -6,8 +6,7 @@ using Core.Utilities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Ordering.API.Applications.Commands.Orders.CreateOrder;
-using Ordering.API.Applications.Commands.Orders.PayOrder;
+using Ordering.API.Applications.Commands.Orders.PayOrderPaymentByOrderId;
 using Ordering.API.Applications.Dtos.Requests;
 using Ordering.API.CustomAttributes;
 using Ordering.API.Extensions;
@@ -47,7 +46,13 @@ public class PaymentController
                 return TypedResults.Forbid();
             } 
              
-            var command = new PayOrderCommand(request.OrderId, request.Amount, request.Currency, request.PaidAt, request.PaymentMethod, request.BankReference);
+            var command = new PayOrderPaymentByOrderIdCommand(
+                request.OrderId,
+                request.Amount,
+                request.Currency,
+                request.PaidAt,
+                request.PaymentMethod,
+                request.BankReference);
 
             var result = await _mediator.Send(command);
 
