@@ -21,7 +21,7 @@ public class AccountServiceAPI : IAccountServiceAPI
 
             var response = await _httpClient.GetAsync(endpoint);
               
-            response.EnsureSuccessStatusCode(); 
+            //response.EnsureSuccessStatusCode(); 
             string content = await response.Content.ReadAsStringAsync(); 
             return (JsonConvert.DeserializeObject<ResultResponseDto<TDataType>>(content), true);
         } 

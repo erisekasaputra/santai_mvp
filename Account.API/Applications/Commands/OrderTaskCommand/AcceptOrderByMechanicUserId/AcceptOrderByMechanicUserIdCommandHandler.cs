@@ -63,6 +63,7 @@ public class AcceptOrderByMechanicUserIdCommandHandler : IRequestHandler<AcceptO
                     if (result)
                     { 
                         var @event = new AccountMechanicOrderAcceptedDomainEvent(request.OrderId, request.MechanicId, mechanic.ToString(), mechanic.Rating);
+                        await _mediator.Publish(@event);
                         return Result.Success(null, ResponseStatus.NoContent);
                     }
 

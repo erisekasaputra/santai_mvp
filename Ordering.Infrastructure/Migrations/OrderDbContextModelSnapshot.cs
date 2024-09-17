@@ -528,8 +528,13 @@ namespace Ordering.Infrastructure.Migrations
                     b.Property<DateTime?>("ScheduledOnUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
+                    b.Property<string>("Secret")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TotalCanceledByMechanic")
                         .ValueGeneratedOnAdd()
@@ -580,6 +585,9 @@ namespace Ordering.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsEventProcessed")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("IsPaid")
                         .HasColumnType("bit");
 
                     b.Property<Guid>("OrderId")

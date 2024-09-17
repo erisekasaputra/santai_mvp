@@ -56,7 +56,7 @@ public static class UserApi
 
     private static async Task<IResult> GetByUserId(
         Guid userId,
-        [FromBody] FleetsRequestDto request,
+        [AsParameters] FleetsRequestDto request,
         [FromServices] ApplicationService service,
         [FromServices] IUserInfoService userInfoService)
     {

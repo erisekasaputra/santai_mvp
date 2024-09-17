@@ -9,6 +9,11 @@ public class ScheduledOrder : Entity
     public bool IsPaid { get; set; }
     public bool IsEventProcessed { get; set; }
 
+    public ScheduledOrder()
+    {
+
+    }
+
     public ScheduledOrder(
         Guid orderId,
         DateTime scheduledAt,
