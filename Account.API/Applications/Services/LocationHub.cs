@@ -1,6 +1,5 @@
 ﻿using Account.API.Applications.Models;
-using Account.API.Applications.Services.Interfaces;
-using Core.Models;
+using Account.API.Applications.Services.Interfaces; 
 using Core.Services.Interfaces;
 using Microsoft.AspNetCore.SignalR; 
 
@@ -9,8 +8,7 @@ namespace Account.API.Applications.Services;
 public class LocationHub : Hub
 {
     private readonly IMechanicCache _cache;
-    private readonly IUserInfoService _userInfoService;
-    private UserClaim? claims;
+    private readonly IUserInfoService _userInfoService; 
     public LocationHub(
         IMechanicCache mechanicCache,
         IUserInfoService userInfoService)
@@ -20,13 +18,7 @@ public class LocationHub : Hub
     }
 
     public override Task OnConnectedAsync()
-    {
-        //claims = _userInfoService.GetUserInfo(); 
-        //if (claims is null || claims.Sub == Guid.Empty || claims.CurrentUserType != Core.Enumerations.UserType.MechanicUser)
-        //{
-        //    Context.Abort(); 
-        //} 
-
+    { 
         return base.OnConnectedAsync();
     }
 

@@ -39,14 +39,9 @@ public class SetItemPriceCommandHandler : IRequestHandler<SetItemPriceCommand, R
         {
             try
             {
-                int numberOfErrors = 0;
-            
-
+                int numberOfErrors = 0; 
                 await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
-
-
-
-
+                 
 
                 // Extract the item IDs from the request
                 var requestItemIds = request.Items.Select(x => x.ItemId).ToList();

@@ -39,9 +39,7 @@ public class AddItemStockQuantityCommandHandler : IRequestHandler<AddItemStockQu
             try
             {  
                 await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
-
-
-
+                 
 
                 // Extract the item IDs from the request
                 var requestItemIds = request.Items.Select(x => x.ItemId).ToList();
@@ -54,8 +52,7 @@ public class AddItemStockQuantityCommandHandler : IRequestHandler<AddItemStockQu
                 {
                     var message = "There are serveral missing items";
 
-                    await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-
+                    await _unitOfWork.RollbackTransactionAsync(cancellationToken); 
                     return Result.Failure(message, ResponseStatus.NotFound)
                         .WithData(missingItems.ToFailedItemsDto());
                 }
@@ -70,6 +67,7 @@ public class AddItemStockQuantityCommandHandler : IRequestHandler<AddItemStockQu
                     var quantity = request.Items.First(x => x.ItemId == item.Id).Quantity;
                     if (quantity <= 0)
                     {
+                        await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                         return Result.Failure("Can not set quantity request with zero or negative", ResponseStatus.BadRequest);
                     }
 
@@ -106,10 +104,12 @@ public class AddItemStockQuantityCommandHandler : IRequestHandler<AddItemStockQu
             }
             catch (DBConcurrencyException)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 throw;
             }
             catch
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 throw;
             }
         });

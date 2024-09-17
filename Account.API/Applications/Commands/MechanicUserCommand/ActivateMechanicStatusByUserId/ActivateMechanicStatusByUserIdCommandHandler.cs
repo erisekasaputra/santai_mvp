@@ -50,6 +50,7 @@ public class ActivateMechanicStatusByUserIdCommandHandler : IRequestHandler<Acti
             
             if (mechanic is null)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result.Failure("Mechanic not found", ResponseStatus.NotFound);    
             }
 

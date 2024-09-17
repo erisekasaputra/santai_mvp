@@ -43,10 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Applications\Commands\Orders\AssignOrderMechanic\" />
-    <Folder Include="Applications\Commands\Orders\CancelOrderByMechanic\" />
     <Folder Include="Applications\IntegrationEventHandlers\" />
-    <Folder Include="Applications\Queries\" />
   </ItemGroup>
 
 </Project>

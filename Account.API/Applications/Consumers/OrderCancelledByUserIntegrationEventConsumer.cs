@@ -1,29 +1,22 @@
-﻿
-using Account.API.Applications.Commands.OrderTaskCommand.CancelOrderByUserByOrderId;
-using Azure;
-using Core.Events;
-using Core.Results;
+﻿using Account.API.Applications.Services.Interfaces;
+using Core.Events; 
 using MassTransit;
-using MediatR;
 
 namespace Account.API.Applications.Consumers;
 
 public class OrderCancelledByUserIntegrationEventConsumer(
-    IMediator mediator) : IConsumer<OrderCancelledByUserIntegrationEvent>
+    IMechanicCache mechanicCache) : IConsumer<OrderCancelledByUserIntegrationEvent>
 {
-    private readonly IMediator _mediator = mediator; 
+    private readonly IMechanicCache _mechanicCache = mechanicCache; 
     public async Task Consume(ConsumeContext<OrderCancelledByUserIntegrationEvent> context)
     {
-        var command = new CancelOrderByUserByOrderIdCommand(context.Message.UserId, context.Message.OrderId);
+        var result = await _mechanicCache.CancelOrderByUser(
+            context.Message.UserId.ToString(),
+            context.Message.OrderId.ToString());
 
-        var result = await _mediator.Send(command);
-
-        if (!result.IsSuccess)
+        if (result)
         {
-            if (result.ResponseStatus is not ResponseStatus.NotFound and ResponseStatus.BadRequest)
-            {
-                throw new Exception(result.Message);
-            }
+            throw new Exception("Failed when cancelling the order {context.Message.OrderId} by buyer");
         }
     }
 }

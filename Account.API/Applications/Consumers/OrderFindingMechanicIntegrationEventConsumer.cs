@@ -1,26 +1,23 @@
-﻿using Account.API.Applications.Commands.OrderTaskCommand.CreateOrderTask; 
-using Core.Events;
-using Core.Results;
-using MassTransit;
-using MediatR;
+﻿using Account.API.Applications.Models;
+using Account.API.Applications.Services.Interfaces;
+using Core.Events; 
+using MassTransit; 
 
 namespace Account.API.Applications.Consumers;
 
 public class OrderFindingMechanicIntegrationEventConsumer(
-    IMediator mediator) : IConsumer<OrderFindingMechanicIntegrationEvent>
+    IMechanicCache cache) : IConsumer<OrderFindingMechanicIntegrationEvent>
 {
-    private readonly IMediator _mediator = mediator;
+    private readonly IMechanicCache _cache = cache;
     public async Task Consume(ConsumeContext<OrderFindingMechanicIntegrationEvent> context)
     {
-        var order = context.Message;
-        var result = await _mediator.Send(new CreateOrderTaskCommand(order.BuyerId, order.OrderId, order.Latitude, order.Longitude));
-
-        if (!result.IsSuccess)
-        {
-            if (result.ResponseStatus is not ResponseStatus.NotFound and ResponseStatus.BadRequest)
-            {
-                throw new Exception(result.Message);
-            }
-        }
+        await _cache.CreateOrderToQueueAndHash(
+                   new OrderTask(
+                       context.Message.BuyerId.ToString(),
+                       context.Message.OrderId.ToString(),
+                       string.Empty,
+                       context.Message.Latitude,
+                       context.Message.Longitude,
+                       OrderTaskStatus.WaitingMechanic));
     }
 }

@@ -57,8 +57,9 @@ public class CreateRegularUserCommandHandler(
                   addressRequest.PostalCode,
                   addressRequest.Country);
 
-            if (await _unitOfWork.BaseUsers.GetAnyByIdAsync(request.IdentityId)) 
+            if (await _unitOfWork.BaseUsers.GetAnyByIdAsync(request.IdentityId))
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result.Failure("User already registered", ResponseStatus.Conflict);
             }
 

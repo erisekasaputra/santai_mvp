@@ -220,9 +220,10 @@ public class OrderController : ControllerBase
         } 
     }
 
-    [HttpPatch("{orderId}/service/start")]
+    [HttpPatch("{orderId}/service/fleet/{fleetId}/start")]
     public async Task<IResult> SetServiceInProgress(
         Guid orderId,
+        Guid fleetId,
         [FromBody] OrderSecretRequest request)
     { 
         try
@@ -235,7 +236,7 @@ public class OrderController : ControllerBase
 
             var result = await _mediator.Send(
                 new SetServiceInProgressByOrderIdAndMechanicIdCommand(
-                    orderId, userClaim.Sub, request.Secret));
+                    orderId, userClaim.Sub, request.Secret, fleetId));
 
             return result.ToIResult();
         }
@@ -248,9 +249,10 @@ public class OrderController : ControllerBase
     }
 
 
-    [HttpPatch("{orderId}/service/success")]
+    [HttpPatch("{orderId}/service/fleet/{fleetId}/success")]
     public async Task<IResult> SetServiceCompleted(
         Guid orderId,
+        Guid fleetId,
         [FromBody] OrderSecretRequest request)
     {
 
@@ -263,7 +265,7 @@ public class OrderController : ControllerBase
             }
 
             var result = await _mediator.Send(
-                new SetServiceSuccessByOrderIdAndMechanicIdCommand(orderId, userClaim.Sub, request.Secret));
+                new SetServiceSuccessByOrderIdAndMechanicIdCommand(orderId, userClaim.Sub, request.Secret, fleetId));
 
             return result.ToIResult();
         }
@@ -275,9 +277,10 @@ public class OrderController : ControllerBase
         }
     }
 
-    [HttpPatch("{orderId}/service/failed")]
+    [HttpPatch("{orderId}/service/fleet/{fleetId}failed")]
     public async Task<IResult> SetServiceIncompleted(
         Guid orderId,
+        Guid fleetId,
         [FromBody] OrderSecretRequest request)
     {
 
@@ -290,7 +293,7 @@ public class OrderController : ControllerBase
             }
 
             var result = await _mediator.Send(
-                new SetServiceFailedByOrderIdAndMechanicIdCommand(orderId, userClaim.Sub, request.Secret));
+                new SetServiceFailedByOrderIdAndMechanicIdCommand(orderId, userClaim.Sub, fleetId, request.Secret));
 
             return result.ToIResult();
         }

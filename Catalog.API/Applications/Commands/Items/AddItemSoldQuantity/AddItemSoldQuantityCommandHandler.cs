@@ -50,8 +50,7 @@ public class AddItemSoldQuantityCommandHandler : IRequestHandler<AddItemSoldQuan
                 {
                     var message = "There are serveral missing items";
 
-                    await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-
+                    await _unitOfWork.RollbackTransactionAsync(cancellationToken); 
                     return Result.Failure(message, ResponseStatus.NotFound)
                         .WithData(missingItems.ToFailedItemsDto());
                 }
@@ -66,6 +65,7 @@ public class AddItemSoldQuantityCommandHandler : IRequestHandler<AddItemSoldQuan
                     var quantity = request.Items.First(x => x.ItemId == item.Id).Quantity;
                     if (quantity <= 0)
                     {
+                        await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                         return Result.Failure("Can not set quantity request with zero or negative", ResponseStatus.BadRequest);
                     }
 
@@ -86,25 +86,25 @@ public class AddItemSoldQuantityCommandHandler : IRequestHandler<AddItemSoldQuan
 
                 if (itemErrors.Count == 0)
                 {
-                    await _unitOfWork.CommitTransactionAsync(cancellationToken);
-
+                    await _unitOfWork.CommitTransactionAsync(cancellationToken); 
                     return Result.Success(
                         items.ToItemsDto(), 
                         ResponseStatus.Ok);
                 }
 
-                var messageError = "There are several items with error result"; 
-
+                var messageError = "There are several items with error result";  
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken); 
                 return Result.Failure(messageError, ResponseStatus.UnprocessableEntity)
                     .WithData(itemErrors);
             }
             catch (DBConcurrencyException)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 throw;
             }
             catch
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 throw;
             }
         });

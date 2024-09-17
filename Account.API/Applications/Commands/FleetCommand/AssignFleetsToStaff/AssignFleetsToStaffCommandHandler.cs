@@ -80,6 +80,7 @@ public class AssignFleetsToStaffCommandHandler : IRequestHandler<AssignFleetsToS
                         .Where(x => !fleetIds.Contains(x))
                         .Select((fleetId, index) => new ErrorDetail($"Fleet[{index}].Id", "Fleet not found")));
 
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result.Failure($"{notFoundFleet} fleet(s) {(notFoundFleet <= 1 ? "was" : "were")} not found", ResponseStatus.BadRequest)
                     .WithErrors(errors);
             }

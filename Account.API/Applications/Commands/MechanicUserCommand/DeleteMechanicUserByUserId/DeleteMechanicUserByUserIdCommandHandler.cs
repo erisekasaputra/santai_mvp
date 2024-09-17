@@ -5,6 +5,7 @@ using Core.Messages;
 using Core.Exceptions;
 using Account.API.Applications.Services.Interfaces;
 using Core.Utilities;
+using System.Data;
 
 namespace Account.API.Applications.Commands.MechanicUserCommand.DeleteMechanicUserByUserId;
 
@@ -27,7 +28,7 @@ public class DeleteMechanicUserByUserIdCommandHandler : IRequestHandler<DeleteMe
 
     public async Task<Result> Handle(DeleteMechanicUserByUserIdCommand request, CancellationToken cancellationToken)
     {
-        await _unitOfWork.BeginTransactionAsync(System.Data.IsolationLevel.ReadCommitted, cancellationToken);
+        await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
         try
         {
             await _cache.PingAsync(); 
@@ -35,6 +36,7 @@ public class DeleteMechanicUserByUserIdCommandHandler : IRequestHandler<DeleteMe
 
             if (mechanicUser is null)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound)
                      .WithError(new("MechanicUser.Id", "Mechanic user not found"));
             }
@@ -49,7 +51,8 @@ public class DeleteMechanicUserByUserIdCommandHandler : IRequestHandler<DeleteMe
             return Result.Success(null, ResponseStatus.NoContent);
         }
         catch (DomainException ex)
-        { 
+        {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);
         }
         catch (Exception ex)

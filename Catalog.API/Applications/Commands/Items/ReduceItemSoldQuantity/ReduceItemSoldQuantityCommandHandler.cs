@@ -68,6 +68,7 @@ public class ReduceItemSoldQuantityCommandHandler : IRequestHandler<ReduceItemSo
                     var quantity = request.Items.First(x => x.ItemId == item.Id).Quantity;
                     if (quantity <= 0)
                     {
+                        await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                         return Result.Failure("Can not set quantity request with zero or negative", ResponseStatus.BadRequest);
                     }
 
@@ -101,10 +102,12 @@ public class ReduceItemSoldQuantityCommandHandler : IRequestHandler<ReduceItemSo
             }
             catch (DBConcurrencyException)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 throw;
             }
             catch
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 throw;
             }
         });

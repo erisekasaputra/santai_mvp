@@ -87,4 +87,13 @@ public class OrderRepository : IOrderRepository
 
         return (totalCount, totalPages, items);
     }
+
+    public async Task<string?> GetOrderSecretByOrderIdAndUserId(Guid orderId, Guid userId, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Orders
+            .AsNoTracking()
+            .Where(x => x.Id == orderId && x.Buyer.BuyerId == userId)
+            .Select(x => x.Secret) 
+            .FirstOrDefaultAsync(cancellationToken);
+    }
 }

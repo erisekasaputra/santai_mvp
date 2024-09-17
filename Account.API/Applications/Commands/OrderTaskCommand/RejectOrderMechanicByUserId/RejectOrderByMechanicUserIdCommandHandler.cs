@@ -44,11 +44,11 @@ public class RejectOrderByMechanicUserIdCommandHandler : IRequestHandler<RejectO
 
     public async Task<Result> Handle(RejectOrderByMechanicUserIdCommand request, CancellationToken cancellationToken)
     {
+        await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, cancellationToken);
         try
         {
             var result = await _asyncRetryPolicy.ExecuteAsync<Result>(async () =>
             {
-                await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, cancellationToken);
                 try
                 {
                     var result = await _mechanicCache.RejectOrderByMechanic(request.MechanicId.ToString(), request.OrderId.ToString()); 
@@ -60,20 +60,30 @@ public class RejectOrderByMechanicUserIdCommandHandler : IRequestHandler<RejectO
                     throw new InvalidOperationException();
                 }
                 catch (Exception)
-                {
-                    await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                { 
                     throw;
                 }
             });
+
+            if (result.IsSuccess) 
+            { 
+                await _unitOfWork.CommitTransactionAsync(cancellationToken);
+            }
+            else
+            { 
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+            }
 
             return result;
         }
         catch (DomainException ex)
         {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);
         }
         catch (Exception ex)
         {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             LoggerHelper.LogError(_logger, ex);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
