@@ -651,7 +651,7 @@ public class MechanicCache : IMechanicCache
                         return;
                     }
 
-                    if (mechanicData.Status is MechanicStatus.Unavailable)
+                    if (mechanicData.Status is MechanicStatus.Unavailable || mechanicData.Status is MechanicStatus.Bussy)
                     {
                         await DeleteKeyAsync(db, lockResource!);
                     }

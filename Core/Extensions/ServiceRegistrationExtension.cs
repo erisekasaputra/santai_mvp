@@ -311,7 +311,8 @@ public static class ServiceRegistrationExtension
         builder.Services.Configure<RateLimiterRuleConfiguration>(builder.Configuration.GetSection(RateLimiterRuleConfiguration.SectionName));
         builder.Services.Configure<ReferralProgramConfiguration>(builder.Configuration.GetSection(ReferralProgramConfiguration.SectionName));
         builder.Services.Configure<StorageConfiguration>(builder.Configuration.GetSection(StorageConfiguration.SectionName)); 
-        builder.Services.Configure<CatalogServiceConfiguration>(builder.Configuration.GetSection(CatalogServiceConfiguration.SectionName)); 
+        builder.Services.Configure<CatalogServiceConfiguration>(builder.Configuration.GetSection(CatalogServiceConfiguration.SectionName));
+        builder.Services.Configure<SafelyShutdownConfiguration>(builder.Configuration.GetSection(SafelyShutdownConfiguration.SectionName));
         return builder;
     }
 
@@ -332,6 +333,7 @@ public static class ServiceRegistrationExtension
         builder.Services.Configure<ReferralProgramConfiguration>(builder.Configuration.GetSection(ReferralProgramConfiguration.SectionName));
         builder.Services.Configure<StorageConfiguration>(builder.Configuration.GetSection(StorageConfiguration.SectionName));
         builder.Services.Configure<CatalogServiceConfiguration>(builder.Configuration.GetSection(CatalogServiceConfiguration.SectionName));
+        builder.Services.Configure<SafelyShutdownConfiguration>(builder.Configuration.GetSection(SafelyShutdownConfiguration.SectionName));
         return builder;
     }
 }

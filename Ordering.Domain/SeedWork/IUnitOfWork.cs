@@ -1,4 +1,5 @@
-﻿using Ordering.Domain.Aggregates.OrderAggregate;
+﻿using Ordering.Domain.Aggregates.CouponAggregate;
+using Ordering.Domain.Aggregates.OrderAggregate;
 using Ordering.Domain.Aggregates.ScheduledOrderAggregate;
 using System.Data;
 
@@ -6,6 +7,7 @@ namespace Ordering.Domain.SeedWork;
 
 public interface IUnitOfWork
 {
+    ICouponRepository Coupons { get; }
     IOrderRepository Orders { get; }
     IScheduledOrderRepository ScheduledOrders { get; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

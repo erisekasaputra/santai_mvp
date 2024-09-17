@@ -62,7 +62,7 @@ public class CreateOrderCommandHandler(
 
             if (buyer.Data.UnknownFleets.Any())
             {
-                return Result.Failure("There are severals fleet that does not exists", 
+                return Result.Failure("There are severals fleet that does not exist", 
                     ResponseStatus.UnprocessableEntity)
                     .WithError(new ErrorDetail("Fleets", "There are severals fleets not found"))
                     .WithData(new 
@@ -230,17 +230,42 @@ public class CreateOrderCommandHandler(
 
         if (!string.IsNullOrWhiteSpace(command.CouponCode))
         {
-            order.ApplyDiscount(Discount.CreateValueDiscount(order.Id, command.CouponCode, 10, command.Currency, 10));
+            var coupon = await _unitOfWork.Coupons.GetByCodeAsync(command.CouponCode); 
+            if (coupon is null)
+            {
+                await RollbackAndRecoveryStockAsync(command.LineItems, cancellationToken);
+                return Result.Failure("Coupon code does not exist", ResponseStatus.NotFound)
+                    .WithError(new("Coupon.Code", "Coupon not found"));
+            }
+
+            if (coupon.CouponValueType == PercentageOrValueType.Percentage)
+            {
+                order.ApplyDiscount(
+                    Discount.CreatePercentageDiscount(
+                        order.Id,
+                        command.CouponCode,
+                        coupon.ValuePercentage,
+                        coupon.MinimumOrderValue,
+                        coupon.Currency)); 
+            }
+            else if (coupon.CouponValueType == PercentageOrValueType.Value) 
+            {
+                order.ApplyDiscount(
+                    Discount.CreateValueDiscount(
+                        order.Id,
+                        command.CouponCode,
+                        coupon.ValueAmount,
+                        coupon.Currency,
+                        coupon.MinimumOrderValue));
+            } 
         }
 
-        order.ApplyTax(new Tax(10, command.Currency));
+        //order.ApplyTax(new Tax(10, command.Currency));
 
-        order.ApplyFee(Fee.CreateByValue(order.Id, FeeDescription.MechanicFee, 10, command.Currency));
-
+        order.ApplyFee(Fee.CreateByValue(order.Id, FeeDescription.MechanicFee, 10, command.Currency)); 
         order.ApplyFee(Fee.CreateByValue(order.Id, FeeDescription.ServiceFee, 10, command.Currency));
 
-        order.CalculateGrandTotal();
-
+        order.CalculateGrandTotal(); 
         await _unitOfWork.Orders.CreateAsync(order, cancellationToken);
 
         if (order.IsShouldRequestPayment)

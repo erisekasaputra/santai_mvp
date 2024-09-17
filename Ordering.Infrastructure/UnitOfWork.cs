@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage; 
+using Microsoft.EntityFrameworkCore.Storage;
+using Ordering.Domain.Aggregates.CouponAggregate;
 using Ordering.Domain.Aggregates.OrderAggregate;
 using Ordering.Domain.Aggregates.ScheduledOrderAggregate;
 using Ordering.Domain.SeedWork;
@@ -15,11 +16,10 @@ public class UnitOfWork : IUnitOfWork
 
     private readonly IMediator _mediator;
 
-    private IDbContextTransaction? _transaction;
-
-    public IOrderRepository Orders { get; }
-
+    private IDbContextTransaction? _transaction; 
+    public IOrderRepository Orders { get; } 
     public IScheduledOrderRepository ScheduledOrders { get; }
+    public ICouponRepository Coupons { get; }
 
     public UnitOfWork(OrderDbContext dbContext, IMediator mediator)
     {
@@ -27,6 +27,7 @@ public class UnitOfWork : IUnitOfWork
         _mediator = mediator;
         Orders = new OrderRepository(dbContext);
         ScheduledOrders = new ScheduledOrderRepository(dbContext);
+        Coupons = new CouponRepository(dbContext);
     }
 
     public async Task BeginTransactionAsync(IsolationLevel isolationLevel = IsolationLevel.ReadCommitted, CancellationToken cancellationToken = default)
@@ -51,7 +52,7 @@ public class UnitOfWork : IUnitOfWork
             await SaveChangesAsync(cancellationToken);
             await _transaction.CommitAsync(cancellationToken);
         }
-        catch(Exception ex)
+        catch(Exception)
         {
             await RollbackTransactionAsync(cancellationToken);
             throw;

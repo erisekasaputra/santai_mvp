@@ -1,27 +1,5 @@
 [
   {
-    "ContainingType": "Account.API.API.UserApi",
-    "Method": "GetByUserId",
-    "RelativePath": "api/v1/users/{userId}",
-    "HttpMethod": "GET",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "userId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
     "ContainingType": "Account.API.API.FleetApi",
     "Method": "CreateFleetByUserId",
     "RelativePath": "api/v1/users/{userId}/fleet/",
@@ -155,6 +133,33 @@
       {
         "Name": "request",
         "Type": "Account.API.Applications.Dtos.RequestDtos.UpdateFleetRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.UserApi",
+    "Method": "GetByUserId",
+    "RelativePath": "api/v1/users/{userId}/info",
+    "HttpMethod": "POST",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.FleetsRequestDto",
         "IsRequired": true
       }
     ],

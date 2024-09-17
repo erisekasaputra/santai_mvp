@@ -1,5 +1,6 @@
-﻿using Account.API.Applications.Services.Interfaces;  
-using Core.Utilities;  
+﻿using Account.API.Applications.Services.Interfaces;
+using Core.Configurations; 
+using Microsoft.Extensions.Options;
 
 namespace Account.API.Applications.Services; 
  
@@ -20,12 +21,21 @@ public class OrderWaitingMechanicAssignJob : BackgroundService
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     { 
-        while (true)
+        while (!stoppingToken.IsCancellationRequested)
         {
             using var scope = _scopeFactory.CreateScope(); 
-            _mechanicCache = scope.ServiceProvider.GetRequiredService<IMechanicCache>(); 
+            _mechanicCache = scope.ServiceProvider.GetRequiredService<IMechanicCache>();
+
+            var isShutdown = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<SafelyShutdownConfiguration>>(); 
+            if (isShutdown.CurrentValue.Shutdown)
+            {
+                await Task.Delay(1000);
+                continue;
+            }
+
+
             await _mechanicCache.ProcessOrdersWaitingMechanicAssignFromQueueAsync();
-            await Task.Delay(1000);
+            await Task.Delay(500);
         }
     }
 } 

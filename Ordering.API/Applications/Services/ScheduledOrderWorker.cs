@@ -1,6 +1,8 @@
 ﻿
+using Core.Configurations;
 using Core.Exceptions;
 using Core.Utilities;
+using Microsoft.Extensions.Options;
 using Ordering.Domain.SeedWork;
 using System.Data;
 
@@ -25,6 +27,15 @@ public class ScheduledOrderWorker : BackgroundService
         {
             using var scope = _scopeFactory.CreateScope(); 
             var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
+
+            var isShutdown = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<SafelyShutdownConfiguration>>();
+            if (isShutdown.CurrentValue.Shutdown)
+            {
+                await Task.Delay(1000);
+                continue;
+            }
+
+
 
 
             try
