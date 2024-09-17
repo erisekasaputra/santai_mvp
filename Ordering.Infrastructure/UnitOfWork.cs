@@ -51,7 +51,7 @@ public class UnitOfWork : IUnitOfWork
             await SaveChangesAsync(cancellationToken);
             await _transaction.CommitAsync(cancellationToken);
         }
-        catch(Exception)
+        catch(Exception ex)
         {
             await RollbackTransactionAsync(cancellationToken);
             throw;

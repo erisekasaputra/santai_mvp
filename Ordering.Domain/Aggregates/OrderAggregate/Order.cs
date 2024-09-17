@@ -206,7 +206,7 @@ public class Order : Entity
         Mechanic = null;
         TotalCanceledByMechanic++;
         Status = OrderStatus.FindingMechanic;   
-        RaiseOrderCancelledByMechanicDomainEvent(); 
+        RaiseOrderCancelledByMechanicDomainEvent(mechanicId); 
     }
 
     private bool IsCancelableByBuyer(Guid buyerId, out string errorMessage)
@@ -786,9 +786,9 @@ public class Order : Entity
         AddDomainEvent(new MechanicAssignedDomainEvent(this));
     }
 
-    private void RaiseOrderCancelledByMechanicDomainEvent()
+    private void RaiseOrderCancelledByMechanicDomainEvent(Guid mechanicId)
     {
-        AddDomainEvent(new OrderCancelledByMechanicDomainEvent(this));
+        AddDomainEvent(new OrderCancelledByMechanicDomainEvent(Id, Buyer.BuyerId, mechanicId));
     }
 
     private void RaiseOrderPaymentPaidDomainEvent()
