@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Polly;
 using Polly.Retry;
 using System.Data;
+using System.Data.Common;
 
 namespace Account.API.Applications.Commands.MechanicUserCommand.ActivateMechanicStatusByUserId;
 
@@ -29,9 +30,11 @@ public class ActivateMechanicStatusByUserIdCommandHandler : IRequestHandler<Acti
         _unitOfWork = unitOfWork; 
         _logger = logger; 
         _asyncRetryPolicy = Policy
-            .Handle<DBConcurrencyException>()  
-            .Or<DbUpdateException>()  
-            .WaitAndRetryAsync(2, retryAttempt =>
+            .Handle<DBConcurrencyException>()
+            .Or<DbUpdateException>()
+            .Or<DbException>()
+            .Or<InvalidOperationException>()
+            .WaitAndRetryAsync(3, retryAttempt =>
                 TimeSpan.FromSeconds(Math.Pow(1, retryAttempt)), 
                 onRetry: (exception, timeSpan, retryCount, context) =>
                 {
@@ -54,7 +57,7 @@ public class ActivateMechanicStatusByUserIdCommandHandler : IRequestHandler<Acti
                         return Result.Success(null, ResponseStatus.NoContent);
                     }
 
-                    throw new Exception();
+                    throw new InvalidOperationException();
                 }
                 catch (Exception)
                 {

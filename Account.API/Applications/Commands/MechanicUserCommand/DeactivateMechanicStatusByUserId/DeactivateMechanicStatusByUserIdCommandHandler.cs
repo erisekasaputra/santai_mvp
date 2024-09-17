@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Polly;
 using Polly.Retry;
 using System.Data;
+using System.Data.Common;
 
 namespace Account.API.Applications.Commands.MechanicUserCommand.DeactivateMechanicStatusByUserId;
 
@@ -30,8 +31,10 @@ public class DeactivateMechanicStatusByUserIdCommandHandler : IRequestHandler<De
         _logger = logger;
         _asyncRetryPolicy = Policy
             .Handle<DBConcurrencyException>()
-            .Or<DbUpdateException>() 
-            .WaitAndRetryAsync(2, retryAttempt =>
+            .Or<DbUpdateException>()
+            .Or<DbException>()
+            .Or<InvalidOperationException>()
+            .WaitAndRetryAsync(3, retryAttempt =>
                 TimeSpan.FromSeconds(Math.Pow(1, retryAttempt)),
                 onRetry: (exception, timeSpan, retryCount, context) =>
                 {

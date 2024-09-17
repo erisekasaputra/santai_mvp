@@ -24,14 +24,12 @@ using Account.API.Applications.Queries.GetPaginatedMechanicCertificationByUserId
 using Account.API.Applications.Queries.GetPaginatedMechanicUser;
 using Account.API.Applications.Services; 
 using Account.API.CustomAttributes;
-using Account.API.Extensions;
-using Account.Domain.Aggregates.UserAggregate;
+using Account.API.Extensions; 
 using Core.Configurations;
 using Core.Dtos;
 using Core.Enumerations;
 using Core.Messages;
-using Core.SeedWorks;
-using Core.Services;
+using Core.SeedWorks; 
 using Core.Services.Interfaces;
 using FluentValidation; 
 using Microsoft.AspNetCore.Mvc;
@@ -112,10 +110,10 @@ public static class MechanicUserApi
         app.MapPatch("/{mechanicUserId}/device-id/force-set", ForceSetDeviceIdByUserId)
              .RequireAuthorization(PolicyName.MechanicUserAndAdministratorUserPolicy.ToString());
 
-        app.MapPatch("/order/confirm/{orderId}", ConfirmOrderByMechanicUserId)
+        app.MapPatch("/order/{orderId}/accept", ConfirmOrderByMechanicUserId)
              .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());
 
-        app.MapPatch("/order/reject/{orderId}", RejectOrderByMechanicUserId)
+        app.MapPatch("/order/{orderId}/reject", RejectOrderByMechanicUserId)
              .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());  
 
         app.MapPost("/driving-license", SetDrivingLicenseByUserId)

@@ -1296,7 +1296,7 @@
   {
     "ContainingType": "Account.API.API.MechanicUserApi",
     "Method": "ConfirmOrderByMechanicUserId",
-    "RelativePath": "api/v1/users/mechanic/order/confirm/{orderId}",
+    "RelativePath": "api/v1/users/mechanic/order/{orderId}/accept",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
@@ -1318,7 +1318,7 @@
   {
     "ContainingType": "Account.API.API.MechanicUserApi",
     "Method": "RejectOrderByMechanicUserId",
-    "RelativePath": "api/v1/users/mechanic/order/reject/{orderId}",
+    "RelativePath": "api/v1/users/mechanic/order/{orderId}/reject",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,

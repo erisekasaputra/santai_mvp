@@ -32,8 +32,9 @@ public class RejectOrderByMechanicUserIdCommandHandler : IRequestHandler<RejectO
             .Handle<DBConcurrencyException>()
             .Or<DbUpdateException>() 
             .Or<DbException>()
+            .Or<InvalidOperationException>()
             .WaitAndRetryAsync(3, retryAttempt =>
-                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                TimeSpan.FromSeconds(Math.Pow(1, retryAttempt)),
                 onRetry: (exception, timeSpan, retryCount, context) =>
                 {
                     LoggerHelper.LogError(logger, exception);
@@ -50,8 +51,7 @@ public class RejectOrderByMechanicUserIdCommandHandler : IRequestHandler<RejectO
                 await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, cancellationToken);
                 try
                 {
-                    var result = await _mechanicCache.RejectOrderByMechanic(request.MechanicId.ToString(), request.OrderId.ToString());
-
+                    var result = await _mechanicCache.RejectOrderByMechanic(request.MechanicId.ToString(), request.OrderId.ToString()); 
                     if (result)
                     {
                         return Result.Success(null, ResponseStatus.NoContent);

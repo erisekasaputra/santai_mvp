@@ -32,8 +32,9 @@ public class CancelOrderByUserByOrderIdCommandHandler : IRequestHandler<CancelOr
             .Handle<DBConcurrencyException>()
             .Or<DbUpdateException>()
             .Or<DbException>()
+            .Or<InvalidOperationException>()
             .WaitAndRetryAsync(3, retryAttempt =>
-                TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                TimeSpan.FromSeconds(Math.Pow(1, retryAttempt)),
                 onRetry: (exception, timeSpan, retryCount, context) =>
                 {
                     LoggerHelper.LogError(logger, exception);
