@@ -20,7 +20,7 @@ public class GetStaffByIdQueryHandler(
     {
         try
         {
-            var fleetIds = request.FleetsRequest?.FleetIds;
+            var fleetIds = request.FleetsRequest?.Fleets;
 
             var staff = await _unitOfWork.Staffs.GetByIdAsync(request.StaffId);
 

@@ -1,6 +1,7 @@
 ﻿using Core.Enumerations;
 using Core.Events;
 using Core.Exceptions;
+using Core.Extensions;
 using Core.Messages;
 using Core.Results;
 using Core.Services.Interfaces;
@@ -41,76 +42,26 @@ public class CreateOrderCommandHandler(
         var requestItems = command.LineItems;
         await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken); 
         try
-        {  
-            if (command.BuyerType is UserType.BusinessUser)
-            { 
-                (var buyer, var isAccountResponseSuccess) = await GetUserAccountAndFleetDetail<AccountIdentityBusinessUserResponseDto>(
-                    command.BuyerId, 
-                    command.Fleets); 
+        {
+            (var buyer, var isAccountResponseSuccess) = await GetUserAccountAndFleetDetail<AccountIdentityResponseDto>(
+                command.BuyerId,
+                command.Fleets);
 
-                (var isAccountValidationSuccess, var result) = await IsAccountResponseSuccess( 
-                    isAccountResponseSuccess, 
-                    buyer, 
-                    cancellationToken); 
+            (var isAccountValidationSuccess, var result) = await IsAccountResponseSuccess(
+                isAccountResponseSuccess,
+                buyer,
+                cancellationToken);
 
-                if (!isAccountValidationSuccess)
-                { 
-                    return result;
-                } 
+            if (!isAccountValidationSuccess)
+                return result;
+            
 
-                return await CreateOrderByRelatedUserType(
-                    command,
-                    buyer?.Data?.BusinessName,
-                    buyer?.Data?.Fleets,
-                    cancellationToken); 
-            }
-            else if (command.BuyerType is UserType.StaffUser)
-            {
-                (var buyer, var isAccountResponseSuccess) = await GetUserAccountAndFleetDetail<AccountIdentityStaffUserResponseDto>(
-                    command.BuyerId, 
-                    command.Fleets);
-
-                (var isAccountValidationSuccess, var result) = await IsAccountResponseSuccess( 
-                    isAccountResponseSuccess, 
-                    buyer, 
-                    cancellationToken);
-
-                if (!isAccountValidationSuccess)
-                {
-                    return result;
-                }
-                return await CreateOrderByRelatedUserType(
-                    command,
-                    buyer?.Data?.Name,
-                    buyer?.Data?.Fleets,
-                    cancellationToken);  
-            }
-            else if (command.BuyerType is UserType.RegularUser)
-            {
-                (var buyer, var isAccountResponseSuccess) = await GetUserAccountAndFleetDetail<AccountIdentityRegularUserResponseDto>(
-                    command.BuyerId, 
-                    command.Fleets);
-
-                (var isAccountValidationSuccess, var result) = await IsAccountResponseSuccess( 
-                    isAccountResponseSuccess, 
-                    buyer, 
-                    cancellationToken);
-
-                if (!isAccountValidationSuccess)
-                {
-                    return result;
-                }
-
-                return await CreateOrderByRelatedUserType(
-                    command, 
-                    buyer?.Data?.PersonalInfo.ToFullName,
-                    buyer?.Data?.Fleets,
-                    cancellationToken); 
-            }
-
-            return Result.Failure(
-                   "Session user type with existing user in database does not match",
-                   ResponseStatus.InternalServerError);
+            return await CreateOrderByRelatedUserType(
+                command,
+                buyer?.Data?.Fullname,
+                buyer?.Data?.Fleets,
+                buyer?.Data?.TimeZoneId,
+                cancellationToken); 
         }
         catch (AccountServiceHttpRequestException ex)
         { 
@@ -191,15 +142,16 @@ public class CreateOrderCommandHandler(
         CreateOrderCommand command,  
         string? buyerName,
         IEnumerable<AccountIdentityFleetResponseDto>? fleets,
+        string? timeZoneId,
         CancellationToken cancellationToken)
     {
         var lineItems = command.LineItems.Select(x => (x.Id, x.Quantity)); 
          
-        if (fleets is null || !fleets.Any() || string.IsNullOrWhiteSpace(buyerName)) 
+        if (fleets is null || !fleets.Any() || string.IsNullOrWhiteSpace(buyerName) || string.IsNullOrWhiteSpace(timeZoneId)) 
         { 
             await RollbackAsync(cancellationToken);
-            return Result.Failure("Data not found for fleet or buyer name", ResponseStatus.NotFound);
-        }
+            return Result.Failure("User data not valid", ResponseStatus.NotFound);
+        } 
 
         (var items, var isCatalogResponseSuccess) = await _catalogService.SubstractStockAndGetDetailItems(lineItems);
 
@@ -225,7 +177,7 @@ public class CreateOrderCommandHandler(
             buyerName,
             command.BuyerType,
             command.IsOrderScheduled,
-            command.ScheduledOn); 
+            command.ScheduledOn.FromLocalToUtc(timeZoneId)); 
 
         order.SetSecretKey(
             await _encryptionService.EncryptAsync($"{order.Id}{order.Buyer.BuyerId}{order.GrandTotal.Amount}"));
@@ -282,7 +234,11 @@ public class CreateOrderCommandHandler(
 
         if (order.IsScheduled)
         {
-            var scheduledOrderWorker = new ScheduledOrder(order.Id, order.ScheduledOnUtc!.Value);
+            var scheduledOrderWorker = new ScheduledOrder(
+                order.Id, 
+                order.ScheduledOnUtc!.Value, 
+                order.IsShouldRequestPayment);
+
             await _unitOfWork.ScheduledOrders.CraeteAsync(scheduledOrderWorker);
         }
 

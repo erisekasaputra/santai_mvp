@@ -11,6 +11,7 @@ using Ordering.API.Applications.Services.Interfaces;
 using Ordering.API.Applications.Services;
 using Polly.Extensions.Http;
 using Polly;
+using Ordering.API.Applications.Consumers;
 
 namespace Ordering.API.Extensions;
 
@@ -81,7 +82,7 @@ public static class ServiceRegistrationExtension
 
             var consumers = new (string QueueName, Type ConsumerType)[]
             {
-                //("identity-email-assigned-to-a-user-integration-event-queue", typeof(IdentityEmailAssignedToAUserIntegrationEventConsumer))
+                ("ordering-service-account-mechanic-order-accepted-integration-event-queue", typeof(AccountMechanicOrderAcceptedIntegrationEventConsumer))
             }; 
 
             foreach ((_, Type consumerType) in consumers)

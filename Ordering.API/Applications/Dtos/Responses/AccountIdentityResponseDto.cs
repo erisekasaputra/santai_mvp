@@ -1,29 +1,30 @@
 ﻿ 
 namespace Ordering.API.Applications.Dtos.Responses;
 
-public class AccountIdentityRegularUserResponseDto
+public class AccountIdentityResponseDto
 {
     public Guid Id { get; set; }
     public string? Email { get; set; }
     public string? PhoneNumber { get; set; }
     public string TimeZoneId { get; set; } 
-    public AccountIdentityPersonalInfoResponseDto PersonalInfo { get; set; }
+    public string Fullname { get; set; }
     public IEnumerable<AccountIdentityFleetResponseDto> Fleets { get; set; }
-
-    public AccountIdentityRegularUserResponseDto(
+    public IEnumerable<Guid> UnknownFleets { get; set; } 
+    public AccountIdentityResponseDto(
         Guid id,
         string? email,
         string? phoneNumber,
         string timeZoneId,
-        AccountIdentityPersonalInfoResponseDto personalInfo,
-        IEnumerable<AccountIdentityFleetResponseDto> fleets
-        )
-    { 
+        string fullname,    
+        IEnumerable<AccountIdentityFleetResponseDto> fleets,
+        IEnumerable<Guid> unknownFleets)
+    {  
         Id = id;
         Email = email;
         PhoneNumber = phoneNumber;
         TimeZoneId = timeZoneId;
-        PersonalInfo = personalInfo;
+        Fullname = fullname;
         Fleets = fleets;
+        UnknownFleets = unknownFleets;
     }
 }

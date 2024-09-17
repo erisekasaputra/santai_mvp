@@ -30,7 +30,7 @@ public class GetRegularUserByUserIdQueryHandler(
                 return Result.Failure($"User '{request.UserId}' not found", ResponseStatus.NotFound);
             }
 
-            var userDto = await ToRegularUserResponseDto(user, request.FleetsRequest?.FleetIds);
+            var userDto = await ToRegularUserResponseDto(user, request.FleetsRequest?.Fleets);
              
             return Result.Success(userDto);
         }

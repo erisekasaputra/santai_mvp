@@ -228,6 +228,7 @@ public class MechanicUser : BaseUser
     {
         return PersonalInfo is null ? string.Empty : $"{PersonalInfo.FirstName} {PersonalInfo.MiddleName} {PersonalInfo.LastName}";
     }
+
     public void VerifyDocument()
     {
         if ((DrivingLicenses is null || DrivingLicenses.Count == 0) 

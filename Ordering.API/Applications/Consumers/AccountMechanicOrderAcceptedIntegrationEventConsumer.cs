@@ -16,9 +16,9 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
     private readonly ILogger<AccountMechanicOrderAcceptedIntegrationEventConsumer> _logger = logger;
     public async Task Consume(ConsumeContext<AccountMechanicOrderAcceptedIntegrationEvent> context)
     {
+        await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted); 
         try
         {
-            await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted); 
             var order = await _unitOfWork.Orders.GetByIdAsync(context.Message.OrderId);
 
             if (order is null)
@@ -37,10 +37,12 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
         }
         catch (DomainException ex)
         {
+            await _unitOfWork.RollbackTransactionAsync();
             _logger.LogInformation(ex.Message);
         }
-        catch (Exception ex) 
+        catch (Exception ex)
         {
+            await _unitOfWork.RollbackTransactionAsync();
             LoggerHelper.LogError(_logger, ex);
             throw;
         }

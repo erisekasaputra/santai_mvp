@@ -19,7 +19,7 @@ public class ScheduledOrderRepository : IScheduledOrderRepository
         }
 
 
-        var query = $"SELECT TOP {rowNumber} * FROM [{nameof(_context.ScheduledOrders)}] WITH (UPDLOCK, ROWLOCK, READPAST) WHERE [{nameof(ScheduledOrder.IsEventProcessed)}] = 0 AND GETUTCDATE() >= [{nameof(ScheduledOrder.ScheduledAt)}] ORDER BY [{nameof(ScheduledOrder.ScheduledAt)}] ASC ";
+        var query = $"SELECT TOP {rowNumber} * FROM [{nameof(_context.ScheduledOrders)}] WITH (UPDLOCK, ROWLOCK, READPAST) WHERE [{nameof(ScheduledOrder.IsEventProcessed)}] = 0 AND GETUTCDATE() >= [{nameof(ScheduledOrder.ScheduledAt)}] AND [{nameof(ScheduledOrder.IsPaid)}] = 1 ORDER BY [{nameof(ScheduledOrder.ScheduledAt)}] ASC ";
 
         var orders = await _context
             .ScheduledOrders
@@ -37,5 +37,15 @@ public class ScheduledOrderRepository : IScheduledOrderRepository
     public async Task CraeteAsync(ScheduledOrder order)
     {
         await _context.ScheduledOrders.AddAsync(order);
+    }
+
+    public async Task<ScheduledOrder?> GetByOrderIdAsync(Guid orderId)
+    {
+        return await _context.ScheduledOrders.Where(x => x.OrderId == orderId).FirstOrDefaultAsync();
+    }
+
+    public void Update(ScheduledOrder order)
+    {
+        _context.ScheduledOrders.Update(order);
     }
 }

@@ -148,7 +148,7 @@ public class Order : Entity
         Payment.SetEntityState(EntityState.Added);
 
         // check if order scheduled and scheduled on is in the past
-        if (IsScheduled && payment.CreatedAt >= ScheduledOnUtc) ScheduledOnUtc = payment.CreatedAt.AddMinutes(10);
+        if (IsScheduled && payment.CreatedAt >= ScheduledOnUtc) ScheduledOnUtc = payment.CreatedAt;
 
         if (IsShouldRequestPayment)
         {

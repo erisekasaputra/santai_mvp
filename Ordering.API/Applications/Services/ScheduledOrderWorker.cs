@@ -36,7 +36,7 @@ public class ScheduledOrderWorker : BackgroundService
                 if (orders is not null && orders.Any())
                 {
                     foreach (var order in orders) 
-                    { 
+                    {  
                         var orderAggregate = await unitOfWork.Orders.GetByIdAsync(order.Id, stoppingToken);
 
                         if (orderAggregate is not null && orderAggregate.IsPaid)

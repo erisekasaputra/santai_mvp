@@ -37,7 +37,21 @@ public class PayOrderPaymentByOrderIdCommandHandler(
                 request.PaymentMethod,
                 request.BankReference));
 
-            _unitOfWork.Orders.Update(order);
+            _unitOfWork.Orders.Update(order); 
+
+            if (order.IsScheduled && order.IsShouldRequestPayment)
+            {
+                var scheduledOrder = await _unitOfWork.ScheduledOrders.GetByOrderIdAsync(order.Id);
+                if (scheduledOrder is not null)
+                {
+                    if (order.Payment!.CreatedAt >= scheduledOrder.ScheduledAt)
+                    {
+                        scheduledOrder.SetNow();
+                    } 
+                    scheduledOrder.MarkAsPaid();
+                    _unitOfWork.ScheduledOrders.Update(scheduledOrder);
+                }
+            }
 
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
 

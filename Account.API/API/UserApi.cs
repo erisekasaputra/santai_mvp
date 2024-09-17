@@ -7,8 +7,10 @@ using Account.API.Applications.Queries.GetPhoneNumberByUserId;
 using Account.API.Applications.Queries.GetRegularUserByUserId;
 using Account.API.Applications.Queries.GetStaffById; 
 using Account.API.Applications.Queries.GetTimeZoneByUserId;
+using Account.API.Applications.Queries.GetUserByUserTypeAndUserId;
 using Account.API.Applications.Services; 
-using Account.API.Extensions; 
+using Account.API.Extensions;
+using Amazon.SecretsManager.Model.Internal.MarshallTransformations;
 using Core.Enumerations;
 using Core.Messages;
 using Core.Results;
@@ -20,7 +22,7 @@ namespace Account.API.API;
 
 public static class UserApi
 {
-    private const int _cacheExpiry = 10;
+    private const int _cacheExpiry = 15;
     public static IEndpointRouteBuilder MapUserApi(this IEndpointRouteBuilder route)
     {
         var app = route.MapGroup("api/v1/users");   
@@ -54,7 +56,7 @@ public static class UserApi
 
     private static async Task<IResult> GetByUserId(
         Guid userId,
-        [AsParameters] FleetsRequestDto fleetsRequest,
+        [FromBody] FleetsRequestDto request,
         [FromServices] ApplicationService service,
         [FromServices] IUserInfoService userInfoService)
     {
@@ -66,38 +68,10 @@ public static class UserApi
                 return TypedResults.Unauthorized();
             }
 
-            Result result; 
-            if (userClaim.CurrentUserType == UserType.StaffUser)
-            {
-                result = await service.Mediator.Send(
-                    new GetStaffByIdQuery(userId, fleetsRequest));
+            var result = await service.Mediator.Send(
+                new GetUserByUserTypeAndUserIdQuery(userId, userClaim.CurrentUserType, request.Fleets));
 
-                return result.ToIResult();
-            }
-            else if (userClaim.CurrentUserType == UserType.BusinessUser)
-            {
-                result = await service.Mediator.Send(
-                   new GetBusinessUserByUserIdQuery(userId, fleetsRequest));
-
-                return result.ToIResult();
-            }
-            else if (userClaim.CurrentUserType == UserType.RegularUser)
-            {
-                result = await service.Mediator.Send(
-                   new GetRegularUserByUserIdQuery(userId, fleetsRequest));
-
-                return result.ToIResult();
-            }
-
-            else if (userClaim.CurrentUserType == UserType.MechanicUser)
-            {
-                result = await service.Mediator.Send(
-                   new GetMechanicUserByIdQuery(userId));
-
-                return result.ToIResult();
-            }
-
-            return TypedResults.BadRequest();
+            return result.ToIResult();
         }
         catch (Exception ex)
         {

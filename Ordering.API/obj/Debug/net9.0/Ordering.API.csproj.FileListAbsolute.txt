@@ -200,3 +200,6 @@ C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Ordering.API.pdb
 C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.1CB89FA7.Up2Date
 C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.genruntimeconfig.cache
 C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\ref\Ordering.API.dll
+C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll

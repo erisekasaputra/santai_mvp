@@ -25,7 +25,7 @@ public class GetBusinessUserByUserIdQueryHandler(
     {
         try
         {
-            var fleetIds = request.FleetsRequest?.FleetIds;
+            var fleetIds = request.FleetsRequest?.Fleets;
 
             var user = await _unitOfWork.BaseUsers.GetBusinessUserByIdAsync(request.Id); 
             if (user is null)

@@ -1,8 +1,7 @@
 ﻿using Core.Exceptions;
 using Newtonsoft.Json;
 using Ordering.API.Applications.Dtos.Responses;
-using Ordering.API.Applications.Services.Interfaces; 
-
+using Ordering.API.Applications.Services.Interfaces;
 namespace Ordering.API.Applications.Services;
 
 public class AccountServiceAPI : IAccountServiceAPI
@@ -33,5 +32,5 @@ public class AccountServiceAPI : IAccountServiceAPI
                 inner: ex
             );
         }
-    }
+    } 
 }
