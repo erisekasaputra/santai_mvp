@@ -1,8 +1,7 @@
 ﻿using Ordering.API.Applications.Dtos.Responses;
-using Ordering.Domain.Aggregates.BuyerAggregate;
-using Ordering.Domain.Aggregates.MechanicAggregate;
+using Ordering.Domain.Aggregates.FleetAggregate;
 using Ordering.Domain.Aggregates.OrderAggregate;
-using Ordering.Domain.ValueObjects; 
+using Ordering.Domain.ValueObjects;
 
 namespace Ordering.API.Extensions;
 

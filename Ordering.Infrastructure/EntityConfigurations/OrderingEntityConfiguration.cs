@@ -4,8 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Ordering.Domain.Aggregates.BuyerAggregate;
-using Ordering.Domain.Aggregates.MechanicAggregate;
 using Ordering.Domain.Aggregates.OrderAggregate;
 using Ordering.Domain.Enumerations;
 

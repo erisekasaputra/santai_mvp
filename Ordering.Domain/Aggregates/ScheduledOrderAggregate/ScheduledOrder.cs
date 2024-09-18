@@ -1,4 +1,5 @@
-﻿using Ordering.Domain.SeedWork;
+﻿using Microsoft.EntityFrameworkCore;
+using Ordering.Domain.SeedWork;
 
 namespace Ordering.Domain.Aggregates.ScheduledOrderAggregate;
 
@@ -43,5 +44,6 @@ public class ScheduledOrder : Entity
     public void MarkAsProcessed()
     {
         IsEventProcessed = true;
+        SetEntityState(EntityState.Deleted);
     }
 }

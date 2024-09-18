@@ -11,13 +11,11 @@ using MediatR;
 using Ordering.API.Applications.Dtos.Requests;
 using Ordering.API.Applications.Dtos.Responses;
 using Ordering.API.Applications.Services.Interfaces;
-using Ordering.API.Extensions;
-using Ordering.Domain.Aggregates.BuyerAggregate;
+using Ordering.API.Extensions; 
 using Ordering.Domain.Aggregates.OrderAggregate;
 using Ordering.Domain.Aggregates.ScheduledOrderAggregate;
 using Ordering.Domain.Enumerations;
-using Ordering.Domain.SeedWork;
-using Ordering.Domain.ValueObjects;
+using Ordering.Domain.SeedWork; 
 using System.Data; 
 namespace Ordering.API.Applications.Commands.Orders.CreateOrder;
 public class CreateOrderCommandHandler(

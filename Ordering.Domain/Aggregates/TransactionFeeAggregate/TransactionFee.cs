@@ -13,8 +13,7 @@ public class TransactionFee : Entity
     public PercentageOrValueType PercentageOrValueType { get; private set; } 
     public Currency Currency { get; private set; }
     public decimal ValuePercentage { get; private set; }
-    public decimal ValueAmount { get; private set; }
-    public Money FeeAmount { get; private set; }  
+    public decimal ValueAmount { get; private set; } 
     public bool IsChargedForBuy { get; set; } 
     public TransactionFee(
         string feeName,

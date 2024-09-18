@@ -1,8 +1,7 @@
 ﻿using Core.Enumerations;
-using Ordering.Domain.Aggregates.OrderAggregate;
 using Ordering.Domain.SeedWork;
 
-namespace Ordering.Domain.Aggregates.BuyerAggregate;
+namespace Ordering.Domain.Aggregates.OrderAggregate;
 
 public class Buyer : Entity
 {

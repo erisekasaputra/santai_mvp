@@ -31,7 +31,7 @@ public class ScheduledOrderWorker : BackgroundService
             var isShutdown = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<SafelyShutdownConfiguration>>();
             if (isShutdown.CurrentValue.Shutdown)
             {
-                await Task.Delay(1000);
+                await Task.Delay(100000);
                 continue;
             }
 
@@ -40,16 +40,13 @@ public class ScheduledOrderWorker : BackgroundService
 
             try
             {
-                await unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, stoppingToken);
-
-                var orders = await unitOfWork.ScheduledOrders.GetOnTimeOrderWithUnpublishedEvent(30);
-
+                await unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, stoppingToken); 
+                var orders = await unitOfWork.ScheduledOrders.GetOnTimeOrderWithUnpublishedEvent(100); 
                 if (orders is not null && orders.Any())
                 {
                     foreach (var order in orders) 
                     {  
-                        var orderAggregate = await unitOfWork.Orders.GetByIdAsync(order.Id, stoppingToken);
-
+                        var orderAggregate = await unitOfWork.Orders.GetByIdAsync(order.Id, stoppingToken); 
                         if (orderAggregate is not null && orderAggregate.IsPaid)
                         {
                             try

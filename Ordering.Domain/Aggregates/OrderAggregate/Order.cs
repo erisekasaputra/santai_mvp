@@ -1,13 +1,12 @@
 ﻿using Core.Enumerations;
 using Core.Exceptions;
-using Core.ValueObjects; 
-using Microsoft.EntityFrameworkCore; 
-using Ordering.Domain.Aggregates.BuyerAggregate;
-using Ordering.Domain.Aggregates.MechanicAggregate;
+using Core.ValueObjects;
+using Microsoft.EntityFrameworkCore;
+using Ordering.Domain.Aggregates.FleetAggregate;
 using Ordering.Domain.Enumerations;
 using Ordering.Domain.Events;
 using Ordering.Domain.SeedWork;
-using Ordering.Domain.ValueObjects; 
+using Ordering.Domain.ValueObjects;
 
 namespace Ordering.Domain.Aggregates.OrderAggregate;
 

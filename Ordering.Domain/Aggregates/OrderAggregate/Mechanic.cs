@@ -1,9 +1,8 @@
 ﻿using Core.Exceptions;
-using Ordering.Domain.Aggregates.OrderAggregate;
 using Ordering.Domain.SeedWork;
 using Ordering.Domain.ValueObjects;
 
-namespace Ordering.Domain.Aggregates.MechanicAggregate;
+namespace Ordering.Domain.Aggregates.OrderAggregate;
 
 public class Mechanic : Entity
 {
@@ -12,7 +11,7 @@ public class Mechanic : Entity
     public Guid MechanicId { get; private set; }
     public string Name { get; private set; }
     public Rating? Rating { get; private set; }
-    public decimal Performance { get; private set; } 
+    public decimal Performance { get; private set; }
     public bool IsRated => Rating is not null && Rating.Value > 0.0M;
 
     public Mechanic()

@@ -2,9 +2,9 @@
 using Core.Exceptions;
 using Core.Utilities;
 using MassTransit;
+using Ordering.Domain.Aggregates.OrderAggregate;
 using Ordering.Domain.SeedWork;
-using System.Data;
-using Ordering.Domain.Aggregates.MechanicAggregate;
+using System.Data; 
 
 namespace Ordering.API.Applications.Consumers;
 

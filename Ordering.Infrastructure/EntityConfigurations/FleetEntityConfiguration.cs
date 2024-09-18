@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Ordering.Domain.Aggregates.OrderAggregate;
+using Ordering.Domain.Aggregates.FleetAggregate;
 
 namespace Ordering.Infrastructure.EntityConfigurations;
 

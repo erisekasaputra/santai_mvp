@@ -1,9 +1,8 @@
 ﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage; 
-using Ordering.Domain.Aggregates.BuyerAggregate;
+using Microsoft.EntityFrameworkCore.Storage;
 using Ordering.Domain.Aggregates.CouponAggregate;
-using Ordering.Domain.Aggregates.MechanicAggregate;
+using Ordering.Domain.Aggregates.FleetAggregate;
 using Ordering.Domain.Aggregates.OrderAggregate;
 using Ordering.Domain.Aggregates.ScheduledOrderAggregate;
 using System.Data;

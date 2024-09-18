@@ -2,7 +2,7 @@
 using Core.Enumerations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Ordering.Domain.Aggregates.BuyerAggregate;
+using Ordering.Domain.Aggregates.OrderAggregate;
 
 namespace Ordering.Infrastructure.EntityConfigurations;
 
