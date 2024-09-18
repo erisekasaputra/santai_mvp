@@ -3,12 +3,10 @@ using Account.API.Applications.Services.Interfaces;
 using Account.API.SeedWork;
 using Core.Configurations; 
 using Microsoft.Extensions.Options;
-using Polly;
-using Polly.Caching;
+using Polly; 
 using RedLockNet.SERedis;
 using RedLockNet.SERedis.Configuration;
-using StackExchange.Redis;
-using System.Drawing;
+using StackExchange.Redis; 
 using System.Net;
 
 namespace Account.API.Applications.Services;
@@ -16,9 +14,8 @@ namespace Account.API.Applications.Services;
 public class MechanicCache : IMechanicCache
 {
     const int TOTAL_PENALTY_IN_MINUTES = 30;
-    const int WAITING_MECHANIC_CONFIRM_IN_SECOND = 1;
-    const int MAX_RETRY_MECHANIC_LOCK = 3;
-    const int MECHANIC_BLACKLIST_FROM_ORDER_IN_SECOND = 1800;
+    const int WAITING_MECHANIC_CONFIRM_IN_SECOND = 600;
+    const int MAX_RETRY_MECHANIC_LOCK = 3; 
 
     private readonly IConnectionMultiplexer _connectionMultiplexer; 
     private readonly AsyncPolicy _asyncPolicy;
@@ -843,15 +840,8 @@ public class MechanicCache : IMechanicCache
 
     private async Task BlockMechanicToAnOrder(IDatabase db, string mechanicId, string orderId)
     {
-        try
-        { 
-            var setKey = CacheKey.MechanicOrderBlacklistPrefix($"{mechanicId}:{orderId}"); 
-            await db.StringSetAsync(setKey, "blocked", TimeSpan.FromMinutes(TOTAL_PENALTY_IN_MINUTES)); 
-        }
-        catch (Exception)
-        {
-            throw;
-        }
+        var setKey = CacheKey.MechanicOrderBlacklistPrefix($"{mechanicId}:{orderId}"); 
+        await db.StringSetAsync(setKey, "blocked", TimeSpan.FromMinutes(TOTAL_PENALTY_IN_MINUTES));  
     } 
 
     private async Task DeleteKeyRedlockAsync(IDatabase db, string lockResource)

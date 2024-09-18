@@ -5,13 +5,13 @@ using MassTransit;
 namespace Account.API.Applications.Consumers;
 
 public class OrderCancelledByUserIntegrationEventConsumer(
-    IMechanicCache mechanicCache) : IConsumer<OrderCancelledByUserIntegrationEvent>
+    IMechanicCache mechanicCache) : IConsumer<OrderCancelledByBuyerIntegrationEvent>
 {
     private readonly IMechanicCache _mechanicCache = mechanicCache; 
-    public async Task Consume(ConsumeContext<OrderCancelledByUserIntegrationEvent> context)
+    public async Task Consume(ConsumeContext<OrderCancelledByBuyerIntegrationEvent> context)
     {
         var result = await _mechanicCache.CancelOrderByUser(
-            context.Message.UserId.ToString(),
+            context.Message.BuyerId.ToString(),
             context.Message.OrderId.ToString());
 
         if (result)

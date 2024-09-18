@@ -908,6 +908,60 @@
   },
   {
     "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "TestAccept",
+    "RelativePath": "api/v1/users/mechanic/{mechanicId}/order/{orderId}/accept",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "TestReject",
+    "RelativePath": "api/v1/users/mechanic/{mechanicId}/order/{orderId}/reject",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mechanicId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.MechanicUserApi",
     "Method": "GetMechanicUserById",
     "RelativePath": "api/v1/users/mechanic/{mechanicUserId}",
     "HttpMethod": "GET",

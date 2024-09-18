@@ -29,8 +29,7 @@ using Account.Domain.Enumerations;
 using Core.Configurations;
 using Core.Dtos;
 using Core.Enumerations;
-using Core.Messages;
-using Core.Models;
+using Core.Messages; 
 using Core.SeedWorks; 
 using Core.Services.Interfaces;
 using FluentValidation; 
@@ -174,7 +173,7 @@ public static class MechanicUserApi
         try
         { 
             var result = await service.Mediator.Send(
-                new AcceptOrderByMechanicUserIdCommand(orderId, mechanicId));
+                new RejectOrderByMechanicUserIdCommand(orderId, mechanicId));
 
             return result.ToIResult();
         }
