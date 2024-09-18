@@ -12,6 +12,7 @@ using Ordering.API.Applications.Dtos.Requests;
 using Ordering.API.Applications.Dtos.Responses;
 using Ordering.API.Applications.Services.Interfaces;
 using Ordering.API.Extensions;
+using Ordering.Domain.Aggregates.BuyerAggregate;
 using Ordering.Domain.Aggregates.OrderAggregate;
 using Ordering.Domain.Aggregates.ScheduledOrderAggregate;
 using Ordering.Domain.Enumerations;
@@ -43,25 +44,30 @@ public class CreateOrderCommandHandler(
         await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken); 
         try
         {
-            (var buyer, var isAccountResponseSuccess) = await GetUserAccountAndFleetDetail<AccountIdentityResponseDto>(
-                command.BuyerId,
-                command.Fleets);
+            (var buyer, var isAccountResponseSuccess) = await _accountService.GetUserDetail<AccountIdentityResponseDto>(command.BuyerId, command.Fleets.Select(x => x.Id));
 
-            (var isAccountValidationSuccess, var result) = await IsAccountResponseSuccess(
-                isAccountResponseSuccess,
-                buyer,
-                cancellationToken);
+            if (!isAccountResponseSuccess)
+            {
+                if (buyer is null || buyer.Data is null)
+                {
+                    await RollbackAsync(cancellationToken);
+                    return  Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
+                }
 
-            if (!isAccountValidationSuccess)
-                return result;
+                await RollbackAsync(cancellationToken);
+                return Result.Failure(buyer.Message ?? Messages.UnknownError, ResponseStatus.BadRequest);
+            }
 
             if (buyer is null || buyer.Data is null)
             {
+                await RollbackAsync(cancellationToken);
                 return Result.Failure("User data not found", ResponseStatus.NotFound);
             }
 
+
             if (buyer.Data.UnknownFleets.Any())
             {
+                await RollbackAsync(cancellationToken);
                 return Result.Failure("There are severals fleet that does not exist", 
                     ResponseStatus.UnprocessableEntity)
                     .WithError(new ErrorDetail("Fleets", "There are severals fleets not found"))
@@ -118,40 +124,8 @@ public class CreateOrderCommandHandler(
             LoggerHelper.LogError(_logger, ex);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
-    }
+    } 
 
-    private async Task<(bool isSuccess, Result accountResult)> IsAccountResponseSuccess<T>( 
-        bool isAccountResponseSuccess,
-        ResultResponseDto<T>? buyer,
-        CancellationToken cancellationToken)
-    { 
-        if (!isAccountResponseSuccess)
-        {
-            if (buyer is null)
-            {
-                await RollbackAsync(cancellationToken); 
-                return (false, Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
-            }
-
-            await RollbackAsync(cancellationToken);
-            return (false, Result.Failure(buyer.Message ?? Messages.UnknownError, ResponseStatus.BadRequest));
-        }
-
-        if (buyer is null)
-        {
-            await RollbackAsync(cancellationToken); 
-            return (false, Result.Failure("User data not found", ResponseStatus.NotFound));
-        }  
-
-        return (true, Result.Success(null, ResponseStatus.Ok));
-    }
-
-    private async Task<(ResultResponseDto<T>? buyer, bool isAccountResponseSuccess)> GetUserAccountAndFleetDetail<T>(
-        Guid buyerId, 
-        IEnumerable<FleetRequest> requestFleets)
-    {
-        return await _accountService.GetUserDetail<T>(buyerId, requestFleets.Select(x => x.Id)); 
-    }
 
     private async Task<Result> CreateOrderByRelatedUserType(
         CreateOrderCommand command,  

@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using Ordering.API.Applications.Dtos.Responses;
 using Ordering.API.Applications.Services.Interfaces;
+using System.Net;
 using System.Text;
 namespace Ordering.API.Applications.Services;
 
@@ -28,16 +29,31 @@ public class AccountServiceAPI : IAccountServiceAPI
             var jsonContent = JsonConvert.SerializeObject(bodyContext); 
             var stringContent = new StringContent(jsonContent, Encoding.UTF8, "application/json"); 
             var response = await _httpClient.PostAsync(endpoint, stringContent);
-            response.EnsureSuccessStatusCode();
             string content = await response.Content.ReadAsStringAsync(); 
+
+            if (response.StatusCode is HttpStatusCode.NotFound or HttpStatusCode.UnprocessableEntity)
+            {
+                if (string.IsNullOrWhiteSpace(content))
+                {
+                    return (null, false);
+                }
+
+                return (JsonConvert.DeserializeObject<ResultResponseDto<TDataType>?> (content), false);
+            } 
+
+            response.EnsureSuccessStatusCode();
             return (JsonConvert.DeserializeObject<ResultResponseDto<TDataType>>(content), true);
-        } 
-        catch (Exception ex)
+        }
+        catch (HttpRequestException ex)
         {
-            throw new CatalogServiceHttpRequestException(
-                message: "Custom message: Failed to communicate with the Account Service.",
+            throw new AccountServiceHttpRequestException(
+                message: "Custom message: Failed to communicate with the Catalog Service.",
                 inner: ex
             );
         }
+        catch (Exception)
+        {
+            throw;
+        } 
     } 
 }

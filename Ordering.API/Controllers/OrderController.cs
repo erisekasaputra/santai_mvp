@@ -49,7 +49,56 @@ public class OrderController : ControllerBase
         _kmsService = kmsService;
         _logger = logger;
         _userInfoService = userInfoService; 
-    } 
+    }
+
+    [Authorize]
+    [HttpGet("test")]
+    [Idempotency(nameof(CreateOrder))]
+    public async Task<IResult> CreateOrder()
+    {
+        try
+        {
+            var userClaim = _userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Forbid();
+            }
+
+
+            List<Result> results = new List<Result>();
+            for (int i = 1; i <= 10; i++)
+            {
+                results.Add(await _mediator.Send(
+                    new CreateOrderCommand(
+                        userClaim.Sub,
+                        userClaim.CurrentUserType,
+                        "Karangsono",
+                        -8.143145,
+                        112.2096,
+                        Core.Enumerations.Currency.MYR,
+                        false,
+                        null,
+                        "",
+                        new List<LineItemRequest>() 
+                        {
+                            new LineItemRequest(Guid.Parse("6BCDFD23-836D-491F-A6D8-A08930923E93"), 1000)
+                        },
+                        new List<FleetRequest>() 
+                        {
+                            new FleetRequest(Guid.Parse("906B1E7D-0F67-4330-8357-18DEA8DED146"))
+                        })));
+            }
+
+            return TypedResults.Ok(results);
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            return TypedResults.InternalServerError(
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+        }
+    }
+
 
 
     [Authorize]

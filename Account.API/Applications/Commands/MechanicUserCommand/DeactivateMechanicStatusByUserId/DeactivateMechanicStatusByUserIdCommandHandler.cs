@@ -53,10 +53,10 @@ public class DeactivateMechanicStatusByUserIdCommandHandler : IRequestHandler<De
 
             var result = await _asyncRetryPolicy.ExecuteAsync<Result>(async () =>
             {
-                if (!mechanic.IsVerified)
-                {
-                    return Result.Failure("You account has not been verified", ResponseStatus.BadRequest);
-                }
+                //if (!mechanic.IsVerified)
+                //{
+                //    return Result.Failure("You account has not been verified", ResponseStatus.BadRequest);
+                //}
 
                 var result = await _cache.Deactivate(request.MechanicId.ToString());
 

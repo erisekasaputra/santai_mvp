@@ -7,8 +7,7 @@ using Account.API.Applications.Queries.GetUserByUserTypeAndUserId;
 using Account.API.Applications.Services; 
 using Account.API.Extensions; 
 using Core.Enumerations;
-using Core.Messages;
-using Core.Results;
+using Core.Messages; 
 using Core.SeedWorks;
 using Core.Services.Interfaces; 
 using Microsoft.AspNetCore.Mvc;
@@ -47,7 +46,7 @@ public static class UserApi
             });
 
         return app;
-    }
+    } 
 
     private static async Task<IResult> GetByUserId(
         Guid userId,

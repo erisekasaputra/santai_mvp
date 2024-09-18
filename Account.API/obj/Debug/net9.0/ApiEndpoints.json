@@ -1375,6 +1375,22 @@
     ]
   },
   {
+    "ContainingType": "Account.API.API.MechanicUserApi",
+    "Method": "TestCreateMechanic",
+    "RelativePath": "api/v1/users/mechanic/test",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "Account.API.API.UserApi",
     "Method": "GetPhoneNumberByUserId",
     "RelativePath": "api/v1/users/phone-number",

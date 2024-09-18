@@ -35,7 +35,7 @@ public class OrderWaitingMechanicAssignJob : BackgroundService
 
 
             await _mechanicCache.ProcessOrdersWaitingMechanicAssignFromQueueAsync();
-            await Task.Delay(500);
+            await Task.Delay(100);
         }
     }
 } 

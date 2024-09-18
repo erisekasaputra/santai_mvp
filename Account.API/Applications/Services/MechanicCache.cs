@@ -7,17 +7,22 @@ using Polly;
 using RedLockNet.SERedis;
 using RedLockNet.SERedis.Configuration;
 using StackExchange.Redis;
+using System.Drawing;
 using System.Net;
 
 namespace Account.API.Applications.Services;
 
 public class MechanicCache : IMechanicCache
-{  
+{
+    const int TOTAL_PENALTY_IN_SECONDS = 60;
+    const int WAITING_MECHANIC_CONFIRM_IN_SECOND = 1;
+    const int MAX_RETRY_MECHANIC_LOCK = 3;
+    const int MECHANIC_BLACKLIST_FROM_ORDER_IN_SECOND = 1800;
+
     private readonly IConnectionMultiplexer _connectionMultiplexer; 
     private readonly AsyncPolicy _asyncPolicy;
     private readonly ILogger<MechanicCache> _logger;
     private RedLockFactory _redLockFactory;
-    
     public MechanicCache(
         IConnectionMultiplexer connectionMultiplexer,
         ILogger<MechanicCache> logger,
@@ -167,45 +172,72 @@ public class MechanicCache : IMechanicCache
         {
             var confirmation = await GetOrderWaitingMechanicConfirmAsync(db, orderId);
             if (confirmation is null)
-            {
-                return false;
-            }
+                return false; 
 
             if (confirmation.ExpiredAtUtc <= DateTime.UtcNow) // not expired already
+                return false; 
+
+
+            var order = await GetOrderTaskAsync(db, orderId);
+            if (order is null || order.MechanicId != mechanicId || string.IsNullOrEmpty(order.MechanicId)) 
+                return false; 
+              
+
+
+
+
+
+
+            int retryCount = 0; // Untuk melacak berapa kali percobaan 
+            bool isMechanicLockAcquired = false;
+
+            do
+            {
+                using var lockMechanic = await _redLockFactory.CreateLockAsync(CacheKey.LockMechanicPrefix(order.MechanicId), TimeSpan.FromMinutes(10));
+                isMechanicLockAcquired = lockMechanic.IsAcquired;
+
+                if (isMechanicLockAcquired)
+                {
+                    // Jika berhasil memperoleh lock, proses data mekanik
+                    var mechanic = await GetMechanicHashSetAsync(db, order.MechanicId);
+                    if (mechanic is not null && mechanic.OrderId == orderId)
+                    {
+                        // Operasi domain
+                        mechanic.SetOrder(orderId);
+                        mechanic.SetMechanicStatus(MechanicStatus.Bussy);
+
+                        // Update data mechanic
+                        await CreateMechanicHashSetAsync(db, mechanic); 
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                    // Keluar dari loop jika lock berhasil diambil
+                    break;
+                }
+
+                // Tambah hitungan percobaan
+                retryCount++;   
+
+
+                // Delay sebelum mencoba lagi (opsional, misal 100 milidetik)
+                await Task.Delay(TimeSpan.FromMilliseconds(100));
+            }
+            while (!isMechanicLockAcquired && retryCount < MAX_RETRY_MECHANIC_LOCK);  // Ulangi selama belum berhasil dan retry < 5
+
+            // Jika setelah 5 kali retry masih tidak berhasil,  return false
+            if (!isMechanicLockAcquired)
             {
                 return false;
             } 
 
 
-            var order = await GetOrderTaskAsync(db, orderId);
-            if (order is null)
-            {
-                return false;
-            }
-
-            if (order.MechanicId != mechanicId)
-            {
-                return false;
-            }
-
-            if (string.IsNullOrEmpty(order.MechanicId))
-            {
-                return false;
-            }
 
 
 
 
-            var mechanic = await GetMechanicHashSetAsync(db, order.MechanicId);
-            if (mechanic is null || mechanic.OrderId != orderId)
-            {
-                return false;
-            }
-
-
-            mechanic.SetOrder(orderId);
-            mechanic.SetMechanicStatus(MechanicStatus.Bussy);
-            await CreateMechanicHashSetAsync(db, mechanic);
 
 
             // remove queue dan data untuk mechanic confirm waiting sesuai order id
@@ -253,18 +285,64 @@ public class MechanicCache : IMechanicCache
             if (string.IsNullOrEmpty(order.MechanicId))
             {
                 return false;
-            }  
+            }
 
-            var mechanic = await GetMechanicHashSetAsync(db, order.MechanicId);
-            if (mechanic is null || mechanic.OrderId != orderId)
+
+
+
+
+
+
+
+            int retryCount = 0;      // Untuk melacak berapa kali percobaan 
+            bool isMechanicLockAcquired = false;
+
+            do
+            {
+                using var lockMechanic = await _redLockFactory.CreateLockAsync(CacheKey.LockMechanicPrefix(order.MechanicId), TimeSpan.FromMinutes(10));
+                isMechanicLockAcquired = lockMechanic.IsAcquired;
+
+                if (isMechanicLockAcquired)
+                {
+                    // Jika berhasil memperoleh lock, proses data mekanik
+                    var mechanic = await GetMechanicHashSetAsync(db, order.MechanicId);
+                    if (mechanic is not null && mechanic.OrderId == orderId)
+                    {
+                        // Operasi domain
+                        mechanic.ResetOrder();
+                        mechanic.SetMechanicStatus(MechanicStatus.Available);
+
+                        // Update data mechanic
+                        await CreateMechanicHashSetAsync(db, mechanic);
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                    // Keluar dari loop jika lock berhasil diambil
+                    break;
+                }
+
+                // Tambah hitungan percobaan
+                retryCount++;
+
+
+                // Delay sebelum mencoba lagi (opsional, misal 100 milidetik)
+                await Task.Delay(TimeSpan.FromMilliseconds(200));
+            }
+            while (!isMechanicLockAcquired && retryCount < MAX_RETRY_MECHANIC_LOCK);  // Ulangi selama belum berhasil dan retry < 5
+
+            // Jika setelah 5 kali retry masih tidak berhasil,  return false
+            if (!isMechanicLockAcquired)
             {
                 return false;
             }
 
+             
+             
 
-            mechanic.ResetOrder();
-            mechanic.SetMechanicStatus(MechanicStatus.Available);
-            await CreateMechanicHashSetAsync(db, mechanic);
+
 
 
 
@@ -302,39 +380,66 @@ public class MechanicCache : IMechanicCache
         if (lockAcquired.IsAcquired)
         {
             var waitingConfirmData = await GetOrderWaitingMechanicConfirmAsync(db, orderId);
-            if (waitingConfirmData is null)
+            if (waitingConfirmData is null || waitingConfirmData.ExpiredAtUtc <= DateTime.UtcNow)
             {
                 return false;
-            } 
-
-            if (waitingConfirmData.ExpiredAtUtc <= DateTime.UtcNow) // not expired already 
-            {  
-                return false;
-            } 
-
+            }   
 
             var order = await GetOrderTaskAsync(db, orderId);
-            if (order is null)
+            if (order is null || order.MechanicId != mechanicId)
             {
                 return false;
             }
-
-            if (order.MechanicId != mechanicId)
-            {
-                return false;
-            }
-
+             
             if (!string.IsNullOrEmpty(order.MechanicId))
             {
-                var mechanic = await GetMechanicHashSetAsync(db, order.MechanicId);
+                int retryCount = 0;      // Untuk melacak berapa kali percobaan 
+                bool isMechanicLockAcquired = false;
 
-                if (mechanic is not null && mechanic.OrderId == orderId)
+                do
                 {
-                    mechanic.ResetOrder();
-                    mechanic.SetMechanicStatus(MechanicStatus.Available);
-                    await CreateMechanicHashSetAsync(db, mechanic);
-                    await BlockMechanicToAnOrder(db, mechanic.MechanicId, orderId);
+                    using var lockMechanic = await _redLockFactory.CreateLockAsync(CacheKey.LockMechanicPrefix(order.MechanicId), TimeSpan.FromMinutes(10));
+                    isMechanicLockAcquired = lockMechanic.IsAcquired;
+
+                    if (isMechanicLockAcquired)
+                    {
+                        // Jika berhasil memperoleh lock, proses data mekanik
+                        var mechanic = await GetMechanicHashSetAsync(db, order.MechanicId);
+                        if (mechanic is not null && mechanic.OrderId == orderId)
+                        {
+                            // Operasi domain
+                            mechanic.ResetOrder();
+                            mechanic.SetMechanicStatus(MechanicStatus.Available);
+
+                            // Update data mechanic
+                            await CreateMechanicHashSetAsync(db, mechanic);
+                            await BlockMechanicToAnOrder(db, mechanic.MechanicId, orderId);
+                            await BlockMechanicForSeveralMinutes(db, mechanic.MechanicId);
+                        }
+                        else
+                        {
+                            return false;
+                        }
+
+                        // Keluar dari loop jika lock berhasil diambil
+                        break;
+                    }
+
+                    retryCount++;   // Tambah hitungan percobaan
+
+                    // Delay sebelum mencoba lagi (opsional, misal 100 milidetik)
+                    await Task.Delay(TimeSpan.FromMilliseconds(200));
                 }
+                while (!isMechanicLockAcquired && retryCount < MAX_RETRY_MECHANIC_LOCK);  // Ulangi selama belum berhasil dan retry < 5
+
+                // Jika setelah 5 kali retry masih tidak berhasil,  return false
+                if (!isMechanicLockAcquired)
+                {
+                    return false;
+                }
+
+
+
 
 
                 var resource1 = CacheKey.OrderWaitingMechanicConfirmDataPrefix(orderId);
@@ -367,27 +472,54 @@ public class MechanicCache : IMechanicCache
         if (lockAcquired.IsAcquired)
         {
             var order = await GetOrderTaskAsync(db, orderId);
-            if (order is null)
-            {
-                return false;
-            }
-
-            if (order.MechanicId != mechanicId.ToString())
+            if (order is null || order.MechanicId != mechanicId.ToString())
             {
                 return false;
             }
 
             if (!string.IsNullOrEmpty(order.MechanicId))
-            {
-                var mechanic = await GetMechanicHashSetAsync(db, order.MechanicId); 
-                if (mechanic is not null && mechanic.OrderId == orderId.ToString())
+            { 
+                int retryCount = 0;      // Untuk melacak berapa kali percobaan
+                int maxRetries = 5;      // Maksimum percobaan adalah 5 kali
+                bool isMechanicLockAcquired = false;
+
+                do
                 {
-                    // reset order pada mechanic dan setel menjadi available lagi, tapi tidak segera relesae, karena ada lock mecahnic yang tidak dihapus
-                    mechanic.ResetOrder();  
-                    mechanic.SetMechanicStatus(MechanicStatus.Available);
-                    await CreateMechanicHashSetAsync(db, mechanic);
-                    // block mechanicId dari order id terkait karena mechanic membatalkan pesanan
-                    await BlockMechanicToAnOrder(db, mechanic.MechanicId, orderId);
+                    using var lockMechanic = await _redLockFactory.CreateLockAsync(CacheKey.LockMechanicPrefix(order.MechanicId), TimeSpan.FromMinutes(10));
+                    isMechanicLockAcquired = lockMechanic.IsAcquired;
+
+                    if (isMechanicLockAcquired)
+                    {
+                        // Jika berhasil memperoleh lock, proses data mekanik
+                        var mechanic = await GetMechanicHashSetAsync(db, order.MechanicId);
+                        if (mechanic is not null && mechanic.OrderId == orderId)
+                        {
+                            // Operasi domain
+                            mechanic.ResetOrder();
+                            mechanic.SetMechanicStatus(MechanicStatus.Available); 
+                            // Update data mechanic
+                            await CreateMechanicHashSetAsync(db, mechanic);
+
+
+                            await BlockMechanicToAnOrder(db, mechanic.MechanicId, orderId);
+                            await BlockMechanicForSeveralMinutes(db, mechanic.MechanicId);
+                        }  
+
+                        // Keluar dari loop jika lock berhasil diambil
+                        break;
+                    }
+
+                    retryCount++;   // Tambah hitungan percobaan
+
+                    // Delay sebelum mencoba lagi (opsional, misal 100 milidetik)
+                    await Task.Delay(TimeSpan.FromMilliseconds(100));
+                }
+                while (!isMechanicLockAcquired && retryCount < maxRetries);  // Ulangi selama belum berhasil dan retry < 5
+
+                // Jika setelah 5 kali retry masih tidak berhasil,  return false
+                if (!isMechanicLockAcquired)
+                {
+                    return false;
                 }
 
 
@@ -423,31 +555,51 @@ public class MechanicCache : IMechanicCache
         if (lockAcquired.IsAcquired)
         {    
             var order = await GetOrderTaskAsync(db, orderId);
-            if (order is null)
+            if (order is null || order.BuyerId != buyerId)
             {
                 return false;
             }
-
-            if (order.BuyerId != buyerId.ToString()) 
-            {
-                return false;
-            }
-
-
+              
             // MECHANIC RESET FOR ORDER ASSIGNED IF EXISTS
             if (!string.IsNullOrEmpty(order.MechanicId))
             {
-                var mechanic = await GetMechanicHashSetAsync(db, order.MechanicId);
-                if (mechanic is not null && mechanic.OrderId == orderId.ToString())
+                int retryCount = 0;      // Untuk melacak berapa kali percobaan 
+                bool isMechanicLockAcquired = false;
+
+                do
                 {
-                    // domain operation
-                    mechanic.ResetOrder();
-                    mechanic.SetMechanicStatus(MechanicStatus.Available);
-                    // update data mechanic
-                    await CreateMechanicHashSetAsync(db, mechanic); 
-                    // lepaskan lock mechanic karena mechanic tidak melakukan fault
-                    await DeleteKeyRedlockAsync(db, CacheKey.LockMechanicPrefix(mechanic.MechanicId));
-                } 
+                    using var lockMechanic = await _redLockFactory.CreateLockAsync(CacheKey.LockMechanicPrefix(order.MechanicId), TimeSpan.FromMinutes(10));
+                    isMechanicLockAcquired = lockMechanic.IsAcquired;
+
+                    if (isMechanicLockAcquired)
+                    {
+                        // Jika berhasil memperoleh lock, proses data mekanik
+                        var mechanic = await GetMechanicHashSetAsync(db, order.MechanicId);
+                        if (mechanic is not null && mechanic.OrderId == orderId)
+                        {
+                            // Operasi domain
+                            mechanic.ResetOrder();
+                            mechanic.SetMechanicStatus(MechanicStatus.Available); 
+                            // Update data mechanic
+                            await CreateMechanicHashSetAsync(db, mechanic);
+                        }
+
+                        // Keluar dari loop jika lock berhasil diambil
+                        break;
+                    }
+
+                    retryCount++;   // Tambah hitungan percobaan
+
+                    // Delay sebelum mencoba lagi (opsional, misal 100 milidetik)
+                    await Task.Delay(TimeSpan.FromMilliseconds(100));
+                }
+                while (!isMechanicLockAcquired && retryCount < MAX_RETRY_MECHANIC_LOCK);  // Ulangi selama belum berhasil dan retry < 5
+
+                // Jika setelah 5 kali retry masih tidak berhasil,  return false
+                if (!isMechanicLockAcquired)
+                {
+                    return false;
+                }
             } 
 
 
@@ -536,18 +688,9 @@ public class MechanicCache : IMechanicCache
                 return;
             }
 
-            if (confirmation.ExpiredAtUtc > DateTime.UtcNow) // not expired already
+             
+            if (confirmation.ExpiredAtUtc <= DateTime.UtcNow) // has expired
             {
-                await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicConfirmQueue(), confirmation.OrderId);
-                await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicConfirmQueue(), confirmation.OrderId);
-            }
-            else // has expired, process it 
-            {
-                var resource = CacheKey.OrderWaitingMechanicConfirmDataPrefix(confirmation.OrderId);
-                await db.KeyDeleteAsync(resource);
-
-
-
                 var order = await GetOrderTaskAsync(db, confirmation.OrderId);
                 if (order is null)
                 {
@@ -555,33 +698,41 @@ public class MechanicCache : IMechanicCache
                 }
 
 
-                order.SetOrderStatus(OrderTaskStatus.WaitingMechanic);
-                order.ResetMechanic();
-                await CreateOrderHashSetAsync(db, order);
-
-
-
-                var mechanic = await GetMechanicHashSetAsync(db, confirmation.MechanicId);
-                if (mechanic is not null && mechanic.OrderId == confirmation.OrderId)
+                using var lockMechanic = await _redLockFactory.CreateLockAsync(
+                    CacheKey.LockMechanicPrefix(confirmation.MechanicId), TimeSpan.FromMinutes(10)); 
+                if (lockMechanic.IsAcquired)
                 {
-                    mechanic.ResetOrder();
-                    mechanic.SetMechanicStatus(MechanicStatus.Available);
-                    await CreateMechanicHashSetAsync(db, mechanic);
-                }
+                    order.SetOrderStatus(OrderTaskStatus.WaitingMechanic);
+                    order.ResetMechanic();
+                    await CreateOrderHashSetAsync(db, order);
 
 
-                await BlockMechanicToAnOrder(db, confirmation.MechanicId, orderId);
 
-                await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), confirmation.OrderId);
-                await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), confirmation.OrderId);
-            }
+                    var mechanic = await GetMechanicHashSetAsync(db, confirmation.MechanicId);
+                    if (mechanic is not null && mechanic.OrderId == confirmation.OrderId)
+                    {
+                        mechanic.ResetOrder();
+                        mechanic.SetMechanicStatus(MechanicStatus.Available);
+                        await CreateMechanicHashSetAsync(db, mechanic);
+                        await BlockMechanicToAnOrder(db, confirmation.MechanicId, orderId);
+                    }
 
-            return;
+                      
+                    await db.KeyDeleteAsync(CacheKey.OrderWaitingMechanicConfirmDataPrefix(confirmation.OrderId));
+                    await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicConfirmQueue(), confirmation.OrderId);
+                    await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), confirmation.OrderId);
+                    await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), confirmation.OrderId);
+
+                    return;
+                } 
+            } 
         }
 
         await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicConfirmQueue(), orderId.ToString());
         await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicConfirmQueue(), orderId.ToString());
     }
+
+    static int totalAssignment = 1;
 
     private async Task TryAssignMechanicToOrderAsync(IDatabase db, string orderId)
     {
@@ -597,14 +748,9 @@ public class MechanicCache : IMechanicCache
                 return;
             }
 
-            var order = await GetOrderTaskAsync(db, orderId);
-
-            if (order is null) return;
-
-            if (order.OrderStatus == OrderTaskStatus.OrderTaskCompleted || order.OrderStatus == OrderTaskStatus.MechanicAssigned)
-            {
+            var order = await GetOrderTaskAsync(db, orderId); 
+            if (order is null || order.OrderStatus == OrderTaskStatus.OrderTaskCompleted || order.OrderStatus == OrderTaskStatus.MechanicAssigned)
                 return;
-            }
 
             var mechanics = await db.GeoRadiusAsync(
                 CacheKey.MechanicGeo(), order.Longitude, order.Latitude, 30, GeoUnit.Miles, count: 100, order: Order.Ascending);
@@ -617,21 +763,19 @@ public class MechanicCache : IMechanicCache
                 }
 
                 var mechanicId = mechanic.Member.ToString();
-                (var isAcquired, var lockResource) = await AcquireLockAsync(mechanicId);
+                using var lockMechanic = await _redLockFactory.CreateLockAsync(CacheKey.LockMechanicPrefix(mechanicId), TimeSpan.FromMinutes(10));
 
-                if (isAcquired)
+                if (lockMechanic.IsAcquired)
                 {
                     var blocked = await IsMechanicBlockedFromOrder(db, mechanicId.ToString(), orderId);
                     if (blocked)
-                    {
-                        await DeleteKeyAsync(db, lockResource!);
+                    { 
                         continue;
                     }
 
                     var mechanicData = await GetMechanicHashSetAsync(db, mechanicId.ToString());
                     if (mechanicData is null)
-                    {
-                        await DeleteKeyAsync(db, lockResource!);
+                    { 
                         continue;
                     }
 
@@ -648,13 +792,14 @@ public class MechanicCache : IMechanicCache
 
 
                         await OrderWaitingConfirmMechanic(db, order, mechanicData);
-                        return;
-                    }
 
-                    if (mechanicData.Status is MechanicStatus.Unavailable || mechanicData.Status is MechanicStatus.Bussy)
-                    {
-                        await DeleteKeyAsync(db, lockResource!);
-                    }
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.WriteLine(totalAssignment);
+                        totalAssignment++;
+
+
+                        return;
+                    } 
                 }
             }
              
@@ -694,7 +839,7 @@ public class MechanicCache : IMechanicCache
         {
             new (nameof(OrderTaskMechanicConfirm.OrderId), order.OrderId),
             new (nameof(OrderTaskMechanicConfirm.MechanicId), mechanic.MechanicId),
-            new (nameof(OrderTaskMechanicConfirm.ExpiredAtUtc), DateTime.UtcNow.AddSeconds(180).ToString())
+            new (nameof(OrderTaskMechanicConfirm.ExpiredAtUtc), DateTime.UtcNow.AddSeconds(WAITING_MECHANIC_CONFIRM_IN_SECOND).ToString())
         };
 
         await db.HashSetAsync(resource, hashEntries); 
@@ -720,22 +865,7 @@ public class MechanicCache : IMechanicCache
             throw;
         }
     }
-
-
-
-    private async Task<(bool isAcquired, string? resourceLock)> AcquireLockAsync(string mechanicId)
-    {
-        var lockResource = CacheKey.LockMechanicPrefix(mechanicId);
-        var mechanicLock = await _redLockFactory.CreateLockAsync(lockResource, TimeSpan.FromMinutes(10));
-
-        if (mechanicLock.IsAcquired)
-        {
-            return (true, lockResource);
-        }
-
-        return (false, null);
-    }
-
+     
     private async Task DeleteKeyRedlockAsync(IDatabase db, string lockResource)
     {
         await db.KeyDeleteAsync(CacheKey.RedlockPrefix(lockResource));
@@ -851,6 +981,12 @@ public class MechanicCache : IMechanicCache
         {
             throw;
         }
+    }
+
+    private async Task BlockMechanicForSeveralMinutes(IDatabase db, string mechanicId)
+    {
+        await _redLockFactory.CreateLockAsync(
+            CacheKey.LockMechanicPenaltyPrefix(mechanicId), TimeSpan.FromMinutes(TOTAL_PENALTY_IN_SECONDS));
     }
 
     private async Task CreateMechanicHashSetAsync(IDatabase db, MechanicExistence mechanic)

@@ -60,7 +60,8 @@ public class CreateMechanicUserCommandHandler(
 
             if (await _unitOfWork.BaseUsers.GetAnyByIdAsync(request.IdentityId))
             {
-                return Result.Failure("User already registered", ResponseStatus.Conflict);
+                return await RollbackAndReturnFailureAsync(
+                    Result.Failure("User already registered", ResponseStatus.NotFound), cancellationToken); 
             }
 
             // get all users that already registered with related request identities such as email, username, phonenumber, and identity id(from identity database)

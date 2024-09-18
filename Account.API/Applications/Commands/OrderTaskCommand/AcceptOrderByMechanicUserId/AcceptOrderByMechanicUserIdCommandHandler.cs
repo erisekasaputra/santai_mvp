@@ -1,17 +1,14 @@
 ﻿using Account.API.Applications.Services.Interfaces;
 using Account.Domain.Events;
-using Account.Domain.SeedWork;
-using Amazon.SecretsManager.Model.Internal.MarshallTransformations;
+using Account.Domain.SeedWork; 
 using Core.Exceptions;
 using Core.Messages;
 using Core.Results;
 using Core.Utilities;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
+using MediatR; 
 using Polly;
 using Polly.Retry;
-using System.Data;
-using System.Data.Common;
+using System.Data; 
 
 namespace Account.API.Applications.Commands.OrderTaskCommand.AcceptOrderByMechanicUserId;
 

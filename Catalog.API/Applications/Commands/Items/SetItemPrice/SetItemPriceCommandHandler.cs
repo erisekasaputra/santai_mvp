@@ -97,10 +97,12 @@ public class SetItemPriceCommandHandler : IRequestHandler<SetItemPriceCommand, R
             }
             catch (DBConcurrencyException)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 throw;
             }
             catch
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 throw;
             }
         });
