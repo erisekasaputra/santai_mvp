@@ -52,53 +52,37 @@ public static class BusinessUserApi
                 config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
             });
 
-        app.MapGet("/{businessUserId}/staffs", GetPaginatedStaff) 
-            .RequireAuthorization(
-                PolicyName.BusinessUserAndAdministratorUserPolicy.ToString())
-            .CacheOutput(config =>
-            {
-                config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
-                config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
-            });
-
-        app.MapGet("/{businessUserId}/business-licenses", GetPaginatedBusinessLicense)
-            .RequireAuthorization(
-                PolicyName.BusinessUserAndAdministratorUserPolicy.ToString())
-            .CacheOutput(config =>
-            {
-                config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
-                config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
-            });
-
-        app.MapGet("/{businessUserId}", GetBusinessUserById)
-            .CacheOutput()
+        app.MapGet("/{businessUserId}/staffs", GetPaginatedStaff)
             .RequireAuthorization(
                 PolicyName.BusinessUserAndAdministratorUserPolicy.ToString());
 
-        app.MapGet("/{businessUserId}/staffs/{staffId}", GetStaffByUserIdAndStaffId)
-            .CacheOutput()
+        app.MapGet("/{businessUserId}/business-licenses", GetPaginatedBusinessLicense)
+            .RequireAuthorization(
+                PolicyName.BusinessUserAndAdministratorUserPolicy.ToString());
+
+        app.MapGet("/{businessUserId}", GetBusinessUserById)
+            .RequireAuthorization(
+                PolicyName.BusinessUserAndAdministratorUserPolicy.ToString());
+
+        app.MapGet("/{businessUserId}/staffs/{staffId}", GetStaffByUserIdAndStaffId) 
             .RequireAuthorization(
                 PolicyName.BusinessUserAndStaffUserAndAdministratorUserPolicy.ToString()); 
 
 
 
-        app.MapGet("/staffs/email", GetEmailByStaffId)
-            .CacheOutput()
+        app.MapGet("/staffs/email", GetEmailByStaffId) 
             .RequireAuthorization(
                 PolicyName.StaffUserOnlyPolicy.ToString());
 
-        app.MapGet("/staffs/phone-number", GetPhoneNumberByStaffId)
-            .CacheOutput()
+        app.MapGet("/staffs/phone-number", GetPhoneNumberByStaffId) 
             .RequireAuthorization(
                 PolicyName.StaffUserOnlyPolicy.ToString());
 
-        app.MapGet("/staffs/time-zone", GetTimeZoneByStaffId)
-            .CacheOutput()
+        app.MapGet("/staffs/time-zone", GetTimeZoneByStaffId) 
             .RequireAuthorization(
                 PolicyName.StaffUserOnlyPolicy.ToString());
 
-        app.MapGet("/staffs/device-id", GetDeviceIdByStaffId)
-            .CacheOutput()
+        app.MapGet("/staffs/device-id", GetDeviceIdByStaffId) 
             .RequireAuthorization(
                 PolicyName.StaffUserOnlyPolicy.ToString());
 

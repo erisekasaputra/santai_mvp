@@ -31,12 +31,7 @@ public static class RegularUserApi
             .RequireAuthorization(PolicyName.RegularUserAndAdministratorUserPolicy.ToString());
 
         app.MapGet("/", GetPaginatedRegularUser)
-            .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString())
-            .CacheOutput(config =>
-            {
-                config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
-                config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
-            });
+            .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
 
         app.MapPost("/", CreateRegularUser)
             .WithMetadata(new IdempotencyAttribute(nameof(CreateRegularUser)))

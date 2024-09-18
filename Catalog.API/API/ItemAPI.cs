@@ -24,22 +24,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace Catalog.API.API;
 
 public static class ItemAPI
-{
-    const int _cacheExpiry = 10;
+{ 
     public static IEndpointRouteBuilder ItemRouter(this IEndpointRouteBuilder route, string groupName)
     {
-        var app = route.MapGroup(groupName); 
+        var app = route.MapGroup(groupName);
 
         app.MapGet("/items/{itemId}", GetItemById)
-            .RequireAuthorization()
-            .CacheOutput(config => config.Expire(TimeSpan.FromSeconds(_cacheExpiry)));
+            .RequireAuthorization();
 
         app.MapGet("/items", GetPaginatedItem)
-            .RequireAuthorization().CacheOutput(config =>
-            {
-                config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
-                config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
-            }); 
+            .RequireAuthorization();
 
         app.MapPost("/items", CreateNewItem)
             .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());

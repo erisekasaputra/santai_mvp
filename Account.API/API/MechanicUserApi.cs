@@ -46,36 +46,21 @@ public static class MechanicUserApi
 
         app.MapPost("/", CreateMechanicUser) 
             .WithMetadata(new IdempotencyAttribute(nameof(CreateMechanicUser)))
-            .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());
-
-        app.MapGet("test", TestCreateMechanic);
+            .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString()); 
 
         app.MapGet("/", GetPaginatedMechanicUser)
-             .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString())
-             .CacheOutput(config =>
-             {
-                 config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
-                 config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
-             });
+             .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
 
-        app.MapGet("/{mechanicUserId}", GetMechanicUserById)
-            .CacheOutput()
-             .RequireAuthorization(PolicyName.MechanicUserAndAdministratorUserPolicy.ToString()); 
+        app.MapGet("/{mechanicUserId}", GetMechanicUserById) 
+             .RequireAuthorization(PolicyName.MechanicUserAndAdministratorUserPolicy.ToString());
 
         app.MapGet("/{mechanicUserId}/certifications", GetPaginatedCertificationsByMechanicUserId)
-             .RequireAuthorization(PolicyName.MechanicUserAndAdministratorUserPolicy.ToString())
-             .CacheOutput(config =>
-             {
-                 config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
-                 config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
-             }); 
+             .RequireAuthorization(PolicyName.MechanicUserAndAdministratorUserPolicy.ToString());
 
-        app.MapGet("/{mechanicUserId}/driving-license", GetDrivingLicenseByMechanicUserId)
-            .CacheOutput()
+        app.MapGet("/{mechanicUserId}/driving-license", GetDrivingLicenseByMechanicUserId) 
             .RequireAuthorization(PolicyName.MechanicUserAndAdministratorUserPolicy.ToString());
 
-        app.MapGet("/{mechanicUserId}/national-identity", GetNationalIdentityByMechanicUserId)
-            .CacheOutput()
+        app.MapGet("/{mechanicUserId}/national-identity", GetNationalIdentityByMechanicUserId) 
             .RequireAuthorization(PolicyName.MechanicUserAndAdministratorUserPolicy.ToString());
 
 
@@ -130,15 +115,7 @@ public static class MechanicUserApi
         app.MapDelete("/{mechanicUserId}", DeleteMechanicUserByUserId)  
             .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
 
-
-
-
-
-        app.MapPatch("/{mechanicId}/order/{orderId}/accept", TestAccept)
-             .AllowAnonymous();
-
-        app.MapPatch("/{mechanicId}/order/{orderId}/reject", TestReject)
-             .AllowAnonymous();
+         
 
         return app;
     }

@@ -25,25 +25,17 @@ public static class UserApi
             .RequireAuthorization(
                 PolicyName.BusinessUserAndAdministratorUserPolicy.ToString());
 
-        app.MapGet("/email", GetEmailByUserId) 
-            .RequireAuthorization()
-            .CacheOutput();
-        
+        app.MapGet("/email", GetEmailByUserId)
+            .RequireAuthorization();
+
         app.MapGet("/phone-number", GetPhoneNumberByUserId)
-            .RequireAuthorization()
-            .CacheOutput();
-        
+            .RequireAuthorization();
+
         app.MapGet("/time-zone", GetTimeZoneByUserId)
-            .RequireAuthorization()
-            .CacheOutput();
+            .RequireAuthorization();
 
         app.MapPost("{userId}/info", GetByUserId)
-            .RequireAuthorization(PolicyName.ServiceToServiceOnlyPolicy.ToString())
-            .CacheOutput(config =>
-            {
-                config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
-                config.SetVaryByQuery("userId");
-            });
+            .RequireAuthorization(PolicyName.ServiceToServiceOnlyPolicy.ToString());
 
         return app;
     } 

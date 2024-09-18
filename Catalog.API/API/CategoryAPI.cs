@@ -20,16 +20,10 @@ public static class CategoryAPI
         var app = route.MapGroup(groupName);
 
         app.MapGet("/categories/{categoryId}", GetCategoryById)
-            .RequireAuthorization()
-            .CacheOutput(config => config.Expire(TimeSpan.FromSeconds(_cacheExpiry)));
+            .RequireAuthorization();
 
         app.MapGet("/categories", GetPaginatedCategory)
-            .RequireAuthorization()
-            .CacheOutput(config =>
-            {
-                config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
-                config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
-            });
+            .RequireAuthorization();
 
         app.MapPost("/categories", CreateNewCategory)
             .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());

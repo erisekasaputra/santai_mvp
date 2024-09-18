@@ -1,0 +1,32 @@
+[
+  {
+    "ContainingType": "Master.Data.API.Controllers.DataController",
+    "Method": "GetMasterDataBasicInspection",
+    "RelativePath": "api/v1/master/order/basic-inspection",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Master.Data.API.Controllers.DataController",
+    "Method": "GetMasterDataPreServiceInspection",
+    "RelativePath": "api/v1/master/order/pre-service-inspection",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Master.Data.API.Controllers.DataController",
+    "Method": "GetMasterDataServiceFee",
+    "RelativePath": "api/v1/master/order/service-fee",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  }
+]

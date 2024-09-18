@@ -6,6 +6,7 @@ using Core.Utilities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.OutputCaching;
 using Ordering.API.Applications.Commands.Orders.CancelOrderByBuyer;
 using Ordering.API.Applications.Commands.Orders.CancelOrderByMechanic; 
 using Ordering.API.Applications.Commands.Orders.CreateOrder;
@@ -140,6 +141,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("{orderId}/secret")]
+    [OutputCache(Duration = 60)]
     public async Task<IResult> GetOrderSecret(
         Guid orderId)
     {
@@ -165,6 +167,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet]
+    [OutputCache(Duration = 60)]
     public async Task<IResult> GetPaginatedOrders(
         [AsParameters] PaginatedRequestDto request)
     {

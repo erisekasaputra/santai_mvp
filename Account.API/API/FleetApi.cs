@@ -27,27 +27,19 @@ public static class FleetApi
 
         app.MapPost("/", CreateFleetByUserId)
             .WithMetadata(new IdempotencyAttribute(nameof(CreateFleetByUserId)))
-            .RequireAuthorization(); 
+            .RequireAuthorization();
 
         app.MapGet("/", GetPaginatedFleetByUserId)
-            .RequireAuthorization()
-            .CacheOutput(config =>
-            {
-                config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
-                config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
-            }); 
+            .RequireAuthorization();
 
         app.MapGet("/{fleetId}", GetFleetByIdByUserId)
-            .RequireAuthorization()
-            .CacheOutput(); 
+            .RequireAuthorization();
 
         app.MapDelete("/{fleetId}", DeleteFleetByIdByUserId)
-            .RequireAuthorization()
             .RequireAuthorization(); 
-        
+
         app.MapPut("/{fleetId}", UpdateFleetByUserId)
-            .RequireAuthorization()
-            .RequireAuthorization(); 
+            .RequireAuthorization();
 
         return builder; 
     }

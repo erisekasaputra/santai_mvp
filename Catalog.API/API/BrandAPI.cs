@@ -20,16 +20,10 @@ public static class BrandAPI
         var app = route.MapGroup(groupName);
 
         app.MapGet("/brands/{brandId}", GetBrandById)
-            .RequireAuthorization()
-            .CacheOutput(config => config.Expire(TimeSpan.FromSeconds(_cacheExpiry)));
+            .RequireAuthorization();
 
         app.MapGet("/brands", GetPaginatedBrand)
-            .RequireAuthorization()
-            .CacheOutput(config =>
-            {
-                config.Expire(TimeSpan.FromSeconds(_cacheExpiry));
-                config.SetVaryByQuery(PaginatedRequestDto.PageNumberName, PaginatedRequestDto.PageSizeName);
-            }); 
+            .RequireAuthorization();
 
         app.MapPost("/brands", CreateNewBrand)
             .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());

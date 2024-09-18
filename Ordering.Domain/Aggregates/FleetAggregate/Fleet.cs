@@ -1,6 +1,4 @@
-﻿using Core.Exceptions;
-using Microsoft.EntityFrameworkCore;
-using Ordering.Domain.Enumerations;
+﻿using Ordering.Domain.Enumerations;
 using Ordering.Domain.SeedWork;
 
 namespace Ordering.Domain.Aggregates.FleetAggregate;
@@ -14,8 +12,8 @@ public class Fleet : Entity
     public string RegistrationNumber { get; private set; }
     public string? ImageUrl { get; private set; } 
     public InspectionStatus InspectionStatus { get; private set; }
-    public ICollection<BasicInspection> BasicInspections { get; private set; } = [];
-    public ICollection<PreServiceInspection> PreServiceInspections { get; private set; } = [];
+    public ICollection<BasicInspection> BasicInspections { get; private set; }
+    public ICollection<PreServiceInspection> PreServiceInspections { get; private set; }
 
     public Fleet()
     {
@@ -24,6 +22,8 @@ public class Fleet : Entity
         RegistrationNumber = string.Empty;
         ImageUrl = string.Empty;
         InspectionStatus = InspectionStatus.BasicInspection;
+        BasicInspections = [];
+        PreServiceInspections = [];
     }
 
     public Fleet(
@@ -41,61 +41,80 @@ public class Fleet : Entity
         RegistrationNumber = registrationNumber;
         ImageUrl = imageUrl;
         InspectionStatus = InspectionStatus.BasicInspection;
+        BasicInspections = [];
+        PreServiceInspections = [];
     }
 
-    public void PutBasicInspection(string parameter, int value)
+    public void AddBasicInspectionDefault(
+        string description,
+        string parameter,
+        int value)
     {
-        BasicInspections ??= []; 
-        if (BasicInspections.Any(x => x.Parameter == parameter)) 
+        BasicInspections ??= [];
+        var basicInspection = BasicInspections.FirstOrDefault(x => x.Parameter == parameter);
+        if (basicInspection is not null)
         {
             return;
         }
 
-        var basicInspection = new BasicInspection(OrderId, FleetId, Id, parameter, value);
-        basicInspection.SetEntityState(EntityState.Added);
-        BasicInspections.Add(basicInspection);
+        BasicInspections.Add(new BasicInspection(OrderId, FleetId, Id, description, parameter, value));
+    }
+
+    public void PutBasicInspection(string parameter, int value)
+    {
+        BasicInspections ??= [];
+        var basicInspection = BasicInspections.FirstOrDefault(x => x.Parameter == parameter); 
+        if (basicInspection is null) 
+        {
+            return;
+        }
+
+        basicInspection.Update(value);
+    }
+
+    public void AddPreServiceInspection(
+        string description,
+        string parameter, 
+        int rating,
+        ICollection<(string description, string parameter, bool isWorking)> preInspectionResults)
+    {
+        PreServiceInspections ??= [];
+
+        var check = PreServiceInspections.FirstOrDefault(x => x.Parameter == parameter);
+        if (check is not null)
+        {
+            return;
+        }
+
+        var preServiceInspection = new PreServiceInspection(
+            OrderId,
+            FleetId,
+            Id,
+            description,
+            parameter,
+            rating,
+            preInspectionResults);
+
+        PreServiceInspections.Add(preServiceInspection); 
     }
 
     public void PutPreServiceInspection(
         string parameter, 
         int rating, 
-        ICollection<(string parameter, bool isWorking)> preInspectionResults)
+        ICollection<(string description, string parameter, bool isWorking)> preInspectionResults)
     {
         PreServiceInspections ??= []; 
 
         var preServiceInspection = PreServiceInspections.FirstOrDefault(x => x.Parameter == parameter); 
-        if (preServiceInspection is not null) 
-        { 
-            preServiceInspection.UpdateRating(rating);
-
-            foreach (var item in preInspectionResults)
-            {
-                preServiceInspection.AddPreServiceInspectionResult(item.parameter, item.isWorking);
-            } 
-
-            return; 
-        }
-
-
-
-
-        var preInspection = new PreServiceInspection(OrderId, FleetId, Id, parameter, rating); 
-        if (preInspectionResults.Count == 0)
+        if (preServiceInspection is null) 
         {
-            throw new DomainException("Pre-Inspection result can not be empty");
+            return;
         }
 
+        preServiceInspection.UpdateRating(rating); 
         foreach (var item in preInspectionResults)
         {
-            preInspection.AddPreServiceInspectionResult(item.parameter, item.isWorking);
-        }
-
-        PreServiceInspections.Add(preInspection);
-    }
-
-
-    public void UpdatePreServiceInspection()
-    {
-
-    }
+            preServiceInspection.PutPreServiceInspectionResult(item.parameter, item.isWorking);
+        } 
+    }    
 }
