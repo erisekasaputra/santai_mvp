@@ -33,10 +33,7 @@ public class ScheduledOrderWorker : BackgroundService
             {
                 await Task.Delay(100000);
                 continue;
-            }
-
-
-
+            }  
 
             try
             {

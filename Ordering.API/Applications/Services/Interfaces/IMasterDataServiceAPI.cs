@@ -4,9 +4,9 @@ namespace Ordering.API.Applications.Services.Interfaces;
 
 public interface IMasterDataServiceAPI
 {
-    Task<IEnumerable<CancellationFeeResponseDto>?> GetCancellationFeeParametersMaster(); 
-    Task<IEnumerable<PreServiceInspectionResponseDto>?> GetPreServiceInspectionMaster();
-    Task<IEnumerable<FeeResponseDto>?> GetFeeParametersMaster();
-    Task<IEnumerable<BasicInspectionResponseDto>?> GetBasicInspectionMaster();
+    Task<CancellationFeeResponseDto?> GetCancellationFeeParametersMaster(); 
+    Task<List<PreServiceInspectionResponseDto>?> GetPreServiceInspectionMaster();
+    Task<List<FeeResponseDto>?> GetFeeParametersMaster();
+    Task<List<BasicInspectionResponseDto>?> GetBasicInspectionMaster();
     Task<MasterDataInitializationMasterResponseDto?> GetMasterDataInitializationMasterResponseDto();
 }

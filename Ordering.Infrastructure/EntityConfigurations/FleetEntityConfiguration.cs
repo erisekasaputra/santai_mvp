@@ -26,6 +26,16 @@ public class FleetEntityConfiguration : IEntityTypeConfiguration<Fleet>
             .IsRequired()
             .HasMaxLength(255);
 
+        builder.HasMany(e => e.BasicInspections)
+            .WithOne()
+            .HasForeignKey(e => e.FleetAggregateId)
+            .OnDelete(DeleteBehavior.Cascade);
+           
+        builder.HasMany(e => e.PreServiceInspections)
+            .WithOne()
+            .HasForeignKey(e => e.FleetAggregateId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.Ignore(p => p.EntityStateAction);
         builder.Ignore(p => p.DomainEvents);
     }

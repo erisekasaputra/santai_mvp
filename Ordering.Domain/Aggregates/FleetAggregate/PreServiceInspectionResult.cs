@@ -11,6 +11,12 @@ public class PreServiceInspectionResult : Entity
     public string Parameter { get; set; }
     public bool IsWorking { get; set; }
 
+    public PreServiceInspectionResult()
+    {
+        Description = string.Empty;
+        Parameter = string.Empty;
+    }
+
     public PreServiceInspectionResult(
         Guid orderId,
         Guid fleetId,

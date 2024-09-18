@@ -1,16 +1,16 @@
 ﻿<Project>
   <ItemGroup>
-    <StaticWebAssetEndpoint Include="_content/Master.Data.API/Order/BasicInspection/basic-inspection.2xco4brsz7.json">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\BasicInspection\basic-inspection.json'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"2xco4brsz7"},{"Name":"integrity","Value":"sha256-mmiujyK2xQ\u002BmJf7Yfik\u002BAprOiHzsBElqNLgnK0lr53U="},{"Name":"label","Value":"_content/Master.Data.API/Order/BasicInspection/basic-inspection.json"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"149"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022mmiujyK2xQ\u002BmJf7Yfik\u002BAprOiHzsBElqNLgnK0lr53U=\u0022"},{"Name":"Last-Modified","Value":"Wed, 18 Sep 2024 19:19:30 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/Master.Data.API/Order/BasicInspection/basic-inspection.json">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\BasicInspection\basic-inspection.json'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-mmiujyK2xQ\u002BmJf7Yfik\u002BAprOiHzsBElqNLgnK0lr53U="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"149"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022mmiujyK2xQ\u002BmJf7Yfik\u002BAprOiHzsBElqNLgnK0lr53U=\u0022"},{"Name":"Last-Modified","Value":"Wed, 18 Sep 2024 19:19:30 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-awoRXUwgFMzND4CmGbnZYxTAO5HxPjCs9K5bYU7uvsk="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"95"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022awoRXUwgFMzND4CmGbnZYxTAO5HxPjCs9K5bYU7uvsk=\u0022"},{"Name":"Last-Modified","Value":"Wed, 18 Sep 2024 22:33:12 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/Master.Data.API/Order/BasicInspection/basic-inspection.ty7plz682s.json">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\BasicInspection\basic-inspection.json'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"ty7plz682s"},{"Name":"integrity","Value":"sha256-awoRXUwgFMzND4CmGbnZYxTAO5HxPjCs9K5bYU7uvsk="},{"Name":"label","Value":"_content/Master.Data.API/Order/BasicInspection/basic-inspection.json"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"95"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022awoRXUwgFMzND4CmGbnZYxTAO5HxPjCs9K5bYU7uvsk=\u0022"},{"Name":"Last-Modified","Value":"Wed, 18 Sep 2024 22:33:12 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/Master.Data.API/Order/CancellationFee/cancellation-fee.fiioof6xfq.json">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\CancellationFee\cancellation-fee.json'))</AssetFile>
@@ -24,29 +24,29 @@
       <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY="}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"78"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY=\u0022"},{"Name":"Last-Modified","Value":"Wed, 18 Sep 2024 20:23:07 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/Master.Data.API/Order/PreServiceInspection/pre-service-inspection.0y7qfws26q.json">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\PreServiceInspection\pre-service-inspection.json'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"0y7qfws26q"},{"Name":"integrity","Value":"sha256-SCa4TAOY8rC98A22sZXb9Ze4Kh\u002BAe\u002B3FOiwfqN8rPpM="},{"Name":"label","Value":"_content/Master.Data.API/Order/PreServiceInspection/pre-service-inspection.json"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"446"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022SCa4TAOY8rC98A22sZXb9Ze4Kh\u002BAe\u002B3FOiwfqN8rPpM=\u0022"},{"Name":"Last-Modified","Value":"Wed, 18 Sep 2024 19:19:23 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/Master.Data.API/Order/PreServiceInspection/pre-service-inspection.json">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\PreServiceInspection\pre-service-inspection.json'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-SCa4TAOY8rC98A22sZXb9Ze4Kh\u002BAe\u002B3FOiwfqN8rPpM="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"446"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022SCa4TAOY8rC98A22sZXb9Ze4Kh\u002BAe\u002B3FOiwfqN8rPpM=\u0022"},{"Name":"Last-Modified","Value":"Wed, 18 Sep 2024 19:19:23 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-FoVB0UBF8BCOt4zETwE1ckn3l7/CemlEXgJg1mxKB1I="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"263"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022FoVB0UBF8BCOt4zETwE1ckn3l7/CemlEXgJg1mxKB1I=\u0022"},{"Name":"Last-Modified","Value":"Wed, 18 Sep 2024 22:33:23 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/Master.Data.API/Order/PreServiceInspection/pre-service-inspection.m1zqj1rw7l.json">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\PreServiceInspection\pre-service-inspection.json'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"m1zqj1rw7l"},{"Name":"integrity","Value":"sha256-FoVB0UBF8BCOt4zETwE1ckn3l7/CemlEXgJg1mxKB1I="},{"Name":"label","Value":"_content/Master.Data.API/Order/PreServiceInspection/pre-service-inspection.json"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"263"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022FoVB0UBF8BCOt4zETwE1ckn3l7/CemlEXgJg1mxKB1I=\u0022"},{"Name":"Last-Modified","Value":"Wed, 18 Sep 2024 22:33:23 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/Master.Data.API/Order/ServiceFee/service-fee.1z315z32pj.json">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\ServiceFee\service-fee.json'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"1z315z32pj"},{"Name":"integrity","Value":"sha256-XQsUXKVoXWoiWgpr3k0hf476/GZevn4JahPOujFcEw8="},{"Name":"label","Value":"_content/Master.Data.API/Order/ServiceFee/service-fee.json"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"452"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022XQsUXKVoXWoiWgpr3k0hf476/GZevn4JahPOujFcEw8=\u0022"},{"Name":"Last-Modified","Value":"Wed, 18 Sep 2024 22:36:43 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/Master.Data.API/Order/ServiceFee/service-fee.json">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\ServiceFee\service-fee.json'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-P1Zy38kavo8CSWcOdnVOfkrIoN2NH3I9Hp8erL1uNCQ="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"588"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022P1Zy38kavo8CSWcOdnVOfkrIoN2NH3I9Hp8erL1uNCQ=\u0022"},{"Name":"Last-Modified","Value":"Wed, 18 Sep 2024 19:20:17 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/Master.Data.API/Order/ServiceFee/service-fee.v886rvhgkq.json">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\ServiceFee\service-fee.json'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"v886rvhgkq"},{"Name":"integrity","Value":"sha256-P1Zy38kavo8CSWcOdnVOfkrIoN2NH3I9Hp8erL1uNCQ="},{"Name":"label","Value":"_content/Master.Data.API/Order/ServiceFee/service-fee.json"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"588"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022P1Zy38kavo8CSWcOdnVOfkrIoN2NH3I9Hp8erL1uNCQ=\u0022"},{"Name":"Last-Modified","Value":"Wed, 18 Sep 2024 19:20:17 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-XQsUXKVoXWoiWgpr3k0hf476/GZevn4JahPOujFcEw8="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"452"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022XQsUXKVoXWoiWgpr3k0hf476/GZevn4JahPOujFcEw8=\u0022"},{"Name":"Last-Modified","Value":"Wed, 18 Sep 2024 22:36:43 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
   </ItemGroup>
 </Project>

@@ -2,7 +2,8 @@
 
 public class CancellationFeeResponseDto
 {
-    public List<string> CancellationParameters { get; private set; }
+    public List<string> CancellationParameters { get; set; }
+
     public CancellationFeeResponseDto(
         List<string> cancellationParameters)
     {

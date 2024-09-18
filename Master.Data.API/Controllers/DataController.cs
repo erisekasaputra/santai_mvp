@@ -71,7 +71,7 @@ public class DataController : ControllerBase
 
         string jsonString = System.IO.File.ReadAllText(filePath);  
 
-        return TypedResults.Json(jsonString);
+        return TypedResults.Ok(jsonString);
     }
 
 
@@ -89,7 +89,7 @@ public class DataController : ControllerBase
 
         string jsonString = System.IO.File.ReadAllText(filePath);
 
-        return TypedResults.Json(jsonString);
+        return TypedResults.Ok(jsonString);
     }
 
 
@@ -106,7 +106,7 @@ public class DataController : ControllerBase
 
         string jsonString = System.IO.File.ReadAllText(filePath);
 
-        return TypedResults.Json(jsonString);
+        return TypedResults.Ok(jsonString);
     }
 
 
@@ -125,7 +125,7 @@ public class DataController : ControllerBase
 
         string jsonString = System.IO.File.ReadAllText(filePath);
 
-        return TypedResults.Json(jsonString);
+        return TypedResults.Ok(jsonString);
     }
 
 

@@ -11,6 +11,12 @@ public class BasicInspection : Entity
     public string Parameter { get; private init; }
     public int Value { get; private set; }
 
+    public BasicInspection()
+    {
+        Description = string.Empty;
+        Parameter = string.Empty;
+    }
+
     public BasicInspection(
         Guid orderId,   
         Guid fleetId,

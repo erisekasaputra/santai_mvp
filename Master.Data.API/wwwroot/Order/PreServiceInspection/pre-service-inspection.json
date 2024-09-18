@@ -1,26 +1,14 @@
 ﻿[
   {
-    "Description": "",
-    "Parameter": "",
+    "Description": "RSprocket",
+    "Parameter": "RSprocket",
     "Rating": 0,
     "PreServiceInspectionResults": [
       {
-        "Description": "",
-        "Parameter": "",
+        "Description": "RSprocket",
+        "Parameter": "RSprocket",
         "IsWorking": false
       }
     ]
-  },
-  {
-    "Description": "",
-    "Parameter": "",
-    "Rating": 0,
-    "PreServiceInspectionResults": [
-      {
-        "Description": "",
-        "Parameter": "",
-        "IsWorking": false
-      }
-    ]
-  }
+  } 
 ]

@@ -2,11 +2,11 @@
 
 public class MechanicResponseDto
 { 
-    public Guid MechanicId { get; private set; }
-    public string Name { get; private set; }
-    public RatingResponseDto? Rating { get; private set; }
-    public decimal Performance { get; private set; }
-    public bool IsRated { get; private set; }
+    public Guid MechanicId { get; set; }
+    public string Name { get; set; }
+    public RatingResponseDto? Rating { get; set; }
+    public decimal Performance { get; set; }
+    public bool IsRated { get; set; }
 
     public MechanicResponseDto(
         Guid mechanicId,

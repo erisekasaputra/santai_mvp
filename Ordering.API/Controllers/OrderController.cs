@@ -23,6 +23,7 @@ using Ordering.API.Applications.Queries.Orders.GetPaginatedOrdersByUserId;
 using Ordering.API.Applications.Services.Interfaces;
 using Ordering.API.CustomAttributes;
 using Ordering.API.Extensions;
+using System.Reflection.Metadata.Ecma335;
 
 namespace Ordering.API.Controllers;
 
@@ -37,20 +38,44 @@ public class OrderController : ControllerBase
     private readonly IEncryptionService _kmsService;
     private readonly ILogger<OrderController> _logger;
     private readonly IUserInfoService _userInfoService;
+    private readonly IMasterDataServiceAPI _masterDataServiceAPI;
 
     public OrderController(
         IAccountServiceAPI accountService,
         IMediator mediator,
         IEncryptionService kmsService,
         ILogger<OrderController> logger,
-        IUserInfoService userInfoService)
+        IUserInfoService userInfoService,
+        IMasterDataServiceAPI masterDataServiceAPI)
     {
         _accountService = accountService;
         _mediator = mediator;
         _kmsService = kmsService;
         _logger = logger;
-        _userInfoService = userInfoService; 
-    } 
+        _userInfoService = userInfoService;
+        _masterDataServiceAPI = masterDataServiceAPI;
+    }
+
+
+    [HttpGet("test")]
+    public async Task<IResult> Test()
+    {
+        var result1 = await _masterDataServiceAPI.GetCancellationFeeParametersMaster();
+        var result2 = await _masterDataServiceAPI.GetMasterDataInitializationMasterResponseDto();
+        var result3 = await _masterDataServiceAPI.GetFeeParametersMaster();
+        var result4 = await _masterDataServiceAPI.GetBasicInspectionMaster();
+        var result5 = await _masterDataServiceAPI.GetPreServiceInspectionMaster();
+
+
+        return TypedResults.Ok(new 
+        {
+            //Result1 = result1,
+            Result2 = result2,
+            Result3 = result3,
+            Result4 = result4,
+            Result5 = result5 
+        });
+    }
 
     [Authorize]
     [HttpPost]

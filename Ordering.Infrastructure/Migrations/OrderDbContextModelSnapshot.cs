@@ -194,35 +194,6 @@ namespace Ordering.Infrastructure.Migrations
                     b.ToTable("OutboxState");
                 });
 
-            modelBuilder.Entity("Ordering.Domain.Aggregates.BuyerAggregate.Buyer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("BuyerId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("BuyerType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId")
-                        .IsUnique();
-
-                    b.ToTable("Buyers");
-                });
-
             modelBuilder.Entity("Ordering.Domain.Aggregates.CouponAggregate.Coupon", b =>
                 {
                     b.Property<Guid>("Id")
@@ -259,14 +230,174 @@ namespace Ordering.Infrastructure.Migrations
                     b.ToTable("Coupons");
                 });
 
-            modelBuilder.Entity("Ordering.Domain.Aggregates.MechanicAggregate.Mechanic", b =>
+            modelBuilder.Entity("Ordering.Domain.Aggregates.FleetAggregate.BasicInspection", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("MechanicId")
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("EntityStateAction")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("FleetAggregateId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FleetId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Parameter")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Value")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FleetAggregateId");
+
+                    b.ToTable("BasicInspection");
+                });
+
+            modelBuilder.Entity("Ordering.Domain.Aggregates.FleetAggregate.Fleet", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Brand")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("FleetId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("InspectionStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Model")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("RegistrationNumber")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
+
+                    b.ToTable("Fleets");
+                });
+
+            modelBuilder.Entity("Ordering.Domain.Aggregates.FleetAggregate.PreServiceInspection", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("EntityStateAction")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("FleetAggregateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FleetId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Parameter")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("Rating")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FleetAggregateId");
+
+                    b.ToTable("PreServiceInspection");
+                });
+
+            modelBuilder.Entity("Ordering.Domain.Aggregates.FleetAggregate.PreServiceInspectionResult", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("EntityStateAction")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("FleetId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<bool>("IsWorking")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Parameter")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("PreServiceInspectionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PreServiceInspectionId");
+
+                    b.ToTable("PreServiceInspectionResult");
+                });
+
+            modelBuilder.Entity("Ordering.Domain.Aggregates.OrderAggregate.Buyer", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("BuyerId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("BuyerType")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -276,16 +407,12 @@ namespace Ordering.Infrastructure.Migrations
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<decimal>("Performance")
-                        .HasPrecision(18, 4)
-                        .HasColumnType("decimal(18,4)");
-
                     b.HasKey("Id");
 
                     b.HasIndex("OrderId")
                         .IsUnique();
 
-                    b.ToTable("Mechanics");
+                    b.ToTable("Buyers");
                 });
 
             modelBuilder.Entity("Ordering.Domain.Aggregates.OrderAggregate.Cancellation", b =>
@@ -320,7 +447,8 @@ namespace Ordering.Infrastructure.Migrations
 
                     b.Property<string>("FeeDescription")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("PercentageOrValueType")
                         .IsRequired()
@@ -395,7 +523,8 @@ namespace Ordering.Infrastructure.Migrations
 
                     b.Property<string>("FeeDescription")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
@@ -417,45 +546,6 @@ namespace Ordering.Infrastructure.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("Fees");
-                });
-
-            modelBuilder.Entity("Ordering.Domain.Aggregates.OrderAggregate.Fleet", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Brand")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<Guid>("FleetId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("ImageUrl")
-                        .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.Property<string>("Model")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("RegistrationNumber")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId");
-
-                    b.ToTable("Fleets");
                 });
 
             modelBuilder.Entity("Ordering.Domain.Aggregates.OrderAggregate.LineItem", b =>
@@ -492,6 +582,35 @@ namespace Ordering.Infrastructure.Migrations
                     b.HasIndex("OrderId");
 
                     b.ToTable("LineItems");
+                });
+
+            modelBuilder.Entity("Ordering.Domain.Aggregates.OrderAggregate.Mechanic", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("MechanicId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<decimal>("Performance")
+                        .HasPrecision(18, 4)
+                        .HasColumnType("decimal(18,4)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId")
+                        .IsUnique();
+
+                    b.ToTable("Mechanics");
                 });
 
             modelBuilder.Entity("Ordering.Domain.Aggregates.OrderAggregate.Order", b =>
@@ -604,48 +723,51 @@ namespace Ordering.Infrastructure.Migrations
                     b.ToTable("ScheduledOrders");
                 });
 
-            modelBuilder.Entity("Ordering.Domain.Aggregates.BuyerAggregate.Buyer", b =>
+            modelBuilder.Entity("Ordering.Domain.Aggregates.FleetAggregate.BasicInspection", b =>
+                {
+                    b.HasOne("Ordering.Domain.Aggregates.FleetAggregate.Fleet", null)
+                        .WithMany("BasicInspections")
+                        .HasForeignKey("FleetAggregateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Ordering.Domain.Aggregates.FleetAggregate.Fleet", b =>
+                {
+                    b.HasOne("Ordering.Domain.Aggregates.OrderAggregate.Order", null)
+                        .WithMany("Fleets")
+                        .HasForeignKey("OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Ordering.Domain.Aggregates.FleetAggregate.PreServiceInspection", b =>
+                {
+                    b.HasOne("Ordering.Domain.Aggregates.FleetAggregate.Fleet", null)
+                        .WithMany("PreServiceInspections")
+                        .HasForeignKey("FleetAggregateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Ordering.Domain.Aggregates.FleetAggregate.PreServiceInspectionResult", b =>
+                {
+                    b.HasOne("Ordering.Domain.Aggregates.FleetAggregate.PreServiceInspection", null)
+                        .WithMany("PreServiceInspectionResults")
+                        .HasForeignKey("PreServiceInspectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("Ordering.Domain.Aggregates.OrderAggregate.Buyer", b =>
                 {
                     b.HasOne("Ordering.Domain.Aggregates.OrderAggregate.Order", "Order")
                         .WithOne("Buyer")
-                        .HasForeignKey("Ordering.Domain.Aggregates.BuyerAggregate.Buyer", "OrderId")
+                        .HasForeignKey("Ordering.Domain.Aggregates.OrderAggregate.Buyer", "OrderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Order");
-                });
-
-            modelBuilder.Entity("Ordering.Domain.Aggregates.MechanicAggregate.Mechanic", b =>
-                {
-                    b.HasOne("Ordering.Domain.Aggregates.OrderAggregate.Order", "Order")
-                        .WithOne("Mechanic")
-                        .HasForeignKey("Ordering.Domain.Aggregates.MechanicAggregate.Mechanic", "OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.OwnsOne("Ordering.Domain.ValueObjects.Rating", "Rating", b1 =>
-                        {
-                            b1.Property<Guid>("MechanicId")
-                                .HasColumnType("uniqueidentifier");
-
-                            b1.Property<string>("Comment")
-                                .HasColumnType("nvarchar(max)");
-
-                            b1.Property<decimal>("Value")
-                                .HasPrecision(18, 4)
-                                .HasColumnType("decimal(18,4)");
-
-                            b1.HasKey("MechanicId");
-
-                            b1.ToTable("Mechanics");
-
-                            b1.WithOwner()
-                                .HasForeignKey("MechanicId");
-                        });
-
-                    b.Navigation("Order");
-
-                    b.Navigation("Rating");
                 });
 
             modelBuilder.Entity("Ordering.Domain.Aggregates.OrderAggregate.Cancellation", b =>
@@ -779,15 +901,6 @@ namespace Ordering.Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Ordering.Domain.Aggregates.OrderAggregate.Fleet", b =>
-                {
-                    b.HasOne("Ordering.Domain.Aggregates.OrderAggregate.Order", null)
-                        .WithMany("Fleets")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("Ordering.Domain.Aggregates.OrderAggregate.LineItem", b =>
                 {
                     b.HasOne("Ordering.Domain.Aggregates.OrderAggregate.Order", null)
@@ -862,6 +975,39 @@ namespace Ordering.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Tax");
+                });
+
+            modelBuilder.Entity("Ordering.Domain.Aggregates.OrderAggregate.Mechanic", b =>
+                {
+                    b.HasOne("Ordering.Domain.Aggregates.OrderAggregate.Order", "Order")
+                        .WithOne("Mechanic")
+                        .HasForeignKey("Ordering.Domain.Aggregates.OrderAggregate.Mechanic", "OrderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.OwnsOne("Ordering.Domain.ValueObjects.Rating", "Rating", b1 =>
+                        {
+                            b1.Property<Guid>("MechanicId")
+                                .HasColumnType("uniqueidentifier");
+
+                            b1.Property<string>("Comment")
+                                .HasColumnType("nvarchar(max)");
+
+                            b1.Property<decimal>("Value")
+                                .HasPrecision(18, 4)
+                                .HasColumnType("decimal(18,4)");
+
+                            b1.HasKey("MechanicId");
+
+                            b1.ToTable("Mechanics");
+
+                            b1.WithOwner()
+                                .HasForeignKey("MechanicId");
+                        });
+
+                    b.Navigation("Order");
+
+                    b.Navigation("Rating");
                 });
 
             modelBuilder.Entity("Ordering.Domain.Aggregates.OrderAggregate.Order", b =>
@@ -973,6 +1119,18 @@ namespace Ordering.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("Order");
+                });
+
+            modelBuilder.Entity("Ordering.Domain.Aggregates.FleetAggregate.Fleet", b =>
+                {
+                    b.Navigation("BasicInspections");
+
+                    b.Navigation("PreServiceInspections");
+                });
+
+            modelBuilder.Entity("Ordering.Domain.Aggregates.FleetAggregate.PreServiceInspection", b =>
+                {
+                    b.Navigation("PreServiceInspectionResults");
                 });
 
             modelBuilder.Entity("Ordering.Domain.Aggregates.OrderAggregate.Cancellation", b =>

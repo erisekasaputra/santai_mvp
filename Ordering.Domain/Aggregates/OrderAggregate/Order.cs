@@ -266,7 +266,7 @@ public class Order : Entity
     }
 
 
-    public void CancelByBuyer(Guid buyerId, List<string> chargesCancellationFeeDescriptions)
+    public void CancelByBuyer(Guid buyerId, IEnumerable<string> chargesCancellationFeeDescriptions)
     {
         if (!IsCancelableByBuyer(buyerId, out string errorMessage))
         {

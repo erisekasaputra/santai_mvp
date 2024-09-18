@@ -5,12 +5,12 @@ namespace Ordering.API.Applications.Dtos.Responses;
 
 public class FeeResponseDto
 { 
-    public PercentageOrValueType Parameter { get; private set; }
-    public string FeeDescription { get; private set; }
-    public Currency Currency { get; private set; }
-    public decimal ValuePercentage { get; private set; }
-    public decimal ValueAmount { get; private set; }
-    public decimal FeeAmount { get; private set; }
+    public PercentageOrValueType Parameter { get; set; }
+    public string FeeDescription { get; set; }
+    public Currency Currency { get; set; }
+    public decimal ValuePercentage { get; set; }
+    public decimal ValueAmount { get; set; }
+    public decimal FeeAmount { get; set; }
 
     public FeeResponseDto(
         PercentageOrValueType parameter,

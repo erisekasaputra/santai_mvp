@@ -2,10 +2,10 @@
 
 public class PreServiceInspectionResponseDto
 {
-    public string Description { get; private set; }
-    public string Parameter { get; private set; }
-    public int Rating { get; private set; }
-    public IEnumerable<PreServiceInspectionResultResponseDto> PreServiceInspectionResults { get; private set; }
+    public string Description { get; set; }
+    public string Parameter { get; set; }
+    public int Rating { get; set; }
+    public IEnumerable<PreServiceInspectionResultResponseDto> PreServiceInspectionResults { get; set; }
     public PreServiceInspectionResponseDto(
         string description,
         string parameter,

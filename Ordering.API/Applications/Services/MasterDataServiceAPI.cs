@@ -1,9 +1,8 @@
-﻿using Core.Exceptions;
+﻿
 using Newtonsoft.Json;
 using Ordering.API.Applications.Dtos.Responses;
 using Ordering.API.Applications.Services.Interfaces;
-using System.Net;
-using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Ordering.API.Applications.Services;
 
@@ -14,16 +13,16 @@ public class MasterDataServiceAPI : IMasterDataServiceAPI
     {
         _httpClient = httpClient;
     }
-    public async Task<IEnumerable<BasicInspectionResponseDto>?> GetBasicInspectionMaster()
+    public async Task<List<BasicInspectionResponseDto>?> GetBasicInspectionMaster()
     {
         try
         {
             var endpoint = $"/api/v1/master/order/basic-inspection";
 
             var response = await _httpClient.GetAsync(endpoint);
+            string content = Regex.Unescape(await response.Content.ReadAsStringAsync()).Trim('"');
             response.EnsureSuccessStatusCode();
-            string content = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<IEnumerable<BasicInspectionResponseDto>>(content);
+            return JsonConvert.DeserializeObject<List<BasicInspectionResponseDto>>(content);
         }
         catch (Exception)
         {
@@ -31,16 +30,16 @@ public class MasterDataServiceAPI : IMasterDataServiceAPI
         }
     }
 
-    public async Task<IEnumerable<CancellationFeeResponseDto>?> GetCancellationFeeParametersMaster()
+    public async Task<CancellationFeeResponseDto?> GetCancellationFeeParametersMaster()
     {
         try
         {
             var endpoint = $"/api/v1/master/order/cancellation-fee";
 
             var response = await _httpClient.GetAsync(endpoint);
+            string content = Regex.Unescape(await response.Content.ReadAsStringAsync()).Trim('"');
             response.EnsureSuccessStatusCode();
-            string content = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<IEnumerable<CancellationFeeResponseDto>>(content);
+            return JsonConvert.DeserializeObject<CancellationFeeResponseDto>(content);
         }
         catch (Exception)
         {
@@ -48,16 +47,16 @@ public class MasterDataServiceAPI : IMasterDataServiceAPI
         }
     }
 
-    public async Task<IEnumerable<FeeResponseDto>?> GetFeeParametersMaster()
+    public async Task<List<FeeResponseDto>?> GetFeeParametersMaster()
     {
         try
         {
             var endpoint = $"/api/v1/master/order/service-fee";
 
             var response = await _httpClient.GetAsync(endpoint);
+            string content = Regex.Unescape(await response.Content.ReadAsStringAsync()).Trim('"');
             response.EnsureSuccessStatusCode();
-            string content = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<IEnumerable<FeeResponseDto>>(content);
+            return JsonConvert.DeserializeObject<List<FeeResponseDto>>(content);
         }
         catch (Exception)
         {
@@ -72,8 +71,8 @@ public class MasterDataServiceAPI : IMasterDataServiceAPI
             var endpoint = $"/api/v1/master/order";
 
             var response = await _httpClient.GetAsync(endpoint);
+            string content = Regex.Unescape(await response.Content.ReadAsStringAsync()).Trim('"');
             response.EnsureSuccessStatusCode();
-            string content = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<MasterDataInitializationMasterResponseDto>(content);
         }
         catch (Exception)
@@ -82,16 +81,16 @@ public class MasterDataServiceAPI : IMasterDataServiceAPI
         }
     }
 
-    public async Task<IEnumerable<PreServiceInspectionResponseDto>?> GetPreServiceInspectionMaster()
+    public async Task<List<PreServiceInspectionResponseDto>?> GetPreServiceInspectionMaster()
     {
         try
         {
             var endpoint = $"/api/v1/master/order/pre-service-inspection";
              
             var response = await _httpClient.GetAsync(endpoint);
+            string content = Regex.Unescape(await response.Content.ReadAsStringAsync()).Trim('"'); 
             response.EnsureSuccessStatusCode();
-            string content = await response.Content.ReadAsStringAsync(); 
-            return JsonConvert.DeserializeObject<IEnumerable<PreServiceInspectionResponseDto>>(content);
+            return JsonConvert.DeserializeObject<List<PreServiceInspectionResponseDto>>(content);
         } 
         catch (Exception)
         {

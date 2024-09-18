@@ -2,10 +2,10 @@
 
 public class FleetResponseDto
 { 
-    public string Brand { get; private set; }
-    public string Model { get; private set; }
-    public string RegistrationNumber { get; private set; }
-    public string? ImageUrl { get; private set; }
+    public string Brand { get; set; }
+    public string Model { get; set; }
+    public string RegistrationNumber { get; set; }
+    public string? ImageUrl { get; set; }
     public FleetResponseDto(
         string brand,
         string model,

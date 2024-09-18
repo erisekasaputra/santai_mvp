@@ -4,14 +4,14 @@ namespace Ordering.API.Applications.Dtos.Responses;
 
 public class LineItemResponseDto
 {
-    public string Name { get; private set; }
-    public string Sku { get; private set; }
-    public decimal UnitPrice { get; private set; }
-    public Currency Currency { get; private set; }
-    public int Quantity { get; private set; }
-    public decimal? TaxPercentage { get; private set; }
-    public decimal? TaxValue { get; private set; }
-    public decimal SubTotal { get; private set; }
+    public string Name { get; set; }
+    public string Sku { get; set; }
+    public decimal UnitPrice { get; set; }
+    public Currency Currency { get; set; }
+    public int Quantity { get; set; }
+    public decimal? TaxPercentage { get; set; }
+    public decimal? TaxValue { get; set; }
+    public decimal SubTotal { get; set; }
 
     public LineItemResponseDto(
         string name,

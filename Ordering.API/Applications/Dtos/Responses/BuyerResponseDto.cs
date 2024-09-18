@@ -2,8 +2,8 @@
 
 public class BuyerResponseDto
 {
-    public Guid BuyerId { get; private set; }
-    public string BuyerName { get; private set; }
+    public Guid BuyerId { get; set; }
+    public string BuyerName { get; set; }
     public BuyerResponseDto(
         Guid buyerId,
         string buyerName)

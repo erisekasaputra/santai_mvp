@@ -1,12 +1,7 @@
 [
   {
-    "Description": "",
-    "Parameter": "",
+    "Description": "RSprocket",
+    "Parameter": "RSprocket",
     "Value": 0
-  },
-  {
-    "Description": "",
-    "Parameter": "",
-    "Value": 0
-  }
+  } 
 ]

@@ -5,6 +5,7 @@ namespace Master.Data.API.Models;
 public class Fee
 {
     public string Parameter { get; private set; }
+    public string FeeDecriptionDetail { get; private set; }
     public string FeeDescription { get; private set; }
     public Currency Currency { get; private set; }
     public decimal ValuePercentage { get; private set; }
@@ -13,6 +14,7 @@ public class Fee
 
     public Fee(
         string parameter,
+        string feeDescriptionDetail,
         string feeDescription,
         Currency currency,
         decimal valuePercentage,
@@ -20,6 +22,7 @@ public class Fee
         decimal feeAmount)
     {
         Parameter = parameter;
+        FeeDecriptionDetail = feeDescriptionDetail;
         FeeDescription = feeDescription;
         Currency = currency;
         ValuePercentage = valuePercentage;

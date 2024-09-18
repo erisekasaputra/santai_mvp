@@ -6,16 +6,22 @@ public class PreServiceInspection : Entity
 {
     public Guid OrderId { get; set; }
     public Guid FleetId { get; set; }
-    public Guid FleetIdAggregate { get; set; }
+    public Guid FleetAggregateId { get; set; }
     public string Description { get; set; }
     public string Parameter { get; set; } 
     public int Rating { get; set; }
     public ICollection<PreServiceInspectionResult>  PreServiceInspectionResults { get; set; }
 
+    public PreServiceInspection()
+    {
+        Description = string.Empty;
+        Parameter = string.Empty;
+        PreServiceInspectionResults = [];
+    }
     public PreServiceInspection(
         Guid orderId,
         Guid fleetId,
-        Guid fleetIdAggregate,
+        Guid fleetAggregateId,
         string description,
         string parameter,
         int rating,
@@ -23,7 +29,7 @@ public class PreServiceInspection : Entity
     {
         OrderId = orderId;
         FleetId = fleetId;
-        FleetIdAggregate = fleetIdAggregate;
+        FleetAggregateId = fleetAggregateId;
         Description = description;
         Parameter = parameter;
         Rating = rating;

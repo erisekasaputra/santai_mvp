@@ -5,13 +5,13 @@ namespace Ordering.API.Applications.Dtos.Responses;
 
 public class DiscountResponseDto
 { 
-    public string CouponCode { get; private set; }
-    public PercentageOrValueType Parameter { get; private set; }
-    public Currency Currency { get; private set; }
-    public decimal ValuePercentage { get; private set; }
-    public decimal ValueAmount { get; private set; }
-    public decimal MinimumOrderValue { get; private set; }
-    public decimal DiscountAmount { get; private set; }
+    public string CouponCode { get; set; }
+    public PercentageOrValueType Parameter { get; set; }
+    public Currency Currency { get; set; }
+    public decimal ValuePercentage { get; set; }
+    public decimal ValueAmount { get; set; }
+    public decimal MinimumOrderValue { get; set; }
+    public decimal DiscountAmount { get; set; }
     public DiscountResponseDto(
         string couponCode,
         PercentageOrValueType parameter,

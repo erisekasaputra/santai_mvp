@@ -2,9 +2,9 @@
 
 public class BasicInspectionResponseDto
 {
-    public string Description { get; private set; }
-    public string Parameter { get; private set; }
-    public int Value { get; private set; }
+    public string Description { get; set; }
+    public string Parameter { get; set; }
+    public int Value { get; set; }
 
     public BasicInspectionResponseDto(
         string description,
