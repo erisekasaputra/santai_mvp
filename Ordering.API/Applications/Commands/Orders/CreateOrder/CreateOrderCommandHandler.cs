@@ -9,7 +9,7 @@ using Core.Utilities;
 using MassTransit;
 using MediatR; 
 using Ordering.API.Applications.Dtos.Requests;
-using Ordering.API.Applications.Dtos.Responses;
+using Ordering.API.Applications.Dtos.Responses; 
 using Ordering.API.Applications.Services.Interfaces;
 using Ordering.API.Extensions; 
 using Ordering.Domain.Aggregates.OrderAggregate;
@@ -25,7 +25,8 @@ public class CreateOrderCommandHandler(
     IAccountServiceAPI accountService,
     ICatalogServiceAPI catalogService,
     IPublishEndpoint publishEndpoint,
-    IEncryptionService encryptionService) : IRequestHandler<CreateOrderCommand, Result>
+    IEncryptionService encryptionService,
+    IMasterDataServiceAPI masterDataServiceAPI) : IRequestHandler<CreateOrderCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ILogger<CreateOrderCommandHandler> _logger = logger;
@@ -34,6 +35,7 @@ public class CreateOrderCommandHandler(
     private readonly ICatalogServiceAPI _catalogService = catalogService;
     private readonly IPublishEndpoint _publishEndpoint = publishEndpoint;
     private readonly IEncryptionService _encryptionService = encryptionService;
+    private readonly IMasterDataServiceAPI _masterDataServiceAPI = masterDataServiceAPI;
 
 
     public async Task<Result> Handle(CreateOrderCommand command, CancellationToken cancellationToken)
@@ -73,13 +75,22 @@ public class CreateOrderCommandHandler(
                     {
                         Ids = buyer.Data.UnknownFleets
                     });
-            } 
+            }
+
+            var initialMaster = await _masterDataServiceAPI.GetMasterDataInitializationMasterResponseDto();  
+            if (initialMaster is null)
+            {
+                _logger.LogError("Initial master create order is null, Master data did not retrive correct data");
+                await RollbackAsync(cancellationToken);
+                return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
+            }
 
             return await CreateOrderByRelatedUserType(
                 command,
                 buyer?.Data?.Fullname,
                 buyer?.Data?.Fleets,
                 buyer?.Data?.TimeZoneId,
+                initialMaster,
                 cancellationToken); 
         }
         catch (AccountServiceHttpRequestException ex)
@@ -130,6 +141,7 @@ public class CreateOrderCommandHandler(
         string? buyerName,
         IEnumerable<AccountIdentityFleetResponseDto>? fleets,
         string? timeZoneId,
+        MasterDataInitializationMasterResponseDto master,
         CancellationToken cancellationToken)
     {
         var lineItems = command.LineItems.Select(x => (x.Id, x.Quantity)); 
@@ -188,7 +200,14 @@ public class CreateOrderCommandHandler(
                     lineItem.Currency!.Value,
                     command.LineItems.First(x => x.Id == lineItem.Id).Quantity));
         }
-  
+
+        var masterBasicInspection = master.BasicInspections.Select(x => (x.Description, x.Parameter, x.Value));
+        var masterPreServiceInspection = master.PreServiceInspections.Select(x => (
+            x.Description,
+            x.Parameter,
+            x.Rating,
+            x.PreServiceInspectionResults.Select(b => (b.Description, b.Parameter, b.IsWorking))));
+
         foreach (var fleet in fleets)
         {
             order.AddFleet(new(
@@ -197,7 +216,9 @@ public class CreateOrderCommandHandler(
                 fleet.Brand,
                 fleet.Model,
                 fleet.RegistrationNumber,
-                fleet.ImageUrl));
+                fleet.ImageUrl),
+                masterBasicInspection,
+                masterPreServiceInspection);
         }
 
         if (!string.IsNullOrWhiteSpace(command.CouponCode))
@@ -234,8 +255,19 @@ public class CreateOrderCommandHandler(
 
         //order.ApplyTax(new Tax(10, command.Currency));
 
-        order.ApplyFee(Fee.CreateByValue(order.Id, FeeDescription.MechanicFee, 10, command.Currency)); 
-        order.ApplyFee(Fee.CreateByValue(order.Id, FeeDescription.ServiceFee, 10, command.Currency));
+        foreach(var fee in master.Fees) 
+        {
+            if (fee.Parameter == PercentageOrValueType.Percentage)
+            { 
+                order.ApplyFee(Fee.CreateByPercentage(order.Id, fee.FeeDescription, fee.ValuePercentage, fee.Currency)); 
+            }
+            else if(fee.Parameter == PercentageOrValueType.Value)
+            {
+                order.ApplyFee(Fee.CreateByValue(order.Id, fee.FeeDescription, fee.ValueAmount, fee.Currency)); 
+            }
+    
+        }
+
 
         order.CalculateGrandTotal(); 
         await _unitOfWork.Orders.CreateAsync(order, cancellationToken);

@@ -1,5 +1,4 @@
-﻿using Ordering.API.Applications.Dtos.Responses;
-using System.ComponentModel.DataAnnotations;
+﻿using Ordering.API.Applications.Dtos.Responses; 
 
 namespace Ordering.API.Applications.Services.Interfaces;
 

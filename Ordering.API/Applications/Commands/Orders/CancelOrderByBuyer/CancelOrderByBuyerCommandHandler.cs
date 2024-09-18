@@ -3,7 +3,8 @@ using Core.Exceptions;
 using Core.Messages;
 using Core.Results;
 using MediatR;
-using Ordering.API.Applications.Commands.Orders.CreateOrder; 
+using Ordering.API.Applications.Commands.Orders.CreateOrder;
+using Ordering.API.Applications.Services.Interfaces;
 using Ordering.Domain.SeedWork;
 using System.Data;
 
@@ -11,24 +12,36 @@ namespace Ordering.API.Applications.Commands.Orders.CancelOrderByBuyer;
 
 public class CancelOrderByBuyerCommandHandler(
     ILogger<CreateOrderCommandHandler> logger, 
-    IUnitOfWork unitOfWork) : IRequestHandler<CancelOrderByBuyerCommand, Result>
+    IUnitOfWork unitOfWork,
+    IMasterDataServiceAPI masterDataServiceAPI) : IRequestHandler<CancelOrderByBuyerCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly ILogger<CreateOrderCommandHandler> _logger = logger; 
+    private readonly ILogger<CreateOrderCommandHandler> _logger = logger;
+    private readonly IMasterDataServiceAPI _masterDataServiceAPI = masterDataServiceAPI;
      
     public async Task<Result> Handle(CancelOrderByBuyerCommand request, CancellationToken cancellationToken)
     {
         await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
         try
         {
+            var cancellationParameter = await _masterDataServiceAPI.GetCancellationFeeParametersMaster();
+
+            if (cancellationParameter is null)
+            {
+                _logger.LogError("Cancellation fee parameter is null, Master data did not retrive correct data");
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
+            }
+
             var order = await _unitOfWork.Orders.GetByIdAsync(request.OrderId, cancellationToken);
 
             if (order is null)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken); 
                 return Result.Failure("Data not found", ResponseStatus.NotFound);
             }
 
-            order.CancelByBuyer(request.BuyerId);
+            order.CancelByBuyer(request.BuyerId, cancellationParameter.CancellationParameters);
 
             _unitOfWork.Orders.Update(order);
 

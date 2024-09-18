@@ -72,11 +72,11 @@ public class Fleet : Entity
         basicInspection.Update(value);
     }
 
-    public void AddPreServiceInspection(
+    public void AddPreServiceInspectionDefault(
         string description,
         string parameter, 
         int rating,
-        ICollection<(string description, string parameter, bool isWorking)> preInspectionResults)
+        IEnumerable<(string description, string parameter, bool isWorking)> preInspectionResults)
     {
         PreServiceInspections ??= [];
 

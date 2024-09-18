@@ -298,6 +298,7 @@ public static class ServiceRegistrationExtension
     public static WebApplicationBuilder AddCoreOptionConfiguration(this WebApplicationBuilder builder)
     {
         builder.Services.Configure<AccountServiceConfiguration>(builder.Configuration.GetSection(AccountServiceConfiguration.SectionName));
+        builder.Services.Configure<MasterDataServiceConfiguration>(builder.Configuration.GetSection(MasterDataServiceConfiguration.SectionName));
         builder.Services.Configure<CacheConfiguration>(builder.Configuration.GetSection(CacheConfiguration.SectionName));
         builder.Services.Configure<DatabaseConfiguration>(builder.Configuration.GetSection(DatabaseConfiguration.SectionName));
         builder.Services.Configure<ElasticsearchConfiguration>(builder.Configuration.GetSection(ElasticsearchConfiguration.SectionName));
@@ -319,6 +320,7 @@ public static class ServiceRegistrationExtension
     public static HostApplicationBuilder AddHostedCoreOptionConfiguration(this HostApplicationBuilder builder)
     {
         builder.Services.Configure<AccountServiceConfiguration>(builder.Configuration.GetSection(AccountServiceConfiguration.SectionName));
+        builder.Services.Configure<MasterDataServiceConfiguration>(builder.Configuration.GetSection(MasterDataServiceConfiguration.SectionName));
         builder.Services.Configure<CacheConfiguration>(builder.Configuration.GetSection(CacheConfiguration.SectionName));
         builder.Services.Configure<DatabaseConfiguration>(builder.Configuration.GetSection(DatabaseConfiguration.SectionName));
         builder.Services.Configure<ElasticsearchConfiguration>(builder.Configuration.GetSection(ElasticsearchConfiguration.SectionName));

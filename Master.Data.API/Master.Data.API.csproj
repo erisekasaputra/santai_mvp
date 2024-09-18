@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\Order\BasicInspection\" />
+    <Folder Include="wwwroot\Order\CancellationFee\" />
     <Folder Include="wwwroot\Order\ServiceFee\" />
   </ItemGroup>
 

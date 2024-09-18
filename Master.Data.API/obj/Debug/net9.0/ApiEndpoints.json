@@ -1,8 +1,28 @@
 [
   {
     "ContainingType": "Master.Data.API.Controllers.DataController",
+    "Method": "GetInitializeOrder",
+    "RelativePath": "api/v1/master/order",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Master.Data.API.Controllers.DataController",
     "Method": "GetMasterDataBasicInspection",
     "RelativePath": "api/v1/master/order/basic-inspection",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Master.Data.API.Controllers.DataController",
+    "Method": "GetMasterDataCancellationFee",
+    "RelativePath": "api/v1/master/order/cancellation-fee",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,

@@ -19,9 +19,7 @@ public class FeeEntityConfiguration : IEntityTypeConfiguration<Fee>
             .IsRequired();
 
         builder.Property(e => e.FeeDescription)
-            .HasConversion(
-                val => val.ToString(),
-                val => Enum.Parse<FeeDescription>(val))
+            .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(e => e.Currency)

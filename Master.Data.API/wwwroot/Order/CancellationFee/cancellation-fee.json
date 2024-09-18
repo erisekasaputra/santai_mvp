@@ -1,0 +1,6 @@
+{
+  "CancellationParameters": [
+    "MechanicFee",
+    "ServiceFee"
+  ]
+}

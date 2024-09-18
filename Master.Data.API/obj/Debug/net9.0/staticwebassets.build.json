@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "68X3MGQCWAtaPSKndmQDbGEXFvtd3QYdA6bLkEl+D5c=",
+  "Hash": "fWekHtaP6tAJ+jdK29hAkTnhBj6WClNP5G+WbiiBIXc=",
   "Source": "Master.Data.API",
   "BasePath": "_content/Master.Data.API",
   "Mode": "Default",
@@ -80,6 +80,27 @@
       "OriginalItemSpec": "C:\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json"
     },
     {
+      "Identity": "C:\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-fiioof6xfq.gz",
+      "SourceId": "Master.Data.API",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\",
+      "BasePath": "_content/Master.Data.API",
+      "RelativePath": "Order/CancellationFee/cancellation-fee#[.{fingerprint=fiioof6xfq}]?.json.gz",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Alternative",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "C:\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json",
+      "AssetTraitName": "Content-Encoding",
+      "AssetTraitValue": "gzip",
+      "Fingerprint": "il80fewhua",
+      "Integrity": "htLffK/JeAppK3otlpTnJ4mNYM/6TXkQvhOlHYkO3b4=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "C:\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json"
+    },
+    {
       "Identity": "C:\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json",
       "SourceId": "Master.Data.API",
       "SourceType": "Discovered",
@@ -99,6 +120,27 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Order\\BasicInspection\\basic-inspection.json"
+    },
+    {
+      "Identity": "C:\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json",
+      "SourceId": "Master.Data.API",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Santai.MVP\\Master.Data.API\\wwwroot\\",
+      "BasePath": "_content/Master.Data.API",
+      "RelativePath": "Order/CancellationFee/cancellation-fee#[.{fingerprint}]?.json",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "fiioof6xfq",
+      "Integrity": "STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\Order\\CancellationFee\\cancellation-fee.json"
     },
     {
       "Identity": "C:\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json",
@@ -439,6 +481,304 @@
         {
           "Name": "integrity",
           "Value": "sha256-mGMsyQUU500shUqUqFhdQue2qF8NQZJAm8N+Ab0uoSk="
+        }
+      ]
+    },
+    {
+      "Route": "Order/CancellationFee/cancellation-fee.fiioof6xfq.json",
+      "AssetFile": "C:\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-fiioof6xfq.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.011627906977"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "85"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"htLffK/JeAppK3otlpTnJ4mNYM/6TXkQvhOlHYkO3b4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 18 Sep 2024 20:23:07 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "fiioof6xfq"
+        },
+        {
+          "Name": "label",
+          "Value": "Order/CancellationFee/cancellation-fee.json"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY="
+        }
+      ]
+    },
+    {
+      "Route": "Order/CancellationFee/cancellation-fee.fiioof6xfq.json",
+      "AssetFile": "C:\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "78"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 18 Sep 2024 20:23:07 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "fiioof6xfq"
+        },
+        {
+          "Name": "label",
+          "Value": "Order/CancellationFee/cancellation-fee.json"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY="
+        }
+      ]
+    },
+    {
+      "Route": "Order/CancellationFee/cancellation-fee.fiioof6xfq.json.gz",
+      "AssetFile": "C:\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-fiioof6xfq.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "85"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"htLffK/JeAppK3otlpTnJ4mNYM/6TXkQvhOlHYkO3b4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 18 Sep 2024 20:23:07 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "fiioof6xfq"
+        },
+        {
+          "Name": "label",
+          "Value": "Order/CancellationFee/cancellation-fee.json.gz"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-htLffK/JeAppK3otlpTnJ4mNYM/6TXkQvhOlHYkO3b4="
+        }
+      ]
+    },
+    {
+      "Route": "Order/CancellationFee/cancellation-fee.json",
+      "AssetFile": "C:\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-fiioof6xfq.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.011627906977"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "85"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"htLffK/JeAppK3otlpTnJ4mNYM/6TXkQvhOlHYkO3b4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 18 Sep 2024 20:23:07 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY="
+        }
+      ]
+    },
+    {
+      "Route": "Order/CancellationFee/cancellation-fee.json",
+      "AssetFile": "C:\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "78"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 18 Sep 2024 20:23:07 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY="
+        }
+      ]
+    },
+    {
+      "Route": "Order/CancellationFee/cancellation-fee.json.gz",
+      "AssetFile": "C:\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-fiioof6xfq.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "85"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"htLffK/JeAppK3otlpTnJ4mNYM/6TXkQvhOlHYkO3b4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 18 Sep 2024 20:23:07 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-htLffK/JeAppK3otlpTnJ4mNYM/6TXkQvhOlHYkO3b4="
         }
       ]
     },

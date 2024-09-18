@@ -10,18 +10,19 @@ public class Fee : Entity
 {
     public Guid OrderId { get; private set; }
     public PercentageOrValueType PercentageOrValueType { get; private set; }
-    public FeeDescription FeeDescription { get; private set; }
+    public string FeeDescription { get; private set; }
     public Currency Currency { get; private set; }
     public decimal ValuePercentage { get; private set; }
     public decimal ValueAmount { get; private set; }
     public Money FeeAmount { get; private set; }
     public Fee()
     {
+        FeeDescription = string.Empty;
         FeeAmount = null!;
     }
     private Fee(
         Guid orderId,
-        FeeDescription feeDescription,
+        string feeDescription,
         PercentageOrValueType percentageOrValueType,
         decimal amount,
         Currency currency)
@@ -59,12 +60,12 @@ public class Fee : Entity
         }
     }
 
-    public static Fee CreateByValue(Guid orderingId, FeeDescription feeDescription, decimal amount, Currency currency)
+    public static Fee CreateByValue(Guid orderingId, string feeDescription, decimal amount, Currency currency)
     {
         return new Fee(orderingId, feeDescription, PercentageOrValueType.Value, amount, currency);
     }
 
-    public static Fee CreateByPercentage(Guid orderingId, FeeDescription feeDescription, decimal percentage, Currency currency)
+    public static Fee CreateByPercentage(Guid orderingId, string feeDescription, decimal percentage, Currency currency)
     {
         return new Fee(orderingId, feeDescription, PercentageOrValueType.Percentage, percentage, currency);
     }

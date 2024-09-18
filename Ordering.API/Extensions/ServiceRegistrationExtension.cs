@@ -37,6 +37,9 @@ public static class ServiceRegistrationExtension
         var catalogConfig = service.BuildServiceProvider().GetService<IOptionsMonitor<CatalogServiceConfiguration>>()
            ?? throw new Exception("Please provide value for database option");
 
+        var masterConfig = service.BuildServiceProvider().GetService<IOptionsMonitor<MasterDataServiceConfiguration>>()
+          ?? throw new Exception("Please provide value for database option");
+
 
         var retryPolicy = HttpPolicyExtensions
             .HandleTransientHttpError()
@@ -51,9 +54,20 @@ public static class ServiceRegistrationExtension
         .AddPolicyHandler(retryPolicy)
         .AddHttpMessageHandler<TokenJwtHandler>();
 
+
+
+
+        service.AddHttpClient<IMasterDataServiceAPI, MasterDataServiceAPI>(client =>
+        {
+            client.BaseAddress = new Uri(masterConfig?.CurrentValue.Host ?? throw new Exception("Master data service client host is not set"));
+        })
+        .AddPolicyHandler(retryPolicy);
+
+
+
         service.AddHttpClient<ICatalogServiceAPI, CatalogServiceAPI>(client =>
         {
-            client.BaseAddress = new Uri(catalogConfig?.CurrentValue.Host ?? throw new Exception("Account service client host is not set"));
+            client.BaseAddress = new Uri(catalogConfig?.CurrentValue.Host ?? throw new Exception("Catalog service client host is not set"));
         })
        .AddPolicyHandler(retryPolicy)
        .AddHttpMessageHandler<TokenJwtHandler>();

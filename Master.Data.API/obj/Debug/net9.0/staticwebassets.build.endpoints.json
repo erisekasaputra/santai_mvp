@@ -300,6 +300,304 @@
       ]
     },
     {
+      "Route": "Order/CancellationFee/cancellation-fee.fiioof6xfq.json",
+      "AssetFile": "Order/CancellationFee/cancellation-fee.json.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.011627906977"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "85"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"htLffK/JeAppK3otlpTnJ4mNYM/6TXkQvhOlHYkO3b4=\""
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 18 Sep 2024 20:23:07 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "fiioof6xfq"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY="
+        },
+        {
+          "Name": "label",
+          "Value": "Order/CancellationFee/cancellation-fee.json"
+        }
+      ]
+    },
+    {
+      "Route": "Order/CancellationFee/cancellation-fee.fiioof6xfq.json",
+      "AssetFile": "Order/CancellationFee/cancellation-fee.json",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "78"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 18 Sep 2024 20:23:07 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "fiioof6xfq"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY="
+        },
+        {
+          "Name": "label",
+          "Value": "Order/CancellationFee/cancellation-fee.json"
+        }
+      ]
+    },
+    {
+      "Route": "Order/CancellationFee/cancellation-fee.fiioof6xfq.json.gz",
+      "AssetFile": "Order/CancellationFee/cancellation-fee.json.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "85"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"htLffK/JeAppK3otlpTnJ4mNYM/6TXkQvhOlHYkO3b4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 18 Sep 2024 20:23:07 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "fiioof6xfq"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-htLffK/JeAppK3otlpTnJ4mNYM/6TXkQvhOlHYkO3b4="
+        },
+        {
+          "Name": "label",
+          "Value": "Order/CancellationFee/cancellation-fee.json.gz"
+        }
+      ]
+    },
+    {
+      "Route": "Order/CancellationFee/cancellation-fee.json",
+      "AssetFile": "Order/CancellationFee/cancellation-fee.json.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.011627906977"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "85"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"htLffK/JeAppK3otlpTnJ4mNYM/6TXkQvhOlHYkO3b4=\""
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 18 Sep 2024 20:23:07 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY="
+        }
+      ]
+    },
+    {
+      "Route": "Order/CancellationFee/cancellation-fee.json",
+      "AssetFile": "Order/CancellationFee/cancellation-fee.json",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "78"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 18 Sep 2024 20:23:07 GMT"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-STggTqD7nIjrwcnaPAA9JM1Xo6IJthCcwEmWk0LCmKY="
+        }
+      ]
+    },
+    {
+      "Route": "Order/CancellationFee/cancellation-fee.json.gz",
+      "AssetFile": "Order/CancellationFee/cancellation-fee.json.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "85"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"htLffK/JeAppK3otlpTnJ4mNYM/6TXkQvhOlHYkO3b4=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Wed, 18 Sep 2024 20:23:07 GMT"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-htLffK/JeAppK3otlpTnJ4mNYM/6TXkQvhOlHYkO3b4="
+        }
+      ]
+    },
+    {
       "Route": "Order/PreServiceInspection/pre-service-inspection.0y7qfws26q.json",
       "AssetFile": "Order/PreServiceInspection/pre-service-inspection.json.gz",
       "Selectors": [

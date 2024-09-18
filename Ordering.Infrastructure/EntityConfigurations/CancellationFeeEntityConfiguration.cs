@@ -18,10 +18,8 @@ public class CancellationFeeEntityConfiguration : IEntityTypeConfiguration<Cance
                 val => Enum.Parse<PercentageOrValueType>(val))
             .IsRequired();
 
-        builder.Property(e => e.FeeDescription)
-            .HasConversion(
-                val => val.ToString(),
-                val => Enum.Parse<FeeDescription>(val))
+        builder.Property(e => e.FeeDescription) 
+            .HasMaxLength(100)
             .IsRequired();
 
         builder.Property(e => e.Currency)

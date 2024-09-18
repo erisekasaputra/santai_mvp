@@ -266,7 +266,7 @@ public class Order : Entity
     }
 
 
-    public void CancelByBuyer(Guid buyerId)
+    public void CancelByBuyer(Guid buyerId, List<string> chargesCancellationFeeDescriptions)
     {
         if (!IsCancelableByBuyer(buyerId, out string errorMessage))
         {
@@ -279,7 +279,7 @@ public class Order : Entity
         if (IsChargeableCancellation())
         {
             Cancellation.ApplyCancellationCharge(
-                Fees.Where(x => ChargeCancellation.Charges.Contains(x.FeeDescription)).ToArray());
+                Fees.Where(x => chargesCancellationFeeDescriptions.Contains(x.FeeDescription)).ToArray());
         }
 
         if (IsRefundableCancellation())
@@ -729,7 +729,17 @@ public class Order : Entity
         }
     }
 
-    public void AddFleet(Fleet fleet)
+    //public void AddPreServiceInspectionDefault(
+    //  string description,
+    //  string parameter,
+    //  int rating,
+    //  ICollection<(string description, string parameter, bool isWorking)> preInspectionResults)
+
+
+    public void AddFleet(
+        Fleet fleet,
+        IEnumerable<(string description, string parameter, int value)> basicInspectionsDefaults,
+        IEnumerable<(string description, string parameter, int rating, IEnumerable<(string description, string parameter, bool isWorking)> result)> preInspectionDefaults)
     {
         if (fleet.FleetId == Guid.Empty)
             throw new ArgumentNullException(nameof(fleet.FleetId), "Fleet id cannot be null.");
@@ -746,7 +756,25 @@ public class Order : Entity
         }
 
         fleet.SetEntityState(EntityState.Added);
-        Fleets.Add(fleet);
+
+        foreach(var (description, parameter, value) in basicInspectionsDefaults)
+        {
+            fleet.AddBasicInspectionDefault(
+                description,
+                parameter,
+                value);
+        }
+
+        foreach (var (description, parameter, rating, result) in preInspectionDefaults)
+        {
+            fleet.AddPreServiceInspectionDefault(
+                description,
+                parameter,
+                rating,
+                result);
+        }
+
+        Fleets.Add(fleet); 
     }
 
     private void RaiseServiceCompletedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId)

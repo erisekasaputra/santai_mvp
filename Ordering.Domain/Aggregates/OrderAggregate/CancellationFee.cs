@@ -10,16 +10,23 @@ public class CancellationFee : Entity
 {
     public Guid CancellationId { get; private set; }
     public PercentageOrValueType PercentageOrValueType { get; private set; }
-    public FeeDescription FeeDescription { get; private set; }
+    public string FeeDescription { get; private set; }
     public Currency Currency { get; private set; }
     public decimal ValuePercentage { get; private set; }
     public decimal ValueAmount { get; private set; }
     public Money FeeAmount { get; private set; }
     public CancellationFee()
     {
+        FeeDescription = string.Empty;
         FeeAmount = null!;
     }
-    private CancellationFee(Guid cancellationId, FeeDescription feeDescription, PercentageOrValueType percentageOrValueType, decimal amount, Currency currency)
+
+    private CancellationFee(
+        Guid cancellationId,
+        string feeDescription,
+        PercentageOrValueType percentageOrValueType,
+        decimal amount,
+        Currency currency)
     {
         if (amount <= 0)
         {
@@ -54,12 +61,12 @@ public class CancellationFee : Entity
         }
     }
 
-    public static CancellationFee CreateByValue(Guid cancellationId, FeeDescription feeDescription, decimal amount, Currency currency)
+    public static CancellationFee CreateByValue(Guid cancellationId, string feeDescription, decimal amount, Currency currency)
     {
         return new CancellationFee(cancellationId, feeDescription, PercentageOrValueType.Value, amount, currency);
     }
 
-    public static CancellationFee CreateByPercentage(Guid cancellationId, FeeDescription feeDescription, decimal percentage, Currency currency)
+    public static CancellationFee CreateByPercentage(Guid cancellationId, string feeDescription, decimal percentage, Currency currency)
     {
         return new CancellationFee(cancellationId, feeDescription, PercentageOrValueType.Percentage, percentage, currency);
     }
