@@ -4,6 +4,7 @@ using Account.API.SeedWork;
 using Core.Configurations; 
 using Microsoft.Extensions.Options;
 using Polly;
+using Polly.Caching;
 using RedLockNet.SERedis;
 using RedLockNet.SERedis.Configuration;
 using StackExchange.Redis;
@@ -14,7 +15,7 @@ namespace Account.API.Applications.Services;
 
 public class MechanicCache : IMechanicCache
 {
-    const int TOTAL_PENALTY_IN_SECONDS = 60;
+    const int TOTAL_PENALTY_IN_MINUTES = 30;
     const int WAITING_MECHANIC_CONFIRM_IN_SECOND = 1;
     const int MAX_RETRY_MECHANIC_LOCK = 3;
     const int MECHANIC_BLACKLIST_FROM_ORDER_IN_SECOND = 1800;
@@ -413,8 +414,7 @@ public class MechanicCache : IMechanicCache
 
                             // Update data mechanic
                             await CreateMechanicHashSetAsync(db, mechanic);
-                            await BlockMechanicToAnOrder(db, mechanic.MechanicId, orderId);
-                            await BlockMechanicForSeveralMinutes(db, mechanic.MechanicId);
+                            await BlockMechanicToAnOrder(db, mechanic.MechanicId, orderId); 
                         }
                         else
                         {
@@ -501,8 +501,7 @@ public class MechanicCache : IMechanicCache
                             await CreateMechanicHashSetAsync(db, mechanic);
 
 
-                            await BlockMechanicToAnOrder(db, mechanic.MechanicId, orderId);
-                            await BlockMechanicForSeveralMinutes(db, mechanic.MechanicId);
+                            await BlockMechanicToAnOrder(db, mechanic.MechanicId, orderId); 
                         }  
 
                         // Keluar dari loop jika lock berhasil diambil
@@ -730,9 +729,7 @@ public class MechanicCache : IMechanicCache
 
         await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicConfirmQueue(), orderId.ToString());
         await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicConfirmQueue(), orderId.ToString());
-    }
-
-    static int totalAssignment = 1;
+    } 
 
     private async Task TryAssignMechanicToOrderAsync(IDatabase db, string orderId)
     {
@@ -784,19 +781,12 @@ public class MechanicCache : IMechanicCache
                         order.SetOrderStatus(OrderTaskStatus.MechanicAssigned);
                         order.SetMechanic(mechanicId);
                         await CreateOrderHashSetAsync(db, order);
-
-
+                         
                         mechanicData.SetOrder(orderId);
                         mechanicData.SetMechanicStatus(MechanicStatus.Bussy);
-                        await CreateMechanicHashSetAsync(db, mechanicData);
+                        await CreateMechanicHashSetAsync(db, mechanicData); 
 
-
-                        await OrderWaitingConfirmMechanic(db, order, mechanicData);
-
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                        Console.WriteLine(totalAssignment);
-                        totalAssignment++;
-
+                        await OrderWaitingConfirmMechanic(db, order, mechanicData); 
 
                         return;
                     } 
@@ -846,26 +836,24 @@ public class MechanicCache : IMechanicCache
     }
 
     private async Task<bool> IsMechanicBlockedFromOrder(IDatabase db, string mechanicId, string orderId)
-    { 
-        var setKey = CacheKey.MechanicOrderBlacklistPrefix(mechanicId);
-        var isBlocked = await db.SetContainsAsync(setKey, orderId);
-
-        return isBlocked;
+    {
+        var setKey = CacheKey.MechanicOrderBlacklistPrefix($"{mechanicId}:{orderId}");  
+        return await db.KeyExistsAsync(setKey);
     }
 
     private async Task BlockMechanicToAnOrder(IDatabase db, string mechanicId, string orderId)
     {
         try
         { 
-            var setKey = CacheKey.MechanicOrderBlacklistPrefix(mechanicId);
-            await db.SetAddAsync(setKey, orderId.ToString());
+            var setKey = CacheKey.MechanicOrderBlacklistPrefix($"{mechanicId}:{orderId}"); 
+            await db.StringSetAsync(setKey, "blocked", TimeSpan.FromMinutes(TOTAL_PENALTY_IN_MINUTES)); 
         }
         catch (Exception)
         {
             throw;
         }
-    }
-     
+    } 
+
     private async Task DeleteKeyRedlockAsync(IDatabase db, string lockResource)
     {
         await db.KeyDeleteAsync(CacheKey.RedlockPrefix(lockResource));
@@ -981,14 +969,7 @@ public class MechanicCache : IMechanicCache
         {
             throw;
         }
-    }
-
-    private async Task BlockMechanicForSeveralMinutes(IDatabase db, string mechanicId)
-    {
-        await _redLockFactory.CreateLockAsync(
-            CacheKey.LockMechanicPenaltyPrefix(mechanicId), TimeSpan.FromMinutes(TOTAL_PENALTY_IN_SECONDS));
-    }
-
+    } 
     private async Task CreateMechanicHashSetAsync(IDatabase db, MechanicExistence mechanic)
     {
         try

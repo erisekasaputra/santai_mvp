@@ -131,8 +131,60 @@ public static class MechanicUserApi
         app.MapDelete("/{mechanicUserId}", DeleteMechanicUserByUserId)  
             .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
 
+
+
+
+
+        app.MapPatch("/{mechanicId}/order/{orderId}/accept", TestAccept)
+             .AllowAnonymous();
+
+        app.MapPatch("/{mechanicId}/order/{orderId}/reject", TestReject)
+             .AllowAnonymous();
+
         return app;
     }
+
+
+
+    private static async Task<IResult> TestAccept(
+        Guid mechanicId,
+        Guid orderId,
+        [FromServices] ApplicationService service)
+    {
+        try
+        {  
+            var result = await service.Mediator.Send(
+                new AcceptOrderByMechanicUserIdCommand(orderId, mechanicId)); 
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+
+
+    private static async Task<IResult> TestReject(
+        Guid mechanicId,
+        Guid orderId,
+        [FromServices] ApplicationService service)
+    {
+        try
+        { 
+            var result = await service.Mediator.Send(
+                new AcceptOrderByMechanicUserIdCommand(orderId, mechanicId));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
 
     private static async Task<IResult> ConfirmOrderByMechanicUserId(
         Guid orderId,
