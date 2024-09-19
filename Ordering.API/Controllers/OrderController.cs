@@ -10,8 +10,11 @@ using Microsoft.AspNetCore.Mvc;
 using Ordering.API.Applications.Commands.Orders.CancelOrderByBuyer;
 using Ordering.API.Applications.Commands.Orders.CancelOrderByMechanic; 
 using Ordering.API.Applications.Commands.Orders.CreateOrder;
+using Ordering.API.Applications.Commands.Orders.PayCancellationRefundByOrderId;
 using Ordering.API.Applications.Commands.Orders.SetMechanicArriveByOrderIdAndMechanicId;
 using Ordering.API.Applications.Commands.Orders.SetMechanicDispatchByOrderIdAndMechanicId;
+using Ordering.API.Applications.Commands.Orders.SetOrderFleetBasicInspection;
+using Ordering.API.Applications.Commands.Orders.SetOrderFleetPreServiceInspection;
 using Ordering.API.Applications.Commands.Orders.SetOrderRatingByOrderIdAndUserId;
 using Ordering.API.Applications.Commands.Orders.SetServiceFailedByOrderIdAndMechanicId;
 using Ordering.API.Applications.Commands.Orders.SetServiceInProgressByOrderIdAndMechanicId;
@@ -125,8 +128,7 @@ public class OrderController : ControllerBase
     [Authorize(Policy = "BusinessStaffRegularUserPolicy")]
     public async Task<IResult> GetPaginatedOrders( 
         [AsParameters] PaginatedRequestDto request)
-    {
-
+    { 
         try
         {
             var userClaim = _userInfoService.GetUserInfo();
@@ -258,6 +260,98 @@ public class OrderController : ControllerBase
                 Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         }
     }
+
+
+
+    [HttpPatch("{orderId}/service/fleet/{fleetId}/basic-inspection")]
+    [Authorize(Policy = "MechanicUserOnlyPolicy")]
+    public async Task<IResult> UpdateBasicInspection(
+       Guid orderId,
+       Guid fleetId,
+       [FromBody] BasicInspectionsRequest request)
+    {
+        try
+        {
+            var userClaim = _userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Forbid();
+            }
+
+            var result = await _mediator.Send(
+                new SetOrderFleetBasicInspectionCommand(
+                    orderId, fleetId, request.BasicInspections));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            return TypedResults.InternalServerError(
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+        }
+    }
+
+
+
+
+    [HttpPatch("{orderId}/service/fleet/{fleetId}/pre-service-inspection")]
+    [Authorize(Policy = "MechanicUserOnlyPolicy")]
+    public async Task<IResult> UpdatePreServiceInspection(
+       Guid orderId,
+       Guid fleetId,
+       [FromBody] PreServiceInspectionsRequest request)
+    {
+        try
+        {
+            var userClaim = _userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Forbid();
+            }
+
+            var result = await _mediator.Send(
+                new SetOrderFleetPreServiceInspectionCommand(
+                    orderId, fleetId, request.PreServiceInspections));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            return TypedResults.InternalServerError(
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+        }
+    }
+
+
+    [HttpPatch("{orderId}/cancellation/refund/pay")]
+    [Authorize(Policy = "AdministratorUserOnlyPolicy")]
+    public async Task<IResult> PayCancellationRefund(
+       Guid orderId, 
+       [FromBody] PayCancellationRefundRequest request)
+    {
+        try
+        {
+            var userClaim = _userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Forbid();
+            }
+
+            var result = await _mediator.Send(new PayCancellationRefundByOrderIdCommand(orderId, request.Amount, request.Currency));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            return TypedResults.InternalServerError(
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+        }
+    }
+
+
 
 
     [HttpPatch("{orderId}/service/fleet/{fleetId}/success")]

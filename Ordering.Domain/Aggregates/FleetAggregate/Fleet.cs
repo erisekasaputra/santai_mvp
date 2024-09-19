@@ -60,16 +60,17 @@ public class Fleet : Entity
         BasicInspections.Add(new BasicInspection(OrderId, FleetId, Id, description, parameter, value));
     }
 
-    public void PutBasicInspection(string parameter, int value)
+    public bool PutBasicInspection(string parameter, int value)
     {
         BasicInspections ??= [];
         var basicInspection = BasicInspections.FirstOrDefault(x => x.Parameter == parameter); 
         if (basicInspection is null) 
         {
-            return;
+            return false;
         }
 
         basicInspection.Update(value);
+        return true;
     }
 
     public void AddPreServiceInspectionDefault(
@@ -98,23 +99,28 @@ public class Fleet : Entity
         PreServiceInspections.Add(preServiceInspection); 
     }
 
-    public void PutPreServiceInspection(
+    public bool PutPreServiceInspection(
         string parameter, 
         int rating, 
-        ICollection<(string description, string parameter, bool isWorking)> preInspectionResults)
+        IEnumerable<(string parameter, bool isWorking)> preInspectionResults)
     {
         PreServiceInspections ??= []; 
 
         var preServiceInspection = PreServiceInspections.FirstOrDefault(x => x.Parameter == parameter); 
         if (preServiceInspection is null) 
         {
-            return;
+            return false;
         }
 
         preServiceInspection.UpdateRating(rating); 
         foreach (var item in preInspectionResults)
         {
-            preServiceInspection.PutPreServiceInspectionResult(item.parameter, item.isWorking);
-        } 
+            if (!preServiceInspection.PutPreServiceInspectionResult(item.parameter, item.isWorking))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }    
 }

@@ -115,7 +115,7 @@
     "ContainingType": "Ordering.API.Controllers.OrderController",
     "Method": "SetOrderRating",
     "RelativePath": "api/v1/orders/{orderId}/rating",
-    "HttpMethod": "POST",
+    "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
     "Parameters": [
@@ -224,16 +224,6 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Ordering.API.Controllers.OrderController",
-    "Method": "Test",
-    "RelativePath": "api/v1/orders/test",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
     "ReturnTypes": []
   },
   {

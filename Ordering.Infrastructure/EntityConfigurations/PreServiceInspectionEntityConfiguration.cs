@@ -36,5 +36,6 @@ public class PreServiceInspectionEntityConfiguration : IEntityTypeConfiguration<
             .OnDelete(DeleteBehavior.Cascade);
 
         builder.Ignore(e => e.DomainEvents);
+        builder.Ignore(e => e.EntityStateAction);
     }
 }

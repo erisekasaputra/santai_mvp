@@ -1,4 +1,5 @@
-﻿using Ordering.Domain.SeedWork;
+﻿using Microsoft.Identity.Client;
+using Ordering.Domain.SeedWork;
 
 namespace Ordering.Domain.Aggregates.FleetAggregate;
 
@@ -52,17 +53,18 @@ public class PreServiceInspection : Entity
         }
     }
 
-    public void PutPreServiceInspectionResult(string parameter, bool isWorking)
+    public bool PutPreServiceInspectionResult(string parameter, bool isWorking)
     {
         PreServiceInspectionResults ??= [];
 
         var preServiceInspectionResult = PreServiceInspectionResults.FirstOrDefault(x => x.Parameter == parameter); 
         if (preServiceInspectionResult is null)
         {
-            return;
+            return false;
         }
 
         preServiceInspectionResult.Update(isWorking);
+        return true;
     }
 
     public void UpdateRating(int rating)

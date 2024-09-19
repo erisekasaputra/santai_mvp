@@ -29,6 +29,13 @@ public class CancellationEntityConfiguration : IEntityTypeConfiguration<Cancella
                 .IsRequired();
         });
 
+        builder.Property(e => e.IsRefundPaid)
+            .IsRequired();
+
+        builder.Property(e => e.ShouldRefundAtUt)
+            .HasColumnType("datetime2")
+            .IsRequired();
+
         builder.Ignore(p => p.EntityStateAction);
         builder.Ignore(p => p.DomainEvents);
     }

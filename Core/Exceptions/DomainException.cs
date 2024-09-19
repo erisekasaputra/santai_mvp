@@ -1,3 +1,10 @@
 ﻿namespace Core.Exceptions;
 
-public class DomainException(string message) : Exception(message);
+public class DomainException : Exception 
+{
+    public string Parameter { get; set; }
+    public DomainException(string message, string parameter = "") : base(message)
+    {
+        Parameter = parameter;
+    }
+}

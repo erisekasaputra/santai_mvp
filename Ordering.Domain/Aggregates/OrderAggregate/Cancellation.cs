@@ -10,16 +10,41 @@ public class Cancellation : Entity
 {
     public Guid OrderId { get; private set; }
     public ICollection<CancellationFee> CancellationCharges { get; private set; }
-    public Money? CancellationRefund { get; private set; } 
+    public Money? CancellationRefund { get; private set; }
+    public DateTime ShouldRefundAtUt { get; set; }
+    public bool IsRefundPaid { get; set; }
     public Cancellation()
     {
         CancellationCharges = [];
     }
 
-    public Cancellation(Guid orderId)
+    public Cancellation(
+        Guid orderId)
     {
         OrderId = orderId;
         CancellationCharges = [];
+        ShouldRefundAtUt.AddDays(7);
+        IsRefundPaid = false;
+    }
+
+    public void SetRefundPaid(Money money)
+    {
+        if (CancellationRefund is null)
+        {
+            throw new DomainException("Cancellation refund not allowed");
+        }
+
+        if (money > CancellationRefund)
+        {
+            throw new DomainException("The money you give back to the buyer cannot be greater than the total order that should be refunded.");
+        }
+
+        if (DateTime.UtcNow > ShouldRefundAtUt) 
+        {
+            throw new InvalidDateOperationException("Cannot process the refund when the date is still outside the range", ShouldRefundAtUt);
+        }
+
+        IsRefundPaid = true;
     }
 
     public void ApplyCancellationCharge(IEnumerable<Fee> cancellationCharges)
@@ -74,6 +99,11 @@ public class Cancellation : Entity
         if (CancellationRefund.Amount < 0)
         {
             throw new DomainException("Refund amount cannot be negative after applying charges.");
+        }
+
+        if (CancellationRefund.Amount == 0)
+        {
+            IsRefundPaid = true;
         }
     }
 }

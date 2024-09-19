@@ -19,8 +19,7 @@ public class OrderRepository : IOrderRepository
 
     public async Task<Order?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        return await _dbContext.Orders
-            .Include(order => order.Fleets)
+        return await _dbContext.Orders 
             .Include(order => order.LineItems)
             .Include(order => order.Payment)
             .Include(order => order.Cancellation)
@@ -28,6 +27,11 @@ public class OrderRepository : IOrderRepository
             .Include(order => order.Buyer)
             .Include(order => order.Discount)
             .Include(order => order.Fees)
+            .Include(order => order.Fleets)
+            .ThenInclude(fleet => fleet.BasicInspections)
+            .Include(order => order.Fleets)
+            .ThenInclude(fleet => fleet.PreServiceInspections)
+            .ThenInclude(preService => preService.PreServiceInspectionResults)
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync(cancellationToken);
     }
@@ -41,14 +45,18 @@ public class OrderRepository : IOrderRepository
     {
         return await _dbContext.Orders
             .AsNoTracking()
-            .Include(order => order.Fleets)
             .Include(order => order.LineItems)
             .Include(order => order.Payment)
             .Include(order => order.Cancellation)
             .Include(order => order.Mechanic)
             .Include(order => order.Buyer)
             .Include(order => order.Discount)
-            .Include(order => order.Fees) 
+            .Include(order => order.Fees)
+            .Include(order => order.Fleets)
+            .ThenInclude(fleet => fleet.BasicInspections)
+            .Include(order => order.Fleets)
+            .ThenInclude(fleet => fleet.PreServiceInspections)
+            .ThenInclude(preService => preService.PreServiceInspectionResults)
             .Where(x => x.Id == orderId && x.Buyer.BuyerId == buyerId)
             .FirstOrDefaultAsync(cancellationToken);
     }
@@ -70,8 +78,7 @@ public class OrderRepository : IOrderRepository
         var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
         var items = await query
-            .AsNoTracking()
-            .Include(order => order.Fleets)
+            .AsNoTracking() 
             .Include(order => order.LineItems)
             .Include(order => order.Payment)
             .Include(order => order.Cancellation)
@@ -79,6 +86,7 @@ public class OrderRepository : IOrderRepository
             .Include(order => order.Buyer)
             .Include(order => order.Discount)
             .Include(order => order.Fees)
+            .Include(order => order.Fleets) 
             .OrderBy(x => x.Status)
             .ThenBy(x => x.CreatedAtUtc)
             .Skip((pageNumber - 1) * pageSize)

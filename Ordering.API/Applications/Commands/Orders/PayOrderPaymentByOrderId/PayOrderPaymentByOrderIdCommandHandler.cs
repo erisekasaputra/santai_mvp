@@ -26,6 +26,7 @@ public class PayOrderPaymentByOrderIdCommandHandler(
             var order = await _unitOfWork.Orders.GetByIdAsync(request.OrderId, cancellationToken); 
             if (order is null)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result.Failure("Data not found", ResponseStatus.NotFound);
             }
 

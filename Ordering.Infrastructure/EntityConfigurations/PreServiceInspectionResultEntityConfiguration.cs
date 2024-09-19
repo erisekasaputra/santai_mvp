@@ -31,5 +31,6 @@ public class PreServiceInspectionResultEntityConfiguration : IEntityTypeConfigur
             .IsRequired(); 
 
         builder.Ignore(e => e.DomainEvents);
+        builder.Ignore(e => e.EntityStateAction);
     }
 }

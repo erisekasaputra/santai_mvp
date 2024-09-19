@@ -31,5 +31,6 @@ public class BasicInspectionEntityConfiguration : IEntityTypeConfiguration<Basic
             .IsRequired();  
 
         builder.Ignore(e => e.DomainEvents);
+        builder.Ignore(e => e.EntityStateAction);
     }
 }

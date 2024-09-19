@@ -23,6 +23,7 @@ public class SetServiceInProgressByOrderIdAndMechanicIdCommandHandler(
 
             if (order is null)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result.Failure("Data not found", ResponseStatus.NotFound);
             }
 

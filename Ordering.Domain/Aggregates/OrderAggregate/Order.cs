@@ -40,7 +40,7 @@ public class Order : Entity
         {
             if (Buyer is null)
             {
-                throw new DomainException("Buyer has not been set");
+                throw new DomainException("Buyer has not been set", "Buyer");
             }
 
             if (Buyer.BuyerType is UserType.BusinessUser or UserType.StaffUser)
@@ -81,7 +81,17 @@ public class Order : Entity
         Secret = string.Empty;
         if (isScheduled && scheduledOnUtc is null || scheduledOnUtc <= DateTime.UtcNow)
         {
-            throw new DomainException("Scheduled date can not in the past and can not be null");
+            if (scheduledOnUtc is null || !scheduledOnUtc.HasValue)
+            {
+                throw new DomainException("Schedule date can not be empty", "ScheduledDate");
+            }
+
+            if (scheduledOnUtc <= DateTime.UtcNow) 
+            {
+                throw new InvalidDateOperationException(
+                    "Schedule date can not in the past",
+                    scheduledOnUtc.Value);
+            } 
         }
 
         Currency = currency;
@@ -130,18 +140,23 @@ public class Order : Entity
 
     public void SetPaymentPaid(Payment payment)
     {
-        if (Status is OrderStatus.OrderCancelledByUser) throw new DomainException($"Order is already canceled by user");
+        if (Status is OrderStatus.OrderCancelledByUser) 
+            throw new DomainException($"Order is already canceled by user");
 
         if (IsShouldRequestPayment)
         {
-            if (Status is not OrderStatus.PaymentPending) throw new DomainException($"Could not set payment to {OrderStatus.PaymentPaid}"); 
+            if (Status is not OrderStatus.PaymentPending) 
+                throw new DomainException($"Could not set payment to {OrderStatus.PaymentPaid}"); 
         }
 
-        if (payment.Amount.Amount <= GrandTotal.Amount) throw new DomainException("Paid amount can not less than total order");
+        if (payment.Amount.Amount <= GrandTotal.Amount) 
+            throw new DomainException("Paid amount can not less than total order");
 
-        if (payment.Amount.Currency != Currency) throw new DomainException("Currency for payment is not equal with order currency");
+        if (payment.Amount.Currency != Currency) 
+            throw new DomainException("Currency for payment is not equal with order currency");
 
-        if (Payment is not null && Payment.Amount.Amount > 0.00M) throw new DomainException("Payment already paid");
+        if (Payment is not null && Payment.Amount.Amount > 0.00M) 
+            throw new DomainException("Payment already paid");
 
         Payment = payment;
         Payment.SetEntityState(EntityState.Added);
@@ -198,9 +213,11 @@ public class Order : Entity
     {
         if (Status is not OrderStatus.MechanicDispatched &&
             Status is not OrderStatus.MechanicArrived &&
-            Status is not OrderStatus.MechanicAssigned) throw new DomainException($"Could not canceling order by mechanic when order status is {Status}"); 
+            Status is not OrderStatus.MechanicAssigned) 
+            throw new DomainException($"Could not canceling order by mechanic when order status is {Status}"); 
 
-        if (!IsCancelableByMechanic(mechanicId, out string errorMessage)) throw new DomainException(errorMessage); 
+        if (!IsCancelableByMechanic(mechanicId, out string errorMessage)) 
+            throw new DomainException(errorMessage); 
 
         Mechanic = null;
         TotalCanceledByMechanic++;
@@ -240,7 +257,7 @@ public class Order : Entity
 
     private bool IsChargeableCancellation()
     {
-        if (Status is OrderStatus.MechanicDispatched or OrderStatus.MechanicArrived or OrderStatus.MechanicArrived or OrderStatus.ServiceInProgress or OrderStatus.ServiceCompleted or OrderStatus.ServiceIncompleted)
+        if (Status is OrderStatus.MechanicAssigned or OrderStatus.MechanicDispatched or OrderStatus.MechanicArrived or OrderStatus.MechanicArrived or OrderStatus.ServiceInProgress or OrderStatus.ServiceCompleted or OrderStatus.ServiceIncompleted)
         {
             return true;
         }
@@ -492,14 +509,7 @@ public class Order : Entity
         {
             errorMessage = $"Order status must be {OrderStatus.FindingMechanic}";
             return false;
-        }
-
-        if (IsScheduled && DateTime.UtcNow < ScheduledOnUtc)
-        {
-            string? formattedDate = ScheduledOnUtc?.ToString("dddd, MMMM d, yyyy, h:mm tt");
-            errorMessage = $"The mechanic can only be assigned on or after {formattedDate} UTC";
-            return false;
-        }
+        } 
 
         if (Mechanic is not null)
         {
@@ -528,7 +538,17 @@ public class Order : Entity
         {
             throw new DomainException(errorMessage);
         }
-         
+
+        if (IsScheduled && DateTime.UtcNow < ScheduledOnUtc)
+        { 
+            if (ScheduledOnUtc is null)
+            {
+                throw new Exception("Inconsistent aggregate is occured");
+            }
+
+            throw new InvalidDateOperationException("The mechanic can only be assigned in the range of order schedule date", ScheduledOnUtc.Value);
+        } 
+
         Status = OrderStatus.MechanicAssigned;
         Mechanic = mechanic;
         Mechanic.SetEntityState(EntityState.Added);
@@ -660,6 +680,21 @@ public class Order : Entity
             GrandTotal += fee.Apply(holdedGrandTotal.Amount, Currency);
         }
     }
+
+    public void PayCancellationRefund(Money money) 
+    {
+        if (Cancellation is null)
+        {
+            throw new DomainException("The order does not have cancellation history", "Cancellation");
+        }
+
+        Cancellation.SetRefundPaid(money);
+        RaiseRefundPaidDomainEvent(
+            Id,
+            Buyer.BuyerId,
+            Cancellation.CancellationRefund!.Amount,
+            Cancellation.CancellationRefund!.Currency);
+    } 
 
     public void AddOrderItem(LineItem lineItem)
     {
@@ -832,5 +867,10 @@ public class Order : Entity
     public void RaiseOrderCreatedDomainEvent()
     {
         AddDomainEvent(new OrderCreatedDomainEvent(this));
-    } 
+    }
+
+    private void RaiseRefundPaidDomainEvent(Guid orderId, Guid buyerId, decimal amount, Currency currency)
+    {
+        AddDomainEvent(new RefundPaidDomainEvent(orderId, buyerId, amount, currency));
+    }
 }
