@@ -1,6 +1,6 @@
 ﻿using Core.Enumerations;
 using Core.Exceptions;
-using Core.ValueObjects;
+using Core.ValueObjects; 
 using Microsoft.EntityFrameworkCore;
 using Ordering.Domain.Aggregates.FleetAggregate;
 using Ordering.Domain.Enumerations;
@@ -74,6 +74,8 @@ public class Order : Entity
         double longitude,
         Guid buyerId,
         string buyerName,
+        string? buyerEmail,
+        string? buyerPhone,
         UserType buyerType,
         bool isScheduled,
         DateTime? scheduledOnUtc)
@@ -98,7 +100,7 @@ public class Order : Entity
         OrderAmount = 0;
         GrandTotal = new Money(0, currency);
         Address = new Address(addressLine, latitude, longitude);
-        Buyer = new Buyer(Id, buyerId, buyerName, buyerType);
+        Buyer = new Buyer(Id, buyerId, buyerName, buyerEmail, buyerPhone, buyerType);
         Mechanic = null;
         Payment = null;
         LineItems = [];
@@ -146,11 +148,17 @@ public class Order : Entity
         if (IsShouldRequestPayment)
         {
             if (Status is not OrderStatus.PaymentPending) 
-                throw new DomainException($"Could not set payment to {OrderStatus.PaymentPaid}"); 
+                throw new DomainException($"Could not set payment to {OrderStatus.PaymentPaid}");
         }
 
-        if (payment.Amount.Amount <= GrandTotal.Amount) 
-            throw new DomainException("Paid amount can not less than total order");
+
+
+        decimal roundedPaymentAmount = Math.Round(payment.Amount.Amount, 2, MidpointRounding.AwayFromZero);
+        decimal roundedGrandTotalAmount = Math.Round(GrandTotal.Amount, 2, MidpointRounding.AwayFromZero); 
+        if (roundedPaymentAmount < roundedGrandTotalAmount)
+        {
+            throw new DomainException("Paid amount can not be less than the total order");
+        }
 
         if (payment.Amount.Currency != Currency) 
             throw new DomainException("Currency for payment is not equal with order currency");

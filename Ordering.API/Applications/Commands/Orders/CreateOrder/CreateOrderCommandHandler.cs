@@ -19,8 +19,8 @@ using Ordering.Domain.SeedWork;
 using System.Data; 
 namespace Ordering.API.Applications.Commands.Orders.CreateOrder;
 public class CreateOrderCommandHandler(
-    ILogger<CreateOrderCommandHandler> logger,
     IPaymentService paymentService,
+    ILogger<CreateOrderCommandHandler> logger, 
     IUnitOfWork unitOfWork,
     IAccountServiceAPI accountService,
     ICatalogServiceAPI catalogService,
@@ -28,9 +28,9 @@ public class CreateOrderCommandHandler(
     IEncryptionService encryptionService,
     IMasterDataServiceAPI masterDataServiceAPI) : IRequestHandler<CreateOrderCommand, Result>
 {
+    private readonly IPaymentService _paymentService = paymentService;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly ILogger<CreateOrderCommandHandler> _logger = logger;
-    private readonly IPaymentService _paymentService = paymentService; 
+    private readonly ILogger<CreateOrderCommandHandler> _logger = logger; 
     private readonly IAccountServiceAPI _accountService = accountService; 
     private readonly ICatalogServiceAPI _catalogService = catalogService;
     private readonly IPublishEndpoint _publishEndpoint = publishEndpoint;
@@ -88,10 +88,17 @@ public class CreateOrderCommandHandler(
             return await CreateOrderByRelatedUserType(
                 command,
                 buyer?.Data?.Fullname,
+                buyer?.Data?.Email,
+                buyer?.Data?.PhoneNumber,
                 buyer?.Data?.Fleets,
                 buyer?.Data?.TimeZoneId,
                 initialMaster,
                 cancellationToken); 
+        }
+        catch (InvalidDateOperationException ex)
+        {
+            await RollbackAndRecoveryStockAsync(requestItems, cancellationToken);
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
         }
         catch (AccountServiceHttpRequestException ex)
         { 
@@ -139,6 +146,8 @@ public class CreateOrderCommandHandler(
     private async Task<Result> CreateOrderByRelatedUserType(
         CreateOrderCommand command,  
         string? buyerName,
+        string? buyerEmail,
+        string? buyerPhoneNumber,
         IEnumerable<AccountIdentityFleetResponseDto>? fleets,
         string? timeZoneId,
         MasterDataInitializationMasterResponseDto master,
@@ -175,6 +184,8 @@ public class CreateOrderCommandHandler(
             command.Longitude,
             command.BuyerId,
             buyerName,
+            buyerEmail,
+            buyerPhoneNumber,
             command.BuyerType,
             command.IsOrderScheduled,
             command.ScheduledOn.FromLocalToUtc(timeZoneId)); 
@@ -219,7 +230,7 @@ public class CreateOrderCommandHandler(
                 fleet.ImageUrl),
                 masterBasicInspection,
                 masterPreServiceInspection);
-        }
+        } 
 
         if (!string.IsNullOrWhiteSpace(command.CouponCode))
         {
@@ -264,17 +275,22 @@ public class CreateOrderCommandHandler(
             else if(fee.Parameter == PercentageOrValueType.Value)
             {
                 order.ApplyFee(Fee.CreateByValue(order.Id, fee.FeeDescription, fee.ValueAmount, fee.Currency)); 
-            }
-    
+            } 
         }
 
-        order.CalculateGrandTotal();
-
+        order.CalculateGrandTotal(); 
         await _unitOfWork.Orders.CreateAsync(order, cancellationToken);
 
-        if (order.IsShouldRequestPayment)
+        string paymentUrl;
+        if (true) // order.IsShouldRequestPayment
         {
-            //await _paymentService.Checkout(order); 
+            paymentUrl = _paymentService.GeneratePaymentUrl(
+                order.Id, 
+                $"{order.Buyer.Name} Detail Order", 
+                order.Buyer.Name, 
+                order.Buyer.Email, 
+                order.Buyer.PhoneNumber, 
+                order.GrandTotal.Amount);
         }
 
         if (order.IsScheduled)
@@ -287,11 +303,13 @@ public class CreateOrderCommandHandler(
             await _unitOfWork.ScheduledOrders.CraeteAsync(scheduledOrderWorker);
         }
 
-        var orderDto = order.ToOrderResponseDto();
-
-        await _unitOfWork.CommitTransactionAsync(cancellationToken);
-
-        return Result.Success(orderDto, ResponseStatus.Created);
+        var orderDto = order.ToOrderResponseDto(); 
+        await _unitOfWork.CommitTransactionAsync(cancellationToken); 
+        return Result.Success(new 
+        {
+            OrderDto = orderDto,
+            Url = paymentUrl
+        }, ResponseStatus.Created);
     }
 
     private static bool IsNullCatalogItems(string? name, string? sku, decimal? price, Currency? currency)

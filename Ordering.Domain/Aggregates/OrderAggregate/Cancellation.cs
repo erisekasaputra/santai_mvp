@@ -39,6 +39,13 @@ public class Cancellation : Entity
             throw new DomainException("The money you give back to the buyer cannot be greater than the total order that should be refunded.");
         }
 
+        decimal paid = Math.Round(money.Amount, 2, MidpointRounding.AwayFromZero);
+        decimal refund = Math.Round(CancellationRefund.Amount, 2, MidpointRounding.AwayFromZero);
+        if (paid > refund)
+        {
+            throw new DomainException("Paid amount can not be less than the total order");
+        }
+
         if (DateTime.UtcNow > ShouldRefundAtUt) 
         {
             throw new InvalidDateOperationException("Cannot process the refund when the date is still outside the range", ShouldRefundAtUt);

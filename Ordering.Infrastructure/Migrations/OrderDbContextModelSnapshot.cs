@@ -241,9 +241,6 @@ namespace Ordering.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("EntityStateAction")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("FleetAggregateId")
                         .HasColumnType("uniqueidentifier");
 
@@ -321,9 +318,6 @@ namespace Ordering.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("EntityStateAction")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("FleetAggregateId")
                         .HasColumnType("uniqueidentifier");
 
@@ -358,9 +352,6 @@ namespace Ordering.Infrastructure.Migrations
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
-
-                    b.Property<int>("EntityStateAction")
-                        .HasColumnType("int");
 
                     b.Property<Guid>("FleetId")
                         .HasColumnType("uniqueidentifier");
@@ -399,6 +390,10 @@ namespace Ordering.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Email")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -406,6 +401,10 @@ namespace Ordering.Infrastructure.Migrations
 
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("PhoneNumber")
+                        .HasMaxLength(40)
+                        .HasColumnType("nvarchar(40)");
 
                     b.HasKey("Id");
 
@@ -421,8 +420,14 @@ namespace Ordering.Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsRefundPaid")
+                        .HasColumnType("bit");
+
                     b.Property<Guid>("OrderId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("ShouldRefundAtUt")
+                        .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 

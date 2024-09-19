@@ -42,8 +42,10 @@ public static class Mapper
     public static BuyerResponseDto ToBuyerDto(this Buyer buyer)
     {
         return new BuyerResponseDto(
-            buyer.Id,
-            buyer.Name);
+            buyer.BuyerId,
+            buyer.Name,
+            buyer.Email,
+            buyer.PhoneNumber);
     }
     public static MechanicResponseDto ToMechanicDto(this Mechanic mechanic)
     {
@@ -64,6 +66,7 @@ public static class Mapper
     public static LineItemResponseDto ToLineItemDto(this LineItem lineItem)
     {
         return new LineItemResponseDto(
+            lineItem.LineItemId,
             lineItem.Name,
             lineItem.Sku,
             lineItem.UnitPrice,
@@ -84,6 +87,7 @@ public static class Mapper
     public static FleetResponseDto ToFleetDto(this Fleet fleet)
     {
         return new FleetResponseDto(
+            fleet.FleetId,
             fleet.Brand,
             fleet.Model,
             fleet.RegistrationNumber,

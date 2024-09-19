@@ -1,6 +1,5 @@
 using Core.Extensions; 
-using FileHub.API.Extensions;
-using FileHub.API.SeedWorks;
+using FileHub.API.Extensions; 
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();

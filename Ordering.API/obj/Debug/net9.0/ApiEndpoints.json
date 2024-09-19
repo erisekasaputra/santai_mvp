@@ -65,6 +65,27 @@
   },
   {
     "ContainingType": "Ordering.API.Controllers.OrderController",
+    "Method": "PayCancellationRefund",
+    "RelativePath": "api/v1/orders/{orderId}/cancellation/refund/pay",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Ordering.API.Applications.Dtos.Requests.PayCancellationRefundRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Ordering.API.Controllers.OrderController",
     "Method": "SetArriveMechanic",
     "RelativePath": "api/v1/orders/{orderId}/mechanic/arrive",
     "HttpMethod": "PATCH",
@@ -150,6 +171,32 @@
   },
   {
     "ContainingType": "Ordering.API.Controllers.OrderController",
+    "Method": "UpdateBasicInspection",
+    "RelativePath": "api/v1/orders/{orderId}/service/fleet/{fleetId}/basic-inspection",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "fleetId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Ordering.API.Applications.Dtos.Requests.BasicInspectionsRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Ordering.API.Controllers.OrderController",
     "Method": "SetServiceIncompleted",
     "RelativePath": "api/v1/orders/{orderId}/service/fleet/{fleetId}/failed",
     "HttpMethod": "PATCH",
@@ -169,6 +216,32 @@
       {
         "Name": "request",
         "Type": "Ordering.API.Applications.Dtos.Requests.OrderSecretRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Ordering.API.Controllers.OrderController",
+    "Method": "UpdatePreServiceInspection",
+    "RelativePath": "api/v1/orders/{orderId}/service/fleet/{fleetId}/pre-service-inspection",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "fleetId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Ordering.API.Applications.Dtos.Requests.PreServiceInspectionsRequest",
         "IsRequired": true
       }
     ],

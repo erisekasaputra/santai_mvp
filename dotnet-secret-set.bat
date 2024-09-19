@@ -8,6 +8,8 @@ dotnet user-secrets set "KMS:SecretKey" "tP56kzHlfp+IUY/nhdOFbOsRjOSEbTVv6sexU/J
 REM Set the secret key jwt
 dotnet user-secrets set "Jwt:SecretKey" "tP56kzHlfp+IUY/nhdOFbOsRjOSEbTVv6sexU/JL17I="
 
+REM Set the secret key senangpay
+dotnet user-secrets set "SenangPay:SecretKey" "6936-735"
 
 REM Set the google client secret 
 dotnet user-secrets set "Google:ClientSecret" "get-from-google-sso-generator" 

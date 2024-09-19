@@ -2,6 +2,7 @@
 
 public class FleetResponseDto
 { 
+    public Guid FleetId { get; set; }
     public string Brand { get; set; }
     public string Model { get; set; }
     public string RegistrationNumber { get; set; }
@@ -9,6 +10,7 @@ public class FleetResponseDto
     public IEnumerable<BasicInspectionResponseDto> BasicInspections { get; set; }
     public IEnumerable<PreServiceInspectionResponseDto> PreServiceInspections { get; set; }
     public FleetResponseDto(
+        Guid fleetId,
         string brand,
         string model,
         string registrationNumber,
@@ -16,6 +18,7 @@ public class FleetResponseDto
         IEnumerable<BasicInspectionResponseDto> basicInspections,
         IEnumerable<PreServiceInspectionResponseDto> preServiceInspections)
     {
+        FleetId = fleetId;
         Brand = brand;
         Model = model;
         RegistrationNumber = registrationNumber;

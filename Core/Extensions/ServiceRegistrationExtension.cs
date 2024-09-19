@@ -312,6 +312,7 @@ public static class ServiceRegistrationExtension
 
     public static WebApplicationBuilder AddCoreOptionConfiguration(this WebApplicationBuilder builder)
     {
+        builder.Services.Configure<SenangPayPaymentConfiguration>(builder.Configuration.GetSection(SenangPayPaymentConfiguration.SectionName));
         builder.Services.Configure<AccountServiceConfiguration>(builder.Configuration.GetSection(AccountServiceConfiguration.SectionName));
         builder.Services.Configure<MasterDataServiceConfiguration>(builder.Configuration.GetSection(MasterDataServiceConfiguration.SectionName));
         builder.Services.Configure<CacheConfiguration>(builder.Configuration.GetSection(CacheConfiguration.SectionName));
@@ -330,11 +331,12 @@ public static class ServiceRegistrationExtension
         builder.Services.Configure<CatalogServiceConfiguration>(builder.Configuration.GetSection(CatalogServiceConfiguration.SectionName));
         builder.Services.Configure<SafelyShutdownConfiguration>(builder.Configuration.GetSection(SafelyShutdownConfiguration.SectionName));
         return builder;
-    }
+    } 
 
     public static HostApplicationBuilder AddHostedCoreOptionConfiguration(this HostApplicationBuilder builder)
     {
         builder.Services.Configure<AccountServiceConfiguration>(builder.Configuration.GetSection(AccountServiceConfiguration.SectionName));
+        builder.Services.Configure<SenangPayPaymentConfiguration>(builder.Configuration.GetSection(SenangPayPaymentConfiguration.SectionName));
         builder.Services.Configure<MasterDataServiceConfiguration>(builder.Configuration.GetSection(MasterDataServiceConfiguration.SectionName));
         builder.Services.Configure<CacheConfiguration>(builder.Configuration.GetSection(CacheConfiguration.SectionName));
         builder.Services.Configure<DatabaseConfiguration>(builder.Configuration.GetSection(DatabaseConfiguration.SectionName));

@@ -19,6 +19,14 @@ public class BuyerEntityConfiguration : IEntityTypeConfiguration<Buyer>
             .IsRequired()
             .HasMaxLength(100);
 
+        builder.Property(p => p.Email)
+           .IsRequired(false)
+           .HasMaxLength(255);
+
+        builder.Property(p => p.PhoneNumber)
+           .IsRequired(false)
+           .HasMaxLength(40);
+
         builder.Property(p => p.BuyerType)
             .IsRequired()
             .HasConversion(

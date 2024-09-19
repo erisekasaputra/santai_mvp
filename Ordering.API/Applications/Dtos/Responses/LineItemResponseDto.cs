@@ -4,6 +4,7 @@ namespace Ordering.API.Applications.Dtos.Responses;
 
 public class LineItemResponseDto
 {
+    public Guid LineItemId { get; set; }
     public string Name { get; set; }
     public string Sku { get; set; }
     public decimal UnitPrice { get; set; }
@@ -14,6 +15,7 @@ public class LineItemResponseDto
     public decimal SubTotal { get; set; }
 
     public LineItemResponseDto(
+        Guid lineItemId,
         string name,
         string sku,
         decimal unitPrice,
@@ -22,6 +24,7 @@ public class LineItemResponseDto
         decimal? taxValue,
         decimal subTotal)
     {
+        LineItemId = lineItemId;
         Name = name; 
         Sku = sku;
         UnitPrice = unitPrice;

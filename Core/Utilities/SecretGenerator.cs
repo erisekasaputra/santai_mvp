@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography;
+﻿using StackExchange.Redis;
+using System.Security.Cryptography;
 using System.Text;
 
 namespace Core.Utilities;
@@ -19,7 +20,13 @@ public static class SecretGenerator
         return Convert.ToBase64String(sha256.ComputeHash(Encoding.UTF8.GetBytes(token)));
     }
 
-    private readonly static Random _random = new();
+    public static string HmacHash(this string value, string secret)
+    {
+        using var hmac = new HMACSHA256(Encoding.UTF8.GetBytes(secret)); 
+        var hash = hmac.ComputeHash(Encoding.UTF8.GetBytes(value));
+        return Convert.ToHexStringLower(hash);
+    }
+      
 
     public static string GenerateOtp(int length = 6)
     {
