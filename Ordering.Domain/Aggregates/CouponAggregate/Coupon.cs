@@ -43,8 +43,7 @@ public class Coupon : Entity
         MinimumOrderValue = minimumOrderValue; 
     } 
 
-    public void Update(
-        string couponCode,
+    public void Update( 
         PercentageOrValueType couponValueType,
         Currency currency,
         decimal value,
@@ -59,8 +58,7 @@ public class Coupon : Entity
         if (minimumOrderValue < 0)
             throw new DomainException("Minimum order value cannot be negative.");
 
-        Currency = currency;
-        CouponCode = couponCode;
+        Currency = currency; 
         CouponValueType = couponValueType;
         ValuePercentage = couponValueType == PercentageOrValueType.Percentage ? value : 0;
         ValueAmount = couponValueType == PercentageOrValueType.Value ? value : 0;
