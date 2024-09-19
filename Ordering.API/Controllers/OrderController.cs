@@ -4,6 +4,7 @@ using Core.Messages;
 using Core.Results; 
 using Core.Services.Interfaces;
 using Core.Utilities;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc; 
@@ -25,7 +26,8 @@ using Ordering.API.Applications.Queries.Orders.GetOrderSecretByOrderId;
 using Ordering.API.Applications.Queries.Orders.GetPaginatedOrdersByUserId;
 using Ordering.API.Applications.Services.Interfaces;
 using Ordering.API.CustomAttributes;
-using Ordering.API.Extensions; 
+using Ordering.API.Extensions;
+using Ordering.API.Validations;
 
 namespace Ordering.API.Controllers;
 
@@ -63,7 +65,8 @@ public class OrderController : ControllerBase
     [HttpPost]
     [Idempotency(nameof(CreateOrder))]
     public async Task<IResult> CreateOrder(
-        [FromBody] OrderRequest request) 
+        [FromBody] OrderRequest request,
+        [FromServices] IValidator<OrderRequest> requestValidation) 
     {
         try
         {
@@ -71,6 +74,12 @@ public class OrderController : ControllerBase
             if (userClaim is null)
             {
                 return TypedResults.Forbid();
+            }
+
+            var validationResult = await requestValidation.ValidateAsync(request); 
+            if (!validationResult.IsValid) 
+            {
+                return TypedResults.BadRequest(validationResult);
             }
 
             var result = await _mediator.Send(

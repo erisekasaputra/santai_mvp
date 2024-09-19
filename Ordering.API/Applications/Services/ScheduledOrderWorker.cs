@@ -56,6 +56,10 @@ public class ScheduledOrderWorker : BackgroundService
                                 order.MarkAsProcessed();
                                 unitOfWork.Orders.Update(orderAggregate);  
                             } 
+                            catch (Exception)
+                            {
+                                continue;
+                            }
                         }
                     }
 

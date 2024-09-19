@@ -471,6 +471,19 @@ public class Order : Entity
             throw new DomainException("Mechanic is already assigned, mechanic need to be reset");
         }
 
+        if (IsScheduled) 
+        {
+            if (ScheduledOnUtc is null) 
+            {
+                throw new InvalidOperationException("Inconsistent state has occured, the order is scheduled but the schedule date is empty");
+            }
+
+            if (ScheduledOnUtc.Value > DateTime.UtcNow) 
+            {
+                throw new InvalidDateOperationException("Date is not in range", ScheduledOnUtc.Value);
+            }
+        }
+
         Status = OrderStatus.FindingMechanic;
         RaiseOrderFindingMechanicDomainEvent(Id, Buyer.BuyerId, Address.Latitude, Address.Longitude);
     }
