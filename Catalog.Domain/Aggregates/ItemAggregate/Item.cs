@@ -290,12 +290,12 @@ public class Item : Entity, IAggregateRoot
         LastPrice = Price.Amount;
         Price.SetAmount(amount, currency);
 
-        RaiseItemPriceSetDomainEvent(Id, amount, currency);
+        RaiseItemPriceSetDomainEvent(Id, LastPrice, amount, currency);
     }
 
-    private void RaiseItemPriceSetDomainEvent(Guid id, decimal price, Currency currency)
+    private void RaiseItemPriceSetDomainEvent(Guid id, decimal oldPrice, decimal newPrice, Currency currency)
     {
-        AddDomainEvent(new ItemPriceSetDomainEvent(id, price, currency));
+        AddDomainEvent(new ItemPriceSetDomainEvent(id, oldPrice, newPrice, currency));
     }
 
     private void RaiseItemSoldSetDomainEvent(Guid id, int quantity)

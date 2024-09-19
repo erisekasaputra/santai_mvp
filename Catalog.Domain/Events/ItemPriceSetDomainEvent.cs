@@ -3,4 +3,8 @@ using MediatR;
 
 namespace Catalog.Domain.Events;
 
-public record ItemPriceSetDomainEvent(Guid Id, decimal Amount, Currency Currency) : INotification;
+public record ItemPriceSetDomainEvent(
+    Guid Id, 
+    decimal OldPrice,
+    decimal NewAmount, 
+    Currency Currency) : INotification;

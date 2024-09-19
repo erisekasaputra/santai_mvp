@@ -16,7 +16,7 @@ internal class SetItemPriceCommandHandler(IItemRepository itemRepository) : IReq
             return Unit.Value;
         } 
 
-        item.SetItemPrice(request.Price, request.Currency);
+        item.SetItemPrice(request.OldPrice, request.NewPrice, request.Currency);
 
         await _itemRepository.UpdateItemAsync(item, cancellationToken);
         return Unit.Value;

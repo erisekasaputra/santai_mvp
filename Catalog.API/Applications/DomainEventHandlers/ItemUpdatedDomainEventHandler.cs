@@ -20,6 +20,7 @@ public class ItemUpdatedDomainEventHandler(IMediator mediator) : INotificationHa
             item.Name,
             item.Description,
             item.Sku,   
+            item.LastPrice,
             item.Price.Amount,
             item.Price.Currency,
             item.ImageUrl,

@@ -7,7 +7,8 @@ public class Item(
     string name,
     string description,
     string sku,
-    decimal price,
+    decimal oldPrice,
+    decimal newPrice,
     Currency currency,
     string imageUrl,
     int stockQuantity,
@@ -26,7 +27,8 @@ public class Item(
     public string Name { get; private set; } = name;
     public string Description { get; private set; } = description;
     public string Sku { get; private set; } = sku;
-    public decimal Price { get; private set; } = price;
+    public decimal OldPrice { get; private set; } = oldPrice;
+    public decimal NewPrice { get; private set; } = newPrice;
     public Currency Currency { get; private set; } = currency;
     public string ImageUrl { get; private set; } = imageUrl;
     public int StockQuantity { get; private set; } = stockQuantity;
@@ -45,7 +47,8 @@ public class Item(
         string name,
         string description,
         string sku,
-        decimal price,
+        decimal oldPrice,
+        decimal newPrice,
         Currency currency,
         string imageUrl,
         int stockQuantity,
@@ -63,7 +66,8 @@ public class Item(
         Name = name;
         Description = description;
         Sku = sku;
-        Price = price;
+        OldPrice = oldPrice;
+        NewPrice = newPrice;
         Currency = currency;
         ImageUrl = imageUrl;
         StockQuantity = stockQuantity;
@@ -115,9 +119,10 @@ public class Item(
         StockQuantity -= quantity;
     }
 
-    internal void SetItemPrice(decimal price, Currency currency)
+    internal void SetItemPrice(decimal oldPrice, decimal newPrice, Currency currency)
     {
-        Price = price;
+        OldPrice = oldPrice;
+        NewPrice = newPrice;
         Currency = currency;
     }
 

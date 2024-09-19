@@ -3,4 +3,8 @@ using MediatR;
 
 namespace Search.Worker.Applications.Commands.SetItemPrice;
 
-internal record SetItemPriceCommand(Guid Id, decimal Price, Currency Currency) : IRequest<Unit>;
+internal record SetItemPriceCommand(
+    Guid Id, 
+    decimal OldPrice, 
+    decimal NewPrice, 
+    Currency Currency) : IRequest<Unit>;
