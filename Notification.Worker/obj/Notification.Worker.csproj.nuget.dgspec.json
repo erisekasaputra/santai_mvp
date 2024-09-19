@@ -259,6 +259,10 @@
               "target": "Package",
               "version": "[8.2.5, )"
             },
+            "Microsoft.AspNetCore.SignalR.StackExchangeRedis": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
             "Microsoft.Extensions.Caching.StackExchangeRedis": {
               "target": "Package",
               "version": "[9.0.0-preview.7.24406.2, )"
@@ -273,7 +277,7 @@
             },
             "StackExchange.Redis": {
               "target": "Package",
-              "version": "[2.8.12, )"
+              "version": "[2.8.16, )"
             }
           },
           "imports": [

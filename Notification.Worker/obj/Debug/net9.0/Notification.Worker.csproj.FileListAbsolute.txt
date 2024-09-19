@@ -98,3 +98,7 @@ C:\Santai.MVP\Notification.Worker\obj\Debug\net9.0\refint\Notification.Worker.dl
 C:\Santai.MVP\Notification.Worker\obj\Debug\net9.0\Notification.Worker.pdb
 C:\Santai.MVP\Notification.Worker\obj\Debug\net9.0\Notification.Worker.genruntimeconfig.cache
 C:\Santai.MVP\Notification.Worker\obj\Debug\net9.0\ref\Notification.Worker.dll
+C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\MessagePack.dll
+C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\MessagePack.Annotations.dll
+C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\Microsoft.AspNetCore.SignalR.StackExchangeRedis.dll
+C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\Microsoft.NET.StringTools.dll

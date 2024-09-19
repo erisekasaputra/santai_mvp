@@ -1,9 +1,14 @@
 ﻿using Core.Configurations;
 using Core.Events;
+using Core.Services;
+using Core.Services.Interfaces;
 using MassTransit;
+using Microsoft.AspNetCore.SignalR.StackExchangeRedis;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Notification.Worker.Consumers;
+using StackExchange.Redis;
+using System.CodeDom;
 
 namespace Notification.Worker.Extensions;
 
@@ -83,6 +88,16 @@ public static class ServiceRegistrationExtension
 
     public static IServiceCollection AddApplicationService(this IServiceCollection services)
     {
+        var redisOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<CacheConfiguration>>()
+            ?? throw new Exception("Please provide value for message bus options");
+
+        services.AddSignalR().AddStackExchangeRedis(redisOptions.CurrentValue.Host, options =>
+        {
+            options.Configuration.ChannelPrefix = RedisChannel.Literal(typeof(Program).Assembly.GetName().Name ?? throw new ArgumentNullException());
+        });
+
+        services.AddSingleton<ICacheService, CacheService>();
+
         return services;
     }
 }

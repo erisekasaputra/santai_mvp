@@ -374,6 +374,37 @@
           }
         }
       },
+      "MessagePack/2.5.108": {
+        "type": "package",
+        "dependencies": {
+          "MessagePack.Annotations": "2.5.108",
+          "Microsoft.NET.StringTools": "17.4.0",
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        },
+        "compile": {
+          "lib/net6.0/MessagePack.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/MessagePack.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "MessagePack.Annotations/2.5.108": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/MessagePack.Annotations.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/MessagePack.Annotations.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "Microsoft.AspNetCore.Authentication.Google/9.0.0-preview.7.24406.2": {
         "type": "package",
         "compile": {
@@ -440,6 +471,27 @@
         },
         "runtime": {
           "lib/net9.0/Microsoft.AspNetCore.OutputCaching.StackExchangeRedis.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
+      "Microsoft.AspNetCore.SignalR.StackExchangeRedis/8.0.8": {
+        "type": "package",
+        "dependencies": {
+          "MessagePack": "2.5.108",
+          "Microsoft.Extensions.Options": "8.0.2",
+          "StackExchange.Redis": "2.7.27"
+        },
+        "compile": {
+          "lib/net8.0/Microsoft.AspNetCore.SignalR.StackExchangeRedis.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.SignalR.StackExchangeRedis.dll": {
             "related": ".xml"
           }
         },
@@ -1427,6 +1479,23 @@
           }
         }
       },
+      "Microsoft.NET.StringTools/17.4.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.5",
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        },
+        "compile": {
+          "ref/net7.0/_._": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/Microsoft.NET.StringTools.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
       "Microsoft.NETCore.Platforms/3.1.0": {
         "type": "package",
         "compile": {
@@ -1582,7 +1651,7 @@
           }
         }
       },
-      "StackExchange.Redis/2.8.12": {
+      "StackExchange.Redis/2.8.16": {
         "type": "package",
         "dependencies": {
           "Microsoft.Extensions.Logging.Abstractions": "6.0.0",
@@ -1906,6 +1975,22 @@
             "assetType": "runtime",
             "rid": "win"
           }
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/6.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net6.0/_._": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net6.0/System.Runtime.CompilerServices.Unsafe.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/netcoreapp3.1/_._": {}
         }
       },
       "System.Runtime.Handles/4.3.0": {
@@ -2635,6 +2720,34 @@
         "mediatr.contracts.nuspec"
       ]
     },
+    "MessagePack/2.5.108": {
+      "sha512": "kcVRbdWP3xNWLZmmpm4DFO+kuXf6mUR2mHZ27WoZIEFIv9hazuUd80injXhNrZnlq/FklAdCsLOil5M76I4Ndg==",
+      "type": "package",
+      "path": "messagepack/2.5.108",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net6.0/MessagePack.dll",
+        "lib/net6.0/MessagePack.xml",
+        "lib/netstandard2.0/MessagePack.dll",
+        "lib/netstandard2.0/MessagePack.xml",
+        "messagepack.2.5.108.nupkg.sha512",
+        "messagepack.nuspec"
+      ]
+    },
+    "MessagePack.Annotations/2.5.108": {
+      "sha512": "28aNCvfJClgwaKr26gf2S6LT+C1PNyPxiG+ihYpy8uCJsRLJEDoCt2I0Uk5hqOPQ8P8hI0ESy520oMkZkPmsOQ==",
+      "type": "package",
+      "path": "messagepack.annotations/2.5.108",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/MessagePack.Annotations.dll",
+        "lib/netstandard2.0/MessagePack.Annotations.xml",
+        "messagepack.annotations.2.5.108.nupkg.sha512",
+        "messagepack.annotations.nuspec"
+      ]
+    },
     "Microsoft.AspNetCore.Authentication.Google/9.0.0-preview.7.24406.2": {
       "sha512": "U6G91muo7/44pJQrHJBhqLpZE9SmyNFsthz3lAR9Jj8kV3f01S0OLDwPi7XixsC85+ivqKkO6g5fuIlin6L0Zw==",
       "type": "package",
@@ -2697,6 +2810,21 @@
         "lib/net9.0/Microsoft.AspNetCore.OutputCaching.StackExchangeRedis.xml",
         "microsoft.aspnetcore.outputcaching.stackexchangeredis.9.0.0-preview.7.24406.2.nupkg.sha512",
         "microsoft.aspnetcore.outputcaching.stackexchangeredis.nuspec"
+      ]
+    },
+    "Microsoft.AspNetCore.SignalR.StackExchangeRedis/8.0.8": {
+      "sha512": "QZdJJBq+nXpdFapxwyJ+rOThpLYZI2q0jBuzcgkRLh2C+lX51JCU/C0xXtMm+8hKt9E26pJRr53RKguekkLfIQ==",
+      "type": "package",
+      "path": "microsoft.aspnetcore.signalr.stackexchangeredis/8.0.8",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net8.0/Microsoft.AspNetCore.SignalR.StackExchangeRedis.dll",
+        "lib/net8.0/Microsoft.AspNetCore.SignalR.StackExchangeRedis.xml",
+        "microsoft.aspnetcore.signalr.stackexchangeredis.8.0.8.nupkg.sha512",
+        "microsoft.aspnetcore.signalr.stackexchangeredis.nuspec"
       ]
     },
     "Microsoft.Bcl.AsyncInterfaces/1.1.1": {
@@ -4099,6 +4227,40 @@
         "microsoft.identitymodel.tokens.nuspec"
       ]
     },
+    "Microsoft.NET.StringTools/17.4.0": {
+      "sha512": "06T6Hqfs3JDIaBvJaBRFFMIdU7oE0OMab5Xl8LKQjWPxBQr3BgVFKMQPTC+GsSEuYREWmK6g5eOd7Xqd9p1YCA==",
+      "type": "package",
+      "path": "microsoft.net.stringtools/17.4.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "MSBuild-NuGet-Icon.png",
+        "README.md",
+        "lib/net35/Microsoft.NET.StringTools.net35.dll",
+        "lib/net35/Microsoft.NET.StringTools.net35.pdb",
+        "lib/net35/Microsoft.NET.StringTools.net35.xml",
+        "lib/net472/Microsoft.NET.StringTools.dll",
+        "lib/net472/Microsoft.NET.StringTools.pdb",
+        "lib/net472/Microsoft.NET.StringTools.xml",
+        "lib/net7.0/Microsoft.NET.StringTools.dll",
+        "lib/net7.0/Microsoft.NET.StringTools.pdb",
+        "lib/net7.0/Microsoft.NET.StringTools.xml",
+        "lib/netstandard2.0/Microsoft.NET.StringTools.dll",
+        "lib/netstandard2.0/Microsoft.NET.StringTools.pdb",
+        "lib/netstandard2.0/Microsoft.NET.StringTools.xml",
+        "microsoft.net.stringtools.17.4.0.nupkg.sha512",
+        "microsoft.net.stringtools.nuspec",
+        "notices/THIRDPARTYNOTICES.txt",
+        "ref/net35/Microsoft.NET.StringTools.net35.dll",
+        "ref/net35/Microsoft.NET.StringTools.net35.xml",
+        "ref/net472/Microsoft.NET.StringTools.dll",
+        "ref/net472/Microsoft.NET.StringTools.xml",
+        "ref/net7.0/Microsoft.NET.StringTools.dll",
+        "ref/net7.0/Microsoft.NET.StringTools.xml",
+        "ref/netstandard2.0/Microsoft.NET.StringTools.dll",
+        "ref/netstandard2.0/Microsoft.NET.StringTools.xml"
+      ]
+    },
     "Microsoft.NETCore.Platforms/3.1.0": {
       "sha512": "z7aeg8oHln2CuNulfhiLYxCVMPEwBl3rzicjvIX+4sUuCwvXw5oXQEtbiU2c0z4qYL5L3Kmx0mMA/+t/SbY67w==",
       "type": "package",
@@ -4410,10 +4572,10 @@
         "version.txt"
       ]
     },
-    "StackExchange.Redis/2.8.12": {
-      "sha512": "uUI5cgV1huCKcfTG4kh1NpLj+K7U9HWEfb0Bxs4qy9pFtc2kxQzRyr4RbVCm6zmWO9zufcs7zd9XVIE8+i0YMg==",
+    "StackExchange.Redis/2.8.16": {
+      "sha512": "WaoulkOqOC9jHepca3JZKFTqndCWab5uYS7qCzmiQDlrTkFaDN7eLSlEfHycBxipRnQY9ppZM7QSsWAwUEGblw==",
       "type": "package",
-      "path": "stackexchange.redis/2.8.12",
+      "path": "stackexchange.redis/2.8.16",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -4427,7 +4589,7 @@
         "lib/netcoreapp3.1/StackExchange.Redis.xml",
         "lib/netstandard2.0/StackExchange.Redis.dll",
         "lib/netstandard2.0/StackExchange.Redis.xml",
-        "stackexchange.redis.2.8.12.nupkg.sha512",
+        "stackexchange.redis.2.8.16.nupkg.sha512",
         "stackexchange.redis.nuspec"
       ]
     },
@@ -5270,6 +5432,31 @@
         "useSharedDesignerContext.txt"
       ]
     },
+    "System.Runtime.CompilerServices.Unsafe/6.0.0": {
+      "sha512": "/iUeP3tq1S0XdNNoMz5C9twLSrM/TH+qElHkXWaPvuNOt+99G75NrV0OS2EqHx5wMN7popYjpc8oTjC1y16DLg==",
+      "type": "package",
+      "path": "system.runtime.compilerservices.unsafe/6.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.targets",
+        "buildTransitive/netcoreapp3.1/_._",
+        "lib/net461/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/net461/System.Runtime.CompilerServices.Unsafe.xml",
+        "lib/net6.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/net6.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "lib/netcoreapp3.1/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/netcoreapp3.1/System.Runtime.CompilerServices.Unsafe.xml",
+        "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "system.runtime.compilerservices.unsafe.6.0.0.nupkg.sha512",
+        "system.runtime.compilerservices.unsafe.nuspec",
+        "useSharedDesignerContext.txt"
+      ]
+    },
     "System.Runtime.Handles/4.3.0": {
       "sha512": "OKiSUN7DmTWeYb3l51A7EYaeNMnvxwE249YtZz7yooT4gOZhmTjIn48KgSsw2k2lYdLgTKNJw/ZIfSElwDRVgg==",
       "type": "package",
@@ -5874,10 +6061,11 @@
       "MassTransit.EntityFrameworkCore >= 8.2.5",
       "MassTransit.Extensions.DependencyInjection >= 7.3.1",
       "MassTransit.RabbitMQ >= 8.2.5",
+      "Microsoft.AspNetCore.SignalR.StackExchangeRedis >= 8.0.8",
       "Microsoft.Extensions.Caching.StackExchangeRedis >= 9.0.0-preview.7.24406.2",
       "Microsoft.Extensions.Hosting >= 9.0.0-preview.6.24327.7",
       "Microsoft.VisualStudio.Azure.Containers.Tools.Targets >= 1.21.0",
-      "StackExchange.Redis >= 2.8.12"
+      "StackExchange.Redis >= 2.8.16"
     ]
   },
   "packageFolders": {
@@ -5959,6 +6147,10 @@
             "target": "Package",
             "version": "[8.2.5, )"
           },
+          "Microsoft.AspNetCore.SignalR.StackExchangeRedis": {
+            "target": "Package",
+            "version": "[8.0.8, )"
+          },
           "Microsoft.Extensions.Caching.StackExchangeRedis": {
             "target": "Package",
             "version": "[9.0.0-preview.7.24406.2, )"
@@ -5973,7 +6165,7 @@
           },
           "StackExchange.Redis": {
             "target": "Package",
-            "version": "[2.8.12, )"
+            "version": "[2.8.16, )"
           }
         },
         "imports": [

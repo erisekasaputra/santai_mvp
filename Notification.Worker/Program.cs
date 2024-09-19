@@ -4,18 +4,17 @@ using Notification.Worker.Data;
 using Notification.Worker.Extensions;
 
 var builder = Host.CreateApplicationBuilder(args);
-
+ 
 builder.AddLoggingContext();
-builder.AddHostedCoreOptionConfiguration();
-
+builder.AddHostedCoreOptionConfiguration(); 
+builder.Services.AddHttpContextAccessor();
 builder.Configuration.AddEnvironmentVariables();  
 builder.Services.AddJsonEnumConverterBehavior();
 builder.Services.AddApplicationService();
 builder.Services.AddHostedService<Worker>();
 builder.Services.AddRedisDatabase();
 builder.Services.AddSqlDatabaseContext<NotificationDbContext>();
-builder.Services.AddMassTransitContext<NotificationDbContext>();
-
+builder.Services.AddMassTransitContext<NotificationDbContext>(); 
 
 var host = builder.Build();
 host.Run();

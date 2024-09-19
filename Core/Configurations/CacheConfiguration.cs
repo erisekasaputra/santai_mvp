@@ -1,7 +1,9 @@
-﻿namespace Core.Configurations;
+﻿using MassTransit.Saga;
+
+namespace Core.Configurations;
 
 public class CacheConfiguration
-{
+{ 
     public const string SectionName = "Cache";
     public string Host { get; set; } = string.Empty;
     public string Username { get; set; } = string.Empty;
