@@ -99,6 +99,8 @@ C:\Santai.MVP\Search.API\bin\Debug\net9.0\Search.API.pdb
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\AWSSDK.Core.dll
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\AWSSDK.Extensions.NETCore.Setup.dll
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\AWSSDK.KeyManagementService.dll
+C:\Santai.MVP\Search.API\bin\Debug\net9.0\AWSSDK.SimpleNotificationService.dll
+C:\Santai.MVP\Search.API\bin\Debug\net9.0\AWSSDK.SQS.dll
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\Azure.Core.dll
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\Azure.Core.Experimental.dll
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\Azure.Identity.dll
@@ -116,6 +118,7 @@ C:\Santai.MVP\Search.API\bin\Debug\net9.0\FluentValidation.DependencyInjectionEx
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\PhoneNumbers.dll
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\MassTransit.dll
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\MassTransit.Abstractions.dll
+C:\Santai.MVP\Search.API\bin\Debug\net9.0\MassTransit.AmazonSqsTransport.dll
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\MassTransit.EntityFrameworkCoreIntegration.dll
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\MassTransit.KafkaIntegration.dll
 C:\Santai.MVP\Search.API\bin\Debug\net9.0\MediatR.dll

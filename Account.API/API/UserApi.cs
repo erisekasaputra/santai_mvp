@@ -15,8 +15,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Account.API.API;
 
 public static class UserApi
-{
-    private const int _cacheExpiry = 15;
+{ 
     public static IEndpointRouteBuilder MapUserApi(this IEndpointRouteBuilder route)
     {
         var app = route.MapGroup("api/v1/users");   

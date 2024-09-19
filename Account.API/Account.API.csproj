@@ -24,11 +24,10 @@
     <PackageReference Include="Hangfire.AspNetCore" Version="1.8.14" />
     <PackageReference Include="Hangfire.Core" Version="1.8.14" />
     <PackageReference Include="Hangfire.SqlServer" Version="1.8.14" />
-    <PackageReference Include="MassTransit" Version="8.2.5-develop.1942" />
-    <PackageReference Include="MassTransit.Abstractions" Version="8.2.5-develop.1942" />
-    <PackageReference Include="MassTransit.AmazonSQS" Version="8.2.5-develop.1942" />
-    <PackageReference Include="MassTransit.EntityFrameworkCore" Version="8.2.5-develop.1942" />
-    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.5-develop.1942" />
+    <PackageReference Include="MassTransit" Version="8.2.5" />
+    <PackageReference Include="MassTransit.Abstractions" Version="8.2.5" />
+    <PackageReference Include="MassTransit.EntityFrameworkCore" Version="8.2.5" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.5" />
     <PackageReference Include="MediatR" Version="12.4.0" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-preview.6.24328.4" />
     <PackageReference Include="Microsoft.AspNetCore.OutputCaching.StackExchangeRedis" Version="9.0.0-preview.7.24406.2" /> 

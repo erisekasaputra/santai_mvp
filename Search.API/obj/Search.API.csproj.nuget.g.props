@@ -20,8 +20,10 @@
   </ImportGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <PkgMicrosoft_VisualStudio_Azure_Containers_Tools_Targets Condition=" '$(PkgMicrosoft_VisualStudio_Azure_Containers_Tools_Targets)' == '' ">C:\Users\erise\.nuget\packages\microsoft.visualstudio.azure.containers.tools.targets\1.21.0</PkgMicrosoft_VisualStudio_Azure_Containers_Tools_Targets>
-    <PkgEntityFramework Condition=" '$(PkgEntityFramework)' == '' ">C:\Users\erise\.nuget\packages\entityframework\6.5.1</PkgEntityFramework>
     <PkgAWSSDK_Core Condition=" '$(PkgAWSSDK_Core)' == '' ">C:\Users\erise\.nuget\packages\awssdk.core\4.0.0-preview.2</PkgAWSSDK_Core>
+    <PkgAWSSDK_SQS Condition=" '$(PkgAWSSDK_SQS)' == '' ">C:\Users\erise\.nuget\packages\awssdk.sqs\3.7.400.3</PkgAWSSDK_SQS>
+    <PkgAWSSDK_SimpleNotificationService Condition=" '$(PkgAWSSDK_SimpleNotificationService)' == '' ">C:\Users\erise\.nuget\packages\awssdk.simplenotificationservice\3.7.400.3</PkgAWSSDK_SimpleNotificationService>
+    <PkgEntityFramework Condition=" '$(PkgEntityFramework)' == '' ">C:\Users\erise\.nuget\packages\entityframework\6.5.1</PkgEntityFramework>
     <PkgAWSSDK_KeyManagementService Condition=" '$(PkgAWSSDK_KeyManagementService)' == '' ">C:\Users\erise\.nuget\packages\awssdk.keymanagementservice\4.0.0-preview.2</PkgAWSSDK_KeyManagementService>
   </PropertyGroup>
 </Project>

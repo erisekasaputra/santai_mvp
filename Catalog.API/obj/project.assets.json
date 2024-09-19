@@ -71,10 +71,10 @@
           }
         }
       },
-      "AWSSDK.SimpleNotificationService/3.7.302.1": {
+      "AWSSDK.SimpleNotificationService/3.7.400.3": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.7.304.30, 4.0.0)"
+          "AWSSDK.Core": "[3.7.400.3, 4.0.0)"
         },
         "compile": {
           "lib/net8.0/AWSSDK.SimpleNotificationService.dll": {
@@ -87,10 +87,10 @@
           }
         }
       },
-      "AWSSDK.SQS/3.7.301.33": {
+      "AWSSDK.SQS/3.7.400.3": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.Core": "[3.7.304.30, 4.0.0)"
+          "AWSSDK.Core": "[3.7.400.3, 4.0.0)"
         },
         "compile": {
           "lib/net8.0/AWSSDK.SQS.dll": {
@@ -166,10 +166,9 @@
           }
         }
       },
-      "Confluent.Kafka/2.5.0": {
+      "Confluent.Kafka/2.5.2": {
         "type": "package",
         "dependencies": {
-          "System.Memory": "4.5.0",
           "librdkafka.redist": "2.5.0"
         },
         "compile": {
@@ -545,10 +544,10 @@
           }
         }
       },
-      "MassTransit/8.2.4-develop.1875": {
+      "MassTransit/8.2.5": {
         "type": "package",
         "dependencies": {
-          "MassTransit.Abstractions": "8.2.4-develop.1875",
+          "MassTransit.Abstractions": "8.2.5",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
           "Microsoft.Extensions.Diagnostics.HealthChecks": "8.0.0",
           "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
@@ -566,7 +565,7 @@
           }
         }
       },
-      "MassTransit.Abstractions/8.2.4-develop.1875": {
+      "MassTransit.Abstractions/8.2.5": {
         "type": "package",
         "compile": {
           "lib/net8.0/MassTransit.Abstractions.dll": {
@@ -579,12 +578,12 @@
           }
         }
       },
-      "MassTransit.AmazonSQS/8.2.4-develop.1875": {
+      "MassTransit.AmazonSQS/8.2.5": {
         "type": "package",
         "dependencies": {
-          "AWSSDK.SQS": "3.7.301.33",
-          "AWSSDK.SimpleNotificationService": "3.7.302.1",
-          "MassTransit": "8.2.4-develop.1875"
+          "AWSSDK.SQS": "3.7.400.3",
+          "AWSSDK.SimpleNotificationService": "3.7.400.3",
+          "MassTransit": "8.2.5"
         },
         "compile": {
           "lib/net8.0/MassTransit.AmazonSqsTransport.dll": {
@@ -597,10 +596,10 @@
           }
         }
       },
-      "MassTransit.EntityFrameworkCore/8.2.4-develop.1875": {
+      "MassTransit.EntityFrameworkCore/8.2.5": {
         "type": "package",
         "dependencies": {
-          "MassTransit": "8.2.4-develop.1875",
+          "MassTransit": "8.2.5",
           "Microsoft.EntityFrameworkCore.Relational": "8.0.0"
         },
         "compile": {
@@ -631,11 +630,11 @@
           }
         }
       },
-      "MassTransit.Kafka/8.2.4-develop.1875": {
+      "MassTransit.Kafka/8.2.5": {
         "type": "package",
         "dependencies": {
-          "Confluent.Kafka": "2.5.0",
-          "MassTransit": "8.2.4-develop.1875"
+          "Confluent.Kafka": "2.5.2",
+          "MassTransit": "8.2.5"
         },
         "compile": {
           "lib/net8.0/MassTransit.KafkaIntegration.dll": {
@@ -648,10 +647,10 @@
           }
         }
       },
-      "MassTransit.RabbitMQ/8.2.4-develop.1875": {
+      "MassTransit.RabbitMQ/8.2.5": {
         "type": "package",
         "dependencies": {
-          "MassTransit": "8.2.4-develop.1875",
+          "MassTransit": "8.2.5",
           "RabbitMQ.Client": "6.8.1"
         },
         "compile": {
@@ -2937,6 +2936,8 @@
           "FluentValidation": "11.9.2",
           "FluentValidation.AspNetCore": "11.3.0",
           "FluentValidation.DependencyInjectionExtensions": "11.9.2",
+          "MassTransit": "8.2.5",
+          "MassTransit.AmazonSQS": "8.2.5",
           "MediatR": "12.4.0",
           "Microsoft.AspNetCore.Authentication.Google": "9.0.0-preview.7.24406.2",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.0-preview.7.24406.2",
@@ -3055,17 +3056,17 @@
         "tools/uninstall.ps1"
       ]
     },
-    "AWSSDK.SimpleNotificationService/3.7.302.1": {
-      "sha512": "c/9ncl/v+g6dpZm+sNQazGgTcf9UAObcxxbKpHEP94s7KxjQJzM3WrN5ySxS/VJK93PnmMnp8kweB2Sxw7GYGg==",
+    "AWSSDK.SimpleNotificationService/3.7.400.3": {
+      "sha512": "cYgE/vI1dc3yFMTspclGnp2+FbbYLtSiB/9ECTI0ShcRVWH3BripL7Zj52hKqB3TY70O/MViBNzqKyt10ToHtg==",
       "type": "package",
-      "path": "awssdk.simplenotificationservice/3.7.302.1",
+      "path": "awssdk.simplenotificationservice/3.7.400.3",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "analyzers/dotnet/cs/AWSSDK.SimpleNotificationService.CodeAnalysis.dll",
         "analyzers/dotnet/cs/SharedAnalysisCode.dll",
-        "awssdk.simplenotificationservice.3.7.302.1.nupkg.sha512",
+        "awssdk.simplenotificationservice.3.7.400.3.nupkg.sha512",
         "awssdk.simplenotificationservice.nuspec",
         "images/AWSLogo.png",
         "lib/net35/AWSSDK.SimpleNotificationService.dll",
@@ -3087,17 +3088,17 @@
         "tools/uninstall.ps1"
       ]
     },
-    "AWSSDK.SQS/3.7.301.33": {
-      "sha512": "vQnxWjrVoAt2TifJv9CTDles6CZLgnF7gGb5CsJZcpOuRnGtGGatr/lCmsJjRMKyc3qFNPwHa4glXKDNbgUh8g==",
+    "AWSSDK.SQS/3.7.400.3": {
+      "sha512": "ZrHblBY1U1MWK75ZicZ3Gy/DBSy0o6/Ua39M+IwlkUaTsGbtcoGurXkOKD7Kbirxk/pNjYXpeI4mXMxz7RoRsQ==",
       "type": "package",
-      "path": "awssdk.sqs/3.7.301.33",
+      "path": "awssdk.sqs/3.7.400.3",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "analyzers/dotnet/cs/AWSSDK.SQS.CodeAnalysis.dll",
         "analyzers/dotnet/cs/SharedAnalysisCode.dll",
-        "awssdk.sqs.3.7.301.33.nupkg.sha512",
+        "awssdk.sqs.3.7.400.3.nupkg.sha512",
         "awssdk.sqs.nuspec",
         "images/AWSLogo.png",
         "lib/net35/AWSSDK.SQS.dll",
@@ -3177,16 +3178,16 @@
         "lib/netstandard2.0/Azure.Identity.xml"
       ]
     },
-    "Confluent.Kafka/2.5.0": {
-      "sha512": "WZsnfuJdV9lkydnqilcFKH2THnsAhJL7zltcoBmbStstzP1FPCO8G7KEJA2nGZTQygVMBfSWeLuYo7sZKu8cxA==",
+    "Confluent.Kafka/2.5.2": {
+      "sha512": "imjEYuPvCPPNwZa7PupDgzcEP0kGWjWrE+Uz5TW+kUjFEC64mGG6NnndDYgzt+a8xoaa6rsgYiKdemkUe1cVeg==",
       "type": "package",
-      "path": "confluent.kafka/2.5.0",
+      "path": "confluent.kafka/2.5.2",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
         "README.md",
         "confluent-logo.png",
-        "confluent.kafka.2.5.0.nupkg.sha512",
+        "confluent.kafka.2.5.2.nupkg.sha512",
         "confluent.kafka.nuspec",
         "lib/net462/Confluent.Kafka.dll",
         "lib/net462/Confluent.Kafka.xml",
@@ -3678,10 +3679,10 @@
         "runtimes/win-x86/native/zstd.dll"
       ]
     },
-    "MassTransit/8.2.4-develop.1875": {
-      "sha512": "Tcg/XiEVPpyZJ0xoIlYJ70clOkqE73L7+zuBhlkJ40Ei/KTexkyOiq+MrydHjEqkU8yWQD6NBgSwdAWMbuDqbg==",
+    "MassTransit/8.2.5": {
+      "sha512": "b/gNaT6IxX+BZnLCLTzjqia5iQJxpmIGOjPiLnD6SLBRX9tyIsYVNKPAqQ6txNe2ztOOaW4ntef84VxSvA0IEA==",
       "type": "package",
-      "path": "masstransit/8.2.4-develop.1875",
+      "path": "masstransit/8.2.5",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3694,15 +3695,15 @@
         "lib/net8.0/MassTransit.xml",
         "lib/netstandard2.0/MassTransit.dll",
         "lib/netstandard2.0/MassTransit.xml",
-        "masstransit.8.2.4-develop.1875.nupkg.sha512",
+        "masstransit.8.2.5.nupkg.sha512",
         "masstransit.nuspec",
         "mt-logo-small.png"
       ]
     },
-    "MassTransit.Abstractions/8.2.4-develop.1875": {
-      "sha512": "DKMipXj00F5T3/Z4Hy1vKjl+txo8eoXFw0gRBixgBRvwUPEIzsy+6EpWdemmWPr0ELmM7qzA3dB2pJjCoqQh7Q==",
+    "MassTransit.Abstractions/8.2.5": {
+      "sha512": "TcAV7ZEdXTrw6D74g55mlEYLBBQvsifNrdfwt0UCps7mZVBoXoS3fvMHCQguRgj+6k1Q1qEV9kZa0aUOT7GcPQ==",
       "type": "package",
-      "path": "masstransit.abstractions/8.2.4-develop.1875",
+      "path": "masstransit.abstractions/8.2.5",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3715,15 +3716,15 @@
         "lib/net8.0/MassTransit.Abstractions.xml",
         "lib/netstandard2.0/MassTransit.Abstractions.dll",
         "lib/netstandard2.0/MassTransit.Abstractions.xml",
-        "masstransit.abstractions.8.2.4-develop.1875.nupkg.sha512",
+        "masstransit.abstractions.8.2.5.nupkg.sha512",
         "masstransit.abstractions.nuspec",
         "mt-logo-small.png"
       ]
     },
-    "MassTransit.AmazonSQS/8.2.4-develop.1875": {
-      "sha512": "lFgisdRzEirZQ1hcNKi9kQ+38kZndkWvjYN8s1BZAgnO68eqot1slnmPrYOuXNqVCL6JwDroJwtKPbDIJXrQ5g==",
+    "MassTransit.AmazonSQS/8.2.5": {
+      "sha512": "8uVCcABW2aL70paumPUp376cENZUSPtb8lkK7Qp0R7ciuxcdtYZTNUHJvA8AKwKNNNBxwu97dAoWeL9kBtdQWQ==",
       "type": "package",
-      "path": "masstransit.amazonsqs/8.2.4-develop.1875",
+      "path": "masstransit.amazonsqs/8.2.5",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3736,15 +3737,15 @@
         "lib/net8.0/MassTransit.AmazonSqsTransport.xml",
         "lib/netstandard2.0/MassTransit.AmazonSqsTransport.dll",
         "lib/netstandard2.0/MassTransit.AmazonSqsTransport.xml",
-        "masstransit.amazonsqs.8.2.4-develop.1875.nupkg.sha512",
+        "masstransit.amazonsqs.8.2.5.nupkg.sha512",
         "masstransit.amazonsqs.nuspec",
         "mt-logo-small.png"
       ]
     },
-    "MassTransit.EntityFrameworkCore/8.2.4-develop.1875": {
-      "sha512": "3gZuPxPgxcA9TTKZAGbQjTooBZlP3PXe4YsfWDHcJV0pGe+TZsTcxoMiq12YnqJPXQ+nqFem0MbpbYzyM7qfAA==",
+    "MassTransit.EntityFrameworkCore/8.2.5": {
+      "sha512": "wYZQKG28ozFkF5UVi3orhrDVixNOIcqYvUA9pguq4rE2fq9N/MxaqCapfR9T69uD3J1rdSUN3WfTxLEzGf/lVg==",
       "type": "package",
-      "path": "masstransit.entityframeworkcore/8.2.4-develop.1875",
+      "path": "masstransit.entityframeworkcore/8.2.5",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3755,7 +3756,7 @@
         "lib/net8.0/MassTransit.EntityFrameworkCoreIntegration.xml",
         "lib/netstandard2.0/MassTransit.EntityFrameworkCoreIntegration.dll",
         "lib/netstandard2.0/MassTransit.EntityFrameworkCoreIntegration.xml",
-        "masstransit.entityframeworkcore.8.2.4-develop.1875.nupkg.sha512",
+        "masstransit.entityframeworkcore.8.2.5.nupkg.sha512",
         "masstransit.entityframeworkcore.nuspec",
         "mt-logo-small.png"
       ]
@@ -3781,10 +3782,10 @@
         "mt-logo-small.png"
       ]
     },
-    "MassTransit.Kafka/8.2.4-develop.1875": {
-      "sha512": "A9lwo9HUIwtNxbb17X5o/culy3Vi6/bLDFJyezSa1qAFsP/p/ZGs/dYZbpbMLvsrhimEn5o8B8cyB9HNMU4IAw==",
+    "MassTransit.Kafka/8.2.5": {
+      "sha512": "sTHco39MgRebXdfcmDW469lOMHmehw2TtwQuypAw6O4WdW3FYuiOdtsHyW34g7NNPTsWZ+XP2XJ/EWmLzkvcyw==",
       "type": "package",
-      "path": "masstransit.kafka/8.2.4-develop.1875",
+      "path": "masstransit.kafka/8.2.5",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3797,15 +3798,15 @@
         "lib/net8.0/MassTransit.KafkaIntegration.xml",
         "lib/netstandard2.0/MassTransit.KafkaIntegration.dll",
         "lib/netstandard2.0/MassTransit.KafkaIntegration.xml",
-        "masstransit.kafka.8.2.4-develop.1875.nupkg.sha512",
+        "masstransit.kafka.8.2.5.nupkg.sha512",
         "masstransit.kafka.nuspec",
         "mt-logo-small.png"
       ]
     },
-    "MassTransit.RabbitMQ/8.2.4-develop.1875": {
-      "sha512": "F/JfZK9qpjC5Ysb9vjkr2rctU0zC5rhWjg+HFJfbH4lgrwS25H0TFZ2/nLGCPvV/HSWxS1dMqYc4TkkZEN+xtw==",
+    "MassTransit.RabbitMQ/8.2.5": {
+      "sha512": "gIBF5plL/BZo5/SNDo0C6BjOZoGqJu5YdqoDm0MI6A7kJad9H/5qfWdB4AK1A97vpK7At3i3uXTuriqx5+UKMg==",
       "type": "package",
-      "path": "masstransit.rabbitmq/8.2.4-develop.1875",
+      "path": "masstransit.rabbitmq/8.2.5",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -3818,7 +3819,7 @@
         "lib/net8.0/MassTransit.RabbitMqTransport.xml",
         "lib/netstandard2.0/MassTransit.RabbitMqTransport.dll",
         "lib/netstandard2.0/MassTransit.RabbitMqTransport.xml",
-        "masstransit.rabbitmq.8.2.4-develop.1875.nupkg.sha512",
+        "masstransit.rabbitmq.8.2.5.nupkg.sha512",
         "masstransit.rabbitmq.nuspec",
         "mt-logo-small.png"
       ]
@@ -8514,11 +8515,11 @@
       "FluentValidation.DependencyInjectionExtensions >= 11.9.2",
       "Grpc.AspNetCore >= 2.65.0",
       "Grpc.AspNetCore.Server >= 2.65.0",
-      "MassTransit >= 8.2.4-develop.1875",
-      "MassTransit.AmazonSQS >= 8.2.4-develop.1875",
-      "MassTransit.EntityFrameworkCore >= 8.2.4-develop.1875",
-      "MassTransit.Kafka >= 8.2.4-develop.1875",
-      "MassTransit.RabbitMQ >= 8.2.4-develop.1875",
+      "MassTransit >= 8.2.5",
+      "MassTransit.AmazonSQS >= 8.2.5",
+      "MassTransit.EntityFrameworkCore >= 8.2.5",
+      "MassTransit.Kafka >= 8.2.5",
+      "MassTransit.RabbitMQ >= 8.2.5",
       "MediatR >= 12.4.0",
       "Microsoft.AspNetCore.OpenApi >= 9.0.0-preview.6.24328.4",
       "Microsoft.AspNetCore.OutputCaching.StackExchangeRedis >= 9.0.0-preview.7.24406.2",
@@ -8638,23 +8639,23 @@
           },
           "MassTransit": {
             "target": "Package",
-            "version": "[8.2.4-develop.1875, )"
+            "version": "[8.2.5, )"
           },
           "MassTransit.AmazonSQS": {
             "target": "Package",
-            "version": "[8.2.4-develop.1875, )"
+            "version": "[8.2.5, )"
           },
           "MassTransit.EntityFrameworkCore": {
             "target": "Package",
-            "version": "[8.2.4-develop.1875, )"
+            "version": "[8.2.5, )"
           },
           "MassTransit.Kafka": {
             "target": "Package",
-            "version": "[8.2.4-develop.1875, )"
+            "version": "[8.2.5, )"
           },
           "MassTransit.RabbitMQ": {
             "target": "Package",
-            "version": "[8.2.4-develop.1875, )"
+            "version": "[8.2.5, )"
           },
           "MediatR": {
             "target": "Package",

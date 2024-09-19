@@ -272,7 +272,16 @@ public static class ServiceRegistrationExtension
         builder.Logging.AddDebug();
 
         return builder;
-    } 
+    }
+
+    public static HostApplicationBuilder AddLoggingContext(this HostApplicationBuilder builder)
+    {
+        builder.Logging.ClearProviders();
+        builder.Logging.AddConsole();
+        builder.Logging.AddDebug();
+
+        return builder;
+    }
 
     public static IServiceCollection AddDataEncryption(this IServiceCollection services, IConfiguration configuration)
     { 

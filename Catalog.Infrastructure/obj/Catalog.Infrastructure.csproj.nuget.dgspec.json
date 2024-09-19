@@ -386,6 +386,14 @@
               "target": "Package",
               "version": "[11.9.2, )"
             },
+            "MassTransit": {
+              "target": "Package",
+              "version": "[8.2.5, )"
+            },
+            "MassTransit.AmazonSQS": {
+              "target": "Package",
+              "version": "[8.2.5, )"
+            },
             "MediatR": {
               "target": "Package",
               "version": "[12.4.0, )"

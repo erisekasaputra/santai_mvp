@@ -47,6 +47,28 @@
           }
         }
       },
+      "AWSSDK.SimpleNotificationService/3.7.400.3": {
+        "dependencies": {
+          "AWSSDK.Core": "4.0.0-preview.2"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.SimpleNotificationService.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.400.3"
+          }
+        }
+      },
+      "AWSSDK.SQS/3.7.400.3": {
+        "dependencies": {
+          "AWSSDK.Core": "4.0.0-preview.2"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.SQS.dll": {
+            "assemblyVersion": "3.3.0.0",
+            "fileVersion": "3.7.400.3"
+          }
+        }
+      },
       "Azure.Core/1.41.0": {
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "1.1.1",
@@ -151,6 +173,43 @@
           "lib/net8.0/PhoneNumbers.dll": {
             "assemblyVersion": "8.13.45.0",
             "fileVersion": "8.13.45.0"
+          }
+        }
+      },
+      "MassTransit/8.2.5": {
+        "dependencies": {
+          "MassTransit.Abstractions": "8.2.5",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Diagnostics.HealthChecks": "8.0.0",
+          "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Options": "9.0.0-preview.7.24405.7"
+        },
+        "runtime": {
+          "lib/net8.0/MassTransit.dll": {
+            "assemblyVersion": "8.2.5.0",
+            "fileVersion": "8.2.5.0"
+          }
+        }
+      },
+      "MassTransit.Abstractions/8.2.5": {
+        "runtime": {
+          "lib/net8.0/MassTransit.Abstractions.dll": {
+            "assemblyVersion": "8.2.5.0",
+            "fileVersion": "8.2.5.0"
+          }
+        }
+      },
+      "MassTransit.AmazonSQS/8.2.5": {
+        "dependencies": {
+          "AWSSDK.SQS": "3.7.400.3",
+          "AWSSDK.SimpleNotificationService": "3.7.400.3",
+          "MassTransit": "8.2.5"
+        },
+        "runtime": {
+          "lib/net8.0/MassTransit.AmazonSqsTransport.dll": {
+            "assemblyVersion": "8.2.5.0",
+            "fileVersion": "8.2.5.0"
           }
         }
       },
@@ -395,6 +454,36 @@
         }
       },
       "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.0-preview.7.24405.7": {},
+      "Microsoft.Extensions.Diagnostics.Abstractions/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Options": "9.0.0-preview.7.24405.7",
+          "System.Diagnostics.DiagnosticSource": "9.0.0-preview.7.24405.7"
+        }
+      },
+      "Microsoft.Extensions.Diagnostics.HealthChecks/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Options": "9.0.0-preview.7.24405.7"
+        }
+      },
+      "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions/8.0.0": {},
+      "Microsoft.Extensions.FileProviders.Abstractions/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "9.0.0-preview.7.24405.7"
+        }
+      },
+      "Microsoft.Extensions.Hosting.Abstractions/8.0.0": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-preview.7.24405.7",
+          "Microsoft.Extensions.Diagnostics.Abstractions": "8.0.0",
+          "Microsoft.Extensions.FileProviders.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.0-preview.7.24405.7"
+        }
+      },
       "Microsoft.Extensions.Logging/9.0.0-preview.7.24405.7": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection": "9.0.0-preview.7.24405.7",
@@ -813,6 +902,8 @@
           "FluentValidation": "11.9.2",
           "FluentValidation.AspNetCore": "11.3.0",
           "FluentValidation.DependencyInjectionExtensions": "11.9.2",
+          "MassTransit": "8.2.5",
+          "MassTransit.AmazonSQS": "8.2.5",
           "MediatR": "12.4.0",
           "Microsoft.AspNetCore.Authentication.Google": "9.0.0-preview.7.24406.2",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "9.0.0-preview.7.24406.2",
@@ -864,6 +955,20 @@
       "sha512": "sha512-GUVVJzJuCNnbrJZcE5NI+AsnzvkU+IM97f1iYCIw5VAMuoLKahsTShHhZ6NQNlY57sWvs1GjcdC4ey2RodU/hQ==",
       "path": "awssdk.keymanagementservice/4.0.0-preview.2",
       "hashPath": "awssdk.keymanagementservice.4.0.0-preview.2.nupkg.sha512"
+    },
+    "AWSSDK.SimpleNotificationService/3.7.400.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cYgE/vI1dc3yFMTspclGnp2+FbbYLtSiB/9ECTI0ShcRVWH3BripL7Zj52hKqB3TY70O/MViBNzqKyt10ToHtg==",
+      "path": "awssdk.simplenotificationservice/3.7.400.3",
+      "hashPath": "awssdk.simplenotificationservice.3.7.400.3.nupkg.sha512"
+    },
+    "AWSSDK.SQS/3.7.400.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ZrHblBY1U1MWK75ZicZ3Gy/DBSy0o6/Ua39M+IwlkUaTsGbtcoGurXkOKD7Kbirxk/pNjYXpeI4mXMxz7RoRsQ==",
+      "path": "awssdk.sqs/3.7.400.3",
+      "hashPath": "awssdk.sqs.3.7.400.3.nupkg.sha512"
     },
     "Azure.Core/1.41.0": {
       "type": "package",
@@ -920,6 +1025,27 @@
       "sha512": "sha512-hVhRxNATI+Yo/KYliUZ3z4BEoRUA+yHgGkV/8pSdkasR8+lLKcjO2UkCVuwyNKieqcY52ogzayRof6XfbTl7ug==",
       "path": "libphonenumber-csharp/8.13.45",
       "hashPath": "libphonenumber-csharp.8.13.45.nupkg.sha512"
+    },
+    "MassTransit/8.2.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-b/gNaT6IxX+BZnLCLTzjqia5iQJxpmIGOjPiLnD6SLBRX9tyIsYVNKPAqQ6txNe2ztOOaW4ntef84VxSvA0IEA==",
+      "path": "masstransit/8.2.5",
+      "hashPath": "masstransit.8.2.5.nupkg.sha512"
+    },
+    "MassTransit.Abstractions/8.2.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-TcAV7ZEdXTrw6D74g55mlEYLBBQvsifNrdfwt0UCps7mZVBoXoS3fvMHCQguRgj+6k1Q1qEV9kZa0aUOT7GcPQ==",
+      "path": "masstransit.abstractions/8.2.5",
+      "hashPath": "masstransit.abstractions.8.2.5.nupkg.sha512"
+    },
+    "MassTransit.AmazonSQS/8.2.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-8uVCcABW2aL70paumPUp376cENZUSPtb8lkK7Qp0R7ciuxcdtYZTNUHJvA8AKwKNNNBxwu97dAoWeL9kBtdQWQ==",
+      "path": "masstransit.amazonsqs/8.2.5",
+      "hashPath": "masstransit.amazonsqs.8.2.5.nupkg.sha512"
     },
     "MediatR/12.4.0": {
       "type": "package",
@@ -1067,6 +1193,41 @@
       "sha512": "sha512-ZuoB/44UTW4IbYfHk0yHtZH9LdHkfEeclxvniWs90T+f9x/NQtN4556iNIKar3MASCcrD0n2AE5y/Kv6buuNIA==",
       "path": "microsoft.extensions.dependencyinjection.abstractions/9.0.0-preview.7.24405.7",
       "hashPath": "microsoft.extensions.dependencyinjection.abstractions.9.0.0-preview.7.24405.7.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Diagnostics.Abstractions/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JHYCQG7HmugNYUhOl368g+NMxYE/N/AiclCYRNlgCY9eVyiBkOHMwK4x60RYMxv9EL3+rmj1mqHvdCiPpC+D4Q==",
+      "path": "microsoft.extensions.diagnostics.abstractions/8.0.0",
+      "hashPath": "microsoft.extensions.diagnostics.abstractions.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Diagnostics.HealthChecks/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-P9SoBuVZhJPpALZmSq72aQEb9ryP67EdquaCZGXGrrcASTNHYdrUhnpgSwIipgM5oVC+dKpRXg5zxobmF9xr5g==",
+      "path": "microsoft.extensions.diagnostics.healthchecks/8.0.0",
+      "hashPath": "microsoft.extensions.diagnostics.healthchecks.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-AT2qqos3IgI09ok36Qag9T8bb6kHJ3uT9Q5ki6CySybFsK6/9JbvQAgAHf1pVEjST0/N4JaFaCbm40R5edffwg==",
+      "path": "microsoft.extensions.diagnostics.healthchecks.abstractions/8.0.0",
+      "hashPath": "microsoft.extensions.diagnostics.healthchecks.abstractions.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.FileProviders.Abstractions/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ZbaMlhJlpisjuWbvXr4LdAst/1XxH3vZ6A0BsgTphZ2L4PGuxRLz7Jr/S7mkAAnOn78Vu0fKhEgNF5JO3zfjqQ==",
+      "path": "microsoft.extensions.fileproviders.abstractions/8.0.0",
+      "hashPath": "microsoft.extensions.fileproviders.abstractions.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Hosting.Abstractions/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-AG7HWwVRdCHlaA++1oKDxLsXIBxmDpMPb3VoyOoAghEWnkUvEAdYQUwnV4jJbAaa/nMYNiEh5ByoLauZBEiovg==",
+      "path": "microsoft.extensions.hosting.abstractions/8.0.0",
+      "hashPath": "microsoft.extensions.hosting.abstractions.8.0.0.nupkg.sha512"
     },
     "Microsoft.Extensions.Logging/9.0.0-preview.7.24405.7": {
       "type": "package",
