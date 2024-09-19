@@ -41,13 +41,10 @@ public class DeleteMechanicUserByUserIdCommandHandler : IRequestHandler<DeleteMe
                      .WithError(new("MechanicUser.Id", "Mechanic user not found"));
             }
 
-            mechanicUser.Delete();
-
-            await _cache.Deactivate(request.UserId.ToString()); 
-
+            mechanicUser.Delete(); 
+            await _cache.Deactivate(request.UserId.ToString());  
             _unitOfWork.BaseUsers.Delete(mechanicUser);   
-            await _unitOfWork.CommitTransactionAsync(cancellationToken);
-
+            await _unitOfWork.CommitTransactionAsync(cancellationToken); 
             return Result.Success(null, ResponseStatus.NoContent);
         }
         catch (DomainException ex)

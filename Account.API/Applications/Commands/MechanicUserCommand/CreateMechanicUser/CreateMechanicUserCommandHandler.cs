@@ -39,9 +39,9 @@ public class CreateMechanicUserCommandHandler(
     {
         try
         { 
-            var errors = new List<ErrorDetail>();
-
             await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
+
+            var errors = new List<ErrorDetail>();
              
             var hashedEmail = await HashNullableAsync(request.Email);
             var hashedPhoneNumber = await HashAsync(request.PhoneNumber);

@@ -4,6 +4,7 @@ using Core.Messages;
 using Account.Domain.SeedWork;
 using MediatR;
 using Core.Exceptions;
+using System.Data;
 
 namespace Account.API.Applications.Commands.StaffCommand.RemoveStaffByUserId;
 
@@ -14,13 +15,14 @@ public class RemoveStaffByUserIdCommandHandler(IUnitOfWork unitOfWork, Applicati
 
     public async Task<Result> Handle(RemoveStaffByUserIdCommand request, CancellationToken cancellationToken)
     {
-        await _unitOfWork.BeginTransactionAsync(System.Data.IsolationLevel.ReadCommitted, cancellationToken);
+        await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
         try
         {
 
             var staff = await _unitOfWork.Staffs.GetByIdAsync(request.StaffId);
             if (staff is null)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result.Failure($"Staff not found", ResponseStatus.NotFound)
                     .WithError(new("Staff.Id", "User not found"));
             }

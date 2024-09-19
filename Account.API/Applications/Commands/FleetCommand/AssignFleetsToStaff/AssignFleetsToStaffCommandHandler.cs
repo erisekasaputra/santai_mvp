@@ -43,6 +43,7 @@ public class AssignFleetsToStaffCommandHandler : IRequestHandler<AssignFleetsToS
 
             if (request is null || !request.FleetIds.Any())
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result.Failure("Please provide the fleet ids", ResponseStatus.BadRequest)
                     .WithError(new ("Fleet.Ids", "Fleets id request is empty"));
             }
@@ -51,6 +52,7 @@ public class AssignFleetsToStaffCommandHandler : IRequestHandler<AssignFleetsToS
 
             if (fleets is null || !fleets.Any())
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result.Failure("Fleets does not have any record", ResponseStatus.NotFound)
                      .WithError(new ErrorDetail("Fleet.Ids", "Fleets not found"));
             }
@@ -60,6 +62,7 @@ public class AssignFleetsToStaffCommandHandler : IRequestHandler<AssignFleetsToS
 
             if (staff is null)
             {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result.Failure("Staff not found", ResponseStatus.NotFound)
                     .WithError(new ErrorDetail("Staff.Id", "Staff not found"));
             }
@@ -112,8 +115,7 @@ public class AssignFleetsToStaffCommandHandler : IRequestHandler<AssignFleetsToS
 
     private async Task<Result> RollbackAndReturnFailureAsync(Result result, CancellationToken cancellationToken)
     {
-        await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-
+        await _unitOfWork.RollbackTransactionAsync(cancellationToken); 
         return result;
     } 
 }
