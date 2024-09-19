@@ -26,8 +26,7 @@ public class ScheduledOrderWorker : BackgroundService
         while (!stoppingToken.IsCancellationRequested) 
         {
             using var scope = _scopeFactory.CreateScope(); 
-            var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>();
-
+            var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>(); 
             var isShutdown = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<SafelyShutdownConfiguration>>();
             if (isShutdown.CurrentValue.Shutdown)
             {
@@ -43,7 +42,7 @@ public class ScheduledOrderWorker : BackgroundService
                 {
                     foreach (var order in orders) 
                     {  
-                        var orderAggregate = await unitOfWork.Orders.GetByIdAsync(order.Id, stoppingToken); 
+                        var orderAggregate = await unitOfWork.Orders.GetByIdAsync(order.OrderId, stoppingToken); 
                         if (orderAggregate is not null && orderAggregate.IsPaid)
                         {
                             try

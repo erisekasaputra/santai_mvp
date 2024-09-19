@@ -2,7 +2,8 @@
 using Newtonsoft.Json;
 using Ordering.API.Applications.Dtos.Responses;
 using Ordering.API.Applications.Services.Interfaces;
-using System.Net; 
+using System.Net;
+using System.Text.RegularExpressions;
 
 namespace Ordering.API.Applications.Services;
 
@@ -31,8 +32,8 @@ public class CatalogServiceAPI : ICatalogServiceAPI
             var endpoint = "/api/v1/catalog/items/stock/reduce";
 
             var response = await _httpClient.PatchAsJsonAsync(endpoint, payload);
-
-            var content = await response.Content.ReadAsStringAsync();
+            
+            var content = Regex.Unescape(await response.Content.ReadAsStringAsync()).Trim('"');
 
             if (response.StatusCode is HttpStatusCode.NotFound or HttpStatusCode.UnprocessableEntity)
             {
@@ -47,6 +48,10 @@ public class CatalogServiceAPI : ICatalogServiceAPI
             response.EnsureSuccessStatusCode();  
 
             return (JsonConvert.DeserializeObject<ResultResponseDto<List<CatalogItemResponseDto>>?>(content), true);
+        }
+        catch (JsonSerializationException ex)
+        {
+            throw;
         }
         catch (HttpRequestException ex)
         {

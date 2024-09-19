@@ -166,6 +166,12 @@ public static class ServiceRegistrationExtension
                 policyBuilder.RequireAuthenticatedUser();
                 policyBuilder.RequireRole(UserType.ServiceToService.ToString());
             });
+
+            options.AddPolicy(PolicyName.BusinessStaffRegularUserPolicy.ToString(), policyBuilder =>
+            {
+                policyBuilder.RequireAuthenticatedUser();
+                policyBuilder.RequireRole(UserType.BusinessUser.ToString(), UserType.StaffUser.ToString(), UserType.RegularUser.ToString());
+            });
         });
 
         return authenticationBuilder;

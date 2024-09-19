@@ -5,8 +5,8 @@
     "FeeDecriptionDetail": "Service Fee",
     "FeeDescription": "MechanicFee", 
     "Currency": "MYR",
-    "ValuePercentage": 10,
-    "ValueAmount": 0
+    "ValuePercentage": 0,
+    "ValueAmount": 30
   },
   {
     "Parameter": "Value",
@@ -15,6 +15,6 @@
     "FeeDescription": "ServiceFee", 
     "Currency": "MYR",
     "ValuePercentage": 2,
-    "ValueAmount": 0
+    "ValueAmount": 5
   }
 ]

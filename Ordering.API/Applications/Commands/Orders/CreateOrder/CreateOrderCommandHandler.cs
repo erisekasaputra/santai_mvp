@@ -201,12 +201,12 @@ public class CreateOrderCommandHandler(
                     command.LineItems.First(x => x.Id == lineItem.Id).Quantity));
         }
 
-        var masterBasicInspection = master.BasicInspections.Select(x => (x.Description, x.Parameter, x.Value));
-        var masterPreServiceInspection = master.PreServiceInspections.Select(x => (
-            x.Description,
-            x.Parameter,
-            x.Rating,
-            x.PreServiceInspectionResults.Select(b => (b.Description, b.Parameter, b.IsWorking))));
+        var masterBasicInspection = master.BasicInspections.Select(
+            x => (x.Description, x.Parameter.CleanAndLowering(), x.Value));
+
+        var masterPreServiceInspection = master.PreServiceInspections.Select(
+            x => (x.Description, x.Parameter.CleanAndLowering(), x.Rating,
+            x.PreServiceInspectionResults.Select(b => (b.Description, b.Parameter.CleanAndLowering(), b.IsWorking))));
 
         foreach (var fleet in fleets)
         {
@@ -251,8 +251,8 @@ public class CreateOrderCommandHandler(
                         coupon.Currency,
                         coupon.MinimumOrderValue));
             } 
-        }
-
+        } 
+      
         //order.ApplyTax(new Tax(10, command.Currency));
 
         foreach(var fee in master.Fees) 
@@ -268,8 +268,8 @@ public class CreateOrderCommandHandler(
     
         }
 
+        order.CalculateGrandTotal();
 
-        order.CalculateGrandTotal(); 
         await _unitOfWork.Orders.CreateAsync(order, cancellationToken);
 
         if (order.IsShouldRequestPayment)

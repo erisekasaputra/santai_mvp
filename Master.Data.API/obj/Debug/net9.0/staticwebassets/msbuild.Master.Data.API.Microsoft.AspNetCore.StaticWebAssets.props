@@ -66,8 +66,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>1z315z32pj</Fingerprint>
-      <Integrity>XQsUXKVoXWoiWgpr3k0hf476/GZevn4JahPOujFcEw8=</Integrity>
+      <Fingerprint>p72ujgw9w7</Fingerprint>
+      <Integrity>tdn00lEQor4I8EQccQDVPNmHOE+UecAEh6WAWL37buQ=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\ServiceFee\service-fee.json'))</OriginalItemSpec>

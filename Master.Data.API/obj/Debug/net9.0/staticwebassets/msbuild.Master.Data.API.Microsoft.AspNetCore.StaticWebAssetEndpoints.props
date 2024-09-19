@@ -36,17 +36,17 @@
       <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"m1zqj1rw7l"},{"Name":"integrity","Value":"sha256-FoVB0UBF8BCOt4zETwE1ckn3l7/CemlEXgJg1mxKB1I="},{"Name":"label","Value":"_content/Master.Data.API/Order/PreServiceInspection/pre-service-inspection.json"}]]]></EndpointProperties>
       <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"263"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022FoVB0UBF8BCOt4zETwE1ckn3l7/CemlEXgJg1mxKB1I=\u0022"},{"Name":"Last-Modified","Value":"Wed, 18 Sep 2024 22:33:23 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
-    <StaticWebAssetEndpoint Include="_content/Master.Data.API/Order/ServiceFee/service-fee.1z315z32pj.json">
-      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\ServiceFee\service-fee.json'))</AssetFile>
-      <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"1z315z32pj"},{"Name":"integrity","Value":"sha256-XQsUXKVoXWoiWgpr3k0hf476/GZevn4JahPOujFcEw8="},{"Name":"label","Value":"_content/Master.Data.API/Order/ServiceFee/service-fee.json"}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"452"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022XQsUXKVoXWoiWgpr3k0hf476/GZevn4JahPOujFcEw8=\u0022"},{"Name":"Last-Modified","Value":"Wed, 18 Sep 2024 22:36:43 GMT"}]]]></ResponseHeaders>
-    </StaticWebAssetEndpoint>
     <StaticWebAssetEndpoint Include="_content/Master.Data.API/Order/ServiceFee/service-fee.json">
       <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\ServiceFee\service-fee.json'))</AssetFile>
       <Selectors><![CDATA[[]]]></Selectors>
-      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-XQsUXKVoXWoiWgpr3k0hf476/GZevn4JahPOujFcEw8="}]]]></EndpointProperties>
-      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"452"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022XQsUXKVoXWoiWgpr3k0hf476/GZevn4JahPOujFcEw8=\u0022"},{"Name":"Last-Modified","Value":"Wed, 18 Sep 2024 22:36:43 GMT"}]]]></ResponseHeaders>
+      <EndpointProperties><![CDATA[[{"Name":"integrity","Value":"sha256-tdn00lEQor4I8EQccQDVPNmHOE\u002BUecAEh6WAWL37buQ="}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"no-cache"},{"Name":"Content-Length","Value":"452"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022tdn00lEQor4I8EQccQDVPNmHOE\u002BUecAEh6WAWL37buQ=\u0022"},{"Name":"Last-Modified","Value":"Thu, 19 Sep 2024 06:46:05 GMT"}]]]></ResponseHeaders>
+    </StaticWebAssetEndpoint>
+    <StaticWebAssetEndpoint Include="_content/Master.Data.API/Order/ServiceFee/service-fee.p72ujgw9w7.json">
+      <AssetFile>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\ServiceFee\service-fee.json'))</AssetFile>
+      <Selectors><![CDATA[[]]]></Selectors>
+      <EndpointProperties><![CDATA[[{"Name":"fingerprint","Value":"p72ujgw9w7"},{"Name":"integrity","Value":"sha256-tdn00lEQor4I8EQccQDVPNmHOE\u002BUecAEh6WAWL37buQ="},{"Name":"label","Value":"_content/Master.Data.API/Order/ServiceFee/service-fee.json"}]]]></EndpointProperties>
+      <ResponseHeaders><![CDATA[[{"Name":"Accept-Ranges","Value":"bytes"},{"Name":"Cache-Control","Value":"max-age=31536000, immutable"},{"Name":"Content-Length","Value":"452"},{"Name":"Content-Type","Value":"application/json"},{"Name":"ETag","Value":"\u0022tdn00lEQor4I8EQccQDVPNmHOE\u002BUecAEh6WAWL37buQ=\u0022"},{"Name":"Last-Modified","Value":"Thu, 19 Sep 2024 06:46:05 GMT"}]]]></ResponseHeaders>
     </StaticWebAssetEndpoint>
   </ItemGroup>
 </Project>

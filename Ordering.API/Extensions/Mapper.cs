@@ -87,7 +87,9 @@ public static class Mapper
             fleet.Brand,
             fleet.Model,
             fleet.RegistrationNumber,
-            fleet.ImageUrl);
+            fleet.ImageUrl,
+            fleet.BasicInspections.Select(x => new BasicInspectionResponseDto(x.Description, x.Parameter, x.Value)),
+            fleet.PreServiceInspections.Select(x => new PreServiceInspectionResponseDto(x.Description, x.Parameter, x.Rating, x.PreServiceInspectionResults.Select(b => new PreServiceInspectionResultResponseDto(b.Description, b.Parameter, b.IsWorking)))));
     }
 
 

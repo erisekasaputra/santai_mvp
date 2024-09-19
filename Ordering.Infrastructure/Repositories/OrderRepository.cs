@@ -48,7 +48,7 @@ public class OrderRepository : IOrderRepository
             .Include(order => order.Mechanic)
             .Include(order => order.Buyer)
             .Include(order => order.Discount)
-            .Include(order => order.Fees)
+            .Include(order => order.Fees) 
             .Where(x => x.Id == orderId && x.Buyer.BuyerId == buyerId)
             .FirstOrDefaultAsync(cancellationToken);
     }
@@ -60,7 +60,7 @@ public class OrderRepository : IOrderRepository
     {
         var query = _dbContext.Orders.AsQueryable();
          
-        if (userId.HasValue && userId != Guid.Empty)
+        if (userId is not null && userId.HasValue && userId != Guid.Empty)
         {
             query = query.Where(x => x.Buyer.BuyerId == userId);
         }

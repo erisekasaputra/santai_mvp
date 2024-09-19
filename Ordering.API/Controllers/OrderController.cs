@@ -1,12 +1,12 @@
 ﻿using Core.Dtos;
+using Core.Enumerations;
 using Core.Messages;
-using Core.Results;
+using Core.Results; 
 using Core.Services.Interfaces;
 using Core.Utilities;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.OutputCaching;
+using Microsoft.AspNetCore.Mvc; 
 using Ordering.API.Applications.Commands.Orders.CancelOrderByBuyer;
 using Ordering.API.Applications.Commands.Orders.CancelOrderByMechanic; 
 using Ordering.API.Applications.Commands.Orders.CreateOrder;
@@ -22,8 +22,7 @@ using Ordering.API.Applications.Queries.Orders.GetOrderSecretByOrderId;
 using Ordering.API.Applications.Queries.Orders.GetPaginatedOrdersByUserId;
 using Ordering.API.Applications.Services.Interfaces;
 using Ordering.API.CustomAttributes;
-using Ordering.API.Extensions;
-using System.Reflection.Metadata.Ecma335;
+using Ordering.API.Extensions; 
 
 namespace Ordering.API.Controllers;
 
@@ -32,7 +31,7 @@ namespace Ordering.API.Controllers;
 [Route("api/v1/orders")]
 
 public class OrderController : ControllerBase
-{
+{ 
     private readonly IAccountServiceAPI _accountService;
     private readonly IMediator _mediator;
     private readonly IEncryptionService _kmsService;
@@ -55,29 +54,9 @@ public class OrderController : ControllerBase
         _userInfoService = userInfoService;
         _masterDataServiceAPI = masterDataServiceAPI;
     }
+     
 
-
-    [HttpGet("test")]
-    public async Task<IResult> Test()
-    {
-        var result1 = await _masterDataServiceAPI.GetCancellationFeeParametersMaster();
-        var result2 = await _masterDataServiceAPI.GetMasterDataInitializationMasterResponseDto();
-        var result3 = await _masterDataServiceAPI.GetFeeParametersMaster();
-        var result4 = await _masterDataServiceAPI.GetBasicInspectionMaster();
-        var result5 = await _masterDataServiceAPI.GetPreServiceInspectionMaster();
-
-
-        return TypedResults.Ok(new 
-        {
-            //Result1 = result1,
-            Result2 = result2,
-            Result3 = result3,
-            Result4 = result4,
-            Result5 = result5 
-        });
-    }
-
-    [Authorize]
+    [Authorize(Policy = "BusinessStaffRegularUserPolicy")]
     [HttpPost]
     [Idempotency(nameof(CreateOrder))]
     public async Task<IResult> CreateOrder(
@@ -115,7 +94,8 @@ public class OrderController : ControllerBase
         }
     }
 
-    [HttpGet("{orderId}/secret")] 
+    [HttpGet("{orderId}/secret")]
+    [Authorize(Policy = "BusinessStaffRegularUserPolicy")]
     public async Task<IResult> GetOrderSecret(
         Guid orderId)
     {
@@ -141,8 +121,9 @@ public class OrderController : ControllerBase
     }
 
 
-    [HttpGet] 
-    public async Task<IResult> GetPaginatedOrders(
+    [HttpGet]
+    [Authorize(Policy = "BusinessStaffRegularUserPolicy")]
+    public async Task<IResult> GetPaginatedOrders( 
         [AsParameters] PaginatedRequestDto request)
     {
 
@@ -155,7 +136,7 @@ public class OrderController : ControllerBase
             }
 
             var result = await _mediator.Send(
-                new GetPaginatedOrdersByUserIdQuery(userClaim.Sub, request.PageNumber, request.PageSize));
+                new GetPaginatedOrdersByUserIdQuery((userClaim.CurrentUserType == UserType.Administrator ? null : userClaim.Sub), request.PageNumber, request.PageSize));
 
             return result.ToIResult();
         }
@@ -168,6 +149,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpGet("{orderId}")]
+    [Authorize(Policy = "BusinessStaffRegularUserPolicy")]
     public async Task<IResult> GetOrderById(
         Guid orderId)
     { 
@@ -194,6 +176,7 @@ public class OrderController : ControllerBase
 
 
     [HttpPatch("{orderId}/mechanic/cancel")]
+    [Authorize(Policy = "MechanicUserOnlyPolicy")]
     public async Task<IResult> CancelOrderByMechanic(
         Guid orderId)
     { 
@@ -220,6 +203,7 @@ public class OrderController : ControllerBase
 
 
     [HttpPatch("{orderId}/buyer/cancel")]
+    [Authorize(Policy = "BusinessStaffRegularUserPolicy")]
     public async Task<IResult> CancelOrderByUser(
         Guid orderId)
     {
@@ -247,6 +231,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPatch("{orderId}/service/fleet/{fleetId}/start")]
+    [Authorize(Policy = "MechanicUserOnlyPolicy")]
     public async Task<IResult> SetServiceInProgress(
         Guid orderId,
         Guid fleetId,
@@ -276,6 +261,7 @@ public class OrderController : ControllerBase
 
 
     [HttpPatch("{orderId}/service/fleet/{fleetId}/success")]
+    [Authorize(Policy = "MechanicUserOnlyPolicy")]
     public async Task<IResult> SetServiceCompleted(
         Guid orderId,
         Guid fleetId,
@@ -304,6 +290,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPatch("{orderId}/service/fleet/{fleetId}/failed")]
+    [Authorize(Policy = "MechanicUserOnlyPolicy")]
     public async Task<IResult> SetServiceIncompleted(
         Guid orderId,
         Guid fleetId,
@@ -332,7 +319,8 @@ public class OrderController : ControllerBase
     }
 
 
-    [HttpPost("{orderId}/rating")]
+    [HttpPut("{orderId}/rating")]
+    [Authorize(Policy = "BusinessStaffRegularUserPolicy")]
     public async Task<IResult> SetOrderRating(
         Guid orderId,
         [FromBody] RatingRequestDto request)
@@ -360,6 +348,7 @@ public class OrderController : ControllerBase
     }
 
     [HttpPatch("{orderId}/mechanic/dispatch")]
+    [Authorize(Policy = "MechanicUserOnlyPolicy")]
     public async Task<IResult> SetDispatchMechanic(
         Guid orderId)
     {
@@ -388,6 +377,7 @@ public class OrderController : ControllerBase
 
 
     [HttpPatch("{orderId}/mechanic/arrive")]
+    [Authorize(Policy = "MechanicUserOnlyPolicy")]
     public async Task<IResult> SetArriveMechanic(
         Guid orderId)
     {

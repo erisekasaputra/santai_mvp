@@ -12,5 +12,6 @@ public enum PolicyName
     MechanicUserAndAdministratorUserPolicy,
     StaffUserOnlyPolicy,
     ServiceToServiceAndAdministratorUserPolicy,
-    ServiceToServiceOnlyPolicy
+    ServiceToServiceOnlyPolicy,
+    BusinessStaffRegularUserPolicy
 } 

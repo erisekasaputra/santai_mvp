@@ -115,7 +115,8 @@ public static class MechanicUserApi
         app.MapDelete("/{mechanicUserId}", DeleteMechanicUserByUserId)  
             .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
 
-         
+        app.MapPatch("{mechanicId}/order/{orderId}/accept", TestAccept)
+          .AllowAnonymous();
 
         return app;
     }
