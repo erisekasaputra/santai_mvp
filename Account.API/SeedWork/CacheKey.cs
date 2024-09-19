@@ -2,15 +2,15 @@
 
 public static class CacheKey
 {
-    public const string MechanicUserPrefix = "MechanicUser";
-    public const string RegularUserPrefix = "RegularUser";
-    public const string BusinessUserPrefix = "BusinessUser";
-    public const string FleetPrefix = "Fleet";
-    public const string StaffPrefix = "Staff";
-    public const string UserEmailPrefix = "UserEmail";
-    public const string UserPhoneNumberPrefix = "UserPhoneNumber";
-    public const string UserTimeZonePrefix = "UserTimeZone";
-    public const string AccountPrefix = "Account";
+    public const string MechanicUserPrefix = "AccountService:MechanicUser";
+    public const string RegularUserPrefix = "AccountService:RegularUser";
+    public const string BusinessUserPrefix = "AccountService:BusinessUser";
+    public const string FleetPrefix = "AccountService:Fleet";
+    public const string StaffPrefix = "AccountService:Staff";
+    public const string UserEmailPrefix = "AccountService:UserEmail";
+    public const string UserPhoneNumberPrefix = "AccountService:UserPhoneNumber";
+    public const string UserTimeZonePrefix = "AccountService:UserTimeZone";
+    public const string AccountPrefix = "AccountService:Account";
 
 
     public static string MechanicOrderBlacklistPrefix(string value) => $"mechanics:order:blacklist:{value}"; 

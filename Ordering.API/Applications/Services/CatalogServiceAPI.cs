@@ -49,7 +49,7 @@ public class CatalogServiceAPI : ICatalogServiceAPI
 
             return (JsonConvert.DeserializeObject<ResultResponseDto<List<CatalogItemResponseDto>>?>(content), true);
         }
-        catch (JsonSerializationException ex)
+        catch (JsonSerializationException)
         {
             throw;
         }
