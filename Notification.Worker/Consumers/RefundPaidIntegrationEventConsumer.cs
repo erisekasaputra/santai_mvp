@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Events;
+using MassTransit;
 
-namespace Notification.Worker.Consumers
+namespace Notification.Worker.Consumers;
+public class RefundPaidIntegrationEventConsumer : IConsumer<RefundPaidIntegrationEvent>
 {
-    internal class RefundPaidIntegrationEventConsumer
+    public async Task Consume(ConsumeContext<RefundPaidIntegrationEvent> context)
     {
+        throw new NotImplementedException();
     }
 }

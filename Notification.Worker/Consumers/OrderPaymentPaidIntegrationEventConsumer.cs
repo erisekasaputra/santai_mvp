@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Events;
+using MassTransit;
 
-namespace Notification.Worker.Consumers
+namespace Notification.Worker.Consumers;
+
+public class OrderPaymentPaidIntegrationEventConsumer : IConsumer<OrderPaymentPaidIntegrationEvent>
 {
-    internal class OrderPaymentPaidIntegrationEventConsumer
+    public async Task Consume(ConsumeContext<OrderPaymentPaidIntegrationEvent> context)
     {
+        throw new NotImplementedException();
     }
 }

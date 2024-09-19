@@ -1,12 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Core.Events;
+using MassTransit;
 
-namespace Notification.Worker.Consumers
+namespace Notification.Worker.Consumers;
+
+public class MechanicAssignedIntegrationEventConsumer : IConsumer<MechanicAssignedIntegrationEvent>
 {
-    internal class MechanicAssignedIntegrationEventConsumer
+    public async Task Consume(ConsumeContext<MechanicAssignedIntegrationEvent> context)
     {
+        throw new NotImplementedException();
     }
 }
