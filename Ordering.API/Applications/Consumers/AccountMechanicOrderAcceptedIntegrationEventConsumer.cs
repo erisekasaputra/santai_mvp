@@ -1,10 +1,10 @@
-﻿using Core.Events;
+﻿using Core.Events.Account;
 using Core.Exceptions;
 using Core.Utilities;
 using MassTransit;
 using Ordering.Domain.Aggregates.OrderAggregate;
 using Ordering.Domain.SeedWork;
-using System.Data; 
+using System.Data;
 
 namespace Ordering.API.Applications.Consumers;
 
@@ -29,7 +29,7 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
             order.AssignMechanic(new Mechanic(
                 context.Message.OrderId,
                 context.Message.MechanicId,
-                context.Message.Name,
+                context.Message.MechanicName,
                 context.Message.Performance));
 
             _unitOfWork.Orders.Update(order);

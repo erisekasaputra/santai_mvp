@@ -1,7 +1,4 @@
-﻿
-
-using Account.API.Applications.Models;
-using StackExchange.Redis;
+﻿using Account.API.Applications.Models; 
 
 namespace Account.API.Applications.Services.Interfaces;
 
@@ -12,13 +9,16 @@ public interface IMechanicCache
     Task<bool> Deactivate(string mechanicId);
     Task<bool> PingAsync();
     Task CreateOrderToQueueAndHash(OrderTask orderTask);
-    Task<bool> AcceptOrderByMechanic(string orderId, string mechanicId);
-    Task<bool> RejectOrderByMechanic(string mechanicId, string orderId);
-    Task<bool> CancelOrderByMechanic(string mechanicId, string orderId);
-    Task<bool> CancelOrderByUser(string buyerId, string orderId);
-    Task<bool> CompleteOrder(string orderId, string mechanicId);
     Task ProcessOrdersWaitingMechanicConfirmExpiryFromQueueAsync(); 
-    Task ProcessOrdersWaitingMechanicAssignFromQueueAsync(); 
+    Task<(bool isSuccess, string orderId, string buyerId, string mechanicId)> ProcessOrdersWaitingMechanicAssignFromQueueAsync(); 
+
+
+    Task<(bool isSuccess, string buyerId)> AcceptOrderByMechanic(string orderId, string mechanicId);
+    Task<(bool isSuccess, string buyerId)> RejectOrderByMechanic(string orderId, string mechanicId);
+    Task<(bool isSuccess, string buyerId)> CancelOrderByMechanic(string orderId, string mechanicId);
+    Task<(bool isSuccess, string buyerId)> CompleteOrder(string orderId, string mechanicId); 
+    Task<(bool isSuccess, string mechanicId)> CancelOrderByUser(string orderId, string buyerId);
+
     
     
     

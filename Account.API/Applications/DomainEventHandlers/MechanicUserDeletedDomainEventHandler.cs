@@ -1,5 +1,6 @@
 ﻿using Account.Domain.Events;
 using Core.Events;
+using Core.Events.Account;
 using MediatR;
 
 namespace Account.API.Applications.DomainEventHandlers;

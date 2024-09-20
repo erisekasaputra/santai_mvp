@@ -1,5 +1,6 @@
 ﻿using Core.Events;
 using Core.Events.Models;
+using Core.Events.Ordering;
 using MediatR; 
 using Ordering.Domain.Events;
 

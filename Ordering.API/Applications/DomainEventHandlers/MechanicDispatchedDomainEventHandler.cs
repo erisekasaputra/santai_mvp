@@ -1,4 +1,5 @@
 ﻿using Core.Events;
+using Core.Events.Account;
 using MediatR; 
 using Ordering.Domain.Events;
 
@@ -12,7 +13,8 @@ public class MechanicDispatchedDomainEventHandler(IMediator mediator) : INotific
         await _mediator.Publish(new MechanicDispatchedIntegrationEvent(
             notification.OrderId,
             notification.BuyerId,
-            notification.MechanicId), cancellationToken);
+            notification.MechanicId,
+            notification.MechanicName), cancellationToken);
     }
 }
 

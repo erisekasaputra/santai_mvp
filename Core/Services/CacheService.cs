@@ -73,7 +73,7 @@ public class CacheService : ICacheService
 
             var jsonString = JsonSerializer.Serialize(value);
 
-            var result = (int)await db.ScriptEvaluateAsync(script, [key], [(int)expiration.TotalSeconds, jsonString]);
+            var result = (int)await db.ScriptEvaluateAsync(script, [key], [(int)(expiration == TimeSpan.Zero ? -1 : expiration.TotalSeconds), jsonString]); 
 
             return result == 1;
         }

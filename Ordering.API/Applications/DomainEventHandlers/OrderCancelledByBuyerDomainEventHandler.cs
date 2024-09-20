@@ -1,4 +1,5 @@
 ﻿using Core.Events;
+using Core.Events.Ordering;
 using MediatR; 
 using Ordering.Domain.Events;
 
@@ -11,7 +12,9 @@ public class OrderCancelledByBuyerDomainEventHandler(IMediator mediator) : INoti
     {
         await _mediator.Publish(new OrderCancelledByBuyerIntegrationEvent(
             notification.OrderId,
-            notification.BuyerId,
-            notification.MechanicId), cancellationToken);
+            notification.BuyerId, 
+            notification.BuyerName,
+            notification.MechanicId,
+            notification.MechanicName), cancellationToken);
     }
 }

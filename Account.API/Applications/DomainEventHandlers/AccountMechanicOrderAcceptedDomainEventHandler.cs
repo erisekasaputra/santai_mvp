@@ -1,5 +1,5 @@
-﻿using Account.Domain.Events;
-using Core.Events;
+﻿using Account.Domain.Events; 
+using Core.Events.Account;
 using MediatR;
 
 namespace Account.API.Applications.DomainEventHandlers;
@@ -11,7 +11,12 @@ public class AccountMechanicOrderAcceptedDomainEventHandler(
     public async Task Handle(AccountMechanicOrderAcceptedDomainEvent notification, CancellationToken cancellationToken)
     {
         await _mediator.Publish(
-            new AccountMechanicOrderAcceptedIntegrationEvent(notification.OrderId, notification.MechanicId, notification.Name, notification.Performance),
+            new AccountMechanicOrderAcceptedIntegrationEvent(
+                notification.OrderId,
+                notification.BuyerId,
+                notification.MechanicId, 
+                notification.MechanicName,
+                notification.Performance),
             cancellationToken);
     }
 }

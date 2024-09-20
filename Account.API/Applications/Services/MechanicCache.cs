@@ -161,7 +161,7 @@ public class MechanicCache : IMechanicCache
    
 
      
-    public async Task<bool> AcceptOrderByMechanic(string orderId, string mechanicId)
+    public async Task<(bool isSuccess, string buyerId)> AcceptOrderByMechanic(string orderId, string mechanicId)
     {
         var db = _connectionMultiplexer.GetDatabase();
         var key = CacheKey.LockOrderPrefix(orderId);
@@ -170,15 +170,15 @@ public class MechanicCache : IMechanicCache
         {
             var confirmation = await GetOrderWaitingMechanicConfirmAsync(db, orderId);
             if (confirmation is null)
-                return false; 
+                return (false, string.Empty); 
 
             if (confirmation.ExpiredAtUtc <= DateTime.UtcNow) // not expired already
-                return false; 
+                return (false, string.Empty); 
 
 
             var order = await GetOrderTaskAsync(db, orderId);
             if (order is null || order.MechanicId != mechanicId || string.IsNullOrEmpty(order.MechanicId)) 
-                return false; 
+                return (false, string.Empty); 
               
 
 
@@ -209,7 +209,7 @@ public class MechanicCache : IMechanicCache
                     }
                     else
                     {
-                        return false;
+                        return (false, string.Empty);
                     }
 
                     // Keluar dari loop jika lock berhasil diambil
@@ -228,7 +228,7 @@ public class MechanicCache : IMechanicCache
             // Jika setelah 5 kali retry masih tidak berhasil,  return false
             if (!isMechanicLockAcquired)
             {
-                return false;
+                return (false, string.Empty);
             } 
 
 
@@ -249,10 +249,10 @@ public class MechanicCache : IMechanicCache
             order.SetMechanic(mechanicId.ToString());
             await CreateOrderHashSetAsync(db, order);
 
-            return true;
+            return (true, order.BuyerId);
         }
 
-        return false;
+        return (false, string.Empty);
     }
 
 
@@ -262,7 +262,8 @@ public class MechanicCache : IMechanicCache
 
 
       
-    public async Task<bool> CompleteOrder(string orderId, string mechanicId)
+    public async Task<(bool isSuccess, string buyerId)> CompleteOrder(
+        string orderId, string mechanicId)
     {
         var db = _connectionMultiplexer.GetDatabase();
         var key = CacheKey.LockOrderPrefix(orderId);
@@ -272,17 +273,17 @@ public class MechanicCache : IMechanicCache
             var order = await GetOrderTaskAsync(db, orderId);
             if (order is null)
             {
-                return false;
+                return (false, string.Empty);
             }
 
             if (order.MechanicId != mechanicId)
             {
-                return false;
+                return (false, string.Empty);
             }
 
             if (string.IsNullOrEmpty(order.MechanicId))
             {
-                return false;
+                return (false, string.Empty);
             }
 
 
@@ -315,7 +316,7 @@ public class MechanicCache : IMechanicCache
                     }
                     else
                     {
-                        return false;
+                        return (false, string.Empty);
                     }
 
                     // Keluar dari loop jika lock berhasil diambil
@@ -333,8 +334,8 @@ public class MechanicCache : IMechanicCache
 
             // Jika setelah 5 kali retry masih tidak berhasil,  return false
             if (!isMechanicLockAcquired)
-            {
-                return false;
+            { 
+                return (false, string.Empty);
             }
 
              
@@ -353,12 +354,11 @@ public class MechanicCache : IMechanicCache
             await db.KeyDeleteAsync(resource2);
             await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
 
-             
 
-            return true;
+            return (true, order.BuyerId);
         }
-
-        return false;
+         
+        return (false, string.Empty);
     }
 
 
@@ -370,7 +370,7 @@ public class MechanicCache : IMechanicCache
 
 
 
-    public async Task<bool> RejectOrderByMechanic(string mechanicId, string orderId)
+    public async Task<(bool isSuccess, string buyerId)> RejectOrderByMechanic(string mechanicId, string orderId)
     {
         var db = _connectionMultiplexer.GetDatabase();
         var key = CacheKey.LockOrderPrefix(orderId);
@@ -380,13 +380,13 @@ public class MechanicCache : IMechanicCache
             var waitingConfirmData = await GetOrderWaitingMechanicConfirmAsync(db, orderId);
             if (waitingConfirmData is null || waitingConfirmData.ExpiredAtUtc <= DateTime.UtcNow)
             {
-                return false;
+                return (false, string.Empty);
             }   
 
             var order = await GetOrderTaskAsync(db, orderId);
             if (order is null || order.MechanicId != mechanicId)
             {
-                return false;
+                return (false, string.Empty);
             }
              
             if (!string.IsNullOrEmpty(order.MechanicId))
@@ -415,7 +415,7 @@ public class MechanicCache : IMechanicCache
                         }
                         else
                         {
-                            return false;
+                            return (false, string.Empty);
                         }
 
                         // Keluar dari loop jika lock berhasil diambil
@@ -432,7 +432,7 @@ public class MechanicCache : IMechanicCache
                 // Jika setelah 5 kali retry masih tidak berhasil,  return false
                 if (!isMechanicLockAcquired)
                 {
-                    return false;
+                    return (false, string.Empty);
                 }
 
 
@@ -452,16 +452,16 @@ public class MechanicCache : IMechanicCache
                 await CreateOrderHashSetAsync(db, order);
                 await AddOrderFIFOtoQueue(db, orderId);
 
-                return true;
-            } 
+                return (true, order.BuyerId);
+            }
 
-            return false;
+            return (false, string.Empty);
         }
 
-        return false;
+        return (false, string.Empty);
     }
 
-    public async Task<bool> CancelOrderByMechanic(string mechanicId, string orderId)
+    public async Task<(bool isSuccess, string buyerId)> CancelOrderByMechanic(string orderId, string mechanicId)
     {
         var db = _connectionMultiplexer.GetDatabase();
         var key = CacheKey.LockOrderPrefix(orderId);
@@ -471,7 +471,7 @@ public class MechanicCache : IMechanicCache
             var order = await GetOrderTaskAsync(db, orderId);
             if (order is null || order.MechanicId != mechanicId.ToString())
             {
-                return false;
+                return (false, string.Empty);
             }
 
             if (!string.IsNullOrEmpty(order.MechanicId))
@@ -515,7 +515,7 @@ public class MechanicCache : IMechanicCache
                 // Jika setelah 5 kali retry masih tidak berhasil,  return false
                 if (!isMechanicLockAcquired)
                 {
-                    return false;
+                    return (false, string.Empty);
                 }
 
 
@@ -536,14 +536,15 @@ public class MechanicCache : IMechanicCache
                 await CreateOrderHashSetAsync(db, order);
                 await AddOrderFIFOtoQueue(db, orderId);
 
-                return true;
-            }   
-        } 
-        return false;
+                return (true, order.BuyerId);
+            }
+        }
+        return (false, string.Empty);
     }
 
 
-    public async Task<bool> CancelOrderByUser(string buyerId, string orderId)
+    public async Task<(bool isSuccess, string mechanicId)> CancelOrderByUser(
+        string orderId, string buyerId)
     {
         var db = _connectionMultiplexer.GetDatabase();
         var key = CacheKey.LockOrderPrefix(orderId);
@@ -553,7 +554,7 @@ public class MechanicCache : IMechanicCache
             var order = await GetOrderTaskAsync(db, orderId);
             if (order is null || order.BuyerId != buyerId)
             {
-                return false;
+                return (false, string.Empty);
             }
               
             // MECHANIC RESET FOR ORDER ASSIGNED IF EXISTS
@@ -594,7 +595,7 @@ public class MechanicCache : IMechanicCache
                 // Jika setelah 5 kali retry masih tidak berhasil,  return false
                 if (!isMechanicLockAcquired)
                 {
-                    return false;
+                    return (false, string.Empty);
                 }
             } 
 
@@ -614,11 +615,10 @@ public class MechanicCache : IMechanicCache
             // hapus queue pada mechanic waiting assign mechanic
             await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
 
-
-            return true;
+            return (true, order.MechanicId);
         }
 
-        return false;
+        return (false, string.Empty);
     }
 
     public async Task ProcessOrdersWaitingMechanicConfirmExpiryFromQueueAsync()
@@ -635,22 +635,99 @@ public class MechanicCache : IMechanicCache
     } 
 
 
-    public async Task ProcessOrdersWaitingMechanicAssignFromQueueAsync()
+    public async Task<(bool isSuccess, string orderId, string buyerId, string mechanicId)> ProcessOrdersWaitingMechanicAssignFromQueueAsync()
     {
         var db = _connectionMultiplexer.GetDatabase(); 
 
         var orderId = await db.ListLeftPopAsync(CacheKey.OrderWaitingMechanicAssignQueue());
         if (orderId == string.Empty || string.IsNullOrEmpty(orderId) || orderId.IsNullOrEmpty)
         {
-            return;
+            return (false, string.Empty, string.Empty, string.Empty);
         }
 
-        await TryAssignMechanicToOrderAsync(db, orderId.ToString());
+        return await TryAssignMechanicToOrderAsync(db, orderId.ToString());
     }
 
 
 
 
+    private async Task<(bool isSuccess, string orderId, string buyerId, string mechanicId)> TryAssignMechanicToOrderAsync(IDatabase db, string orderId)
+    {
+        try
+        {
+            var key = CacheKey.LockOrderPrefix(orderId);
+            using var lockAcquired = await _redLockFactory.CreateLockAsync(key, TimeSpan.FromSeconds(30));
+
+            if (!lockAcquired.IsAcquired)
+            {
+                await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
+                await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
+
+                return (false, string.Empty, string.Empty, string.Empty);
+            }
+
+            var order = await GetOrderTaskAsync(db, orderId);
+            if (order is null || order.OrderStatus == OrderTaskStatus.OrderTaskCompleted || order.OrderStatus == OrderTaskStatus.MechanicAssigned) 
+                return (false, string.Empty, string.Empty, string.Empty);
+
+            var mechanics = await db.GeoRadiusAsync(
+                CacheKey.MechanicGeo(), order.Longitude, order.Latitude, 30, GeoUnit.Miles, count: 100, order: Order.Ascending);
+
+            foreach (var mechanic in mechanics)
+            {
+                if (!mechanic.Member.HasValue || mechanic.Member.IsNullOrEmpty)
+                {
+                    continue;
+                }
+
+                var mechanicId = mechanic.Member.ToString();
+                using var lockMechanic = await _redLockFactory.CreateLockAsync(CacheKey.LockMechanicPrefix(mechanicId), TimeSpan.FromMinutes(10));
+
+                if (lockMechanic.IsAcquired)
+                {
+                    var blocked = await IsMechanicBlockedFromOrder(db, mechanicId.ToString(), orderId);
+                    if (blocked)
+                    {
+                        continue;
+                    }
+
+                    var mechanicData = await GetMechanicHashSetAsync(db, mechanicId.ToString());
+                    if (mechanicData is null)
+                    {
+                        continue;
+                    }
+
+                    if (mechanicData.Status is MechanicStatus.Available)
+                    {
+                        order.SetOrderStatus(OrderTaskStatus.MechanicAssigned);
+                        order.SetMechanic(mechanicId);
+                        await CreateOrderHashSetAsync(db, order);
+
+                        mechanicData.SetOrder(orderId);
+                        mechanicData.SetMechanicStatus(MechanicStatus.Bussy);
+                        await CreateMechanicHashSetAsync(db, mechanicData);
+
+                        await OrderWaitingConfirmMechanic(db, order, mechanicData);
+
+
+                        return (true, order.OrderId, order.BuyerId, mechanicId);
+                    }
+                }
+            }
+
+            await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
+            await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
+
+            return (false, string.Empty, string.Empty, string.Empty);
+        }
+        catch (Exception)
+        {
+            await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
+            await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId); 
+
+            return (false, string.Empty, string.Empty, string.Empty);
+        }
+    }
 
 
 
@@ -728,78 +805,7 @@ public class MechanicCache : IMechanicCache
         await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicConfirmQueue(), orderId.ToString());
     } 
 
-    private async Task TryAssignMechanicToOrderAsync(IDatabase db, string orderId)
-    {
-        try
-        {
-            var key = CacheKey.LockOrderPrefix(orderId);
-            using var lockAcquired = await _redLockFactory.CreateLockAsync(key, TimeSpan.FromSeconds(30));
-
-            if (!lockAcquired.IsAcquired)
-            {
-                await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
-                await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
-                return;
-            }
-
-            var order = await GetOrderTaskAsync(db, orderId); 
-            if (order is null || order.OrderStatus == OrderTaskStatus.OrderTaskCompleted || order.OrderStatus == OrderTaskStatus.MechanicAssigned)
-                return;
-
-            var mechanics = await db.GeoRadiusAsync(
-                CacheKey.MechanicGeo(), order.Longitude, order.Latitude, 30, GeoUnit.Miles, count: 100, order: Order.Ascending);
-
-            foreach (var mechanic in mechanics)
-            {
-                if (!mechanic.Member.HasValue || mechanic.Member.IsNullOrEmpty)
-                {
-                    continue;
-                }
-
-                var mechanicId = mechanic.Member.ToString();
-                using var lockMechanic = await _redLockFactory.CreateLockAsync(CacheKey.LockMechanicPrefix(mechanicId), TimeSpan.FromMinutes(10));
-
-                if (lockMechanic.IsAcquired)
-                {
-                    var blocked = await IsMechanicBlockedFromOrder(db, mechanicId.ToString(), orderId);
-                    if (blocked)
-                    { 
-                        continue;
-                    }
-
-                    var mechanicData = await GetMechanicHashSetAsync(db, mechanicId.ToString());
-                    if (mechanicData is null)
-                    { 
-                        continue;
-                    }
-
-                    if (mechanicData.Status is MechanicStatus.Available)
-                    {
-                        order.SetOrderStatus(OrderTaskStatus.MechanicAssigned);
-                        order.SetMechanic(mechanicId);
-                        await CreateOrderHashSetAsync(db, order);
-                         
-                        mechanicData.SetOrder(orderId);
-                        mechanicData.SetMechanicStatus(MechanicStatus.Bussy);
-                        await CreateMechanicHashSetAsync(db, mechanicData); 
-
-                        await OrderWaitingConfirmMechanic(db, order, mechanicData); 
-
-                        return;
-                    } 
-                }
-            }
-             
-            await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
-            await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
-        }
-        catch (Exception)
-        {
-            await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
-            await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
-        }
-    }
-     
+    
 
     private async Task AddOrderFIFOtoQueue(IDatabase db, string orderId)
     {
@@ -929,7 +935,7 @@ public class MechanicCache : IMechanicCache
         var longitude = RedisValueToDouble(hashEntries.FirstOrDefault(x => x.Name == nameof(OrderTask.Longitude)).Value);
         var status = RedisValueToString(hashEntries.FirstOrDefault(x => x.Name == nameof(OrderTask.OrderStatus)).Value);
 
-        return new OrderTask(buyerId, orderId.ToString(), mechanicId, latitude, longitude, status);
+        return new OrderTask(orderId.ToString(), buyerId, mechanicId, latitude, longitude, status);
     }
 
     private async Task<OrderTaskMechanicConfirm?> GetOrderWaitingMechanicConfirmAsync(IDatabase db, string orderId)
@@ -989,8 +995,8 @@ public class MechanicCache : IMechanicCache
             var hashKey = CacheKey.OrderWaitingMechanicAssignDataPrefix(order.OrderId);
             var hashEntries = new HashEntry[]
             {
-                new (nameof(order.BuyerId), order.BuyerId),
                 new (nameof(order.OrderId), order.OrderId),
+                new (nameof(order.BuyerId), order.BuyerId),
                 new (nameof(order.MechanicId), order.MechanicId),
                 new (nameof(order.Latitude), order.Latitude),
                 new (nameof(order.Longitude), order.Longitude),

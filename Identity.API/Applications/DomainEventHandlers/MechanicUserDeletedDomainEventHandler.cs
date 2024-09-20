@@ -1,5 +1,6 @@
 ﻿
 using Core.Events;
+using Core.Events.Account;
 using Identity.API.Domain.Events; 
 using MediatR;
 

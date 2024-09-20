@@ -2,28 +2,28 @@
 
 public class OrderTask
 {
-    public string BuyerId { get; private init; }
     public string OrderId { get; private init; }
+    public string BuyerId { get; private init; }
     public string MechanicId { get; private set; }
     public double Latitude { get; private init; }
     public double Longitude { get; private init; }
     public string OrderStatus { get; private set; }
 
     public OrderTask(
-        string buyerId,
         string orderId, 
+        string buyerId,
         string mechanicId,
         double latitude,
         double longitude,
         string orderStatus)
     {
-        if (string.IsNullOrEmpty(buyerId)) throw new ArgumentNullException(nameof(buyerId));   
         if (string.IsNullOrEmpty(orderId)) throw new ArgumentNullException(nameof(orderId));   
+        if (string.IsNullOrEmpty(buyerId)) throw new ArgumentNullException(nameof(buyerId));   
         if (mechanicId is null) throw new ArgumentNullException(nameof(mechanicId));   
         if (string.IsNullOrEmpty(orderStatus)) throw new ArgumentNullException(nameof(orderStatus));   
 
-        BuyerId = buyerId;
         OrderId = orderId;
+        BuyerId = buyerId;
         MechanicId = mechanicId;
         Latitude = latitude;
         Longitude = longitude;

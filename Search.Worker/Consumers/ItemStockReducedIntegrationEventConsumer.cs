@@ -1,8 +1,7 @@
-﻿ 
-using Core.Events;
+﻿using Core.Events.Catalog;
 using MassTransit;
 using MediatR;
-using Search.Worker.Applications.Commands.ReduceItemStockQuantity; 
+using Search.Worker.Applications.Commands.ReduceItemStockQuantity;
 
 namespace Search.Worker.Consumers;
 

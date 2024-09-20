@@ -1,4 +1,4 @@
-﻿using Core.Events;
+﻿using Core.Events.Ordering;
 using MassTransit;
 using MediatR;
 

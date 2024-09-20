@@ -202,8 +202,7 @@ public class Order : Entity
 
         if (Mechanic is null)
         {
-            errorMessage = "Mechanic has not been set";
-            return false;
+            throw new DomainException("Mechanic has not been set");
         }
 
         if (!Mechanic.MechanicId.Equals(mechanicId))
@@ -225,12 +224,16 @@ public class Order : Entity
             throw new DomainException($"Could not canceling order by mechanic when order status is {Status}"); 
 
         if (!IsCancelableByMechanic(mechanicId, out string errorMessage)) 
-            throw new DomainException(errorMessage); 
+            throw new DomainException(errorMessage);
+
+
+        string mechanicName = Mechanic!.Name;
+
 
         Mechanic = null;
         TotalCanceledByMechanic++;
         Status = OrderStatus.FindingMechanic;   
-        RaiseOrderCancelledByMechanicDomainEvent(mechanicId); 
+        RaiseOrderCancelledByMechanicDomainEvent(Id, Buyer.BuyerId, Buyer.Name, mechanicId, mechanicName); 
     }
 
     private bool IsCancelableByBuyer(Guid buyerId, out string errorMessage)
@@ -313,7 +316,7 @@ public class Order : Entity
         }
 
         Status = OrderStatus.OrderCancelledByUser;
-        RaiseOrderCancelledByBuyerDomainEvent(Id, buyerId, Mechanic?.MechanicId);
+        RaiseOrderCancelledByBuyerDomainEvent(Id, buyerId, Buyer.Name, Mechanic?.MechanicId, Mechanic?.Name ?? string.Empty);
         Mechanic = null;
     }
 
@@ -572,8 +575,7 @@ public class Order : Entity
 
         Status = OrderStatus.MechanicAssigned;
         Mechanic = mechanic;
-        Mechanic.SetEntityState(EntityState.Added);
-        RaiseMechanicAssignedDomainEvent(Id, Buyer.BuyerId, mechanic.MechanicId);
+        Mechanic.SetEntityState(EntityState.Added); 
     }
 
     public void SetDispatchMechanic(Guid mechanicId)
@@ -599,7 +601,7 @@ public class Order : Entity
         }
 
         Status = OrderStatus.MechanicDispatched; 
-        RaiseMechanicDispatchedDomainEvent(Id, Buyer.BuyerId, mechanicId);
+        RaiseMechanicDispatchedDomainEvent(Id, Buyer.BuyerId, mechanicId, Mechanic.Name);
     }
 
     public void SetArrivedMechanic(Guid mechanicId)
@@ -625,7 +627,7 @@ public class Order : Entity
         }
 
         Status = OrderStatus.MechanicArrived;
-        RaiseMechanicArrivedDomainEvent(Id, Buyer.BuyerId, mechanicId);
+        RaiseMechanicArrivedDomainEvent(Id, Buyer.BuyerId, mechanicId, Mechanic.Name);
     }
      
       
@@ -847,33 +849,28 @@ public class Order : Entity
         AddDomainEvent(new ServiceProcessedDomainEvent(orderId, buyerId, mechanicId));
     }
 
-    private void RaiseMechanicArrivedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId)
+    private void RaiseMechanicArrivedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId, string mechanicName)
     {
-        AddDomainEvent(new MechanicArrivedDomainEvent(orderId, buyerId, mechanicId));
+        AddDomainEvent(new MechanicArrivedDomainEvent(orderId, buyerId, mechanicId, mechanicName));
     }
 
-    private void RaiseMechanicDispatchedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId)
+    private void RaiseMechanicDispatchedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId, string mechanicName)
     {
-        AddDomainEvent(new MechanicDispatchedDomainEvent(orderId, buyerId, mechanicId));
+        AddDomainEvent(new MechanicDispatchedDomainEvent(orderId, buyerId, mechanicId, mechanicName));
     }
 
     private void RaiseOrderRatedDomainEvent(Guid orderId, Guid buyerId, decimal value, string? comment)
     {
         AddDomainEvent(new OrderRatedDomainEvent(orderId, buyerId, value, comment));
     } 
-    private void RaiseOrderCancelledByBuyerDomainEvent(Guid orderId, Guid buyerId, Guid? mechanicId)
+    private void RaiseOrderCancelledByBuyerDomainEvent(Guid orderId, Guid buyerId, string buyerName, Guid? mechanicId, string mechanicName)
     { 
-        AddDomainEvent(new OrderCancelledByBuyerDomainEvent(orderId, buyerId, mechanicId));
+        AddDomainEvent(new OrderCancelledByBuyerDomainEvent(orderId, buyerId, buyerName, mechanicId, mechanicName));
     }
-
-    private void RaiseMechanicAssignedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId)
+     
+    private void RaiseOrderCancelledByMechanicDomainEvent(Guid orderId, Guid buyerId, string buyerName, Guid mechanicId, string mechanicName)
     {
-        AddDomainEvent(new MechanicAssignedDomainEvent(orderId, buyerId, mechanicId));
-    }
-
-    private void RaiseOrderCancelledByMechanicDomainEvent(Guid mechanicId)
-    {
-        AddDomainEvent(new OrderCancelledByMechanicDomainEvent(Id, Buyer.BuyerId, mechanicId));
+        AddDomainEvent(new OrderCancelledByMechanicDomainEvent(orderId, buyerId, buyerName, mechanicId, mechanicName));
     }
 
     private void RaiseOrderPaymentPaidDomainEvent(Guid orderId, Guid buyerId, decimal amount, Currency currency)

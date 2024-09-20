@@ -1,5 +1,5 @@
 ﻿using Catalog.API.Applications.Commands.Items.AddItemStockQuantity;
-using Core.Events;
+using Core.Events.Ordering;
 using Core.Results;
 using MassTransit;
 using MediatR;

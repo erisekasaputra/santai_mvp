@@ -1,7 +1,7 @@
-﻿ 
+﻿
 using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Events;
-using Core.Events;
+using Core.Events.Account;
 using Core.Services.Interfaces;
 using MediatR;
 

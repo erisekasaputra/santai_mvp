@@ -4,6 +4,7 @@ namespace Account.Domain.Events;
 
 public record AccountMechanicOrderAcceptedDomainEvent(
     Guid OrderId, 
+    Guid BuyerId, 
     Guid MechanicId, 
-    string Name, 
+    string MechanicName, 
     decimal Performance) : INotification;

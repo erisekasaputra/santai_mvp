@@ -1,5 +1,4 @@
-﻿ 
-using Core.Events;
+﻿using Core.Events.Catalog;
 using MassTransit;
 using MediatR;
 using Search.Worker.Applications.Commands.ActivateItem;

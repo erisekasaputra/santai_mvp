@@ -2,7 +2,7 @@
 using Account.API.Applications.Commands.UserCommand.ConfirmUserPhoneNumberByUserId;
 using Azure;
 using Core.Enumerations;
-using Core.Events;
+using Core.Events.Identity;
 using Core.Results;
 using MassTransit;
 using MediatR;

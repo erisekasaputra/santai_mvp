@@ -2,6 +2,7 @@
 using Catalog.Domain.Events;
 using Catalog.Domain.SeedWork;
 using Core.Events;
+using Core.Events.Catalog;
 using MediatR;
 
 namespace Catalog.API.Applications.DomainEventHandlers;

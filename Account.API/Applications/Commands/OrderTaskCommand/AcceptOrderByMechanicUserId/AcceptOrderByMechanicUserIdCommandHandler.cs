@@ -46,6 +46,7 @@ public class AcceptOrderByMechanicUserIdCommandHandler : IRequestHandler<AcceptO
         try
         {
             var mechanic = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.MechanicId);
+
             if (mechanic is null)
             {
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
@@ -56,10 +57,18 @@ public class AcceptOrderByMechanicUserIdCommandHandler : IRequestHandler<AcceptO
             {  
                 try
                 {  
-                    var result = await _mechanicCache.AcceptOrderByMechanic(request.OrderId.ToString(), request.MechanicId.ToString()); 
-                    if (result)
+                    (var isSuccess, var buyerId) = await _mechanicCache.AcceptOrderByMechanic(
+                        request.OrderId.ToString(), 
+                        request.MechanicId.ToString());
+                    
+                    if (isSuccess)
                     { 
-                        var @event = new AccountMechanicOrderAcceptedDomainEvent(request.OrderId, request.MechanicId, mechanic.ToString(), mechanic.Rating);
+                        var @event = new AccountMechanicOrderAcceptedDomainEvent(
+                            request.OrderId,
+                            Guid.Parse(buyerId), 
+                            request.MechanicId, 
+                            mechanic.ToString(), 
+                            mechanic.Rating);
                         await _mediator.Publish(@event);
                         return Result.Success(null, ResponseStatus.NoContent);
                     }

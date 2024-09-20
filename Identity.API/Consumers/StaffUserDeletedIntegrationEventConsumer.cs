@@ -1,7 +1,7 @@
-﻿using Core.Events;
+﻿using Core.Events.Account;
 using Identity.API.Domain.Entities;
-using Identity.API.Infrastructure; 
-using MassTransit; 
+using Identity.API.Infrastructure;
+using MassTransit;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Data;

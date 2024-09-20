@@ -2,4 +2,9 @@
 
 namespace Ordering.Domain.Events;
 
-public record OrderCancelledByBuyerDomainEvent(Guid OrderId, Guid BuyerId, Guid? MechanicId) : INotification;
+public record OrderCancelledByBuyerDomainEvent(
+    Guid OrderId, 
+    Guid BuyerId, 
+    string BuyerName,
+    Guid? MechanicId,
+    string MechanicName) : INotification;

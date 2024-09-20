@@ -1,6 +1,6 @@
 ﻿
 using Core.Enumerations;
-using Core.Events;
+using Core.Events.Catalog;
 using MediatR;
 
 namespace Search.Worker.Applications.Commands.CreateItem;

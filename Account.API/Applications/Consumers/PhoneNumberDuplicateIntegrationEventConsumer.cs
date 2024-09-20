@@ -1,9 +1,9 @@
 ﻿using Account.API.Applications.Commands.BusinessUserCommand.DeleteBusinessUserByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.DeleteMechanicUserByUserId;
 using Account.API.Applications.Commands.RegularUserCommand.DeleteRegularUserByUserId;
-using Account.API.Applications.Commands.StaffCommand.RemoveStaffByUserId; 
+using Account.API.Applications.Commands.StaffCommand.RemoveStaffByUserId;
 using Core.Enumerations;
-using Core.Events;
+using Core.Events.Identity;
 using Core.Results;
 using MassTransit;
 using MediatR;

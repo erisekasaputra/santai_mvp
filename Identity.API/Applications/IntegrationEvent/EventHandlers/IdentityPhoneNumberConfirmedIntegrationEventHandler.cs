@@ -1,4 +1,4 @@
-﻿using Core.Events; 
+﻿using Core.Events.Identity;
 using MassTransit;
 using MediatR;
 

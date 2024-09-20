@@ -276,9 +276,9 @@ public static class ServiceRegistrationExtension
 
     public static HostApplicationBuilder AddLoggingContext(this HostApplicationBuilder builder)
     {
-        builder.Logging.ClearProviders();
-        builder.Logging.AddConsole();
-        builder.Logging.AddDebug();
+        //builder.Logging.ClearProviders();
+        //builder.Logging.AddConsole();
+        //builder.Logging.AddDebug();
 
         return builder;
     }

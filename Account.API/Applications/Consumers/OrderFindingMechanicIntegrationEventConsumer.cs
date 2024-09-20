@@ -1,7 +1,7 @@
 ﻿using Account.API.Applications.Models;
 using Account.API.Applications.Services.Interfaces;
-using Core.Events; 
-using MassTransit; 
+using Core.Events.Ordering;
+using MassTransit;
 
 namespace Account.API.Applications.Consumers;
 
@@ -13,8 +13,8 @@ public class OrderFindingMechanicIntegrationEventConsumer(
     {
         await _cache.CreateOrderToQueueAndHash(
                    new OrderTask(
-                       context.Message.BuyerId.ToString(),
                        context.Message.OrderId.ToString(),
+                       context.Message.BuyerId.ToString(),
                        string.Empty,
                        context.Message.Latitude,
                        context.Message.Longitude,

@@ -1,0 +1,8 @@
+﻿using MediatR;
+
+namespace Core.Events.Ordering;
+
+public record ServiceProcessedIntegrationEvent(
+    Guid OrderId,
+    Guid BuyerId,
+    Guid MechanicId) : INotification;

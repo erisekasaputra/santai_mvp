@@ -1,6 +1,6 @@
 ﻿using MassTransit;
-using MediatR; 
-using Core.Events;
+using MediatR;
+using Core.Events.Catalog;
 
 namespace Catalog.API.Applications.IntegrationEvents.EventHandlers;
 

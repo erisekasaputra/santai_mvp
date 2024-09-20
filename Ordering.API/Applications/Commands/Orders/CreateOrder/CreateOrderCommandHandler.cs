@@ -1,5 +1,7 @@
 ﻿using Core.Enumerations;
 using Core.Events;
+using Core.Events.Catalog;
+using Core.Events.Ordering;
 using Core.Exceptions;
 using Core.Extensions;
 using Core.Messages;

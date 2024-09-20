@@ -1,7 +1,7 @@
-﻿using Core.Events;
+﻿using Core.Events.Catalog;
 using MassTransit;
 using MediatR;
-using Search.Worker.Applications.Commands.DeleteItemCategory; 
+using Search.Worker.Applications.Commands.DeleteItemCategory;
 
 namespace Search.Worker.Consumers;
 

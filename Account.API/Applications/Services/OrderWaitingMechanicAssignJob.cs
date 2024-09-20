@@ -1,6 +1,11 @@
 ﻿using Account.API.Applications.Services.Interfaces;
-using Core.Configurations; 
+using Account.Domain.Events;
+using Account.Domain.SeedWork;
+using Core.Configurations;
+using MassTransit;
+using MediatR;
 using Microsoft.Extensions.Options;
+using System.Data;
 
 namespace Account.API.Applications.Services; 
  
@@ -20,21 +25,32 @@ public class OrderWaitingMechanicAssignJob : BackgroundService
     }
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
-    { 
+    {   
         while (!stoppingToken.IsCancellationRequested)
-        {
+        { 
             using var scope = _scopeFactory.CreateScope(); 
             _mechanicCache = scope.ServiceProvider.GetRequiredService<IMechanicCache>();
+            var unitOfWork = scope.ServiceProvider.GetRequiredService<IUnitOfWork>(); 
+            var mediator = scope.ServiceProvider.GetRequiredService<IMediator>(); 
 
             var isShutdown = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<SafelyShutdownConfiguration>>(); 
             if (isShutdown.CurrentValue.Shutdown)
             { 
-                await Task.Delay(100000000);
+                await Task.Delay(2000);
                 continue;
             }
 
 
-            await _mechanicCache.ProcessOrdersWaitingMechanicAssignFromQueueAsync();
+            (bool isSuccess, string orderId, string buyerId, string mechanicId) = await _mechanicCache.ProcessOrdersWaitingMechanicAssignFromQueueAsync();
+
+            if (isSuccess && !string.IsNullOrEmpty(orderId) && !string.IsNullOrEmpty(buyerId) && !string.IsNullOrEmpty(mechanicId))
+            {
+                await unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, stoppingToken);
+
+                await mediator.Publish(new AccountMechanicAutoSelectedToAnOrderDomainEvent(Guid.Parse(orderId), Guid.Parse(buyerId), Guid.Parse(mechanicId)), stoppingToken);
+
+                await unitOfWork.CommitTransactionAsync(stoppingToken);
+            } 
             await Task.Delay(500);
         }
     }

@@ -1,10 +1,10 @@
 ﻿using Core.CustomClaims;
 using Core.Enumerations;
-using Core.Events;
+using Core.Events.Account;
 using Core.Models;
 using Identity.API.Domain.Entities;
 using Identity.API.Domain.Events;
-using Identity.API.Infrastructure; 
+using Identity.API.Infrastructure;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Identity;

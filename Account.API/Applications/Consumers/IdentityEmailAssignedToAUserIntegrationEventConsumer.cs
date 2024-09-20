@@ -1,7 +1,7 @@
-﻿using Account.API.Applications.Commands.StaffCommand.AssignStaffEmailByUserId; 
-using Account.API.Applications.Commands.UserCommand.AssignUserEmailByUserId; 
+﻿using Account.API.Applications.Commands.StaffCommand.AssignStaffEmailByUserId;
+using Account.API.Applications.Commands.UserCommand.AssignUserEmailByUserId;
 using Core.Enumerations;
-using Core.Events;
+using Core.Events.Identity;
 using Core.Results;
 using MassTransit;
 using MediatR;

@@ -1,6 +1,5 @@
-﻿ 
-using Core.Events;
-using MassTransit; 
+﻿using Core.Events.Catalog;
+using MassTransit;
 using MediatR;
 using Search.Worker.Applications.Commands.UndeleteItem;
 
