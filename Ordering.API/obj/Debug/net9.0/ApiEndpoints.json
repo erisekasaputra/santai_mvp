@@ -1,5 +1,101 @@
 [
   {
+    "ContainingType": "Ordering.API.Controllers.CouponController",
+    "Method": "GetPaginatedCoupons",
+    "RelativePath": "api/v1/coupons",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Core.Dtos.PaginatedRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Ordering.API.Controllers.CouponController",
+    "Method": "CreateCoupon",
+    "RelativePath": "api/v1/coupons",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "Ordering.API.Applications.Commands.Coupons.CreateCoupon.CreateCouponCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Ordering.API.Controllers.CouponController",
+    "Method": "UpdateCoupon",
+    "RelativePath": "api/v1/coupons",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "Ordering.API.Applications.Commands.Coupons.UpdateCouponById.UpdateCouponByIdCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Ordering.API.Controllers.CouponController",
+    "Method": "DeleteCoupon",
+    "RelativePath": "api/v1/coupons",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "command",
+        "Type": "Ordering.API.Applications.Commands.Coupons.DeleteCouponById.DeleteCouponByIdCommand",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Ordering.API.Controllers.CouponController",
+    "Method": "GetCouponById",
+    "RelativePath": "api/v1/coupons/{couponId}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "couponId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Ordering.API.Controllers.CouponController",
+    "Method": "GetCouponByCode",
+    "RelativePath": "api/v1/coupons/code/{code}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "code",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Ordering.API.Controllers.OrderController",
     "Method": "CreateOrder",
     "RelativePath": "api/v1/orders",

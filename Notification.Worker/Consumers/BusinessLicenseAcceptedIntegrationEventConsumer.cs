@@ -1,12 +1,12 @@
 ﻿using Core.Events;
-using MediatR;
+using MassTransit; 
 
 namespace Notification.Worker.Consumers;
 
-public class BusinessLicenseAcceptedIntegrationEventConsumer : INotificationHandler<BusinessLicenseAcceptedIntegrationEvent>
+public class BusinessLicenseAcceptedIntegrationEventConsumer : IConsumer<BusinessLicenseAcceptedIntegrationEvent>
 {
-    public async Task Handle(BusinessLicenseAcceptedIntegrationEvent notification, CancellationToken cancellationToken)
+    public async Task Consume(ConsumeContext<BusinessLicenseAcceptedIntegrationEvent> context)
     {
         throw new NotImplementedException();
-    }
+    } 
 }

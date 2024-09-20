@@ -14,9 +14,7 @@ using Ordering.API.Applications.Queries.Coupons.GetCouponByCode;
 using Ordering.API.Applications.Queries.Coupons.GetCouponById;
 using Ordering.API.Applications.Queries.Coupons.GetPaginatedCoupons;
 using Ordering.API.Applications.Services.Interfaces;
-using Ordering.API.Extensions;
-using Ordering.Domain.Aggregates.CouponAggregate;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Ordering.API.Extensions; 
 
 namespace Ordering.API.Controllers;
 
