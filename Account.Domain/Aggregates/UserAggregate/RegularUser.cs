@@ -1,18 +1,17 @@
 ﻿using Account.Domain.Events; 
 using Account.Domain.ValueObjects;
 using Core.Exceptions;
+using Core.Extensions;
 
 namespace Account.Domain.Aggregates.UserAggregate;
 
 public class RegularUser : BaseUser
-{  
-    public PersonalInfo PersonalInfo { get; private set; } 
-
-    public string? DeviceId { get; private set; }
-       
+{   
+    public PersonalInfo PersonalInfo { get; private set; }  
     public RegularUser() : base()
     {
         PersonalInfo = null!;
+        Name = null!;
     }
 
     public RegularUser(
@@ -24,11 +23,18 @@ public class RegularUser : BaseUser
         Address address, 
         PersonalInfo personalInfo,
         string timeZoneId,
-        string deviceId) : base(email, encryptedEmail, phoneNumber, encryptedPhoneNumber, address, timeZoneId)
+        string deviceId) : base(
+            $"{personalInfo.FirstName} {personalInfo.MiddleName} {personalInfo.LastName}".CleanAndLowering(),
+            email,
+            encryptedEmail,
+            phoneNumber,
+            encryptedPhoneNumber,
+            address,
+            timeZoneId,
+            deviceId)
     { 
         Id = identityId;
-        PersonalInfo = personalInfo ?? throw new ArgumentNullException(nameof(personalInfo));
-        DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
+        PersonalInfo = personalInfo ?? throw new ArgumentNullException(nameof(personalInfo)); 
 
         RaiseRegularUserCreatedDomainEvent(this);
     }
@@ -51,56 +57,15 @@ public class RegularUser : BaseUser
         base.AddReferralProgram(referralRewardPoint, referralValidDate);
     } 
 
-    public void ResetDeviceId()
+    public override void AddDeviceId(string deviceId)
     {
-        if (DeviceId is null)
-        {
-            return;
-        }
-
-        DeviceId = null;
-
-        RaiseDeviceIdResetDomainEvent(Id);
+        base.AddDeviceId(deviceId);
     }  
 
-    public void SetDeviceId(string deviceId)
+    public override void RemoveDeviceId(string deviceId)
     {
-        if (deviceId is not null)
-        {
-            throw new DomainException("This account is already registered with another device");
-        }
-
-        DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
-
-        RaiseDeviceIdSetDomainEvent(Id, deviceId);
-    }  
-
-    public void ForceSetDeviceId(string deviceId)
-    {
-        if (DeviceId == deviceId)
-        {
-            return;
-        }
-
-        DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
-
-        RaiseDeviceIdForcedSetDomainEvent(Id, deviceId);
-    }
-     
-    private void RaiseDeviceIdForcedSetDomainEvent(Guid id, string deviceId)
-    {
-        AddDomainEvent(new DeviceIdForcedSetDomainEvent(id, deviceId));
-    }
-
-    private void RaiseDeviceIdSetDomainEvent(Guid id, string deviceId)
-    {
-        AddDomainEvent(new DeviceIdSetDomainEvent(id, deviceId));
-    }
-
-    private void RaiseDeviceIdResetDomainEvent(Guid id)
-    {
-        AddDomainEvent(new DeviceIdResetDomainEvent(id));
-    }
+        base.RemoveDeviceId(deviceId);
+    }    
 
     private void RaiseRegularUserCreatedDomainEvent(RegularUser user)
     {

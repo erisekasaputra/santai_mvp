@@ -32,45 +32,30 @@ public static class ServiceRegistrationExtension
     public static IServiceCollection AddHttpClients(this IServiceCollection service)
     { 
         var accountConfig = service.BuildServiceProvider().GetService<IOptionsMonitor<AccountServiceConfiguration>>()
-            ?? throw new Exception("Please provide value for database option");
-
+            ?? throw new Exception("Please provide value for database option"); 
         var catalogConfig = service.BuildServiceProvider().GetService<IOptionsMonitor<CatalogServiceConfiguration>>()
-           ?? throw new Exception("Please provide value for database option");
-
+           ?? throw new Exception("Please provide value for database option"); 
         var masterConfig = service.BuildServiceProvider().GetService<IOptionsMonitor<MasterDataServiceConfiguration>>()
-          ?? throw new Exception("Please provide value for database option");
-
+          ?? throw new Exception("Please provide value for database option"); 
 
         var retryPolicy = HttpPolicyExtensions
             .HandleTransientHttpError()
-            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)));
-
-
+            .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(1, retryAttempt))); 
 
         service.AddHttpClient<IAccountServiceAPI, AccountServiceAPI>(client =>
         {
             client.BaseAddress = new Uri(accountConfig?.CurrentValue.Host ?? throw new Exception("Account service client host is not set"));
-        }) 
-        .AddPolicyHandler(retryPolicy)
-        .AddHttpMessageHandler<TokenJwtHandler>();
-
-
-
-
+        }).AddPolicyHandler(retryPolicy).AddHttpMessageHandler<TokenJwtHandler>();
+         
         service.AddHttpClient<IMasterDataServiceAPI, MasterDataServiceAPI>(client =>
         {
             client.BaseAddress = new Uri(masterConfig?.CurrentValue.Host ?? throw new Exception("Master data service client host is not set"));
-        })
-        .AddPolicyHandler(retryPolicy);
-
-
+        }).AddPolicyHandler(retryPolicy); 
 
         service.AddHttpClient<ICatalogServiceAPI, CatalogServiceAPI>(client =>
         {
             client.BaseAddress = new Uri(catalogConfig?.CurrentValue.Host ?? throw new Exception("Catalog service client host is not set"));
-        })
-       .AddPolicyHandler(retryPolicy)
-       .AddHttpMessageHandler<TokenJwtHandler>();
+        }).AddPolicyHandler(retryPolicy).AddHttpMessageHandler<TokenJwtHandler>();
 
         return service;
     }
@@ -78,10 +63,8 @@ public static class ServiceRegistrationExtension
     public static IServiceCollection AddMassTransitContext<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
     {
         var messageBusOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<MessagingConfiguration>>()
-            ?? throw new Exception("Please provide value for message bus options");
-
-        var options = messageBusOptions.CurrentValue;
-
+            ?? throw new Exception("Please provide value for message bus options"); 
+        var options = messageBusOptions.CurrentValue; 
         services.AddMassTransit(x =>
         {
             x.AddEntityFrameworkOutbox<TDbContext>(o =>
@@ -97,13 +80,9 @@ public static class ServiceRegistrationExtension
             var consumers = new (string QueueName, Type ConsumerType)[]
             {
                 ("ordering-service-account-mechanic-order-accepted-integration-event-queue", typeof(AccountMechanicOrderAcceptedIntegrationEventConsumer))
-            }; 
+            };
 
-            foreach ((_, Type consumerType) in consumers)
-            {
-                x.AddConsumer(consumerType);
-            }
-
+            x.AddConsumersFromNamespaceContaining<IOrderAPIMarkerInterface>();
             x.UsingRabbitMq((context, configure) =>
             {
                 configure.Host(options.Host ?? string.Empty, host =>
@@ -112,40 +91,17 @@ public static class ServiceRegistrationExtension
                     host.Password(options.Password ?? string.Empty);
                 });
 
-                configure.UseMessageRetry(retryCfg =>
-                {
-                    retryCfg.Interval(options.MessageRetryInterval,
-                        TimeSpan.FromSeconds(options.MessageRetryTimespan));
-                });
-
-                configure.UseTimeout(timeoutCfg =>
-                {
-                    timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout);
-                });
-
-                configure.ConfigureEndpoints(context); 
-                
+                configure.UseTimeout(timeoutCfg => timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout));
+                //configure.ConfigureEndpoints(context);
 
                 foreach (var (queueName, consumerType) in consumers)
-                {
-                    configure.ReceiveEndpoint(queueName, receiveBuilder =>
-                    {
-                        ConfigureEndPoint(receiveBuilder, queueName, consumerType);
-                    });
-                }
+                    configure.ReceiveEndpoint(queueName, receiveBuilder => ConfigureEndPoint(receiveBuilder, queueName, consumerType));
 
                 void ConfigureEndPoint(IReceiveEndpointConfigurator receiveBuilder, string queueName, Type consumerType)
                 {
-                    receiveBuilder.UseMessageRetry(retry =>
-                    {
-                        retry.Interval(options.MessageRetryInterval, TimeSpan.FromSeconds(options.MessageRetryTimespan));
-                    });
-
-                    receiveBuilder.UseDelayedRedelivery(redelivery =>
-                    {
-                        redelivery.Intervals(TimeSpan.FromSeconds(options.DelayedRedeliveryInterval));
-                    });
-
+                    receiveBuilder.ConfigureConsumer(context, consumerType);
+                    receiveBuilder.UseMessageRetry(retry => retry.Interval(options.MessageRetryInterval, TimeSpan.FromSeconds(options.MessageRetryTimespan)));
+                    receiveBuilder.UseDelayedRedelivery(redelivery => redelivery.Intervals(TimeSpan.FromSeconds(options.DelayedRedeliveryInterval)));
                     receiveBuilder.UseRateLimit(1000, TimeSpan.FromSeconds(2));
                 }
             });

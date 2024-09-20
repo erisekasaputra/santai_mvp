@@ -214,11 +214,13 @@ public class StaffRepository : IStaffRepository
            .FirstOrDefaultAsync();
     }
      
-    public async Task<string?> GetDeviceIdByIdAsync(Guid staffId)
+    public async Task<IEnumerable<string>?> GetDeviceIdByIdAsync(Guid staffId)
     {
-        return await _context.Staffs
+        var deviceIds = await _context.Staffs
            .Where(x => x.Id == staffId)
-           .Select(x => x.DeviceId)
+           .Select(x => x.DeviceIds)  
            .FirstOrDefaultAsync();
+
+        return deviceIds ?? []; 
     }
 }

@@ -53,17 +53,17 @@ public class IdentityPhoneNumberConfirmedIntegrationEventConsumer : IConsumer<Id
         }
 
 
-        var commandForAll = new ConfirmUserPhoneNumberByUserIdCommand(user.Id);
-        var responseForAll = await _mediator.Send(commandForAll);
+        //var commandForAll = new ConfirmUserPhoneNumberByUserIdCommand(user.Id);
+        //var responseForAll = await _mediator.Send(commandForAll);
 
-        if (!responseForAll.IsSuccess)
-        {
-            _logger.LogError("An error occured. error: '{Message}'. When confirming the phone number: {phoneNumber} for registered user id: {Id}", responseForAll.Message, user.PhoneNumber, user.Id);
+        //if (!responseForAll.IsSuccess)
+        //{
+        //    _logger.LogError("An error occured. error: '{Message}'. When confirming the phone number: {phoneNumber} for registered user id: {Id}", responseForAll.Message, user.PhoneNumber, user.Id);
 
-            if (responseForAll.ResponseStatus is not ResponseStatus.NotFound and ResponseStatus.BadRequest)
-            {
-                throw new Exception(responseForAll.Message);
-            }
-        }
+        //    if (responseForAll.ResponseStatus is not ResponseStatus.NotFound and ResponseStatus.BadRequest)
+        //    {
+        //        throw new Exception(responseForAll.Message);
+        //    }
+        //}
     }
 }

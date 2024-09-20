@@ -1,5 +1,6 @@
 ﻿using Core.Configurations;
 using MassTransit;
+using MassTransit.Configuration;
 using Microsoft.Extensions.Options;
 using Search.Worker.Consumers;
 using Search.Worker.Domain.Repositories;
@@ -19,10 +20,10 @@ public static class ServiceRegistrationExtension
 
     public static IServiceCollection AddMasstransitContext(this IServiceCollection services)
     {
-        var messagingConfiguration = services.BuildServiceProvider().GetService<IOptionsMonitor<MessagingConfiguration>>()
+        var messageOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<MessagingConfiguration>>()
             ?? throw new Exception("Please provide value for message bus options");
 
-        var messaging = messagingConfiguration.CurrentValue;
+        var options = messageOptions.CurrentValue;
 
         services.AddMassTransit(x =>
         {
@@ -47,58 +48,26 @@ public static class ServiceRegistrationExtension
                 ("search-worker-service-category-updated-integration-event-queue", typeof(CategoryUpdatedIntegrationEventConsumer))
             };
 
-            foreach ((_, Type consumerType) in consumers)
+            x.AddConsumersFromNamespaceContaining<ISearchWorkerMarkerInterface>();
+            x.UsingRabbitMq((context, configure) =>
             {
-                x.AddConsumer(consumerType);
-            }
-
-            x.UsingRabbitMq((context, config) =>
-            {
-                config.Host(messaging.Host ?? "localhost", host =>
+                configure.Host(options.Host ?? string.Empty, host =>
                 {
-                    host.Username(messaging.Username ?? "user");
-                    host.Password(messaging.Password ?? "user");
+                    host.Username(options.Username ?? string.Empty);
+                    host.Password(options.Password ?? string.Empty);
                 });
 
-                config.UseMessageRetry(retryCfg =>
-                {
-                    retryCfg.Interval(
-                        messaging.MessageRetryInterval,
-                        messaging.MessageRetryTimespan);
-                });
-
-                config.UseTimeout(timeoutCfg =>
-                {
-                    timeoutCfg.Timeout = TimeSpan.FromSeconds(10);
-                });  
-
-                config.ConfigureEndpoints(context);
+                configure.UseTimeout(timeoutCfg => timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout));
+                //configure.ConfigureEndpoints(context);
 
                 foreach (var (queueName, consumerType) in consumers)
-                {
-                    config.ReceiveEndpoint(queueName, receiveBuilder =>
-                    {
-                        ConfigureEndPoint(receiveBuilder, queueName, consumerType);
-                    });
-                }
+                    configure.ReceiveEndpoint(queueName, receiveBuilder => ConfigureEndPoint(receiveBuilder, queueName, consumerType));
 
                 void ConfigureEndPoint(IReceiveEndpointConfigurator receiveBuilder, string queueName, Type consumerType)
-                { 
-                    receiveBuilder.UseMessageRetry(retry =>
-                    {
-                        retry.Interval(
-                            messaging.MessageRetryInterval,
-                            messaging.MessageRetryTimespan);
-                    });
-
-                    receiveBuilder.UseDelayedRedelivery(redelivery =>
-                    {
-                        redelivery.Intervals(
-                            TimeSpan.FromSeconds(1), 
-                            TimeSpan.FromSeconds(10), 
-                            TimeSpan.FromSeconds(20));
-                    });
-
+                {
+                    receiveBuilder.ConfigureConsumer(context, consumerType);
+                    receiveBuilder.UseMessageRetry(retry => retry.Interval(options.MessageRetryInterval, TimeSpan.FromSeconds(options.MessageRetryTimespan)));
+                    receiveBuilder.UseDelayedRedelivery(redelivery => redelivery.Intervals(TimeSpan.FromSeconds(options.DelayedRedeliveryInterval)));
                     receiveBuilder.UseRateLimit(1000, TimeSpan.FromSeconds(2));
                 }
             });

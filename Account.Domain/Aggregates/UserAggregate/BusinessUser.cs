@@ -35,7 +35,17 @@ public class BusinessUser : BaseUser
         string? websiteUrl,
         string? description, 
         string timeZoneId,
-        string password) : base(null, null, phoneNumber, encryptedPhoneNumber, address, timeZoneId, isEmailVerified: false, isPhoneNumberVerified: true)
+        string password) : base(
+            businessName, 
+            null, 
+            null, 
+            phoneNumber, 
+            encryptedPhoneNumber, 
+            address, 
+            timeZoneId, 
+            string.Empty,
+            isEmailVerified: false, 
+            isPhoneNumberVerified: true)
     {  
         Code = UniqueIdGenerator.Generate(Id);
         BusinessName = businessName ?? throw new ArgumentNullException(nameof(businessName));
@@ -140,8 +150,7 @@ public class BusinessUser : BaseUser
             encryptedPhoneNumber,
             name,
             address,
-            timeZoneId,
-            null,
+            timeZoneId, 
             password,
             raiseCreatedEvent: false); 
 

@@ -1,15 +1,13 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
 using Account.API.Applications.Services;
-using Account.Domain.Aggregates.FleetAggregate;
-using Account.Domain.Aggregates.UserAggregate;
+using Account.Domain.Aggregates.FleetAggregate; 
 using Account.Domain.SeedWork;
-using Core.Configurations;
-using Core.Enumerations;
+using Core.Configurations; 
 using Core.Messages;
 using Core.Results;
 using Core.Services.Interfaces;
 using MediatR;
-using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Options; 
 
 namespace Account.API.Applications.Queries.GetUserByUserTypeAndUserId;
 
@@ -27,60 +25,38 @@ public class GetUserByUserTypeAndUserIdQueryHandler(
     public async Task<Result> Handle(GetUserByUserTypeAndUserIdQuery request, CancellationToken cancellationToken)
     {
         try
-        { 
-            dynamic? user = request.UserType switch
+        {
+            var baseUser = await _unitOfWork.BaseUsers.GetByIdAsync(request.UserId); 
+            if (baseUser is not null)
             {
-                UserType.RegularUser => await _unitOfWork.BaseUsers.GetRegularUserByIdAsync(request.UserId),
-                UserType.MechanicUser => await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.UserId), 
-                UserType.BusinessUser => await _unitOfWork.BaseUsers.GetBusinessUserByIdAsync(request.UserId),
-                UserType.StaffUser => await _unitOfWork.Staffs.GetByIdAsync(request.UserId),
-                _ => throw new NotImplementedException()
-            }; 
-            
-            if (user is null)
-            {
-                return Result.Failure($"User not found", ResponseStatus.NotFound);
-            }
-             
-            if (user is RegularUser regularUser)
-            {
-                var decryptedEmail = await DecryptNullableAsync(regularUser.EncryptedEmail);
-                var decryptedPhoneNumber = await DecryptNullableAsync(regularUser.EncryptedPhoneNumber);
-                (var fleets, var fleetsUnknown) = await GetFleetsDtos(regularUser.Fleets, request.Fleets);
+                var decryptedEmail = await DecryptNullableAsync(baseUser.EncryptedEmail);
+                var decryptedPhoneNumber = await DecryptNullableAsync(baseUser.EncryptedPhoneNumber);
+
+                var fleets = await _unitOfWork.Fleets.GetByUserIdAsync(request.UserId);
+
+                (var filteredFleets, var fleetsUnknown) = await GetFleetsDtos(fleets, request.Fleets);
 
                 var userResponseDto = new GlobalUserResponseDto(
-                    regularUser.Id,
+                    baseUser.Id,
                     decryptedEmail,
                     decryptedPhoneNumber,
-                    regularUser.TimeZoneId,
-                    regularUser.PersonalInfo.ToString() ?? string.Empty,
-                    fleets,
-                    fleetsUnknown);
-
-                return Result.Success(userResponseDto, ResponseStatus.Ok); ;
-            }
-            else if (user is BusinessUser businessUser)
-            {
-                var decryptedEmail = await DecryptNullableAsync(businessUser.EncryptedEmail);
-                var decryptedPhoneNumber = await DecryptNullableAsync(businessUser.EncryptedPhoneNumber);
-                (var fleets, var fleetsUnknown) = await GetFleetsDtos(businessUser.Fleets, request.Fleets);
-
-                var userResponseDto = new GlobalUserResponseDto(
-                    businessUser.Id,
-                    decryptedEmail,
-                    decryptedPhoneNumber,
-                    businessUser.TimeZoneId,
-                    businessUser.BusinessName,
-                    fleets,
-                    fleetsUnknown);
+                    baseUser.TimeZoneId,
+                    baseUser.Name,
+                    filteredFleets,
+                    fleetsUnknown,
+                    baseUser.DeviceIds);
 
                 return Result.Success(userResponseDto, ResponseStatus.Ok);
             }
-            else if (user is Staff staffUser)
+             
+             
+            var staffUser = await _unitOfWork.Staffs.GetByIdAsync(request.UserId);
+            if (staffUser is not null)
             {
                 var decryptedEmail = await DecryptNullableAsync(staffUser.EncryptedEmail);
-                var decryptedPhoneNumber = await DecryptNullableAsync(staffUser.EncryptedPhoneNumber);
-                (var fleets, var fleetsUnknown) = await GetFleetsDtos(staffUser.Fleets, request.Fleets);
+                var decryptedPhoneNumber = await DecryptNullableAsync(staffUser.EncryptedPhoneNumber); 
+
+                (var filteredFleets, var fleetsUnknown) = await GetFleetsDtos(staffUser.Fleets, request.Fleets);
 
                 var userResponseDto = new GlobalUserResponseDto(
                     staffUser.Id,
@@ -88,32 +64,14 @@ public class GetUserByUserTypeAndUserIdQueryHandler(
                     decryptedPhoneNumber,
                     staffUser.TimeZoneId,
                     staffUser.Name,
-                    fleets,
-                    fleetsUnknown);
+                    filteredFleets,
+                    fleetsUnknown,
+                    staffUser.DeviceIds);
 
                 return Result.Success(userResponseDto, ResponseStatus.Ok);
             }
-            else if (user is MechanicUser mechanicUser)
-            {
-                var decryptedEmail = await DecryptNullableAsync(mechanicUser.EncryptedEmail);
-                var decryptedPhoneNumber = await DecryptNullableAsync(mechanicUser.EncryptedPhoneNumber);  
-                (var fleets, var fleetsUnknown) = await GetFleetsDtos(mechanicUser.Fleets, request.Fleets);
 
-                var userResponseDto = new GlobalUserResponseDto(
-                    mechanicUser.Id,
-                    decryptedEmail,
-                    decryptedPhoneNumber,
-                    mechanicUser.TimeZoneId,
-                    mechanicUser.PersonalInfo.ToString() ?? string.Empty,
-                    fleets,
-                    fleetsUnknown);
-
-                return Result.Success(userResponseDto, ResponseStatus.Ok);
-            }
-            else
-            {
-                return Result.Failure($"User {request.UserType} is not supported", ResponseStatus.BadRequest);
-            } 
+            return Result.Failure("User data not found", ResponseStatus.NotFound);
         }
         catch (Exception ex)
         {

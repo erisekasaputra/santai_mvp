@@ -10,6 +10,7 @@ public class AccountIdentityResponseDto
     public string Fullname { get; set; }
     public IEnumerable<AccountIdentityFleetResponseDto> Fleets { get; set; }
     public IEnumerable<Guid> UnknownFleets { get; set; } 
+    public IEnumerable<string> DeviceIds { get; set; }
     public AccountIdentityResponseDto(
         Guid id,
         string? email,
@@ -17,7 +18,8 @@ public class AccountIdentityResponseDto
         string timeZoneId,
         string fullname,    
         IEnumerable<AccountIdentityFleetResponseDto> fleets,
-        IEnumerable<Guid> unknownFleets)
+        IEnumerable<Guid> unknownFleets,
+        IEnumerable<string> deviceIds)
     {  
         Id = id;
         Email = email;
@@ -26,5 +28,6 @@ public class AccountIdentityResponseDto
         Fullname = fullname;
         Fleets = fleets;
         UnknownFleets = unknownFleets;
+        DeviceIds = deviceIds;
     }
 }

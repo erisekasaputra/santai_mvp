@@ -15,8 +15,8 @@ public interface IStaffRepository
     Task<Staff?> GetByIdAsync(Guid id);
     Task<string?> GetTimeZoneByIdAsync(Guid staffId);
     Task<string?> GetEmailByIdAsync(Guid staffId);
-    Task<string?> GetPhoneNumberByIdAsync(Guid staffId); 
-    Task<string?> GetDeviceIdByIdAsync(Guid staffId);
+    Task<string?> GetPhoneNumberByIdAsync(Guid staffId);
+    Task<IEnumerable<string>?> GetDeviceIdByIdAsync(Guid staffId);
     void Update(Staff staff);
     void Delete(Staff staff); 
 }

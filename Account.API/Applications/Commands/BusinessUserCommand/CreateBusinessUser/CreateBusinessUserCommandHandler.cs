@@ -397,8 +397,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
                 encryptedPhoneNumber,
                 staff.Name,
                 address,
-                staff.TimeZoneId,
-                null,
+                staff.TimeZoneId, 
                 staff.Password,
                 raiseCreatedEvent: false));
         }

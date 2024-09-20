@@ -7,7 +7,7 @@ using Core.Exceptions;
 namespace Account.Domain.Aggregates.UserAggregate;
 
 public class Staff : Entity, IAggregateRoot
-{ 
+{  
     public Guid BusinessUserId { get; private init; }
     public string BusinessUserCode { get; private init; } 
     public string? HashedPhoneNumber { get; private set; } 
@@ -21,12 +21,11 @@ public class Staff : Entity, IAggregateRoot
     public string? NewEncryptedEmail {  get; private set; }
     public bool IsEmailVerified { get; private set; }
     public string Name { get; private set; }
-    public string? DeviceId { get; private set; } 
     public Address Address { get; private set; }
     public string TimeZoneId { get; private set; }
     public string Password { get; private set; }
-    public ICollection<Fleet>? Fleets { get; private set; } 
-
+    public ICollection<Fleet>? Fleets { get; private set; }
+    public ICollection<string> DeviceIds { get; private set; } = [];
     public Staff()
     {
         Password = string.Empty;
@@ -43,8 +42,7 @@ public class Staff : Entity, IAggregateRoot
         string encryptedPhoneNumber,
         string name,
         Address address,
-        string timeZoneId,
-        string? deviceId,
+        string timeZoneId, 
         string password, 
         bool raiseCreatedEvent = true)
     { 
@@ -52,8 +50,9 @@ public class Staff : Entity, IAggregateRoot
         BusinessUserCode = businessUserCode ?? throw new ArgumentNullException(nameof(businessUserCode));   
         Name = name ?? throw new ArgumentNullException(nameof(name)); 
         TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId)); 
-        Address = address ?? throw new ArgumentNullException(nameof(address));  
-        DeviceId = deviceId ?? null; 
+        Address = address ?? throw new ArgumentNullException(nameof(address));
+         
+        DeviceIds ??= []; 
 
         HashedPhoneNumber = hashedPhoneNumber ?? throw new ArgumentNullException(nameof(hashedPhoneNumber)); 
         EncryptedPhoneNumber = encryptedPhoneNumber ?? throw new ArgumentNullException(nameof(hashedPhoneNumber)); 
@@ -130,56 +129,22 @@ public class Staff : Entity, IAggregateRoot
 
         RaisePhoneNumberVerifiedDomainEvent(Id, HashedPhoneNumber, EncryptedPhoneNumber);
     }
-
-    public void ResetDeviceId()
+     
+    public void AddDeviceId(string deviceId)
     {
-        if (string.IsNullOrWhiteSpace(DeviceId))
+        DeviceIds ??= [];
+        if (DeviceIds.Contains(deviceId) || string.IsNullOrWhiteSpace(deviceId)) 
         {
-            return;  
+            return;
         }
 
-        DeviceId = null;
-
-        RaiseDeviceIdResetDomainEvent(Id);
+        DeviceIds.Add(deviceId);
     }
 
-    public void SetDeviceId(string deviceId)
-    {
-        if (!string.IsNullOrWhiteSpace(DeviceId))
-        {
-            throw new DomainException("This account is already registered with another device");
-        }
-
-        DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
-
-        RaiseDeviceIdSetDomainEvent(Id, deviceId);
-    }
-
-    public void ForceSetDeviceId(string deviceId)
-    {
-        if (DeviceId == deviceId)
-        {
-            return;  
-        }
-
-        DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
-
-        RaiseDeviceIdForcedSetDomainEvent(Id, deviceId);
-    }
-
-    private void RaiseDeviceIdResetDomainEvent(Guid id)
-    {
-        AddDomainEvent(new DeviceIdResetDomainEvent(id));
-    }
-
-    private void RaiseDeviceIdSetDomainEvent(Guid id, string deviceId)
-    {
-        AddDomainEvent(new DeviceIdSetDomainEvent(id, deviceId));
-    }
-
-    private void RaiseDeviceIdForcedSetDomainEvent(Guid id, string deviceId)
-    {
-        AddDomainEvent(new DeviceIdForcedSetDomainEvent(id, deviceId));
+    public void RemoveDeviceId(string deviceId)
+    { 
+        DeviceIds ??= [];
+        DeviceIds.Remove(deviceId);
     }
 
     private void RaiseEmailUpdatedDomainEvent(Guid id, string? oldEmail, string newEmail, string? oldEncryptedEmail, string newEncryptedEmail)

@@ -13,8 +13,10 @@ public class OrderFindingMechanicIntegrationEventConsumer(
 {
     private readonly IHubContext<ActivityHub, IActivityClient> _activityHubContext = activityHubContecxt;
     private readonly ICacheService _cacheService = cacheService;
+     
     public async Task Consume(ConsumeContext<OrderFindingMechanicIntegrationEvent> context)
-    {
+    {  
+        Console.WriteLine(context.Message.OrderId); 
         await Task.CompletedTask;
     }
 }

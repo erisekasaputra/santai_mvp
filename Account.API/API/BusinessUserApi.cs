@@ -7,8 +7,7 @@ using Account.API.Applications.Commands.BusinessUserCommand.RemoveBusinessLicens
 using Account.API.Applications.Commands.BusinessUserCommand.UpdateBusinessUserByUserId;
 using Account.API.Applications.Commands.StaffCommand.ConfirmStaffEmailByStaffId;
 using Account.API.Applications.Commands.StaffCommand.ConfirmStaffPhoneNumberByStaffId;
-using Account.API.Applications.Commands.StaffCommand.CreateStaffBusinessUserByUserId;
-using Account.API.Applications.Commands.StaffCommand.ForceSetDeviceIdByStaffId;
+using Account.API.Applications.Commands.StaffCommand.CreateStaffBusinessUserByUserId; 
 using Account.API.Applications.Commands.StaffCommand.RemoveStaffByUserId;
 using Account.API.Applications.Commands.StaffCommand.ResetDeviceIdByStaffId;
 using Account.API.Applications.Commands.StaffCommand.SetDeviceIdByStaffId;
@@ -110,14 +109,11 @@ public static class BusinessUserApi
             .RequireAuthorization(PolicyName.BusinessUserAndAdministratorUserPolicy.ToString());
 
 
-        app.MapPatch("/staffs/device-id", SetDeviceIdByStaffId)
+        app.MapPatch("/staffs/{staffId}/device-id/set", SetDeviceIdByStaffId)
             .RequireAuthorization(PolicyName.StaffUserOnlyPolicy.ToString());
 
         app.MapPatch("/staffs/{staffId}/device-id/reset", ResetDeviceIdByStaffId)
-            .RequireAuthorization(PolicyName.StaffUserAndAdministratorUserPolicy.ToString());
-
-        app.MapPatch("/staffs/{staffId}/device-id/force-set", ForceSetDeviceIdByStaffId)
-            .RequireAuthorization(PolicyName.StaffUserAndAdministratorUserPolicy.ToString());
+            .RequireAuthorization(PolicyName.StaffUserAndAdministratorUserPolicy.ToString()); 
 
         app.MapPatch("/staffs/email", SetStaffEmailByStaffId)
             .RequireAuthorization(PolicyName.StaffUserOnlyPolicy.ToString());
@@ -475,9 +471,38 @@ public static class BusinessUserApi
             service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
-    } 
+    }  
 
-    private static async Task<IResult> ForceSetDeviceIdByStaffId( 
+    private static async Task<IResult> ResetDeviceIdByStaffId( 
+        Guid staffId,
+        [FromBody] DeviceIdRequestDto request,
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
+    {
+        try
+        {
+            var userClaim = userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+             
+            if (userClaim.CurrentUserType == UserType.StaffUser && staffId != userClaim.Sub)
+            {
+                return TypedResults.Forbid();
+            }
+
+            var result = await service.Mediator.Send(new ResetDeviceIdByStaffIdCommand(staffId, request.DeviceId)); 
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+    private static async Task<IResult> SetDeviceIdByStaffId(
         Guid staffId,
         [FromBody] DeviceIdRequestDto request,
         [FromServices] ApplicationService service,
@@ -485,76 +510,7 @@ public static class BusinessUserApi
         [FromServices] IUserInfoService userInfoService)
     {
         try
-        {
-            var userClaim = userInfoService.GetUserInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Unauthorized();
-            } 
-
-            if (userClaim.CurrentUserType == UserType.StaffUser && staffId != userClaim.Sub)
-            {
-                return TypedResults.Forbid();
-            }
-
-            var validation = await validator.ValidateAsync(request); 
-            if (!validation.IsValid)
-            {
-                return TypedResults.BadRequest(validation.Errors);
-            }
-
-            var result = await service.Mediator.Send(new ForceSetDeviceIdByStaffIdCommand(staffId, request.DeviceId)); 
-            return result.ToIResult();
-        }
-        catch (Exception ex)
-        {
-            service.Logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
-    }
-
-    private static async Task<IResult> ResetDeviceIdByStaffId( 
-        Guid staffId, 
-        [FromServices] ApplicationService service,
-        [FromServices] IUserInfoService userInfoService)
-    {
-        try
-        {
-            var userClaim = userInfoService.GetUserInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Unauthorized();
-            }
-             
-            if (userClaim.CurrentUserType == UserType.StaffUser && staffId != userClaim.Sub)
-            {
-                return TypedResults.Forbid();
-            }
-
-            var result = await service.Mediator.Send(new ResetDeviceIdByStaffIdCommand(staffId)); 
-            return result.ToIResult();
-        }
-        catch (Exception ex)
-        {
-            service.Logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
-    }
-
-    private static async Task<IResult> SetDeviceIdByStaffId( 
-        [FromBody] DeviceIdRequestDto request,
-        [FromServices] ApplicationService service,
-        [FromServices] IValidator<DeviceIdRequestDto> validator,
-        [FromServices] IUserInfoService userInfoService)
-    {
-        try
-        {
-            var userClaim = userInfoService.GetUserInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Unauthorized();
-            }
-
+        {  
             var validation = await validator.ValidateAsync(request);
             if (!validation.IsValid)
             {
@@ -562,7 +518,7 @@ public static class BusinessUserApi
             }
              
 
-            var result = await service.Mediator.Send(new SetDeviceIdByStaffIdCommand(userClaim.Sub, request.DeviceId));
+            var result = await service.Mediator.Send(new SetDeviceIdByStaffIdCommand(staffId, request.DeviceId));
 
             return result.ToIResult();
         }

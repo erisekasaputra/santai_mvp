@@ -26,8 +26,7 @@ public class GetDeviceIdByRegularUserIdQueryHandler(
     {
         try
         {
-            var deviceId = await _unitOfWork.BaseUsers.GetDeviceIdByRegularUserId(request.UserId);
-
+            var deviceId = await _unitOfWork.BaseUsers.GetDeviceIdById(request.UserId); 
             if (deviceId is null)
             {
                 return Result.Failure($"Staff '{request.UserId}' not found", ResponseStatus.NotFound);
@@ -35,8 +34,8 @@ public class GetDeviceIdByRegularUserIdQueryHandler(
 
             return Result.Success(new
             {
-                request.UserId,
-                DeviceId = deviceId
+                UserId = request.UserId,
+                DeviceIds = deviceId
             }, ResponseStatus.Ok);
         }
         catch (Exception ex)

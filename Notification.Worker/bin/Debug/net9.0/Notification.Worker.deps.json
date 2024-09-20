@@ -8,6 +8,8 @@
     ".NETCoreApp,Version=v9.0": {
       "Notification.Worker/1.0.0": {
         "dependencies": {
+          "AWSSDK.Core": "4.0.0-preview.2",
+          "AWSSDK.SimpleNotificationService": "4.0.0-preview.2",
           "Core": "1.0.0",
           "MassTransit": "8.2.5",
           "MassTransit.Abstractions": "8.2.5",
@@ -63,14 +65,14 @@
           }
         }
       },
-      "AWSSDK.SimpleNotificationService/3.7.400.3": {
+      "AWSSDK.SimpleNotificationService/4.0.0-preview.2": {
         "dependencies": {
           "AWSSDK.Core": "4.0.0-preview.2"
         },
         "runtime": {
           "lib/net8.0/AWSSDK.SimpleNotificationService.dll": {
-            "assemblyVersion": "3.3.0.0",
-            "fileVersion": "3.7.400.3"
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
           }
         }
       },
@@ -227,7 +229,7 @@
       "MassTransit.AmazonSQS/8.2.5": {
         "dependencies": {
           "AWSSDK.SQS": "3.7.400.3",
-          "AWSSDK.SimpleNotificationService": "3.7.400.3",
+          "AWSSDK.SimpleNotificationService": "4.0.0-preview.2",
           "MassTransit": "8.2.5"
         },
         "runtime": {
@@ -1638,12 +1640,12 @@
       "path": "awssdk.keymanagementservice/4.0.0-preview.2",
       "hashPath": "awssdk.keymanagementservice.4.0.0-preview.2.nupkg.sha512"
     },
-    "AWSSDK.SimpleNotificationService/3.7.400.3": {
+    "AWSSDK.SimpleNotificationService/4.0.0-preview.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-cYgE/vI1dc3yFMTspclGnp2+FbbYLtSiB/9ECTI0ShcRVWH3BripL7Zj52hKqB3TY70O/MViBNzqKyt10ToHtg==",
-      "path": "awssdk.simplenotificationservice/3.7.400.3",
-      "hashPath": "awssdk.simplenotificationservice.3.7.400.3.nupkg.sha512"
+      "sha512": "sha512-eMdKdNWhcZEX+926vE9rVNVKLJMHJA4/dLlUWzwzythgsefUeSOG1wlhMu83xM0+KOldL/vV0GujAkTqcwJCZA==",
+      "path": "awssdk.simplenotificationservice/4.0.0-preview.2",
+      "hashPath": "awssdk.simplenotificationservice.4.0.0-preview.2.nupkg.sha512"
     },
     "AWSSDK.SQS/3.7.400.3": {
       "type": "package",

@@ -22,7 +22,7 @@ public class SetDeviceIdByStaffIdCommandHandler(IUnitOfWork unitOfWork, Applicat
                     .WithError(new("Staff.Id", "User not found"));
             }
 
-            staff.SetDeviceId(request.DeviceId);
+            staff.AddDeviceId(request.DeviceId);
 
             _unitOfWork.Staffs.Update(staff);
             

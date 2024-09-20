@@ -55,57 +55,30 @@ public static class ServiceRegistrationExtension
                 ("account-service-order-cancelled-by-buyer-integration-event-queue", typeof(OrderCancelledByUserIntegrationEventConsumer)) 
             };
 
-            foreach((_, Type consumerType) in consumers)
-            {
-                x.AddConsumer(consumerType); 
-            }
-
-
+            //foreach ((_, Type consumerType) in consumers) x.AddConsumer(consumerType); 
+            x.AddConsumersFromNamespaceContaining<IAccountAPIMarkerInterface>();
             x.UsingRabbitMq((context, configure) =>
-            {  
+            {
                 configure.Host(options.Host ?? string.Empty, host =>
                 {
                     host.Username(options.Username ?? string.Empty);
                     host.Password(options.Password ?? string.Empty);
                 });
 
-                configure.UseMessageRetry(retryCfg =>
-                {
-                    retryCfg.Interval(
-                        options.MessageRetryInterval,
-                        options.MessageRetryTimespan);
-                });
-
-                configure.UseTimeout(timeoutCfg =>
-                {
-                    timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout);
-                });
-
-                configure.ConfigureEndpoints(context);  
+                configure.UseTimeout(timeoutCfg => timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout));
+                //configure.ConfigureEndpoints(context);
 
                 foreach (var (queueName, consumerType) in consumers)
-                {
-                    configure.ReceiveEndpoint(queueName, receiveBuilder =>
-                    {
-                        ConfigureEndPoint(receiveBuilder, queueName, consumerType);
-                    });
-                }
+                    configure.ReceiveEndpoint(queueName, receiveBuilder => ConfigureEndPoint(receiveBuilder, queueName, consumerType));
 
                 void ConfigureEndPoint(IReceiveEndpointConfigurator receiveBuilder, string queueName, Type consumerType)
                 {
-                    receiveBuilder.UseMessageRetry(retry =>
-                    {
-                        retry.Interval(options.MessageRetryInterval, TimeSpan.FromSeconds(options.MessageRetryTimespan));
-                    });
-
-                    receiveBuilder.UseDelayedRedelivery(redelivery =>
-                    {
-                        redelivery.Intervals(TimeSpan.FromSeconds(options.DelayedRedeliveryInterval));
-                    });
-
+                    receiveBuilder.ConfigureConsumer(context, consumerType);
+                    receiveBuilder.UseMessageRetry(retry => retry.Interval(options.MessageRetryInterval, TimeSpan.FromSeconds(options.MessageRetryTimespan)));
+                    receiveBuilder.UseDelayedRedelivery(redelivery => redelivery.Intervals(TimeSpan.FromSeconds(options.DelayedRedeliveryInterval)));
                     receiveBuilder.UseRateLimit(1000, TimeSpan.FromSeconds(2));
                 }
-            }); 
+            });
         });
 
         return services;

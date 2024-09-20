@@ -22,8 +22,7 @@ public interface IUserRepository
     Task<(int TotalCount, int TotalPages, IEnumerable<MechanicUser> Brands)> GetPaginatedMechanicUser(int pageNumber, int pageSize);
     Task<string?> GetTimeZoneById(Guid id);
     Task<string?> GetEmailById(Guid id);
-    Task<string?> GetPhoneNumberById(Guid id);    
-    Task<string?> GetDeviceIdByMechanicUserId(Guid id);    
-    Task<string?> GetDeviceIdByRegularUserId(Guid id);    
+    Task<string?> GetPhoneNumberById(Guid id);
+    Task<IEnumerable<string>?> GetDeviceIdById(Guid id);
     Task<UserType?> GetUserTypeById(Guid id);
 }

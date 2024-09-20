@@ -1,9 +1,6 @@
 ﻿using Account.API.Applications.Commands.RegularUserCommand.CreateRegularUser;
 using Account.API.Applications.Commands.RegularUserCommand.DeleteRegularUserByUserId;
-using Account.API.Applications.Commands.RegularUserCommand.UpdateRegularUserByUserId;
-using Account.API.Applications.Commands.RegularUserCommand.ForceSetDeviceIdByUserId;
-using Account.API.Applications.Commands.RegularUserCommand.ResetDeviceIdByUserId;
-using Account.API.Applications.Commands.RegularUserCommand.SetDeviceIdByUserId;
+using Account.API.Applications.Commands.RegularUserCommand.UpdateRegularUserByUserId; 
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetRegularUserByUserId;
 using Account.API.Extensions;
@@ -38,16 +35,7 @@ public static class RegularUserApi
             .RequireAuthorization(PolicyName.RegularUserOnlyPolicy.ToString());
         
         app.MapPut("/", UpdateRegularUserByUserId)
-            .RequireAuthorization(PolicyName.RegularUserOnlyPolicy.ToString());
-        
-        app.MapPatch("/device-id", SetDeviceIdByUserId)
-            .RequireAuthorization(PolicyName.RegularUserOnlyPolicy.ToString());
-
-        app.MapPatch("/device-id/force-set", ForceSetDeviceIdByUserId)
-            .RequireAuthorization(PolicyName.RegularUserOnlyPolicy.ToString());
-
-        app.MapPatch("/device-id/reset", ResetDeviceIdByUserId) 
-            .RequireAuthorization(PolicyName.RegularUserOnlyPolicy.ToString());
+            .RequireAuthorization(PolicyName.RegularUserOnlyPolicy.ToString()); 
 
         app.MapDelete("/{regularUserId}", DeleteRegularUserByUserId)
             .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
@@ -77,96 +65,7 @@ public static class RegularUserApi
             service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
-    }
-
-    private static async Task<IResult> ForceSetDeviceIdByUserId( 
-        [FromBody] DeviceIdRequestDto request,
-        [FromServices] ApplicationService service,
-        [FromServices] IValidator<DeviceIdRequestDto> validator,
-        [FromServices] IUserInfoService userInfoService)
-    {
-        try
-        {
-            var userClaim = userInfoService.GetUserInfo(); 
-            if (userClaim is null)
-            {
-                return TypedResults.Unauthorized();
-            }
-
-            var validationResult = await validator.ValidateAsync(request);
-            if (!validationResult.IsValid)
-            {
-                return TypedResults.BadRequest(validationResult.Errors);
-            }
-
-            var result = await service.Mediator.Send(new ForceSetDeviceIdByUserIdCommand(
-                userClaim.Sub,
-                request.DeviceId)); 
-
-            return result.ToIResult();
-        }
-        catch (Exception ex)
-        {
-            service.Logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
-    }
-
-    private static async Task<IResult> ResetDeviceIdByUserId( 
-        [FromServices] ApplicationService service,
-        [FromServices] IUserInfoService userInfoService)
-    {
-        try
-        {
-            var userClaim = userInfoService.GetUserInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Unauthorized();
-            }
-
-            var result = await service.Mediator.Send(new ResetDeviceIdByUserIdCommand(userClaim.Sub)); 
-            return result.ToIResult();
-        }
-        catch (Exception ex)
-        {
-            service.Logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
-    }
-
-    private static async Task<IResult> SetDeviceIdByUserId( 
-        [FromBody] DeviceIdRequestDto request,
-        [FromServices] ApplicationService service,
-        [FromServices] IValidator<DeviceIdRequestDto> validator,
-        [FromServices] IUserInfoService userInfoService)
-    {
-        try
-        {
-            var userClaim = userInfoService.GetUserInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Unauthorized();
-            }
-
-            var validationResult = await validator.ValidateAsync(request);
-            if (!validationResult.IsValid)
-            {
-                return TypedResults.BadRequest(validationResult.Errors);
-            }
-
-            var result = await service.Mediator.Send(new SetDeviceIdByUserIdCommand(
-                userClaim.Sub,
-                request.DeviceId)); 
-
-            return result.ToIResult();
-        }
-        catch (Exception ex)
-        { 
-            service.Logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
-    }
-
+    } 
     private static async Task<IResult> DeleteRegularUserByUserId(
         Guid regularUserId,
         [FromServices] ApplicationService service,

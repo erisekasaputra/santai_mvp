@@ -5,6 +5,7 @@ using Core.Models;
 using Core.SeedWorks;
 using Core.Services.Interfaces;
 using Core.Utilities;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -15,17 +16,17 @@ namespace Core.Services;
 
 public class JwtTokenService : ITokenService
 {
+    private readonly IUserInfoService _userInfoService;
     private readonly IOptionsMonitor<JwtConfiguration> _jwtConfigs;
     private readonly ICacheService _cacheService;
-    private readonly IUserInfoService _userInfoService;
     public JwtTokenService(
+        IUserInfoService userInfoService,
         IOptionsMonitor<JwtConfiguration> jwtConfigs, 
-        ICacheService cacheService,
-        IUserInfoService userInfoService)
+        ICacheService cacheService)
     {
+        _userInfoService = userInfoService;
         _jwtConfigs = jwtConfigs;
         _cacheService = cacheService;
-        _userInfoService = userInfoService;
     }
 
     public string GenerateAccessToken(ClaimsIdentity claims)
@@ -50,7 +51,7 @@ public class JwtTokenService : ITokenService
     }
 
     public string GenerateAccessTokenForServiceToService()
-    {
+    { 
         var userClaim = _userInfoService.GetUserInfo(); 
         if (userClaim is null)
         {

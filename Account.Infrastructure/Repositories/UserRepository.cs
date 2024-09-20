@@ -297,21 +297,14 @@ public class UserRepository : IUserRepository
            .FirstOrDefaultAsync();
     }
 
-    public async Task<string?> GetDeviceIdByMechanicUserId(Guid id)
+    public async Task<IEnumerable<string>?> GetDeviceIdById(Guid id)
     {
-        return await _context.BaseUsers
-           .OfType<MechanicUser>()
+        var deviceIds = await _context.BaseUsers
            .Where(x => x.Id == id)
-           .Select(x => x.DeviceId)
+           .Select(x => x.DeviceIds)
            .FirstOrDefaultAsync();
-    }
 
-    public async Task<string?> GetDeviceIdByRegularUserId(Guid id)
-    {
-        return await _context.BaseUsers
-           .OfType<RegularUser>()
-           .Where(x => x.Id == id)
-           .Select(x => x.DeviceId)
-           .FirstOrDefaultAsync();
-    } 
+        return deviceIds ?? []; 
+    }
+     
 }

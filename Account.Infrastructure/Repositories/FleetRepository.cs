@@ -129,6 +129,11 @@ public class FleetRepository : IFleetRepository
         return await _context.Fleets.Where(x => x.StaffId == staffId).ToListAsync();    
     }
 
+    public async Task<IEnumerable<Fleet>> GetByUserIdAsync(Guid userId)
+    {
+        return await _context.Fleets.Where(x => x.UserId == userId).ToListAsync();
+    }
+
     public async Task<Fleet?> GetByUserIdAndIdAsync(Guid userId, Guid fleetId)
     {
         return await _context.Fleets

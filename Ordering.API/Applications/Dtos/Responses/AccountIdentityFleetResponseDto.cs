@@ -31,8 +31,7 @@ public class AccountIdentityFleetResponseDto
         int odometerReading,
         string ownerName,
         string ownerAddress,
-        string? imageUrl
-        )
+        string? imageUrl)
     {
         Id = id;
         RegistrationNumber = registrationNumber;

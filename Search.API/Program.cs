@@ -21,17 +21,12 @@ var app = builder.Build();
  
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-
-    app.UseSwaggerUI();
-
+    app.UseSwagger(); 
+    app.UseSwaggerUI(); 
     app.MapOpenApi();
 }
 
-app.UseHsts();
-
-app.MapCatalogSearchApi();
-
-app.UseHttpsRedirection(); 
-
+app.UseHsts(); 
+app.MapCatalogSearchApi(); 
+app.UseHttpsRedirection();  
 app.Run();

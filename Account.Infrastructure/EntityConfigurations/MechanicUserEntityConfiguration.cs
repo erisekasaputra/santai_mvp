@@ -11,14 +11,7 @@ public class MechanicUserEntityConfiguration : IEntityTypeConfiguration<Mechanic
     public void Configure(EntityTypeBuilder<MechanicUser> e)
     {
         e.Property(p => p.Rating)
-                .HasColumnType("decimal(5, 2)");
-
-        e.Property(p => p.DeviceId)
-            .HasMaxLength(255)
-            .IsRequired(false)
-            .HasConversion(
-                v => v == null ? null : v.Trim(),
-                v => v == null ? null : v.Trim()); 
+                .HasColumnType("decimal(5, 2)"); 
 
         e.OwnsOne(p => p.PersonalInfo, personalInfo =>
         {

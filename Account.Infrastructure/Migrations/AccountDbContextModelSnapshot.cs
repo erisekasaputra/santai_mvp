@@ -404,6 +404,10 @@ namespace Account.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("DeviceIds")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("EncryptedEmail")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
@@ -425,6 +429,13 @@ namespace Account.Infrastructure.Migrations
 
                     b.Property<bool>("IsPhoneNumberVerified")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasDefaultValue("");
 
                     b.Property<string>("NewEncryptedEmail")
                         .HasMaxLength(255)
@@ -487,9 +498,9 @@ namespace Account.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("DeviceId")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                    b.Property<string>("DeviceIds")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EncryptedEmail")
                         .HasMaxLength(255)
@@ -767,10 +778,6 @@ namespace Account.Infrastructure.Migrations
                 {
                     b.HasBaseType("Account.Domain.Aggregates.UserAggregate.BaseUser");
 
-                    b.Property<string>("DeviceId")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
                     b.Property<bool>("IsVerified")
                         .HasColumnType("bit");
 
@@ -783,16 +790,6 @@ namespace Account.Infrastructure.Migrations
             modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.RegularUser", b =>
                 {
                     b.HasBaseType("Account.Domain.Aggregates.UserAggregate.BaseUser");
-
-                    b.Property<string>("DeviceId")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
-                    b.ToTable("BaseUsers", t =>
-                        {
-                            t.Property("DeviceId")
-                                .HasColumnName("RegularUser_DeviceId");
-                        });
 
                     b.HasDiscriminator().HasValue("RegularUser");
                 });

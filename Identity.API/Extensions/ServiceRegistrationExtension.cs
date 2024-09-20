@@ -55,11 +55,12 @@ public static class ServiceRegistrationExtension
     {
         services.AddTransient<GlobalExceptionMiddleware>();
         services.AddSingleton<ActionMethodUtility>(); 
-        services.AddSingleton<ITokenService, JwtTokenService>();
-        services.AddSingleton<IJwtTokenValidator, JwtTokenValidator>(); 
-        services.AddSingleton<IGoogleTokenValidator, MockGoogleTokenValidator>(); 
+        services.AddScoped<ITokenService, JwtTokenService>();
+        services.AddScoped<IJwtTokenValidator, JwtTokenValidator>(); 
+        services.AddScoped<IGoogleTokenValidator, MockGoogleTokenValidator>(); 
         services.AddSingleton<IOtpService, OtpService>();
         services.AddSingleton<ICacheService, CacheService>(); 
+        services.AddScoped<IUserInfoService, UserInfoService>();
 
         return services;
     }  
@@ -94,16 +95,12 @@ public static class ServiceRegistrationExtension
 
     public static IServiceCollection AddMasstransitContext<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
     {
-        var messagingOption = services.BuildServiceProvider().GetService<IOptionsMonitor<MessagingConfiguration>>()?.CurrentValue
+        var options = services.BuildServiceProvider().GetService<IOptionsMonitor<MessagingConfiguration>>()?.CurrentValue
            ?? throw new Exception("Please provide value for messaging configuration");
 
         services.AddMassTransit(x =>
         {
-            if (messagingOption is null)
-            {
-                throw new Exception("Messaging configuration has not been set");
-            }
-
+            if (options is null) throw new Exception("Messaging configuration has not been set");  
             var consumers = new (string QueueName, Type ConsumerType)[]
             {
                 ("identity-service-business-user-created-integration-event-queue", typeof(BusinessUserCreatedIntegrationEventConsumer)),
@@ -116,65 +113,37 @@ public static class ServiceRegistrationExtension
                 ("identity-service-staff-user-deleted-integration-event-queue", typeof(StaffUserDeletedIntegrationEventConsumer)),
             };
 
-            foreach ((_, Type consumerType) in consumers)
-            {
-                x.AddConsumer(consumerType);
-            }
+            foreach ((_, Type consumerType) in consumers) x.AddConsumer(consumerType); 
 
             x.AddEntityFrameworkOutbox<TDbContext>(o =>
             {
-                o.DuplicateDetectionWindow = TimeSpan.FromSeconds(messagingOption.DuplicateDetectionWindows);
-                o.QueryDelay = TimeSpan.FromSeconds(messagingOption.QueryDelay);
-                o.QueryTimeout = TimeSpan.FromSeconds(messagingOption.QueryTimeout);
-                o.QueryMessageLimit = messagingOption.QueryMessageLimit;
+                o.DuplicateDetectionWindow = TimeSpan.FromSeconds(options.DuplicateDetectionWindows);
+                o.QueryDelay = TimeSpan.FromSeconds(options.QueryDelay);
+                o.QueryTimeout = TimeSpan.FromSeconds(options.QueryTimeout);
+                o.QueryMessageLimit = options.QueryMessageLimit;
                 o.UseSqlServer();
                 o.UseBusOutbox();
-            });
-
-           
+            }); 
 
             x.UsingRabbitMq((context, configure) =>
             {
-                configure.Host(messagingOption.Host, host =>
+                configure.Host(options.Host ?? string.Empty, host =>
                 {
-                    host.Username(messagingOption.Username ?? "user");
-                    host.Password(messagingOption.Password ?? "user");
+                    host.Username(options.Username ?? string.Empty);
+                    host.Password(options.Password ?? string.Empty);
                 });
 
-                configure.UseMessageRetry(retryCfg =>
-                {
-                    retryCfg.Interval(
-                        messagingOption.MessageRetryInterval, 
-                        messagingOption.MessageRetryTimespan);
-                });
-
-                configure.UseTimeout(timeoutCfg =>
-                {
-                    timeoutCfg.Timeout = TimeSpan.FromSeconds(messagingOption.MessageTimeout);
-                });
-
-                configure.ConfigureEndpoints(context); 
+                configure.UseTimeout(timeoutCfg => timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout));
+                configure.ConfigureEndpoints(context);
 
                 foreach (var (queueName, consumerType) in consumers)
-                {
-                    configure.ReceiveEndpoint(queueName, receiveBuilder =>
-                    {
-                        ConfigureEndPoint(receiveBuilder, queueName, consumerType);
-                    });
-                }
+                    configure.ReceiveEndpoint(queueName, receiveBuilder => ConfigureEndPoint(receiveBuilder, queueName, consumerType));
 
                 void ConfigureEndPoint(IReceiveEndpointConfigurator receiveBuilder, string queueName, Type consumerType)
                 {
-                    receiveBuilder.UseMessageRetry(retry =>
-                    {
-                        retry.Interval(messagingOption.MessageRetryInterval, TimeSpan.FromSeconds(messagingOption.MessageRetryTimespan));
-                    });
-
-                    receiveBuilder.UseDelayedRedelivery(redelivery =>
-                    {
-                        redelivery.Intervals(TimeSpan.FromSeconds(messagingOption.DelayedRedeliveryInterval));
-                    });
-
+                    receiveBuilder.ConfigureConsumer(context, consumerType);
+                    receiveBuilder.UseMessageRetry(retry => retry.Interval(options.MessageRetryInterval, TimeSpan.FromSeconds(options.MessageRetryTimespan)));
+                    receiveBuilder.UseDelayedRedelivery(redelivery => redelivery.Intervals(TimeSpan.FromSeconds(options.DelayedRedeliveryInterval)));
                     receiveBuilder.UseRateLimit(1000, TimeSpan.FromSeconds(2));
                 }
             });

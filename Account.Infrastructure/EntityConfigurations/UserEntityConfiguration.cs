@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Aggregates.LoyaltyAggregate;
 using Account.Domain.Aggregates.ReferralAggregate;
+using Newtonsoft.Json;
 
 namespace Account.Infrastructure.EntityConfigurations;
 
@@ -42,6 +43,18 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<BaseUser>
             .IsRequired();
 
         e.Property(p => p.AccountStatus).HasConversion<string>();
+
+        e.Property(p => p.Name)
+            .HasMaxLength(100)
+            .HasDefaultValue("")
+            .IsRequired();
+
+        e.Property(p => p.DeviceIds)
+               .HasConversion(
+                   v => JsonConvert.SerializeObject(v),
+                   v => JsonConvert.DeserializeObject<List<string>>(v) ?? new List<string>() 
+               )
+               .IsRequired();
 
         e.Property(p => p.TimeZoneId)
             .HasMaxLength(40).IsRequired();

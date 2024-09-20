@@ -15,18 +15,15 @@ public class OtpRequestedIntegrationEventConsumer(
     private readonly ICacheService _cacheService = cacheService;
     public async Task Consume(ConsumeContext<OtpRequestedIntegrationEvent> context)
     {
-        var orderData = context.Message; 
-
-
+        var otp = context.Message;    
     }
 
     private async Task SendOtpByEmail()
     { 
     }
+
     private async Task SendOtpBySms()
     { 
-    }
-    private async Task SendOtpByWhatsapp()
-    { 
+
     } 
 }

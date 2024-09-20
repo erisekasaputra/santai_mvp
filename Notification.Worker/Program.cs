@@ -1,19 +1,23 @@
-using Core.Extensions;
-using Notification.Worker;
+using Core.Extensions; 
 using Notification.Worker.Data;
 using Notification.Worker.Extensions;
+using Notification.Worker.Services;
 
-var builder = Host.CreateApplicationBuilder(args);
- 
+
+var builder = WebApplication.CreateBuilder(args); 
+
+builder.Services.AddJsonEnumConverterBehavior();
 builder.AddLoggingContext();
-builder.AddHostedCoreOptionConfiguration();
+builder.AddCoreOptionConfiguration();
 builder.Services.AddHttpContextAccessor();
 builder.Configuration.AddEnvironmentVariables();   
-builder.Services.AddApplicationService();
-builder.Services.AddHostedService<Worker>();
+builder.Services.AddApplicationService(); 
 builder.Services.AddRedisDatabase();
 builder.Services.AddSqlDatabaseContext<NotificationDbContext>();
 builder.Services.AddMassTransitContext<NotificationDbContext>(); 
 
-var host = builder.Build();
-host.Run();
+var app = builder.Build();
+
+app.MapHub<ActivityHub>("notification");
+
+app.Run();

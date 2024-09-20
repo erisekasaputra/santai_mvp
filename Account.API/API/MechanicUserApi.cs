@@ -3,12 +3,9 @@ using Account.API.Applications.Commands.MechanicUserCommand.ConfirmDrivingLicens
 using Account.API.Applications.Commands.MechanicUserCommand.ConfirmNationalIdentityByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.CreateMechanicUser;
 using Account.API.Applications.Commands.MechanicUserCommand.DeactivateMechanicStatusByUserId;
-using Account.API.Applications.Commands.MechanicUserCommand.DeleteMechanicUserByUserId;
-using Account.API.Applications.Commands.MechanicUserCommand.ForceSetDeviceIdByMechanicUserId;
+using Account.API.Applications.Commands.MechanicUserCommand.DeleteMechanicUserByUserId; 
 using Account.API.Applications.Commands.MechanicUserCommand.RejectDrivingLicenseByUserId;
-using Account.API.Applications.Commands.MechanicUserCommand.RejectNationalIdentityByUserId;
-using Account.API.Applications.Commands.MechanicUserCommand.ResetDeviceIdByMechanicUserId;
-using Account.API.Applications.Commands.MechanicUserCommand.SetDeviceIdByMechanicUserId;
+using Account.API.Applications.Commands.MechanicUserCommand.RejectNationalIdentityByUserId; 
 using Account.API.Applications.Commands.MechanicUserCommand.SetDrivingLicenseByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.SetNationalIdentityByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.SetRatingByUserId;
@@ -86,16 +83,7 @@ public static class MechanicUserApi
              .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
 
         app.MapPatch("/{mechanicUserId}/national-identity/{nationalIdentityId}/reject", RejectNationalIdentityByUserId)
-             .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
-
-        app.MapPatch("/device-id", SetDeviceIdByUserId)
-             .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());
-
-        app.MapPatch("/{mechanicUserId}/device-id/reset", ResetDeviceIdByUserId)
-             .RequireAuthorization(PolicyName.MechanicUserAndAdministratorUserPolicy.ToString());
-
-        app.MapPatch("/{mechanicUserId}/device-id/force-set", ForceSetDeviceIdByUserId)
-             .RequireAuthorization(PolicyName.MechanicUserAndAdministratorUserPolicy.ToString());
+             .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString()); 
 
         app.MapPatch("/order/{orderId}/accept", ConfirmOrderByMechanicUserId)
              .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());
@@ -509,116 +497,7 @@ public static class MechanicUserApi
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }
-
-    private static async Task<IResult> ForceSetDeviceIdByUserId(
-        Guid mechanicUserId,
-        [FromBody] DeviceIdRequestDto request,
-        [FromServices] ApplicationService service,
-        [FromServices] IValidator<DeviceIdRequestDto> validator,
-        [FromServices] IUserInfoService userInfoService)
-    {
-        try
-        {
-            var userClaim = userInfoService.GetUserInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Unauthorized();
-            }
-
-            if (userClaim.CurrentUserType != UserType.Administrator && mechanicUserId != userClaim.Sub)
-            {
-                return TypedResults.Forbid();
-            }
-
-            var validation = await validator.ValidateAsync(request);
-
-            if (!validation.IsValid)
-            {
-                return TypedResults.BadRequest(validation.Errors);
-            }
-
-            var result = await service.Mediator.Send(new ForceSetDeviceIdByMechanicUserIdCommand(
-                mechanicUserId,
-                request.DeviceId));
-
-            return result.ToIResult();
-        }
-        catch (Exception ex)
-        {
-            service.Logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
-    }
-
-    private static async Task<IResult> ResetDeviceIdByUserId(
-        Guid mechanicUserId,
-        [FromServices] ApplicationService service,
-        [FromServices] IUserInfoService userInfoService)
-    {
-        try
-        {
-            var userClaim = userInfoService.GetUserInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Unauthorized();
-            }
-
-            if (userClaim.CurrentUserType != UserType.Administrator && mechanicUserId != userClaim.Sub)
-            {
-                return TypedResults.Forbid();
-            }
-             
-
-            var result = await service.Mediator.Send(new ResetDeviceIdByMechanicUserIdCommand(mechanicUserId));
-
-            return result.ToIResult();
-        }
-        catch (Exception ex)
-        {
-            service.Logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
-    }
-
-    private static async Task<IResult> SetDeviceIdByUserId( 
-        [FromBody] DeviceIdRequestDto request,
-        [FromServices] ApplicationService service,
-        [FromServices] IValidator<DeviceIdRequestDto> validator,
-        [FromServices] IUserInfoService userInfoService)
-    {
-        try
-        {
-            var userClaim = userInfoService.GetUserInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Unauthorized();
-            }
-
-            var validation = await validator.ValidateAsync(request);
-
-            if (!validation.IsValid)
-            {
-                return TypedResults.BadRequest(validation.Errors);
-            }
-
-            var result = await service.Mediator.Send(new SetDeviceIdByMechanicUserIdCommand(
-                userClaim.Sub,
-                request.DeviceId));
-
-            return result.ToIResult();
-        }
-        catch (Exception ex)
-        {
-            var userClaim = userInfoService.GetUserInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Unauthorized();
-            }
-
-            service.Logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
-    }
+     
 
     private static async Task<IResult> RejectNationalIdentityByUserId(
         Guid mechanicUserId, 
@@ -798,50 +677,7 @@ public static class MechanicUserApi
             service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
-    }
-
-    private static async Task TestCreateMechanic(
-        [FromServices] ApplicationService service)
-    {
-
-        string[] ids = {
-                "2cfb79f6-8992-4fc8-bd7d-3e7145adf322",
-                "367d4274-f3b9-456f-9019-ed09610d68eb",
-                "6a60aca8-eef0-4b4a-8a73-a98b1272d671",
-                "7c051a23-d2ad-44a5-8091-44382d8f5ab1",
-                "7035b81a-ee66-4209-b505-ef6efbdd2881",
-                "e85170c1-883c-42e7-8ba0-93b0e412271b",
-                "a654d2af-4002-42ae-b8ef-b020254e636e",
-                "f65eb0dc-5d4b-48d3-946c-22056989dcc5",
-                "43f8590f-9a96-44fa-b151-65069ba6ff6d",
-                "1718a5e1-0b90-43ff-b4a2-13f6eaaa5096" 
-        };
-
-        int index = 1;
-        foreach (string id in ids)
-        {
-            var result = await service.Mediator.Send(new CreateMechanicUserCommand(
-                Guid.Parse(id),
-                $"erisekasaputra28{index}@gmail.com",
-                $"0857913832{index}",
-                "asia/jakarta",
-                "",
-                new PersonalInfoRequestDto("eris", "eka", "saputra", DateTime.UtcNow, Gender.Male, ""),
-                new AddressRequestDto("Karangsono", null, null, "Blitar", "Jawa Timur", "66171", "IDN"),
-                new List<CertificationRequestDto>()
-                {
-                    new ($"CERTSSSS{index}", "CERTSSSS", DateTime.UtcNow.AddMonths(1), []),
-                },
-                new DrivingLicenseRequestDto($"LICE1111NSE1{index}", "https://image.png", "https://image.png"),
-                new NationalIdentityRequestDto($"IDENT1111ITY{index}", "https://image.png", "https://image.png"),
-                $"DEVICEID123{index}"));
-
-            await service.Mediator.Send(new ActivateMechanicStatusByUserIdCommand(Guid.Parse(id)));
-
-            index++;
-        }
-    }
-
+    }   
 
     private static async Task<IResult> CreateMechanicUser(
         [FromBody] MechanicUserRequestDto request,

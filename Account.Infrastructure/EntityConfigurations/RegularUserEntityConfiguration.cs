@@ -7,11 +7,7 @@ namespace Account.Infrastructure.EntityConfigurations;
 public class RegularUserEntityConfiguration : IEntityTypeConfiguration<RegularUser>
 {
     public void Configure(EntityTypeBuilder<RegularUser> e)
-    {
-        e.Property(p => p.DeviceId)
-            .HasMaxLength(255)
-            .IsRequired(false); 
-
+    {  
         e.OwnsOne(p => p.PersonalInfo, personalInfo =>
         {
             personalInfo.Property(i => i.FirstName)

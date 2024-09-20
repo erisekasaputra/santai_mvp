@@ -22,7 +22,7 @@ public class ResetDeviceIdByStaffIdCommandHandler(IUnitOfWork unitOfWork, Applic
                     .WithError(new("Staff.Id", "User not found"));
             }
 
-            staff.ResetDeviceId();
+            staff.RemoveDeviceId(request.DeviceId);
 
             _unitOfWork.Staffs.Update(staff);
             

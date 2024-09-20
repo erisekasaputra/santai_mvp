@@ -25,7 +25,7 @@ public class GetDeviceIdByMechanicUserIdQueryHandler(
     {
         try
         {
-            var deviceId = await _unitOfWork.BaseUsers.GetDeviceIdByMechanicUserId(request.UserId);
+            var deviceId = await _unitOfWork.BaseUsers.GetDeviceIdById(request.UserId);
 
             if (deviceId is null)
             {

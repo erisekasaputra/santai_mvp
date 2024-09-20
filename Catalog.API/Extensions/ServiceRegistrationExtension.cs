@@ -30,7 +30,7 @@ public static class ServiceRegistrationExtension
         var messagingConfiguration = services.BuildServiceProvider().GetService<IOptionsMonitor<MessagingConfiguration>>()
             ?? throw new Exception("Please provide value for message bus options");
 
-        var messaging = messagingConfiguration.CurrentValue;
+        var options = messagingConfiguration.CurrentValue;
 
         services.AddMassTransit(x =>
         {
@@ -42,63 +42,33 @@ public static class ServiceRegistrationExtension
                 o.QueryMessageLimit = 100;
                 o.UseSqlServer();
                 o.UseBusOutbox();
-            });
+            }); 
 
             var consumers = new (string QueueName, Type ConsumerType)[]
             {
                 ("catalog-service-order-failed-recovery-stock-integration-event-queue", typeof(OrderFailedRecoveryStockIntegrationEventConsumer))
-            };
+            };  
 
-            foreach ((_, Type consumerType) in consumers) 
-            {
-                x.AddConsumer(consumerType);
-            }
-
+            x.AddConsumersFromNamespaceContaining<ICatalogAPIMarkerInterface>();
             x.UsingRabbitMq((context, configure) =>
             {
-                configure.Host(messaging.Host
-                    ?? throw new Exception(nameof(messaging.Host)), host =>
+                configure.Host(options.Host ?? string.Empty, host =>
                 {
-                    host.Username(messaging.Username
-                    ?? throw new Exception(nameof(messaging.Host)));
-                    host.Password(messaging.Password
-                    ?? throw new Exception(nameof(messaging.Host)));
-                }); 
-
-                configure.UseMessageRetry(retryCfg =>
-                {
-                    retryCfg.Interval(
-                        messaging.MessageRetryInterval,
-                        messaging.MessageRetryTimespan);
-                }); 
-
-                configure.UseTimeout(timeoutCfg =>
-                {
-                    timeoutCfg.Timeout = TimeSpan.FromSeconds(5);
+                    host.Username(options.Username ?? string.Empty);
+                    host.Password(options.Password ?? string.Empty);
                 });
 
-                configure.ConfigureEndpoints(context); 
-               
+                configure.UseTimeout(timeoutCfg => timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout));
+                //configure.ConfigureEndpoints(context);
+
                 foreach (var (queueName, consumerType) in consumers)
-                {
-                    configure.ReceiveEndpoint(queueName, receiveBuilder =>
-                    {
-                        ConfigureEndPoint(receiveBuilder, queueName, consumerType);
-                    });
-                }
+                    configure.ReceiveEndpoint(queueName, receiveBuilder => ConfigureEndPoint(receiveBuilder, queueName, consumerType));
 
                 void ConfigureEndPoint(IReceiveEndpointConfigurator receiveBuilder, string queueName, Type consumerType)
                 {
-                    receiveBuilder.UseMessageRetry(retry =>
-                    {
-                        retry.Interval(messaging.MessageRetryInterval, TimeSpan.FromSeconds(messaging.MessageRetryTimespan));
-                    });
-
-                    receiveBuilder.UseDelayedRedelivery(redelivery =>
-                    {
-                        redelivery.Intervals(TimeSpan.FromSeconds(messaging.DelayedRedeliveryInterval));
-                    });
-
+                    receiveBuilder.ConfigureConsumer(context, consumerType);
+                    receiveBuilder.UseMessageRetry(retry => retry.Interval(options.MessageRetryInterval, TimeSpan.FromSeconds(options.MessageRetryTimespan)));
+                    receiveBuilder.UseDelayedRedelivery(redelivery => redelivery.Intervals(TimeSpan.FromSeconds(options.DelayedRedeliveryInterval)));
                     receiveBuilder.UseRateLimit(1000, TimeSpan.FromSeconds(2));
                 }
             });

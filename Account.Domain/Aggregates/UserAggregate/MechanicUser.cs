@@ -4,7 +4,8 @@ using Account.Domain.Enumerations;
 using Account.Domain.Aggregates.NationalIdentityAggregate;
 using Account.Domain.Aggregates.DrivingLicenseAggregate;
 using Account.Domain.Events;
-using Core.Exceptions; 
+using Core.Exceptions;
+using Core.Extensions;
 
 namespace Account.Domain.Aggregates.UserAggregate;
 
@@ -12,11 +13,10 @@ public class MechanicUser : BaseUser
 {  
     public PersonalInfo PersonalInfo { get; private set; } 
     public ICollection<Certification>? Certifications { get; private set; } 
-    public ICollection<DrivingLicense>? DrivingLicenses { get; private set; } // Navigation properties 
-    public ICollection<NationalIdentity>? NationalIdentities { get; private set; } // Navigation properties 
+    public ICollection<DrivingLicense>? DrivingLicenses { get; private set; } 
+    public ICollection<NationalIdentity>? NationalIdentities { get; private set; } 
     public decimal Rating { get; private set; }  
     public bool IsVerified { get; private set; } 
-    public string? DeviceId { get; private set; } 
 
     protected MechanicUser() : base()
     { 
@@ -32,13 +32,20 @@ public class MechanicUser : BaseUser
         PersonalInfo personalInfo,
         Address address, 
         string timeZoneId,
-        string deviceId) : base(email, encryptedEmail, phoneNumber, encryptedPhoneNumber, address, timeZoneId)
+        string deviceId) : base(
+            $"{personalInfo.FirstName} {personalInfo.MiddleName} {personalInfo.LastName}".CleanAndLowering(),
+            email,
+            encryptedEmail,
+            phoneNumber,
+            encryptedPhoneNumber,
+            address,
+            timeZoneId,
+            deviceId)
     {  
         Id = identityId;
         PersonalInfo = personalInfo;
         Rating = 5;
-        IsVerified = false;
-        DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId)); 
+        IsVerified = false; 
         RaiseMechanicUserCreatedDomainEvent(this);
     } 
 
@@ -178,41 +185,15 @@ public class MechanicUser : BaseUser
         }
     }
 
-    public void ResetDeviceId()
-    {
-        if (DeviceId is null)
-        {
-            return;
-        }
-
-        DeviceId = null;
-
-        RaiseDeviceIdResetDomainEvent(Id);
+    public override void AddDeviceId(string deviceId)
+    {  
+        base.AddDeviceId(deviceId);
     }  
 
-    public void SetDeviceId(string deviceId)
+    public override void RemoveDeviceId(string deviceId)
     {
-        if (deviceId is not null)
-        {
-            throw new DomainException("This account is already registered with another device");
-        }
-
-        DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
-
-        RaiseDeviceIdSetDomainEvent(Id, deviceId);
-    }  
-
-    public void ForceSetDeviceId(string deviceId)
-    {
-        if (DeviceId == deviceId)
-        {
-            return;
-        }
-
-        DeviceId = deviceId ?? throw new ArgumentNullException(nameof(deviceId));
-
-        RaiseDeviceIdForcedSetDomainEvent(Id, deviceId);
-    } 
+        base.RemoveDeviceId(deviceId); 
+    }
 
     public void SetRating(decimal rating)
     {
@@ -300,20 +281,5 @@ public class MechanicUser : BaseUser
 
     private void RaiseNationalIDSetDomainEvent()
     { 
-    }
-
-    private void RaiseDeviceIdResetDomainEvent(Guid id)
-    {
-        AddDomainEvent(new DeviceIdResetDomainEvent(id));
-    }
-
-    private void RaiseDeviceIdSetDomainEvent(Guid id, string deviceId)
-    {
-        AddDomainEvent(new DeviceIdSetDomainEvent(id, deviceId));
-    }
-
-    private void RaiseDeviceIdForcedSetDomainEvent(Guid id, string deviceId)
-    {
-        AddDomainEvent(new DeviceIdForcedSetDomainEvent(id, deviceId));
-    }
+    } 
 }

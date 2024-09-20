@@ -16,4 +16,5 @@ public interface IFleetRepository
     Task DeleteByUserId(Guid id);
     Task<IEnumerable<Fleet>> GetByStaffIdAsync(Guid staffId);
     void UpdateRange(IEnumerable<Fleet> fleets);
+    Task<IEnumerable<Fleet>> GetByUserIdAsync(Guid userId);
 }

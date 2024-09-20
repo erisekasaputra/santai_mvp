@@ -13,7 +13,8 @@ using MediatR;
 using Ordering.API.Applications.Dtos.Requests;
 using Ordering.API.Applications.Dtos.Responses; 
 using Ordering.API.Applications.Services.Interfaces;
-using Ordering.API.Extensions; 
+using Ordering.API.Extensions;
+using Ordering.Domain.Aggregates.CouponAggregate;
 using Ordering.Domain.Aggregates.OrderAggregate;
 using Ordering.Domain.Aggregates.ScheduledOrderAggregate;
 using Ordering.Domain.Enumerations;
@@ -46,6 +47,19 @@ public class CreateOrderCommandHandler(
         await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken); 
         try
         {
+            Coupon? coupon = null;
+            if (!string.IsNullOrWhiteSpace(command.CouponCode))
+            { 
+                coupon = await _unitOfWork.Coupons.GetByCodeAsync(command.CouponCode);
+                if (coupon is null)
+                {
+                    await RollbackAsync(cancellationToken);
+                    return Result.Failure("Coupon code does not exist", ResponseStatus.NotFound)
+                        .WithError(new("Coupon.Code", "Coupon not found"));
+                }
+            }
+
+
             (var buyer, var isAccountResponseSuccess) = await _accountService.GetUserDetail<AccountIdentityResponseDto>(command.BuyerId, command.Fleets.Select(x => x.Id));
 
             if (!isAccountResponseSuccess)
@@ -95,6 +109,7 @@ public class CreateOrderCommandHandler(
                 buyer?.Data?.Fleets,
                 buyer?.Data?.TimeZoneId,
                 initialMaster,
+                coupon,
                 cancellationToken); 
         }
         catch (InvalidDateOperationException ex)
@@ -153,11 +168,12 @@ public class CreateOrderCommandHandler(
         IEnumerable<AccountIdentityFleetResponseDto>? fleets,
         string? timeZoneId,
         MasterDataInitializationMasterResponseDto master,
+        Coupon? coupon,
         CancellationToken cancellationToken)
     {
         var lineItems = command.LineItems.Select(x => (x.Id, x.Quantity)); 
          
-        if (fleets is null || !fleets.Any() || string.IsNullOrWhiteSpace(buyerName) || string.IsNullOrWhiteSpace(timeZoneId)) 
+        if (fleets is null || !fleets.Any() || string.IsNullOrWhiteSpace(timeZoneId)) 
         { 
             await RollbackAsync(cancellationToken);
             return Result.Failure("User data not valid", ResponseStatus.NotFound);
@@ -185,7 +201,7 @@ public class CreateOrderCommandHandler(
             command.Latitude,
             command.Longitude,
             command.BuyerId,
-            buyerName,
+            buyerName ?? string.Empty,
             buyerEmail,
             buyerPhoneNumber,
             command.BuyerType,
@@ -234,16 +250,8 @@ public class CreateOrderCommandHandler(
                 masterPreServiceInspection);
         } 
 
-        if (!string.IsNullOrWhiteSpace(command.CouponCode))
-        {
-            var coupon = await _unitOfWork.Coupons.GetByCodeAsync(command.CouponCode); 
-            if (coupon is null)
-            {
-                await RollbackAndRecoveryStockAsync(command.LineItems, cancellationToken);
-                return Result.Failure("Coupon code does not exist", ResponseStatus.NotFound)
-                    .WithError(new("Coupon.Code", "Coupon not found"));
-            }
-
+        if (!string.IsNullOrWhiteSpace(command.CouponCode) && coupon is not null)
+        { 
             if (coupon.CouponValueType == PercentageOrValueType.Percentage)
             {
                 order.ApplyDiscount(

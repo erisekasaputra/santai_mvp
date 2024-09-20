@@ -21,6 +21,8 @@ public class MechanicAutoSelectedIntegrationEventConsumer(
 
         var connectionId = await _cacheService.GetAsync<string>(CacheKey.GetUserCacheKey(orderData.MechanicId.ToString()));
 
+        Console.WriteLine("Mechanic seletected with id " + orderData.MechanicId);
+
         if (connectionId is null || string.IsNullOrEmpty(connectionId))
         {
             // send notification via sns

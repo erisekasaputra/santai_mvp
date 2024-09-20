@@ -1,6 +1,7 @@
 ﻿using Account.Domain.Aggregates.UserAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Newtonsoft.Json;
 
 namespace Account.Infrastructure.EntityConfigurations;
 
@@ -73,11 +74,13 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
                 v => v.Trim(),
                 v => v.Trim());
 
-        e.Property(p => p.DeviceId)
-            .HasMaxLength(255)
+
+        e.Property(p => p.DeviceIds)
             .HasConversion(
-                v => v == null ? null : v.Trim(),
-                v => v == null ? null : v.Trim());
+                v => JsonConvert.SerializeObject(v),
+                v => JsonConvert.DeserializeObject<List<string>>(v) ?? new List<string>()
+            )
+            .IsRequired();
 
         e.Property(p => p.TimeZoneId)
             .HasMaxLength(40)

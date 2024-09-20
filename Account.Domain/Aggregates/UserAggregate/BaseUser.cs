@@ -12,87 +12,80 @@ namespace Account.Domain.Aggregates.UserAggregate;
 
 public abstract class BaseUser : Entity, IAggregateRoot
 {     
-    public string? HashedEmail { get; private set; }
-
-    public string? EncryptedEmail { get; private set; }
-
-    public bool IsEmailVerified { get; private set; }
-
-    public string? NewHashedEmail { get; private set; }
-    
-    public string? NewEncryptedEmail { get; private set; }
-
-    public string? HashedPhoneNumber { get; private set; }
-
-    public string? EncryptedPhoneNumber { get; private set; }
-    
-    public bool IsPhoneNumberVerified { get; private set; }
-
-    public string? NewHashedPhoneNumber { get; private set; }
-
-    public string? NewEncryptedPhoneNumber {  get; private set; }
-
-    public DateTime CreatedAtUtc { get; private init; }
-
-    public DateTime UpdatedAtUtc { get; protected set; }
-
-    public AccountStatus AccountStatus { get; private set; }
-
-    public Address Address { get; protected set; }
-     
-    public LoyaltyProgram LoyaltyProgram { get; private set; }
-
-    public ReferralProgram? ReferralProgram { get; private set; }
-     
-    public ICollection<ReferredProgram>? ReferredPrograms { get; private set; } 
-
-    public ICollection<Fleet>? Fleets { get; private set; }
-
-    public string TimeZoneId {  get; set; }   
-
+    public string Name { get; set; }
+    public string? HashedEmail { get; private set; } 
+    public string? EncryptedEmail { get; private set; } 
+    public bool IsEmailVerified { get; private set; } 
+    public string? NewHashedEmail { get; private set; } 
+    public string? NewEncryptedEmail { get; private set; } 
+    public string? HashedPhoneNumber { get; private set; } 
+    public string? EncryptedPhoneNumber { get; private set; } 
+    public bool IsPhoneNumberVerified { get; private set; } 
+    public string? NewHashedPhoneNumber { get; private set; } 
+    public string? NewEncryptedPhoneNumber {  get; private set; } 
+    public DateTime CreatedAtUtc { get; private init; } 
+    public DateTime UpdatedAtUtc { get; protected set; } 
+    public AccountStatus AccountStatus { get; private set; } 
+    public Address Address { get; protected set; } 
+    public LoyaltyProgram LoyaltyProgram { get; private set; } 
+    public ReferralProgram? ReferralProgram { get; private set; } 
+    public ICollection<ReferredProgram>? ReferredPrograms { get; private set; }  
+    public ICollection<Fleet>? Fleets { get; private set; } 
+    public string TimeZoneId {  get; set; }
+    public ICollection<string> DeviceIds { get; private set; } = [];
     protected BaseUser()
     {
         Address = null!;
         LoyaltyProgram = null!; 
         TimeZoneId = null!;
-    } 
+        Name = null!; 
+    }
 
-    public BaseUser(  
+    public BaseUser(
+        string name,
         string? hashedEmail,
         string? encryptedEmail,
         string hashedPhoneNumber,
         string encryptedPhoneNumber,
         Address address,
         string timeZoneId,
+        string deviceId,
         bool isEmailVerified = false,
         bool isPhoneNumberVerified = false)
-    {  
+    {
+        Name = name;
         HashedEmail = hashedEmail;
         EncryptedEmail = encryptedEmail;
         HashedPhoneNumber = hashedPhoneNumber ?? throw new ArgumentNullException(nameof(hashedPhoneNumber));
         EncryptedPhoneNumber = encryptedPhoneNumber ?? throw new ArgumentNullException(nameof(encryptedPhoneNumber));
         Address = address ?? throw new ArgumentNullException(nameof(address));
-        TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId)); 
+        TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId));
         CreatedAtUtc = DateTime.UtcNow;
         UpdatedAtUtc = DateTime.UtcNow;
         AccountStatus = AccountStatus.Active;
 
         if (!isPhoneNumberVerified)
-        { 
+        {
             NewHashedPhoneNumber = hashedPhoneNumber;
             NewEncryptedPhoneNumber = encryptedPhoneNumber;
-        } 
+        }
 
         if (hashedEmail is not null)
         {
             NewHashedEmail = hashedEmail;
             NewEncryptedEmail = encryptedEmail;
-        } 
-        
+        }
+
         IsEmailVerified = isEmailVerified;
-        IsPhoneNumberVerified = isPhoneNumberVerified; 
-         
-        LoyaltyProgram = new LoyaltyProgram(Id, 0); 
+        IsPhoneNumberVerified = isPhoneNumberVerified;
+
+        LoyaltyProgram = new LoyaltyProgram(Id, 0);
+
+        DeviceIds ??= [];
+        if (!string.IsNullOrWhiteSpace(deviceId))
+        {
+            DeviceIds.Add(deviceId);
+        }
     }
 
     public void ResetPhoneNumber()
@@ -114,6 +107,23 @@ public abstract class BaseUser : Entity, IAggregateRoot
         HashedEmail = null;
         EncryptedEmail = null;
         IsEmailVerified = false;
+    }
+
+    public virtual void AddDeviceId(string deviceId)
+    {
+        if (DeviceIds.Contains(deviceId) || string.IsNullOrWhiteSpace(deviceId))
+        {
+            return;
+        }
+
+        DeviceIds ??= [];
+        DeviceIds.Add(deviceId);
+    }
+
+    public virtual void RemoveDeviceId(string deviceId)
+    {
+        DeviceIds ??= [];
+        DeviceIds.Remove(deviceId);  
     }
 
     public virtual void AddReferralProgram(int referralRewardPoint, int referralValidDate)

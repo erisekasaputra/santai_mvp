@@ -84,7 +84,6 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
                 request.Name,
                 address,
                 request.TimeZoneId,
-                null,
                 request.Password,
                 raiseCreatedEvent: true);
 

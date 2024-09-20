@@ -1,5 +1,59 @@
 [
   {
+    "ContainingType": "Account.API.API.UserApi",
+    "Method": "ResetDeviceIdByUserId",
+    "RelativePath": "api/v1/users/{userId}/device-id/reset",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Account.API.API.UserApi",
+    "Method": "SetDeviceIdByUserId",
+    "RelativePath": "api/v1/users/{userId}/device-id/set",
+    "HttpMethod": "PATCH",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "userId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "Account.API.API.FleetApi",
     "Method": "CreateFleetByUserId",
     "RelativePath": "api/v1/users/{userId}/fleet/",
@@ -610,8 +664,8 @@
   },
   {
     "ContainingType": "Account.API.API.BusinessUserApi",
-    "Method": "ForceSetDeviceIdByStaffId",
-    "RelativePath": "api/v1/users/business/staffs/{staffId}/device-id/force-set",
+    "Method": "ResetDeviceIdByStaffId",
+    "RelativePath": "api/v1/users/business/staffs/{staffId}/device-id/reset",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
@@ -637,8 +691,8 @@
   },
   {
     "ContainingType": "Account.API.API.BusinessUserApi",
-    "Method": "ResetDeviceIdByStaffId",
-    "RelativePath": "api/v1/users/business/staffs/{staffId}/device-id/reset",
+    "Method": "SetDeviceIdByStaffId",
+    "RelativePath": "api/v1/users/business/staffs/{staffId}/device-id/set",
     "HttpMethod": "PATCH",
     "IsController": false,
     "Order": 0,
@@ -646,6 +700,11 @@
       {
         "Name": "staffId",
         "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "request",
+        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
         "IsRequired": true
       }
     ],
@@ -665,28 +724,6 @@
     "IsController": false,
     "Order": 0,
     "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Account.API.API.BusinessUserApi",
-    "Method": "SetDeviceIdByStaffId",
-    "RelativePath": "api/v1/users/business/staffs/device-id",
-    "HttpMethod": "PATCH",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
-        "IsRequired": true
-      }
-    ],
     "ReturnTypes": [
       {
         "Type": "System.Void",
@@ -1011,55 +1048,6 @@
   },
   {
     "ContainingType": "Account.API.API.MechanicUserApi",
-    "Method": "ForceSetDeviceIdByUserId",
-    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/device-id/force-set",
-    "HttpMethod": "PATCH",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "mechanicUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      },
-      {
-        "Name": "request",
-        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Account.API.API.MechanicUserApi",
-    "Method": "ResetDeviceIdByUserId",
-    "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/device-id/reset",
-    "HttpMethod": "PATCH",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "mechanicUserId",
-        "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Account.API.API.MechanicUserApi",
     "Method": "GetDrivingLicenseByMechanicUserId",
     "RelativePath": "api/v1/users/mechanic/{mechanicUserId}/driving-license",
     "HttpMethod": "GET",
@@ -1248,28 +1236,6 @@
       {
         "Name": "mechanicUserId",
         "Type": "System.Guid",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Account.API.API.MechanicUserApi",
-    "Method": "SetDeviceIdByUserId",
-    "RelativePath": "api/v1/users/mechanic/device-id",
-    "HttpMethod": "PATCH",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
         "IsRequired": true
       }
     ],
@@ -1524,66 +1490,6 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Account.API.API.RegularUserApi",
-    "Method": "SetDeviceIdByUserId",
-    "RelativePath": "api/v1/users/regular/device-id",
-    "HttpMethod": "PATCH",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Account.API.API.RegularUserApi",
-    "Method": "ForceSetDeviceIdByUserId",
-    "RelativePath": "api/v1/users/regular/device-id/force-set",
-    "HttpMethod": "PATCH",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "Account.API.Applications.Dtos.RequestDtos.DeviceIdRequestDto",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Void",
-        "MediaTypes": [],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "Account.API.API.RegularUserApi",
-    "Method": "ResetDeviceIdByUserId",
-    "RelativePath": "api/v1/users/regular/device-id/reset",
-    "HttpMethod": "PATCH",
-    "IsController": false,
-    "Order": 0,
-    "Parameters": [],
     "ReturnTypes": [
       {
         "Type": "System.Void",
