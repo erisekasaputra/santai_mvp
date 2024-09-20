@@ -1,18 +1,16 @@
 ﻿using Core.Services.Interfaces; 
 using Microsoft.AspNetCore.SignalR;
+using Notification.Worker.Enumerations;
 using Notification.Worker.SeedWorks;
 using Notification.Worker.Services.Interfaces;
 namespace Notification.Worker.Services;
 
 public class ActivityHub : Hub<IActivityClient>
-{ 
-    private readonly IUserInfoService _userInfoService;
+{  
     private readonly ICacheService _cacheService; 
-    public ActivityHub(
-        IUserInfoService userInfoService,
+    public ActivityHub( 
         ICacheService cacheService )
-    { 
-        _userInfoService = userInfoService;
+    {  
         _cacheService = cacheService;  
     }
 
@@ -25,10 +23,14 @@ public class ActivityHub : Hub<IActivityClient>
             return; 
         }
 
+        Console.WriteLine("Hello");
         var connectionId = Context.ConnectionId;
-        await _cacheService.SetAsync(CacheKey.GetUserCacheKey(userId), connectionId, TimeSpan.Zero); 
+
+        await _cacheService.SetAsync(CacheKey.GetUserCacheKey(userId), connectionId, TimeSpan.FromHours(1));
         await base.OnConnectedAsync();
+        await Clients.User(userId).ReceiveOrderStatusUpdate("test", "test", "test", "test", "test", OrderStatus.PaymentPending.ToString());
     }
+
 
     public override async Task OnDisconnectedAsync(Exception? exception)
     {
@@ -36,7 +38,8 @@ public class ActivityHub : Hub<IActivityClient>
         if (userId != null)
         { 
             await _cacheService.DeleteAsync(CacheKey.GetUserCacheKey(userId));
-        } 
+        }
+        Console.WriteLine("Good bye");
         await base.OnDisconnectedAsync(exception);
     }
 }

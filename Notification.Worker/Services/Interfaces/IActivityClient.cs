@@ -10,5 +10,5 @@ public interface IActivityClient
         string buyerName,
         string mechanicId,
         string mechanicName,
-        OrderStatus update);
+        string orderStatus);
 }

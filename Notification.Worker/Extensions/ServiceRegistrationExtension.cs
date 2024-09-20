@@ -150,7 +150,7 @@ public static class ServiceRegistrationExtension
 
         services.AddSignalR().AddStackExchangeRedis(redisOptions.CurrentValue.Host, options =>
         {
-            options.Configuration.ChannelPrefix = RedisChannel.Literal(typeof(Program).Assembly.GetName().Name ?? throw new ArgumentNullException());
+            options.Configuration.ChannelPrefix = RedisChannel.Literal("NotificationWorker");
         });
 
         services.AddSingleton<ICacheService, CacheService>();

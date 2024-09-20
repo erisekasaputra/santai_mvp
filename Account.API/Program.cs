@@ -52,10 +52,9 @@ app.MapBusinessUserApi();
 app.MapUserApi(); 
 app.MapRegularUserApi(); 
 app.MapMechanicUserApi(); 
-app.MapFleetApi();
+app.MapFleetApi(); 
 
-
-app.MapHub<LocationHub>("/mechanic/location");
+app.MapHub<LocationHub>("/location");
 app.MapControllers();
 
 app.Run();
