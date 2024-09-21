@@ -3,8 +3,7 @@ using FileHub.API.Services.Interfaces;
 using FileHub.API.Services;
 using Microsoft.AspNetCore.Http.Features;
 using Core.Services.Interfaces;
-using Core.Configurations;
-using Microsoft.Extensions.Options;
+using Core.Configurations; 
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting; 
 using Core.Policies;
@@ -13,34 +12,34 @@ namespace FileHub.API.Extensions;
 
 public static class ServiceRegistrationExtension
 {
-    public static IServiceCollection AddApplicationService(this IServiceCollection services)
+    public static WebApplicationBuilder AddApplicationService(this WebApplicationBuilder builder)
     {
-        var storageConfigs = (services.BuildServiceProvider().GetService<IOptionsMonitor<StorageConfiguration>>()?.CurrentValue
-            ?? throw new Exception("Please provide value for message bus options")) ?? throw new Exception("Storage configuration has not been set");
+        var options = builder.Configuration.GetSection(StorageConfiguration.SectionName).Get<StorageConfiguration>()
+            ?? throw new Exception();
 
-        services.AddSingleton<ICacheService, CacheService>();
-        if (storageConfigs.UseMinio)
+        builder.Services.AddSingleton<ICacheService, CacheService>();
+        if (options.UseMinio)
         {
-            services.AddSingleton<IStorageService, MinioStorageService>();
+            builder.Services.AddSingleton<IStorageService, MinioStorageService>();
         }
         else
         {
-            services.AddSingleton<IStorageService, AwsStorageService>();
+            builder.Services.AddSingleton<IStorageService, AwsStorageService>();
         }
 
-        services.Configure<FormOptions>(options =>
+        builder.Services.Configure<FormOptions>(options =>
         {
-            options.MultipartBodyLengthLimit = storageConfigs.MultipartBodyLengthLimit; // 10 MB 
+            options.MultipartBodyLengthLimit = options.MultipartBodyLengthLimit; // 10 MB 
         });
 
-        return services;
+        return builder;
     }
 
-    public static IServiceCollection AddCustomRateLimiter(this IServiceCollection services) 
+    public static WebApplicationBuilder AddCustomRateLimiter(this WebApplicationBuilder builder) 
     {
-        services.AddRateLimiter(options =>
+        builder.Services.AddRateLimiter(configure =>
         {
-            options.AddTokenBucketLimiter(RateLimiterPolicy.FileUploadRateLimiterPolicy, configureOptions =>
+            configure.AddTokenBucketLimiter(RateLimiterPolicy.FileUploadRateLimiterPolicy, configureOptions =>
             {
                 configureOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
                 configureOptions.TokenLimit = 500;
@@ -49,7 +48,7 @@ public static class ServiceRegistrationExtension
                 configureOptions.ReplenishmentPeriod = TimeSpan.FromSeconds(1);
             });
 
-            options.AddTokenBucketLimiter(RateLimiterPolicy.FileReadRateLimiterPolicy, configureOptions =>
+            configure.AddTokenBucketLimiter(RateLimiterPolicy.FileReadRateLimiterPolicy, configureOptions =>
             {
                 configureOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
                 configureOptions.TokenLimit = 1000;
@@ -59,6 +58,6 @@ public static class ServiceRegistrationExtension
             });
         });
 
-        return services;
+        return builder;
     }
 }

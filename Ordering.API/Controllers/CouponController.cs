@@ -1,5 +1,5 @@
-﻿using Core.Dtos;
-using Core.Messages;
+﻿using Core.CustomMessages;
+using Core.Dtos;
 using Core.Results;
 using Core.Services.Interfaces;
 using Core.Utilities;
@@ -14,7 +14,7 @@ using Ordering.API.Applications.Queries.Coupons.GetCouponByCode;
 using Ordering.API.Applications.Queries.Coupons.GetCouponById;
 using Ordering.API.Applications.Queries.Coupons.GetPaginatedCoupons;
 using Ordering.API.Applications.Services.Interfaces;
-using Ordering.API.Extensions; 
+using Ordering.API.Extensions;
 
 namespace Ordering.API.Controllers;
 

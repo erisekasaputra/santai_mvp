@@ -1,11 +1,11 @@
-﻿using Account.API.Applications.Services; 
+﻿using Account.API.Applications.Services;
 using Core.Results;
-using Core.Messages;
 using Account.Domain.SeedWork;
 using MediatR;
 using Microsoft.Extensions.Options;
 using Core.Configurations;
 using Core.Services.Interfaces;
+using Core.CustomMessages;
 
 namespace Account.API.Applications.Queries.GetDeviceIdByMechanicUserId;
 

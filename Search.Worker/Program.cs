@@ -1,11 +1,13 @@
-using Core.Extensions; 
-using Search.Worker; 
-using Search.Worker.Extensions;   
-var builder = Host.CreateApplicationBuilder(args);
+using Core.Extensions;  
+using Search.Worker.Extensions;
+
+var builder = WebApplication.CreateBuilder(args);
+
+builder.AddCoreOptionConfiguration();
+builder.AddLoggingContext();
 builder.Configuration.AddEnvironmentVariables();
-builder.AddHostedCoreOptionConfiguration();
-builder.Services.AddMasstransitContext();
-builder.Services.AddMediatorService<ISearchWorkerMarkerInterface>();
-builder.Services.AddApplicationService();  
-var host = builder.Build();
-host.Run();
+builder.AddMasstransitContext();
+builder.AddApplicationService();   
+
+var app = builder.Build();
+app.Run();

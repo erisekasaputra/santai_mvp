@@ -453,3 +453,16 @@ C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\refint\Search.Worker.dll
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.pdb
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.genruntimeconfig.cache
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\ref\Search.Worker.dll
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.MvcApplicationPartsAssemblyInfo.cache
+C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Search.Worker.staticwebassets.endpoints.json
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.MvcApplicationPartsAssemblyInfo.cs
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\scopedcss\bundle\Search.Worker.styles.css
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\staticwebassets.build.json
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\staticwebassets.development.json
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\staticwebassets.build.endpoints.json
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\staticwebassets\msbuild.Search.Worker.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\staticwebassets\msbuild.Search.Worker.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\staticwebassets\msbuild.build.Search.Worker.props
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.Search.Worker.props
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.Search.Worker.props
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\staticwebassets.pack.json

@@ -14,26 +14,24 @@ namespace Account.API.Extensions;
 
 public static class ServiceRegistrationExtension
 {    
-    public static IServiceCollection AddApplicationService(this IServiceCollection services)
+    public static WebApplicationBuilder AddApplicationService(this WebApplicationBuilder builder)
     {
-        services.AddScoped<IUserInfoService, UserInfoService>();
-        services.AddScoped<ApplicationService>();
-        services.AddScoped<IUnitOfWork, UnitOfWork>(); 
-        services.AddScoped<ICacheService, CacheService>(); 
-        services.AddScoped<IMechanicCache, MechanicCache>();
-        services.AddHostedService<OrderWaitingMechanicAssignJob>();
-        services.AddHostedService<OrderWaitingMechanicConfirmExpiryJob>();
-        return services;
+        builder.Services.AddScoped<IUserInfoService, UserInfoService>();
+        builder.Services.AddScoped<ApplicationService>();
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); 
+        builder.Services.AddScoped<ICacheService, CacheService>(); 
+        builder.Services.AddScoped<IMechanicCache, MechanicCache>();
+        builder.Services.AddHostedService<OrderWaitingMechanicAssignJob>();
+        builder.Services.AddHostedService<OrderWaitingMechanicConfirmExpiryJob>();
+        return builder;
     }  
 
-    public static IServiceCollection AddMassTransitContext<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
+    public static WebApplicationBuilder AddMassTransitContext<TDbContext>(this WebApplicationBuilder builder) where TDbContext : DbContext
     { 
-        var messagingOption = services.BuildServiceProvider().GetService<IOptionsMonitor<MessagingConfiguration>>() 
-            ?? throw new Exception("Please provide value for message bus options");
+        var options = builder.Configuration.GetSection(MessagingConfiguration.SectionName).Get<IOptionsMonitor<MessagingConfiguration>>()?.CurrentValue
+            ?? throw new Exception("Please provide value for message bus options"); 
 
-        var options = messagingOption.CurrentValue;
-         
-        services.AddMassTransit(x =>
+        builder.Services.AddMassTransit(x =>
         {
             x.AddEntityFrameworkOutbox<TDbContext>(o =>
             {
@@ -56,8 +54,7 @@ public static class ServiceRegistrationExtension
                 ("account-service-order-service-incompleted-integration-event-queue", typeof(ServiceIncompletedIntegrationEventConsumer)), 
                 ("account-service-order-service-completed-integration-event-queue", typeof(ServiceCompletedIntegrationEventConsumer))
             };
-
-            //foreach ((_, Type consumerType) in consumers) x.AddConsumer(consumerType); 
+             
             x.AddConsumersFromNamespaceContaining<IAccountAPIMarkerInterface>();
             x.UsingRabbitMq((context, configure) =>
             {
@@ -67,8 +64,7 @@ public static class ServiceRegistrationExtension
                     host.Password(options.Password ?? string.Empty);
                 });
 
-                configure.UseTimeout(timeoutCfg => timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout));
-                //configure.ConfigureEndpoints(context);
+                configure.UseTimeout(timeoutCfg => timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout)); 
 
                 foreach (var (queueName, consumerType) in consumers)
                     configure.ReceiveEndpoint(queueName, receiveBuilder => ConfigureEndPoint(receiveBuilder, queueName, consumerType));
@@ -83,6 +79,6 @@ public static class ServiceRegistrationExtension
             });
         });
 
-        return services;
+        return builder;
     }  
 }

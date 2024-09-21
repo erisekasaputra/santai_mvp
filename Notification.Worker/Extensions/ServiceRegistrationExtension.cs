@@ -5,23 +5,20 @@ using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Notification.Worker.Consumers;
-using StackExchange.Redis;
-using System.CodeDom;
+using StackExchange.Redis; 
 
 namespace Notification.Worker.Extensions;
 
 public static class ServiceRegistrationExtension
 {
-    public static IServiceCollection AddMassTransitContext<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
+    public static WebApplicationBuilder AddMassTransitContext<TDbContext>(this WebApplicationBuilder builder) where TDbContext : DbContext
     { 
-        var messageBusOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<MessagingConfiguration>>()
-            ?? throw new Exception("Please provide value for message bus options"); 
-        var options = messageBusOptions.CurrentValue;
+        var options = builder.Configuration.GetSection(MessagingConfiguration.SectionName).Get<MessagingConfiguration>() ?? throw new Exception();  
 
         var isAmazonSqs = false;
         if (isAmazonSqs)
-        { 
-            services.AddMassTransit(x =>
+        {
+            builder.Services.AddMassTransit(x =>
             {
                 x.AddEntityFrameworkOutbox<TDbContext>(o =>
                 {
@@ -57,8 +54,7 @@ public static class ServiceRegistrationExtension
                     ("notification-service-service-incompleted-integration-queue",typeof(ServiceIncompletedIntegrationEventConsumer)),
                     ("notification-service-service-processed-integration-queue",typeof(ServiceProcessedIntegrationEventConsumer))
                 };
-
-                //foreach ((_, Type consumerType) in consumers) x.AddConsumer(consumerType);
+                 
 
                 x.AddConsumersFromNamespaceContaining<INotificationWorkerMarkerInterface>(); 
                 x.UsingAmazonSqs((context, configure) =>
@@ -86,7 +82,7 @@ public static class ServiceRegistrationExtension
         }
         else
         {
-            services.AddMassTransit(x =>
+            builder.Services.AddMassTransit(x =>
             { 
                 var consumers = new (string QueueName, Type ConsumerType)[]
                 {
@@ -112,9 +108,7 @@ public static class ServiceRegistrationExtension
                     ("notification-service-service-incompleted-integration-queue",typeof(ServiceIncompletedIntegrationEventConsumer)),
                     ("notification-service-service-processed-integration-queue",typeof(ServiceProcessedIntegrationEventConsumer))
                 };
-
-
-                //foreach ((_, Type consumerType) in consumers) x.AddConsumer(consumerType); 
+                 
                 x.AddConsumersFromNamespaceContaining<INotificationWorkerMarkerInterface>();
                 x.UsingRabbitMq((context, configure) =>
                 { 
@@ -124,8 +118,7 @@ public static class ServiceRegistrationExtension
                         host.Password(options.Password ?? string.Empty);
                     });
 
-                    configure.UseTimeout(timeoutCfg => timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout));
-                    //configure.ConfigureEndpoints(context);
+                    configure.UseTimeout(timeoutCfg => timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout)); 
 
                     foreach (var (queueName, consumerType) in consumers)
                         configure.ReceiveEndpoint(queueName, receiveBuilder => ConfigureEndPoint(receiveBuilder, queueName, consumerType));
@@ -140,21 +133,17 @@ public static class ServiceRegistrationExtension
                 });
             });
         } 
-        return services;  
+        return builder;  
     }
 
-    public static IServiceCollection AddApplicationService(this IServiceCollection services)
+    public static WebApplicationBuilder AddApplicationService(this WebApplicationBuilder builder)
     {
-        var redisOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<CacheConfiguration>>()
-            ?? throw new Exception("Please provide value for message bus options");
-
-        services.AddSignalR().AddStackExchangeRedis(redisOptions.CurrentValue.Host, options =>
+        var options = builder.Configuration.GetSection(CacheConfiguration.SectionName).Get<CacheConfiguration>() ?? throw new Exception();  
+        builder.Services.AddSignalR().AddStackExchangeRedis(options.Host, options =>
         {
             options.Configuration.ChannelPrefix = RedisChannel.Literal("NotificationWorker");
-        });
-
-        services.AddSingleton<ICacheService, CacheService>();
-
-        return services;
+        }); 
+        builder.Services.AddSingleton<ICacheService, CacheService>(); 
+        return builder;
     }
 }

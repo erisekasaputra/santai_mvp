@@ -1,10 +1,10 @@
-﻿using Account.API.Applications.Services; 
-using Core.Results; 
+﻿using Account.API.Applications.Services;
+using Core.Results;
 using Account.Domain.SeedWork;
-using MediatR; 
-using Core.Messages;
+using MediatR;
 using Core.Services.Interfaces;
 using Core.Exceptions;
+using Core.CustomMessages;
 
 namespace Account.API.Applications.Commands.MechanicUserCommand.ConfirmDrivingLicenseByUserId;
 

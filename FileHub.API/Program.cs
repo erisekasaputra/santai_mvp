@@ -5,11 +5,11 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 builder.AddCoreOptionConfiguration();
 builder.AddLoggingContext();
-builder.Services.AddApplicationService();
+builder.AddApplicationService();
 builder.Services.AddControllers();
-builder.Services.AddCustomRateLimiter();
-builder.Services.AddRedisDatabase();
-builder.Services.AddAuth();
+builder.AddCustomRateLimiter();
+builder.AddRedisDatabase();
+builder.AddAuth();
 
 var app = builder.Build();
 

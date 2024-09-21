@@ -1,19 +1,19 @@
 ﻿using Account.API.Applications.Commands.RegularUserCommand.CreateRegularUser;
 using Account.API.Applications.Commands.RegularUserCommand.DeleteRegularUserByUserId;
-using Account.API.Applications.Commands.RegularUserCommand.UpdateRegularUserByUserId; 
+using Account.API.Applications.Commands.RegularUserCommand.UpdateRegularUserByUserId;
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetRegularUserByUserId;
 using Account.API.Extensions;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
-using Account.API.Applications.Queries.GetPaginatedRegularUser;
-using Account.API.CustomAttributes; 
-using Account.API.Applications.Services; 
+using Account.API.Applications.Queries.GetPaginatedRegularUser; 
+using Account.API.Applications.Services;
 using Core.SeedWorks;
-using Core.Messages;
 using Core.Enumerations;
 using Core.Dtos;
 using Core.Services.Interfaces;
+using Core.CustomMessages;
+using Core.CustomAttributes;
 
 namespace Account.API.API;
 

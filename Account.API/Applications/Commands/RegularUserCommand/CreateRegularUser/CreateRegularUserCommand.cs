@@ -1,6 +1,5 @@
 ﻿using Account.API.Applications.Dtos.RequestDtos;
-using Core.Results;
-using Core.Messages;
+using Core.Results; 
 using MediatR;
 
 namespace Account.API.Applications.Commands.RegularUserCommand.CreateRegularUser;

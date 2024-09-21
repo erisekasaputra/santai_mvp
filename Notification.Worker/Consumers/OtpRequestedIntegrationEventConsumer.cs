@@ -15,7 +15,8 @@ public class OtpRequestedIntegrationEventConsumer(
     private readonly ICacheService _cacheService = cacheService;
     public async Task Consume(ConsumeContext<OtpRequestedIntegrationEvent> context)
     {
-        var otp = context.Message;    
+        var otp = context.Message;
+        Console.WriteLine(otp.Token);
     }
 
     private async Task SendOtpByEmail()

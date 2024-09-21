@@ -1,13 +1,13 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
 using Account.API.Applications.Services;
-using Account.Domain.Aggregates.FleetAggregate; 
+using Account.Domain.Aggregates.FleetAggregate;
 using Account.Domain.SeedWork;
-using Core.Configurations; 
-using Core.Messages;
+using Core.Configurations;
+using Core.CustomMessages;
 using Core.Results;
 using Core.Services.Interfaces;
 using MediatR;
-using Microsoft.Extensions.Options; 
+using Microsoft.Extensions.Options;
 
 namespace Account.API.Applications.Queries.GetUserByUserTypeAndUserId;
 

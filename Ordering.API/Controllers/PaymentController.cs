@@ -1,6 +1,5 @@
-﻿using Core.Messages;
-using Core.Results;
-using Core.Services.Interfaces;
+﻿using Core.CustomMessages;
+using Core.Results; 
 using Core.Utilities;
 using FluentValidation;
 using MediatR;
@@ -8,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ordering.API.Applications.Commands.Orders.PayOrderPaymentByOrderId;
 using Ordering.API.Applications.Dtos.Requests; 
-using Ordering.API.CustomAttributes; 
 
 namespace Ordering.API.Controllers;
 

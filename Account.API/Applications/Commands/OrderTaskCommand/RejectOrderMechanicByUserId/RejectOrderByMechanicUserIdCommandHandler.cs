@@ -1,7 +1,7 @@
 ﻿using Account.API.Applications.Services.Interfaces;
 using Account.Domain.SeedWork;
+using Core.CustomMessages;
 using Core.Exceptions;
-using Core.Messages;
 using Core.Results;
 using Core.Utilities;
 using MediatR;

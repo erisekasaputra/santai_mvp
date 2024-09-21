@@ -1,11 +1,10 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
-using Account.API.Applications.Services; 
+using Account.API.Applications.Services;
 using Account.API.Extensions;
 using Core.Results;
-using Core.Messages;
 using Account.Domain.Aggregates.ReferredAggregate;
 using Account.Domain.Aggregates.UserAggregate;
-using Account.Domain.Enumerations; 
+using Account.Domain.Enumerations;
 using Account.Domain.SeedWork;
 using Account.Domain.ValueObjects;
 using MediatR;
@@ -14,6 +13,7 @@ using System.Data;
 using Core.Configurations;
 using Core.Services.Interfaces;
 using Core.Exceptions;
+using Core.CustomMessages;
 
 namespace Account.API.Applications.Commands.RegularUserCommand.CreateRegularUser;
 

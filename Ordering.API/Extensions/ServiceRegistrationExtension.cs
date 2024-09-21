@@ -6,66 +6,71 @@ using Core.Services;
 using Core.Services.Interfaces;
 using Ordering.Domain.SeedWork;
 using Ordering.Infrastructure;
-using Ordering.API.CustomDelegates;
 using Ordering.API.Applications.Services.Interfaces;
 using Ordering.API.Applications.Services;
 using Polly.Extensions.Http;
 using Polly;
 using Ordering.API.Applications.Consumers;
+using Core.CustomDelegates;
 
 namespace Ordering.API.Extensions;
 
 public static class ServiceRegistrationExtension
 {
-    public static IServiceCollection AddApplicationService(this IServiceCollection services)
+    public static WebApplicationBuilder AddApplicationService(this WebApplicationBuilder builder)
     {
-        services.AddTransient<ITokenService, JwtTokenService>();
-        services.AddTransient<TokenJwtHandler>();
-        services.AddScoped<IPaymentService, PaymentService>(); 
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<IUserInfoService, UserInfoService>();
-        services.AddSingleton<ICacheService, CacheService>();
-        services.AddHostedService<ScheduledOrderWorker>();
-        return services;
+        builder.Services.AddTransient<ITokenService, JwtTokenService>();
+        builder.Services.AddTransient<TokenJwtHandler>();
+        builder.Services.AddScoped<IPaymentService, PaymentService>(); 
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        builder.Services.AddScoped<IUserInfoService, UserInfoService>();
+        builder.Services.AddSingleton<ICacheService, CacheService>();
+        builder.Services.AddHostedService<ScheduledOrderWorker>();
+        return builder;
     }
 
-    public static IServiceCollection AddHttpClients(this IServiceCollection service)
+    public static WebApplicationBuilder AddHttpClients(this WebApplicationBuilder builder)
     { 
-        var accountConfig = service.BuildServiceProvider().GetService<IOptionsMonitor<AccountServiceConfiguration>>()
-            ?? throw new Exception("Please provide value for database option"); 
-        var catalogConfig = service.BuildServiceProvider().GetService<IOptionsMonitor<CatalogServiceConfiguration>>()
-           ?? throw new Exception("Please provide value for database option"); 
-        var masterConfig = service.BuildServiceProvider().GetService<IOptionsMonitor<MasterDataServiceConfiguration>>()
-          ?? throw new Exception("Please provide value for database option"); 
+        var accountOptions = builder.Configuration.GetSection(AccountServiceConfiguration.SectionName).Get<AccountServiceConfiguration>() ?? throw new Exception();
+        var catalogOptions = builder.Configuration.GetSection(CatalogServiceConfiguration.SectionName).Get<CatalogServiceConfiguration>() ?? throw new Exception();
+        var masterOptions = builder.Configuration.GetSection(MasterDataServiceConfiguration.SectionName).Get<MasterDataServiceConfiguration>() ?? throw new Exception(); 
 
         var retryPolicy = HttpPolicyExtensions
             .HandleTransientHttpError()
             .WaitAndRetryAsync(3, retryAttempt => TimeSpan.FromSeconds(Math.Pow(1, retryAttempt))); 
 
-        service.AddHttpClient<IAccountServiceAPI, AccountServiceAPI>(client =>
+        builder.Services.AddHttpClient<IAccountServiceAPI, AccountServiceAPI>(client =>
         {
-            client.BaseAddress = new Uri(accountConfig?.CurrentValue.Host ?? throw new Exception("Account service client host is not set"));
-        }).AddPolicyHandler(retryPolicy).AddHttpMessageHandler<TokenJwtHandler>();
-         
-        service.AddHttpClient<IMasterDataServiceAPI, MasterDataServiceAPI>(client =>
-        {
-            client.BaseAddress = new Uri(masterConfig?.CurrentValue.Host ?? throw new Exception("Master data service client host is not set"));
-        }).AddPolicyHandler(retryPolicy); 
+            client.BaseAddress = new Uri(accountOptions.Host ?? throw new Exception("Account service client host is not set"));
+        })
+        .AddPolicyHandler(retryPolicy).AddHttpMessageHandler<TokenJwtHandler>();
 
-        service.AddHttpClient<ICatalogServiceAPI, CatalogServiceAPI>(client =>
-        {
-            client.BaseAddress = new Uri(catalogConfig?.CurrentValue.Host ?? throw new Exception("Catalog service client host is not set"));
-        }).AddPolicyHandler(retryPolicy).AddHttpMessageHandler<TokenJwtHandler>();
+          
 
-        return service;
+
+        builder.Services.AddHttpClient<ICatalogServiceAPI, CatalogServiceAPI>(client =>
+        {
+            client.BaseAddress = new Uri(catalogOptions?.Host ?? throw new Exception("Catalog service client host is not set"));
+        })
+        .AddPolicyHandler(retryPolicy).AddHttpMessageHandler<TokenJwtHandler>();
+
+
+
+        builder.Services.AddHttpClient<IMasterDataServiceAPI, MasterDataServiceAPI>(client =>
+        {
+            client.BaseAddress = new Uri(masterOptions.Host ?? throw new Exception("Master data service client host is not set"));
+        })
+       .AddPolicyHandler(retryPolicy);
+
+
+
+        return builder;
     }
 
-    public static IServiceCollection AddMassTransitContext<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
+    public static WebApplicationBuilder AddMassTransitContext<TDbContext>(this WebApplicationBuilder builder) where TDbContext : DbContext
     {
-        var messageBusOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<MessagingConfiguration>>()
-            ?? throw new Exception("Please provide value for message bus options"); 
-        var options = messageBusOptions.CurrentValue; 
-        services.AddMassTransit(x =>
+        var options = builder.Configuration.GetSection(MessagingConfiguration.SectionName).Get<MessagingConfiguration>() ?? throw new Exception();  
+        builder.Services.AddMassTransit(x =>
         {
             x.AddEntityFrameworkOutbox<TDbContext>(o =>
             {
@@ -91,8 +96,7 @@ public static class ServiceRegistrationExtension
                     host.Password(options.Password ?? string.Empty);
                 });
 
-                configure.UseTimeout(timeoutCfg => timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout));
-                //configure.ConfigureEndpoints(context);
+                configure.UseTimeout(timeoutCfg => timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout)); 
 
                 foreach (var (queueName, consumerType) in consumers)
                     configure.ReceiveEndpoint(queueName, receiveBuilder => ConfigureEndPoint(receiveBuilder, queueName, consumerType));
@@ -106,6 +110,6 @@ public static class ServiceRegistrationExtension
                 }
             });
         });
-        return services;
+        return builder;
     }
 }

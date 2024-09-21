@@ -1,11 +1,11 @@
 ﻿using Account.API.Applications.Commands.MechanicUserCommand.ActivateMechanicStatusByUserId;
 using Account.API.Applications.Services.Interfaces;
 using Account.Domain.SeedWork;
+using Core.CustomMessages;
 using Core.Exceptions;
-using Core.Messages;
-using Core.Results; 
+using Core.Results;
 using Core.Utilities;
-using MediatR; 
+using MediatR;
 using Polly;
 using Polly.Retry;
 using System.Data;

@@ -1,10 +1,10 @@
 ﻿using Account.API.Applications.Dtos.ResponseDtos;
 using Account.API.Applications.Services;
 using Core.Results;
-using Core.Messages;
 using Account.Domain.SeedWork;
-using MediatR; 
-using Core.Services.Interfaces; 
+using MediatR;
+using Core.Services.Interfaces;
+using Core.CustomMessages;
 
 namespace Account.API.Applications.Queries.GetStaffById;
 

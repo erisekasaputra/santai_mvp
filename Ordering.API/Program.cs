@@ -1,37 +1,55 @@
  
 using Core.Extensions;
+using Core.Middlewares;
 using Ordering.API;
-using Ordering.API.Extensions;
+using Ordering.API.Extensions; 
 using Ordering.Infrastructure; 
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
-builder.Services.AddJsonEnumConverterBehavior();
-builder.AddCoreOptionConfiguration();
-builder.AddLoggingContext();
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddApplicationService();
-builder.Services.AddDataEncryption(builder.Configuration);
-builder.Services.AddMediatorService<IOrderAPIMarkerInterface>();
-builder.Services.AddRedisDatabase();
 builder.Services.AddControllers();
-builder.Services.AddSqlDatabaseContext<OrderDbContext>();
-builder.Services.AddMassTransitContext<OrderDbContext>();
-builder.Services.AddValidation<IOrderAPIMarkerInterface>();
-builder.Services.AddHttpClients();
-builder.Services.AddOpenApi(); 
-builder.Services.AddAuth();
+builder.AddCoreOptionConfiguration();
+
+
+builder.AddJsonEnumConverterBehavior();
+builder.AddLoggingContext();
+builder.AddApplicationService();
+builder.AddDataEncryption(builder.Configuration);
+builder.AddMediatorService<IOrderAPIMarkerInterface>();
+builder.AddRedisDatabase();
+builder.AddSqlDatabaseContext<OrderDbContext>();
+builder.AddMassTransitContext<OrderDbContext>();
+builder.AddValidation<IOrderAPIMarkerInterface>();
+builder.AddHttpClients();
+builder.AddAuth();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddOpenApi();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+}
 
 var app = builder.Build();
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseMiddleware<IdempotencyMiddleware>();
+
 app.UseAuthentication();
-app.UseAuthorization(); 
-//app.UseMiddleware<IdempotencyMiddleware>();
+app.UseAuthorization();
+
 app.MapControllers();
+
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
     app.MapOpenApi();
 }
+
 app.UseHttpsRedirection();
 app.UseHsts();
 app.UseOutputCache();

@@ -1,9 +1,9 @@
-﻿using Core.Dtos;
+﻿using Core.CustomMessages;
+using Core.Dtos;
 using Core.Exceptions;
-using Core.Messages;
 using Core.Results;
 using MediatR;
-using Ordering.API.Applications.Dtos.Responses; 
+using Ordering.API.Applications.Dtos.Responses;
 using Ordering.Domain.SeedWork;
 
 namespace Ordering.API.Applications.Queries.Coupons.GetPaginatedCoupons;

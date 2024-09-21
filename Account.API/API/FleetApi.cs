@@ -5,13 +5,13 @@ using Account.API.Applications.Commands.FleetCommand.UpdateFleetByUserId;
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetFleetByIdByUserId;
 using Account.API.Applications.Queries.GetPaginatedFleetByUserId;
-using Account.API.Applications.Services;
-using Account.API.CustomAttributes;
-using Account.API.Extensions; 
+using Account.API.Applications.Services; 
+using Account.API.Extensions;
+using Core.CustomAttributes;
+using Core.CustomMessages;
 using Core.Dtos;
 using Core.Enumerations;
-using Core.Messages;
-using Core.Models; 
+using Core.Models;
 using Core.Services.Interfaces;
 using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
@@ -19,8 +19,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Account.API.API;
 
 public static class FleetApi
-{
-    const int _cacheExpiry = 10;
+{ 
     public static IEndpointRouteBuilder MapFleetApi(this IEndpointRouteBuilder builder)
     {
         var app = builder.MapGroup("api/v1/users/{userId}/fleet"); 

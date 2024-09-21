@@ -3,36 +3,32 @@ using Catalog.API.Applications.Services;
 using Catalog.Domain.SeedWork;
 using Catalog.Infrastructure;
 using Catalog.Infrastructure.Helpers;
-using Core.Configurations;
-using Core.Events;
+using Core.Configurations; 
 using Core.Services;
 using Core.Services.Interfaces;
 using MassTransit;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore; 
 
 namespace Catalog.API.Extensions;
 
 public static class ServiceRegistrationExtension
 {  
-    public static IServiceCollection AddApplicationService(this IServiceCollection services)
+    public static WebApplicationBuilder AddApplicationService(this WebApplicationBuilder builder)
     { 
-        services.AddScoped<IUnitOfWork, UnitOfWork>();
-        services.AddScoped<IUserInfoService, UserInfoService>();
-        services.AddSingleton<ICacheService, CacheService>(); 
-        services.AddScoped<ApplicationService>(); 
-        services.AddScoped<MetaTableHelper>(); 
-        return services;
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+        builder.Services.AddScoped<IUserInfoService, UserInfoService>();
+        builder.Services.AddSingleton<ICacheService, CacheService>(); 
+        builder.Services.AddScoped<ApplicationService>();
+        builder.Services.AddScoped<MetaTableHelper>(); 
+        return builder;
     } 
 
-    public static IServiceCollection AddMassTransitContext<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
+    public static WebApplicationBuilder AddMassTransitContext<TDbContext>(this WebApplicationBuilder builder) where TDbContext : DbContext
     {
-        var messagingConfiguration = services.BuildServiceProvider().GetService<IOptionsMonitor<MessagingConfiguration>>()
-            ?? throw new Exception("Please provide value for message bus options");
+        var options = builder.Configuration.GetSection(MessagingConfiguration.SectionName)?.Get<MessagingConfiguration>()
+            ?? throw new Exception();
 
-        var options = messagingConfiguration.CurrentValue;
-
-        services.AddMassTransit(x =>
+        builder.Services.AddMassTransit(x =>
         {
             x.AddEntityFrameworkOutbox<TDbContext>(o =>
             {
@@ -58,8 +54,7 @@ public static class ServiceRegistrationExtension
                     host.Password(options.Password ?? string.Empty);
                 });
 
-                configure.UseTimeout(timeoutCfg => timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout));
-                //configure.ConfigureEndpoints(context);
+                configure.UseTimeout(timeoutCfg => timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout)); 
 
                 foreach (var (queueName, consumerType) in consumers)
                     configure.ReceiveEndpoint(queueName, receiveBuilder => ConfigureEndPoint(receiveBuilder, queueName, consumerType));
@@ -74,6 +69,6 @@ public static class ServiceRegistrationExtension
             });
         });
 
-        return services;
+        return builder;
     } 
 }

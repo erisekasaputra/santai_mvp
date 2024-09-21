@@ -1,22 +1,22 @@
 ﻿
+using Core.CustomAttributes;
 using Core.CustomClaims;
+using Core.CustomMessages;
 using Core.Enumerations;
 using Core.Extensions;
-using Core.Messages;
 using Core.Results;
 using Core.Services.Interfaces;
 using Core.Utilities;
 using Core.Validations;
 using FluentValidation;
-using Google.Apis.Auth;
-using Identity.API.Applications.Dto;
-using Identity.API.CustomAttributes;
+using Google.Apis.Auth; 
+using Identity.API.Applications.Dto; 
 using Identity.API.Domain.Entities;
 using Identity.API.Domain.Enumerations;
 using Identity.API.Domain.Events;
 using Identity.API.Extensions;
 using Identity.API.Infrastructure;
-using Identity.API.Service.Interfaces; 
+using Identity.API.Service.Interfaces;
 using MassTransit;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -32,7 +32,21 @@ namespace Identity.API.Controllers;
 
 [Route("api/v1/[controller]")]
 [ApiController]
-public class AuthController : ControllerBase
+public class AuthController(
+    RoleManager<IdentityRole> roleManager,
+    SignInManager<ApplicationUser> signInManager,
+    UserManager<ApplicationUser> userManager,
+    IGoogleTokenValidator googleTokenValidator,
+    IJwtTokenValidator jwtTokenValidator,
+    ITokenService tokenService,
+    ILogger<AuthController> logger,
+    IMediator mediator,
+    ApplicationDbContext dbContext,
+    IOtpService otpService, 
+    ActionMethodUtility actionMethodService, 
+    IPasswordHasher<ApplicationUser> passwordHasher,
+    IPasswordValidator<ApplicationUser> passwordValidator,
+    ITokenCacheService tokenCacheService) : ControllerBase
 {
     private const string _controllerName = "Auth";
     private const string _apiVPhoneVerify = "v1";
@@ -48,52 +62,20 @@ public class AuthController : ControllerBase
     private const string _staffLoginActionName = "LoginStaff";
     private const string _userLoginActionName = "LoginUser";
 
-    private readonly RoleManager<IdentityRole> _roleManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly IGoogleTokenValidator _googleTokenValidator;
-    private readonly IJwtTokenValidator _jwtTokenValidator;
-    private readonly ITokenService _tokenService;
-    private readonly ILogger<AuthController> _logger;
-    private readonly IMediator _mediator;
-    private readonly ApplicationDbContext _dbContext;
-    private readonly IOtpService _otpService;
-    private readonly HttpContext? _httpContext;
-    private readonly ActionMethodUtility _actionMethodService;
-    private readonly IPasswordHasher<ApplicationUser> _passwordHasher;
-    private readonly IPasswordValidator<ApplicationUser> _passwordValidator;
-    public AuthController(
-        RoleManager<IdentityRole> roleManager,
-        SignInManager<ApplicationUser> signInManager,
-        UserManager<ApplicationUser> userManager,
-        IGoogleTokenValidator googleTokenValidator,
-        IJwtTokenValidator jwtTokenValidator,
-        ITokenService tokenService,
-        ILogger<AuthController> logger,
-        IMediator mediator,
-        ApplicationDbContext dbContext,
-        IOtpService otpService, 
-        IHttpContextAccessor httpContextAccessor,
-        ActionMethodUtility actionMethodService,
-        IPublishEndpoint publishEndpoint,
-        IPasswordHasher<ApplicationUser> passwordHasher,
-        IPasswordValidator<ApplicationUser> passwordValidator)
-    {
-        _roleManager = roleManager;
-        _signInManager = signInManager;
-        _userManager = userManager;
-        _googleTokenValidator = googleTokenValidator;
-        _jwtTokenValidator = jwtTokenValidator;
-        _tokenService = tokenService;
-        _logger = logger;
-        _mediator = mediator;
-        _dbContext = dbContext;
-        _otpService = otpService;
-        _httpContext = httpContextAccessor.HttpContext;
-        _actionMethodService = actionMethodService;
-        _passwordHasher = passwordHasher;
-        _passwordValidator = passwordValidator;
-    }
+    private readonly RoleManager<IdentityRole> _roleManager = roleManager;
+    private readonly SignInManager<ApplicationUser> _signInManager = signInManager;
+    private readonly UserManager<ApplicationUser> _userManager = userManager;
+    private readonly IGoogleTokenValidator _googleTokenValidator = googleTokenValidator;
+    private readonly IJwtTokenValidator _jwtTokenValidator = jwtTokenValidator;
+    private readonly ITokenService _tokenService = tokenService;
+    private readonly ILogger<AuthController> _logger = logger;
+    private readonly IMediator _mediator = mediator;
+    private readonly ApplicationDbContext _dbContext = dbContext;
+    private readonly IOtpService _otpService = otpService; 
+    private readonly ActionMethodUtility _actionMethodService = actionMethodService;
+    private readonly IPasswordHasher<ApplicationUser> _passwordHasher = passwordHasher;
+    private readonly IPasswordValidator<ApplicationUser> _passwordValidator = passwordValidator;
+    private readonly ITokenCacheService _tokenCacheService = tokenCacheService;
 
 
     //[HttpPost("google-signin")]
@@ -146,8 +128,7 @@ public class AuthController : ControllerBase
                 }
 
                 var user = await _dbContext.Users.FirstOrDefaultAsync(
-                        x => x.PhoneNumber == requestOtp.PhoneNumber
-                        ||
+                        x => x.PhoneNumber == requestOtp.PhoneNumber ||
                         (
                             !string.IsNullOrWhiteSpace(requestOtp.Email)
                             &&
@@ -156,10 +137,7 @@ public class AuthController : ControllerBase
                             x.Email == requestOtp.Email
                         ));
 
-                if (user is null)
-                {
-                    return TypedResults.Unauthorized();
-                }
+                if (user is null) return TypedResults.Unauthorized(); 
 
                 if (string.IsNullOrWhiteSpace(user.PhoneNumber))
                 {
@@ -195,12 +173,9 @@ public class AuthController : ControllerBase
                         return TypedResults.NoContent();
                     }
 
-                    var otpToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber);
-
-                    await _mediator.Publish(new OtpRequestedDomainEvent(user.PhoneNumber, user.Email, otpToken, request.OtpProviderType));
-
-                    await _dbContext.SaveChangesAsync();
-
+                    var otpToken = await _userManager.GenerateChangePhoneNumberTokenAsync(user, user.PhoneNumber); 
+                    await _mediator.Publish(new OtpRequestedDomainEvent(user.PhoneNumber, user.Email, otpToken, request.OtpProviderType)); 
+                    await _dbContext.SaveChangesAsync(); 
                     await transaction.CommitAsync();
 
                     return TypedResults.Accepted(_verifyPhoneActionName, new
@@ -231,10 +206,8 @@ public class AuthController : ControllerBase
                         await _mediator.Publish(new OtpRequestedDomainEvent(user.PhoneNumber, user.Email, otp, request.OtpProviderType));
                     }
 
-                    await _dbContext.SaveChangesAsync();
-
-                    await transaction.CommitAsync();
-
+                    await _dbContext.SaveChangesAsync(); 
+                    await transaction.CommitAsync(); 
                     return TypedResults.Accepted(_resetPasswordActionName, new
                     {
                         User = new
@@ -264,10 +237,8 @@ public class AuthController : ControllerBase
                         await _mediator.Publish(new OtpRequestedDomainEvent(user.PhoneNumber, user.Email, otp, request.OtpProviderType));
                     }
 
-                    await _dbContext.SaveChangesAsync();
-
-                    await transaction.CommitAsync();
-
+                    await _dbContext.SaveChangesAsync(); 
+                    await transaction.CommitAsync(); 
                     return TypedResults.Ok(new
                     {
                         User = new
@@ -848,8 +819,8 @@ public class AuthController : ControllerBase
                             .WithError(new("UserType", $"Unknown user type {request.UserType}")));
                 }
 
-                var phoneNumber = request.PhoneNumber.NormalizePhoneNumber(request.RegionCode);
 
+                var phoneNumber = request.PhoneNumber.NormalizePhoneNumber(request.RegionCode); 
                 if (phoneNumber is null)
                 {
                     return TypedResults.BadRequest(
@@ -857,14 +828,13 @@ public class AuthController : ControllerBase
                            .WithError(new("PhoneNumber", "Please provide valid phone number")));
                 }
 
-                GoogleJsonWebSignature.Payload? payload = null;
 
+                GoogleJsonWebSignature.Payload? payload = null;
                 if (!string.IsNullOrWhiteSpace(request.GoogleIdToken))
                 {
                     payload = await _googleTokenValidator.ValidateAsync(request.GoogleIdToken);
 
-                    var userByEmailClaim = await _userManager.FindByEmailAsync(payload.Email);
-
+                    var userByEmailClaim = await _userManager.FindByEmailAsync(payload.Email); 
                     if (userByEmailClaim is not null)
                     {
                         if (userByEmailClaim.PhoneNumber is null)
@@ -874,8 +844,8 @@ public class AuthController : ControllerBase
                                 Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                         } 
 
-                        var claims = await _userManager.GetClaimsAsync(userByEmailClaim);
 
+                        var claims = await _userManager.GetClaimsAsync(userByEmailClaim); 
                         if (claims is null || !claims.Any())
                         {
                             _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", userByEmailClaim.Id);
@@ -883,8 +853,8 @@ public class AuthController : ControllerBase
                                 Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                         }
 
-                        var roles = await _userManager.GetRolesAsync(userByEmailClaim);
 
+                        var roles = await _userManager.GetRolesAsync(userByEmailClaim); 
                         if (roles is null || !roles.Any())
                         {
                             _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", userByEmailClaim.Id);
@@ -898,6 +868,7 @@ public class AuthController : ControllerBase
                             return TypedResults.Conflict(
                                 Result.Failure($"Email address already used by another account.", ResponseStatus.Conflict));
                         }
+
 
                         if (!userByEmailClaim.PhoneNumberConfirmed)
                         {
@@ -934,8 +905,7 @@ public class AuthController : ControllerBase
                     }
                 }
 
-                var user = await _userManager.FindByNameAsync(phoneNumber);
-
+                var user = await _userManager.FindByNameAsync(phoneNumber); 
                 if (user != null)
                 {
                     return TypedResults.Conflict(
@@ -1036,55 +1006,31 @@ public class AuthController : ControllerBase
 
 
     [HttpPost("refresh-token")]
-    public async Task<IResult> RefreshToken([FromBody] RefreshTokenRequest refreshTokenRequest)
+    public async Task<IResult> RefreshToken(
+        [FromBody] RefreshTokenRequest refreshTokenRequest)
     {
         try 
         {
-            if (string.IsNullOrWhiteSpace(refreshTokenRequest.RefreshToken))
-            {
-                return TypedResults.BadRequest(
-                    Result.Failure("Refresh token must not be null", ResponseStatus.BadRequest));
-            } 
+            if (string.IsNullOrWhiteSpace(refreshTokenRequest.RefreshToken) || string.IsNullOrEmpty(refreshTokenRequest.AccessToken) || await _tokenCacheService.IsRefreshTokenBlacklisted(refreshTokenRequest.RefreshToken) || await _tokenCacheService.IsAccessTokenBlacklisted(refreshTokenRequest.AccessToken)) return TypedResults.Unauthorized();   
 
-            if (_httpContext is null)
-            {
-                _logger.LogError("Http context is null");
-                return TypedResults.InternalServerError(
-                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
-            }
 
-            var bearer = _httpContext.GetBearerToken();
+            var refreshToken = await _tokenCacheService.RotateRefreshTokenAsync(refreshTokenRequest.RefreshToken); 
+            if (refreshToken is null) return TypedResults.Unauthorized(); 
 
-            if (bearer is null)
-            {
-                return TypedResults.BadRequest(
-                    Result.Failure("Access token must not be null", ResponseStatus.BadRequest));
-            }
+            
+            var newRefreshToken = await _tokenService.GenerateRefreshTokenAsync(refreshToken.UserId);
+              
+
+            await _tokenCacheService.BlackListRefreshTokenAsync(refreshTokenRequest.RefreshToken);
+            await _tokenCacheService.BlackListAccessTokenAsync(refreshTokenRequest.AccessToken);
+            await _tokenCacheService.SaveRefreshToken(newRefreshToken);
+
              
+            var user = await _userManager.FindByIdAsync(refreshToken.UserId);  
+            if (user is null) return TypedResults.Unauthorized(); 
 
-            if (await _tokenService.IsRefreshTokenBlacklisted(refreshTokenRequest.RefreshToken) || await _tokenService.IsAccessTokenBlacklisted(bearer))
-            {
-                return TypedResults.Unauthorized();
-            }
 
-            var refreshToken = await _tokenService.RotateRefreshTokenAsync(refreshTokenRequest.RefreshToken); 
-            if (refreshToken is null)
-            {
-                return TypedResults.Unauthorized();
-            }
-
-            await _tokenService.BlackListRefreshTokenAsync(refreshTokenRequest.RefreshToken);
-            await _tokenService.BlackListAccessTokenAsync(bearer);
-
-            var user = await _userManager.FindByIdAsync(refreshToken.UserId); 
-
-            if (user is null)
-            {
-                return TypedResults.Unauthorized();
-            } 
-
-            var claims = await _userManager.GetClaimsAsync(user);  
-
+            var claims = await _userManager.GetClaimsAsync(user);   
             if (claims is null || !claims.Any())
             { 
                 _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
@@ -1092,8 +1038,8 @@ public class AuthController : ControllerBase
                     Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
             } 
 
-            var roles = await _userManager.GetRolesAsync(user);
 
+            var roles = await _userManager.GetRolesAsync(user); 
             if (roles is null || !roles.Any())
             {
                 _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
@@ -1103,8 +1049,7 @@ public class AuthController : ControllerBase
 
 
             var claimsIdentity = new ClaimsIdentity(claims); 
-            var accessToken = _tokenService.GenerateAccessToken(claimsIdentity); 
-
+            var accessToken = _tokenService.GenerateAccessToken(claimsIdentity);  
             return TypedResults.Ok(new
             {
                 Token = accessToken,
@@ -1206,33 +1151,15 @@ public class AuthController : ControllerBase
 
      
     [HttpPost("verify/token")]
-    public async Task<IResult> VerifyToken([FromBody] RefreshTokenRequest request)
+    public async Task<IResult> VerifyToken(
+        [FromBody] RefreshTokenRequest request)
     {
         try
         {
-            if (string.IsNullOrEmpty(request.RefreshToken))
-            {
-                return TypedResults.BadRequest(
-                    Result.Failure("Refresh token must not null", ResponseStatus.BadRequest));
-            }
+            if (string.IsNullOrEmpty(request.RefreshToken) || string.IsNullOrEmpty(request.AccessToken)) return TypedResults.Unauthorized(); 
 
-            if (_httpContext is null)
-            {
-                _logger.LogError("Http context is null");
-                return TypedResults.InternalServerError(
-                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
-            }
-
-            var bearer = _httpContext.GetBearerToken();
-
-            if (bearer is null)
-            {
-                return TypedResults.BadRequest(
-                    Result.Failure("Access token must not be null", ResponseStatus.BadRequest));
-            }
-
-            var isAccessTokenBlocked = await _tokenService.IsAccessTokenBlacklisted(bearer);
-            var isRefreshTokenBlocked = await _tokenService.IsRefreshTokenBlacklisted(request.RefreshToken);
+            var isAccessTokenBlocked = await _tokenCacheService.IsAccessTokenBlacklisted(request.AccessToken);
+            var isRefreshTokenBlocked = await _tokenCacheService.IsRefreshTokenBlacklisted(request.RefreshToken);
 
             return isAccessTokenBlocked || isRefreshTokenBlocked ? TypedResults.Forbid() : TypedResults.Ok();
         }
@@ -1251,22 +1178,19 @@ public class AuthController : ControllerBase
         [FromBody] VerifyLoginRequest request,
         IValidator<VerifyLoginRequest> validator)
     {
-        var strategy = _dbContext.Database.CreateExecutionStrategy();
-
+        var strategy = _dbContext.Database.CreateExecutionStrategy(); 
         return await strategy.ExecuteAsync<IResult>(async () =>
         {
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
             try
             {
-                var validation = await validator.ValidateAsync(request);
-
+                var validation = await validator.ValidateAsync(request); 
                 if (!validation.IsValid)
                 {
                     return TypedResults.BadRequest(validation.Errors);
                 }
 
-                var isOtpValid = await _otpService.IsOtpValidAsync(request.PhoneNumber, request.Token);
-
+                var isOtpValid = await _otpService.IsOtpValidAsync(request.PhoneNumber, request.Token); 
                 if (!isOtpValid)
                 {
                     return TypedResults.BadRequest(
@@ -1274,16 +1198,14 @@ public class AuthController : ControllerBase
                             .WithError(new("Credential", "OTP or phone number is invalid")));
                 }
 
-                var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber);
-
+                var user = await _dbContext.Users.FirstOrDefaultAsync(x => x.PhoneNumber == request.PhoneNumber); 
                 if (user is null)
                 {
                     return TypedResults.Unauthorized();
                 }
 
 
-                var claims = await _userManager.GetClaimsAsync(user);
-
+                var claims = await _userManager.GetClaimsAsync(user); 
                 if (claims is null || !claims.Any())
                 {
                     _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
@@ -1291,8 +1213,7 @@ public class AuthController : ControllerBase
                         Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                 }
 
-                var roles = await _userManager.GetRolesAsync(user);
-
+                var roles = await _userManager.GetRolesAsync(user); 
                 if (roles is null || !roles.Any())
                 {
                     _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
@@ -1300,14 +1221,13 @@ public class AuthController : ControllerBase
                         Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                 }
 
-                var accessToken = _tokenService.GenerateAccessToken(new ClaimsIdentity(claims));
+                var accessToken = _tokenService.GenerateAccessToken(new ClaimsIdentity(claims)); 
+                var refreshToken = await _tokenService.GenerateRefreshTokenAsync(user.Id); 
+                await _tokenCacheService.SaveRefreshToken(refreshToken);
 
-                var refreshToken = await _tokenService.GenerateRefreshTokenAsync(user.Id);
-
-                await _otpService.RemoveOtpAsync(request.PhoneNumber);
-
-                string redirectTo = user.IsAccountRegistered ? _homePageActionName : _createAccountActionName;
-
+                await _otpService.RemoveOtpAsync(request.PhoneNumber); 
+                string redirectTo = user.IsAccountRegistered ? _homePageActionName : _createAccountActionName; 
+                
                 await transaction.CommitAsync();
 
                 return TypedResults.Ok(
@@ -1359,20 +1279,11 @@ public class AuthController : ControllerBase
             var transaction = await _dbContext.Database.BeginTransactionAsync();
             try
             {
-                var validation = await validator.ValidateAsync(request);
+                var validation = await validator.ValidateAsync(request); 
+                if (!validation.IsValid) return TypedResults.BadRequest(validation.Errors); 
 
-                if (!validation.IsValid)
-                {
-                    return TypedResults.BadRequest(validation.Errors);
-                }
-
-                var user = await _userManager.FindByNameAsync(request.PhoneNumber);
-
-
-                if (user is null)
-                {
-                    return TypedResults.Unauthorized();
-                }
+                var user = await _userManager.FindByNameAsync(request.PhoneNumber);  
+                if (user is null) return TypedResults.Unauthorized(); 
 
                 if (string.IsNullOrWhiteSpace(user.PhoneNumber))
                 {
@@ -1381,14 +1292,10 @@ public class AuthController : ControllerBase
                         Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
                 }
 
-                if (user.PhoneNumberConfirmed)
-                {
-                    return TypedResults.NoContent();
-                }
+                if (user.PhoneNumberConfirmed) return TypedResults.NoContent(); 
 
 
-                var changeResult = await _userManager.ChangePhoneNumberAsync(user, request.PhoneNumber, request.Token);
-
+                var changeResult = await _userManager.ChangePhoneNumberAsync(user, request.PhoneNumber, request.Token); 
                 if (!changeResult.Succeeded)
                 {
                     var errors = changeResult.Errors.Select(e => new ErrorDetail(e.Code, e.Description));
@@ -1400,10 +1307,8 @@ public class AuthController : ControllerBase
                 await _mediator.Publish(
                     new PhoneNumberConfirmedDomainEvent(Guid.Parse(user.Id), user.PhoneNumber, user.UserType));
 
-                await _dbContext.SaveChangesAsync();
-
-                await transaction.CommitAsync();
-
+                await _dbContext.SaveChangesAsync(); 
+                await transaction.CommitAsync(); 
                 return TypedResults.NoContent();
             }
             catch (DbUpdateException ex)
@@ -1424,50 +1329,28 @@ public class AuthController : ControllerBase
 
     [Authorize]
     [HttpPost("logout")]
-    public async Task<IResult> Logout([FromBody] RefreshTokenRequest request)
+    public async Task<IResult> Logout(
+        [FromBody] RefreshTokenRequest request)
     {
         try
         {
-            if (string.IsNullOrEmpty(request.RefreshToken))
-            {
-                return TypedResults.BadRequest(
-                    Result.Failure("Refresh token must not null", ResponseStatus.BadRequest));
-            }
-
-            if (_httpContext is null)
-            {
-                _logger.LogError("Http context is null");
-                return TypedResults.InternalServerError(
-                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
-            }
-
-            var bearer = _httpContext.GetBearerToken();
-
-            if (bearer is null)
-            {
-                return TypedResults.Unauthorized();
-            }
-
-            await _tokenService.BlackListRefreshTokenAsync(request.RefreshToken);
-            await _tokenService.BlackListAccessTokenAsync(bearer);
-
+            if (string.IsNullOrWhiteSpace(request.RefreshToken) || string.IsNullOrEmpty(request.AccessToken)) return TypedResults.Unauthorized();
+            
+            await _tokenCacheService.BlackListRefreshTokenAsync(request.RefreshToken);
+            await _tokenCacheService.BlackListAccessTokenAsync(request.AccessToken);
+            
             return TypedResults.NoContent();
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(
-                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+            Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         }
     }
-
-
     private async Task<IdentityResult> AddClaimsToDatabase(ApplicationUser user)
     {
-        if(user.PhoneNumber is null)
-        {
-            throw new ArgumentNullException(user.PhoneNumber);
-        } 
+        if(user.PhoneNumber is null) throw new ArgumentNullException(user.PhoneNumber); 
 
         var claims = new List<Claim>()
         {
@@ -1478,15 +1361,9 @@ public class AuthController : ControllerBase
             new (ClaimTypes.Role, user.UserType.ToString())
         };
 
-        if (!string.IsNullOrWhiteSpace(user.Email))
-        {
-            claims.Add(new Claim(ClaimTypes.Email, user.Email));
-        }
+        if (!string.IsNullOrWhiteSpace(user.Email)) claims.Add(new Claim(ClaimTypes.Email, user.Email)); 
 
-        if (!string.IsNullOrWhiteSpace(user.BusinessCode))
-        {
-            claims.Add(new Claim(SantaiClaimTypes.BusinessCode, user.BusinessCode));
-        } 
+        if (!string.IsNullOrWhiteSpace(user.BusinessCode)) claims.Add(new Claim(SantaiClaimTypes.BusinessCode, user.BusinessCode)); 
 
         return await _userManager.AddClaimsAsync(user, claims);
     }   

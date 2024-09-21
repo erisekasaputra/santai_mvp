@@ -1,7 +1,5 @@
 ﻿using Core.Configurations;
-using MassTransit;
-using MassTransit.Configuration;
-using Microsoft.Extensions.Options;
+using MassTransit;  
 using Search.Worker.Consumers;
 using Search.Worker.Domain.Repositories;
 using Search.Worker.Infrastructure;
@@ -11,21 +9,24 @@ namespace Search.Worker.Extensions;
 
 public static class ServiceRegistrationExtension
 {
-    public static IServiceCollection AddApplicationService(this IServiceCollection services)
+    public static WebApplicationBuilder AddApplicationService(this WebApplicationBuilder builder)
     { 
-        services.AddScoped<ElasticsearchContext>();
-        services.AddScoped<IItemRepository, ItemRepository>();
-        return services;
+        builder.Services.AddScoped<ElasticsearchContext>();
+        builder.Services.AddScoped<IItemRepository, ItemRepository>();
+        builder.Services.AddMediatR(configure =>
+        {
+            configure.RegisterServicesFromAssemblyContaining<ISearchWorkerMarkerInterface>();
+        });
+
+        return builder;
     }
 
-    public static IServiceCollection AddMasstransitContext(this IServiceCollection services)
+    public static WebApplicationBuilder AddMasstransitContext(this WebApplicationBuilder builder)
     {
-        var messageOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<MessagingConfiguration>>()
-            ?? throw new Exception("Please provide value for message bus options");
+        var options = builder.Configuration.GetSection(MessagingConfiguration.SectionName).Get<MessagingConfiguration>()
+            ?? throw new Exception(); 
 
-        var options = messageOptions.CurrentValue;
-
-        services.AddMassTransit(x =>
+        builder.Services.AddMassTransit(x =>
         {
             var consumers = new (string QueueName, Type ConsumerType)[]
             {
@@ -57,8 +58,7 @@ public static class ServiceRegistrationExtension
                     host.Password(options.Password ?? string.Empty);
                 });
 
-                configure.UseTimeout(timeoutCfg => timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout));
-                //configure.ConfigureEndpoints(context);
+                configure.UseTimeout(timeoutCfg => timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout)); 
 
                 foreach (var (queueName, consumerType) in consumers)
                     configure.ReceiveEndpoint(queueName, receiveBuilder => ConfigureEndPoint(receiveBuilder, queueName, consumerType));
@@ -73,6 +73,6 @@ public static class ServiceRegistrationExtension
             });
         });
 
-        return services;
+        return builder;
     }
 }

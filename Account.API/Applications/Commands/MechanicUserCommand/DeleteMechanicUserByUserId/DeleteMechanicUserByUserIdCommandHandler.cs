@@ -1,11 +1,11 @@
-﻿using Core.Results; 
+﻿using Core.Results;
 using Account.Domain.SeedWork;
-using MediatR; 
-using Core.Messages; 
+using MediatR;
 using Core.Exceptions;
 using Account.API.Applications.Services.Interfaces;
 using Core.Utilities;
 using System.Data;
+using Core.CustomMessages;
 
 namespace Account.API.Applications.Commands.MechanicUserCommand.DeleteMechanicUserByUserId;
 

@@ -1,15 +1,16 @@
-﻿using Core.Dtos;
+﻿using Core.CustomAttributes;
+using Core.CustomMessages;
+using Core.Dtos;
 using Core.Enumerations;
-using Core.Messages;
-using Core.Results; 
+using Core.Results;
 using Core.Services.Interfaces;
 using Core.Utilities;
 using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc; 
+using Microsoft.AspNetCore.Mvc;
 using Ordering.API.Applications.Commands.Orders.CancelOrderByBuyer;
-using Ordering.API.Applications.Commands.Orders.CancelOrderByMechanic; 
+using Ordering.API.Applications.Commands.Orders.CancelOrderByMechanic;
 using Ordering.API.Applications.Commands.Orders.CreateOrder;
 using Ordering.API.Applications.Commands.Orders.PayCancellationRefundByOrderId;
 using Ordering.API.Applications.Commands.Orders.SetMechanicArriveByOrderIdAndMechanicId;
@@ -25,10 +26,8 @@ using Ordering.API.Applications.Queries.Orders.GetOrderByIdAndUserId;
 using Ordering.API.Applications.Queries.Orders.GetOrderSecretByOrderId;
 using Ordering.API.Applications.Queries.Orders.GetPaginatedOrdersByUserId;
 using Ordering.API.Applications.Queries.Orders.GetPaymentUrlByUserIdAndOrderId;
-using Ordering.API.Applications.Services.Interfaces;
-using Ordering.API.CustomAttributes;
-using Ordering.API.Extensions;
-using Ordering.API.Validations;
+using Ordering.API.Applications.Services.Interfaces; 
+using Ordering.API.Extensions; 
 
 namespace Ordering.API.Controllers;
 

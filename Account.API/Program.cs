@@ -1,13 +1,14 @@
 using Account.API;
 using Account.API.API;
 using Account.API.Applications.Services;
-using Account.API.Extensions;
-using Account.API.Middleware; 
+using Account.API.Extensions;  
 using Account.Infrastructure;
-using Core.Extensions; 
+using Core.Extensions;
+using Core.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddHttpContextAccessor(); 
 builder.Configuration.AddEnvironmentVariables();
 
 builder.AddCoreOptionConfiguration(); 
@@ -15,35 +16,37 @@ builder.AddLoggingContext();
 
 if (builder.Environment.IsDevelopment())
 {
-    builder.Services.AddOpenApi(); 
-    builder.Services.AddSwaggerGen(); 
+    builder.Services.AddOpenApi();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
 }
 
-builder.Services.AddJsonEnumConverterBehavior();
-builder.Services.AddAuth(); 
-builder.Services.AddHttpContextAccessor(); 
-builder.Services.AddMediatorService<IAccountAPIMarkerInterface>(); 
-builder.Services.AddRedisDatabase();
-builder.Services.AddApplicationService();
-builder.Services.AddValidation<IAccountAPIMarkerInterface>(); 
-builder.Services.AddSqlDatabaseContext<AccountDbContext>();   
-builder.Services.AddMassTransitContext<AccountDbContext>(); 
-builder.Services.AddDataEncryption(builder.Configuration);
+builder.AddJsonEnumConverterBehavior();
+builder.AddAuth(); 
+builder.AddMediatorService<IAccountAPIMarkerInterface>(); 
+builder.AddRedisDatabase();
+builder.AddApplicationService();
+builder.AddValidation<IAccountAPIMarkerInterface>(); 
+builder.AddSqlDatabaseContext<AccountDbContext>();   
+builder.AddMassTransitContext<AccountDbContext>(); 
+builder.AddDataEncryption(builder.Configuration);
 builder.Services.AddSignalR();
 
 var app = builder.Build(); 
 
+app.UseMiddleware<GlobalExceptionMiddleware>(); 
+app.UseMiddleware<IdempotencyMiddleware>(); 
+
 app.UseAuthentication(); 
 app.UseAuthorization();
-app.UseMiddleware<IdempotencyMiddleware>(); 
-  
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(); 
-    app.UseSwaggerUI(); 
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger();
+    app.UseSwaggerUI();
     app.MapOpenApi();
 }
-
 app.UseHttpsRedirection(); 
 app.UseHsts(); 
 app.UseOutputCache(); 

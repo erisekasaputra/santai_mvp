@@ -1,9 +1,9 @@
 using Catalog.API;
 using Catalog.API.API; 
-using Catalog.API.Extensions;
-using Catalog.API.Middewares; 
+using Catalog.API.Extensions; 
 using Catalog.Infrastructure;
 using Core.Extensions;
+using Core.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args); 
 builder.Configuration.AddEnvironmentVariables();
@@ -11,26 +11,35 @@ builder.AddCoreOptionConfiguration();
 builder.AddLoggingContext();
 
 builder.Services.AddHttpContextAccessor();
-builder.Services.AddJsonEnumConverterBehavior();
-builder.Services.AddMediatorService<ICatalogAPIMarkerInterface>();
-builder.Services.AddValidation<ICatalogAPIMarkerInterface>(); 
+builder.AddJsonEnumConverterBehavior();
+builder.AddMediatorService<ICatalogAPIMarkerInterface>();
+builder.AddValidation<ICatalogAPIMarkerInterface>(); 
 builder.Services.AddRouting();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddSqlDatabaseContext<CatalogDbContext>(); 
-builder.Services.AddMassTransitContext<CatalogDbContext>();
-builder.Services.AddRedisDatabase();
-builder.Services.AddApplicationService();
-builder.Services.AddAuth();
+builder.AddSqlDatabaseContext<CatalogDbContext>(); 
+builder.AddMassTransitContext<CatalogDbContext>();
+builder.AddRedisDatabase();
+builder.AddApplicationService();
+builder.AddAuth();
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddOpenApi();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+}
 
 var app = builder.Build();
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseMiddleware<IdempotencyMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseMiddleware<IdempotencyMiddleware>();
- 
+
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage(); 

@@ -7,7 +7,7 @@ using Account.API.Applications.Commands.BusinessUserCommand.RemoveBusinessLicens
 using Account.API.Applications.Commands.BusinessUserCommand.UpdateBusinessUserByUserId;
 using Account.API.Applications.Commands.StaffCommand.ConfirmStaffEmailByStaffId;
 using Account.API.Applications.Commands.StaffCommand.ConfirmStaffPhoneNumberByStaffId;
-using Account.API.Applications.Commands.StaffCommand.CreateStaffBusinessUserByUserId; 
+using Account.API.Applications.Commands.StaffCommand.CreateStaffBusinessUserByUserId;
 using Account.API.Applications.Commands.StaffCommand.RemoveStaffByUserId;
 using Account.API.Applications.Commands.StaffCommand.ResetDeviceIdByStaffId;
 using Account.API.Applications.Commands.StaffCommand.SetDeviceIdByStaffId;
@@ -25,14 +25,14 @@ using Account.API.Applications.Queries.GetPhoneNumberByStaffId;
 using Account.API.Applications.Queries.GetStaffByUserIdAndStaffId;
 using Account.API.Applications.Queries.GetTimeZoneByStaffId;
 using Account.API.Applications.Services; 
-using Account.API.CustomAttributes;
 using Account.API.Extensions;
+using Core.CustomAttributes;
+using Core.CustomMessages;
 using Core.Dtos;
 using Core.Enumerations;
-using Core.Messages;
 using Core.SeedWorks;
 using Core.Services.Interfaces;
-using FluentValidation; 
+using FluentValidation;
 using Microsoft.AspNetCore.Mvc;
 namespace Account.API.API;
 

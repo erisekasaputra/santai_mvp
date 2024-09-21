@@ -1,9 +1,9 @@
-﻿using Core.Results; 
-using MediatR;  
-using Ordering.Domain.SeedWork; 
+﻿using Core.Results;
+using MediatR;
+using Ordering.Domain.SeedWork;
 using Core.Exceptions;
-using Core.Messages;
 using System.Data;
+using Core.CustomMessages;
 
 namespace Ordering.API.Applications.Commands.Orders.SetServiceInProgressByOrderIdAndMechanicId;
 

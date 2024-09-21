@@ -1,4 +1,5 @@
-using Core.Extensions; 
+using Core.Extensions;
+using Core.Middlewares;
 using Identity.API;  
 using Identity.API.Extensions;
 using Identity.API.Infrastructure; 
@@ -10,41 +11,55 @@ builder.Configuration.AddEnvironmentVariables();
 builder.AddCoreOptionConfiguration();
 builder.AddLoggingContext(); 
 
-
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddJsonEnumConverterBehavior(); 
-builder.Services.AddHttpContextAccessor();  
-
-builder.Services.AddMediatorService<IIdentityMarkerInterface>();
-builder.Services.AddValidation<IIdentityMarkerInterface>(); 
-builder.Services.AddApplicationService();
-
 builder.Services.AddControllers();  
 builder.Services.AddRouting();
-builder.Services.AddOpenApi();
-builder.Services.AddEndpointsApiExplorer(); 
-builder.Services.AddSwaggerGen();
-builder.Services.AddCustomRateLimiter(); 
-builder.Services.ConfigureOtpService(); 
-builder.Services.AddSqlDatabaseContext<ApplicationDbContext>(isRetryable: true); 
-builder.Services.AddMasstransitContext<ApplicationDbContext>();
-builder.Services.AddIdentityService();
-builder.Services.AddAuth().AddGoogleSSO();  
+builder.Services.AddHttpContextAccessor();
 
 
-builder.Services.AddRedisDatabase();  
+builder.AddJsonEnumConverterBehavior(); 
+builder.AddMediatorService<IIdentityMarkerInterface>();
+builder.AddValidation<IIdentityMarkerInterface>(); 
+builder.AddApplicationService();
+
+ 
+builder.AddCustomRateLimiter(); 
+builder.ConfigureOtpService(); 
+builder.AddSqlDatabaseContext<ApplicationDbContext>(isRetryable: true); 
+builder.AddMasstransitContext<ApplicationDbContext>();
+builder.AddIdentityService();
+builder.AddAuth().AddGoogleSSO();
+builder.AddRedisDatabase();  
+
+
+if (builder.Environment.IsDevelopment())
+{
+    builder.Services.AddOpenApi();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+}
+
 
 var app = builder.Build();
 
-//app.UseMiddleware<GlobalExceptionMiddleware>();
-//app.UseMiddleware<IdempotencyMiddleware>();  
-app.UseRateLimiter(); 
-app.UseHsts(); 
-app.UseSwagger(); 
-app.UseSwaggerUI(); 
-app.UseHttpsRedirection(); 
+app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseMiddleware<IdempotencyMiddleware>();
+
 app.UseAuthentication(); 
 app.UseAuthorization(); 
+
+app.UseRateLimiter(); 
+
+if (app.Environment.IsDevelopment())
+{
+    app.UseDeveloperExceptionPage();
+    app.UseSwagger(); 
+    app.UseSwaggerUI();
+    app.MapOpenApi();
+}
+
+app.UseHsts(); 
+app.UseHttpsRedirection(); 
+
 app.MapControllers(); 
 
 using (var scope = app.Services.CreateScope())

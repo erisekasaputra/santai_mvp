@@ -1,6 +1,5 @@
 ﻿using Core.Policies;
-using Core.Utilities;
-using Identity.API.Middleware;
+using Core.Utilities; 
 using Identity.API.Service.Interfaces;
 using Identity.API.Service;
 using Microsoft.AspNetCore.RateLimiting;
@@ -8,22 +7,22 @@ using System.Threading.RateLimiting;
 using Core.Services;
 using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Identity;
-using Core.Configurations;
-using Microsoft.Extensions.Options;
+using Core.Configurations; 
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Identity.API.Consumers;
 using Identity.API.Domain.Entities;
-using Identity.API.Infrastructure; 
+using Identity.API.Infrastructure;
+using Core.Middlewares;
 namespace Identity.API.Extensions;
 
 public static class ServiceRegistrationExtension
 {
-    public static IServiceCollection AddCustomRateLimiter(this IServiceCollection services)
+    public static WebApplicationBuilder AddCustomRateLimiter(this WebApplicationBuilder builder)
     {
-        services.AddRateLimiter(options =>
+        builder.Services.AddRateLimiter(configure =>
         {
-            options.AddTokenBucketLimiter(RateLimiterPolicy.AuthenticationRateRimiterPolicy, configureOptions =>
+            configure.AddTokenBucketLimiter(RateLimiterPolicy.AuthenticationRateRimiterPolicy, configureOptions =>
             {
                 configureOptions.QueueProcessingOrder = QueueProcessingOrder.OldestFirst;
                 configureOptions.TokenLimit = 500;
@@ -33,54 +32,52 @@ public static class ServiceRegistrationExtension
             });
         });
 
-        return services;
+        return builder;
     }
 
-    public static IServiceCollection ConfigureOtpService(this IServiceCollection services) 
+    public static WebApplicationBuilder ConfigureOtpService(this WebApplicationBuilder builder) 
     {
-        var otpOption = services.BuildServiceProvider().GetService<IOptionsMonitor<OtpConfiguration>>()?.CurrentValue
-            ?? throw new Exception("Please provide value for otp configuration");
-
-        services.Configure<DataProtectionTokenProviderOptions>(options =>
+        var options = builder.Configuration.GetSection(OtpConfiguration.SectionName).Get<OtpConfiguration>() ?? throw new Exception("Please provide value for otp configuration"); 
+        builder.Services.Configure<DataProtectionTokenProviderOptions>(configure =>
         {
-            ArgumentNullException.ThrowIfNull(otpOption);
-
-            options.TokenLifespan = TimeSpan.FromSeconds(otpOption.LockTimeSecond);
+            ArgumentNullException.ThrowIfNull(options);
+            configure.TokenLifespan = TimeSpan.FromSeconds(options.LockTimeSecond);
         });
 
-        return services;
+        return builder;
     }
 
-    public static IServiceCollection AddApplicationService(this IServiceCollection services) 
+    public static WebApplicationBuilder AddApplicationService(this WebApplicationBuilder builder) 
     {
-        services.AddTransient<GlobalExceptionMiddleware>();
-        services.AddSingleton<ActionMethodUtility>(); 
-        services.AddScoped<ITokenService, JwtTokenService>();
-        services.AddScoped<IJwtTokenValidator, JwtTokenValidator>(); 
-        services.AddScoped<IGoogleTokenValidator, MockGoogleTokenValidator>(); 
-        services.AddSingleton<IOtpService, OtpService>();
-        services.AddSingleton<ICacheService, CacheService>(); 
-        services.AddScoped<IUserInfoService, UserInfoService>();
+        builder.Services.AddTransient<GlobalExceptionMiddleware>();
+        builder.Services.AddSingleton<ActionMethodUtility>(); 
+        builder.Services.AddScoped<ITokenService, JwtTokenService>();
+        builder.Services.AddScoped<IJwtTokenValidator, JwtTokenValidator>(); 
+        builder.Services.AddScoped<IGoogleTokenValidator, MockGoogleTokenValidator>(); 
+        builder.Services.AddSingleton<IOtpService, OtpService>();
+        builder.Services.AddSingleton<ICacheService, CacheService>(); 
+        builder.Services.AddScoped<IUserInfoService, UserInfoService>();
+        builder.Services.AddScoped<ITokenCacheService, TokenCacheService>();
 
-        return services;
+        return builder;
     }  
 
-    public static IServiceCollection AddIdentityService(this IServiceCollection services)
+    public static WebApplicationBuilder AddIdentityService(this WebApplicationBuilder builder)
     {
-        services.AddIdentity<ApplicationUser, IdentityRole>(options =>
+        builder.Services.AddIdentity<ApplicationUser, IdentityRole>(configure =>
         {
-            options.SignIn.RequireConfirmedPhoneNumber = true;
-            options.SignIn.RequireConfirmedEmail = false;
-            options.SignIn.RequireConfirmedAccount = false;
+            configure.SignIn.RequireConfirmedPhoneNumber = true;
+            configure.SignIn.RequireConfirmedEmail = false;
+            configure.SignIn.RequireConfirmedAccount = false;
 
-            options.User.RequireUniqueEmail = false;
-             
-            options.Password.RequireDigit = false;
-            options.Password.RequireLowercase = false;
-            options.Password.RequireNonAlphanumeric = false;
-            options.Password.RequireUppercase = false;
-            options.Password.RequiredLength = 0;
-            options.Password.RequiredUniqueChars = 0;
+            configure.User.RequireUniqueEmail = false;
+
+            configure.Password.RequireDigit = false;
+            configure.Password.RequireLowercase = false;
+            configure.Password.RequireNonAlphanumeric = false;
+            configure.Password.RequireUppercase = false;
+            configure.Password.RequiredLength = 0;
+            configure.Password.RequiredUniqueChars = 0;
         })
         .AddEntityFrameworkStores<ApplicationDbContext>()
         .AddSignInManager<SignInManager<ApplicationUser>>()
@@ -89,18 +86,27 @@ public static class ServiceRegistrationExtension
         .AddDefaultTokenProviders()
         .AddClaimsPrincipalFactory<ApplicationClaims>();
 
-        return services;
+        return builder;
     }
 
 
-    public static IServiceCollection AddMasstransitContext<TDbContext>(this IServiceCollection services) where TDbContext : DbContext
+    public static WebApplicationBuilder AddMasstransitContext<TDbContext>(this WebApplicationBuilder builder) where TDbContext : DbContext
     {
-        var options = services.BuildServiceProvider().GetService<IOptionsMonitor<MessagingConfiguration>>()?.CurrentValue
-           ?? throw new Exception("Please provide value for messaging configuration");
+        var options = builder.Configuration.GetSection(MessagingConfiguration.SectionName).Get<MessagingConfiguration>()
+           ?? throw new Exception();
 
-        services.AddMassTransit(x =>
-        {
-            if (options is null) throw new Exception("Messaging configuration has not been set");  
+        builder.Services.AddMassTransit(x =>
+        { 
+            x.AddEntityFrameworkOutbox<TDbContext>(o =>
+            {
+                o.DuplicateDetectionWindow = TimeSpan.FromSeconds(options.DuplicateDetectionWindows);
+                o.QueryDelay = TimeSpan.FromSeconds(options.QueryDelay);
+                o.QueryTimeout = TimeSpan.FromSeconds(options.QueryTimeout);
+                o.QueryMessageLimit = options.QueryMessageLimit;
+                o.UseSqlServer();
+                o.UseBusOutbox();
+            }); 
+
             var consumers = new (string QueueName, Type ConsumerType)[]
             {
                 ("identity-service-business-user-created-integration-event-queue", typeof(BusinessUserCreatedIntegrationEventConsumer)),
@@ -113,18 +119,7 @@ public static class ServiceRegistrationExtension
                 ("identity-service-staff-user-deleted-integration-event-queue", typeof(StaffUserDeletedIntegrationEventConsumer)),
             };
 
-            foreach ((_, Type consumerType) in consumers) x.AddConsumer(consumerType); 
-
-            x.AddEntityFrameworkOutbox<TDbContext>(o =>
-            {
-                o.DuplicateDetectionWindow = TimeSpan.FromSeconds(options.DuplicateDetectionWindows);
-                o.QueryDelay = TimeSpan.FromSeconds(options.QueryDelay);
-                o.QueryTimeout = TimeSpan.FromSeconds(options.QueryTimeout);
-                o.QueryMessageLimit = options.QueryMessageLimit;
-                o.UseSqlServer();
-                o.UseBusOutbox();
-            }); 
-
+            x.AddConsumersFromNamespaceContaining<IIdentityMarkerInterface>();
             x.UsingRabbitMq((context, configure) =>
             {
                 configure.Host(options.Host ?? string.Empty, host =>
@@ -134,7 +129,6 @@ public static class ServiceRegistrationExtension
                 });
 
                 configure.UseTimeout(timeoutCfg => timeoutCfg.Timeout = TimeSpan.FromSeconds(options.MessageTimeout));
-                configure.ConfigureEndpoints(context);
 
                 foreach (var (queueName, consumerType) in consumers)
                     configure.ReceiveEndpoint(queueName, receiveBuilder => ConfigureEndPoint(receiveBuilder, queueName, consumerType));
@@ -149,7 +143,7 @@ public static class ServiceRegistrationExtension
             });
         });
 
-        return services;
+        return builder;
 
     }
 }

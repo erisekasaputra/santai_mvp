@@ -8,11 +8,11 @@ using Search.API.Infrastructure.Repositories;
 var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 
-builder.Services.Configure<ElasticsearchConfiguration>(builder.Configuration.GetSection("Elasticsearch"));
+builder.Services.Configure<ElasticsearchConfiguration>(builder.Configuration.GetSection(ElasticsearchConfiguration.SectionName));
 
 builder.Services.AddOpenApi(); 
 builder.Services.AddSwaggerGen();
-builder.Services.AddJsonEnumConverterBehavior();
+builder.AddJsonEnumConverterBehavior();
 
 builder.Services.AddScoped<ElasticsearchContext>();  
 builder.Services.AddScoped<IItemRepository, ItemRepository>();

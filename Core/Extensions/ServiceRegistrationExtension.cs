@@ -25,149 +25,146 @@ namespace Core.Extensions;
 
 public static class ServiceRegistrationExtension
 {
-    public static IServiceCollection AddMediatorService<T>(this IServiceCollection services)
+    public static WebApplicationBuilder AddMediatorService<T>(this WebApplicationBuilder builder)
     {
-        services.AddMediatR(e =>
+        builder.Services.AddMediatR(configure =>
         {
-            e.RegisterServicesFromAssemblyContaining<T>();
+            configure.RegisterServicesFromAssemblyContaining<T>();
         });
 
-        return services;
+        return builder;
     } 
 
-    public static IServiceCollection AddJsonEnumConverterBehavior(this IServiceCollection services)
+    public static WebApplicationBuilder AddJsonEnumConverterBehavior(this WebApplicationBuilder builder)
     {
-        services.Configure<JsonOptions>(options =>
+        builder.Services.Configure<JsonOptions>(configure =>
         {
-            options.SerializerOptions.Converters.Add(new JsonStringEnumConverter(
+            configure.SerializerOptions.Converters.Add(new JsonStringEnumConverter(
                 namingPolicy: System.Text.Json.JsonNamingPolicy.CamelCase,
                 allowIntegerValues: true));
         });
 
-        services.AddControllers()
-            .AddJsonOptions(options =>
+        builder.Services.AddControllers()
+            .AddJsonOptions(configure =>
             {
-                options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                configure.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
             });
 
-        return services;
+        return builder;
     }
 
     public static AuthenticationBuilder AddGoogleSSO(this AuthenticationBuilder builder)
     {
-        var googleConfiguration = builder.Services.BuildServiceProvider().GetService<IOptionsMonitor<GoogleSSOConfiguration>>()?.CurrentValue
-          ?? throw new Exception("Please provide value for google configuratoin");
+        var options = builder.Services.BuildServiceProvider().GetService<IOptionsMonitor<GoogleSSOConfiguration>>()?.CurrentValue
+          ?? throw new Exception();
 
-        builder.AddGoogle(googleOption =>
+        builder.AddGoogle(configure =>
         {
-            googleOption.ClientId = googleConfiguration?.ClientId ?? throw new Exception("Google client id can not be null");
-            googleOption.ClientSecret = googleConfiguration?.ClientSecret ?? throw new Exception("Google client secret can not be null");
+            configure.ClientId = options?.ClientId ?? throw new Exception();
+            configure.ClientSecret = options?.ClientSecret ?? throw new Exception();
         });
 
         return builder;
     }
 
 
-    public static AuthenticationBuilder AddAuth(this IServiceCollection services)
+    public static AuthenticationBuilder AddAuth(this WebApplicationBuilder builder)
     {    
-        var jwtOption = services.BuildServiceProvider().GetService<IOptionsMonitor<JwtConfiguration>>()
-           ?? throw new Exception("Please provide value for message bus options");
+        var options = builder.Configuration.GetSection(JwtConfiguration.SectionName).Get<JwtConfiguration>()
+           ?? throw new Exception(); 
 
-        var jwt = jwtOption.CurrentValue;
-
-        var authenticationBuilder = services.AddAuthentication(authOption =>
-        { 
-            authOption.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            authOption.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+        var authenticationBuilder = builder.Services.AddAuthentication(configure =>
+        {
+            configure.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            configure.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
         });
 
 
-        authenticationBuilder.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, options =>
+        authenticationBuilder.AddJwtBearer(JwtBearerDefaults.AuthenticationScheme, configure =>
         {
-            var secretKey = Encoding.UTF8.GetBytes(jwt?.SecretKey ?? throw new Exception("Secret key for jwt can not be empty"));
-
-            options.TokenValidationParameters = new TokenValidationParameters()
+            var secretKey = Encoding.UTF8.GetBytes(options.SecretKey ?? throw new Exception("Secret key has not been set")); 
+            configure.TokenValidationParameters = new TokenValidationParameters()
             {
                 RequireExpirationTime = true,
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateLifetime = false,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = jwt?.Issuer ?? throw new Exception("Issuer can not be null"),
-                ValidAudience = jwt?.Audience ?? throw new Exception("Audience can not be null"),
+                ValidIssuer = options.Issuer ?? throw new Exception("Issuer can not be null"),
+                ValidAudience = options.Audience ?? throw new Exception("Audience can not be null"),
                 IssuerSigningKey = new SymmetricSecurityKey(secretKey)
             };
         });
 
-        services.AddAuthorization(options =>
+        builder.Services.AddAuthorization(configure =>
         {
-            options.AddPolicy(PolicyName.AdministratorUserOnlyPolicy.ToString(), policyBuilder =>
+            configure.AddPolicy(PolicyName.AdministratorUserOnlyPolicy.ToString(), policyBuilder =>
             { 
                 policyBuilder.RequireAuthenticatedUser();
                 policyBuilder.RequireRole(UserType.Administrator.ToString());
             });
 
-            options.AddPolicy(PolicyName.BusinessUserAndAdministratorUserPolicy.ToString(), policyBuilder =>
+            configure.AddPolicy(PolicyName.BusinessUserAndAdministratorUserPolicy.ToString(), policyBuilder =>
             {
                 policyBuilder.RequireAuthenticatedUser();
                 policyBuilder.RequireRole(UserType.BusinessUser.ToString(), UserType.Administrator.ToString());
             });
 
-            options.AddPolicy(PolicyName.BusinessUserAndStaffUserAndAdministratorUserPolicy.ToString(), policyBuilder =>
+            configure.AddPolicy(PolicyName.BusinessUserAndStaffUserAndAdministratorUserPolicy.ToString(), policyBuilder =>
             {
                 policyBuilder.RequireAuthenticatedUser();
                 policyBuilder.RequireRole(UserType.BusinessUser.ToString(), UserType.StaffUser.ToString(), UserType.Administrator.ToString());
             });
 
-            options.AddPolicy(PolicyName.StaffUserAndAdministratorUserPolicy.ToString(), policyBuilder =>
+            configure.AddPolicy(PolicyName.StaffUserAndAdministratorUserPolicy.ToString(), policyBuilder =>
             {
                 policyBuilder.RequireAuthenticatedUser();
                 policyBuilder.RequireRole(UserType.StaffUser.ToString(), UserType.Administrator.ToString());
             });
 
-            options.AddPolicy(PolicyName.RegularUserAndAdministratorUserPolicy.ToString(), policyBuilder =>
+            configure.AddPolicy(PolicyName.RegularUserAndAdministratorUserPolicy.ToString(), policyBuilder =>
             {
                 policyBuilder.RequireAuthenticatedUser();
                 policyBuilder.RequireRole(UserType.RegularUser.ToString(), UserType.Administrator.ToString());
             });
 
-            options.AddPolicy(PolicyName.RegularUserOnlyPolicy.ToString(), policyBuilder =>
+            configure.AddPolicy(PolicyName.RegularUserOnlyPolicy.ToString(), policyBuilder =>
             {
                 policyBuilder.RequireAuthenticatedUser();
                 policyBuilder.RequireRole(UserType.RegularUser.ToString());
             });
 
-            options.AddPolicy(PolicyName.MechanicUserOnlyPolicy.ToString(), policyBuilder =>
+            configure.AddPolicy(PolicyName.MechanicUserOnlyPolicy.ToString(), policyBuilder =>
             {
                 policyBuilder.RequireAuthenticatedUser();
                 policyBuilder.RequireRole(UserType.MechanicUser.ToString());
             });
 
-            options.AddPolicy(PolicyName.MechanicUserAndAdministratorUserPolicy.ToString(), policyBuilder =>
+            configure.AddPolicy(PolicyName.MechanicUserAndAdministratorUserPolicy.ToString(), policyBuilder =>
             {
                 policyBuilder.RequireAuthenticatedUser();
                 policyBuilder.RequireRole(UserType.MechanicUser.ToString(), UserType.Administrator.ToString());
             });
 
-            options.AddPolicy(PolicyName.StaffUserOnlyPolicy.ToString(), policyBuilder =>
+            configure.AddPolicy(PolicyName.StaffUserOnlyPolicy.ToString(), policyBuilder =>
             {
                 policyBuilder.RequireAuthenticatedUser();
                 policyBuilder.RequireRole(UserType.StaffUser.ToString());
             });
 
-            options.AddPolicy(PolicyName.ServiceToServiceAndAdministratorUserPolicy.ToString(), policyBuilder =>
+            configure.AddPolicy(PolicyName.ServiceToServiceAndAdministratorUserPolicy.ToString(), policyBuilder =>
             {
                 policyBuilder.RequireAuthenticatedUser();
                 policyBuilder.RequireRole(UserType.ServiceToService.ToString(), UserType.Administrator.ToString());
             });
 
-            options.AddPolicy(PolicyName.ServiceToServiceOnlyPolicy.ToString(), policyBuilder =>
+            configure.AddPolicy(PolicyName.ServiceToServiceOnlyPolicy.ToString(), policyBuilder =>
             {
                 policyBuilder.RequireAuthenticatedUser();
                 policyBuilder.RequireRole(UserType.ServiceToService.ToString());
             });
 
-            options.AddPolicy(PolicyName.BusinessStaffRegularUserPolicy.ToString(), policyBuilder =>
+            configure.AddPolicy(PolicyName.BusinessStaffRegularUserPolicy.ToString(), policyBuilder =>
             {
                 policyBuilder.RequireAuthenticatedUser();
                 policyBuilder.RequireRole(UserType.BusinessUser.ToString(), UserType.StaffUser.ToString(), UserType.RegularUser.ToString());
@@ -177,92 +174,92 @@ public static class ServiceRegistrationExtension
         return authenticationBuilder;
     }
 
-    public static IServiceCollection AddRedisDatabase(this IServiceCollection services)
-    {
-        var cacheOptions = services.BuildServiceProvider().GetService<IOptionsMonitor<CacheConfiguration>>()
-            ?? throw new Exception("Please provide value for database option");
+    public static WebApplicationBuilder AddRedisDatabase(this WebApplicationBuilder builder)
+    { 
+        var options = builder.Configuration.GetSection(CacheConfiguration.SectionName).Get<CacheConfiguration>()
+           ?? throw new Exception(); 
 
-        services.AddSingleton<IConnectionMultiplexer>(sp =>
+        builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
         {
             var configurations = new ConfigurationOptions
             {
-                EndPoints = { cacheOptions.CurrentValue.Host },
-                ConnectTimeout = (int)TimeSpan.FromSeconds(cacheOptions.CurrentValue.ConnectTimeout).TotalMilliseconds,
-                SyncTimeout = (int)TimeSpan.FromSeconds(cacheOptions.CurrentValue.SyncTimeout).TotalMilliseconds,
+                EndPoints = { options.Host },
+                ConnectTimeout = (int)TimeSpan.FromSeconds(options.ConnectTimeout).TotalMilliseconds,
+                SyncTimeout = (int)TimeSpan.FromSeconds(options.SyncTimeout).TotalMilliseconds,
                 AbortOnConnectFail = false,
                 ReconnectRetryPolicy = new ExponentialRetry((int)TimeSpan
-                    .FromSeconds(cacheOptions.CurrentValue.ReconnectRetryPolicy).TotalMilliseconds)
+                    .FromSeconds(options.ReconnectRetryPolicy).TotalMilliseconds)
             };
 
             return ConnectionMultiplexer.Connect(configurations);
         });
 
 
-        services.AddStackExchangeRedisCache(options =>
+        builder.Services.AddStackExchangeRedisCache(configure =>
         {
-            options.ConfigurationOptions = new ConfigurationOptions
-            {
-
-                EndPoints = { cacheOptions.CurrentValue.Host },
-                ConnectTimeout = (int)TimeSpan.FromSeconds(cacheOptions.CurrentValue.ConnectTimeout).TotalMilliseconds,
-                SyncTimeout = (int)TimeSpan.FromSeconds(cacheOptions.CurrentValue.SyncTimeout).TotalMilliseconds,
-                AbortOnConnectFail = false,
-                ReconnectRetryPolicy = new ExponentialRetry((int)TimeSpan
-                    .FromSeconds(cacheOptions.CurrentValue.ReconnectRetryPolicy).TotalMilliseconds)
-            };
-        }); 
-
-
-        services.AddOutputCache(policy =>
-        {
-            policy.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(cacheOptions.CurrentValue.CacheLifeTime);
-        })
-        .AddStackExchangeRedisOutputCache(redisOptions =>
-        {
-            redisOptions.ConfigurationOptions = new ConfigurationOptions
+            configure.ConfigurationOptions = new ConfigurationOptions
             { 
-                EndPoints = { cacheOptions.CurrentValue.Host },
-                ConnectTimeout = (int)TimeSpan.FromSeconds(cacheOptions.CurrentValue.ConnectTimeout).TotalMilliseconds,
-                SyncTimeout = (int)TimeSpan.FromSeconds(cacheOptions.CurrentValue.SyncTimeout).TotalMilliseconds,
+                EndPoints = { options.Host },
+                ConnectTimeout = (int)TimeSpan.FromSeconds(options.ConnectTimeout).TotalMilliseconds,
+                SyncTimeout = (int)TimeSpan.FromSeconds(options.SyncTimeout).TotalMilliseconds,
                 AbortOnConnectFail = false,
                 ReconnectRetryPolicy = new ExponentialRetry((int)TimeSpan
-                    .FromSeconds(cacheOptions.CurrentValue.ReconnectRetryPolicy).TotalMilliseconds)
+                    .FromSeconds(options.ReconnectRetryPolicy).TotalMilliseconds)
+            };
+        });
+
+
+        builder.Services.AddOutputCache(configure =>
+        {
+            configure.DefaultExpirationTimeSpan = TimeSpan.FromSeconds(options.CacheLifeTime);
+        })
+        .AddStackExchangeRedisOutputCache(configure =>
+        {
+            configure.ConfigurationOptions = new ConfigurationOptions
+            { 
+                EndPoints = { options.Host },
+                ConnectTimeout = (int)TimeSpan.FromSeconds(options.ConnectTimeout).TotalMilliseconds,
+                SyncTimeout = (int)TimeSpan.FromSeconds(options.SyncTimeout).TotalMilliseconds,
+                AbortOnConnectFail = false,
+                ReconnectRetryPolicy = new ExponentialRetry((int)TimeSpan
+                    .FromSeconds(options.ReconnectRetryPolicy).TotalMilliseconds)
             };
         });  
 
 
-        return services;
+        return builder;
     }
 
 
-    public static IServiceCollection AddSqlDatabaseContext<TDbContext>(this IServiceCollection services, bool isRetryable = false) where TDbContext : DbContext
+    public static WebApplicationBuilder AddSqlDatabaseContext<TDbContext>(this WebApplicationBuilder builder, bool isRetryable = false) where TDbContext : DbContext
     {
-        var databaseOption = services.BuildServiceProvider().GetService<IOptionsMonitor<DatabaseConfiguration>>()
-            ?? throw new Exception("Please provide value for database option");
+        var options = builder.Configuration.GetSection(DatabaseConfiguration.SectionName).Get<DatabaseConfiguration>()
+          ?? throw new Exception();
 
-        services.AddDbContext<TDbContext>(options =>
+
+        builder.Services.AddDbContext<TDbContext>(configure =>
         {
-            options.UseSqlServer(databaseOption.CurrentValue.ConnectionString, action =>
+            configure.UseSqlServer(options.ConnectionString, action =>
             {
                 if (isRetryable)
                 {
                     action.EnableRetryOnFailure();
                 }
-                action.CommandTimeout(databaseOption.CurrentValue.CommandTimeout);
+                action.CommandTimeout(options.CommandTimeout);
             });
         });
 
-        return services;
+        return builder;
     }
 
 
-    public static IServiceCollection AddValidation<T>(this IServiceCollection services)
+    public static WebApplicationBuilder AddValidation<T>(this WebApplicationBuilder builder)
     {
-        services.AddFluentValidationAutoValidation();
-        services.AddFluentValidationClientsideAdapters();
-        services.AddValidatorsFromAssemblyContaining<T>();
+        builder.Services.AddFluentValidationAutoValidation();
+        builder.Services.AddFluentValidationClientsideAdapters();
+        builder.Services.AddValidatorsFromAssemblyContaining<T>();
 
-        return services;
+        return builder;
     } 
 
     public static WebApplicationBuilder AddLoggingContext(this WebApplicationBuilder builder)
@@ -276,38 +273,25 @@ public static class ServiceRegistrationExtension
 
     public static HostApplicationBuilder AddLoggingContext(this HostApplicationBuilder builder)
     {
-        //builder.Logging.ClearProviders();
-        //builder.Logging.AddConsole();
-        //builder.Logging.AddDebug();
+        builder.Logging.ClearProviders();
+        builder.Logging.AddConsole();
+        builder.Logging.AddDebug();
 
         return builder;
     }
 
-    public static IServiceCollection AddDataEncryption(this IServiceCollection services, IConfiguration configuration)
-    { 
-        bool production = false;
-        if (production)
+    public static WebApplicationBuilder AddDataEncryption(
+        this WebApplicationBuilder builder, 
+        IConfiguration configuration)
+    {
+        builder.Services.AddSingleton<IEncryptionService>(configure =>
         {
-            services.AddDefaultAWSOptions(configuration.GetAWSOptions());
-            services.AddAWSService<IAmazonKeyManagementService>();
-            services.AddSingleton<IEncryptionService>(sp =>
-            {
-                var kmsClient = sp.GetRequiredService<IAmazonKeyManagementService>();
-                var kmsOptions = sp.GetRequiredService<IOptionsMonitor<EncryptionConfiguration>>();
-                return new ThirdPartyEncryptionService(kmsClient, kmsOptions.CurrentValue.Id);
-            });
-        }
-        else
-        {
-            services.AddSingleton<IEncryptionService>(sp =>
-            {
-                var kmsOptions = sp.GetRequiredService<IOptionsMonitor<EncryptionConfiguration>>();
-                return new EncryptionService(kmsOptions.CurrentValue.SecretKey);
-            });
-        }
-        services.AddSingleton<IHashService, HashService>();
+            var kmsOptions = configure.GetRequiredService<IOptionsMonitor<EncryptionConfiguration>>();
+            return new EncryptionService(kmsOptions.CurrentValue.SecretKey);
+        });
+        builder.Services.AddSingleton<IHashService, HashService>();
 
-        return services;
+        return builder;
     }
 
     public static WebApplicationBuilder AddCoreOptionConfiguration(this WebApplicationBuilder builder)
@@ -333,26 +317,26 @@ public static class ServiceRegistrationExtension
         return builder;
     } 
 
-    public static HostApplicationBuilder AddHostedCoreOptionConfiguration(this HostApplicationBuilder builder)
-    {
-        builder.Services.Configure<AccountServiceConfiguration>(builder.Configuration.GetSection(AccountServiceConfiguration.SectionName));
-        builder.Services.Configure<SenangPayPaymentConfiguration>(builder.Configuration.GetSection(SenangPayPaymentConfiguration.SectionName));
-        builder.Services.Configure<MasterDataServiceConfiguration>(builder.Configuration.GetSection(MasterDataServiceConfiguration.SectionName));
-        builder.Services.Configure<CacheConfiguration>(builder.Configuration.GetSection(CacheConfiguration.SectionName));
-        builder.Services.Configure<DatabaseConfiguration>(builder.Configuration.GetSection(DatabaseConfiguration.SectionName));
-        builder.Services.Configure<ElasticsearchConfiguration>(builder.Configuration.GetSection(ElasticsearchConfiguration.SectionName));
-        builder.Services.Configure<EncryptionConfiguration>(builder.Configuration.GetSection(EncryptionConfiguration.SectionName));
-        builder.Services.Configure<GoogleSSOConfiguration>(builder.Configuration.GetSection(GoogleSSOConfiguration.SectionName));
-        builder.Services.Configure<IdempotencyConfiguration>(builder.Configuration.GetSection(IdempotencyConfiguration.SectionName));
-        builder.Services.Configure<JwtConfiguration>(builder.Configuration.GetSection(JwtConfiguration.SectionName));
-        builder.Services.Configure<MessagingConfiguration>(builder.Configuration.GetSection(MessagingConfiguration.SectionName));
-        builder.Services.Configure<OtpConfiguration>(builder.Configuration.GetSection(OtpConfiguration.SectionName));
-        builder.Services.Configure<RateLimiterConfiguration>(builder.Configuration.GetSection(RateLimiterConfiguration.SectionName));
-        builder.Services.Configure<RateLimiterRuleConfiguration>(builder.Configuration.GetSection(RateLimiterRuleConfiguration.SectionName));
-        builder.Services.Configure<ReferralProgramConfiguration>(builder.Configuration.GetSection(ReferralProgramConfiguration.SectionName));
-        builder.Services.Configure<StorageConfiguration>(builder.Configuration.GetSection(StorageConfiguration.SectionName));
-        builder.Services.Configure<CatalogServiceConfiguration>(builder.Configuration.GetSection(CatalogServiceConfiguration.SectionName));
-        builder.Services.Configure<SafelyShutdownConfiguration>(builder.Configuration.GetSection(SafelyShutdownConfiguration.SectionName));
-        return builder;
-    }
+    //public static HostApplicationBuilder AddHostedCoreOptionConfiguration(this HostApplicationBuilder builder)
+    //{
+    //    builder.Services.Configure<AccountServiceConfiguration>(builder.Configuration.GetSection(AccountServiceConfiguration.SectionName));
+    //    builder.Services.Configure<SenangPayPaymentConfiguration>(builder.Configuration.GetSection(SenangPayPaymentConfiguration.SectionName));
+    //    builder.Services.Configure<MasterDataServiceConfiguration>(builder.Configuration.GetSection(MasterDataServiceConfiguration.SectionName));
+    //    builder.Services.Configure<CacheConfiguration>(builder.Configuration.GetSection(CacheConfiguration.SectionName));
+    //    builder.Services.Configure<DatabaseConfiguration>(builder.Configuration.GetSection(DatabaseConfiguration.SectionName));
+    //    builder.Services.Configure<ElasticsearchConfiguration>(builder.Configuration.GetSection(ElasticsearchConfiguration.SectionName));
+    //    builder.Services.Configure<EncryptionConfiguration>(builder.Configuration.GetSection(EncryptionConfiguration.SectionName));
+    //    builder.Services.Configure<GoogleSSOConfiguration>(builder.Configuration.GetSection(GoogleSSOConfiguration.SectionName));
+    //    builder.Services.Configure<IdempotencyConfiguration>(builder.Configuration.GetSection(IdempotencyConfiguration.SectionName));
+    //    builder.Services.Configure<JwtConfiguration>(builder.Configuration.GetSection(JwtConfiguration.SectionName));
+    //    builder.Services.Configure<MessagingConfiguration>(builder.Configuration.GetSection(MessagingConfiguration.SectionName));
+    //    builder.Services.Configure<OtpConfiguration>(builder.Configuration.GetSection(OtpConfiguration.SectionName));
+    //    builder.Services.Configure<RateLimiterConfiguration>(builder.Configuration.GetSection(RateLimiterConfiguration.SectionName));
+    //    builder.Services.Configure<RateLimiterRuleConfiguration>(builder.Configuration.GetSection(RateLimiterRuleConfiguration.SectionName));
+    //    builder.Services.Configure<ReferralProgramConfiguration>(builder.Configuration.GetSection(ReferralProgramConfiguration.SectionName));
+    //    builder.Services.Configure<StorageConfiguration>(builder.Configuration.GetSection(StorageConfiguration.SectionName));
+    //    builder.Services.Configure<CatalogServiceConfiguration>(builder.Configuration.GetSection(CatalogServiceConfiguration.SectionName));
+    //    builder.Services.Configure<SafelyShutdownConfiguration>(builder.Configuration.GetSection(SafelyShutdownConfiguration.SectionName));
+    //    return builder;
+    //}
 }

@@ -5,6 +5,7 @@ using Core.Services.Interfaces;
 using Core.Utilities;
 using Identity.API.Domain.Entities;
 using Identity.API.Domain.Enumerations;
+using Identity.API.SeedWork;
 using Identity.API.Service.Interfaces;
 using Microsoft.Extensions.Options;
 
