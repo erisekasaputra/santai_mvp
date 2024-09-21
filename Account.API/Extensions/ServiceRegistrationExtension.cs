@@ -4,11 +4,12 @@ using Account.API.Applications.Services.Interfaces;
 using Account.Domain.SeedWork;
 using Account.Infrastructure;
 using Core.Configurations;
+using Core.CustomDelegates;
+using Core.Middlewares;
 using Core.Services;
 using Core.Services.Interfaces;
 using MassTransit;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
 
 namespace Account.API.Extensions;
 
@@ -16,6 +17,10 @@ public static class ServiceRegistrationExtension
 {    
     public static WebApplicationBuilder AddApplicationService(this WebApplicationBuilder builder)
     {
+        builder.Services.AddTransient<GlobalExceptionMiddleware>();
+        builder.Services.AddTransient<TokenJwtHandler>();
+        builder.Services.AddTransient<ITokenService, JwtTokenService>();
+         
         builder.Services.AddScoped<IUserInfoService, UserInfoService>();
         builder.Services.AddScoped<ApplicationService>();
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); 
@@ -23,13 +28,15 @@ public static class ServiceRegistrationExtension
         builder.Services.AddScoped<IMechanicCache, MechanicCache>();
         builder.Services.AddHostedService<OrderWaitingMechanicAssignJob>();
         builder.Services.AddHostedService<OrderWaitingMechanicConfirmExpiryJob>();
+         
+
         return builder;
     }  
 
     public static WebApplicationBuilder AddMassTransitContext<TDbContext>(this WebApplicationBuilder builder) where TDbContext : DbContext
     { 
-        var options = builder.Configuration.GetSection(MessagingConfiguration.SectionName).Get<IOptionsMonitor<MessagingConfiguration>>()?.CurrentValue
-            ?? throw new Exception("Please provide value for message bus options"); 
+        var options = builder.Configuration.GetSection(MessagingConfiguration.SectionName).Get<MessagingConfiguration>()
+            ?? throw new Exception(); 
 
         builder.Services.AddMassTransit(x =>
         {

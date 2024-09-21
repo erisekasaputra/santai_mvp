@@ -50,14 +50,16 @@ public static class ServiceRegistrationExtension
     public static WebApplicationBuilder AddApplicationService(this WebApplicationBuilder builder) 
     {
         builder.Services.AddTransient<GlobalExceptionMiddleware>();
-        builder.Services.AddSingleton<ActionMethodUtility>(); 
+         
         builder.Services.AddScoped<ITokenService, JwtTokenService>();
         builder.Services.AddScoped<IJwtTokenValidator, JwtTokenValidator>(); 
         builder.Services.AddScoped<IGoogleTokenValidator, MockGoogleTokenValidator>(); 
-        builder.Services.AddSingleton<IOtpService, OtpService>();
-        builder.Services.AddSingleton<ICacheService, CacheService>(); 
         builder.Services.AddScoped<IUserInfoService, UserInfoService>();
         builder.Services.AddScoped<ITokenCacheService, TokenCacheService>();
+  
+        builder.Services.AddSingleton<IOtpService, OtpService>();
+        builder.Services.AddSingleton<ICacheService, CacheService>(); 
+        builder.Services.AddSingleton<ActionMethodUtility>(); 
 
         return builder;
     }  

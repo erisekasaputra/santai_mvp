@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Options;
-using MassTransit;
+﻿using MassTransit;
 using Microsoft.EntityFrameworkCore;
 using Core.Configurations;
 using Core.Services;
@@ -12,6 +11,7 @@ using Polly.Extensions.Http;
 using Polly;
 using Ordering.API.Applications.Consumers;
 using Core.CustomDelegates;
+using Core.Middlewares; 
 
 namespace Ordering.API.Extensions;
 
@@ -19,13 +19,17 @@ public static class ServiceRegistrationExtension
 {
     public static WebApplicationBuilder AddApplicationService(this WebApplicationBuilder builder)
     {
-        builder.Services.AddTransient<ITokenService, JwtTokenService>();
         builder.Services.AddTransient<TokenJwtHandler>();
+        builder.Services.AddTransient<GlobalExceptionMiddleware>();
+        builder.Services.AddTransient<ITokenService, JwtTokenService>();
+         
         builder.Services.AddScoped<IPaymentService, PaymentService>(); 
         builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
         builder.Services.AddScoped<IUserInfoService, UserInfoService>();
         builder.Services.AddSingleton<ICacheService, CacheService>();
-        builder.Services.AddHostedService<ScheduledOrderWorker>();
+        builder.Services.AddHostedService<ScheduledOrderWorker>(); 
+
+
         return builder;
     }
 
@@ -41,6 +45,7 @@ public static class ServiceRegistrationExtension
 
         builder.Services.AddHttpClient<IAccountServiceAPI, AccountServiceAPI>(client =>
         {
+            client.Timeout = TimeSpan.FromSeconds(5);
             client.BaseAddress = new Uri(accountOptions.Host ?? throw new Exception("Account service client host is not set"));
         })
         .AddPolicyHandler(retryPolicy).AddHttpMessageHandler<TokenJwtHandler>();
@@ -50,6 +55,7 @@ public static class ServiceRegistrationExtension
 
         builder.Services.AddHttpClient<ICatalogServiceAPI, CatalogServiceAPI>(client =>
         {
+            client.Timeout = TimeSpan.FromSeconds(10);
             client.BaseAddress = new Uri(catalogOptions?.Host ?? throw new Exception("Catalog service client host is not set"));
         })
         .AddPolicyHandler(retryPolicy).AddHttpMessageHandler<TokenJwtHandler>();
@@ -58,6 +64,7 @@ public static class ServiceRegistrationExtension
 
         builder.Services.AddHttpClient<IMasterDataServiceAPI, MasterDataServiceAPI>(client =>
         {
+            client.Timeout = TimeSpan.FromSeconds(5);
             client.BaseAddress = new Uri(masterOptions.Host ?? throw new Exception("Master data service client host is not set"));
         })
        .AddPolicyHandler(retryPolicy);

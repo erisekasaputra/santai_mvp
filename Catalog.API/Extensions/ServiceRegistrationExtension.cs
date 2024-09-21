@@ -3,7 +3,9 @@ using Catalog.API.Applications.Services;
 using Catalog.Domain.SeedWork;
 using Catalog.Infrastructure;
 using Catalog.Infrastructure.Helpers;
-using Core.Configurations; 
+using Core.Configurations;
+using Core.CustomDelegates;
+using Core.Middlewares;
 using Core.Services;
 using Core.Services.Interfaces;
 using MassTransit;
@@ -14,12 +16,19 @@ namespace Catalog.API.Extensions;
 public static class ServiceRegistrationExtension
 {  
     public static WebApplicationBuilder AddApplicationService(this WebApplicationBuilder builder)
-    { 
-        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-        builder.Services.AddScoped<IUserInfoService, UserInfoService>();
-        builder.Services.AddSingleton<ICacheService, CacheService>(); 
+    {
+        builder.Services.AddTransient<GlobalExceptionMiddleware>();
+        builder.Services.AddTransient<TokenJwtHandler>();
+        builder.Services.AddTransient<ITokenService, JwtTokenService>();
+          
+        builder.Services.AddScoped<IUserInfoService, UserInfoService>(); 
+        builder.Services.AddScoped<ICacheService, CacheService>(); 
+        builder.Services.AddScoped<IUnitOfWork, UnitOfWork>(); 
         builder.Services.AddScoped<ApplicationService>();
         builder.Services.AddScoped<MetaTableHelper>(); 
+
+        builder.Services.AddSingleton<ICacheService, CacheService>();  
+        
         return builder;
     } 
 

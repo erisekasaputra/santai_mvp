@@ -9,6 +9,7 @@ builder.AddJsonEnumConverterBehavior();
 builder.Services.AddControllers();
 builder.Services.AddDirectoryBrowser();
 builder.AddRedisDatabase();
+builder.Services.AddTransient<GlobalExceptionMiddleware>();
 
 var app = builder.Build();
 
