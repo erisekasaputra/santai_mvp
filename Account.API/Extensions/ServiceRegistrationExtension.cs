@@ -52,7 +52,9 @@ public static class ServiceRegistrationExtension
                 ("account-service-phone-number-duplicate-integration-event-queue", typeof(PhoneNumberDuplicateIntegrationEventConsumer)),
                 ("account-service-order-finding-mechanic-integration-event-queue", typeof(OrderFindingMechanicIntegrationEventConsumer)),
                 ("account-service-order-cancelled-by-mechanic-integration-event-queue", typeof(OrderCancelledByMechanicIntegrationEventConsumer)),
-                ("account-service-order-cancelled-by-buyer-integration-event-queue", typeof(OrderCancelledByUserIntegrationEventConsumer)) 
+                ("account-service-order-cancelled-by-buyer-integration-event-queue", typeof(OrderCancelledByUserIntegrationEventConsumer)), 
+                ("account-service-order-service-incompleted-integration-event-queue", typeof(ServiceIncompletedIntegrationEventConsumer)), 
+                ("account-service-order-service-completed-integration-event-queue", typeof(ServiceCompletedIntegrationEventConsumer))
             };
 
             //foreach ((_, Type consumerType) in consumers) x.AddConsumer(consumerType); 

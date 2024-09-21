@@ -454,8 +454,7 @@ public class OrderController : ControllerBase
     [Authorize(Policy = "MechanicUserOnlyPolicy")]
     public async Task<IResult> SetDispatchMechanic(
         Guid orderId)
-    {
-
+    {  
         try
         {
             var userClaim = _userInfoService.GetUserInfo();
