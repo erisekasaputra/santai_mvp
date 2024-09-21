@@ -75,7 +75,7 @@ public class Discount : Entity
             throw new DomainException("Amount cannot be negative.");
 
         if (orderAmount < MinimumOrderValue)
-            return new Money(0, orderCurrency);
+            throw new DomainException($"Can not use coupon, minimun order is {MinimumOrderValue:F2} {Currency}");
 
         if (orderCurrency != Currency)
         {

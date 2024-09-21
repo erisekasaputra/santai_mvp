@@ -42,13 +42,10 @@ public class PaymentController
             }
 
             var command = new PayOrderPaymentByOrderIdCommand(
-                request.OrderId,
-                request.Name,
-                request.Email,
-                request.Phone,
+                request.OrderId, 
                 request.Amount,
                 request.Method,
-                request.Reference,
+                request.TransactionId,
                 request.Message,
                 request.Hash,
                 request.Status);

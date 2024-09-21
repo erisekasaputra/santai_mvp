@@ -33,7 +33,9 @@ public class PayOrderPaymentByOrderIdCommandHandler(
                 return Result.Failure("Data not found", ResponseStatus.NotFound);
             } 
 
-            if (_paymentService.ValidatePayment(request.OrderId, order.GetDetail(), order.GrandTotal.Amount, request.Hash))
+            if (_paymentService.ValidatePayment(
+                new SenangPayPaymentRequest(request.TransactionId, request.OrderId, request.Amount, request.Method, request.Message, request.Status, request.Hash),
+                request.Hash))
             {
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result.Failure("Failed to authorize hash payment", ResponseStatus.BadRequest);
@@ -45,7 +47,7 @@ public class PayOrderPaymentByOrderIdCommandHandler(
                 order.Currency,
                 DateTime.UtcNow,
                 request.Method,
-                request.Reference));
+                request.TransactionId));
 
             _unitOfWork.Orders.Update(order);  
             if (order.IsScheduled && order.IsShouldRequestPayment)

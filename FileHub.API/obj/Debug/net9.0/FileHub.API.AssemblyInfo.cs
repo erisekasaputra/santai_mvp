@@ -15,7 +15,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("FileHub.API")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+c1ec522ada0403f0a5cc1eff65740ad375dbfe74")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9d79ff20d0f6e5d0b3b3ed6b2a7f12bf0bb63014")]
 [assembly: System.Reflection.AssemblyProductAttribute("FileHub.API")]
 [assembly: System.Reflection.AssemblyTitleAttribute("FileHub.API")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

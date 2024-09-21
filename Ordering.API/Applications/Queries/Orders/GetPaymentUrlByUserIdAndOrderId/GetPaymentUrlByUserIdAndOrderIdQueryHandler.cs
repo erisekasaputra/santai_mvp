@@ -30,14 +30,12 @@ public class GetPaymentUrlByUserIdAndOrderIdQueryHandler(
             }
 
             string paymentUrl = _paymentService.GeneratePaymentUrl(
-                new SenangPayPaymentRequest(
-                    order.Id,
-                    order.GetDetail(),
-                    order.Buyer.Name,
-                    order.Buyer.Email,
-                    order.Buyer.PhoneNumber,
-                    order.GrandTotal.Amount));
-              
+                order.GetDetail(),
+                order.GrandTotal.Amount,
+                order.Id,
+                order.Buyer.Name,
+                order.Buyer.Email ?? string.Empty,
+                order.Buyer.PhoneNumber ?? string.Empty);  
 
             return Result.Success(new PaymentUrlResponseDto(paymentUrl), ResponseStatus.Ok);
         }

@@ -1,6 +1,7 @@
 ﻿using Core.Configurations;
 using Core.Utilities; 
-using Microsoft.Extensions.Options; 
+using Microsoft.Extensions.Options;
+using Ordering.API.Applications.Dtos.Requests;
 using Ordering.API.Applications.Services.Interfaces;
 
 namespace Ordering.API.Applications.Services;
@@ -14,11 +15,11 @@ public class PaymentService : IPaymentService
     {
         _senangPayConfig = senangPayConfig.CurrentValue;
     }
-
+     
     public string GeneratePaymentUrl(
-        Guid orderId,
         string detail,
         decimal amount,
+        Guid orderId,
         string name,
         string email,
         string phoneNumber)
@@ -43,10 +44,10 @@ public class PaymentService : IPaymentService
         return fullPaymentUrl;
     }
 
-    public bool ValidatePayment(Guid orderId, string detail, decimal amount, string hash)
+    public bool ValidatePayment(SenangPayPaymentRequest request, string hash)
     {
-        var secret = _senangPayConfig.SecretKey;
-        var comparerHash = SecretGenerator.HmacHash($"{secret}{detail}{amount:F2}{orderId}", secret);
+        var secret = _senangPayConfig.SecretKey; 
+        var comparerHash = SecretGenerator.HmacHash($"?transactionId={request.TransactionId}&orderId={request.OrderId}&amount={request.Amount:F2}&method={request.Method}&message=P{request.Message}&status={request.Status}&hash={request.Hash}", secret);
         if (comparerHash == hash)
         {
             return true;

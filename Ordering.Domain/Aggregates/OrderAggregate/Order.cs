@@ -261,7 +261,7 @@ public class Order : Entity
 
         if (Status is OrderStatus.ServiceCompleted or OrderStatus.ServiceIncompleted)
         {
-            errorMessage = $"Can not canceling the order when the status is {Status}";
+            errorMessage = $"Can not canceling the order when it is completed";
             return false;
         }
 
@@ -332,7 +332,7 @@ public class Order : Entity
 
         if (Status is not OrderStatus.MechanicArrived)
         {
-            throw new DomainException($"Order status must be {OrderStatus.MechanicArrived}");
+            throw new DomainException($"Can not mark order as mechanic arrived");
         }
 
         if (mechanicId == Guid.Empty)
@@ -380,7 +380,7 @@ public class Order : Entity
 
         if (Status is not OrderStatus.ServiceInProgress)
         {
-            throw new DomainException($"Order status must be {OrderStatus.ServiceInProgress}");
+            throw new DomainException($"Order status must be {OrderStatus.ServiceInProgress.ToString().SplitByUpperCase()}");
         }
 
         if (mechanicId == Guid.Empty)
@@ -428,7 +428,7 @@ public class Order : Entity
 
         if (Status is not OrderStatus.ServiceInProgress)
         {
-            throw new DomainException($"Order status must be {OrderStatus.ServiceInProgress}");
+            throw new DomainException($"Order status must be {OrderStatus.ServiceInProgress.ToString().SplitByUpperCase()}");
         }
 
         if (mechanicId == Guid.Empty)
@@ -590,7 +590,7 @@ public class Order : Entity
 
         if (Status is not OrderStatus.MechanicAssigned)
         {
-            throw new DomainException($"Order status must be {OrderStatus.MechanicAssigned}");
+            throw new DomainException($"Order status must be {OrderStatus.MechanicAssigned.ToString().SplitByUpperCase()}");
         }
 
         if (Mechanic is null)
@@ -616,7 +616,7 @@ public class Order : Entity
 
         if (Status is not OrderStatus.MechanicDispatched)
         {
-            throw new DomainException($"Order status must be {OrderStatus.MechanicDispatched}");
+            throw new DomainException($"Order status must be {OrderStatus.MechanicDispatched.ToString().SplitByUpperCase()}");
         }
 
         if (Mechanic is null)
@@ -640,7 +640,7 @@ public class Order : Entity
     {
         if (Status != OrderStatus.PaymentPending)
         {
-            throw new DomainException($"Status order must be in {OrderStatus.PaymentPending}");
+            throw new DomainException($"Status order must be in {OrderStatus.PaymentPending.ToString().SplitByUpperCase()}");
         }
 
         PaymentUrl = url;
@@ -696,8 +696,9 @@ public class Order : Entity
             throw new DomainException("Order amount can not less than or equal with 0");
         }
 
-        GrandTotal.SetAmount(totalAmount, Currency);
-        GrandTotal -= Discount?.Apply(totalAmount, Currency) ?? new Money(0, Currency);
+        GrandTotal.SetAmount(totalAmount, Currency); 
+         
+        GrandTotal -= Discount?.Apply(totalAmount, Currency) ?? new Money(0, Currency); ;
 
         var holdedGrandTotal = GrandTotal;
 

@@ -292,16 +292,14 @@ public class CreateOrderCommandHandler(
         await _unitOfWork.Orders.CreateAsync(order, cancellationToken);
 
         if (order.IsShouldRequestPayment)
-        {
-            var requestPayment = new SenangPayPaymentRequest(
-                order.Id,
+        { 
+            string paymentUrl = _paymentService.GeneratePaymentUrl(
                 order.GetDetail(),
+                order.GrandTotal.Amount,
+                order.Id,
                 order.Buyer.Name,
-                order.Buyer.Email,
-                order.Buyer.PhoneNumber,
-                order.GrandTotal.Amount);
-
-            string paymentUrl = _paymentService.GeneratePaymentUrl(requestPayment); 
+                order.Buyer.Email ?? string.Empty,
+                order.Buyer.PhoneNumber ?? string.Empty); 
             order.SetPaymentUrl(paymentUrl);
         }
 

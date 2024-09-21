@@ -414,14 +414,14 @@
   {
     "ContainingType": "Ordering.API.Controllers.PaymentController",
     "Method": "CreatePayment",
-    "RelativePath": "api/v1/payment",
+    "RelativePath": "api/v1/payment/callback-senangpay",
     "HttpMethod": "POST",
     "IsController": true,
     "Order": 0,
     "Parameters": [
       {
         "Name": "request",
-        "Type": "Ordering.API.Applications.Dtos.Requests.PaymentRequest",
+        "Type": "Ordering.API.Applications.Dtos.Requests.SenangPayPaymentRequest",
         "IsRequired": true
       }
     ],
