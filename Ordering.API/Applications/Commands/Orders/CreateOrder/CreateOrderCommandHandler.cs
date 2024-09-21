@@ -291,16 +291,18 @@ public class CreateOrderCommandHandler(
         order.CalculateGrandTotal(); 
         await _unitOfWork.Orders.CreateAsync(order, cancellationToken);
 
-        string paymentUrl;
-        if (true) // order.IsShouldRequestPayment
+        if (order.IsShouldRequestPayment)
         {
-            paymentUrl = _paymentService.GeneratePaymentUrl(
-                order.Id, 
-                $"{order.Buyer.Name} Detail Order", 
-                order.Buyer.Name, 
-                order.Buyer.Email, 
-                order.Buyer.PhoneNumber, 
+            var requestPayment = new SenangPayPaymentRequest(
+                order.Id,
+                order.GetDetail(),
+                order.Buyer.Name,
+                order.Buyer.Email,
+                order.Buyer.PhoneNumber,
                 order.GrandTotal.Amount);
+
+            string paymentUrl = _paymentService.GeneratePaymentUrl(requestPayment); 
+            order.SetPaymentUrl(paymentUrl);
         }
 
         if (order.IsScheduled)
@@ -313,13 +315,10 @@ public class CreateOrderCommandHandler(
             await _unitOfWork.ScheduledOrders.CraeteAsync(scheduledOrderWorker);
         }
 
+
         var orderDto = order.ToOrderResponseDto(); 
         await _unitOfWork.CommitTransactionAsync(cancellationToken); 
-        return Result.Success(new 
-        {
-            OrderDto = orderDto,
-            Url = paymentUrl
-        }, ResponseStatus.Created);
+        return Result.Success(orderDto, ResponseStatus.Created);
     }
 
     private static bool IsNullCatalogItems(string? name, string? sku, decimal? price, Currency? currency)

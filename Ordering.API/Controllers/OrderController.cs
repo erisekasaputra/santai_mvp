@@ -24,6 +24,7 @@ using Ordering.API.Applications.Dtos.Requests;
 using Ordering.API.Applications.Queries.Orders.GetOrderByIdAndUserId;
 using Ordering.API.Applications.Queries.Orders.GetOrderSecretByOrderId;
 using Ordering.API.Applications.Queries.Orders.GetPaginatedOrdersByUserId;
+using Ordering.API.Applications.Queries.Orders.GetPaymentUrlByUserIdAndOrderId;
 using Ordering.API.Applications.Services.Interfaces;
 using Ordering.API.CustomAttributes;
 using Ordering.API.Extensions;
@@ -239,6 +240,33 @@ public class OrderController : ControllerBase
             return TypedResults.InternalServerError(
                 Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         } 
+    }
+
+    [HttpGet("{orderId}/payment-url")]
+    [Authorize]
+    public async Task<IResult> GetPaymentUrl(
+        Guid orderId)
+    {
+        try
+        {
+            var userClaim = _userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Forbid();
+            }
+
+            var result = await _mediator.Send(
+                new GetPaymentUrlByUserIdAndOrderIdQuery(
+                    orderId, userClaim.Sub));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            return TypedResults.InternalServerError(
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+        }
     }
 
     [HttpPatch("{orderId}/service/fleet/{fleetId}/start")]

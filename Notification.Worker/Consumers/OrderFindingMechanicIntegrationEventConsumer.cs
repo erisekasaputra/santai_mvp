@@ -15,8 +15,7 @@ public class OrderFindingMechanicIntegrationEventConsumer(
     private readonly ICacheService _cacheService = cacheService;
      
     public async Task Consume(ConsumeContext<OrderFindingMechanicIntegrationEvent> context)
-    {  
-        Console.WriteLine(context.Message.OrderId); 
+    {   
         await Task.CompletedTask;
     }
 }

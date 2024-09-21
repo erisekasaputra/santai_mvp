@@ -230,6 +230,22 @@
   },
   {
     "ContainingType": "Ordering.API.Controllers.OrderController",
+    "Method": "GetPaymentUrl",
+    "RelativePath": "api/v1/orders/{orderId}/payment-url",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Ordering.API.Controllers.OrderController",
     "Method": "SetOrderRating",
     "RelativePath": "api/v1/orders/{orderId}/rating",
     "HttpMethod": "PUT",

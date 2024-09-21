@@ -19,6 +19,7 @@ public class LineItemResponseDto
         string name,
         string sku,
         decimal unitPrice,
+        int quantity,
         Currency currency,
         decimal? taxPercentage,
         decimal? taxValue,
@@ -28,6 +29,7 @@ public class LineItemResponseDto
         Name = name; 
         Sku = sku;
         UnitPrice = unitPrice;
+        Quantity = quantity;
         Currency = currency;
         TaxPercentage = taxPercentage;
         TaxValue = taxValue;

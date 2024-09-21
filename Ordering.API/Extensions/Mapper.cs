@@ -70,6 +70,7 @@ public static class Mapper
             lineItem.Name,
             lineItem.Sku,
             lineItem.UnitPrice,
+            lineItem.Quantity,
             lineItem.SubTotal.Currency,
             lineItem.Tax?.Rate,
             lineItem.Tax?.TaxAmount.Amount,

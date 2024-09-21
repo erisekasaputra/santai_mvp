@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "s853NfsPUQs=",
+  "dgSpecHash": "cy5OWtwprt0=",
   "success": true,
-  "projectFilePath": "C:\\Santai.MVP\\account.api\\Account.API.csproj",
+  "projectFilePath": "C:\\Santai.MVP\\Account.API\\Account.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\erise\\.nuget\\packages\\aspnetcoreratelimit\\5.0.0\\aspnetcoreratelimit.5.0.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.cognitoidentity\\3.7.400.2\\awssdk.cognitoidentity.3.7.400.2.nupkg.sha512",

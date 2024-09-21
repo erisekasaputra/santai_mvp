@@ -151,5 +151,6 @@ public class OrderingEntityConfiguration : IEntityTypeConfiguration<Order>
         builder.Ignore(x => x.IsPaid);
         builder.Ignore(x => x.IsRated);
         builder.Ignore(x => x.IsPaymentExpire);
+        builder.Ignore(x => x.PaymentUrl);
     }
 }

@@ -4,7 +4,9 @@ using Core.Messages;
 using Core.Results;
 using MediatR;
 using Ordering.API.Applications.Commands.Orders.CreateOrder;
-using Ordering.API.Applications.Commands.Orders.PayOrderPaymentByOrderId; 
+using Ordering.API.Applications.Commands.Orders.PayOrderPaymentByOrderId;
+using Ordering.API.Applications.Dtos.Requests;
+using Ordering.API.Applications.Services.Interfaces;
 using Ordering.Domain.Aggregates.OrderAggregate;
 using Ordering.Domain.SeedWork;
 using System.Data;
@@ -13,33 +15,39 @@ namespace Ordering.API.Applications.Commands.Orders.PayOrder;
 
 public class PayOrderPaymentByOrderIdCommandHandler(
     ILogger<CreateOrderCommandHandler> logger, 
+    IPaymentService paymentService,
     IUnitOfWork unitOfWork) : IRequestHandler<PayOrderPaymentByOrderIdCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly ILogger<CreateOrderCommandHandler> _logger = logger; 
-
+    private readonly ILogger<CreateOrderCommandHandler> _logger = logger;
+    private readonly IPaymentService _paymentService = paymentService;
     public async Task<Result> Handle(PayOrderPaymentByOrderIdCommand request, CancellationToken cancellationToken)
     {
         await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
         try
-        {
+        { 
             var order = await _unitOfWork.Orders.GetByIdAsync(request.OrderId, cancellationToken); 
             if (order is null)
             {
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result.Failure("Data not found", ResponseStatus.NotFound);
+            } 
+
+            if (_paymentService.ValidatePayment(request.OrderId, order.GetDetail(), order.GrandTotal.Amount, request.Hash))
+            {
+                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                return Result.Failure("Failed to authorize hash payment", ResponseStatus.BadRequest);
             }
 
             order.SetPaymentPaid(new Payment(
                 request.OrderId,
                 request.Amount,
-                request.Currency,
-                request.PaidAt,
-                request.PaymentMethod,
-                request.BankReference));
+                order.Currency,
+                DateTime.UtcNow,
+                request.Method,
+                request.Reference));
 
-            _unitOfWork.Orders.Update(order); 
-
+            _unitOfWork.Orders.Update(order);  
             if (order.IsScheduled && order.IsShouldRequestPayment)
             {
                 var scheduledOrder = await _unitOfWork.ScheduledOrders.GetByOrderIdAsync(order.Id);
@@ -56,16 +64,18 @@ public class PayOrderPaymentByOrderIdCommandHandler(
 
             await _unitOfWork.CommitTransactionAsync(cancellationToken);
 
-            return Result.Success("OK", ResponseStatus.Ok);
+            return Result.Success("Payment successfull", ResponseStatus.Ok);
         }
         catch (ArgumentNullException ex)
         {
             await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+            _logger.LogError(ex, "An error occured , Error: {error}, Detail: {Detail}", ex.Message, ex.InnerException?.Message);
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);
         }
         catch (DomainException ex)
         {
             await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+            _logger.LogError(ex, "An error occured , Error: {error}, Detail: {Detail}", ex.Message, ex.InnerException?.Message);
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);
         }
         catch (NotImplementedException ex)

@@ -37,10 +37,11 @@ public class Cancellation : Entity
         if (money > CancellationRefund)
         {
             throw new DomainException("The money you give back to the buyer cannot be greater than the total order that should be refunded.");
-        }
+        } 
+       
 
-        decimal paid = Math.Round(money.Amount, 2, MidpointRounding.AwayFromZero);
-        decimal refund = Math.Round(CancellationRefund.Amount, 2, MidpointRounding.AwayFromZero);
+        decimal paid = Math.Truncate(money.Amount * 100) / 100;
+        decimal refund = Math.Truncate(CancellationRefund.Amount * 100) / 100;
         if (paid > refund)
         {
             throw new DomainException("Paid amount can not be less than the total order");

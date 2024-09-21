@@ -78,7 +78,8 @@ public class Order : Entity
         string? buyerPhone,
         UserType buyerType,
         bool isScheduled,
-        DateTime? scheduledOnUtc)
+        DateTime? scheduledOnUtc,
+        int paymentExpirationSeconds = 3600)
     {
         Secret = string.Empty;
         if (isScheduled && scheduledOnUtc is null || scheduledOnUtc <= DateTime.UtcNow)
@@ -115,7 +116,7 @@ public class Order : Entity
         if (isScheduled) ScheduledOnUtc = scheduledOnUtc; 
          
         CreatedAtUtc = DateTime.UtcNow;
-        PaymentExpiration = DateTime.UtcNow.AddHours(24);
+        PaymentExpiration = DateTime.UtcNow.AddSeconds(paymentExpirationSeconds);
         TotalCanceledByMechanic = 0;
         RaiseOrderCreatedDomainEvent();
 
@@ -153,12 +154,14 @@ public class Order : Entity
 
 
 
-        decimal roundedPaymentAmount = Math.Round(payment.Amount.Amount, 2, MidpointRounding.AwayFromZero);
-        decimal roundedGrandTotalAmount = Math.Round(GrandTotal.Amount, 2, MidpointRounding.AwayFromZero); 
-        if (roundedPaymentAmount < roundedGrandTotalAmount)
+        decimal paymentAmount = Math.Truncate(payment.Amount.Amount * 100) / 100;
+        decimal grandTotalAmount = Math.Truncate(GrandTotal.Amount * 100) / 100; 
+        if (paymentAmount < grandTotalAmount)
         {
             throw new DomainException("Paid amount can not be less than the total order");
         }
+
+
 
         if (payment.Amount.Currency != Currency) 
             throw new DomainException("Currency for payment is not equal with order currency");
@@ -833,6 +836,11 @@ public class Order : Entity
         }
 
         Fleets.Add(fleet); 
+    }
+
+    public string GetDetail()
+    {
+        return $"{string.Join('_', Buyer.Name.Split(' '))}_Summary_Order_Includes_{LineItems.Count}_Items";
     }
 
     private void RaiseServiceCompletedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId)

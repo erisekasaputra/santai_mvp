@@ -2,61 +2,66 @@
 using Core.Results;
 using Core.Services.Interfaces;
 using Core.Utilities;
+using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Ordering.API.Applications.Commands.Orders.PayOrderPaymentByOrderId;
-using Ordering.API.Applications.Dtos.Requests;
-using Ordering.API.CustomAttributes;
-using Ordering.API.Extensions;
+using Ordering.API.Applications.Dtos.Requests; 
+using Ordering.API.CustomAttributes; 
 
 namespace Ordering.API.Controllers;
 
 [ApiController]
 [Route("api/v1/payment")]
 public class PaymentController
-{
-    private readonly IUserInfoService _userInfoService;
+{ 
     private readonly ILogger<PaymentController> _logger;
-    private readonly IMediator _mediator;
-    public PaymentController(
-        IUserInfoService userInfoService,
+    private readonly IMediator _mediator; 
+    public PaymentController( 
         ILogger<PaymentController> logger,
         IMediator mediator)
-    {
-        _userInfoService = userInfoService;
+    { 
         _logger = logger; 
-        _mediator = mediator;
+        _mediator = mediator; 
     }
 
 
-    [Authorize]
-    [HttpPost]
-    [Idempotency(nameof(CreatePayment))]
+    [AllowAnonymous]
+    [HttpPost("callback-senangpay")]
     public async Task<IResult> CreatePayment(
-        [FromBody] PaymentRequest request)
+        [FromBody] SenangPayPaymentRequest request,
+        [FromServices] IValidator<SenangPayPaymentRequest> validator)
     {
         try
         {
-            var userClaim = _userInfoService.GetUserInfo();
-
-            if (userClaim is null)
+            var validation = await validator.ValidateAsync(request);
+            if (!validation.IsValid) 
             {
-                return TypedResults.Forbid();
-            } 
-             
+                return TypedResults.BadRequest(validation.Errors);
+            }
+
             var command = new PayOrderPaymentByOrderIdCommand(
                 request.OrderId,
+                request.Name,
+                request.Email,
+                request.Phone,
                 request.Amount,
-                request.Currency,
-                request.PaidAt,
-                request.PaymentMethod,
-                request.BankReference);
+                request.Method,
+                request.Reference,
+                request.Message,
+                request.Hash,
+                request.Status);
 
-            var result = await _mediator.Send(command);
-
-            return result.ToIResult();
-
+            var result = await _mediator.Send(command); 
+            if (result.IsSuccess) 
+            {
+                return TypedResults.Ok("OK");
+            }
+            else
+            {
+                return TypedResults.InternalServerError("FAILED");
+            } 
         }
         catch (Exception ex)
         {

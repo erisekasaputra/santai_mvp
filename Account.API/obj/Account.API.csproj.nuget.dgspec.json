@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Santai.MVP\\account.api\\Account.API.csproj": {}
+    "C:\\Santai.MVP\\Account.API\\Account.API.csproj": {}
   },
   "projects": {
-    "C:\\Santai.MVP\\account.api\\Account.API.csproj": {
+    "C:\\Santai.MVP\\Account.API\\Account.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Santai.MVP\\account.api\\Account.API.csproj",
+        "projectUniqueName": "C:\\Santai.MVP\\Account.API\\Account.API.csproj",
         "projectName": "Account.API",
-        "projectPath": "C:\\Santai.MVP\\account.api\\Account.API.csproj",
+        "projectPath": "C:\\Santai.MVP\\Account.API\\Account.API.csproj",
         "packagesPath": "C:\\Users\\erise\\.nuget\\packages\\",
-        "outputPath": "C:\\Santai.MVP\\account.api\\obj\\",
+        "outputPath": "C:\\Santai.MVP\\Account.API\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

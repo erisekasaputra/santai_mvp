@@ -72,7 +72,7 @@ public static class ItemAPI
             .RequireAuthorization(PolicyName.ServiceToServiceAndAdministratorUserPolicy.ToString());
 
         app.MapPatch("/items/price", SetItemsPrice)
-            .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
+            .RequireAuthorization(PolicyName.ServiceToServiceAndAdministratorUserPolicy.ToString());
 
         return app;
     }

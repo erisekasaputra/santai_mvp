@@ -29,8 +29,7 @@ public class OrderResponseDto
     public CancellationResponseDto? Cancellation { get; private set; } 
     public bool IsPaid { get; private set; }
     public bool IsRated { get; private set; }
-    public bool IsPaymentExpire { get; private set; }
-
+    public bool IsPaymentExpire { get; private set; } 
     public OrderResponseDto(
         Guid orderId,
         string secret,

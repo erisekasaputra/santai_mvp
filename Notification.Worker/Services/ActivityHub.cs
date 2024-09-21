@@ -22,8 +22,7 @@ public class ActivityHub : Hub<IActivityClient>
             Context.Abort();
             return; 
         }
-
-        Console.WriteLine("Hello");
+         
         var connectionId = Context.ConnectionId;
 
         await _cacheService.SetAsync(CacheKey.GetUserCacheKey(userId), connectionId, TimeSpan.FromHours(1));
@@ -38,8 +37,7 @@ public class ActivityHub : Hub<IActivityClient>
         if (userId != null)
         { 
             await _cacheService.DeleteAsync(CacheKey.GetUserCacheKey(userId));
-        }
-        Console.WriteLine("Good bye");
+        } 
         await base.OnDisconnectedAsync(exception);
     }
 }
