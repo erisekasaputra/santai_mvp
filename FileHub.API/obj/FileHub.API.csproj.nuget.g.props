@@ -25,6 +25,6 @@
     <PkgAWSSDK_SimpleNotificationService Condition=" '$(PkgAWSSDK_SimpleNotificationService)' == '' ">C:\Users\erise\.nuget\packages\awssdk.simplenotificationservice\3.7.400.3</PkgAWSSDK_SimpleNotificationService>
     <PkgEntityFramework Condition=" '$(PkgEntityFramework)' == '' ">C:\Users\erise\.nuget\packages\entityframework\6.5.1</PkgEntityFramework>
     <PkgAWSSDK_KeyManagementService Condition=" '$(PkgAWSSDK_KeyManagementService)' == '' ">C:\Users\erise\.nuget\packages\awssdk.keymanagementservice\4.0.0-preview.2</PkgAWSSDK_KeyManagementService>
-    <PkgAWSSDK_S3 Condition=" '$(PkgAWSSDK_S3)' == '' ">C:\Users\erise\.nuget\packages\awssdk.s3\3.7.402.11</PkgAWSSDK_S3>
+    <PkgAWSSDK_S3 Condition=" '$(PkgAWSSDK_S3)' == '' ">C:\Users\erise\.nuget\packages\awssdk.s3\4.0.0-preview.2</PkgAWSSDK_S3>
   </PropertyGroup>
 </Project>

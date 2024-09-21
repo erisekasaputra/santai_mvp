@@ -20,9 +20,9 @@ public class AwsStorageService : IStorageService
 
         // Initialize the S3 client with region and credentials
         _s3Client = new AmazonS3Client(
-            _config.CurrentValue.AccessKey,
-            _config.CurrentValue.SecretKey,
-            Amazon.RegionEndpoint.GetBySystemName(_config.CurrentValue.Region)
+            _config.CurrentValue.AWS_ACCESS_KEY_ID,
+            _config.CurrentValue.AWS_SECRET_ACCESS_KEY,
+            Amazon.RegionEndpoint.GetBySystemName(_config.CurrentValue.AWS_DEFAULT_REGION)
         );
 
         _bucketPrivate = _config.CurrentValue.BucketPrivate ?? string.Empty;

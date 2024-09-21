@@ -8,7 +8,7 @@
     ".NETCoreApp,Version=v9.0": {
       "FileHub.API/1.0.0": {
         "dependencies": {
-          "AWSSDK.S3": "3.7.402.11",
+          "AWSSDK.S3": "4.0.0-preview.2",
           "Core": "1.0.0",
           "Microsoft.AspNetCore.Mvc.Versioning": "5.1.0",
           "Microsoft.AspNetCore.OpenApi": "9.0.0-preview.6.24328.4",
@@ -55,14 +55,14 @@
           }
         }
       },
-      "AWSSDK.S3/3.7.402.11": {
+      "AWSSDK.S3/4.0.0-preview.2": {
         "dependencies": {
           "AWSSDK.Core": "4.0.0-preview.2"
         },
         "runtime": {
           "lib/net8.0/AWSSDK.S3.dll": {
-            "assemblyVersion": "3.3.0.0",
-            "fileVersion": "3.7.402.11"
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
           }
         }
       },
@@ -1050,12 +1050,12 @@
       "path": "awssdk.keymanagementservice/4.0.0-preview.2",
       "hashPath": "awssdk.keymanagementservice.4.0.0-preview.2.nupkg.sha512"
     },
-    "AWSSDK.S3/3.7.402.11": {
+    "AWSSDK.S3/4.0.0-preview.2": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-P2Syd8q1E5VkqrdmbpzbQi6wgIvHSWKsqmPKAeJOrSBfnG7fE3XIYLaHXguHvSz46unDAFP4g5IPvPOZRUOGnw==",
-      "path": "awssdk.s3/3.7.402.11",
-      "hashPath": "awssdk.s3.3.7.402.11.nupkg.sha512"
+      "sha512": "sha512-1ZaYCM8fMAI3Bd+LrUVI7Bl8OAsUYMrJVmI0J7rdaOByQUeFWrnPOHPzq/1Lr5mdaK6z5nLmlau7TKEUHUhOOQ==",
+      "path": "awssdk.s3/4.0.0-preview.2",
+      "hashPath": "awssdk.s3.4.0.0-preview.2.nupkg.sha512"
     },
     "AWSSDK.SimpleNotificationService/3.7.400.3": {
       "type": "package",
