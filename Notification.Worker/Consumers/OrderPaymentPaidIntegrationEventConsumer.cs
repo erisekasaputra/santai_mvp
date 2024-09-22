@@ -32,6 +32,7 @@ public class OrderPaymentPaidIntegrationEventConsumer(
             string.Empty,
             string.Empty,
             string.Empty,
-            OrderStatus.PaymentPaid.ToString());
+            OrderStatus.PaymentPaid.ToString(),
+            string.Empty);
     }
 }

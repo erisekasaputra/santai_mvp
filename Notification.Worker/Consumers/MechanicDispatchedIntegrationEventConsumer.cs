@@ -32,6 +32,7 @@ public class MechanicDispatchedIntegrationEventConsumer(
             "",
             orderData.MechanicId.ToString(),
             orderData.MechanicName,
-            OrderStatus.MechanicDispatched.ToString());
+            OrderStatus.MechanicDispatched.ToString(),
+            string.Empty);
     }
 }

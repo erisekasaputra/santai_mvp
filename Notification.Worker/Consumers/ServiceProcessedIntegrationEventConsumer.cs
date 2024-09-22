@@ -32,6 +32,7 @@ public class ServiceProcessedIntegrationEventConsumer(
             string.Empty,
             string.Empty,
             string.Empty,
-            OrderStatus.ServiceInProgress.ToString());
+            OrderStatus.ServiceInProgress.ToString(),
+            string.Empty);
     }
 }

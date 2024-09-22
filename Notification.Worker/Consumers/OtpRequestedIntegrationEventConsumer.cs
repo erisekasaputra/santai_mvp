@@ -21,6 +21,7 @@ public class OtpRequestedIntegrationEventConsumer(
 
         if (otp.Provider == Core.Enumerations.OtpProviderType.Sms) 
         {
+            Console.WriteLine("OTP Requested" + otp.Token + otp.PhoneNumber);
             string template = $"Your token is: {otp.Token}. Please keep it confidential and do not share it with anyone. For your security, never disclose this token to others";
             await _messageService.SendTextMessageAsync(otp.PhoneNumber, template);
         }

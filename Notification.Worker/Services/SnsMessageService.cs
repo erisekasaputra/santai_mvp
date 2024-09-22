@@ -40,11 +40,11 @@ public class SnsMessageService : IMessageService
                 return;
             }
 
-            var request = new CreatePlatformEndpointRequest
-            {
-                PlatformApplicationArn = platformApplicationArn,
-                Token = deviceToken
-            };
+            //var request = new CreatePlatformEndpointRequest
+            //{
+            //    PlatformApplicationArn = platformApplicationArn,
+            //    Token = deviceToken
+            //};
         }
         catch (AmazonSimpleNotificationServiceException ex)
         {

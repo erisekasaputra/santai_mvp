@@ -32,6 +32,7 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
             orderData.BuyerName,
             orderData.MechanicId.ToString(),
             orderData.MechanicName,
-            OrderStatus.OrderCancelledByMechanic.ToString());
+            OrderStatus.OrderCancelledByMechanic.ToString(),
+            string.Empty);
     }
 }

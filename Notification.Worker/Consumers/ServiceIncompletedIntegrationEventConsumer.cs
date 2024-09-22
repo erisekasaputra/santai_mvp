@@ -32,6 +32,7 @@ public class ServiceIncompletedIntegrationEventConsumer(
             string.Empty,
             string.Empty,
             string.Empty,
-            OrderStatus.ServiceIncompleted.ToString());
+            OrderStatus.ServiceIncompleted.ToString(),
+            string.Empty);
     }
 }

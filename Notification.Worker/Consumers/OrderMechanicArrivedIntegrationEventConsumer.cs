@@ -32,6 +32,7 @@ public class OrderMechanicArrivedIntegrationEventConsumer(
             string.Empty,
             orderData.MechanicId.ToString(),
             orderData.MechanicName,
-            OrderStatus.MechanicArrived.ToString());
+            OrderStatus.MechanicArrived.ToString(),
+            string.Empty);
     }
 }

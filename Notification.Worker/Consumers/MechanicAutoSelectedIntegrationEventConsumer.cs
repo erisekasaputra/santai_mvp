@@ -36,6 +36,7 @@ public class MechanicAutoSelectedIntegrationEventConsumer(
             string.Empty,
             orderData.MechanicId.ToString(),
             string.Empty,
-            OrderStatus.MechanicSelected.ToString());
+            OrderStatus.MechanicSelected.ToString(),
+            string.Empty);
     }
 }

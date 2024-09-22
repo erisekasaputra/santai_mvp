@@ -7,6 +7,7 @@ public class AccountSignedOutIntegrationEventConsumer : IConsumer<AccountSignedO
 {
     public async Task Consume(ConsumeContext<AccountSignedOutIntegrationEvent> context)
     {
-        throw new NotImplementedException();
+        Console.WriteLine(context.Message.UserId);
+        Console.WriteLine(context.Message.DeviceId);
     }
 }
