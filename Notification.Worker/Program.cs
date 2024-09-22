@@ -12,8 +12,7 @@ builder.AddJsonEnumConverterBehavior();
 builder.AddLoggingContext();
 builder.AddCoreOptionConfiguration();
 builder.AddApplicationService(); 
-builder.AddRedisDatabase();
-builder.AddSqlDatabaseContext<NotificationDbContext>();
+builder.AddRedisDatabase(); 
 builder.AddMassTransitContext<NotificationDbContext>();
 builder.AddAuth();
 

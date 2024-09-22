@@ -18,7 +18,7 @@
   {
     "ContainingType": "FileHub.API.Controllers.FilesController",
     "Method": "Get",
-    "RelativePath": "api/v1/Files/images/private/{resourceName}",
+    "RelativePath": "api/v1/Files/images/private",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -26,7 +26,7 @@
       {
         "Name": "resourceName",
         "Type": "System.String",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -50,7 +50,7 @@
   {
     "ContainingType": "FileHub.API.Controllers.FilesController",
     "Method": "GetPublicResourceUrl",
-    "RelativePath": "api/v1/Files/images/public/{resourceName}/url",
+    "RelativePath": "api/v1/Files/images/public/url",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -58,7 +58,7 @@
       {
         "Name": "resourceName",
         "Type": "System.String",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

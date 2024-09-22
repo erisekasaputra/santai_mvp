@@ -115,9 +115,10 @@ public class FilesController
     }
 
 
-    [HttpGet("images/private/{resourceName}")]
+    [HttpGet("images/private")]
     [EnableRateLimiting(RateLimiterPolicy.FileReadRateLimiterPolicy)]
-    public async Task<IResult> Get(string resourceName)
+    public async Task<IResult> Get(
+        [AsParameters] string resourceName)
     {
         try
         {
@@ -157,8 +158,9 @@ public class FilesController
         }
     }
 
-    [HttpGet("images/public/{resourceName}/url")]
-    public async Task<IResult> GetPublicResourceUrl(string resourceName)
+    [HttpGet("images/public/url")]
+    public async Task<IResult> GetPublicResourceUrl(
+        [AsParameters] string resourceName)
     {
         try
         {

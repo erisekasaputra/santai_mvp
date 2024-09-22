@@ -1,6 +1,5 @@
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\appsettings.Development.json
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\appsettings.json
-C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\appsettings.Production.json
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\FileHub.API.staticwebassets.endpoints.json
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\FileHub.API.exe
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\FileHub.API.deps.json

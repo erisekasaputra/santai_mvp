@@ -9,24 +9,28 @@ namespace FileHub.API.Services;
 
 public class AwsStorageService : IStorageService
 {
-    private readonly IOptionsMonitor<StorageConfiguration> _config;
+    private readonly IOptionsMonitor<AWSIAMConfiguration> _awsConfig;
+    private readonly IOptionsMonitor<StorageConfiguration> _storageConfig;
     private readonly IAmazonS3 _s3Client;
     private readonly string _bucketPrivate;
     private readonly string _bucketPublic;
 
-    public AwsStorageService(IOptionsMonitor<StorageConfiguration> config)
+    public AwsStorageService(
+        IOptionsMonitor<AWSIAMConfiguration> awsConfig,
+        IOptionsMonitor<StorageConfiguration> storageConfig)
     {
-        _config = config;
+        _awsConfig = awsConfig;
+        _storageConfig = storageConfig;
 
         // Initialize the S3 client with region and credentials
         _s3Client = new AmazonS3Client(
-            _config.CurrentValue.AWS_ACCESS_KEY_ID,
-            _config.CurrentValue.AWS_SECRET_ACCESS_KEY,
-            Amazon.RegionEndpoint.GetBySystemName(_config.CurrentValue.AWS_DEFAULT_REGION)
+            _awsConfig.CurrentValue.AccessID,
+            _awsConfig.CurrentValue.SecretKey,
+            Amazon.RegionEndpoint.GetBySystemName(_awsConfig.CurrentValue.Region)
         );
 
-        _bucketPrivate = _config.CurrentValue.BucketPrivate ?? string.Empty;
-        _bucketPublic = _config.CurrentValue.BucketPublic ?? string.Empty;
+        _bucketPrivate = _storageConfig.CurrentValue.BucketPrivate ?? string.Empty;
+        _bucketPublic = _storageConfig.CurrentValue.BucketPublic ?? string.Empty;
     }
 
     public async Task DeleteFilePrivateAsync(string objectName)
@@ -131,10 +135,10 @@ public class AwsStorageService : IStorageService
 
     public async Task<string> GeneratePublicObjectUrl(string resourceName, bool isUsingCdn = false)
     {
-        string url = $"https://{_bucketPublic}.s3.{_config.CurrentValue.Region}.amazonaws.com/{resourceName}";
+        string url = $"https://{_bucketPublic}.s3.{_storageConfig.CurrentValue.Region}.amazonaws.com/{resourceName}";
         if (isUsingCdn)
         {
-            url = $"https://{_config.CurrentValue.CdnServiceUrl.RemovePrefixProcotol()}/{resourceName}";
+            url = $"https://{_storageConfig.CurrentValue.CdnServiceUrl.RemovePrefixProcotol()}/{resourceName}";
         }
 
         return await Task.FromResult(url);
