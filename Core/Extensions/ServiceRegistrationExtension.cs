@@ -183,6 +183,7 @@ public static class ServiceRegistrationExtension
         {
             var configurations = new ConfigurationOptions
             {
+                Ssl = true,
                 EndPoints = { options.Host },
                 ConnectTimeout = (int)TimeSpan.FromSeconds(options.ConnectTimeout).TotalMilliseconds,
                 SyncTimeout = (int)TimeSpan.FromSeconds(options.SyncTimeout).TotalMilliseconds,
@@ -199,6 +200,7 @@ public static class ServiceRegistrationExtension
         {
             configure.ConfigurationOptions = new ConfigurationOptions
             { 
+                Ssl = true,
                 EndPoints = { options.Host },
                 ConnectTimeout = (int)TimeSpan.FromSeconds(options.ConnectTimeout).TotalMilliseconds,
                 SyncTimeout = (int)TimeSpan.FromSeconds(options.SyncTimeout).TotalMilliseconds,
