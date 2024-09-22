@@ -2,7 +2,7 @@
 using Core.CustomAttributes;
 using Core.CustomClaims;
 using Core.CustomMessages;
-using Core.Enumerations;
+using Core.Enumerations; 
 using Core.Extensions;
 using Core.Results;
 using Core.Services.Interfaces;
@@ -13,8 +13,7 @@ using Google.Apis.Auth;
 using Identity.API.Applications.Dto; 
 using Identity.API.Domain.Entities;
 using Identity.API.Domain.Enumerations;
-using Identity.API.Domain.Events;
-using Identity.API.Extensions;
+using Identity.API.Domain.Events; 
 using Identity.API.Infrastructure;
 using Identity.API.Service.Interfaces;
 using MassTransit;
@@ -23,7 +22,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.IdentityModel.Tokens; 
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -1226,8 +1225,15 @@ public class AuthController(
                 await _tokenCacheService.SaveRefreshToken(refreshToken);
 
                 await _otpService.RemoveOtpAsync(request.PhoneNumber); 
-                string redirectTo = user.IsAccountRegistered ? _homePageActionName : _createAccountActionName; 
+                string redirectTo = user.IsAccountRegistered ? _homePageActionName : _createAccountActionName;  
+
+
+                user.AddDeviceId(request.DeviceId);
+                await _userManager.UpdateAsync(user);
+
+                await _mediator.Publish(new AccountSignedInDomainEvent(Guid.Parse(user.Id), request.DeviceId)); 
                 
+                await _dbContext.SaveChangesAsync(); 
                 await transaction.CommitAsync();
 
                 return TypedResults.Ok(
@@ -1332,21 +1338,54 @@ public class AuthController(
     public async Task<IResult> Logout(
         [FromBody] RefreshTokenRequest request)
     {
-        try
+        var strategy = _dbContext.Database.CreateExecutionStrategy();
+        return await strategy.ExecuteAsync<IResult>(async () =>
         {
-            if (string.IsNullOrWhiteSpace(request.RefreshToken) || string.IsNullOrEmpty(request.AccessToken)) return TypedResults.Unauthorized();
-            
-            await _tokenCacheService.BlackListRefreshTokenAsync(request.RefreshToken);
-            await _tokenCacheService.BlackListAccessTokenAsync(request.AccessToken);
-            
-            return TypedResults.NoContent();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(
-            Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
-        }
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+            try
+            {
+                if (string.IsNullOrWhiteSpace(request.RefreshToken) || string.IsNullOrEmpty(request.AccessToken)) return TypedResults.Unauthorized();
+
+                await _tokenCacheService.BlackListRefreshTokenAsync(request.RefreshToken);
+                await _tokenCacheService.BlackListAccessTokenAsync(request.AccessToken);
+
+                var refreshToken = await _tokenCacheService.GetStoredRefreshToken(request.RefreshToken);
+                if (refreshToken is null || string.IsNullOrEmpty(request.DeviceId))
+                {
+                    await _dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                    return TypedResults.NoContent();
+                }
+
+                var user = await _userManager.FindByIdAsync(refreshToken.UserId); 
+                if (user is null)
+                {
+                    await _dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+                    return TypedResults.NoContent();
+                }
+
+                user.RemoveDeviceId(request.DeviceId);
+                await _userManager.UpdateAsync(user);
+
+                await _mediator.Publish(new AccountSignedOutDomainEvent(Guid.Parse(refreshToken.UserId), request.DeviceId));
+                await _dbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return TypedResults.NoContent();
+            }
+            catch (DbUpdateException ex)
+            {
+                _logger.LogError(ex, "Database update exception occurred, error: {errors}", ex.InnerException?.Message);
+                throw;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, ex.InnerException?.Message);
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+            }
+        }); 
     }
     private async Task<IdentityResult> AddClaimsToDatabase(ApplicationUser user)
     {

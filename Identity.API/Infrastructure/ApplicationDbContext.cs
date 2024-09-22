@@ -3,6 +3,7 @@ using Identity.API.Domain.Entities;
 using MassTransit;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace Identity.API.Infrastructure;
 
@@ -28,6 +29,11 @@ public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
 
             options.HasIndex(u => u.PhoneNumber)
                 .IsUnique();
+
+            options.Property(u => u.DeviceIds)
+                .HasConversion(
+                    v => JsonConvert.SerializeObject(v), 
+                    v => v == null ? new List<string>() : JsonConvert.DeserializeObject<List<string>>(v) ?? new List<string>());
         });
 
         builder.AddInboxStateEntity();

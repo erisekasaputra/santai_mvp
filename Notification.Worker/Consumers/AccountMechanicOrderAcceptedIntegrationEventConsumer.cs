@@ -31,6 +31,7 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
             string.Empty,
             orderData.MechanicId.ToString(),
             orderData.MechanicName,
-            OrderStatus.MechanicAssigned.ToString()); 
+            OrderStatus.MechanicAssigned.ToString(),
+            string.Empty); 
     }
 }

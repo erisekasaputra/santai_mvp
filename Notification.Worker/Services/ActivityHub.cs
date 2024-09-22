@@ -26,8 +26,7 @@ public class ActivityHub : Hub<IActivityClient>
         var connectionId = Context.ConnectionId;
 
         await _cacheService.SetAsync(CacheKey.GetUserCacheKey(userId), connectionId, TimeSpan.FromHours(1));
-        await base.OnConnectedAsync();
-        await Clients.User(userId).ReceiveOrderStatusUpdate("test", "test", "test", "test", "test", OrderStatus.PaymentPending.ToString());
+        await base.OnConnectedAsync(); 
     }
 
 

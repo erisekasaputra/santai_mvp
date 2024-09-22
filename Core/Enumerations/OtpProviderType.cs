@@ -2,8 +2,7 @@
 
 public enum OtpProviderType
 {
-    Sms,
-    Whatsapp,
+    Sms, 
     Email
 }
 
@@ -13,13 +12,13 @@ public static class AllowedOtpProviderType
     {
         get
         {
-            return [OtpProviderType.Sms, OtpProviderType.Whatsapp, OtpProviderType.Email];
+            return [OtpProviderType.Sms, OtpProviderType.Email];
         }
     }
 
-    public static Dictionary<IdentityType, List<OtpProviderType>> GetAllByName = new Dictionary<IdentityType, List<OtpProviderType>>
+    public static Dictionary<IdentityType, List<OtpProviderType>> GetAllByName = new()
     {
-        { IdentityType.PhoneNumber, [OtpProviderType.Sms, OtpProviderType.Whatsapp]},
+        { IdentityType.PhoneNumber, [OtpProviderType.Sms]},
         { IdentityType.Email, [OtpProviderType.Email]}
     };
 }

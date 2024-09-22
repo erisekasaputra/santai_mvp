@@ -1,5 +1,4 @@
-﻿using Core.Events.Identity;
-using Identity.API.Domain.Events;
+﻿using Core.Events.Identity; 
 using MassTransit;
 using MediatR;
 

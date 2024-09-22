@@ -1,5 +1,4 @@
-using Core.Extensions; 
-using Notification.Worker.Data;
+using Core.Extensions;  
 using Notification.Worker.Extensions;
 using Notification.Worker.Services; 
 
@@ -13,7 +12,7 @@ builder.AddLoggingContext();
 builder.AddCoreOptionConfiguration();
 builder.AddApplicationService(); 
 builder.AddRedisDatabase(); 
-builder.AddMassTransitContext<NotificationDbContext>();
+builder.AddMassTransitContext();
 builder.AddAuth();
 
 var app = builder.Build();

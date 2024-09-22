@@ -1,17 +1,17 @@
 ﻿using Core.Configurations; 
 using Core.Services;
 using Core.Services.Interfaces;
-using MassTransit; 
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
+using MassTransit;  
 using Notification.Worker.Consumers;
+using Notification.Worker.Services;
+using Notification.Worker.Services.Interfaces;
 using StackExchange.Redis; 
 
 namespace Notification.Worker.Extensions;
 
 public static class ServiceRegistrationExtension
 {
-    public static WebApplicationBuilder AddMassTransitContext<TDbContext>(this WebApplicationBuilder builder) where TDbContext : DbContext
+    public static WebApplicationBuilder AddMassTransitContext(this WebApplicationBuilder builder)
     { 
         var options = builder.Configuration.GetSection(MessagingConfiguration.SectionName).Get<MessagingConfiguration>() ?? throw new Exception();
 
@@ -19,6 +19,8 @@ public static class ServiceRegistrationExtension
         {
             var consumers = new (string QueueName, Type ConsumerType)[]
             {
+                ("notification-service-account-signed-out-integration-event-queue",typeof(AccountSignedOutIntegrationEventConsumer)),
+                ("notification-service-account-signed-in-integration-event-queue",typeof(AccountSignedInIntegrationEventConsumer)),
                 ("notification-service-account-mechanic-order-accepted-integration-event-queue",typeof(AccountMechanicOrderAcceptedIntegrationEventConsumer)),
                 ("notification-service-business-license-accepted-integration-event-queue",typeof(BusinessLicenseAcceptedIntegrationEventConsumer)),
                 ("notification-service-business-license-rejected-integration-event-queue",typeof(BusinessLicenseRejectedIntegrationEventConsumer)),
@@ -76,7 +78,8 @@ public static class ServiceRegistrationExtension
         {
             options.Configuration.ChannelPrefix = RedisChannel.Literal("NotificationWorker");
         }); 
-        builder.Services.AddSingleton<ICacheService, CacheService>(); 
+        builder.Services.AddSingleton<ICacheService, CacheService>();
+        builder.Services.AddSingleton<IMessageService, SnsMessageService>();
         return builder;
     }
 }

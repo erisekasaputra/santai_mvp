@@ -20,7 +20,7 @@ dotnet user-secrets set "AWS:SecretKey" "6mIoP493YVrGwjUOYeZ/8WstUKRU2eUKi1rD9Vb
 dotnet user-secrets set "AWS:Region" "ap-southeast-1"  
 dotnet user-secrets set "AWS:RDS:Username" "santaitechnology"  
 dotnet user-secrets set "AWS:RDS:Password" "_SANTAItechnology2024" 
-dotnet user-secrets set "AWS:RabbitMQ:Broekr" "ProductionBackendBroker" 
+dotnet user-secrets set "AWS:RabbitMQ:Broker" "ProductionBackendBroker" 
 dotnet user-secrets set "AWS:RabbitMQ:Username" "santaitechnology" 
 dotnet user-secrets set "AWS:RabbitMQ:Password" "_SANTAItechnology2024" 
 dotnet user-secrets set "AWS:Sns:Topic" "NotificationTopic" 

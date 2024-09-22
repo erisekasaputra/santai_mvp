@@ -13,7 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Identity.API.Consumers;
 using Identity.API.Domain.Entities;
 using Identity.API.Infrastructure;
-using Core.Middlewares;
+using Core.Middlewares; 
 namespace Identity.API.Extensions;
 
 public static class ServiceRegistrationExtension
@@ -111,6 +111,7 @@ public static class ServiceRegistrationExtension
 
             var consumers = new (string QueueName, Type ConsumerType)[]
             {
+                ("identity-service-notification-device-token-removed-integration-event-queue", typeof(NotificationDeviceTokenRemovedIntegrationEventConsumer)),
                 ("identity-service-business-user-created-integration-event-queue", typeof(BusinessUserCreatedIntegrationEventConsumer)),
                 ("identity-service-business-user-deleted-integration-event-queue", typeof(BusinessUserDeletedIntegrationEventConsumer)),
                 ("identity-service-mechanic-user-created-integration-event-queue", typeof(MechanicUserCreatedIntegrationEventConsumer)),

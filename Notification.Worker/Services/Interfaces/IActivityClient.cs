@@ -1,6 +1,4 @@
-﻿using Notification.Worker.Enumerations;
-
-namespace Notification.Worker.Services.Interfaces;
+﻿namespace Notification.Worker.Services.Interfaces;
 
 public interface IActivityClient
 {
@@ -10,5 +8,6 @@ public interface IActivityClient
         string buyerName,
         string mechanicId,
         string mechanicName,
-        string orderStatus);
+        string orderStatus,
+        string actionUrl);
 }

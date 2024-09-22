@@ -1,50 +1,86 @@
-﻿using Amazon;
-using Amazon.Runtime;
+﻿using Amazon; 
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
+using Core.Configurations;
+using Core.Utilities;
+using MassTransit.AmazonSqsTransport;
+using Microsoft.Extensions.Options;
 using Notification.Worker.Services.Interfaces; 
 
 namespace Notification.Worker.Services;
 
 public class SnsMessageService : IMessageService
 {
-    private AmazonSimpleNotificationServiceClient _amazonServiceClient;
-    private IConfiguration _configuration;
-    public SnsMessageService(RegionEndpoint regionEndpoint, IConfiguration configuration)
-    { 
-        _amazonServiceClient = new AmazonSimpleNotificationServiceClient(regionEndpoint);
-        _configuration = configuration;
-    }
-    public async Task SendTextMessageAsync(string phoneNumber, string message)
+    private readonly AmazonSimpleNotificationServiceClient _snsClient; 
+    private readonly AWSIAMConfiguration _awsConfig;
+    private readonly ILogger<SnsMessageService> _logger; 
+    public SnsMessageService( 
+        IOptionsMonitor<AWSIAMConfiguration> awsConfig, 
+        ILogger<SnsMessageService> logger)
     {
-        if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(message))
+        _awsConfig = awsConfig.CurrentValue;
+        var awsOptions = new AmazonSimpleNotificationServiceConfig
         {
-            return;
+            RegionEndpoint = RegionEndpoint.GetBySystemName(_awsConfig.Region)
+        };
+
+        _snsClient = new AmazonSimpleNotificationServiceClient(
+            _awsConfig.AccessID,
+            _awsConfig.SecretKey,
+            awsOptions);
+        _logger = logger; 
+    } 
+
+    public async Task RegisterDevice(string deviceToken)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(deviceToken))
+            {
+                return;
+            }
+
+            var request = new CreatePlatformEndpointRequest
+            {
+                PlatformApplicationArn = platformApplicationArn,
+                Token = deviceToken
+            };
         }
+        catch (AmazonSimpleNotificationServiceException ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+        }
+    }
 
-        //var awsConfiguration = _configuration.GetSection().Get();
+    public async Task SendTextMessageAsync(string phoneNumber, string message)
+    { 
+        try
+        {
+            if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(message))
+            {
+                return;
+            }
 
-        //var awsAccessKey = config["AWS:AccessKey"];
-        //var awsSecretKey = config["AWS:SecretKey"];
-        //var awsRegion = config["AWS:Region"]; 
+            var request = new PublishRequest
+            {
+                Message = message,
+                PhoneNumber = phoneNumber,
+            };
 
-        //// Create AWS SNS client with credentials
-        //var credentials = new BasicAWSCredentials(awsAccessKey, awsSecretKey);
-        //var snsClient = new AmazonSimpleNotificationServiceClient(credentials, RegionEndpoint.GetBySystemName(awsRegion));
-
-        //var request = new PublishRequest
-        //{
-        //    Message = message,
-        //    PhoneNumber = phoneNumber // Format nomor harus +62 untuk Indonesia atau sesuai negara
-        //};
-
-        //try
-        //{
-        //    var response = await snsClient.PublishAsync(request);
-        //}
-        //catch (Exception ex)
-        //{
-        //    Console.WriteLine("Failed to send message: " + ex.Message);
-        //}
+            var response = await _snsClient.PublishAsync(request);
+            response.EnsureSuccessfulResponse();
+        }
+        catch (AmazonSimpleNotificationServiceException ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+        }
     }
 }
