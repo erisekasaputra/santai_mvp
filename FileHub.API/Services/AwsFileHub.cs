@@ -135,7 +135,7 @@ public class AwsStorageService : IStorageService
 
     public async Task<string> GeneratePublicObjectUrl(string resourceName, bool isUsingCdn = false)
     {
-        string url = $"https://{_bucketPublic}.s3.{_storageConfig.CurrentValue.Region}.amazonaws.com/{resourceName}";
+        string url = $"https://{_bucketPublic}.s3.{_awsConfig.CurrentValue.Region}.amazonaws.com/{resourceName}";
         if (isUsingCdn)
         {
             url = $"https://{_storageConfig.CurrentValue.CdnServiceUrl.RemovePrefixProcotol()}/{resourceName}";

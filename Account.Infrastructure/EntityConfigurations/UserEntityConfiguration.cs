@@ -47,14 +47,7 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<BaseUser>
         e.Property(p => p.Name)
             .HasMaxLength(100)
             .HasDefaultValue("")
-            .IsRequired();
-
-        e.Property(p => p.DeviceIds)
-               .HasConversion(
-                   v => JsonConvert.SerializeObject(v),
-                   v => JsonConvert.DeserializeObject<List<string>>(v) ?? new List<string>() 
-               )
-               .IsRequired();
+            .IsRequired(); 
 
         e.Property(p => p.TimeZoneId)
             .HasMaxLength(40).IsRequired();

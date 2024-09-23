@@ -295,16 +295,5 @@ public class UserRepository : IUserRepository
            .Where(x => x.Id == id)
            .Select(x => x.EncryptedPhoneNumber)
            .FirstOrDefaultAsync();
-    }
-
-    public async Task<IEnumerable<string>?> GetDeviceIdById(Guid id)
-    {
-        var deviceIds = await _context.BaseUsers
-           .Where(x => x.Id == id)
-           .Select(x => x.DeviceIds)
-           .FirstOrDefaultAsync();
-
-        return deviceIds ?? []; 
-    }
-     
+    } 
 }

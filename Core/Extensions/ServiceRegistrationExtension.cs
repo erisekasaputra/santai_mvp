@@ -19,8 +19,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer; 
 using Core.SeedWorks;
 using Core.Enumerations;
-using Microsoft.Extensions.Hosting;
-using System.Configuration;
+using Microsoft.Extensions.Hosting; 
 
 namespace Core.Extensions;
 

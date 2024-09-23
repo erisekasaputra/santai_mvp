@@ -72,15 +72,7 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
             .IsRequired()
             .HasConversion(
                 v => v.Trim(),
-                v => v.Trim());
-
-
-        e.Property(p => p.DeviceIds)
-            .HasConversion(
-                v => JsonConvert.SerializeObject(v),
-                v => JsonConvert.DeserializeObject<List<string>>(v) ?? new List<string>()
-            )
-            .IsRequired();
+                v => v.Trim()); 
 
         e.Property(p => p.TimeZoneId)
             .HasMaxLength(40)

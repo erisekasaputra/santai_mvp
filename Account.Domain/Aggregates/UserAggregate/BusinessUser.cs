@@ -42,8 +42,7 @@ public class BusinessUser : BaseUser
             phoneNumber, 
             encryptedPhoneNumber, 
             address, 
-            timeZoneId, 
-            string.Empty,
+            timeZoneId,  
             isEmailVerified: false, 
             isPhoneNumberVerified: true)
     {  

@@ -212,15 +212,5 @@ public class StaffRepository : IStaffRepository
            .Where(x => x.Id == staffId)
            .Select(x => x.EncryptedPhoneNumber)
            .FirstOrDefaultAsync();
-    }
-     
-    public async Task<IEnumerable<string>?> GetDeviceIdByIdAsync(Guid staffId)
-    {
-        var deviceIds = await _context.Staffs
-           .Where(x => x.Id == staffId)
-           .Select(x => x.DeviceIds)  
-           .FirstOrDefaultAsync();
-
-        return deviceIds ?? []; 
-    }
+    } 
 }

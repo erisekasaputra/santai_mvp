@@ -22,16 +22,14 @@ public class RegularUser : BaseUser
         string encryptedPhoneNumber,
         Address address, 
         PersonalInfo personalInfo,
-        string timeZoneId,
-        string deviceId) : base(
+        string timeZoneId ) : base(
             $"{personalInfo.FirstName} {personalInfo.MiddleName} {personalInfo.LastName}".CleanAndLowering(),
             email,
             encryptedEmail,
             phoneNumber,
             encryptedPhoneNumber,
             address,
-            timeZoneId,
-            deviceId)
+            timeZoneId )
     { 
         Id = identityId;
         PersonalInfo = personalInfo ?? throw new ArgumentNullException(nameof(personalInfo)); 
@@ -56,16 +54,7 @@ public class RegularUser : BaseUser
     {
         base.AddReferralProgram(referralRewardPoint, referralValidDate);
     } 
-
-    public override void AddDeviceId(string deviceId)
-    {
-        base.AddDeviceId(deviceId);
-    }  
-
-    public override void RemoveDeviceId(string deviceId)
-    {
-        base.RemoveDeviceId(deviceId);
-    }    
+     
 
     private void RaiseRegularUserCreatedDomainEvent(RegularUser user)
     {

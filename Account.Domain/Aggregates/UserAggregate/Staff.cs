@@ -24,8 +24,7 @@ public class Staff : Entity, IAggregateRoot
     public Address Address { get; private set; }
     public string TimeZoneId { get; private set; }
     public string Password { get; private set; }
-    public ICollection<Fleet>? Fleets { get; private set; }
-    public ICollection<string> DeviceIds { get; private set; } = [];
+    public ICollection<Fleet>? Fleets { get; private set; } 
     public Staff()
     {
         Password = string.Empty;
@@ -51,9 +50,7 @@ public class Staff : Entity, IAggregateRoot
         Name = name ?? throw new ArgumentNullException(nameof(name)); 
         TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId)); 
         Address = address ?? throw new ArgumentNullException(nameof(address));
-         
-        DeviceIds ??= []; 
-
+           
         HashedPhoneNumber = hashedPhoneNumber ?? throw new ArgumentNullException(nameof(hashedPhoneNumber)); 
         EncryptedPhoneNumber = encryptedPhoneNumber ?? throw new ArgumentNullException(nameof(hashedPhoneNumber)); 
 
@@ -129,24 +126,7 @@ public class Staff : Entity, IAggregateRoot
 
         RaisePhoneNumberVerifiedDomainEvent(Id, HashedPhoneNumber, EncryptedPhoneNumber);
     }
-     
-    public void AddDeviceId(string deviceId)
-    {
-        DeviceIds ??= [];
-        if (DeviceIds.Contains(deviceId) || string.IsNullOrWhiteSpace(deviceId)) 
-        {
-            return;
-        }
-
-        DeviceIds.Add(deviceId);
-    }
-
-    public void RemoveDeviceId(string deviceId)
-    { 
-        DeviceIds ??= [];
-        DeviceIds.Remove(deviceId);
-    }
-
+      
     private void RaiseEmailUpdatedDomainEvent(Guid id, string? oldEmail, string newEmail, string? oldEncryptedEmail, string newEncryptedEmail)
     {
         AddDomainEvent(new EmailUpdatedDomainEvent(id, oldEmail, newEmail, oldEncryptedEmail, newEncryptedEmail));

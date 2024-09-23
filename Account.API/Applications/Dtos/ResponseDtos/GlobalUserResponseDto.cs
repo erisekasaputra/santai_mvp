@@ -8,8 +8,7 @@ public class GlobalUserResponseDto
     public string TimeZoneId { get; set; }
     public string Fullname { get; set; }
     public IEnumerable<FleetResponseDto> Fleets { get; set; }
-    public IEnumerable<Guid> UnknownFleets { get; set; }
-    public IEnumerable<string> DeviceId { get; set; }
+    public IEnumerable<Guid> UnknownFleets { get; set; } 
 
     public GlobalUserResponseDto(
         Guid id,
@@ -18,8 +17,7 @@ public class GlobalUserResponseDto
         string timeZoneId,
         string fullname,
         IEnumerable<FleetResponseDto> fleets,
-        IEnumerable<Guid> unknownFleets,
-        IEnumerable<string> deviceId)
+        IEnumerable<Guid> unknownFleets)
     {
         Id = id;
         Email = email;
@@ -27,7 +25,6 @@ public class GlobalUserResponseDto
         TimeZoneId = timeZoneId;
         Fullname = fullname;
         Fleets = fleets;
-        UnknownFleets = unknownFleets;  
-        DeviceId = deviceId;
+        UnknownFleets = unknownFleets;   
     }
 }

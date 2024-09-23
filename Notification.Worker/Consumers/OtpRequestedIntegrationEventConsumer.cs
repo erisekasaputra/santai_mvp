@@ -15,6 +15,7 @@ public class OtpRequestedIntegrationEventConsumer(
     private readonly IHubContext<ActivityHub, IActivityClient> _activityHubContext = activityHubContecxt;
     private readonly IMessageService _messageService = messageService;
     private readonly ICacheService _cacheService = cacheService;
+    
     public async Task Consume(ConsumeContext<OtpRequestedIntegrationEvent> context)
     {
         var otp = context.Message;

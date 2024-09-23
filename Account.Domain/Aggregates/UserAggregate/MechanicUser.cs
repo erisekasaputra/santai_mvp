@@ -31,16 +31,14 @@ public class MechanicUser : BaseUser
         string encryptedPhoneNumber,
         PersonalInfo personalInfo,
         Address address, 
-        string timeZoneId,
-        string deviceId) : base(
+        string timeZoneId ) : base(
             $"{personalInfo.FirstName} {personalInfo.MiddleName} {personalInfo.LastName}".CleanAndLowering(),
             email,
             encryptedEmail,
             phoneNumber,
             encryptedPhoneNumber,
             address,
-            timeZoneId,
-            deviceId)
+            timeZoneId )
     {  
         Id = identityId;
         PersonalInfo = personalInfo;
@@ -183,17 +181,7 @@ public class MechanicUser : BaseUser
         {  
             Certifications?.Remove(certification);
         }
-    }
-
-    public override void AddDeviceId(string deviceId)
-    {  
-        base.AddDeviceId(deviceId);
-    }  
-
-    public override void RemoveDeviceId(string deviceId)
-    {
-        base.RemoveDeviceId(deviceId); 
-    }
+    } 
 
     public void SetRating(decimal rating)
     {

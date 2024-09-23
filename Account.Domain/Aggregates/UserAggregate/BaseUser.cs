@@ -31,8 +31,7 @@ public abstract class BaseUser : Entity, IAggregateRoot
     public ReferralProgram? ReferralProgram { get; private set; } 
     public ICollection<ReferredProgram>? ReferredPrograms { get; private set; }  
     public ICollection<Fleet>? Fleets { get; private set; } 
-    public string TimeZoneId {  get; set; }
-    public ICollection<string> DeviceIds { get; private set; } = [];
+    public string TimeZoneId {  get; set; } 
     protected BaseUser()
     {
         Address = null!;
@@ -48,8 +47,7 @@ public abstract class BaseUser : Entity, IAggregateRoot
         string hashedPhoneNumber,
         string encryptedPhoneNumber,
         Address address,
-        string timeZoneId,
-        string deviceId,
+        string timeZoneId, 
         bool isEmailVerified = false,
         bool isPhoneNumberVerified = false)
     {
@@ -79,13 +77,7 @@ public abstract class BaseUser : Entity, IAggregateRoot
         IsEmailVerified = isEmailVerified;
         IsPhoneNumberVerified = isPhoneNumberVerified;
 
-        LoyaltyProgram = new LoyaltyProgram(Id, 0);
-
-        DeviceIds ??= [];
-        if (!string.IsNullOrWhiteSpace(deviceId))
-        {
-            DeviceIds.Add(deviceId);
-        }
+        LoyaltyProgram = new LoyaltyProgram(Id, 0); 
     }
 
     public void ResetPhoneNumber()
@@ -108,23 +100,7 @@ public abstract class BaseUser : Entity, IAggregateRoot
         EncryptedEmail = null;
         IsEmailVerified = false;
     }
-
-    public virtual void AddDeviceId(string deviceId)
-    {
-        if (DeviceIds.Contains(deviceId) || string.IsNullOrWhiteSpace(deviceId))
-        {
-            return;
-        }
-
-        DeviceIds ??= [];
-        DeviceIds.Add(deviceId);
-    }
-
-    public virtual void RemoveDeviceId(string deviceId)
-    {
-        DeviceIds ??= [];
-        DeviceIds.Remove(deviceId);  
-    }
+     
 
     public virtual void AddReferralProgram(int referralRewardPoint, int referralValidDate)
     {

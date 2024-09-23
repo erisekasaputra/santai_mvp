@@ -156,8 +156,7 @@ public class CreateMechanicUserCommandHandler(
                 encryptedPhoneNumber,
                 request.PersonalInfo.ToPersonalInfo(request.TimeZoneId),
                 address,
-                request.TimeZoneId,
-                request.DeviceId);
+                request.TimeZoneId );
             
             
             int? referralRewardPoint = _referralOptions.CurrentValue.Point;

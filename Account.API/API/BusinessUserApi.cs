@@ -8,15 +8,12 @@ using Account.API.Applications.Commands.BusinessUserCommand.UpdateBusinessUserBy
 using Account.API.Applications.Commands.StaffCommand.ConfirmStaffEmailByStaffId;
 using Account.API.Applications.Commands.StaffCommand.ConfirmStaffPhoneNumberByStaffId;
 using Account.API.Applications.Commands.StaffCommand.CreateStaffBusinessUserByUserId;
-using Account.API.Applications.Commands.StaffCommand.RemoveStaffByUserId;
-using Account.API.Applications.Commands.StaffCommand.ResetDeviceIdByStaffId;
-using Account.API.Applications.Commands.StaffCommand.SetDeviceIdByStaffId;
+using Account.API.Applications.Commands.StaffCommand.RemoveStaffByUserId; 
 using Account.API.Applications.Commands.StaffCommand.UpdateStaffByStaffId;
 using Account.API.Applications.Commands.StaffCommand.UpdateStaffEmailByStaffId;
 using Account.API.Applications.Commands.StaffCommand.UpdateStaffPhoneNumberByStaffId;
 using Account.API.Applications.Dtos.RequestDtos;
-using Account.API.Applications.Queries.GetBusinessUserByUserId;
-using Account.API.Applications.Queries.GetDeviceIdByStaffId;
+using Account.API.Applications.Queries.GetBusinessUserByUserId; 
 using Account.API.Applications.Queries.GetEmailByStaffId;
 using Account.API.Applications.Queries.GetPaginatedBusinessLicenseByUserId;
 using Account.API.Applications.Queries.GetPaginatedBusinessUser;
@@ -79,11 +76,7 @@ public static class BusinessUserApi
 
         app.MapGet("/staffs/time-zone", GetTimeZoneByStaffId) 
             .RequireAuthorization(
-                PolicyName.StaffUserOnlyPolicy.ToString());
-
-        app.MapGet("/staffs/device-id", GetDeviceIdByStaffId) 
-            .RequireAuthorization(
-                PolicyName.StaffUserOnlyPolicy.ToString());
+                PolicyName.StaffUserOnlyPolicy.ToString()); 
 
 
         app.MapPut("/{businessUserId}", UpdateBusinessUser)
@@ -107,14 +100,7 @@ public static class BusinessUserApi
         app.MapPost("/{businessUserId}/business-licenses", CreateBusinessLicenseBusinessUserById)
             .WithMetadata(new IdempotencyAttribute(nameof(CreateBusinessLicenseBusinessUserById)))
             .RequireAuthorization(PolicyName.BusinessUserAndAdministratorUserPolicy.ToString());
-
-
-        app.MapPatch("/staffs/{staffId}/device-id/set", SetDeviceIdByStaffId)
-            .RequireAuthorization(PolicyName.StaffUserOnlyPolicy.ToString());
-
-        app.MapPatch("/staffs/{staffId}/device-id/reset", ResetDeviceIdByStaffId)
-            .RequireAuthorization(PolicyName.StaffUserAndAdministratorUserPolicy.ToString()); 
-
+         
         app.MapPatch("/staffs/email", SetStaffEmailByStaffId)
             .RequireAuthorization(PolicyName.StaffUserOnlyPolicy.ToString());
 
@@ -145,30 +131,7 @@ public static class BusinessUserApi
 
         return route;
     }
-
-    private static async Task<IResult> GetDeviceIdByStaffId( 
-        [FromServices] ApplicationService service,
-        [FromServices] IUserInfoService userInfoService)
-    {
-        try
-        {
-            var userClaim = userInfoService.GetUserInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Unauthorized();
-            }
-
-            var result = await service.Mediator.Send(
-                new GetDeviceIdByStaffIdQuery(userClaim.Sub));
-
-            return result.ToIResult();
-        }
-        catch (Exception ex)
-        {
-            service.Logger.LogError(ex.Message, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
-    }
+     
 
     private static async Task<IResult> GetTimeZoneByStaffId( 
         [FromServices] ApplicationService service,
@@ -473,62 +436,7 @@ public static class BusinessUserApi
         }
     }  
 
-    private static async Task<IResult> ResetDeviceIdByStaffId( 
-        Guid staffId,
-        [FromBody] DeviceIdRequestDto request,
-        [FromServices] ApplicationService service,
-        [FromServices] IUserInfoService userInfoService)
-    {
-        try
-        {
-            var userClaim = userInfoService.GetUserInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Unauthorized();
-            }
-             
-            if (userClaim.CurrentUserType == UserType.StaffUser && staffId != userClaim.Sub)
-            {
-                return TypedResults.Forbid();
-            }
-
-            var result = await service.Mediator.Send(new ResetDeviceIdByStaffIdCommand(staffId, request.DeviceId)); 
-            return result.ToIResult();
-        }
-        catch (Exception ex)
-        {
-            service.Logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
-    }
-
-    private static async Task<IResult> SetDeviceIdByStaffId(
-        Guid staffId,
-        [FromBody] DeviceIdRequestDto request,
-        [FromServices] ApplicationService service,
-        [FromServices] IValidator<DeviceIdRequestDto> validator,
-        [FromServices] IUserInfoService userInfoService)
-    {
-        try
-        {  
-            var validation = await validator.ValidateAsync(request);
-            if (!validation.IsValid)
-            {
-                return TypedResults.BadRequest(validation.Errors);
-            }
-             
-
-            var result = await service.Mediator.Send(new SetDeviceIdByStaffIdCommand(staffId, request.DeviceId));
-
-            return result.ToIResult();
-        }
-        catch (Exception ex)
-        {
-            service.Logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
-    }
-
+    
     private static async Task<IResult> ConfirmBusinessLicenseByUserId(
         Guid businessUserId,
         Guid businessLicenseId,

@@ -240,6 +240,7 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\appsettings.Development.json
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\appsettings.json
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\appsettings.Production.json
+C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Search.Worker.staticwebassets.endpoints.json
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Search.Worker.exe
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Search.Worker.deps.json
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Search.Worker.runtimeconfig.json
@@ -446,16 +447,9 @@ C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.GeneratedMSBuildEdito
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.AssemblyInfoInputs.cache
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.AssemblyInfo.cs
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.csproj.CoreCompileInputs.cache
-C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.sourcelink.json
-C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.W.39D248E3.Up2Date
-C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.dll
-C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\refint\Search.Worker.dll
-C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.pdb
-C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.genruntimeconfig.cache
-C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\ref\Search.Worker.dll
-C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.MvcApplicationPartsAssemblyInfo.cache
-C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Search.Worker.staticwebassets.endpoints.json
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.MvcApplicationPartsAssemblyInfo.cs
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.MvcApplicationPartsAssemblyInfo.cache
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.sourcelink.json
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\scopedcss\bundle\Search.Worker.styles.css
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\staticwebassets.build.json
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\staticwebassets.development.json
@@ -466,3 +460,9 @@ C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\staticwebassets\msbuild.build.Searc
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.Search.Worker.props
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.Search.Worker.props
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\staticwebassets.pack.json
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.W.39D248E3.Up2Date
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.dll
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\refint\Search.Worker.dll
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.pdb
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.genruntimeconfig.cache
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\ref\Search.Worker.dll

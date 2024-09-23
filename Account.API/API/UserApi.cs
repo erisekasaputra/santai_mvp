@@ -1,6 +1,4 @@
-﻿using Account.API.Applications.Commands.FleetCommand.AssignFleetsToStaff;
-using Account.API.Applications.Commands.UserCommand.ResetDeviceIdByUserId;
-using Account.API.Applications.Commands.UserCommand.SetDeviceIdByUserId;
+﻿using Account.API.Applications.Commands.FleetCommand.AssignFleetsToStaff; 
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetEmailByUserId;
 using Account.API.Applications.Queries.GetPhoneNumberByUserId;
@@ -34,13 +32,7 @@ public static class UserApi
             .RequireAuthorization();
 
         app.MapGet("/time-zone", GetTimeZoneByUserId)
-            .RequireAuthorization();
-
-        app.MapPatch("/{userId}/device-id/set", SetDeviceIdByUserId)
-           .RequireAuthorization();
-
-        app.MapPatch("/{userId}/device-id/reset", ResetDeviceIdByUserId)
-           .RequireAuthorization();
+            .RequireAuthorization(); 
 
         app.MapPost("{userId}/info", GetByUserId)
             .RequireAuthorization(PolicyName.ServiceToServiceOnlyPolicy.ToString());
@@ -177,61 +169,7 @@ public static class UserApi
     }
 
 
-
-
-    private static async Task<IResult> ResetDeviceIdByUserId(
-        Guid userId,
-        [FromBody] DeviceIdRequestDto request,
-        [FromServices] ApplicationService service,
-        [FromServices] IValidator<DeviceIdRequestDto> validator,
-        [FromServices] IUserInfoService userInfoService)
-    {
-        try
-        { 
-            var validation = await validator.ValidateAsync(request); 
-            if (!validation.IsValid)
-            {
-                return TypedResults.BadRequest(validation.Errors);
-            }
-
-            var result = await service.Mediator.Send(new ResetDeviceIdByUserIdCommand(userId, request.DeviceId));
-
-            return result.ToIResult();
-        }
-        catch (Exception ex)
-        {
-            service.Logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
-    }
-
-    private static async Task<IResult> SetDeviceIdByUserId(
-        Guid userId,
-        [FromBody] DeviceIdRequestDto request,
-        [FromServices] ApplicationService service,
-        [FromServices] IValidator<DeviceIdRequestDto> validator,
-        [FromServices] IUserInfoService userInfoService)
-    {
-        try
-        { 
-            var validation = await validator.ValidateAsync(request); 
-            if (!validation.IsValid)
-            {
-                return TypedResults.BadRequest(validation.Errors);
-            }
-
-            var result = await service.Mediator.Send(new SetDeviceIdByUserIdCommand(
-                userId,
-                request.DeviceId));
-
-            return result.ToIResult();
-        }
-        catch (Exception ex)
-        { 
-            service.Logger.LogError(ex, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
-        }
-    }
+     
 
     //private static async Task<IResult> UpdateUserEmailByUserId(
     //    Guid userId, 

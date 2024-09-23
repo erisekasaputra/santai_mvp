@@ -85,8 +85,7 @@ public class CreateRegularUserCommandHandler(
                 encryptedPhoneNumber,
                 address,
                 request.PersonalInfo.ToPersonalInfo(request.TimeZoneId),
-                request.TimeZoneId,
-                request.DeviceId);
+                request.TimeZoneId );
 
             // creating referral program if exists
             int? referralRewardPoint = _referralOptions.CurrentValue.Point;

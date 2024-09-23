@@ -43,8 +43,7 @@ public class GetUserByUserTypeAndUserIdQueryHandler(
                     baseUser.TimeZoneId,
                     baseUser.Name,
                     filteredFleets,
-                    fleetsUnknown,
-                    baseUser.DeviceIds);
+                    fleetsUnknown);
 
                 return Result.Success(userResponseDto, ResponseStatus.Ok);
             }
@@ -65,8 +64,7 @@ public class GetUserByUserTypeAndUserIdQueryHandler(
                     staffUser.TimeZoneId,
                     staffUser.Name,
                     filteredFleets,
-                    fleetsUnknown,
-                    staffUser.DeviceIds);
+                    fleetsUnknown);
 
                 return Result.Success(userResponseDto, ResponseStatus.Ok);
             }

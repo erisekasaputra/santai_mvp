@@ -18,6 +18,7 @@ REM Set the aws client
 dotnet user-secrets set "AWS:AccessID" "AKIAYS2NP3RU6DEGPJUM"  
 dotnet user-secrets set "AWS:SecretKey" "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"  
 dotnet user-secrets set "AWS:Region" "ap-southeast-1"  
+
 dotnet user-secrets set "AWS:RDS:Username" "santaitechnology"  
 dotnet user-secrets set "AWS:RDS:Password" "_SANTAItechnology2024" 
 dotnet user-secrets set "AWS:RabbitMQ:Broker" "ProductionBackendBroker" 
