@@ -1,5 +1,6 @@
 using Core.Extensions;  
 using Notification.Worker.Extensions;
+using Notification.Worker.Infrastructure;
 using Notification.Worker.Services; 
 
 var builder = WebApplication.CreateBuilder(args); 
@@ -14,6 +15,7 @@ builder.AddApplicationService();
 builder.AddRedisDatabase(); 
 builder.AddMassTransitContext();
 builder.AddAuth();
+builder.AddSqlDatabaseContext<NotificationDbContext>();
 
 var app = builder.Build();
  

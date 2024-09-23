@@ -2,9 +2,9 @@
 
 public class PasswordResetRequest
 {
-    public string Identity { get; set; }
-    public string OtpCode { get; set; }
-    public string NewPassword { get; set; }
+    public required string Identity { get; set; }
+    public required string OtpCode { get; set; }
+    public required string NewPassword { get; set; }
 
     public PasswordResetRequest(string identity, string otpCode, string newPassword)
     {

@@ -6,12 +6,10 @@ public class RegularUserRequestDto(
     string timeZoneId,
     string? referralCode,
     AddressRequestDto address,
-    PersonalInfoRequestDto personalInfo,
-    string deviceId)
+    PersonalInfoRequestDto personalInfo)
 { 
-    public string TimeZoneId { get; } = timeZoneId.Clean();
-    public string? ReferralCode { get; } = referralCode?.Clean();
-    public AddressRequestDto Address { get; } = address;
-    public PersonalInfoRequestDto PersonalInfo { get; } = personalInfo;
-    public string DeviceId { get; } = deviceId.Clean();
+    public required string TimeZoneId { get; set; } = timeZoneId.Clean();
+    public string? ReferralCode { get; set; } = referralCode?.Clean();
+    public required AddressRequestDto Address { get; set; } = address;
+    public required PersonalInfoRequestDto PersonalInfo { get; set; } = personalInfo;
 }

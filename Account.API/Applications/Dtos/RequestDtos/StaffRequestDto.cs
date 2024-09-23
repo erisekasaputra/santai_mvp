@@ -9,9 +9,9 @@ public class StaffRequestDto(
     string timeZoneId,
     string password)
 { 
-    public string PhoneNumber { get; set; } = phoneNumber.Clean(); 
-    public string Name { get; } = name.Clean();
-    public AddressRequestDto Address { get; } = address;
-    public string TimeZoneId { get; set; } = timeZoneId.Clean();
-    public string Password { get; set; } = password.Clean();
+    public required string PhoneNumber { get; set; } = phoneNumber.Clean(); 
+    public required string Name { get; set; } = name.Clean();
+    public required AddressRequestDto Address { get; set; } = address;
+    public required string TimeZoneId { get; set; } = timeZoneId.Clean();
+    public required string Password { get; set; } = password.Clean();
 }

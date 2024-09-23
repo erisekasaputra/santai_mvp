@@ -1,6 +1,4 @@
-﻿using Ordering.Domain.Enumerations;
-
-namespace Ordering.API.Applications.Dtos.Requests;
+﻿namespace Ordering.API.Applications.Dtos.Requests;
 
 public class SenangPayPaymentRequest
 {

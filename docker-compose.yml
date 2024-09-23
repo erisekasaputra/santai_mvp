@@ -11,6 +11,8 @@ services:
             RABBITMQ_DEFAULT_USER: eris
             RABBITMQ_DEFAULT_PASS: 000328Eris@
         restart: always
+        networks:
+            - backend-network
     elasticsearch:
         image: docker.elastic.co/elasticsearch/elasticsearch:8.8.1
         container_name: elasticsearch-santai
@@ -24,12 +26,16 @@ services:
         volumes:
             - es_data:/usr/share/elasticsearch/data
         restart: always 
+        networks:
+            - backend-network
     dynamodb:
         image: amazon/dynamodb-local:latest
         container_name: dynamodb-santai
         ports:
             - "8000:8000"
         restart: always
+        networks:
+            - backend-network
     minio:
         image: minio/minio:latest
         container_name: minio
@@ -44,19 +50,23 @@ services:
             - minio-config:/root/.minio
         command: server /data --console-address ":9001"
         restart: always
+        networks:
+            - backend-network
     redis:
         image: redis:latest
         container_name: redis
         ports:
             - "6379:6379"
         networks:
-            - redis-network 
+            - backend-network 
             
+
+
 volumes:
     es_data:
     minio-data:
     minio-config:
 
 networks:
-    redis-network:
+    backend-network:
         driver: bridge

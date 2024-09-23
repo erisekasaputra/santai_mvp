@@ -2,8 +2,7 @@
 
 public class FleetRequest
 {
-    public Guid Id { get; private set; }
-
+    public Guid Id { get; private set; } 
     public FleetRequest(Guid id)
     {
         if (id == Guid.Empty)

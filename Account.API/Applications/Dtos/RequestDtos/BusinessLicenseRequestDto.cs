@@ -8,7 +8,7 @@ public class BusinessLicenseRequestDto(
     string name,
     string description)
 {
-    public string LicenseNumber { get; set; } = licenseNumber.Clean();
-    public string Name { get; } = name.Clean();
-    public string Description { get; } = description.Clean();
+    public required string LicenseNumber { get; set; } = licenseNumber.Clean();
+    public required string Name { get; set; } = name.Clean();
+    public required string Description { get; set; } = description.Clean();
 }

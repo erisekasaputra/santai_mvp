@@ -2,7 +2,7 @@
 
 public class PreServiceInspectionsRequest
 {
-    public IEnumerable<PreServiceInspectionRequest> PreServiceInspections { get; set; }
+    public required IEnumerable<PreServiceInspectionRequest> PreServiceInspections { get; set; }
     public PreServiceInspectionsRequest(
         IEnumerable<PreServiceInspectionRequest> preServiceInspections)
     {

@@ -2,7 +2,7 @@
 
 public class BasicInspectionsRequest
 {
-    public IEnumerable<BasicInspectionRequest> BasicInspections { get; set; }
+    public required IEnumerable<BasicInspectionRequest> BasicInspections { get; set; }
     public BasicInspectionsRequest(
         IEnumerable<BasicInspectionRequest> basicInspections)
     {

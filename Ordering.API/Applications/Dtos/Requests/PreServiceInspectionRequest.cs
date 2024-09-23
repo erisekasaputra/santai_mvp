@@ -4,10 +4,10 @@ namespace Ordering.API.Applications.Dtos.Requests;
 
 public class PreServiceInspectionRequest
 {
-    public string Description { get; set; }
-    public string Parameter { get; set; }
-    public int Rating { get; set; }
-    public IEnumerable<PreServiceInspectionResultRequest> PreServiceInspectionResults { get; set; }
+    public required string Description { get; set; }
+    public required string Parameter { get; set; }
+    public required int Rating { get; set; }
+    public required IEnumerable<PreServiceInspectionResultRequest> PreServiceInspectionResults { get; set; }
     public PreServiceInspectionRequest(
         string description,
         string parameter,

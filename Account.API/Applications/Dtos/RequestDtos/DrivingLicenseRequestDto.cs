@@ -8,7 +8,7 @@ public class DrivingLicenseRequestDto(
     string frontSideImageUrl,
     string backSideImageUrl)
 {
-    public string LicenseNumber { get; set; } = licenseNumber.Clean();
-    public string FrontSideImageUrl { get; } = frontSideImageUrl.Clean();
-    public string BackSideImageUrl { get; } = backSideImageUrl.Clean();
+    public required string LicenseNumber { get; set; } = licenseNumber.Clean();
+    public required string FrontSideImageUrl { get; set; } = frontSideImageUrl.Clean();
+    public required string BackSideImageUrl { get; set; } = backSideImageUrl.Clean();
 }

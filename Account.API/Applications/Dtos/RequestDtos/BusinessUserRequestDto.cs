@@ -16,16 +16,16 @@ public class BusinessUserRequestDto(
     IEnumerable<BusinessLicenseRequestDto> businessLicenses,
     IEnumerable<StaffRequestDto> staffs)
 {  
-    public string PhoneNumber { get; set; } = phoneNumber.Clean();
-    public string TimeZoneId { get; } = timeZoneId.Clean();
-    public AddressRequestDto Address { get; } = address;
-    public string BusinessName { get; } = businessName.Clean();
-    public string ContactPerson { get; } = contactPerson.Clean();
+    public required string PhoneNumber { get; set; } = phoneNumber.Clean();
+    public required string TimeZoneId { get; set; } = timeZoneId.Clean();
+    public required AddressRequestDto Address { get; set; } = address;
+    public required string BusinessName { get; set; } = businessName.Clean();
+    public required string ContactPerson { get; set; } = contactPerson.Clean();
     public string? TaxId { get; set; } = taxId?.Clean();
-    public string? WebsiteUrl { get; } = websiteUrl?.Clean();
-    public string? BusinessDescription { get; } = businessDescription?.Clean();
-    public string? ReferralCode { get; } = referralCode?.Clean();
-    public string Password { get; } = password.Clean();
-    public IEnumerable<BusinessLicenseRequestDto> BusinessLicenses { get; } = businessLicenses;
-    public IEnumerable<StaffRequestDto> Staffs { get; } = staffs;
+    public string? WebsiteUrl { get; set; } = websiteUrl?.Clean();
+    public string? BusinessDescription { get; set; } = businessDescription?.Clean();
+    public string? ReferralCode { get; set; } = referralCode?.Clean();
+    public required string Password { get; set; } = password.Clean();
+    public required IEnumerable<BusinessLicenseRequestDto> BusinessLicenses { get; set; } = businessLicenses;
+    public required IEnumerable<StaffRequestDto> Staffs { get; set; } = staffs;
 }

@@ -2,7 +2,7 @@
 
 public class UpdateRegularUserRequestDto(AddressRequestDto address, string timeZoneId, PersonalInfoRequestDto personalInfo)
 {
-    public AddressRequestDto Address { get; } = address;
-    public string TimeZoneId { get; } = timeZoneId;
-    public PersonalInfoRequestDto PersonalInfo { get; } = personalInfo;
+    public required AddressRequestDto Address { get; set; } = address;
+    public required string TimeZoneId { get; set; } = timeZoneId;
+    public required PersonalInfoRequestDto PersonalInfo { get; set; } = personalInfo;
 }

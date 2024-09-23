@@ -2,9 +2,9 @@
 
 public class PreServiceInspectionResultRequest
 {
-    public string Description { get; set; }
-    public string Parameter { get; set; }
-    public bool IsWorking { get; set; }
+    public required string Description { get; set; }
+    public required string Parameter { get; set; }
+    public required bool IsWorking { get; set; }
     public PreServiceInspectionResultRequest(
         string description,
         string parameter,

@@ -4,7 +4,7 @@ namespace Identity.API.Applications.Dto;
 
 public class SendOtpRequest
 {
-    public Guid OtpRequestId { get; set; }
-    public string OtpRequestToken { get; set; } = string.Empty;
-    public OtpProviderType OtpProviderType { get; set; }
+    public required Guid OtpRequestId { get; set; }
+    public required string OtpRequestToken { get; set; } = string.Empty;
+    public required OtpProviderType OtpProviderType { get; set; }
 }

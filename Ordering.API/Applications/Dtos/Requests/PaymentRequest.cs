@@ -4,10 +4,10 @@ namespace Ordering.API.Applications.Dtos.Requests;
 
 public class PaymentRequest
 {
-    public Guid OrderId { get; set; }
-    public decimal Amount { get; set; }
-    public Currency Currency { get; set; }
-    public DateTime PaidAt { get; set; }
+    public required Guid OrderId { get; set; }
+    public required decimal Amount { get; set; }
+    public required Currency Currency { get; set; }
+    public required DateTime PaidAt { get; set; }
     public string? PaymentMethod { get; set; }
     public string? BankReference { get; set; }
     public PaymentRequest(

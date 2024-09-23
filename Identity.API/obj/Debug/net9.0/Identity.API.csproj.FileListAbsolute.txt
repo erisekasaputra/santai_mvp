@@ -424,3 +424,4 @@ C:\Santai.MVP\Identity.API\obj\Debug\net9.0\refint\Identity.API.dll
 C:\Santai.MVP\Identity.API\obj\Debug\net9.0\Identity.API.pdb
 C:\Santai.MVP\Identity.API\obj\Debug\net9.0\Identity.API.genruntimeconfig.cache
 C:\Santai.MVP\Identity.API\obj\Debug\net9.0\ref\Identity.API.dll
+C:\Santai.MVP\Identity.API\bin\Debug\net9.0\appsettings.Docker.json

@@ -4,9 +4,9 @@ namespace Ordering.API.Applications.Dtos.Requests;
 
 public class PayCancellationRefundRequest
 {
-    public Guid OrderId { get; set; }
-    public decimal Amount { get; set; }
-    public Currency Currency { get; set; }
+    public required Guid OrderId { get; set; }
+    public required decimal Amount { get; set; }
+    public required Currency Currency { get; set; }
     public PayCancellationRefundRequest(
         Guid orderId,
         decimal amount,

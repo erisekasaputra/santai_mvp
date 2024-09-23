@@ -60,7 +60,7 @@ public static class ServiceRegistrationExtension
 
         builder.AddGoogle(configure =>
         {
-            configure.ClientId = options?.ClientId ?? throw new Exception();
+            configure.ClientId = options?.ClientID ?? throw new Exception();
             configure.ClientSecret = options?.ClientSecret ?? throw new Exception();
         });
 

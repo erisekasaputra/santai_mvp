@@ -2,9 +2,9 @@
 
 public class BasicInspectionRequest
 {
-    public string Description { get; set; }
-    public string Parameter { get; set; }
-    public int Value { get; set; }
+    public required string Description { get; set; }
+    public required string Parameter { get; set; }
+    public required int Value { get; set; }
 
     public BasicInspectionRequest(
         string description,

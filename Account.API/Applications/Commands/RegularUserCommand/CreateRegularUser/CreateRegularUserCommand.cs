@@ -11,5 +11,4 @@ public record CreateRegularUserCommand(
     string TimeZoneId,
     string? ReferralCode,
     AddressRequestDto Address,
-    PersonalInfoRequestDto PersonalInfo,
-    string DeviceId) : IRequest<Result>;
+    PersonalInfoRequestDto PersonalInfo ) : IRequest<Result>;

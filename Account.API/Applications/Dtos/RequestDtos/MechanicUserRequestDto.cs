@@ -10,15 +10,13 @@ public class MechanicUserRequestDto(
     AddressRequestDto address,
     IEnumerable<CertificationRequestDto> certifications,
     DrivingLicenseRequestDto drivingLicense,
-    NationalIdentityRequestDto nationalIdentity,
-    string deviceId)
+    NationalIdentityRequestDto nationalIdentity )
 {  
-    public string TimeZoneId { get; } = timeZoneId.Clean();
-    public string? ReferralCode { get; } = referralCode?.Clean();
-    public PersonalInfoRequestDto PersonalInfo { get; set; } = personalInfo;
-    public AddressRequestDto Address { get; } = address;
-    public IEnumerable<CertificationRequestDto> Certifications { get; } = certifications;
-    public DrivingLicenseRequestDto DrivingLicense { get; } = drivingLicense;
-    public NationalIdentityRequestDto NationalIdentity { get; } = nationalIdentity;
-    public string DeviceId { get; } = deviceId;
+    public required string TimeZoneId { get; set; } = timeZoneId.Clean();
+    public string? ReferralCode { get; set; } = referralCode?.Clean();
+    public required PersonalInfoRequestDto PersonalInfo { get; set; } = personalInfo;
+    public required AddressRequestDto Address { get; set; } = address;
+    public required IEnumerable<CertificationRequestDto> Certifications { get; set; } = certifications;
+    public required DrivingLicenseRequestDto DrivingLicense { get; set; } = drivingLicense;
+    public required NationalIdentityRequestDto NationalIdentity { get; set; } = nationalIdentity; 
 }

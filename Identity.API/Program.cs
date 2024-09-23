@@ -31,7 +31,7 @@ builder.AddAuth().AddGoogleSSO();
 builder.AddRedisDatabase();  
 
 
-if (builder.Environment.IsDevelopment())
+if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Docker")
 {
     builder.Services.AddOpenApi();
     builder.Services.AddEndpointsApiExplorer();
@@ -49,7 +49,7 @@ app.UseAuthorization();
 
 app.UseRateLimiter(); 
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Docker")
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger(); 
@@ -57,8 +57,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHsts(); 
-app.UseHttpsRedirection(); 
+//app.UseHsts(); 
+//app.UseHttpsRedirection(); 
 
 app.MapControllers(); 
 

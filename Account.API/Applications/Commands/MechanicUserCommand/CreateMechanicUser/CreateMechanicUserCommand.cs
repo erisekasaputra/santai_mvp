@@ -14,6 +14,5 @@ public record CreateMechanicUserCommand(
     AddressRequestDto Address,
     IEnumerable<CertificationRequestDto> Certifications,
     DrivingLicenseRequestDto DrivingLicense,
-    NationalIdentityRequestDto NationalIdentity,
-    string DeviceId
+    NationalIdentityRequestDto NationalIdentity 
     ) : IRequest<Result>;

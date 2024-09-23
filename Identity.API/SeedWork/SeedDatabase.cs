@@ -65,7 +65,7 @@ public class SeedDatabase
                         await userManager.CreateAsync(user, password);
                         await userManager.AddToRoleAsync(user, UserType.Administrator.ToString());
 
-                        var userInfoLogin = new UserLoginInfo("google", googleOption.CurrentValue.ClientId, "google");
+                        var userInfoLogin = new UserLoginInfo("google", googleOption.CurrentValue.ClientID, "google");
 
                         await userManager.AddLoginAsync(user, userInfoLogin);
 

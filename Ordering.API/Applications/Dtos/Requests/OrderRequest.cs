@@ -4,15 +4,15 @@ namespace Ordering.API.Applications.Dtos.Requests;
 
 public class OrderRequest
 {
-    public string AddressLine { get; set; }
-    public double Latitude { get; set; }
-    public double Longitude { get; set; }
-    public Currency Currency { get; set; }
-    public bool IsScheduled { get; set; }
+    public required string AddressLine { get; set; }
+    public required double Latitude { get; set; }
+    public required double Longitude { get; set; }
+    public required Currency Currency { get; set; }
+    public required bool IsScheduled { get; set; }
     public DateTime? ScheduledAt { get; set; }
-    public string CouponCode { get; set; }
-    public IEnumerable<LineItemRequest> LineItems { get; set; }
-    public IEnumerable<FleetRequest> Fleets { get; set; }
+    public required string CouponCode { get; set; }
+    public required IEnumerable<LineItemRequest> LineItems { get; set; }
+    public required IEnumerable<FleetRequest> Fleets { get; set; }
 
     public OrderRequest(
         string addressLine,

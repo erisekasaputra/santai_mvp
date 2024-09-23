@@ -12,11 +12,11 @@ public class UpdateBusinessUserRequestDto(
     AddressRequestDto address,
     string timeZoneId)
 { 
-    public string BusinessName { get; } = businessName.Clean();
-    public string ContactPerson { get; } = contactPerson.Clean();
+    public required string BusinessName { get; set; } = businessName.Clean();
+    public required string ContactPerson { get; set; } = contactPerson.Clean();
     public string? TaxId { get; } = taxId?.Clean();
     public string? WebsiteUrl { get; } = websiteUrl?.Clean();
     public string? Description { get; } = description?.Clean();
-    public AddressRequestDto Address { get; } = address;
+    public required AddressRequestDto Address { get; set; } = address;
     public string TimeZoneId { get; } = timeZoneId.Clean();
 }

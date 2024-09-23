@@ -2,8 +2,8 @@
 
 public class RatingRequestDto
 {
-    public decimal Value { get; private set; }
-    public string Comment { get; private set; }
+    public required decimal Value { get; set; }
+    public required string Comment { get; set; }
     public IEnumerable<string>? Images { get; private set; }
     public RatingRequestDto(decimal value, string comment, IEnumerable<string>? images)
     {

@@ -1,3 +1,5 @@
-﻿namespace Catalog.API.Applications.Dtos.Category;
+﻿using System.ComponentModel.DataAnnotations;
 
-public record CategoryDto(Guid Id, string Name, string ImageUrl);
+namespace Catalog.API.Applications.Dtos.Category;
+
+public record CategoryDto(Guid Id, [Required] string Name, [Required] string ImageUrl);

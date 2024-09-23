@@ -24,23 +24,23 @@ public class UpdateFleetRequestDto(
     TransmissionType transmissionType,
     string? imageUrl)
 {
-    public string RegistrationNumber { get; set; } = registrationNumber.Clean(); 
-    public VehicleType VehicleType { get; set; } = vehicleType;
-    public string Brand { get; set; } = brand.Clean();
-    public string Model { get; set; } = model.Clean();
-    public int YearOfManufacture { get; set; } = yearOfManufacture;
-    public string ChassisNumber { get; set; } = chassisNumber.Clean(); 
-    public string EngineNumber { get; set; } = engineNumber.Clean(); 
-    public string InsuranceNumber { get; set; } = insuranceNumber.Clean();
-    public bool IsInsuranceValid { get; set; } = isInsuranceValid;
-    public DateTime LastInspectionDateLocal { get; set; } = lastInspectionDateLocal;
-    public int OdometerReading { get; set; } = odometerReading;
-    public FuelType FuelType { get; set; } = fuelType; 
-    public string OwnerName { get; set; } = ownerName.Clean();
-    public string OwnerAddress { get; set; } = ownerAddress.Clean();
-    public UsageStatus UsageStatus { get; set; } = usageStatus;
-    public OwnershipStatus OwnershipStatus { get; set; } = ownershipStatus;
-    public TransmissionType TransmissionType { get; set; } = transmissionType; 
+    public required string RegistrationNumber { get; set; } = registrationNumber.Clean(); 
+    public required VehicleType VehicleType { get; set; } = vehicleType;
+    public required string Brand { get; set; } = brand.Clean();
+    public required string Model { get; set; } = model.Clean();
+    public required int YearOfManufacture { get; set; } = yearOfManufacture;
+    public required string ChassisNumber { get; set; } = chassisNumber.Clean(); 
+    public required string EngineNumber { get; set; } = engineNumber.Clean(); 
+    public required string InsuranceNumber { get; set; } = insuranceNumber.Clean();
+    public required bool IsInsuranceValid { get; set; } = isInsuranceValid;
+    public required DateTime LastInspectionDateLocal { get; set; } = lastInspectionDateLocal;
+    public required int OdometerReading { get; set; } = odometerReading;
+    public required FuelType FuelType { get; set; } = fuelType; 
+    public required string OwnerName { get; set; } = ownerName.Clean();
+    public required string OwnerAddress { get; set; } = ownerAddress.Clean();
+    public required UsageStatus UsageStatus { get; set; } = usageStatus;
+    public required OwnershipStatus OwnershipStatus { get; set; } = ownershipStatus;
+    public required TransmissionType TransmissionType { get; set; } = transmissionType; 
     public string? ImageUrl { get; set; } = imageUrl?.Clean();
 }
 

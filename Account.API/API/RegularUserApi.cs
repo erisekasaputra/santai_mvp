@@ -180,8 +180,7 @@ public static class RegularUserApi
                 request.TimeZoneId,
                 request.ReferralCode,
                 request.Address,
-                request.PersonalInfo,
-                request.DeviceId)); 
+                request.PersonalInfo )); 
             return result.ToIResult();
         }
         catch (Exception ex)

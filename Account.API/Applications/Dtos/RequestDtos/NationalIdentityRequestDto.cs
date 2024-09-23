@@ -8,7 +8,7 @@ public class NationalIdentityRequestDto(
     string frontSideImageUrl,
     string backSideImageUrl)
 {
-    public string IdentityNumber { get; set; } = identityNumber.Clean();
-    public string FrontSideImageUrl { get; } = frontSideImageUrl.Clean();
-    public string BackSideImageUrl { get; } = backSideImageUrl.Clean();
+    public required string IdentityNumber { get; set; } = identityNumber.Clean();
+    public required string FrontSideImageUrl { get; set; } = frontSideImageUrl.Clean();
+    public required string BackSideImageUrl { get; set; } = backSideImageUrl.Clean();
 }

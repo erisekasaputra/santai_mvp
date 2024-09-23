@@ -1,10 +1,9 @@
-﻿using Core.Extensions;
-
+﻿using Core.Extensions; 
 namespace Ordering.API.Applications.Dtos.Requests;
 
 public class OrderSecretRequest
 {
-    public string Secret { get; private set; } 
+    public required string Secret { get; set; } 
     public OrderSecretRequest(string secret)
     {
         Secret = secret.Clean();

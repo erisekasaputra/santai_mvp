@@ -709,8 +709,7 @@ public static class MechanicUserApi
                 request.Address,
                 request.Certifications,
                 request.DrivingLicense,
-                request.NationalIdentity,
-                request.DeviceId));
+                request.NationalIdentity));
              
             return result.ToIResult();
         }

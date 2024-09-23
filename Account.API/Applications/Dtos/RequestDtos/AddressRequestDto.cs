@@ -11,11 +11,11 @@ public class AddressRequestDto(
     string postalCode,
     string country)
 {
-    public string AddressLine1 { get; set; } = addressLine1.Clean();
+    public required string AddressLine1 { get; set; } = addressLine1.Clean();
     public string? AddressLine2 { get; set; } = addressLine2?.Clean();
     public string? AddressLine3 { get; set; } = addressLine3?.Clean();
-    public string City { get; } = city.Clean();
-    public string State { get; } = state.Clean();
-    public string PostalCode { get; } = postalCode.Clean();
-    public string Country { get; } = country.Clean();
+    public required string City { get; set; } = city.Clean();
+    public required string State { get; set; } = state.Clean();
+    public required string PostalCode { get; set; } = postalCode.Clean();
+    public required string Country { get; set; } = country.Clean();
 }

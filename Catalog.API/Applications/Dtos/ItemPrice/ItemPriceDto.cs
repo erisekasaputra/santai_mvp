@@ -1,9 +1,10 @@
 ﻿using Core.Enumerations;
+using System.ComponentModel.DataAnnotations;
 
 namespace Catalog.API.Applications.Dtos.ItemPrice;
 
 public record ItemPriceDto(
     Guid ItemId,
-    decimal Amount,
+    [Required] decimal Amount,
     Currency? Currency,
-    string Message);
+    [Required] string Message);

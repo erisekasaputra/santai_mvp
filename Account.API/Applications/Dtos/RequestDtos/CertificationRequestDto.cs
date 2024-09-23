@@ -8,8 +8,8 @@ public class CertificationRequestDto(
     DateTime? validDate,
     IEnumerable<string>? specialization)
 {
-    public string CertificationId { get; } = certificationId.Clean();
-    public string CertificationName { get; } = certificationName.Clean();
-    public DateTime? ValidDate { get; } = validDate;
-    public IEnumerable<string>? Specialization { get; } = specialization?.Select(x => x.Clean());
+    public required string CertificationId { get; set; } = certificationId.Clean();
+    public required string CertificationName { get; set; } = certificationName.Clean();
+    public  DateTime? ValidDate { get; set; } = validDate;
+    public required IEnumerable<string>? Specialization { get; set; } = specialization?.Select(x => x.Clean());
 }
