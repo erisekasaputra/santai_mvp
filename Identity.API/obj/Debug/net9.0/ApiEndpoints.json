@@ -17,70 +17,6 @@
   },
   {
     "ContainingType": "Identity.API.Controllers.AuthController",
-    "Method": "GoogleSignInCallBack",
-    "RelativePath": "api/v1/Auth/google-signin/callback",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "Identity.API.Applications.Dto.GoogleSignInRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Identity.API.Controllers.AuthController",
-    "Method": "LoginStaff",
-    "RelativePath": "api/v1/Auth/login/staff",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "Identity.API.Applications.Dto.LoginStaffRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Identity.API.Controllers.AuthController",
-    "Method": "LoginUser",
-    "RelativePath": "api/v1/Auth/login/user",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "Identity.API.Applications.Dto.LoginUserRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Identity.API.Controllers.AuthController",
-    "Method": "Logout",
-    "RelativePath": "api/v1/Auth/logout",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "request",
-        "Type": "Identity.API.Applications.Dto.RefreshTokenRequest",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "Identity.API.Controllers.AuthController",
     "Method": "SendOtp",
     "RelativePath": "api/v1/Auth/otp",
     "HttpMethod": "POST",
@@ -145,8 +81,72 @@
   },
   {
     "ContainingType": "Identity.API.Controllers.AuthController",
+    "Method": "GoogleSignInCallBack",
+    "RelativePath": "api/v1/Auth/signin-google",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Identity.API.Applications.Dto.GoogleSignInRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Identity.API.Controllers.AuthController",
+    "Method": "LoginStaff",
+    "RelativePath": "api/v1/Auth/signin-staff",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Identity.API.Applications.Dto.LoginStaffRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Identity.API.Controllers.AuthController",
+    "Method": "LoginUser",
+    "RelativePath": "api/v1/Auth/signin-user",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Identity.API.Applications.Dto.LoginUserRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Identity.API.Controllers.AuthController",
+    "Method": "Logout",
+    "RelativePath": "api/v1/Auth/signout",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Identity.API.Applications.Dto.RefreshTokenRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Identity.API.Controllers.AuthController",
     "Method": "VerifyLogin",
-    "RelativePath": "api/v1/Auth/verify/login",
+    "RelativePath": "api/v1/Auth/verify-login",
     "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
@@ -162,7 +162,7 @@
   {
     "ContainingType": "Identity.API.Controllers.AuthController",
     "Method": "VerifyPhoneNumber",
-    "RelativePath": "api/v1/Auth/verify/phone-number",
+    "RelativePath": "api/v1/Auth/verify-phone-number",
     "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
@@ -178,8 +178,8 @@
   {
     "ContainingType": "Identity.API.Controllers.AuthController",
     "Method": "VerifyToken",
-    "RelativePath": "api/v1/Auth/verify/token",
-    "HttpMethod": "POST",
+    "RelativePath": "api/v1/Auth/verify-token",
+    "HttpMethod": "PATCH",
     "IsController": true,
     "Order": 0,
     "Parameters": [

@@ -9,7 +9,7 @@ using Core.Services.Interfaces;
 using Core.Utilities;
 using Core.Validations;
 using FluentValidation;
-using Google.Apis.Auth; 
+using Google.Apis.Auth;
 using Identity.API.Applications.Dto; 
 using Identity.API.Domain.Entities;
 using Identity.API.Domain.Enumerations;
@@ -104,18 +104,17 @@ public class AuthController(
 
         return await strategy.ExecuteAsync<IResult>(async () =>
         {
-            using var transaction = await _dbContext.Database.BeginTransactionAsync();
-
+            using var transaction = await _dbContext.Database.BeginTransactionAsync(); 
             try
             {
                 if (!AllowedOtpProviderType.GetAll.Contains(request.OtpProviderType))
                 {
                     return TypedResults.BadRequest(
-                        Result.Failure($"Unknown otp provider type '{request.OtpProviderType}'", ResponseStatus.BadRequest));
+                        Result.Failure($"Unknown otp provider type '{request.OtpProviderType}'", 
+                            ResponseStatus.BadRequest));
                 }
 
-                var requestOtp = await _otpService.GetRequestOtpAsync(request.OtpRequestId);
-
+                var requestOtp = await _otpService.GetRequestOtpAsync(request.OtpRequestId); 
                 if (requestOtp is null)
                 {
                     return TypedResults.Unauthorized();
@@ -357,8 +356,9 @@ public class AuthController(
     }
 
 
-    [HttpPost("google-signin/callback")]
-    public async Task<IResult> GoogleSignInCallBack([FromBody] GoogleSignInRequest request)
+    [HttpPost("signin-google")]
+    public async Task<IResult> GoogleSignInCallBack(
+        [FromBody] GoogleSignInRequest request)
     {
         var strategy = _dbContext.Database.CreateExecutionStrategy();
 
@@ -498,7 +498,7 @@ public class AuthController(
     }  
 
 
-    [HttpPost("login/staff")]
+    [HttpPost("signin-staff")]
     public async Task<IResult> LoginStaff(
         [FromBody] LoginStaffRequest request,
         [FromServices] IValidator<LoginStaffRequest> validator)
@@ -645,7 +645,7 @@ public class AuthController(
     }
 
 
-    [HttpPost("login/user")]
+    [HttpPost("signin-user")]
     public async Task<IResult> LoginUser(
         [FromBody] LoginUserRequest request,
         [FromServices] IValidator<LoginUserRequest> validator)
@@ -1003,32 +1003,34 @@ public class AuthController(
     }  
 
 
-
+    private async Task<bool> IsRefreshTokenValid(string refreshToken, string accessToken)
+    {
+        if (string.IsNullOrWhiteSpace(refreshToken) || string.IsNullOrEmpty(accessToken) || await _tokenCacheService.IsRefreshTokenBlacklisted(refreshToken) || await _tokenCacheService.IsAccessTokenBlacklisted(accessToken))
+            return false;
+        return true;
+    }
     [HttpPost("refresh-token")]
     public async Task<IResult> RefreshToken(
-        [FromBody] RefreshTokenRequest refreshTokenRequest)
+    [FromBody] RefreshTokenRequest refreshTokenRequest)
     {
-        try 
+        try
         {
-            if (string.IsNullOrWhiteSpace(refreshTokenRequest.RefreshToken) || string.IsNullOrEmpty(refreshTokenRequest.AccessToken) || await _tokenCacheService.IsRefreshTokenBlacklisted(refreshTokenRequest.RefreshToken) || await _tokenCacheService.IsAccessTokenBlacklisted(refreshTokenRequest.AccessToken)) return TypedResults.Unauthorized();   
+            if (!await IsRefreshTokenValid(refreshTokenRequest.RefreshToken, refreshTokenRequest.AccessToken))
+            {
+                return TypedResults.Unauthorized();
+            }
 
 
-            var refreshToken = await _tokenCacheService.RotateRefreshTokenAsync(refreshTokenRequest.RefreshToken); 
-            if (refreshToken is null) return TypedResults.Unauthorized(); 
-
-            
+            var refreshToken = await _tokenCacheService.RotateRefreshTokenAsync(refreshTokenRequest.RefreshToken);
+            if (refreshToken is null) return TypedResults.Unauthorized();
             var newRefreshToken = await _tokenService.GenerateRefreshTokenAsync(refreshToken.UserId);
-              
-
+           
+            
             await _tokenCacheService.BlackListRefreshTokenAsync(refreshTokenRequest.RefreshToken);
             await _tokenCacheService.BlackListAccessTokenAsync(refreshTokenRequest.AccessToken);
             await _tokenCacheService.SaveRefreshToken(newRefreshToken);
-
-             
-            var user = await _userManager.FindByIdAsync(refreshToken.UserId);  
-            if (user is null) return TypedResults.Unauthorized(); 
-
-
+            var user = await _userManager.FindByIdAsync(refreshToken.UserId);
+            if (user is null) return TypedResults.Unauthorized();
             var claims = await _userManager.GetClaimsAsync(user);   
             if (claims is null || !claims.Any())
             { 
@@ -1149,7 +1151,7 @@ public class AuthController(
     }
 
      
-    [HttpPost("verify/token")]
+    [HttpPatch("verify-token")]
     public async Task<IResult> VerifyToken(
         [FromBody] RefreshTokenRequest request)
     {
@@ -1172,7 +1174,7 @@ public class AuthController(
 
 
 
-    [HttpPatch("verify/login")]
+    [HttpPatch("verify-login")]
     public async Task<IResult> VerifyLogin(
         [FromBody] VerifyLoginRequest request,
         IValidator<VerifyLoginRequest> validator)
@@ -1273,7 +1275,7 @@ public class AuthController(
 
 
 
-    [HttpPatch("verify/phone-number")]
+    [HttpPatch("verify-phone-number")]
     public async Task<IResult> VerifyPhoneNumber(
         [FromBody] VerifyPhoneNumberRequest request,
         [FromServices] IValidator<VerifyPhoneNumberRequest> validator)
@@ -1332,9 +1334,8 @@ public class AuthController(
     }
 
 
-
-    [Authorize]
-    [HttpPost("logout")]
+     
+    [HttpPost("signout")]
     public async Task<IResult> Logout(
         [FromBody] RefreshTokenRequest request)
     {
@@ -1344,7 +1345,8 @@ public class AuthController(
             using var transaction = await _dbContext.Database.BeginTransactionAsync();
             try
             {
-                if (string.IsNullOrWhiteSpace(request.RefreshToken) || string.IsNullOrEmpty(request.AccessToken)) return TypedResults.Unauthorized();
+                if (string.IsNullOrWhiteSpace(request.RefreshToken) || 
+                string.IsNullOrEmpty(request.AccessToken)) return TypedResults.Unauthorized();
 
                 await _tokenCacheService.BlackListRefreshTokenAsync(request.RefreshToken);
                 await _tokenCacheService.BlackListAccessTokenAsync(request.AccessToken);

@@ -42,7 +42,7 @@ if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName =
 var app = builder.Build();
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
-app.UseMiddleware<IdempotencyMiddleware>();
+//app.UseMiddleware<IdempotencyMiddleware>();
 
 app.UseAuthentication(); 
 app.UseAuthorization(); 

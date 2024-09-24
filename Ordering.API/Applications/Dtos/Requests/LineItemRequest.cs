@@ -2,8 +2,8 @@
 
 public class LineItemRequest
 {
-    public required Guid Id { get; private set; }
-    public required int Quantity { get; private set; }
+    public required Guid Id { get; set; }
+    public required int Quantity { get; set; }
 
     public LineItemRequest(Guid id, int quantity)
     {

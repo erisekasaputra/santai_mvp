@@ -14,7 +14,7 @@ builder.Configuration.AddEnvironmentVariables();
 builder.AddCoreOptionConfiguration(); 
 builder.AddLoggingContext();
 
-if (builder.Environment.IsDevelopment())
+if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Docker")
 {
     builder.Services.AddOpenApi();
     builder.Services.AddEndpointsApiExplorer();
@@ -40,7 +40,7 @@ app.UseMiddleware<IdempotencyMiddleware>();
 app.UseAuthentication(); 
 app.UseAuthorization();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Docker")
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();

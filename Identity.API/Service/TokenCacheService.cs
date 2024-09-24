@@ -15,9 +15,9 @@ public class TokenCacheService(
     private readonly IOptionsMonitor<JwtConfiguration> _jwtConfigs = jwtConfigs;
     private readonly ICacheService _cacheService = cacheService;
 
-    public async Task<RefreshToken?> GetStoredRefreshToken(string token)
+    public async Task<RefreshToken?> GetStoredRefreshToken(string refreshToken)
     {
-        var key = CacheKey.RefreshTokenCacheKey(token.HashToken());
+        var key = CacheKey.RefreshTokenCacheKey(refreshToken);
         var storedToken = await _cacheService.GetAsync<RefreshToken>(key); 
         return storedToken;
     }
@@ -31,7 +31,7 @@ public class TokenCacheService(
       
 
     public async Task<RefreshToken?> RotateRefreshTokenAsync(string oldToken)
-    {
+    { 
         var storedRefreshToken = await GetStoredRefreshToken(oldToken);
         if (storedRefreshToken is null) return null;  
         if (!ValidateToken(storedRefreshToken)) return null;  
@@ -41,7 +41,7 @@ public class TokenCacheService(
 
     public async Task<bool> InvalidateRefreshToken(string oldToken)
     {
-        var cacheKey = CacheKey.RefreshTokenCacheKey(oldToken.HashToken()); 
+        var cacheKey = CacheKey.RefreshTokenCacheKey(oldToken); 
         return await _cacheService.DeleteAsync(cacheKey);
     }
 
@@ -54,8 +54,7 @@ public class TokenCacheService(
     public async Task<bool> BlackListRefreshTokenAsync(string refreshToken)
     {
         return await _cacheService.SetAsync(
-            CacheKey.BlackListRefreshTokenKey(refreshToken),
-                new { Blacklisted = true },
+            CacheKey.BlackListRefreshTokenKey(refreshToken), refreshToken,
                 TimeSpan.FromDays(_jwtConfigs.CurrentValue.TotalDaysRefreshTokenLifetime));
     }
 

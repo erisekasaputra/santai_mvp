@@ -86,15 +86,8 @@ public class JwtTokenService(
     public async Task<RefreshToken> GenerateRefreshTokenAsync(string userId)
     {
         var newToken = SecretGenerator.GenerateRandomSecret();
-        var tokenExpiry = DateTime.UtcNow.AddDays(_jwtConfigs.CurrentValue.TotalDaysRefreshTokenLifetime); 
-
-        var hashedRefreshToken = new RefreshToken()
-        {
-            Token = newToken.HashToken(),
-            UserId = userId,
-            ExpiryDateUtc = tokenExpiry
-        };
-         
+        var tokenExpiry = DateTime.UtcNow.AddDays(_jwtConfigs.CurrentValue.TotalDaysRefreshTokenLifetime);  
+    
         return await Task.FromResult(new RefreshToken()
         {
             Token = newToken,

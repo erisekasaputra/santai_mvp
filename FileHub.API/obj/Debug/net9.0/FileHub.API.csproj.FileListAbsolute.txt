@@ -116,3 +116,6 @@ C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\refint\FileHub.API.dll
 C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.pdb
 C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.genruntimeconfig.cache
 C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\ref\FileHub.API.dll
+C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
