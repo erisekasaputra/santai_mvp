@@ -1,11 +1,24 @@
 using Core.Extensions;
 using Core.Middlewares;
-using Identity.API;  
+using Identity.API;
 using Identity.API.Extensions;
-using Identity.API.Infrastructure; 
-using Identity.API.SeedWork;  
+using Identity.API.Infrastructure;
+using Identity.API.SeedWork;
 
 var builder = WebApplication.CreateBuilder(args); 
+
+builder.WebHost.UseKestrel(options =>
+{
+    options.ListenAnyIP(8000);
+}); 
+ 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
 
 builder.Configuration.AddEnvironmentVariables();
 builder.AddCoreOptionConfiguration();
@@ -41,8 +54,11 @@ if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName =
 
 var app = builder.Build();
 
+app.UseRouting();
+app.UseCors("AllowAllOrigins"); 
+
 app.UseMiddleware<GlobalExceptionMiddleware>();
-//app.UseMiddleware<IdempotencyMiddleware>();
+app.UseMiddleware<IdempotencyMiddleware>();
 
 app.UseAuthentication(); 
 app.UseAuthorization(); 

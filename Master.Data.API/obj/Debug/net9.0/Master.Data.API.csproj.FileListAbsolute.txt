@@ -115,3 +115,4 @@ C:\Santai.MVP\Master.Data.API\obj\Debug\net9.0\refint\Master.Data.API.dll
 C:\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.pdb
 C:\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.genruntimeconfig.cache
 C:\Santai.MVP\Master.Data.API\obj\Debug\net9.0\ref\Master.Data.API.dll
+C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\appsettings.Production.json

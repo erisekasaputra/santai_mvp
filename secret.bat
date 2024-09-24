@@ -2,6 +2,9 @@
 REM Initialize user secrets
 dotnet user-secrets init
 
+
+Token GITHUB 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
+
 REM Set the secret key
 dotnet user-secrets set "KMS:SecretKey" "tP56kzHlfp+IUY/nhdOFbOsRjOSEbTVv6sexU/JL17I="
 
