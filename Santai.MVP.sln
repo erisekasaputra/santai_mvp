@@ -19,7 +19,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Search.API", "Search.API\Se
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F4668E0C-7E0A-44E5-BC3D-7CC7A43A9B8F}"
 	ProjectSection(SolutionItems) = preProject
-		bucket-policy.json = bucket-policy.json
 		docker-compose-account.yml = docker-compose-account.yml
 		docker-compose-catalog.yml = docker-compose-catalog.yml
 		docker-compose-filehub.yml = docker-compose-filehub.yml
@@ -28,10 +27,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docker-compose-notification.yml = docker-compose-notification.yml
 		docker-compose-ordering.yml = docker-compose-ordering.yml
 		docker-compose-search.yml = docker-compose-search.yml
-		MigrationsText.txt = MigrationsText.txt
 		docker-compose-development-service.yml = docker-compose-development-service.yml
 		policy.json = policy.json
-		ReadMe.md = ReadMe.md
 		secret.bat = secret.bat
 	EndProjectSection
 EndProject
