@@ -68,7 +68,7 @@ public class SnsMessageService : IMessageService
             var request = new PublishRequest
             {
                 Message = message,
-                PhoneNumber = phoneNumber,
+                PhoneNumber = phoneNumber
             };
 
             var response = await _snsClient.PublishAsync(request);
