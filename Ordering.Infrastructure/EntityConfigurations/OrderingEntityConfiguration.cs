@@ -122,11 +122,7 @@ public class OrderingEntityConfiguration : IEntityTypeConfiguration<Order>
         builder.HasOne(o => o.Cancellation)
             .WithOne()
             .HasForeignKey<Cancellation>(o => o.OrderId)
-            .OnDelete(DeleteBehavior.Cascade);
-
-        builder.Property(p => p.PaymentUrl)
-            .HasMaxLength(1000)
-            .IsRequired(false); 
+            .OnDelete(DeleteBehavior.Cascade); 
 
         builder.Property(o => o.ScheduledOnUtc)
             .IsRequired(false)
@@ -141,9 +137,7 @@ public class OrderingEntityConfiguration : IEntityTypeConfiguration<Order>
             .IsRequired();
 
         builder.Property(o => o.TotalCanceledByMechanic)
-            .HasDefaultValue(0);
-
-
+            .HasDefaultValue(0); 
 
         builder.Ignore(p => p.EntityStateAction);
         builder.Ignore(x => x.DomainEvents);
