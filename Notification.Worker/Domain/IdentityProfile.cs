@@ -2,8 +2,9 @@
 
 public class IdentityProfile
 {
-    public required string DeviceToken { get; set; }
+    public string DeviceToken { get; set; }
     public string? Arn { get; set; } 
+
     public IdentityProfile(string deviceToken, string? arn)
     {
         DeviceToken = deviceToken ?? throw new Exception("Device token can not be empty");

@@ -1,0 +1,3 @@
+﻿<Project>
+  <Import Project="..\build\Location.Sender.props" />
+</Project>

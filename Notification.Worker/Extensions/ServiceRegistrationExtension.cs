@@ -3,6 +3,7 @@ using Core.Services;
 using Core.Services.Interfaces;
 using MassTransit;  
 using Notification.Worker.Consumers;
+using Notification.Worker.Repository;
 using Notification.Worker.Services;
 using Notification.Worker.Services.Interfaces;
 using StackExchange.Redis; 
@@ -80,6 +81,7 @@ public static class ServiceRegistrationExtension
         }); 
         builder.Services.AddSingleton<ICacheService, CacheService>();
         builder.Services.AddSingleton<IMessageService, SnsMessageService>();
+        builder.Services.AddScoped<UserProfileRepository>();
         return builder;
     }
 }

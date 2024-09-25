@@ -10,7 +10,7 @@ public class GoogleTokenValidator : IGoogleTokenValidator
     private readonly string _clientId; 
     public GoogleTokenValidator(IOptionsMonitor<GoogleSSOConfiguration> googleConfigs)
     {
-        _clientId = googleConfigs.CurrentValue.ClientID; 
+        _clientId = googleConfigs.CurrentValue.ClientId; 
     }
 
     public async Task<GoogleJsonWebSignature.Payload> ValidateAsync(string idToken)

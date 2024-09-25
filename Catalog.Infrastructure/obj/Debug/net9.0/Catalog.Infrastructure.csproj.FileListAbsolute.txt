@@ -20,3 +20,25 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Infrastructure\obj\Debug\net9.0\ref\Catalog.Infrastructure.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Infrastructure\bin\Debug\net9.0\Core.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Infrastructure\bin\Debug\net9.0\Core.pdb
+C:\Santai.MVP\Catalog.Infrastructure\obj\Debug\net9.0\Catalog.Infrastructure.csproj.AssemblyReference.cache
+C:\Santai.MVP\Catalog.Infrastructure\obj\Debug\net9.0\Catalog.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Santai.MVP\Catalog.Infrastructure\obj\Debug\net9.0\Catalog.Infrastructure.AssemblyInfoInputs.cache
+C:\Santai.MVP\Catalog.Infrastructure\obj\Debug\net9.0\Catalog.Infrastructure.AssemblyInfo.cs
+C:\Santai.MVP\Catalog.Infrastructure\obj\Debug\net9.0\Catalog.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Santai.MVP\Catalog.Infrastructure\obj\Debug\net9.0\Catalog.Infrastructure.sourcelink.json
+C:\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Catalog.Infrastructure.deps.json
+C:\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Catalog.Infrastructure.runtimeconfig.json
+C:\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Catalog.Infrastructure.dll
+C:\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Catalog.Infrastructure.pdb
+C:\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Account.Domain.dll
+C:\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Catalog.Domain.dll
+C:\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Core.dll
+C:\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Account.Domain.pdb
+C:\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Catalog.Domain.pdb
+C:\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Core.pdb
+C:\Santai.MVP\Catalog.Infrastructure\obj\Debug\net9.0\Catalog..168C4A48.Up2Date
+C:\Santai.MVP\Catalog.Infrastructure\obj\Debug\net9.0\Catalog.Infrastructure.dll
+C:\Santai.MVP\Catalog.Infrastructure\obj\Debug\net9.0\refint\Catalog.Infrastructure.dll
+C:\Santai.MVP\Catalog.Infrastructure\obj\Debug\net9.0\Catalog.Infrastructure.pdb
+C:\Santai.MVP\Catalog.Infrastructure\obj\Debug\net9.0\Catalog.Infrastructure.genruntimeconfig.cache
+C:\Santai.MVP\Catalog.Infrastructure\obj\Debug\net9.0\ref\Catalog.Infrastructure.dll

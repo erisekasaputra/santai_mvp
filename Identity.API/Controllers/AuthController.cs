@@ -1233,7 +1233,12 @@ public class AuthController(
                 user.AddDeviceId(request.DeviceId);
                 await _userManager.UpdateAsync(user);
 
-                await _mediator.Publish(new AccountSignedInDomainEvent(Guid.Parse(user.Id), request.DeviceId)); 
+                await _mediator.Publish(
+                    new AccountSignedInDomainEvent(
+                        Guid.Parse(user.Id), 
+                        request.DeviceId,
+                        request.PhoneNumber,
+                        user.Email?.ToLower())); 
                 
                 await _dbContext.SaveChangesAsync(); 
                 await transaction.CommitAsync();

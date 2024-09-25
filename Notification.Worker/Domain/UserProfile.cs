@@ -3,22 +3,22 @@
 public class UserProfile
 {
     public Guid Id { get; set; }
+    public string PhoneNumber { get; set; }
     public string? Email { get; set; }
-    public required string PhoneNumber { get; set; }
-    public ICollection<IdentityProfile> Profiles { get; set; } = [];
+    public ICollection<IdentityProfile> Profiles { get; set; } = []; 
 
     public UserProfile()
     {
-        
+        PhoneNumber = string.Empty;
     }
     public UserProfile(
         Guid id,
-        string? email,
-        string phoneNumber)
+        string phoneNumber,
+        string? email)
     {
         Id = id;
-        Email = email;
         PhoneNumber = phoneNumber;
+        Email = email; 
     }
 
     public void AddUserProfile(IdentityProfile profile)

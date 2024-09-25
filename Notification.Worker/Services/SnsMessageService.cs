@@ -2,9 +2,8 @@
 using Amazon.SimpleNotificationService;
 using Amazon.SimpleNotificationService.Model;
 using Core.Configurations;
-using Core.Utilities;
-using MassTransit.AmazonSqsTransport;
-using Microsoft.Extensions.Options;
+using Core.Utilities; 
+using Microsoft.Extensions.Options; 
 using Notification.Worker.Services.Interfaces; 
 
 namespace Notification.Worker.Services;
@@ -16,7 +15,7 @@ public class SnsMessageService : IMessageService
     private readonly ILogger<SnsMessageService> _logger; 
     public SnsMessageService( 
         IOptionsMonitor<AWSIAMConfiguration> awsConfig, 
-        ILogger<SnsMessageService> logger)
+        ILogger<SnsMessageService> logger )
     {
         _awsConfig = awsConfig.CurrentValue;
         var awsOptions = new AmazonSimpleNotificationServiceConfig
@@ -28,31 +27,70 @@ public class SnsMessageService : IMessageService
             _awsConfig.AccessID,
             _awsConfig.SecretKey,
             awsOptions);
-        _logger = logger; 
-    } 
+        _logger = logger;  
+    }
 
-    public async Task RegisterDevice(string deviceToken)
+    public async Task DeregisterDevice(string arn)
+    {
+        try
+        {
+            if (string.IsNullOrEmpty(arn))
+            {
+                return;
+            }
+
+            var request = new DeleteEndpointRequest
+            { 
+                EndpointArn = arn
+            };
+
+            await _snsClient.DeleteEndpointAsync(request);   
+            return;
+        }
+        catch (AmazonSimpleNotificationServiceException ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            throw;  
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            throw;
+        }
+    }
+
+    public async Task<string> RegisterDevice(string deviceToken)
     {
         try
         {
             if (string.IsNullOrEmpty(deviceToken))
             {
-                return;
+                return string.Empty;
             }
 
-            //var request = new CreatePlatformEndpointRequest
-            //{
-            //    PlatformApplicationArn = platformApplicationArn,
-            //    Token = deviceToken
-            //};
+            var request = new CreatePlatformEndpointRequest
+            {
+                PlatformApplicationArn = "",
+                Token = deviceToken
+            };
+
+            var response = await _snsClient.CreatePlatformEndpointAsync(request); 
+            if (!string.IsNullOrEmpty(response.EndpointArn)) 
+            {
+                return response.EndpointArn;
+            }
+
+            return string.Empty;
         }
         catch (AmazonSimpleNotificationServiceException ex)
         {
             LoggerHelper.LogError(_logger, ex);
+            throw;
         }
         catch (Exception ex)
         {
             LoggerHelper.LogError(_logger, ex);
+            throw;
         }
     }
 
@@ -71,16 +109,17 @@ public class SnsMessageService : IMessageService
                 PhoneNumber = phoneNumber
             };
 
-            var response = await _snsClient.PublishAsync(request);
-            response.EnsureSuccessfulResponse();
+            await _snsClient.PublishAsync(request); 
         }
         catch (AmazonSimpleNotificationServiceException ex)
         {
             LoggerHelper.LogError(_logger, ex);
+            throw;
         }
         catch (Exception ex)
         {
             LoggerHelper.LogError(_logger, ex);
+            throw;
         }
     }
 }
