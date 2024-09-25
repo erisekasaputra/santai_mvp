@@ -11,6 +11,7 @@ using Catalog.API.Applications.Commands.Items.SetItemSoldQuantity;
 using Catalog.API.Applications.Commands.Items.SetItemStockQuantity;
 using Catalog.API.Applications.Commands.Items.UndeleteItem;
 using Catalog.API.Applications.Commands.Items.UpdateItem;
+using Catalog.API.Applications.Dtos.Item;
 using Catalog.API.Applications.Queries.Items.GetItemById;
 using Catalog.API.Applications.Queries.Items.GetItemPaginated;
 using Catalog.API.Applications.Services;
@@ -33,7 +34,7 @@ public static class ItemAPI
             .RequireAuthorization();
 
         app.MapGet("/items", GetPaginatedItem)
-            .RequireAuthorization();
+            .AllowAnonymous();
 
         app.MapPost("/items", CreateNewItem)
             .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
@@ -105,13 +106,18 @@ public static class ItemAPI
     }
 
     private static async Task<IResult> GetPaginatedItem(
-        [AsParameters] PaginatedRequestDto paginatedRequest, 
+        [AsParameters] PaginatedRequestDto paginatedRequest,
+        [AsParameters] ItemQueryFilter queryFilter,
         [FromServices] ApplicationService service,
         [FromServices] IValidator<GetItemPaginatedQuery> validator)
     {
         try
         {
-            var query = new GetItemPaginatedQuery(paginatedRequest.PageNumber, paginatedRequest.PageSize);
+            var query = new GetItemPaginatedQuery(
+                paginatedRequest.PageNumber, 
+                paginatedRequest.PageSize,
+                queryFilter.CategoryId,
+                queryFilter.BrandId);
 
             var validation = await validator.ValidateAsync(query);
 

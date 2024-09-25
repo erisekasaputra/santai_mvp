@@ -14,7 +14,11 @@ public class GetItemPaginatedQueryHandler(IUnitOfWork unitOfWork) : IRequestHand
 
     public async Task<Result> Handle(GetItemPaginatedQuery request, CancellationToken cancellationToken)
     {
-        var (TotalCount, TotalPages, Items) = await _unitOfWork.Items.GetPaginatedItemsAsync(request.PageNumber, request.PageSize);
+        Guid? categoryId = request.CategoryId is null ? Guid.Empty : request.CategoryId;
+        Guid? brandId = request.BrandId is null ? Guid.Empty : request.BrandId;
+
+        var (TotalCount, TotalPages, Items) = await _unitOfWork.Items.GetPaginatedItemsAsync(
+            request.PageNumber, request.PageSize, categoryId, brandId);
 
         if (Items is null)
         {

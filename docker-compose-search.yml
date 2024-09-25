@@ -1,0 +1,44 @@
+services:
+  search-api:
+    build:
+      context: .
+      dockerfile: Search.API/Dockerfile  # Arahkan ke Dockerfile yang benar
+    ports:
+      - "80:80"  # Port untuk HTTP
+    environment:
+      - Kestrel__Endpoints__Http__Url=http://+:80
+      - ASPNETCORE_HTTP_PORTS=80
+      - ASPNETCORE_ENVIRONMENT=Production
+      - Jwt__SecretKey=tP56kzHlfp+IUY/nhdOFbOsRjOSEbTVv6sexU/JL17I=
+      - KMS_SecretKey=tP56kzHlfp+IUY/nhdOFbOsRjOSEbTVv6sexU/JL17I= 
+      - AWS__AccessID=AKIAYS2NP3RU6DEGPJUM
+      - AWS__SecretKey=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
+      - AWS__Region=ap-southeast-1 
+      - Messaging__Host=amqps://b-7be94d57-3bad-4a58-862f-b64b5a6aa5f1.mq.ap-southeast-1.amazonaws.com:5671
+      - Messaging__Username=santaitechnology
+      - Messaging__Password=_SANTAItechnology2024
+      - Cache__Host=santaimvprediscache-hkpg4d.serverless.apse1.cache.amazonaws.com:6379
+      - Elasticsearch__Addresses=["http://localhost:9200/"]
+    restart: always
+  search-worker:
+    build:
+      context: .
+      dockerfile: Search.Worker/Dockerfile  # Arahkan ke Dockerfile yang benar
+    ports:
+      - "8000:8000"  # Port untuk HTTP
+    environment:
+      - Kestrel__Endpoints__Http__Url=http://+:8000
+      - ASPNETCORE_HTTP_PORTS=8000
+      - ASPNETCORE_ENVIRONMENT=Production
+      - Jwt__SecretKey=tP56kzHlfp+IUY/nhdOFbOsRjOSEbTVv6sexU/JL17I=
+      - KMS_SecretKey=tP56kzHlfp+IUY/nhdOFbOsRjOSEbTVv6sexU/JL17I=
+      - Google__ClientSecret=testing
+      - AWS__AccessID=AKIAYS2NP3RU6DEGPJUM
+      - AWS__SecretKey=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
+      - AWS__Region=ap-southeast-1 
+      - Messaging__Host=amqps://b-7be94d57-3bad-4a58-862f-b64b5a6aa5f1.mq.ap-southeast-1.amazonaws.com:5671
+      - Messaging__Username=santaitechnology
+      - Messaging__Password=_SANTAItechnology2024
+      - Cache=santaimvprediscache-hkpg4d.serverless.apse1.cache.amazonaws.com:6379
+      - Elasticsearch__Addresses=["http://localhost:9200/"]
+    restart: always

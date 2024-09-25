@@ -65,7 +65,7 @@ public static class BrandAPI
     }
 
     private static async Task<IResult> GetPaginatedBrand(
-        [AsParameters] PaginatedRequestDto paginatedRequest,
+        [AsParameters] PaginatedRequestDto paginatedRequest, 
         [FromServices] ApplicationService service, 
         [FromServices] IValidator<GetBrandPaginatedQuery> validator)
     {

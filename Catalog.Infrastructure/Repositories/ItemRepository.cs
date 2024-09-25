@@ -33,21 +33,32 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
             .FirstOrDefaultAsync(e => e.Id == id);
     }
 
-    public async Task<(int TotalCount, int TotalPages, IEnumerable<Item> Items)> GetPaginatedItemsAsync(int pageNumber, int pageSize)
+    public async Task<(int TotalCount, int TotalPages, IEnumerable<Item> Items)> GetPaginatedItemsAsync(
+        int pageNumber, int pageSize, Guid? categoryId, Guid? brandId)
     {
-        var query = _context.Items.AsQueryable();
-
-        var totalCount = await query.CountAsync();
-
-        var totalPages = (int) Math.Ceiling(totalCount / (double)pageSize);
-
-        var items = await query.Skip((pageNumber - 1) * pageSize)
-            .Take(pageSize)
+        var query = _context.Items
             .Where(w => !w.IsDeleted)
+            .AsQueryable();
+
+        if (categoryId is not null && categoryId.HasValue && categoryId != Guid.Empty) 
+        {
+            query = query.Where(x => x.CategoryId == categoryId);
+        }
+
+        if (brandId is not null && brandId.HasValue && categoryId != Guid.Empty)
+        {
+            query = query.Where(x => x.BrandId == brandId);
+        }
+
+        var totalCount = await query.CountAsync(); 
+        var totalPages = (int) Math.Ceiling(totalCount / (double)pageSize); 
+        var items = await query
+            .OrderBy(x => x.Name)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
             .Include(d => d.Category)
             .Include(d => d.Brand)
             .AsNoTracking()
-            .OrderBy(x => x.Name)
             .ToListAsync();
 
         return (totalCount, totalPages, items);
