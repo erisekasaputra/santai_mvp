@@ -14,7 +14,7 @@ public class GoogleTokenValidator : IGoogleTokenValidator
     }
 
     public async Task<GoogleJsonWebSignature.Payload> ValidateAsync(string idToken)
-    {
+    { 
         var settings = new GoogleJsonWebSignature.ValidationSettings
         { 
             Audience = [_clientId]

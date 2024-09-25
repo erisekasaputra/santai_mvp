@@ -14,13 +14,14 @@ builder.Configuration.AddEnvironmentVariables();
 builder.AddCoreOptionConfiguration(); 
 builder.AddLoggingContext();
 
-if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Docker")
+if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Staging")
 {
     builder.Services.AddOpenApi();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
 }
 
+builder.Services.AddHealthChecks();
 builder.AddJsonEnumConverterBehavior();
 builder.AddAuth(); 
 builder.AddMediatorService<IAccountAPIMarkerInterface>(); 
@@ -40,13 +41,14 @@ app.UseMiddleware<IdempotencyMiddleware>();
 app.UseAuthentication(); 
 app.UseAuthorization();
 
-if (app.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Docker")
+if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Staging")
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
     app.MapOpenApi();
 }
+
 app.UseHttpsRedirection(); 
 app.UseHsts(); 
 app.UseOutputCache(); 
@@ -59,6 +61,8 @@ app.MapFleetApi();
 
 app.MapHub<LocationHub>("/location");
 app.MapControllers();
+
+app.MapHealthChecks("/health");
 
 app.Run();
 

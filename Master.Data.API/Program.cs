@@ -10,14 +10,13 @@ builder.Services.AddControllers();
 builder.Services.AddDirectoryBrowser();
 builder.AddRedisDatabase();
 builder.Services.AddTransient<GlobalExceptionMiddleware>();
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
 
-app.UseMiddleware<GlobalExceptionMiddleware>();
+app.UseMiddleware<GlobalExceptionMiddleware>(); 
 
-app.UseHsts();
-app.UseHttpsRedirection();
-
+app.UseRouting();
 app.UseStaticFiles();
 app.MapControllers();
 app.UseOutputCache();

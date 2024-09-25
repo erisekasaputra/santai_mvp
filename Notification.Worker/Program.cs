@@ -16,8 +16,10 @@ builder.AddRedisDatabase();
 builder.AddMassTransitContext();
 builder.AddAuth();
 builder.AddSqlDatabaseContext<NotificationDbContext>();
+builder.Services.AddHealthChecks();
 
 var app = builder.Build();
  
-app.MapHub<ActivityHub>("/notification"); 
+app.MapHub<ActivityHub>("/notification");
+app.MapHealthChecks("/health");
 app.Run();

@@ -299,6 +299,10 @@
               "target": "Package",
               "version": "[9.0.0-preview.7.24406.2, )"
             },
+            "Microsoft.Extensions.Diagnostics.HealthChecks": {
+              "target": "Package",
+              "version": "[9.0.0-rc.1.24452.1, )"
+            },
             "Microsoft.Extensions.Hosting": {
               "target": "Package",
               "version": "[9.0.0-preview.6.24327.7, )"

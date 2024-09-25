@@ -357,7 +357,7 @@ public class AuthController(
 
 
     [HttpPost("signin-google")]
-    public async Task<IResult> GoogleSignInCallBack(
+    public async Task<IResult> GoogleSignIn(
         [FromBody] GoogleSignInRequest request)
     {
         var strategy = _dbContext.Database.CreateExecutionStrategy();

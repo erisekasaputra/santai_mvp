@@ -10,9 +10,9 @@ builder.Services.AddControllers();
 builder.AddCustomRateLimiter();
 builder.AddRedisDatabase();
 builder.AddAuth();
+builder.Services.AddHealthChecks(); 
 
-
-if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Docker")
+if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Staging")
 {
     builder.Services.AddOpenApi();
     builder.Services.AddEndpointsApiExplorer();
@@ -25,7 +25,7 @@ app.UseAuthentication();
 app.UseAuthorization();
  
 
-if (app.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Docker")
+if (app.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Staging")
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
@@ -33,6 +33,7 @@ if (app.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "D
     app.MapOpenApi();
 }
 
+app.MapHealthChecks("/health");
 app.UseRateLimiter(); 
 app.UseHttpsRedirection();  
 app.UseHsts();  

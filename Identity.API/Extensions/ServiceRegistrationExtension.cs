@@ -28,7 +28,7 @@ public static class ServiceRegistrationExtension
                 configureOptions.TokenLimit = 500;
                 configureOptions.QueueLimit = 50;
                 configureOptions.TokensPerPeriod = 500;
-                configureOptions.ReplenishmentPeriod = TimeSpan.FromSeconds(1);
+                configureOptions.ReplenishmentPeriod = TimeSpan.FromSeconds(5);
             });
         });
 
@@ -53,7 +53,7 @@ public static class ServiceRegistrationExtension
          
         builder.Services.AddScoped<ITokenService, JwtTokenService>();
         builder.Services.AddScoped<IJwtTokenValidator, JwtTokenValidator>(); 
-        builder.Services.AddScoped<IGoogleTokenValidator, MockGoogleTokenValidator>(); 
+        builder.Services.AddScoped<IGoogleTokenValidator, GoogleTokenValidator>(); 
         builder.Services.AddScoped<IUserInfoService, UserInfoService>();
         builder.Services.AddScoped<ITokenCacheService, TokenCacheService>();
   

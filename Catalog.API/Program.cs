@@ -9,11 +9,12 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 builder.AddCoreOptionConfiguration();
 builder.AddLoggingContext();
-
-builder.Services.AddHttpContextAccessor();
 builder.AddJsonEnumConverterBehavior();
 builder.AddMediatorService<ICatalogAPIMarkerInterface>();
-builder.AddValidation<ICatalogAPIMarkerInterface>(); 
+builder.AddValidation<ICatalogAPIMarkerInterface>();
+
+builder.Services.AddHealthChecks();
+builder.Services.AddHttpContextAccessor();
 builder.Services.AddRouting();
 builder.Services.AddOpenApi();
 builder.Services.AddEndpointsApiExplorer();
@@ -24,7 +25,7 @@ builder.AddRedisDatabase();
 builder.AddApplicationService();
 builder.AddAuth();
 
-if (builder.Environment.IsDevelopment())
+if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Staging") 
 {
     builder.Services.AddOpenApi();
     builder.Services.AddEndpointsApiExplorer();
@@ -39,8 +40,9 @@ app.UseMiddleware<IdempotencyMiddleware>();
 app.UseAuthentication();
 app.UseAuthorization();
 
+app.MapHealthChecks("/health");
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Staging")
 {
     app.UseDeveloperExceptionPage(); 
     app.UseSwagger(); 

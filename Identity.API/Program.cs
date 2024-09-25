@@ -5,12 +5,7 @@ using Identity.API.Extensions;
 using Identity.API.Infrastructure;
 using Identity.API.SeedWork;
 
-var builder = WebApplication.CreateBuilder(args); 
-
-builder.WebHost.UseKestrel(options =>
-{
-    options.ListenAnyIP(8000);
-}); 
+var builder = WebApplication.CreateBuilder(args);  
  
 builder.Services.AddCors(options =>
 {
@@ -21,14 +16,14 @@ builder.Services.AddCors(options =>
 });
 
 builder.Configuration.AddEnvironmentVariables();
-builder.AddCoreOptionConfiguration();
-builder.AddLoggingContext(); 
 
 builder.Services.AddControllers();  
 builder.Services.AddRouting();
 builder.Services.AddHttpContextAccessor();
+ 
 
-
+builder.AddCoreOptionConfiguration();
+builder.AddLoggingContext(); 
 builder.AddJsonEnumConverterBehavior(); 
 builder.AddMediatorService<IIdentityMarkerInterface>();
 builder.AddValidation<IIdentityMarkerInterface>(); 
@@ -41,16 +36,15 @@ builder.AddSqlDatabaseContext<ApplicationDbContext>(isRetryable: true);
 builder.AddMasstransitContext<ApplicationDbContext>();
 builder.AddIdentityService();
 builder.AddAuth().AddGoogleSSO();
-builder.AddRedisDatabase();  
+builder.AddRedisDatabase();
+builder.Services.AddHealthChecks();
 
-
-if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Docker")
+if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Staging")
 {
     builder.Services.AddOpenApi();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-}
-
+} 
 
 var app = builder.Build();
 
@@ -63,18 +57,17 @@ app.UseMiddleware<IdempotencyMiddleware>();
 app.UseAuthentication(); 
 app.UseAuthorization(); 
 
-app.UseRateLimiter(); 
+app.UseRateLimiter();
 
-if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Docker")
+app.MapHealthChecks("/health");
+
+if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Staging")
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger(); 
     app.UseSwaggerUI();
     app.MapOpenApi();
-}
-
-//app.UseHsts(); 
-//app.UseHttpsRedirection(); 
+} 
 
 app.MapControllers(); 
 

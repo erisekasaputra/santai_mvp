@@ -24,6 +24,7 @@ builder.AddMassTransitContext<OrderDbContext>();
 builder.AddValidation<IOrderAPIMarkerInterface>();
 builder.AddHttpClients();
 builder.AddAuth();
+builder.Services.AddHealthChecks();
 
 if (builder.Environment.IsDevelopment())
 {
@@ -34,9 +35,11 @@ if (builder.Environment.IsDevelopment())
 
 var app = builder.Build();
 
+app.UseRouting();
+
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseMiddleware<IdempotencyMiddleware>();
-
+  
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -50,7 +53,7 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
-app.UseHttpsRedirection();
-app.UseHsts();
+app.MapHealthChecks("/health"); 
+
 app.UseOutputCache();
 app.Run();
