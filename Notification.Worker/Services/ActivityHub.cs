@@ -1,6 +1,5 @@
 ﻿using Core.Services.Interfaces; 
-using Microsoft.AspNetCore.SignalR;
-using Notification.Worker.Enumerations;
+using Microsoft.AspNetCore.SignalR; 
 using Notification.Worker.SeedWorks;
 using Notification.Worker.Services.Interfaces;
 namespace Notification.Worker.Services;

@@ -5,7 +5,7 @@ using Search.Worker.Applications.Commands.SetItemPrice;
 
 namespace Search.Worker.Consumers;
 
-internal class ItemPriceSetIntegrationEventConsumer(IMediator mediator) : IConsumer<ItemPriceSetIntegrationEvent>
+public class ItemPriceSetIntegrationEventConsumer(IMediator mediator) : IConsumer<ItemPriceSetIntegrationEvent>
 {
     private readonly IMediator _mediator = mediator;
     public async Task Consume(ConsumeContext<ItemPriceSetIntegrationEvent> context)

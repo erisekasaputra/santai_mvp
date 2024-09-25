@@ -2,8 +2,7 @@
 using Core.Dtos;
 using Core.Results;
 using Core.Services.Interfaces;
-using Core.Utilities;
-using MassTransit.Internals.GraphValidation;
+using Core.Utilities; 
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -44,16 +43,10 @@ public class CouponController : ControllerBase
     [Authorize]
     [HttpGet]
     public async Task<IResult> GetPaginatedCoupons(
-        [FromBody] PaginatedRequestDto request)
+        [FromQuery] PaginatedRequestDto request)
     {
         try
-        {
-            var userClaim = _userInfoService.GetUserInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Forbid();
-            }
-
+        {  
             var result = await _mediator.Send(new GetPaginatedCouponsQuery(request.PageNumber, request.PageSize));
 
             return result.ToIResult();
@@ -72,13 +65,7 @@ public class CouponController : ControllerBase
         Guid couponId)
     {
         try
-        {
-            var userClaim = _userInfoService.GetUserInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Forbid();
-            }
-
+        { 
             var result = await _mediator.Send(new GetCouponByIdQuery(couponId));
 
             return result.ToIResult();
@@ -93,18 +80,12 @@ public class CouponController : ControllerBase
 
 
     [Authorize]
-    [HttpGet("code/{code}")]
+    [HttpGet("code")]
     public async Task<IResult> GetCouponByCode(
-       string code)
+       [AsParameters] string code)
     {
         try
-        {
-            var userClaim = _userInfoService.GetUserInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Forbid();
-            }
-
+        { 
             var result = await _mediator.Send(new GetCouponByCodeQuery(code));
 
             return result.ToIResult();
@@ -124,13 +105,7 @@ public class CouponController : ControllerBase
         [FromBody] CreateCouponCommand command)
     {
         try
-        {
-            var userClaim = _userInfoService.GetUserInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Forbid();
-            }
-
+        { 
             var result = await _mediator.Send(command);
 
             return result.ToIResult();
@@ -143,19 +118,13 @@ public class CouponController : ControllerBase
         }
     }
 
-    [Authorize()]
+    [Authorize]
     [HttpPut]
     public async Task<IResult> UpdateCoupon(
         [FromBody] UpdateCouponByIdCommand command)
     {
         try
-        {
-            var userClaim = _userInfoService.GetUserInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Forbid();
-            }
-
+        { 
             var result = await _mediator.Send(command);
 
             return result.ToIResult();
@@ -168,19 +137,13 @@ public class CouponController : ControllerBase
         }
     }
 
-    [Authorize()]
+    [Authorize]
     [HttpDelete] 
     public async Task<IResult> DeleteCoupon(
         [FromBody] DeleteCouponByIdCommand command)
     {
         try
-        {
-            var userClaim = _userInfoService.GetUserInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Forbid();
-            }
-
+        { 
             var result = await _mediator.Send(command);
 
             return result.ToIResult();

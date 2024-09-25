@@ -19,6 +19,7 @@
           "Microsoft.EntityFrameworkCore.Tools": "9.0.0-rc.1.24451.1",
           "Microsoft.Extensions.Caching.StackExchangeRedis": "9.0.0-rc.1.24452.1",
           "Microsoft.Extensions.Configuration.Json": "9.0.0-rc.1.24431.7",
+          "Microsoft.Extensions.Diagnostics.HealthChecks": "9.0.0-rc.1.24452.1",
           "Microsoft.Extensions.Http.Polly": "8.0.8",
           "Microsoft.VisualStudio.Azure.Containers.Tools.Targets": "1.21.0",
           "Newtonsoft.Json": "13.0.3",
@@ -97,7 +98,7 @@
         "dependencies": {
           "Microsoft.Bcl.AsyncInterfaces": "7.0.0",
           "System.ClientModel": "1.0.0",
-          "System.Diagnostics.DiagnosticSource": "8.0.0",
+          "System.Diagnostics.DiagnosticSource": "6.0.1",
           "System.Memory.Data": "1.0.2",
           "System.Numerics.Vectors": "4.5.0",
           "System.Text.Encodings.Web": "4.7.2",
@@ -212,8 +213,8 @@
         "dependencies": {
           "MassTransit.Abstractions": "8.2.6-develop.1990",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-rc.1.24431.7",
-          "Microsoft.Extensions.Diagnostics.HealthChecks": "8.0.0",
-          "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Diagnostics.HealthChecks": "9.0.0-rc.1.24452.1",
+          "Microsoft.Extensions.Hosting.Abstractions": "9.0.0-rc.1.24431.7",
           "Microsoft.Extensions.Logging.Abstractions": "9.0.0-rc.1.24431.7",
           "Microsoft.Extensions.Options": "9.0.0-rc.1.24431.7"
         },
@@ -874,26 +875,25 @@
       "Microsoft.Extensions.Diagnostics/8.0.0": {
         "dependencies": {
           "Microsoft.Extensions.Configuration": "9.0.0-rc.1.24431.7",
-          "Microsoft.Extensions.Diagnostics.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Diagnostics.Abstractions": "9.0.0-rc.1.24431.7",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "8.0.0"
         }
       },
-      "Microsoft.Extensions.Diagnostics.Abstractions/8.0.0": {
+      "Microsoft.Extensions.Diagnostics.Abstractions/9.0.0-rc.1.24431.7": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-rc.1.24431.7",
-          "Microsoft.Extensions.Options": "9.0.0-rc.1.24431.7",
-          "System.Diagnostics.DiagnosticSource": "8.0.0"
+          "Microsoft.Extensions.Options": "9.0.0-rc.1.24431.7"
         }
       },
-      "Microsoft.Extensions.Diagnostics.HealthChecks/8.0.0": {
+      "Microsoft.Extensions.Diagnostics.HealthChecks/9.0.0-rc.1.24452.1": {
         "dependencies": {
-          "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions": "8.0.0",
-          "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions": "9.0.0-rc.1.24452.1",
+          "Microsoft.Extensions.Hosting.Abstractions": "9.0.0-rc.1.24431.7",
           "Microsoft.Extensions.Logging.Abstractions": "9.0.0-rc.1.24431.7",
           "Microsoft.Extensions.Options": "9.0.0-rc.1.24431.7"
         }
       },
-      "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions/8.0.0": {},
+      "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions/9.0.0-rc.1.24452.1": {},
       "Microsoft.Extensions.FileProviders.Abstractions/9.0.0-rc.1.24431.7": {
         "dependencies": {
           "Microsoft.Extensions.Primitives": "9.0.0-rc.1.24431.7"
@@ -907,11 +907,11 @@
         }
       },
       "Microsoft.Extensions.FileSystemGlobbing/9.0.0-rc.1.24431.7": {},
-      "Microsoft.Extensions.Hosting.Abstractions/8.0.0": {
+      "Microsoft.Extensions.Hosting.Abstractions/9.0.0-rc.1.24431.7": {
         "dependencies": {
           "Microsoft.Extensions.Configuration.Abstractions": "9.0.0-rc.1.24431.7",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-rc.1.24431.7",
-          "Microsoft.Extensions.Diagnostics.Abstractions": "8.0.0",
+          "Microsoft.Extensions.Diagnostics.Abstractions": "9.0.0-rc.1.24431.7",
           "Microsoft.Extensions.FileProviders.Abstractions": "9.0.0-rc.1.24431.7",
           "Microsoft.Extensions.Logging.Abstractions": "9.0.0-rc.1.24431.7"
         }
@@ -970,7 +970,7 @@
       "Microsoft.Identity.Client/4.64.0": {
         "dependencies": {
           "Microsoft.IdentityModel.Abstractions": "8.0.0",
-          "System.Diagnostics.DiagnosticSource": "8.0.0"
+          "System.Diagnostics.DiagnosticSource": "6.0.1"
         },
         "runtime": {
           "lib/net6.0/Microsoft.Identity.Client.dll": {
@@ -1365,7 +1365,11 @@
           }
         }
       },
-      "System.Diagnostics.DiagnosticSource/8.0.0": {},
+      "System.Diagnostics.DiagnosticSource/6.0.1": {
+        "dependencies": {
+          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+        }
+      },
       "System.Diagnostics.EventLog/8.0.0": {},
       "System.Drawing.Common/9.0.0-preview.7.24405.4": {
         "dependencies": {
@@ -2006,26 +2010,26 @@
       "path": "microsoft.extensions.diagnostics/8.0.0",
       "hashPath": "microsoft.extensions.diagnostics.8.0.0.nupkg.sha512"
     },
-    "Microsoft.Extensions.Diagnostics.Abstractions/8.0.0": {
+    "Microsoft.Extensions.Diagnostics.Abstractions/9.0.0-rc.1.24431.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-JHYCQG7HmugNYUhOl368g+NMxYE/N/AiclCYRNlgCY9eVyiBkOHMwK4x60RYMxv9EL3+rmj1mqHvdCiPpC+D4Q==",
-      "path": "microsoft.extensions.diagnostics.abstractions/8.0.0",
-      "hashPath": "microsoft.extensions.diagnostics.abstractions.8.0.0.nupkg.sha512"
+      "sha512": "sha512-rQf3zwBtbvDfNH2qsXIXvbmwcQhfBHT570lvnKFJdEdmZt1MiNNQ9ldB3BQ+pvsrtgW3uNuR/zj7Z0TYgMRatg==",
+      "path": "microsoft.extensions.diagnostics.abstractions/9.0.0-rc.1.24431.7",
+      "hashPath": "microsoft.extensions.diagnostics.abstractions.9.0.0-rc.1.24431.7.nupkg.sha512"
     },
-    "Microsoft.Extensions.Diagnostics.HealthChecks/8.0.0": {
+    "Microsoft.Extensions.Diagnostics.HealthChecks/9.0.0-rc.1.24452.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-P9SoBuVZhJPpALZmSq72aQEb9ryP67EdquaCZGXGrrcASTNHYdrUhnpgSwIipgM5oVC+dKpRXg5zxobmF9xr5g==",
-      "path": "microsoft.extensions.diagnostics.healthchecks/8.0.0",
-      "hashPath": "microsoft.extensions.diagnostics.healthchecks.8.0.0.nupkg.sha512"
+      "sha512": "sha512-L7VFSjcAzLaJoJ++ByQHgMgHE1kSfukf6yOAoSJkVw0Kv/6jx377UDSWlXI1BxSRpmWX4GNR1L5bD+VYePlwEQ==",
+      "path": "microsoft.extensions.diagnostics.healthchecks/9.0.0-rc.1.24452.1",
+      "hashPath": "microsoft.extensions.diagnostics.healthchecks.9.0.0-rc.1.24452.1.nupkg.sha512"
     },
-    "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions/8.0.0": {
+    "Microsoft.Extensions.Diagnostics.HealthChecks.Abstractions/9.0.0-rc.1.24452.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-AT2qqos3IgI09ok36Qag9T8bb6kHJ3uT9Q5ki6CySybFsK6/9JbvQAgAHf1pVEjST0/N4JaFaCbm40R5edffwg==",
-      "path": "microsoft.extensions.diagnostics.healthchecks.abstractions/8.0.0",
-      "hashPath": "microsoft.extensions.diagnostics.healthchecks.abstractions.8.0.0.nupkg.sha512"
+      "sha512": "sha512-tX+WMKjywtO/aROLQW9dEsIlHZZCXjV1g2VA4S6LMJLgF4aKlgC5N5hHhbV+X0sKI5d435EubEbi7ZZzETxhKw==",
+      "path": "microsoft.extensions.diagnostics.healthchecks.abstractions/9.0.0-rc.1.24452.1",
+      "hashPath": "microsoft.extensions.diagnostics.healthchecks.abstractions.9.0.0-rc.1.24452.1.nupkg.sha512"
     },
     "Microsoft.Extensions.FileProviders.Abstractions/9.0.0-rc.1.24431.7": {
       "type": "package",
@@ -2048,12 +2052,12 @@
       "path": "microsoft.extensions.filesystemglobbing/9.0.0-rc.1.24431.7",
       "hashPath": "microsoft.extensions.filesystemglobbing.9.0.0-rc.1.24431.7.nupkg.sha512"
     },
-    "Microsoft.Extensions.Hosting.Abstractions/8.0.0": {
+    "Microsoft.Extensions.Hosting.Abstractions/9.0.0-rc.1.24431.7": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-AG7HWwVRdCHlaA++1oKDxLsXIBxmDpMPb3VoyOoAghEWnkUvEAdYQUwnV4jJbAaa/nMYNiEh5ByoLauZBEiovg==",
-      "path": "microsoft.extensions.hosting.abstractions/8.0.0",
-      "hashPath": "microsoft.extensions.hosting.abstractions.8.0.0.nupkg.sha512"
+      "sha512": "sha512-7wn7v/L75ai5J/xvliU9kacNOimAR8KSTsO20yAGIob9+TEM/ACq87eu16p3vGqhrGCuwDIMCNUDQS6uQ85FAQ==",
+      "path": "microsoft.extensions.hosting.abstractions/9.0.0-rc.1.24431.7",
+      "hashPath": "microsoft.extensions.hosting.abstractions.9.0.0-rc.1.24431.7.nupkg.sha512"
     },
     "Microsoft.Extensions.Http/8.0.0": {
       "type": "package",
@@ -2398,12 +2402,12 @@
       "path": "system.data.sqlclient/4.8.6",
       "hashPath": "system.data.sqlclient.4.8.6.nupkg.sha512"
     },
-    "System.Diagnostics.DiagnosticSource/8.0.0": {
+    "System.Diagnostics.DiagnosticSource/6.0.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-c9xLpVz6PL9lp/djOWtk5KPDZq3cSYpmXoJQY524EOtuFl5z9ZtsotpsyrDW40U1DRnQSYvcPKEUV0X//u6gkQ==",
-      "path": "system.diagnostics.diagnosticsource/8.0.0",
-      "hashPath": "system.diagnostics.diagnosticsource.8.0.0.nupkg.sha512"
+      "sha512": "sha512-KiLYDu2k2J82Q9BJpWiuQqCkFjRBWVq4jDzKKWawVi9KWzyD0XG3cmfX0vqTQlL14Wi9EufJrbL0+KCLTbqWiQ==",
+      "path": "system.diagnostics.diagnosticsource/6.0.1",
+      "hashPath": "system.diagnostics.diagnosticsource.6.0.1.nupkg.sha512"
     },
     "System.Diagnostics.EventLog/8.0.0": {
       "type": "package",

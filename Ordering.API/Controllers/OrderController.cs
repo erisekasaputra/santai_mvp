@@ -136,7 +136,7 @@ public class OrderController : ControllerBase
     [HttpGet]
     [Authorize(Policy = "BusinessStaffRegularUserPolicy")]
     public async Task<IResult> GetPaginatedOrders( 
-        [AsParameters] PaginatedRequestDto request)
+        [FromQuery] PaginatedRequestDto request)
     { 
         try
         {

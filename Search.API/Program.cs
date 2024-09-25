@@ -1,5 +1,6 @@
 using Core.Configurations;
-using Core.Extensions; 
+using Core.Extensions;
+using Core.Middlewares;
 using Search.API.API; 
 using Search.API.Domain.Repositories;
 using Search.API.Infrastructure;
@@ -9,6 +10,16 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.AddJsonEnumConverterBehavior();
 builder.Configuration.AddEnvironmentVariables();
+
+builder.Services.AddRouting();
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
 
 builder.Services.Configure<ElasticsearchConfiguration>(builder.Configuration.GetSection(ElasticsearchConfiguration.SectionName));
 
@@ -22,10 +33,14 @@ if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName =
 
 builder.Services.AddScoped<ElasticsearchContext>();  
 builder.Services.AddScoped<IItemRepository, ItemRepository>();
+builder.Services.AddTransient<GlobalExceptionMiddleware>();
 builder.Services.AddHealthChecks(); 
 
 var app = builder.Build();
- 
+
+app.UseRouting();
+app.UseCors("AllowAllOrigins");
+
 if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Staging")
 { 
     app.UseDeveloperExceptionPage();
@@ -34,6 +49,7 @@ if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Stagi
     app.MapOpenApi();
 }
 
+app.UseMiddleware<GlobalExceptionMiddleware>();
 app.MapHealthChecks("/health");
 app.MapCatalogSearchApi();  
 app.Run();

@@ -250,6 +250,7 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\appsettings.Development.json
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\appsettings.json
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\appsettings.Production.json
+C:\Santai.MVP\Account.API\bin\Debug\net9.0\appsettings.Staging.json
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\Account.API.staticwebassets.endpoints.json
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\Account.API.exe
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\Account.API.deps.json

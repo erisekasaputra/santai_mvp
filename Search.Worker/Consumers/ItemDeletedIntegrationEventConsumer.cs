@@ -5,7 +5,7 @@ using Search.Worker.Applications.Commands.DeleteItem;
 
 namespace Search.Worker.Consumers;
 
-internal class ItemDeletedIntegrationEventConsumer(IMediator mediator) : IConsumer<ItemDeletedIntegrationEvent>
+public class ItemDeletedIntegrationEventConsumer(IMediator mediator) : IConsumer<ItemDeletedIntegrationEvent>
 {
     private readonly IMediator _mediator = mediator; 
     public async Task Consume(ConsumeContext<ItemDeletedIntegrationEvent> context)

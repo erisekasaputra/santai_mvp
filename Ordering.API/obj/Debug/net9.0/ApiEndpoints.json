@@ -8,9 +8,14 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "request",
-        "Type": "Core.Dtos.PaginatedRequestDto",
-        "IsRequired": true
+        "Name": "PageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -82,7 +87,7 @@
   {
     "ContainingType": "Ordering.API.Controllers.CouponController",
     "Method": "GetCouponByCode",
-    "RelativePath": "api/v1/coupons/code/{code}",
+    "RelativePath": "api/v1/coupons/code",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -90,7 +95,7 @@
       {
         "Name": "code",
         "Type": "System.String",
-        "IsRequired": true
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []
@@ -120,9 +125,14 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "request",
-        "Type": "Core.Dtos.PaginatedRequestDto",
-        "IsRequired": true
+        "Name": "PageNumber",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "PageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

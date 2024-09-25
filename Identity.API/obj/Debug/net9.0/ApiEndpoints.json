@@ -81,7 +81,7 @@
   },
   {
     "ContainingType": "Identity.API.Controllers.AuthController",
-    "Method": "GoogleSignInCallBack",
+    "Method": "GoogleSignIn",
     "RelativePath": "api/v1/Auth/signin-google",
     "HttpMethod": "POST",
     "IsController": true,

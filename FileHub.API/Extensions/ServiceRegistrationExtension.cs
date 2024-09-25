@@ -7,6 +7,7 @@ using Core.Configurations;
 using Microsoft.AspNetCore.RateLimiting;
 using System.Threading.RateLimiting; 
 using Core.Policies;
+using Core.Middlewares;
 
 namespace FileHub.API.Extensions;
 
@@ -16,7 +17,7 @@ public static class ServiceRegistrationExtension
     {
         var options = builder.Configuration.GetSection(StorageConfiguration.SectionName).Get<StorageConfiguration>()
             ?? throw new Exception();
-
+        builder.Services.AddTransient<GlobalExceptionMiddleware>();
         builder.Services.AddSingleton<ICacheService, CacheService>();
         if (options.UseMinio)
         {

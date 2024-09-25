@@ -1,16 +1,29 @@
-using Core.Extensions; 
+using Core.Extensions;
+using Core.Middlewares;
 using FileHub.API.Extensions; 
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Configuration.AddEnvironmentVariables();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
+
+builder.Services.AddRouting();
+builder.Services.AddControllers();
+builder.Services.AddHealthChecks();
+
 builder.AddCoreOptionConfiguration();
 builder.AddLoggingContext();
 builder.AddApplicationService();
-builder.Services.AddControllers();
 builder.AddCustomRateLimiter();
 builder.AddRedisDatabase();
 builder.AddAuth();
-builder.Services.AddHealthChecks(); 
 
 if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Staging")
 {
@@ -20,6 +33,11 @@ if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName =
 }
 
 var app = builder.Build();
+
+app.UseRouting();
+app.UseCors("AllowAllOrigins");
+
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -35,8 +53,6 @@ if (app.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "S
 
 app.MapHealthChecks("/health");
 app.UseRateLimiter(); 
-app.UseHttpsRedirection();  
-app.UseHsts();  
 
 app.MapControllers(); 
 app.Run();

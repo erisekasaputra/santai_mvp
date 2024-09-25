@@ -7,10 +7,19 @@ using Ordering.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddCoreOptionConfiguration();
 builder.Configuration.AddEnvironmentVariables();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+}); 
+builder.Services.AddRouting(); 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddControllers();
-builder.AddCoreOptionConfiguration();
 
 
 builder.AddJsonEnumConverterBehavior();
@@ -26,7 +35,7 @@ builder.AddHttpClients();
 builder.AddAuth();
 builder.Services.AddHealthChecks();
 
-if (builder.Environment.IsDevelopment())
+if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Staging") 
 {
     builder.Services.AddOpenApi();
     builder.Services.AddEndpointsApiExplorer();
@@ -36,6 +45,7 @@ if (builder.Environment.IsDevelopment())
 var app = builder.Build();
 
 app.UseRouting();
+app.UseCors("AllowAllOrigins");
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseMiddleware<IdempotencyMiddleware>();
@@ -45,7 +55,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-if (app.Environment.IsDevelopment())
+if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Staging")
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();

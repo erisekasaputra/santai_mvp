@@ -8,20 +8,27 @@ using Core.Middlewares;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddHttpContextAccessor(); 
 builder.Configuration.AddEnvironmentVariables();
-
-builder.AddCoreOptionConfiguration(); 
-builder.AddLoggingContext();
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
+builder.Services.AddSignalR();
+builder.Services.AddRouting();
+builder.Services.AddHealthChecks();
+builder.Services.AddHttpContextAccessor();  
 if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Staging")
 {
     builder.Services.AddOpenApi();
     builder.Services.AddEndpointsApiExplorer();
     builder.Services.AddSwaggerGen();
-}
+} 
 
-builder.Services.AddHealthChecks();
+builder.AddCoreOptionConfiguration();
+builder.AddLoggingContext();
 builder.AddJsonEnumConverterBehavior();
 builder.AddAuth(); 
 builder.AddMediatorService<IAccountAPIMarkerInterface>(); 
@@ -31,9 +38,12 @@ builder.AddValidation<IAccountAPIMarkerInterface>();
 builder.AddSqlDatabaseContext<AccountDbContext>();   
 builder.AddMassTransitContext<AccountDbContext>(); 
 builder.AddDataEncryption(builder.Configuration);
-builder.Services.AddSignalR();
 
-var app = builder.Build(); 
+
+var app = builder.Build();
+
+app.UseRouting();
+app.UseCors("AllowAllOrigins");
 
 app.UseMiddleware<GlobalExceptionMiddleware>(); 
 app.UseMiddleware<IdempotencyMiddleware>(); 
@@ -48,20 +58,17 @@ if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Stagi
     app.UseSwaggerUI();
     app.MapOpenApi();
 }
-
-app.UseHttpsRedirection(); 
-app.UseHsts(); 
+  
 app.UseOutputCache(); 
 
 app.MapBusinessUserApi(); 
 app.MapUserApi(); 
 app.MapRegularUserApi(); 
 app.MapMechanicUserApi(); 
-app.MapFleetApi(); 
-
-app.MapHub<LocationHub>("/location");
+app.MapFleetApi();
 app.MapControllers();
 
+app.MapHub<LocationHub>("/location");
 app.MapHealthChecks("/health");
 
 app.Run();

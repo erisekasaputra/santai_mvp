@@ -5,8 +5,8 @@ using Identity.API.Extensions;
 using Identity.API.Infrastructure;
 using Identity.API.SeedWork;
 
-var builder = WebApplication.CreateBuilder(args);  
- 
+var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowAllOrigins", policy =>
@@ -15,10 +15,9 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Configuration.AddEnvironmentVariables();
-
-builder.Services.AddControllers();  
+builder.Configuration.AddEnvironmentVariables(); 
 builder.Services.AddRouting();
+builder.Services.AddControllers();  
 builder.Services.AddHttpContextAccessor();
  
 

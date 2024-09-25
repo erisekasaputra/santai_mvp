@@ -55,7 +55,7 @@ public class DataController : ControllerBase
 
         var master = new MasterData(serviceFee, basicInspection, preService);
 
-        return TypedResults.Ok(JsonConvert.SerializeObject(master));
+        return TypedResults.Ok(master);
     }
 
     [HttpGet("order/pre-service-inspection")]
@@ -69,9 +69,10 @@ public class DataController : ControllerBase
             return TypedResults.NotFound();
         }
 
-        string jsonString = System.IO.File.ReadAllText(filePath);  
+        string jsonString = System.IO.File.ReadAllText(filePath);
 
-        return TypedResults.Ok(jsonString);
+        var preService = JsonConvert.DeserializeObject<IEnumerable<PreServiceInspection>>(jsonString);
+        return TypedResults.Ok(preService);
     }
 
 
@@ -89,7 +90,8 @@ public class DataController : ControllerBase
 
         string jsonString = System.IO.File.ReadAllText(filePath);
 
-        return TypedResults.Ok(jsonString);
+        var basicInspection = JsonConvert.DeserializeObject<IEnumerable<BasicInspection>>(jsonString);
+        return TypedResults.Ok(basicInspection);
     }
 
 
@@ -102,11 +104,10 @@ public class DataController : ControllerBase
         if (!System.IO.File.Exists(filePath))
         {
             return TypedResults.NotFound();
-        }
-
+        } 
         string jsonString = System.IO.File.ReadAllText(filePath);
-
-        return TypedResults.Ok(jsonString);
+        var serviceFee = JsonConvert.DeserializeObject<IEnumerable<Fee>>(jsonString); 
+        return TypedResults.Ok(serviceFee);
     }
 
 
@@ -124,9 +125,7 @@ public class DataController : ControllerBase
         }
 
         string jsonString = System.IO.File.ReadAllText(filePath);
-
-        return TypedResults.Ok(jsonString);
-    }
-
-
+        var cancellationFee = JsonConvert.DeserializeObject<CancellationFee>(jsonString);
+        return TypedResults.Ok(cancellationFee);
+    } 
 }

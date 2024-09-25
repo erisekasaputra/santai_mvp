@@ -1,14 +1,7 @@
-C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.csproj.AssemblyReference.cache
-C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.GeneratedMSBuildEditorConfig.editorconfig
-C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.AssemblyInfoInputs.cache
-C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.AssemblyInfo.cs
-C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.csproj.CoreCompileInputs.cache
-C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.MvcApplicationPartsAssemblyInfo.cs
-C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.MvcApplicationPartsAssemblyInfo.cache
-C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.sourcelink.json
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\appsettings.Development.json
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\appsettings.json
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\appsettings.Production.json
+C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\appsettings.Staging.json
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\FileHub.API.staticwebassets.endpoints.json
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\FileHub.API.exe
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\FileHub.API.deps.json
@@ -62,6 +55,9 @@ C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\Microsoft.Win32.SystemEvents.dll
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\Minio.dll
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\Pipelines.Sockets.Unofficial.dll
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\StackExchange.Redis.dll
+C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\System.ClientModel.dll
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\System.CodeDom.dll
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
@@ -100,6 +96,14 @@ C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\runtimes\win\lib\netcoreapp2.1\System
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\runtimes\win\lib\net8.0\System.Runtime.Caching.dll
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\Core.dll
 C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\Core.pdb
+C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.csproj.AssemblyReference.cache
+C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.AssemblyInfoInputs.cache
+C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.AssemblyInfo.cs
+C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.csproj.CoreCompileInputs.cache
+C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.sourcelink.json
 C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\scopedcss\bundle\FileHub.API.styles.css
 C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\staticwebassets.build.json
 C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\staticwebassets.development.json
@@ -116,6 +120,3 @@ C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\refint\FileHub.API.dll
 C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.pdb
 C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.genruntimeconfig.cache
 C:\Santai.MVP\FileHub.API\obj\Debug\net9.0\ref\FileHub.API.dll
-C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
-C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
-C:\Santai.MVP\FileHub.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll

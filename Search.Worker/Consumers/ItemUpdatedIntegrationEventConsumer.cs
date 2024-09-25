@@ -5,7 +5,7 @@ using Search.Worker.Applications.Commands.UpdateItem;
 
 namespace Search.Worker.Consumers;
 
-internal class ItemUpdatedIntegrationEventConsumer(IMediator mediator) : IConsumer<ItemUpdatedIntegrationEvent>
+public class ItemUpdatedIntegrationEventConsumer(IMediator mediator) : IConsumer<ItemUpdatedIntegrationEvent>
 {
     private readonly IMediator _mediator = mediator; 
     public async Task Consume(ConsumeContext<ItemUpdatedIntegrationEvent> context)

@@ -1,6 +1,7 @@
 C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\appsettings.Development.json
 C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\appsettings.json
 C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\appsettings.Production.json
+C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\appsettings.Staging.json
 C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\Notification.Worker.staticwebassets.endpoints.json
 C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\Notification.Worker.exe
 C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\Notification.Worker.deps.json
@@ -64,6 +65,7 @@ C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\Microsoft.NET.StringTools.dll
 C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\Microsoft.SqlServer.Server.dll
 C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\Microsoft.Win32.SystemEvents.dll
 C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\Mono.TextTemplating.dll
+C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\Newtonsoft.Json.dll
 C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\Pipelines.Sockets.Unofficial.dll
 C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\RabbitMQ.Client.dll
 C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\StackExchange.Redis.dll
@@ -197,4 +199,3 @@ C:\Santai.MVP\Notification.Worker\obj\Debug\net9.0\refint\Notification.Worker.dl
 C:\Santai.MVP\Notification.Worker\obj\Debug\net9.0\Notification.Worker.pdb
 C:\Santai.MVP\Notification.Worker\obj\Debug\net9.0\Notification.Worker.genruntimeconfig.cache
 C:\Santai.MVP\Notification.Worker\obj\Debug\net9.0\ref\Notification.Worker.dll
-C:\Santai.MVP\Notification.Worker\bin\Debug\net9.0\Newtonsoft.Json.dll

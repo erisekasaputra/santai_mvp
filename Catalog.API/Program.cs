@@ -5,34 +5,44 @@ using Catalog.Infrastructure;
 using Core.Extensions;
 using Core.Middlewares;
 
-var builder = WebApplication.CreateBuilder(args); 
+var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAllOrigins", policy =>
+    {
+        policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+    });
+});
+if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Staging")
+{
+    builder.Services.AddOpenApi();
+    builder.Services.AddEndpointsApiExplorer();
+    builder.Services.AddSwaggerGen();
+}
+builder.Services.AddRouting();
+builder.Services.AddHealthChecks();
+builder.Services.AddHttpContextAccessor();
+ 
+
 builder.AddCoreOptionConfiguration();
 builder.AddLoggingContext();
 builder.AddJsonEnumConverterBehavior();
 builder.AddMediatorService<ICatalogAPIMarkerInterface>();
 builder.AddValidation<ICatalogAPIMarkerInterface>();
 
-builder.Services.AddHealthChecks();
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddRouting();
-builder.Services.AddOpenApi();
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
 builder.AddSqlDatabaseContext<CatalogDbContext>(); 
 builder.AddMassTransitContext<CatalogDbContext>();
 builder.AddRedisDatabase();
 builder.AddApplicationService();
-builder.AddAuth();
-
-if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Staging") 
-{
-    builder.Services.AddOpenApi();
-    builder.Services.AddEndpointsApiExplorer();
-    builder.Services.AddSwaggerGen();
-}
+builder.AddAuth(); 
 
 var app = builder.Build();
+
+app.UseRouting();
+app.UseCors("AllowAllOrigins");
 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 app.UseMiddleware<IdempotencyMiddleware>();

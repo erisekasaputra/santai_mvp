@@ -1,5 +1,7 @@
 C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\appsettings.Development.json
 C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\appsettings.json
+C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\appsettings.Production.json
+C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\appsettings.Staging.json
 C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Master.Data.API.staticwebassets.runtime.json
 C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Master.Data.API.staticwebassets.endpoints.json
 C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Master.Data.API.exe
@@ -51,6 +53,9 @@ C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Microsoft.Win32.SystemEvents.dll
 C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Newtonsoft.Json.dll
 C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Pipelines.Sockets.Unofficial.dll
 C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\StackExchange.Redis.dll
+C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.Swagger.dll
+C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerGen.dll
+C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Swashbuckle.AspNetCore.SwaggerUI.dll
 C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\System.ClientModel.dll
 C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\System.CodeDom.dll
 C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
@@ -115,4 +120,3 @@ C:\Santai.MVP\Master.Data.API\obj\Debug\net9.0\refint\Master.Data.API.dll
 C:\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.pdb
 C:\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.genruntimeconfig.cache
 C:\Santai.MVP\Master.Data.API\obj\Debug\net9.0\ref\Master.Data.API.dll
-C:\Santai.MVP\Master.Data.API\bin\Debug\net9.0\appsettings.Production.json

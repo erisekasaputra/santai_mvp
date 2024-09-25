@@ -5,7 +5,7 @@ using Search.Worker.Applications.Commands.ReduceItemStockQuantity;
 
 namespace Search.Worker.Consumers;
 
-internal class ItemStockReducedIntegrationEventConsumer(IMediator mediator) : IConsumer<ItemStockReducedIntegrationEvent>
+public class ItemStockReducedIntegrationEventConsumer(IMediator mediator) : IConsumer<ItemStockReducedIntegrationEvent>
 {
     private readonly IMediator _mediator = mediator;
     public async Task Consume(ConsumeContext<ItemStockReducedIntegrationEvent> context)
