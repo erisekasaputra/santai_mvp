@@ -15,7 +15,8 @@ REM Set the secret key senangpay
 dotnet user-secrets set "SenangPay:SecretKey" "6936-735"
 
 REM Set the google client secret 
-dotnet user-secrets set "Google:ClientSecret" "get-from-google-sso-generator"  
+dotnet user-secrets set "Google:ClientSecret" "NOT_PROVIDED"  
+dotnet user-secrets set "Google:ClientId" "1065462126306-sla57ni7q7n8mhs2v0miqa6u5ms8lrsi.apps.googleusercontent.com"  
 
 REM Set the aws client
 dotnet user-secrets set "AWS:AccessID" "AKIAYS2NP3RU6DEGPJUM"  
