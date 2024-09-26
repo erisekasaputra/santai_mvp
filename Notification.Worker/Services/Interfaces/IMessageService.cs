@@ -1,8 +1,11 @@
-﻿namespace Notification.Worker.Services.Interfaces;
+﻿using Amazon.SimpleNotificationService.Model;
+
+namespace Notification.Worker.Services.Interfaces;
 
 public interface IMessageService
 {  
-    Task SendTextMessageAsync(string phoneNumber, string text);
+    Task PublishSmsAsync(string phoneNumber, string text);
     Task<string> RegisterDevice(string deviceToken);
     Task DeregisterDevice(string arn);
+    Task PublishPushNotificationAsync(PublishRequest request);
 }

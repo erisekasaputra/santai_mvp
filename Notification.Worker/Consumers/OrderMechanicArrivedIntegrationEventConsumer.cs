@@ -17,16 +17,8 @@ public class OrderMechanicArrivedIntegrationEventConsumer(
     private readonly ICacheService _cacheService = cacheService;
     public async Task Consume(ConsumeContext<OrderMechanicArrivedIntegrationEvent> context)
     {
-        var orderData = context.Message;
-        var connectionId = await _cacheService.GetAsync<string>(CacheKey.GetUserCacheKey(orderData.BuyerId.ToString()));
-
-        if (connectionId is null || string.IsNullOrEmpty(connectionId))
-        {
-            // send notification via sns
-            return;
-        }
-
-        await _activityHubContext.Clients.User(connectionId).ReceiveOrderStatusUpdate(
+        var orderData = context.Message; 
+        await _activityHubContext.Clients.User(orderData.BuyerId.ToString()).ReceiveOrderStatusUpdate(
             orderData.OrderId.ToString(),
             orderData.BuyerId.ToString(),
             string.Empty,

@@ -12,6 +12,7 @@ public class MechanicAssignedDomainEventHandler(IMediator mediator) : INotificat
         await _mediator.Publish(new MechanicAutoSelectedIntegrationEvent(
             notification.OrderId,
             notification.BuyerId,
-            notification.MechanicId), cancellationToken);
+            notification.MechanicId,
+            notification.ConfirmDeadlineInSeconds), cancellationToken);
     }
 }

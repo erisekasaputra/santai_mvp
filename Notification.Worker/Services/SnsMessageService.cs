@@ -12,12 +12,15 @@ public class SnsMessageService : IMessageService
 {
     private readonly AmazonSimpleNotificationServiceClient _snsClient; 
     private readonly AWSIAMConfiguration _awsConfig;
+    private readonly AWSSNSConfiguration _snsConfig;
     private readonly ILogger<SnsMessageService> _logger; 
     public SnsMessageService( 
         IOptionsMonitor<AWSIAMConfiguration> awsConfig, 
-        ILogger<SnsMessageService> logger )
-    {
+        ILogger<SnsMessageService> logger,
+        IOptionsMonitor<AWSSNSConfiguration> snsConfig)
+    {   
         _awsConfig = awsConfig.CurrentValue;
+        _snsConfig = snsConfig.CurrentValue;
         var awsOptions = new AmazonSimpleNotificationServiceConfig
         {
             RegionEndpoint = RegionEndpoint.GetBySystemName(_awsConfig.Region)
@@ -59,6 +62,25 @@ public class SnsMessageService : IMessageService
         }
     }
 
+    public async Task PublishPushNotificationAsync(PublishRequest request)
+    {
+        try
+        { 
+            await _snsClient.PublishAsync(request);
+        }
+        catch (AmazonSimpleNotificationServiceException ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            throw;
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            throw;
+        }
+    }
+     
+
     public async Task<string> RegisterDevice(string deviceToken)
     {
         try
@@ -70,7 +92,7 @@ public class SnsMessageService : IMessageService
 
             var request = new CreatePlatformEndpointRequest
             {
-                PlatformApplicationArn = "",
+                PlatformApplicationArn = _snsConfig.ARN,
                 Token = deviceToken
             };
 
@@ -94,7 +116,7 @@ public class SnsMessageService : IMessageService
         }
     }
 
-    public async Task SendTextMessageAsync(string phoneNumber, string message)
+    public async Task PublishSmsAsync(string phoneNumber, string message)
     { 
         try
         {
@@ -109,7 +131,7 @@ public class SnsMessageService : IMessageService
                 PhoneNumber = phoneNumber
             };
 
-            await _snsClient.PublishAsync(request); 
+            var response = await _snsClient.PublishAsync(request); 
         }
         catch (AmazonSimpleNotificationServiceException ex)
         {

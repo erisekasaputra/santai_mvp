@@ -17,15 +17,7 @@ public class ServiceIncompletedIntegrationEventConsumer(
     private readonly ICacheService _cacheService = cacheService;
     public async Task Consume(ConsumeContext<ServiceIncompletedIntegrationEvent> context)
     {
-        var orderData = context.Message;
-        var connectionId = await _cacheService.GetAsync<string>(CacheKey.GetUserCacheKey(orderData.BuyerId.ToString()));
-
-        if (connectionId is null || string.IsNullOrEmpty(connectionId))
-        {
-            // send notification via sns
-            return;
-        }
-
+        var orderData = context.Message; 
         await _activityHubContext.Clients.User(connectionId).ReceiveOrderStatusUpdate(
             orderData.OrderId.ToString(),
             orderData.BuyerId.ToString(),

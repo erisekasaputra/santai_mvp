@@ -26,7 +26,7 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
             return;
         } 
 
-        await _activityHubContext.Clients.User(connectionId).ReceiveOrderStatusUpdate(
+        await _activityHubContext.Clients.User(orderData.BuyerId.ToString()).ReceiveOrderStatusUpdate(
             orderData.OrderId.ToString(),
             orderData.BuyerId.ToString(),
             orderData.BuyerName,

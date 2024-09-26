@@ -6,7 +6,8 @@ using Notification.Worker.Consumers;
 using Notification.Worker.Repository;
 using Notification.Worker.Services;
 using Notification.Worker.Services.Interfaces;
-using StackExchange.Redis; 
+using StackExchange.Redis;
+using System.Net;
 
 namespace Notification.Worker.Extensions;
 
@@ -75,10 +76,25 @@ public static class ServiceRegistrationExtension
     public static WebApplicationBuilder AddApplicationService(this WebApplicationBuilder builder)
     {
         var options = builder.Configuration.GetSection(CacheConfiguration.SectionName).Get<CacheConfiguration>() ?? throw new Exception();  
-        builder.Services.AddSignalR().AddStackExchangeRedis(options.Host, options =>
+
+        builder.Services.AddSignalR().AddStackExchangeRedis(configure =>
         {
-            options.Configuration.ChannelPrefix = RedisChannel.Literal("NotificationWorker");
+            var endpoints = new EndPointCollection
+            {
+                options.Host
+            }; 
+            var conf = new ConfigurationOptions()
+            {
+                EndPoints = endpoints,
+                Password = options.Password, 
+                AbortOnConnectFail = false,  
+                ChannelPrefix = RedisChannel.Literal("NotificationWorker")
+            }; 
+
+            configure.Configuration = conf;
         }); 
+
+
         builder.Services.AddSingleton<ICacheService, CacheService>();
         builder.Services.AddSingleton<IMessageService, SnsMessageService>();
         builder.Services.AddScoped<UserProfileRepository>();

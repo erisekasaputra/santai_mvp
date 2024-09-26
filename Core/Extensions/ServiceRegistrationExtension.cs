@@ -316,9 +316,12 @@ public static class ServiceRegistrationExtension
 
     public static WebApplicationBuilder AddCoreOptionConfiguration(this WebApplicationBuilder builder)
     {
+        builder.Services.Configure<OrderConfiguration>(builder.Configuration.GetSection(OrderConfiguration.SectionName));
+        builder.Services.Configure<ProjectConfiguration>(builder.Configuration.GetSection(ProjectConfiguration.SectionName));
         builder.Services.Configure<SenangPayPaymentConfiguration>(builder.Configuration.GetSection(SenangPayPaymentConfiguration.SectionName));
         builder.Services.Configure<MinioConfiguration>(builder.Configuration.GetSection(MinioConfiguration.SectionName));
         builder.Services.Configure<AWSIAMConfiguration>(builder.Configuration.GetSection(AWSIAMConfiguration.SectionName));
+        builder.Services.Configure<AWSSNSConfiguration>(builder.Configuration.GetSection(AWSSNSConfiguration.SectionName));
         builder.Services.Configure<AccountServiceConfiguration>(builder.Configuration.GetSection(AccountServiceConfiguration.SectionName));
         builder.Services.Configure<MasterDataServiceConfiguration>(builder.Configuration.GetSection(MasterDataServiceConfiguration.SectionName));
         builder.Services.Configure<CacheConfiguration>(builder.Configuration.GetSection(CacheConfiguration.SectionName));

@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Ordering.Domain.Aggregates.OrderAggregate;
+﻿using MediatR; 
 
 namespace Ordering.Domain.Events;
 
@@ -7,4 +6,5 @@ public record MechanicAssignedDomainEvent(
     Guid OrderId , 
     Guid BuyerId, 
     Guid MechanicId,
-    string MechanicName) : INotification;
+    string MechanicName,
+    int ConfirmDeadlineInSeconds) : INotification;

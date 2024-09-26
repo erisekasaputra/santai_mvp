@@ -1,42 +1,34 @@
 ﻿using Account.API.Applications.Models;
 using Account.API.Applications.Services.Interfaces;
 using Account.API.SeedWork;
-using Core.Configurations; 
+using Core.Configurations;
 using Microsoft.Extensions.Options;
-using Polly; 
 using RedLockNet.SERedis;
 using RedLockNet.SERedis.Configuration;
-using StackExchange.Redis; 
+using StackExchange.Redis;
 using System.Net;
 
 namespace Account.API.Applications.Services;
 
 public class MechanicCache : IMechanicCache
-{
-    const int TOTAL_PENALTY_IN_MINUTES = 30;
-    const int WAITING_MECHANIC_CONFIRM_IN_SECOND = 600;
+{ 
     const int MAX_RETRY_MECHANIC_LOCK = 3; 
 
-    private readonly IConnectionMultiplexer _connectionMultiplexer; 
-    private readonly AsyncPolicy _asyncPolicy;
+    private readonly IConnectionMultiplexer _connectionMultiplexer;  
     private readonly ILogger<MechanicCache> _logger;
-    private RedLockFactory _redLockFactory;
+    private readonly RedLockFactory _redLockFactory;
+    private readonly OrderConfiguration _orderConfiguration;
+
     public MechanicCache(
         IConnectionMultiplexer connectionMultiplexer,
         ILogger<MechanicCache> logger,
-        IOptionsMonitor<CacheConfiguration> cacheOptions)
+        IOptionsMonitor<CacheConfiguration> cacheOptions,
+        IOptionsMonitor<OrderConfiguration> orderConfiguration)
     {
         _connectionMultiplexer = connectionMultiplexer;
-        _logger = logger;
-        _asyncPolicy = Policy.Handle<InvalidOperationException>()
-                             .Or<RedisConnectionException>() 
-                             .WaitAndRetryAsync(1, retryAttempt =>
-                                 TimeSpan.FromSeconds(Math.Pow(1, retryAttempt))  
-                             );
-
-        
-
+        _logger = logger;  
         _redLockFactory = RedLockFactory.Create(ParseRedisEndpoints([cacheOptions.CurrentValue.Host]));
+        _orderConfiguration = orderConfiguration.CurrentValue;
     } 
     public async Task<bool> UpdateLocationAsync(MechanicExistence mechanic)
     {
@@ -832,7 +824,7 @@ public class MechanicCache : IMechanicCache
         {
             new (nameof(OrderTaskMechanicConfirm.OrderId), order.OrderId),
             new (nameof(OrderTaskMechanicConfirm.MechanicId), mechanic.MechanicId),
-            new (nameof(OrderTaskMechanicConfirm.ExpiredAtUtc), DateTime.UtcNow.AddSeconds(WAITING_MECHANIC_CONFIRM_IN_SECOND).ToString())
+            new (nameof(OrderTaskMechanicConfirm.ExpiredAtUtc), DateTime.UtcNow.AddSeconds(_orderConfiguration.OrderMechanicConfirmTimeToAcceptInSeconds).ToString())
         };
 
         await db.HashSetAsync(resource, hashEntries); 
@@ -847,7 +839,7 @@ public class MechanicCache : IMechanicCache
     private async Task BlockMechanicToAnOrder(IDatabase db, string mechanicId, string orderId)
     {
         var setKey = CacheKey.MechanicOrderBlacklistPrefix($"{mechanicId}:{orderId}"); 
-        await db.StringSetAsync(setKey, "blocked", TimeSpan.FromMinutes(TOTAL_PENALTY_IN_MINUTES));  
+        await db.StringSetAsync(setKey, "blocked", TimeSpan.FromMinutes(_orderConfiguration.PenaltyInMinutes));  
     } 
 
     private async Task DeleteKeyRedlockAsync(IDatabase db, string lockResource)

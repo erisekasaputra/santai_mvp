@@ -12,7 +12,7 @@ public class OrderWaitingMechanicAssignJob : BackgroundService
 {
     private readonly IServiceScopeFactory _scopeFactory; 
     private readonly ILogger<OrderWaitingMechanicAssignJob> _logger;
-    private IMechanicCache _mechanicCache;
+    private IMechanicCache _mechanicCache; 
 
     public OrderWaitingMechanicAssignJob(
         IServiceScopeFactory serviceScopeFactory, 
@@ -29,6 +29,7 @@ public class OrderWaitingMechanicAssignJob : BackgroundService
         { 
             using var scope = _scopeFactory.CreateScope(); 
             _mechanicCache = scope.ServiceProvider.GetRequiredService<IMechanicCache>(); 
+            var orderConfiguration = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<OrderConfiguration>>(); 
 
             var isShutdown = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<SafelyShutdownConfiguration>>(); 
             if (isShutdown.CurrentValue.Shutdown)
@@ -47,7 +48,13 @@ public class OrderWaitingMechanicAssignJob : BackgroundService
 
                 await unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted, stoppingToken);
 
-                await mediator.Publish(new AccountMechanicAutoSelectedToAnOrderDomainEvent(Guid.Parse(orderId), Guid.Parse(buyerId), Guid.Parse(mechanicId)), stoppingToken);
+                await mediator.Publish(new AccountMechanicAutoSelectedToAnOrderDomainEvent(
+                    Guid.Parse(orderId), 
+                    Guid.Parse(buyerId), 
+                    Guid.Parse(mechanicId), 
+                    orderConfiguration.CurrentValue.OrderMechanicConfirmTimeToAcceptInSeconds),
+                    
+                    stoppingToken);
 
                 await unitOfWork.CommitTransactionAsync(stoppingToken);
             } 

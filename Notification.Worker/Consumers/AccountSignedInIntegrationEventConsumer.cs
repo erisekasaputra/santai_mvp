@@ -1,7 +1,6 @@
 ﻿using Amazon.SimpleNotificationService.Model;
 using Core.Events.Identity;
-using MassTransit;
-using MassTransit.SqlTransport;
+using MassTransit; 
 using Notification.Worker.Domain;
 using Notification.Worker.Infrastructure;
 using Notification.Worker.Repository;
