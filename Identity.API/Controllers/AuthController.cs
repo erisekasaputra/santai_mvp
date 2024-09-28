@@ -1230,8 +1230,9 @@ public class AuthController(
                 string redirectTo = user.IsAccountRegistered ? _homePageActionName : _createAccountActionName;  
 
 
-                user.AddDeviceId(request.DeviceId);
-                await _userManager.UpdateAsync(user);
+                user.AddDeviceId(request.DeviceId); 
+
+                _dbContext.Users.Update(user);
 
                 await _mediator.Publish(
                     new AccountSignedInDomainEvent(

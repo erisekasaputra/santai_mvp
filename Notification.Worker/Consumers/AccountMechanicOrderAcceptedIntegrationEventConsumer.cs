@@ -58,22 +58,7 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
                     {
                         notification = new
                         { 
-                            click_action = "OPEN_APP", 
-                            //actions = new[]
-                            //{
-                            //    new
-                            //    {
-                            //        title = "Accept",
-                            //        action = "accept_order_by_mechanic", 
-                            //        icon = "ic_accept" 
-                            //    },
-                            //    new
-                            //    {
-                            //        title = "Decline",
-                            //        action = "decline_order_by_mechanic", 
-                            //        icon = "ic_decline"  
-                            //    }
-                            //}
+                            click_action = "OPEN_APP"
                         }
                     },
                     data = new

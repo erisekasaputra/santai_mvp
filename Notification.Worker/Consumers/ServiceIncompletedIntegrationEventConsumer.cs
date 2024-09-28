@@ -4,15 +4,28 @@ using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 using Notification.Worker.Services.Interfaces;
 using Notification.Worker.Services;
-using Notification.Worker.Enumerations;
-using Notification.Worker.SeedWorks;
+using Notification.Worker.Enumerations; 
+using Amazon.SimpleNotificationService.Model;
+using Core.Configurations;
+using Notification.Worker.Repository; 
+using Microsoft.Extensions.Options;
 
 namespace Notification.Worker.Consumers;
 
 public class ServiceIncompletedIntegrationEventConsumer(
-    IHubContext<ActivityHub, IActivityClient> activityHubContecxt) : IConsumer<ServiceIncompletedIntegrationEvent>
+    IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
+    IMessageService messageService,
+    ICacheService cacheService,
+    UserProfileRepository userProfileRepository,
+    IOptionsMonitor<ProjectConfiguration> projectConfiguration,
+    IOptionsMonitor<OrderConfiguration> orderConfiguration) : IConsumer<ServiceIncompletedIntegrationEvent>
 {
-    private readonly IHubContext<ActivityHub, IActivityClient> _activityHubContext = activityHubContecxt; 
+    private readonly IMessageService _messageService = messageService;
+    private readonly IHubContext<ActivityHub, IActivityClient> _activityHubContext = activityHubContecxt;
+    private readonly ICacheService _cacheService = cacheService;
+    private readonly UserProfileRepository _userProfileRepository = userProfileRepository;
+    private readonly ProjectConfiguration _projectConfiguration = projectConfiguration.CurrentValue;
+    private readonly OrderConfiguration _orderConfiguration = orderConfiguration.CurrentValue;
     public async Task Consume(ConsumeContext<ServiceIncompletedIntegrationEvent> context)
     {
         var orderData = context.Message; 
@@ -20,9 +33,61 @@ public class ServiceIncompletedIntegrationEventConsumer(
             orderData.OrderId.ToString(),
             orderData.BuyerId.ToString(),
             string.Empty,
-            string.Empty,
+            orderData.MechanicId.ToString(),
             string.Empty,
             OrderStatus.ServiceIncompleted.ToString(),
             string.Empty);
+
+         
+
+        var target = await _userProfileRepository.GetProfiles(orderData.BuyerId);
+        if (target is null || !target.Any())
+        {
+            return;
+        }
+        foreach (var profile in target)
+        {
+            var fcmPayload = new
+            {
+                message = new
+                {
+                    token = profile.DeviceToken,
+                    notification = new
+                    {
+                        title = "Santai",
+                        body = $"Your service is complete, but the mechanic was unable to repair your vehicle",
+                        image = _projectConfiguration.LogoUrl
+                    },
+                    android = new
+                    {
+                        notification = new
+                        {
+                            click_action = "OPEN_APP"
+                        }
+                    },
+                    data = new
+                    {
+                        orderId = orderData.OrderId,
+                        buyerId = orderData.BuyerId,
+                        mechanicId = orderData.MechanicId
+                    }
+                }
+            };
+
+
+            var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
+            {
+                GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
+            });
+
+            var request = new PublishRequest
+            {
+                Message = messageJson,
+                MessageStructure = "json",
+                TargetArn = profile.Arn
+            };
+
+            await _messageService.PublishPushNotificationAsync(request);
+        }
     }
 }
