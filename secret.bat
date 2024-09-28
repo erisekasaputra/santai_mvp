@@ -29,6 +29,8 @@ dotnet user-secrets set "AWS:RabbitMQ:Broker" "ProductionBackendBroker"
 dotnet user-secrets set "AWS:RabbitMQ:Username" "santaitechnology" 
 dotnet user-secrets set "AWS:RabbitMQ:Password" "_SANTAItechnology2024" 
 dotnet user-secrets set "AWS:Sns:Topic" "NotificationTopic" 
+
+git token "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"
  
 echo User secrets initialized and secret key set.
 pause

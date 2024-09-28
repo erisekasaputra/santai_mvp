@@ -8,7 +8,7 @@ services:
     environment:
       - Kestrel__Endpoints__Http__Url=http://+:80
       - ASPNETCORE_HTTP_PORTS=80
-      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_ENVIRONMENT=Staging
       - Jwt__SecretKey=tP56kzHlfp+IUY/nhdOFbOsRjOSEbTVv6sexU/JL17I=
       - Jwt__Issuer=santaitechnology-api.com
       - Jwt__Audience=santaitechnology-api.com
