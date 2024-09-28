@@ -1,9 +1,3 @@
-C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.csproj.AssemblyReference.cache
-C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
-C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.AssemblyInfoInputs.cache
-C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.AssemblyInfo.cs
-C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.csproj.CoreCompileInputs.cache
-C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.sourcelink.json
 C:\Santai.MVP\Account.Infrastructure\bin\Debug\net9.0\Account.Infrastructure.deps.json
 C:\Santai.MVP\Account.Infrastructure\bin\Debug\net9.0\Account.Infrastructure.runtimeconfig.json
 C:\Santai.MVP\Account.Infrastructure\bin\Debug\net9.0\Account.Infrastructure.dll
@@ -12,6 +6,12 @@ C:\Santai.MVP\Account.Infrastructure\bin\Debug\net9.0\Account.Domain.dll
 C:\Santai.MVP\Account.Infrastructure\bin\Debug\net9.0\Core.dll
 C:\Santai.MVP\Account.Infrastructure\bin\Debug\net9.0\Account.Domain.pdb
 C:\Santai.MVP\Account.Infrastructure\bin\Debug\net9.0\Core.pdb
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.csproj.AssemblyReference.cache
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.AssemblyInfoInputs.cache
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.AssemblyInfo.cs
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.sourcelink.json
 C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account..8D276FD3.Up2Date
 C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\Account.Infrastructure.dll
 C:\Santai.MVP\Account.Infrastructure\obj\Debug\net9.0\refint\Account.Infrastructure.dll

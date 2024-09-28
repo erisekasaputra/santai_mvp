@@ -1,10 +1,3 @@
-C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.csproj.AssemblyReference.cache
-C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.GeneratedMSBuildEditorConfig.editorconfig
-C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.AssemblyInfoInputs.cache
-C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.AssemblyInfo.cs
-C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.csproj.CoreCompileInputs.cache
-C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.MvcApplicationPartsAssemblyInfo.cache
-C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.sourcelink.json
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\appsettings.Development.json
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\appsettings.json
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\appsettings.Production.json
@@ -190,7 +183,14 @@ C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Ordering.Infrastructure.dll
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Core.pdb
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Ordering.Domain.pdb
 C:\Santai.MVP\Ordering.API\bin\Debug\net9.0\Ordering.Infrastructure.pdb
+C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.csproj.AssemblyReference.cache
+C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.AssemblyInfoInputs.cache
+C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.AssemblyInfo.cs
+C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.csproj.CoreCompileInputs.cache
 C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.sourcelink.json
 C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\scopedcss\bundle\Ordering.API.styles.css
 C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\staticwebassets.build.json
 C:\Santai.MVP\Ordering.API\obj\Debug\net9.0\staticwebassets.development.json

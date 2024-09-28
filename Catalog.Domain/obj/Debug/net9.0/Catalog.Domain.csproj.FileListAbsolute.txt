@@ -11,18 +11,18 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Domain\obj\Debug\net9.0\refint\Catalog.Domain.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Catalog.Domain\obj\Debug\net9.0\ref\Catalog.Domain.dll
-C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.csproj.AssemblyReference.cache
-C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.GeneratedMSBuildEditorConfig.editorconfig
-C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.AssemblyInfoInputs.cache
-C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.AssemblyInfo.cs
-C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.csproj.CoreCompileInputs.cache
-C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.sourcelink.json
 C:\Santai.MVP\Catalog.Domain\bin\Debug\net9.0\Catalog.Domain.deps.json
 C:\Santai.MVP\Catalog.Domain\bin\Debug\net9.0\Catalog.Domain.runtimeconfig.json
 C:\Santai.MVP\Catalog.Domain\bin\Debug\net9.0\Catalog.Domain.dll
 C:\Santai.MVP\Catalog.Domain\bin\Debug\net9.0\Catalog.Domain.pdb
 C:\Santai.MVP\Catalog.Domain\bin\Debug\net9.0\Core.dll
 C:\Santai.MVP\Catalog.Domain\bin\Debug\net9.0\Core.pdb
+C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.csproj.AssemblyReference.cache
+C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.AssemblyInfoInputs.cache
+C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.AssemblyInfo.cs
+C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.csproj.CoreCompileInputs.cache
+C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.sourcelink.json
 C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog..A0AFAC00.Up2Date
 C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.dll
 C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\refint\Catalog.Domain.dll

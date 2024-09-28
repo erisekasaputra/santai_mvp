@@ -237,13 +237,6 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Search.Worker\obj\Debug\net9.0\Search.Worker.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Search.Worker\obj\Debug\net9.0\Search.Worker.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Search.Worker\obj\Debug\net9.0\ref\Search.Worker.dll
-C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.csproj.AssemblyReference.cache
-C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.GeneratedMSBuildEditorConfig.editorconfig
-C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.AssemblyInfoInputs.cache
-C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.AssemblyInfo.cs
-C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.csproj.CoreCompileInputs.cache
-C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.MvcApplicationPartsAssemblyInfo.cache
-C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.sourcelink.json
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\appsettings.Development.json
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\appsettings.json
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\appsettings.Production.json
@@ -450,7 +443,14 @@ C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Diag
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\runtimes\win\lib\net8.0\System.Runtime.Caching.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Core.dll
 C:\Santai.MVP\Search.Worker\bin\Debug\net9.0\Core.pdb
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.csproj.AssemblyReference.cache
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.GeneratedMSBuildEditorConfig.editorconfig
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.AssemblyInfoInputs.cache
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.AssemblyInfo.cs
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.csproj.CoreCompileInputs.cache
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.MvcApplicationPartsAssemblyInfo.cs
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.MvcApplicationPartsAssemblyInfo.cache
+C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.sourcelink.json
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\scopedcss\bundle\Search.Worker.styles.css
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\staticwebassets.build.json
 C:\Santai.MVP\Search.Worker\obj\Debug\net9.0\staticwebassets.development.json

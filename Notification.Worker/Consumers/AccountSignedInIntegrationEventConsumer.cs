@@ -5,6 +5,8 @@ using Notification.Worker.Domain;
 using Notification.Worker.Infrastructure;
 using Notification.Worker.Repository;
 using Notification.Worker.Services.Interfaces;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore;
 
 namespace Notification.Worker.Consumers;
 
@@ -25,14 +27,16 @@ public class AccountSignedInIntegrationEventConsumer : IConsumer<AccountSignedIn
 
     public async Task Consume(ConsumeContext<AccountSignedInIntegrationEvent> context)
     {
+        IDbContextTransaction? transaction = null;
         try
         {
-            var profile = context.Message;
+            transaction = await _notificationDbContext.Database.BeginTransactionAsync(); 
+            var profile = context.Message; 
 
             if (string.IsNullOrEmpty(profile.DeviceId))
             {
                 return;
-            }
+            } 
 
             var userProfile = await _userProfileRepository.GetUserByIdAsync(profile.UserId);
 
@@ -51,6 +55,7 @@ public class AccountSignedInIntegrationEventConsumer : IConsumer<AccountSignedIn
 
                 await _userProfileRepository.AddAsync(userProfile);
                 await _notificationDbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
                 return;
             }
 
@@ -59,34 +64,15 @@ public class AccountSignedInIntegrationEventConsumer : IConsumer<AccountSignedIn
             {
                 userProfile.AddUserProfile(new IdentityProfile(profile.DeviceId, arn));
             }
+
             _userProfileRepository.Update(userProfile);
             await _notificationDbContext.SaveChangesAsync();
-        }
-
-        catch (InvalidParameterException ex)
+            await transaction.CommitAsync();
+        } 
+        catch (Exception)
         {
-            if (ex.Message.Contains("DuplicateEndpoint"))
-            {
-                _ = ExtractEndpointArnFromExceptionMessage(ex.Message);
-            }
-            else
-            {
-                throw;
-            }
-        }
-        catch (Exception) 
-        {
+            if (transaction is not null) await transaction.RollbackAsync();
             throw;
         } 
-    }
-
-    private static string? ExtractEndpointArnFromExceptionMessage(string message)
-    { 
-        var arnIndex = message.IndexOf("arn:aws:sns:");
-        if (arnIndex >= 0)
-        {
-            return message[arnIndex..].Split(' ')[0];
-        }
-        return null;
-    }
+    } 
 }

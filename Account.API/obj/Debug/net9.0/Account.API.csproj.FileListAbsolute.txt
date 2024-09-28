@@ -247,13 +247,6 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\obj\Debug\net9.0\Account.API.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\obj\Debug\net9.0\Account.API.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\obj\Debug\net9.0\ref\Account.API.dll
-C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.csproj.AssemblyReference.cache
-C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.GeneratedMSBuildEditorConfig.editorconfig
-C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.AssemblyInfoInputs.cache
-C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.AssemblyInfo.cs
-C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.csproj.CoreCompileInputs.cache
-C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.MvcApplicationPartsAssemblyInfo.cache
-C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.sourcelink.json
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\appsettings.Development.json
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\appsettings.json
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\appsettings.Production.json
@@ -468,7 +461,14 @@ C:\Santai.MVP\Account.API\bin\Debug\net9.0\Core.dll
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\Account.Domain.pdb
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\Account.Infrastructure.pdb
 C:\Santai.MVP\Account.API\bin\Debug\net9.0\Core.pdb
+C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.csproj.AssemblyReference.cache
+C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.AssemblyInfoInputs.cache
+C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.AssemblyInfo.cs
+C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.csproj.CoreCompileInputs.cache
 C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.sourcelink.json
 C:\Santai.MVP\Account.API\obj\Debug\net9.0\scopedcss\bundle\Account.API.styles.css
 C:\Santai.MVP\Account.API\obj\Debug\net9.0\staticwebassets.build.json
 C:\Santai.MVP\Account.API\obj\Debug\net9.0\staticwebassets.development.json
