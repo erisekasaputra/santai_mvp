@@ -4,9 +4,15 @@ using Notification.Worker.Domain;
 
 namespace Notification.Worker.Infrastructure;
 
-public class NotificationDbContext(DbContextOptions<NotificationDbContext> options) : DbContext(options)
+public class NotificationDbContext : DbContext
 {
     public DbSet<UserProfile> Users { get; set; }
+
+    public NotificationDbContext(DbContextOptions<NotificationDbContext> options) : base(options)
+    {
+        
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<UserProfile>(configure =>

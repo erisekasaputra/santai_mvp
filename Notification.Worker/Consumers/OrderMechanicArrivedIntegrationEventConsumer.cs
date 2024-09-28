@@ -3,8 +3,7 @@ using Core.Services.Interfaces;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 using Notification.Worker.Services.Interfaces;
-using Notification.Worker.Services;
-using Notification.Worker.SeedWorks;
+using Notification.Worker.Services; 
 using Notification.Worker.Enumerations;
 
 namespace Notification.Worker.Consumers;

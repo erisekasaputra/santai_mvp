@@ -4,7 +4,6 @@ using MassTransit;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Newtonsoft.Json;
 
 namespace Identity.API.Infrastructure;
 

@@ -10,15 +10,13 @@ using Notification.Worker.SeedWorks;
 namespace Notification.Worker.Consumers;
 
 public class ServiceIncompletedIntegrationEventConsumer(
-    IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
-    ICacheService cacheService) : IConsumer<ServiceIncompletedIntegrationEvent>
+    IHubContext<ActivityHub, IActivityClient> activityHubContecxt) : IConsumer<ServiceIncompletedIntegrationEvent>
 {
-    private readonly IHubContext<ActivityHub, IActivityClient> _activityHubContext = activityHubContecxt;
-    private readonly ICacheService _cacheService = cacheService;
+    private readonly IHubContext<ActivityHub, IActivityClient> _activityHubContext = activityHubContecxt; 
     public async Task Consume(ConsumeContext<ServiceIncompletedIntegrationEvent> context)
     {
         var orderData = context.Message; 
-        await _activityHubContext.Clients.User(connectionId).ReceiveOrderStatusUpdate(
+        await _activityHubContext.Clients.User(orderData.BuyerId.ToString()).ReceiveOrderStatusUpdate(
             orderData.OrderId.ToString(),
             orderData.BuyerId.ToString(),
             string.Empty,

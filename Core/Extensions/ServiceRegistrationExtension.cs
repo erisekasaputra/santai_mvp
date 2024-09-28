@@ -56,7 +56,7 @@ public static class ServiceRegistrationExtension
     public static AuthenticationBuilder AddGoogleSSO(this AuthenticationBuilder builder)
     {
         var options = builder.Services.BuildServiceProvider().GetService<IOptionsMonitor<GoogleSSOConfiguration>>()?.CurrentValue
-          ?? throw new Exception();
+          ?? throw new Exception("Google SSO options can no be null");
 
         builder.AddGoogle(configure =>
         {
@@ -71,7 +71,7 @@ public static class ServiceRegistrationExtension
     public static AuthenticationBuilder AddAuth(this WebApplicationBuilder builder)
     {    
         var options = builder.Configuration.GetSection(JwtConfiguration.SectionName).Get<JwtConfiguration>()
-           ?? throw new Exception(); 
+           ?? throw new Exception("JWT options can no be null"); 
 
         var authenticationBuilder = builder.Services.AddAuthentication(configure =>
         {
@@ -177,7 +177,7 @@ public static class ServiceRegistrationExtension
     public static WebApplicationBuilder AddRedisDatabase(this WebApplicationBuilder builder)
     { 
         var options = builder.Configuration.GetSection(CacheConfiguration.SectionName).Get<CacheConfiguration>()
-           ?? throw new Exception(); 
+           ?? throw new Exception("Cache options can no be null"); 
 
         builder.Services.AddSingleton<IConnectionMultiplexer>(_ =>
         {
@@ -254,7 +254,7 @@ public static class ServiceRegistrationExtension
     public static WebApplicationBuilder AddSqlDatabaseContext<TDbContext>(this WebApplicationBuilder builder, bool isRetryable = false) where TDbContext : DbContext
     {
         var options = builder.Configuration.GetSection(DatabaseConfiguration.SectionName).Get<DatabaseConfiguration>()
-          ?? throw new Exception();
+          ?? throw new Exception("Database options can no be null");
 
 
         builder.Services.AddDbContext<TDbContext>(configure =>

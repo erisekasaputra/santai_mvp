@@ -36,7 +36,7 @@ services:
       - AWS__AccessID=AKIAYS2NP3RU6DEGPJUM
       - AWS__SecretKey=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
       - AWS__Region=ap-southeast-1 
-      - Messaging__Host=amqps://b-7be94d57-3bad-4a58-862f-b64b5a6aa5f1.mq.ap-southeast-1.amazonaws.com:5671
+      - Messaging__Host=amqps://b-e7d48130-52b4-4deb-9718-410459aa94ed.mq.ap-southeast-1.amazonaws.com:5671
       - Messaging__Username=santaitechnology
       - Messaging__Password=_SANTAItechnology2024
       - Cache=santaimvprediscache-hkpg4d.serverless.apse1.cache.amazonaws.com:6379
