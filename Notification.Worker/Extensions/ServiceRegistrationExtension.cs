@@ -78,20 +78,23 @@ public static class ServiceRegistrationExtension
 
         builder.Services.AddSignalR().AddStackExchangeRedis(configure =>
         {
-            var endpoints = new EndPointCollection
+            var configurations = new ConfigurationOptions
             {
-                options.Host
-            }; 
-            var conf = new ConfigurationOptions()
-            {
-                EndPoints = endpoints,
-                Password = options.Password, 
+                EndPoints = { options.Host },
+                ConnectTimeout = (int)TimeSpan.FromSeconds(options.ConnectTimeout).TotalMilliseconds,
+                SyncTimeout = (int)TimeSpan.FromSeconds(options.SyncTimeout).TotalMilliseconds,
                 AbortOnConnectFail = false,
-                Ssl = true,
+                ReconnectRetryPolicy = new ExponentialRetry((int)TimeSpan
+                   .FromSeconds(options.ReconnectRetryPolicy).TotalMilliseconds),
                 ChannelPrefix = RedisChannel.Literal("NotificationWorker")
-            }; 
+            };
 
-            configure.Configuration = conf;
+            if (builder.Environment.IsProduction() || builder.Environment.IsStaging())
+            {
+                configurations.Ssl = true;
+            }
+
+            configure.Configuration = configurations; 
         }); 
 
 
