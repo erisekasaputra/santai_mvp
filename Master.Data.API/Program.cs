@@ -20,6 +20,7 @@ builder.AddCoreOptionConfiguration();
 builder.AddLoggingContext();
 builder.AddJsonEnumConverterBehavior(); 
 builder.AddRedisDatabase();
+builder.Services.AddHealthChecks();
 
 if (builder.Environment.IsDevelopment() || builder.Environment.IsStaging())
 {
@@ -44,5 +45,5 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 app.UseStaticFiles();
 app.MapControllers();
 app.UseOutputCache();
-
+app.MapHealthChecks("/health");
 app.Run(); 
