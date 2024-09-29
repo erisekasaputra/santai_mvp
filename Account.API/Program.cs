@@ -20,7 +20,7 @@ builder.Services.AddSignalR();
 builder.Services.AddRouting();
 builder.Services.AddHealthChecks();
 builder.Services.AddHttpContextAccessor();  
-if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Staging")
+if (builder.Environment.IsDevelopment() || builder.Environment.IsStaging())
 {
     builder.Services.AddOpenApi();
     builder.Services.AddEndpointsApiExplorer();
@@ -51,7 +51,7 @@ app.UseMiddleware<IdempotencyMiddleware>();
 app.UseAuthentication(); 
 app.UseAuthorization();
 
-if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Staging")
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();

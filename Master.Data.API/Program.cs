@@ -21,7 +21,7 @@ builder.AddLoggingContext();
 builder.AddJsonEnumConverterBehavior(); 
 builder.AddRedisDatabase();
 
-if (builder.Environment.IsDevelopment() || builder.Environment.EnvironmentName == "Staging")
+if (builder.Environment.IsDevelopment() || builder.Environment.IsStaging())
 {
     builder.Services.AddOpenApi();
     builder.Services.AddEndpointsApiExplorer();
@@ -33,7 +33,7 @@ app.UseRouting();
 app.UseCors("AllowAllOrigins"); 
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
-if (app.Environment.IsDevelopment() || app.Environment.EnvironmentName == "Staging")
+if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();

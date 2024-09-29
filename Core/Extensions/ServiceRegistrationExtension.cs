@@ -191,7 +191,7 @@ public static class ServiceRegistrationExtension
                     .FromSeconds(options.ReconnectRetryPolicy).TotalMilliseconds)
             };
 
-            if (builder.Environment.IsProduction())
+            if (builder.Environment.IsProduction() || builder.Environment.IsStaging())
             {
                 configurations.Ssl = true;
             }
@@ -213,7 +213,7 @@ public static class ServiceRegistrationExtension
                     .FromSeconds(options.ReconnectRetryPolicy).TotalMilliseconds)
             };
 
-            if (builder.Environment.IsProduction())
+            if (builder.Environment.IsProduction() || builder.Environment.IsStaging())
             {
                 configurations.Ssl = true;
             }
@@ -238,7 +238,7 @@ public static class ServiceRegistrationExtension
                     .FromSeconds(options.ReconnectRetryPolicy).TotalMilliseconds)
             };
 
-            if (builder.Environment.IsProduction())
+            if (builder.Environment.IsProduction() || builder.Environment.IsStaging())
             {
                 configurations.Ssl = true;
             }
