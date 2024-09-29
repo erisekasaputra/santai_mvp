@@ -132,8 +132,7 @@ public class SnsMessageService : IMessageService
                 PhoneNumber = phoneNumber
             };
 
-            var response = await _snsClient.PublishAsync(request);
-        
+            var response = await _snsClient.PublishAsync(request); 
         }
         catch (AmazonSimpleNotificationServiceException ex)
         {
