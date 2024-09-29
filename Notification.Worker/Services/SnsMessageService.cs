@@ -4,7 +4,8 @@ using Amazon.SimpleNotificationService.Model;
 using Core.Configurations;
 using Core.Utilities; 
 using Microsoft.Extensions.Options; 
-using Notification.Worker.Services.Interfaces; 
+using Notification.Worker.Services.Interfaces;
+using System.Net;
 
 namespace Notification.Worker.Services;
 
@@ -131,7 +132,8 @@ public class SnsMessageService : IMessageService
                 PhoneNumber = phoneNumber
             };
 
-            var response = await _snsClient.PublishAsync(request); 
+            var response = await _snsClient.PublishAsync(request);
+        
         }
         catch (AmazonSimpleNotificationServiceException ex)
         {
