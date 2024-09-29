@@ -36,6 +36,8 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
             OrderStatus.MechanicAssigned.ToString(),
             string.Empty);
 
+
+
         var target = await _userProfileRepository.GetProfiles(orderData.BuyerId); 
         if (target is null || !target.Any())
         { 
@@ -45,34 +47,23 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
-                message = new
+                data = new
                 {
                     token = profile.DeviceToken,
-                    notification = new
-                    {
-                        title = "Santai",
-                        body = $"Successfully assigned a mechanic. Mechanic {orderData.MechanicName} has been assigned and will be heading to your location shortly",
-                        image = _projectConfiguration.LogoUrl
-                    },
-                    android = new
-                    {
-                        notification = new
-                        { 
-                            click_action = "OPEN_APP"
-                        }
-                    },
-                    data = new
-                    {
-                        orderId = orderData.OrderId,
-                        buyerId = orderData.BuyerId, 
-                        mechanicId = orderData.MechanicId,
-                        mechanicName = orderData.MechanicName, 
-                    }
+                    title = "Santai",
+                    body = $"Successfully assigned a mechanic. Mechanic {orderData.MechanicName} has been assigned and will be heading to your location shortly",
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP",
+                    orderId = orderData.OrderId,
+                    buyerId = orderData.BuyerId,
+                    mechanicId = orderData.MechanicId,
+                    mechanicName = orderData.MechanicName
                 }
             }; 
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             { 
+                @default = $"Mechanic {orderData.MechanicName} has been assigned",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)  
             });
              

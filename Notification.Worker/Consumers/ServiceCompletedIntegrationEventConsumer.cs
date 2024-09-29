@@ -49,34 +49,23 @@ public class ServiceCompletedIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
-                message = new
+                data = new
                 {
                     token = profile.DeviceToken,
-                    notification = new
-                    {
-                        title = "Santai",
-                        body = $"Your service is complete, and the mechanic has successfully repaired your vehicle",
-                        image = _projectConfiguration.LogoUrl
-                    },
-                    android = new
-                    {
-                        notification = new
-                        {
-                            click_action = "OPEN_APP"
-                        }
-                    },
-                    data = new
-                    {
-                        orderId = orderData.OrderId,
-                        buyerId = orderData.BuyerId,
-                        mechanicId = orderData.MechanicId
-                    }
+                    title = "Santai",
+                    body = $"Your service is complete, and the mechanic has successfully repaired your vehicle",
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP",
+                    orderId = orderData.OrderId,
+                    buyerId = orderData.BuyerId,
+                    mechanicId = orderData.MechanicId
                 }
             };
 
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
+                @default = "Servie is complete",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

@@ -53,34 +53,23 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
         {
             var fcmPayload = new
             {
-                message = new
+                data = new
                 {
                     token = profile.DeviceToken,
-                    notification = new
-                    {
-                        title = "Santai",
-                        body = $"The order has been canceled by the Customer",
-                        image = _projectConfiguration.LogoUrl
-                    },
-                    android = new
-                    {
-                        notification = new
-                        {
-                            click_action = "OPEN_APP"
-                        }
-                    },
-                    data = new
-                    {
-                        orderId = orderData.OrderId,
-                        buyerId = orderData.BuyerId,
-                        mechanicId = orderData.MechanicId.Value
-                    }
+                    title = "Santai",
+                    body = $"The order has been canceled by the Customer",
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP",
+                    orderId = orderData.OrderId,
+                    buyerId = orderData.BuyerId,
+                    mechanicId = orderData.MechanicId.Value 
                 }
             };
 
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
+                @default = "Order cancelled by Customer",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

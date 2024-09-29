@@ -51,48 +51,37 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
 
             var fcmPayload = new
             {
-                message = new
+                data = new
                 {
                     token = profile.DeviceToken,
-                    notification = new
+                    title = "Santai",
+                    body = $"You have received a new order, the confirmation time is {minutes} minutes and {seconds} seconds",
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP",
+                    actions = new[]
                     {
-                        title = "Santai",
-                        body = $"You have received a new order, the confirmation deadline is {minutes} minutes and {seconds} seconds",
-                        image = _projectConfiguration.LogoUrl
-                    },
-                    android = new
-                    {
-                        notification = new
+                        new
                         {
-                            click_action = "OPEN_APP",
-                            actions = new[]
-                            {
-                                new
-                                {
-                                    title = "YES, TAKE IT",
-                                    action = "accept_action",
-                                    icon = "ic_accept"
-                                },
-                                new
-                                {
-                                    title = "NO, LEAVE IT",
-                                    action = "decline_action",
-                                    icon = "ic_decline"
-                                }
-                            }
+                            title = "ACCEPT",
+                            action = "accept_action",
+                            icon = "ic_accept"
+                        },
+                        new
+                        {
+                            title = "DECLINE",
+                            action = "decline_action",
+                            icon = "ic_decline"
                         }
                     },
-                    data = new
-                    {
-                        orderId = orderData.OrderId,
-                        buyerId = orderData.BuyerId,
-                        mechanicId = orderData.MechanicId
-                    }
+                    orderId = orderData.OrderId,
+                    buyerId = orderData.BuyerId,
+                    mechanicId = orderData.MechanicId 
                 }
             };
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
+                @default = "You have received a new Order",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

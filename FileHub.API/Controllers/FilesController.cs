@@ -138,8 +138,7 @@ public class FilesController
                     .WithError(new("ResourceName", "Object url must not empty")));
             }
 
-            var bytes = await _storageService.GetFilePrivateAsync(objectName);
-
+            var bytes = await _storageService.GetFilePrivateAsync(objectName); 
             if (bytes is null)
             {
                 return TypedResults.NotFound(
@@ -147,8 +146,7 @@ public class FilesController
                     .WithError(new("ResourceName", "Object resource not found")));
             }
 
-            await _cacheService.SetAsync(objectName, bytes, TimeSpan.FromMinutes(5));
-
+            await _cacheService.SetAsync(objectName, bytes, TimeSpan.FromMinutes(5)); 
             return TypedResults.File(bytes, ContentType.GetContentType(type), resourceName);
         }
         catch (Exception ex)
@@ -159,14 +157,13 @@ public class FilesController
     }
 
     [HttpGet("images/public/url")]
-    public async Task<IResult> GetPublicResourceUrl(
-        [AsParameters] string resourceName)
+    public async Task<IResult> GetPublicResourceUrl()
     {
         try
         {
             return TypedResults.Ok(new 
             { 
-                Url = await _storageService.GeneratePublicObjectUrl(UrlBuilder.Build(ObjectPrefix.ImageResource, resourceName))
+                Url = await _storageService.GeneratePublicObjectUrl(UrlBuilder.Build(ObjectPrefix.ImageResource, string.Empty))
             });  
         }
         catch (Exception ex)

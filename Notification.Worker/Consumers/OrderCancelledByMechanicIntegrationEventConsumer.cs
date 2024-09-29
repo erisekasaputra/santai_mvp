@@ -52,33 +52,22 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
-                message = new
+                data = new
                 {
                     token = profile.DeviceToken,
-                    notification = new
-                    {
-                        title = "Santai",
-                        body = $"The order has been canceled by the Mechanic",
-                        image = _projectConfiguration.LogoUrl
-                    },
-                    android = new
-                    {
-                        notification = new
-                        {
-                            click_action = "OPEN_APP"
-                        }
-                    },
-                    data = new
-                    {
-                        orderId = orderData.OrderId,
-                        buyerId = orderData.BuyerId 
-                    }
+                    title = "Santai",
+                    body = $"The order has been canceled by the Mechanic",
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP", 
+                    orderId = orderData.OrderId,
+                    buyerId = orderData.BuyerId
                 }
             };
 
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
+                @default = "Order has been cancelled by Mechanic",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

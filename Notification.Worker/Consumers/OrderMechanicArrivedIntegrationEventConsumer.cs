@@ -50,34 +50,23 @@ public class OrderMechanicArrivedIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
-                message = new
+                data = new
                 {
-                    token = profile.DeviceToken,
-                    notification = new
-                    {
-                        title = "Santai",
-                        body = $"The mechanic has arrived at your location, help them get more detailed directions to your location",
-                        image = _projectConfiguration.LogoUrl
-                    },
-                    android = new
-                    {
-                        notification = new
-                        {
-                            click_action = "OPEN_APP"
-                        }
-                    },
-                    data = new
-                    {
-                        orderId = orderData.OrderId,
-                        buyerId = orderData.BuyerId,
-                        mechanicId = orderData.MechanicId
-                    }
+                    token = profile.DeviceToken, 
+                    title = "Santai",
+                    body = $"The mechanic has arrived at your location, help them get more detailed directions to your location",
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP",
+                    orderId = orderData.OrderId,
+                    buyerId = orderData.BuyerId,
+                    mechanicId = orderData.MechanicId
                 }
             };
 
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
+                @default = "Mechanic has arrived at your location",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

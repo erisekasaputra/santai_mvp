@@ -50,33 +50,22 @@ public class OrderPaymentPaidIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
-                message = new
+                data = new
                 {
                     token = profile.DeviceToken,
-                    notification = new
-                    {
-                        title = "Santai",
-                        body = $"We have received your payment. Thank you.",
-                        image = _projectConfiguration.LogoUrl
-                    },
-                    android = new
-                    {
-                        notification = new
-                        {
-                            click_action = "OPEN_APP"
-                        }
-                    },
-                    data = new
-                    {
-                        orderId = orderData.OrderId,
-                        buyerId = orderData.BuyerId
-                    }
+                    title = "Santai",
+                    body = $"We have received your payment. Thank you.",
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP",
+                    orderId = orderData.OrderId,
+                    buyerId = orderData.BuyerId
                 }
             };
 
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
+                @default = "Payment successfull",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 
