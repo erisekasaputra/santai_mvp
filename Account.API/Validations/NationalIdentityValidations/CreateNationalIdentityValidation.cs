@@ -14,13 +14,9 @@ public class CreateNationalIdentityValidation : AbstractValidator<NationalIdenti
             .Length(3, 40).WithMessage("The identity number must be between 3 and 40 characters long");
 
         RuleFor(x => x.FrontSideImageUrl)
-            .NotEmpty().WithMessage("Front side image url can not be empty")
-            .Length(3, 255).WithMessage("The image url must be between 3 and 255 characters long")
-            .Must(UrlValidation.IsValidImageUrl).WithMessage("Front side image url is not valid");
+            .NotEmpty().WithMessage("Front side image url can not be empty");
 
         RuleFor(x => x.BackSideImageUrl)
-            .NotEmpty().WithMessage("Back side image url can not be empty")
-            .Length(3, 255).WithMessage("The image url must be between 3 and 255 characters long")
-            .Must(UrlValidation.IsValidImageUrl).WithMessage("Front side image url is not valid"); 
+            .NotEmpty().WithMessage("Back side image url can not be empty");
     }
 }

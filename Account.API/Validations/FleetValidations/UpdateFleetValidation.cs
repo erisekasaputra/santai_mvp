@@ -89,8 +89,7 @@ public class UpdateFleetValidation : AbstractValidator<UpdateFleetRequestDto>
             .IsInEnum().WithMessage("Invalid transmission type. Should be Manual or Automatic.");
 
         RuleFor(x => x.ImageUrl)
-            .Must(url =>
-                string.IsNullOrWhiteSpace(url) || UrlValidation.IsValidImageUrl(url))
-            .WithMessage("Image url format is invaid");
+            .NotEmpty()
+            .WithMessage("Image resource name can not be empty");
     }
 }

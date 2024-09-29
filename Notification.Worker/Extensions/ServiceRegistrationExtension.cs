@@ -6,8 +6,7 @@ using Notification.Worker.Consumers;
 using Notification.Worker.Repository;
 using Notification.Worker.Services;
 using Notification.Worker.Services.Interfaces;
-using StackExchange.Redis;
-using System.Net;
+using StackExchange.Redis; 
 
 namespace Notification.Worker.Extensions;
 
@@ -87,7 +86,8 @@ public static class ServiceRegistrationExtension
             {
                 EndPoints = endpoints,
                 Password = options.Password, 
-                AbortOnConnectFail = false,  
+                AbortOnConnectFail = false,
+                Ssl = true,
                 ChannelPrefix = RedisChannel.Literal("NotificationWorker")
             }; 
 

@@ -15,7 +15,7 @@ public class CreateItemCommandValidator : AbstractValidator<CreateItemCommand>
             .NotEmpty().WithMessage("Description is required.")
             .MaximumLength(1000).WithMessage("Description cannot exceed 1000 characters.");
 
-        RuleFor(x => x.Sku) 
+        RuleFor(x => x.Sku)
             .MaximumLength(50).WithMessage("Sku cannot exceed 50 characters.");
 
         RuleFor(x => x.Price)
@@ -23,8 +23,7 @@ public class CreateItemCommandValidator : AbstractValidator<CreateItemCommand>
 
         RuleFor(x => x.ImageUrl)
             .MaximumLength(500).WithMessage("Image URL cannot exceed 500 characters.")
-            .NotEmpty().WithMessage("Image URL is required.")
-            .Must(BeAValidUrl).WithMessage("Image URL must be a valid URL.");
+            .NotEmpty().WithMessage("Image URL is required.");
 
         RuleFor(x => x.StockQuantity)
             .InclusiveBetween(0, int.MaxValue).WithMessage($"Stock quantity must be in between 0 and {int.MaxValue}");
@@ -37,20 +36,14 @@ public class CreateItemCommandValidator : AbstractValidator<CreateItemCommand>
             .NotEqual(Guid.Empty).WithMessage("The Id cannot be empty.");
 
         RuleFor(x => x.BrandId)
-            .NotEmpty().WithMessage("Brand Id is required.") 
+            .NotEmpty().WithMessage("Brand Id is required.")
             .NotEqual(Guid.Empty).WithMessage("The Id cannot be empty.");
 
         When(x => x.OwnerReviews is not null && x.OwnerReviews.Any(), () =>
-        { 
-            RuleForEach(e => e.OwnerReviews).SetValidator(new ItemOwnerReviewsCommandValidator()); 
-        }); 
+        {
+            RuleForEach(e => e.OwnerReviews).SetValidator(new ItemOwnerReviewsCommandValidator());
+        });
     }
-
-    private bool BeAValidUrl(string url)
-    {
-        return Uri.TryCreate(url, UriKind.Absolute, out var uriResult)
-            && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
-    } 
 }
 
 
