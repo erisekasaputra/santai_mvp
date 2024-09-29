@@ -193,6 +193,7 @@ public static class ServiceRegistrationExtension
 
             if (builder.Environment.IsProduction() || builder.Environment.IsStaging())
             {
+                configurations.SslHost = options.Host;
                 configurations.Ssl = true;
             }
 
@@ -203,8 +204,7 @@ public static class ServiceRegistrationExtension
         builder.Services.AddStackExchangeRedisCache(configure =>
         {
             var configurations = new ConfigurationOptions
-            {
-                Ssl = true,
+            { 
                 EndPoints = { options.Host },
                 ConnectTimeout = (int)TimeSpan.FromSeconds(options.ConnectTimeout).TotalMilliseconds,
                 SyncTimeout = (int)TimeSpan.FromSeconds(options.SyncTimeout).TotalMilliseconds,
@@ -215,6 +215,7 @@ public static class ServiceRegistrationExtension
 
             if (builder.Environment.IsProduction() || builder.Environment.IsStaging())
             {
+                configurations.SslHost = options.Host;
                 configurations.Ssl = true;
             }
 
@@ -240,6 +241,7 @@ public static class ServiceRegistrationExtension
 
             if (builder.Environment.IsProduction() || builder.Environment.IsStaging())
             {
+                configurations.SslHost = options.Host;
                 configurations.Ssl = true;
             }
 

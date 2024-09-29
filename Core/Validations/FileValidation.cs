@@ -10,11 +10,12 @@ public class FileValidation
 
     private static readonly string[] PermittedMimeTypes =
     {
-        "image/jpeg",    // .jpg, .jpeg
+        "image/jpeg",    // .jpeg
         "image/png",     // .png
         "image/gif",     // .gif
         "image/webp",    // .webp
-        "image/svg+xml"  // .svg
+        "image/svg+xml",  // .svg
+        "image/jpg"
     };
 
 

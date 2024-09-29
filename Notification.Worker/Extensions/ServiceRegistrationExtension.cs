@@ -92,6 +92,7 @@ public static class ServiceRegistrationExtension
             if (builder.Environment.IsProduction() || builder.Environment.IsStaging())
             {
                 configurations.Ssl = true;
+                configurations.SslHost = options.Host;
             }
 
             configure.Configuration = configurations; 
