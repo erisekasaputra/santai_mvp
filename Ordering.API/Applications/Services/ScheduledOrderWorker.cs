@@ -30,14 +30,14 @@ public class ScheduledOrderWorker : BackgroundService
             var isShutdown = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<SafelyShutdownConfiguration>>();
             if (isShutdown.CurrentValue.Shutdown)
             {
-                await Task.Delay(100000);
+                await Task.Delay(10000, stoppingToken);
                 continue;
             }  
 
             try
             {
                 await unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, stoppingToken); 
-                var orders = await unitOfWork.ScheduledOrders.GetOnTimeOrderWithUnpublishedEvent(100); 
+                var orders = await unitOfWork.ScheduledOrders.GetOnTimeOrderWithUnpublishedEvent(5); 
                 if (orders is not null && orders.Any())
                 {
                     foreach (var order in orders) 
@@ -74,7 +74,7 @@ public class ScheduledOrderWorker : BackgroundService
                 await unitOfWork.RollbackTransactionAsync(stoppingToken);
             }
 
-            await Task.Delay(1000, stoppingToken);
+            await Task.Delay(500, stoppingToken);
         }
     }
 }

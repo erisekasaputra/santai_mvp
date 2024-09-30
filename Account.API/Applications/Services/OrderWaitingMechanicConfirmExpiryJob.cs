@@ -29,7 +29,7 @@ public class OrderWaitingMechanicConfirmExpiryJob : BackgroundService
             var isShutdown = scope.ServiceProvider.GetRequiredService<IOptionsMonitor<SafelyShutdownConfiguration>>(); 
             if (isShutdown.CurrentValue.Shutdown) 
             {
-                await Task.Delay(10000);
+                await Task.Delay(10000, stoppingToken);
                 continue;
             }
 

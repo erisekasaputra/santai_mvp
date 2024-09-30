@@ -13,8 +13,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Catalog.API.API;
 
 public static class CategoryAPI
-{
-    const int _cacheExpiry = 10;
+{ 
     public static IEndpointRouteBuilder CategoryRouter(this IEndpointRouteBuilder route, string groupName)
     {
         var app = route.MapGroup(groupName);

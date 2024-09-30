@@ -153,10 +153,15 @@ public class FleetRepository : IFleetRepository
 
         var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
 
-        var items = await query.Skip((pageNumber - 1) * pageSize)
+        var items = await query
+            .Where(x => x.UserId == userId) // Apply the filter first
+            .OrderBy(x => x.UserId)         // Apply OrderBy after Where
+            .ThenBy(x => x.StaffId)
+            .ThenBy(x => x.Brand)
+            .ThenBy(x => x.Model)
+            .Skip((pageNumber - 1) * pageSize)  // Pagination applied after filtering and ordering
             .Take(pageSize)
-            .AsNoTracking() 
-            .Where(x => x.UserId == userId)
+            .AsNoTracking() // AsNoTracking can be applied after pagination and sorting
             .ToListAsync();
 
         return (totalCount, totalPages, items);

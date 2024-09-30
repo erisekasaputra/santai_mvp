@@ -1,6 +1,4 @@
-﻿using Account.Domain.Aggregates.BusinessLicenseAggregate;
-using Account.Domain.Aggregates.UserAggregate;
-using Account.Domain.Enumerations;
+﻿using Account.Domain.Aggregates.BusinessLicenseAggregate; 
 using Microsoft.EntityFrameworkCore;
 
 namespace Account.Infrastructure.Repositories;

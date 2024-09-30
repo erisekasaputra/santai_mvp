@@ -10,9 +10,12 @@ public class ScheduledOrderEntityConfiguration : IEntityTypeConfiguration<Schedu
     { 
         builder.HasIndex(e => e.OrderId).IsUnique();
 
+        builder.HasIndex(e => e.ScheduledAt); 
+
         builder.Property(o => o.ScheduledAt)
           .IsRequired()
           .HasColumnType("datetime2");
+
 
         builder.Ignore(e => e.DomainEvents);
         builder.Ignore(e => e.EntityStateAction);
