@@ -7,36 +7,40 @@ builder.Services.AddSignalR();
 
 var app = builder.Build(); 
 
-var mechanic3 = new HubConnectionBuilder()
-    .WithUrl("https://account.santaitechnology-app.com/location", options =>
+var connection = new HubConnectionBuilder()
+    .WithUrl("wss://notification.santaitechnology-app.com/v1/ReceiveOrderStatusUpdate", options =>
     {
-        options.Headers["Authorization"] = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5NmFkNTliZi0yNGY0LTRkY2EtODFiNy00ZTBiNjI1OWFhMWQiLCJ1bmlxdWVfbmFtZSI6Iis2Mjg1NzkxMzg3NTUxIiwiaHR0cDovL3NjaGVtYXMueG1sc29hcC5vcmcvd3MvMjAwNS8wNS9pZGVudGl0eS9jbGFpbXMvbW9iaWxlcGhvbmUiOiIrNjI4NTc5MTM4NzU1MSIsInVzZXJfdHlwZSI6Ik1lY2hhbmljVXNlciIsInJvbGUiOiJNZWNoYW5pY1VzZXIiLCJuYmYiOjE3MjY0MDE2NDYsImV4cCI6MTcyNjQwNTI0NiwiaWF0IjoxNzI2NDAxNjQ2LCJpc3MiOiJpZGVudGl0eS5zYW50YWltdnAuY29tIiwiYXVkIjoic2FudGFpbXZwLmNvbSJ9.9w4Wk7mvPPfr8_hAtuFJRJmVkJH7mA16KTC8YINnazc";
-    }).Build();
+        options.Headers.Add("Authorization", "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJkMTdkNGVmOC1hZTMyLTQ5ODEtYjkyZS1mZTA4ODYxMDU4N2UiLCJlbWFpbCI6ImVyaXNla2FzYXB1dHJhMjgyMDAwQGdtYWlsLmNvbSIsInVuaXF1ZV9uYW1lIjoiKzYyODU3OTEzODc1NTgiLCJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9tb2JpbGVwaG9uZSI6Iis2Mjg1NzkxMzg3NTU4Iiwicm9sZSI6IkFkbWluaXN0cmF0b3IiLCJ1c2VyX3R5cGUiOiJBZG1pbmlzdHJhdG9yIiwibmJmIjoxNzI3ODEwNTg3LCJleHAiOjE3Mjc4MTQxODcsImlhdCI6MTcyNzgxMDU4NywiaXNzIjoic2FudGFpdGVjaG5vbG9neS1hcGkuY29tIiwiYXVkIjoic2FudGFpdGVjaG5vbG9neS1hcGkuY29tIn0.2-6t3kDNEbAaTVuIxHNgYDoVCA1N8VAqOuMX1hJk9Xo");
+        options.Headers.Add("x-api-key", "udIfHWsDMN26rglBkGqa9jCuQysIkUn2RqB3eEL1");
+        options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
+    })
+    .WithAutomaticReconnect()
+    .Build();
+
+connection.On<string, string, string, string, string, string, string>("ReceiveOrderStatusUpdate",
+    (orderId, buyerId, buyerName, mechanicId, mechanicName, orderStatus, actionUrl) =>
+    {
+        Console.WriteLine("Order Status Updated:");
+        Console.WriteLine($"Order ID: {orderId}");
+        Console.WriteLine($"Buyer ID: {buyerId}");
+        Console.WriteLine($"Buyer Name: {buyerName}");
+        Console.WriteLine($"Mechanic ID: {mechanicId}");
+        Console.WriteLine($"Mechanic Name: {mechanicName}");
+        Console.WriteLine($"Order Status: {orderStatus}");
+        Console.WriteLine($"Action URL: {actionUrl}");
+    });
 
 try
 { 
-    await mechanic3.StartAsync();
+    await connection.StartAsync();
+    Console.WriteLine("SignalR client connected."); 
+    Console.WriteLine("Listening for events. Press any key to exit.");
+    Console.ReadKey();
 }
 catch(Exception ex)
-{
-    Console.WriteLine("Error happen");
+{ 
     Console.WriteLine(ex.Message);
-}
- 
-
-
-await Task.Run( async() =>
-{
-    while (true)
-    {
-        //await mechanic3.SendAsync("UpdateLocation", -8.143145, 112.2096);
-
-        //Console.WriteLine("Location Sent from Mechanic 1");
-
-        //await Task.Delay(1000);
-    }
-});
- 
-
+    Console.ReadKey();
+} 
 app.Run(); 
 

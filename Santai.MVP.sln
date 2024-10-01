@@ -21,13 +21,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		docker-compose-account.yml = docker-compose-account.yml
 		docker-compose-catalog.yml = docker-compose-catalog.yml
+		docker-compose-development-service.yml = docker-compose-development-service.yml
 		docker-compose-filehub.yml = docker-compose-filehub.yml
 		docker-compose-identity.yml = docker-compose-identity.yml
 		docker-compose-master.yml = docker-compose-master.yml
 		docker-compose-notification.yml = docker-compose-notification.yml
 		docker-compose-ordering.yml = docker-compose-ordering.yml
 		docker-compose-search.yml = docker-compose-search.yml
-		docker-compose-development-service.yml = docker-compose-development-service.yml
 		policy.json = policy.json
 		secret.bat = secret.bat
 	EndProjectSection
@@ -71,6 +71,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Notification.Worker", "Notification.Worker\Notification.Worker.csproj", "{564DC712-90A9-41B7-B5F0-1E1395BC37A2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Ordering", "Ordering", "{F037CEED-6056-4DDD-A8F7-996EFC0ED143}"
+	ProjectSection(SolutionItems) = preProject
+		Notification.Worker\Program.cs = Notification.Worker\Program.cs
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ordering.Domain", "Ordering.Domain\Ordering.Domain.csproj", "{58DABCD6-928D-4A06-9D36-E9568E46165F}"
 EndProject

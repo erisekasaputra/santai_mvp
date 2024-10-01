@@ -1,4 +1,5 @@
-using Core.Extensions;  
+using Core.Extensions;
+using Microsoft.AspNetCore.Http.Connections;
 using Notification.Worker.Extensions;
 using Notification.Worker.Infrastructure;
 using Notification.Worker.Services; 
@@ -32,7 +33,7 @@ app.UseRouting();
 app.UseCors("AllowAllOrigins");
 app.MapHub<ActivityHub>("/notification", options =>
 { 
-    options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
+    options.Transports = HttpTransportType.WebSockets;
 });
 app.MapHealthChecks("/health");
 app.Run();
