@@ -5,6 +5,7 @@ using Account.API.Extensions;
 using Account.Infrastructure;
 using Core.Extensions;
 using Core.Middlewares;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -68,7 +69,10 @@ app.MapMechanicUserApi();
 app.MapFleetApi();
 app.MapControllers();
 
-app.MapHub<LocationHub>("/location");
+app.MapHub<LocationHub>("/location", options =>
+{
+    options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
+});
 app.MapHealthChecks("/health");
 
 app.Run();

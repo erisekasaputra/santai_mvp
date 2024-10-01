@@ -721,6 +721,8 @@ namespace Ordering.Infrastructure.Migrations
                     b.HasIndex("OrderId")
                         .IsUnique();
 
+                    b.HasIndex("ScheduledAt");
+
                     b.ToTable("ScheduledOrders");
                 });
 

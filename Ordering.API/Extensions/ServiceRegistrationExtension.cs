@@ -45,7 +45,7 @@ public static class ServiceRegistrationExtension
 
         builder.Services.AddHttpClient<IAccountServiceAPI, AccountServiceAPI>(client =>
         {
-            client.Timeout = TimeSpan.FromSeconds(5);
+            client.Timeout = TimeSpan.FromSeconds(30);
             client.BaseAddress = new Uri(accountOptions.Host ?? throw new Exception("Account service client host is not set"));
         })
         .AddPolicyHandler(retryPolicy).AddHttpMessageHandler<TokenJwtHandler>();
@@ -55,7 +55,7 @@ public static class ServiceRegistrationExtension
 
         builder.Services.AddHttpClient<ICatalogServiceAPI, CatalogServiceAPI>(client =>
         {
-            client.Timeout = TimeSpan.FromSeconds(10);
+            client.Timeout = TimeSpan.FromSeconds(30);
             client.BaseAddress = new Uri(catalogOptions?.Host ?? throw new Exception("Catalog service client host is not set"));
         })
         .AddPolicyHandler(retryPolicy).AddHttpMessageHandler<TokenJwtHandler>();
@@ -64,7 +64,7 @@ public static class ServiceRegistrationExtension
 
         builder.Services.AddHttpClient<IMasterDataServiceAPI, MasterDataServiceAPI>(client =>
         {
-            client.Timeout = TimeSpan.FromSeconds(5);
+            client.Timeout = TimeSpan.FromSeconds(20);
             client.BaseAddress = new Uri(masterOptions.Host ?? throw new Exception("Master data service client host is not set"));
         })
        .AddPolicyHandler(retryPolicy);

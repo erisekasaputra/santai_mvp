@@ -30,6 +30,9 @@ builder.Services.AddHealthChecks();
 var app = builder.Build(); 
 app.UseRouting();
 app.UseCors("AllowAllOrigins");
-app.MapHub<ActivityHub>("/notification");
+app.MapHub<ActivityHub>("/notification", options =>
+{ 
+    options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
+});
 app.MapHealthChecks("/health");
 app.Run();

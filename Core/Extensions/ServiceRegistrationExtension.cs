@@ -240,7 +240,7 @@ public static class ServiceRegistrationExtension
             };
 
             if (builder.Environment.IsProduction() || builder.Environment.IsStaging())
-            {
+            { 
                 configurations.SslHost = options.Host.Split(':')[0];
                 configurations.Ssl = true;
             }
