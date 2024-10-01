@@ -70,10 +70,7 @@ app.MapMechanicUserApi();
 app.MapFleetApi();
 app.MapControllers();
 
-app.MapHub<LocationHub>("/location", options =>
-{
-    options.Transports = HttpTransportType.WebSockets;
-});
+app.MapHub<LocationHub>("/location");
 app.MapHealthChecks("/health");
 
 app.Run();
