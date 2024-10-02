@@ -25,7 +25,7 @@ services:
       - SenangPay__Host=https://app.senangpay.my/payment
       - SenangPay__MerchantId=741172360948037
       - SenangPay__SecretKey=6936-735
-      - AccountService__Host=http://AccountServiceNLB-5a6be46a8a65f6b0.elb.ap-southeast-1.amazonaws.com:80
+      - AccountService__Host=http://internal-AccountServiceLoadBalancer-783549570.ap-southeast-1.elb.amazonaws.com:80
       - CatalogService__Host=http://internal-CatalogServiceLoadBalancer-1634552484.ap-southeast-1.elb.amazonaws.com:80
       - MasterDataService__Host=http://internal-MasterDataLoadBalancer-188755112.ap-southeast-1.elb.amazonaws.com:80
 

@@ -30,8 +30,7 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
             var entity = await _unitOfWork.BaseUsers.GetBusinessUserByIdAsync(request.Id);
             if (entity is null)
             {
-                return Result.Failure($"Business user not found", ResponseStatus.NotFound)
-                    .WithError(new("BusinessUser.Id", "User not found"));
+                return Result.Failure($"Business user not found", ResponseStatus.NotFound);
             } 
 
             var addressRequest = request.Address;
@@ -63,7 +62,7 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
 
                 if (conflict.HashedPhoneNumber == hashedPhoneNumber || conflict.NewHashedPhoneNumber == hashedPhoneNumber)
                 {
-                    errorDetails.Add(new ("Staff.PhoneNumber", "Phone number already registered"));
+                    errorDetails.Add(new ("PhoneNumber", "Phone number already registered", string.Empty, "PhoneNumberValidator", "Error"));
                 }
 
                 var message = errorDetails.Count switch

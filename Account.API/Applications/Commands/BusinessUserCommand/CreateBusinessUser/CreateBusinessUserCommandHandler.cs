@@ -17,6 +17,7 @@ using Core.Services.Interfaces;
 using Core.Exceptions;
 using Account.API.Extensions;
 using Core.CustomMessages;
+using System.ComponentModel.DataAnnotations;
 
 namespace Account.API.Applications.Commands.BusinessUserCommand.CreateBusinessUser;
 
@@ -95,13 +96,15 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
                 if (referralProgram is null)
                 {
                     // if it is not found the rollback transaction and give the error message related the error items
-                    errors.Add(new ErrorDetail("BusinessUser.ReferralCode", "Referral code not found"));
+                    errors.Add(
+                        new ErrorDetail("ReferralCode", "Referral code not found", request.ReferralCode, "ReferralCodeValidator", "NotFound"));
                 }
 
                 // check is referral program is still valid 
                 if (referralProgram is not null && referralProgram.ValidDateUtc < DateTime.UtcNow)
                 {
-                    errors.Add(new ErrorDetail("BusinessUser.ReferralCode", "Referral code expired"));
+                    errors.Add(
+                        new ErrorDetail("ReferralCode", "Referral code has expired", request.ReferralCode, "ReferralCodeValidator", "Expired"));
                 }
             }
               
@@ -181,8 +184,8 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
                     if (newStaff is null && errorParameter is not null)
                     {
-                        errorStaffs.Add(new($"Staff[{indexStaff}].{errorParameter}", 
-                            errorMessage ?? string.Empty));
+                        errorStaffs.Add(new($"Staff[{indexStaff}].{errorParameter}",
+                            errorMessage ?? string.Empty, string.Empty, $"{errorParameter}Validator", "Error"));
                     }
 
                     indexStaff++;
@@ -216,7 +219,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
                     if (newBusinessLicense is null && errorParameter is not null)
                     {
-                        errorLicenses.Add(new($"BusinessLicense[{indexRequestLicense}].{errorParameter}", errorMessage ?? string.Empty));
+                        errorLicenses.Add(new($"BusinessLicense[{indexRequestLicense}].{errorParameter}", errorMessage ?? string.Empty, string.Empty, $"{errorParameter}Validator", "Error"));
                     }
 
                     indexRequestLicense++;
@@ -235,9 +238,8 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
                     ResponseStatus.BadRequest).WithErrors(errors), cancellationToken);
             }
 
-            await _unitOfWork.BaseUsers.CreateAsync(user);
-
-            await _unitOfWork.CommitTransactionAsync(cancellationToken);
+            await _unitOfWork.BaseUsers.CreateAsync(user); 
+            await _unitOfWork.CommitTransactionAsync(cancellationToken); 
 
             var result = ToBusinessUserResponseDto(user, request);
             return Result.Success(result, ResponseStatus.Created); 
@@ -382,13 +384,13 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
             var encryptedAddressLine3 = await EncryptNullableAsync(staff.Address.AddressLine3);
 
             var address = new Address(
-                     encryptedAddressLine1,
-                     encryptedAddressLine2,
-                     encryptedAddressLine3,
-                     staff.Address.City,
-                     staff.Address.State,
-                     staff.Address.PostalCode,
-                     staff.Address.Country);
+                encryptedAddressLine1,
+                encryptedAddressLine2,
+                encryptedAddressLine3,
+                staff.Address.City,
+                staff.Address.State,
+                staff.Address.PostalCode,
+                staff.Address.Country);
 
             newStaffs.Add(new Staff(
                 businessUserId,
@@ -411,10 +413,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
     {
         var newBusinessLicenses = new List<BusinessLicense>();
 
-        if (businessLicenses is null)
-        {
-            return null;
-        }
+        if (businessLicenses is null) return null; 
 
         foreach (var businessLicense in businessLicenses)
         {
@@ -434,8 +433,7 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
     private async Task<Result> RollbackAndReturnFailureAsync(Result result, CancellationToken cancellationToken)
     {
-        await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-
+        await _unitOfWork.RollbackTransactionAsync(cancellationToken); 
         return result;
     }
 
@@ -450,13 +448,12 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
         int indexRequestLicense = 0;
         foreach (var businessLicense in licenseConflicts)
         {
-            var number = businessLicense.HashedLicenseNumber;
-            var errorParameter = nameof(businessLicense.HashedLicenseNumber);
+            var number = businessLicense.HashedLicenseNumber; 
 
             if (cleanedRequest.Contains(number))
             {
-                errors.Add(new ($"BusinessLicense[{indexRequestLicense}].{errorParameter}",
-                    "Can not have multiple license numbers with accepted status"));
+                errors.Add(new ($"BusinessLicense[{indexRequestLicense}].LicenseNumber",
+                    "Can not have multiple license numbers with accepted status", string.Empty, $"LicenseNumberValidator", "Error"));
             } 
             indexRequestLicense++;
         }
@@ -472,8 +469,8 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
         if (user.HashedPhoneNumber == phoneNumber || user.NewHashedPhoneNumber == phoneNumber)
         {
-            conflicts.Add(new ($"BusinessUser.{nameof(user.HashedPhoneNumber)}", 
-                "User phone number already registered"));
+            conflicts.Add(new ($"PhoneNumber", 
+                "User phone number already registered", string.Empty, "PhoneNumberValidator", "Error"));
         } 
 
         return conflicts;
@@ -490,14 +487,15 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
 
                 if (conflicts.Any(x => (x.HashedEmail == staff.HashedEmail || x.NewHashedEmail == staff.HashedEmail) && !string.IsNullOrWhiteSpace(x.HashedEmail)))
                 {
-                    errorDetails.Add(new ErrorDetail($"Staff[{index}].{nameof(staff.HashedEmail)}",
-                        "Email already registered"));
+                    errorDetails.Add(
+                        new ErrorDetail($"Staff[{index}].Email",
+                        "Email already registered", string.Empty, "EmailValidator", "Error"));
                 }
 
                 if (conflicts.Any(x => x.HashedPhoneNumber == staff.HashedPhoneNumber || x.NewHashedPhoneNumber == staff.HashedPhoneNumber))
                 {
-                    errorDetails.Add(new ErrorDetail($"Staff[{index}].{nameof(staff.HashedPhoneNumber)}",
-                        "Phone number already registered"));
+                    errorDetails.Add(new ErrorDetail($"Staff[{index}].PhoneNumber",
+                        "Phone number already registered", string.Empty, "PhoneNumberValidator", "Error"));
                 }
 
                 return errorDetails;
@@ -522,16 +520,6 @@ public class CreateBusinessUserCommandHandler : IRequestHandler<CreateBusinessUs
     private async Task<string> HashAsync(string plainText)
     {
         return await _hashService.Hash(plainText);
-    }
-
-    private async Task<string?> HashNullableAsync(string? value)
-    {
-        if (string.IsNullOrWhiteSpace(value))
-        {
-            return null;
-        }
-
-        return await _hashService.Hash(value);
-    }
+    } 
 }
 

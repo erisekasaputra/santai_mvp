@@ -37,8 +37,7 @@ public class UpdateMechanicUserByUserIdCommandHandler : IRequestHandler<UpdateMe
 
             if (mechanicUser is null)
             {
-                return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound)
-                     .WithError(new("MechanicUser.Id", "Mechanic user not found"));
+                return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound);
             }  
 
             var address = new Address(

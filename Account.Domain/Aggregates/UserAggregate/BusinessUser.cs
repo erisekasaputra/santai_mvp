@@ -83,7 +83,7 @@ public class BusinessUser : BaseUser
 
         if (licenses is not null)
         {
-            return (null, "BusinessLicense.LicenseNumber", $"Business license already registered");
+            return (null, "LicenseNumber", $"Business license already registered");
         } 
 
         var license = new BusinessLicense(
@@ -108,7 +108,7 @@ public class BusinessUser : BaseUser
 
         if (licenses is not null)
         {
-            return (null, "BusinessLicense.LicenseNumber", $"Business license already registered");
+            return (null, "LicenseNumber", $"Business license already registered");
         }
 
         var license = new BusinessLicense(
@@ -139,7 +139,7 @@ public class BusinessUser : BaseUser
 
         if (Staffs.Any(x => x.HashedPhoneNumber == hashedPhoneNumber || x.NewHashedPhoneNumber == hashedPhoneNumber))
         {
-            return (null, "Staff.PhoneNumber", $"Phone number is already registered"); 
+            return (null, "PhoneNumber", $"Phone number is already registered"); 
         }  
         
         var staff = new Staff(
@@ -166,12 +166,12 @@ public class BusinessUser : BaseUser
 
         if (Staffs.Any(x => x.HashedPhoneNumber == staff.HashedPhoneNumber || x.NewHashedPhoneNumber == staff.HashedPhoneNumber))
         {
-            return (null, "Staff.PhoneNumber", $"Phone number is already registered");
+            return (null, "PhoneNumber", $"Phone number is already registered");
         }
 
         if (Staffs.Any(x => x.HashedEmail == staff.HashedEmail || x.NewHashedEmail == staff.HashedEmail))
         {
-            return (null, "Staff.Email", "Email is already registered");
+            return (null, "Email", "Email is already registered");
         }
 
         Staffs.Add(staff); 

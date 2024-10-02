@@ -23,8 +23,7 @@ public class RemoveStaffByUserIdCommandHandler(IUnitOfWork unitOfWork, Applicati
             if (staff is null)
             {
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                return Result.Failure($"Staff not found", ResponseStatus.NotFound)
-                    .WithError(new("Staff.Id", "User not found"));
+                return Result.Failure($"Staff not found", ResponseStatus.NotFound); 
             }
 
             var fleets = await _unitOfWork.Fleets.GetByStaffIdAsync(staff.Id); 

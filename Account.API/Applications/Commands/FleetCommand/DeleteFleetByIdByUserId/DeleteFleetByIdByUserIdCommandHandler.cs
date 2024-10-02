@@ -41,8 +41,7 @@ public class DeleteFleetByIdByUserIdCommandHandler : IRequestHandler<DeleteFleet
 
             if (fleet is null)
             {
-                return Result.Failure($"Fleet not found", ResponseStatus.NotFound)
-                    .WithError(new("Fleet.Id", "Fleet not found")); ;
+                return Result.Failure($"Fleet not found", ResponseStatus.NotFound);
             } 
 
             _unitOfWork.Fleets.Delete(fleet);

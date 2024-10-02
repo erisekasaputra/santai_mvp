@@ -28,8 +28,7 @@ public class UpdateUserPhoneNumberByUserIdCommandHandler(
             
             if (user is null)
             {
-                return Result.Failure($"User not found", ResponseStatus.NotFound)
-                    .WithError(new("User.Id", "User not found"));
+                return Result.Failure($"User not found", ResponseStatus.NotFound);
             }
 
             var hashedPhoneNumber = await _hashClient.Hash(request.PhoneNumber);
@@ -40,8 +39,7 @@ public class UpdateUserPhoneNumberByUserIdCommandHandler(
             
             if (conflict)
             {
-                return Result.Failure($"Phone number already registered", ResponseStatus.Conflict)
-                    .WithError(new ErrorDetail("Staff.PhoneNumber", "Phone number already registered"));
+                return Result.Failure($"Phone number already registered", ResponseStatus.Conflict);
             }
 
             user.UpdatePhoneNumber(hashedPhoneNumber, encryptedPhoneNumber);

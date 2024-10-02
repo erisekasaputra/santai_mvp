@@ -103,16 +103,14 @@ public class CreateRegularUserCommandHandler(
                 if (referralProgram is null)
                 {
                     return await RollbackAndReturnFailureAsync(
-                        Result.Failure("Referral code is invalid", ResponseStatus.BadRequest)
-                            .WithError(new("RegularUser.ReferralCode", "Referral code is invalid")), cancellationToken);
+                        Result.Failure("Referral code is invalid", ResponseStatus.BadRequest), cancellationToken);
                 }
 
                 // check is referral program is still valid 
                 if (referralProgram.ValidDateUtc < DateTime.UtcNow)
                 {
                     return await RollbackAndReturnFailureAsync(
-                        Result.Failure("Referral code is expired", ResponseStatus.BadRequest)
-                            .WithError(new("RegularUser.ReferralCode", "Referral code is expired")), cancellationToken);
+                        Result.Failure("Referral code is expired", ResponseStatus.BadRequest), cancellationToken);
                 }
 
                 // creating the referred programs
@@ -228,15 +226,15 @@ public class CreateRegularUserCommandHandler(
         {
             if (user.HashedEmail == hashedEmail || user.NewHashedEmail == hashedEmail)
             {
-                conflictIdentities.Add(new ($"RegularUser.{nameof(user.HashedEmail)}", 
-                    "Email already registered"));
+                conflictIdentities.Add(new ($"Email", 
+                    "Email already registered", string.Empty, "EmailValidator", "Error"));
             } 
         }
 
         if (user.HashedPhoneNumber == hashedPhoneNumber || user.NewHashedPhoneNumber == hashedPhoneNumber)
         {
-            conflictIdentities.Add(new ($"RegularUser.{nameof(user.HashedPhoneNumber)}", 
-                "Phone number already registered"));
+            conflictIdentities.Add(new ($"PhoneNumber", 
+                "Phone number already registered", string.Empty, "PhoneNumberValidator", "Error"));
         } 
 
         var message = conflictIdentities.Count == 1
@@ -256,15 +254,7 @@ public class CreateRegularUserCommandHandler(
     private async Task<string> EncryptAsync(string value)
     {
         return await _kmsClient.EncryptAsync(value);
-    }
-
-    private async Task<string?> DecryptNullableAsync(string? value)
-    {
-        if (value == null) return null;
-
-        return await _kmsClient.DecryptAsync(value);
-    }
-
+    } 
     private async Task<string> DecryptAsync(string value)
     {
         return await _kmsClient.DecryptAsync(value);

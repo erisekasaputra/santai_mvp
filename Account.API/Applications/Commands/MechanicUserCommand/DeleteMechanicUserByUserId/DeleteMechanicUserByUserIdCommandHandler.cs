@@ -37,8 +37,7 @@ public class DeleteMechanicUserByUserIdCommandHandler : IRequestHandler<DeleteMe
             if (mechanicUser is null)
             {
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound)
-                     .WithError(new("MechanicUser.Id", "Mechanic user not found"));
+                return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound);
             }
 
             mechanicUser.Delete(); 

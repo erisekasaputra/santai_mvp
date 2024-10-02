@@ -21,8 +21,7 @@ public class ResetPhoneNumberByStaffIdCommandHandler(
             var user = await _unitOfWork.Staffs.GetByIdAsync(request.Id);
             if (user is null)
             {
-                return Result.Failure($"User not found", ResponseStatus.NotFound)
-                    .WithError(new("User.Id", "User not found"));
+                return Result.Failure($"User not found", ResponseStatus.NotFound);
             }
               
             user.ResetPhoneNumber();

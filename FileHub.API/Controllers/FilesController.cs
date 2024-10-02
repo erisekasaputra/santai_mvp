@@ -36,16 +36,12 @@ public class FilesController
     public async Task<IResult> SavePrivateImages(IFormFile file)
     {
         try
-        {
-            if (file is null)
-            {
-                return await Task.FromResult(TypedResults.BadRequest("Invalid request parameter"));
-            }
-
+        { 
             if (!FileValidation.IsValidImage(file))
             {
                 return await Task.FromResult(
-                    TypedResults.BadRequest("Invalid file type. Only image files are allowed."));
+                    TypedResults.BadRequest(
+                        Result.Failure("Invalid file type. Only image files are allowed.", ResponseStatus.BadRequest)));
             }
 
             if (!await _storageService.IsBucketPrivateExistsAsync())
@@ -60,10 +56,10 @@ public class FilesController
 
             await _storageService.UploadFilePrivateAsync(objectName, file);
 
-            return TypedResults.Created(string.Empty, new
+            return TypedResults.Created(string.Empty, Result.Success(new
             {
                 ResourceName = newFileName
-            });
+            }, ResponseStatus.Created));
         }
         catch (MinioException ex)
         {
@@ -82,13 +78,15 @@ public class FilesController
             if (file is null)
             {
                 return await Task.FromResult(
-                    TypedResults.BadRequest("Invalid request parameter"));
+                    TypedResults.BadRequest(
+                        Result.Failure("Invalid request parameter", ResponseStatus.BadRequest)));
             }
 
             if (!FileValidation.IsValidImage(file))
             {
                 return await Task.FromResult(
-                    TypedResults.BadRequest("Invalid file type. Only image files are allowed."));
+                    TypedResults.BadRequest(
+                        Result.Failure("Invalid file type. Only image files are allowed.", ResponseStatus.BadRequest)));
             }
 
             if (!await _storageService.IsBucketPublicExistsAsync())
@@ -102,10 +100,10 @@ public class FilesController
 
             await _storageService.UploadFilePublicAsync(objectName, file);
 
-            return TypedResults.Created(string.Empty, new
+            return TypedResults.Created(string.Empty, Result.Success(new
             {
                 ResourceName = newFileName
-            });
+            }, ResponseStatus.Created));
         }
         catch (MinioException ex)
         {
@@ -134,16 +132,14 @@ public class FilesController
             if (string.IsNullOrEmpty(resourceName))
             {
                 return TypedResults.BadRequest(
-                    Result.Failure("Data not found", ResponseStatus.BadRequest)
-                    .WithError(new("ResourceName", "Object url must not empty")));
+                    Result.Failure("Object url must not be empty", ResponseStatus.BadRequest));
             }
 
             var bytes = await _storageService.GetFilePrivateAsync(objectName); 
             if (bytes is null)
             {
                 return TypedResults.NotFound(
-                    Result.Failure("Data not found", ResponseStatus.NotFound)
-                    .WithError(new("ResourceName", "Object resource not found")));
+                    Result.Failure("We could not find your file", ResponseStatus.NotFound));
             }
 
             await _cacheService.SetAsync(objectName, bytes, TimeSpan.FromMinutes(5)); 
@@ -161,10 +157,11 @@ public class FilesController
     {
         try
         {
-            return TypedResults.Ok(new 
-            { 
-                Url = await _storageService.GeneratePublicObjectUrl(UrlBuilder.Build(ObjectPrefix.ImageResource, string.Empty))
-            });  
+            return TypedResults.Ok(
+                Result.Success(new 
+                {
+                    Url = await _storageService.GeneratePublicObjectUrl(UrlBuilder.Build(ObjectPrefix.ImageResource, string.Empty))
+                }, ResponseStatus.Ok));  
         }
         catch (Exception ex)
         {

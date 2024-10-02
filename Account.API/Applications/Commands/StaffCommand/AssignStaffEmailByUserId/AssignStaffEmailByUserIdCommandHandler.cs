@@ -28,8 +28,7 @@ public class AssignStaffEmailByUserIdCommandHandler(
 
             if (staff is null)
             {
-                return Result.Failure($"Staff not found", ResponseStatus.NotFound)
-                    .WithError(new("Staff.Id", "User not found"));
+                return Result.Failure($"Staff not found", ResponseStatus.NotFound);
             }
 
             var hashedEmail = await HashAsync(request.Email); 
@@ -38,8 +37,7 @@ public class AssignStaffEmailByUserIdCommandHandler(
             var conflict = await _unitOfWork.Staffs.GetAnyByIdentitiesExcludingIdsAsNoTrackingAsync((IdentityParameter.Email, [(staff.Id, hashedEmail)]));
             if (conflict)
             {
-                return Result.Failure($"Email already registered", ResponseStatus.Conflict)
-                    .WithError(new ErrorDetail("Staff.Email", "Email already registered"));
+                return Result.Failure($"Email already registered", ResponseStatus.Conflict);
             }
 
             staff.UpdateEmail(hashedEmail, encryptedEmail);

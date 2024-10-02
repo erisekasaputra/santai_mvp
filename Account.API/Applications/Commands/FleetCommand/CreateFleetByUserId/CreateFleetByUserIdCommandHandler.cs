@@ -60,8 +60,8 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
 
             if (timeZoneId is null)
             {
-                return await RollbackAndReturnFailureAsync(Result.Failure("User not found", ResponseStatus.NotFound)
-                    .WithError(new("User.Id", "User user not found")), cancellationToken);
+                return await RollbackAndReturnFailureAsync(
+                    Result.Failure("User not found", ResponseStatus.NotFound), cancellationToken);
             }
 
             var conflict = await _unitOfWork.Fleets.GetByIdentityAsync(
@@ -73,17 +73,17 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
             {
                 if (conflict.HashedChassisNumber == hashedChassisNumber)
                 {
-                    errors.Add(new("Fleet.ChassisNumber", "Chassis number already registered"));
+                    errors.Add(new("ChassisNumber", "Chassis number already registered", request.ChassisNumber, "ChassisNumberValidator", "Error"));
                 }
 
                 if (conflict.HashedEngineNumber == hashedEngineNumber)
                 {
-                    errors.Add(new("Fleet.EngineNumber", "Engine number already registered"));
+                    errors.Add(new("EngineNumber", "Engine number already registered", request.EngineNumber, "EngineNumberValidator", "Error"));
                 }
 
                 if (conflict.HashedRegistrationNumber == hashedRegistrationNumber)
                 {
-                    errors.Add(new("Fleet.RegistrationNumber", "Registration number already registered"));
+                    errors.Add(new("RegistrationNumber", "Registration number already registered", request.RegistrationNumber, "RegistrationNumberValidator", "Error"));
                 }
             }
 
@@ -125,15 +125,13 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
             if (userType is null)
             {
                 return await RollbackAndReturnFailureAsync(
-                    Result.Failure("User not found", ResponseStatus.NotFound)
-                        .WithError(new("User.Id", "User not found")), cancellationToken);
+                    Result.Failure("User not found", ResponseStatus.NotFound), cancellationToken);
             }
 
             if (userType == UserType.MechanicUser)
             {
                 return await RollbackAndReturnFailureAsync(
-                    Result.Failure("Can not create fleet to mechanic user", ResponseStatus.BadRequest)
-                        .WithError(new("User.Id", "User type of mechanic user")), cancellationToken);
+                    Result.Failure("Can not create fleet to mechanic user", ResponseStatus.BadRequest), cancellationToken);
             }
 
 
@@ -184,17 +182,7 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
         await _unitOfWork.RollbackTransactionAsync(cancellationToken);
 
         return result;
-    }
-
-
-    private async Task<string?> EncryptNullableAsync(string? plaintext)
-    {
-        if (string.IsNullOrEmpty(plaintext))
-            return null;
-
-        return await _kmsClient.EncryptAsync(plaintext);
-    }
-
+    } 
     private async Task<string> EncryptAsync(string plaintext)
     {
         return await _kmsClient.EncryptAsync(plaintext);

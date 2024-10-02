@@ -20,22 +20,19 @@ public class ConfirmBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork
 
             if (license is null)
             {
-                return Result.Failure($"Business license not found", ResponseStatus.NotFound)
-                    .WithError(new ("BusinessLicense.LicenseNumber", "Business license not found"));
+                return Result.Failure($"Business license not found", ResponseStatus.NotFound);
             }
 
             var acceptedLicense = await _unitOfWork.BusinessLicenses.GetAcceptedStatusByLicenseNumberAsNoTrackingAsync(license.HashedLicenseNumber);
 
             if (acceptedLicense is not null && acceptedLicense.Id == request.BusinessLicenseId)
             {
-                return Result.Failure($"Business license '{acceptedLicense.Id}' already confirmed", ResponseStatus.Conflict)
-                    .WithError(new ("BusinessLicense.LicenseNumber", "Business license is confirmed"));
+                return Result.Failure($"Business license already confirmed", ResponseStatus.Conflict);
             }
 
             if (acceptedLicense is not null)
             {
-                return Result.Failure($"Conflict business license", ResponseStatus.Conflict)
-                    .WithError(new("BusinessLicense.LicenseNumber", "Can not have multiple license number with 'Accepted' status"));
+                return Result.Failure("Can not have multiple license number with 'Accepted' status", ResponseStatus.Conflict);
             }
 
             license.VerifyDocument();

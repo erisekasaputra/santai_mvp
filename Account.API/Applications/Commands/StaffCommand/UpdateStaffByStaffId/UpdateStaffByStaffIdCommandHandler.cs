@@ -24,8 +24,7 @@ public class UpdateStaffByStaffIdCommandHandler(
             var staff = await _unitOfWork.Staffs.GetByBusinessUserIdAndStaffIdAsync(request.UserId, request.StaffId);
             if (staff is null)
             {
-                return Result.Failure($"Staff not found", ResponseStatus.NotFound)
-                    .WithError(new("Staff.Id", "User not found"));
+                return Result.Failure($"Staff not found", ResponseStatus.NotFound);
             }
 
 

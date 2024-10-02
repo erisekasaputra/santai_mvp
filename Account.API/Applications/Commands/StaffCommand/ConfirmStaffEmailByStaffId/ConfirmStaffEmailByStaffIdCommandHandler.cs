@@ -18,8 +18,7 @@ public class ConfirmStaffEmailByStaffIdCommandHandler(IUnitOfWork unitOfWork, Ap
             var staff = await _unitOfWork.Staffs.GetByIdAsync(request.StaffId);
             if (staff is null)
             {
-                return Result.Failure($"Staff not found", ResponseStatus.NotFound)
-                    .WithError(new("Staff.Id", "User not found"));
+                return Result.Failure($"Staff not found", ResponseStatus.NotFound);
             }
 
             staff.VerifyEmail();

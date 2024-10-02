@@ -23,15 +23,14 @@ public class SetOrderFleetPreServiceInspectionCommandHandler(
             if (order is null)
             {
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                return Result.Failure("Data not found", ResponseStatus.NotFound);
+                return Result.Failure("We could not find the order", ResponseStatus.NotFound);
             }
               
             var fleet = order.Fleets.FirstOrDefault(x => x.FleetId == request.FleetId); 
             if (fleet is null) 
             {
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                return Result.Failure("Data not found", ResponseStatus.NotFound)
-                    .WithError(new ($"Fleet.FleetId[0]", $"Fleet id {request.FleetId} not found"));
+                return Result.Failure("Fleet not found", ResponseStatus.NotFound);
             }
 
             foreach (var preServiceInspection in request.PreServiceInspections)

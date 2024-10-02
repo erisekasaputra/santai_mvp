@@ -35,8 +35,7 @@ public class RejectDrivingLicenseByUserIdCommandHandler : IRequestHandler<Reject
 
             if (drivingLicense is null)
             {
-                return Result.Failure($"Driving license not found", ResponseStatus.NotFound)
-                     .WithError(new("DrivingLicense.Id", "Driving license not found"));
+                return Result.Failure($"Driving license not found", ResponseStatus.NotFound);
             }
 
             drivingLicense.RejectDocument();

@@ -28,8 +28,7 @@ public class CreateBusinessLicenseByUserIdCommandHandler(
             var entity = await _unitOfWork.BaseUsers.GetAnyByIdAsync(request.BusinessUserId);
             if (entity is false)
             {
-                return Result.Failure($"Business user not found", ResponseStatus.NotFound)
-                    .WithError(new ("BusinessUser.Id", "Business user id not found"));
+                return Result.Failure($"We could not find you account", ResponseStatus.NotFound);
             }
 
             var hashedLicenseNumber = await _hashClient.Hash(request.LicenseNumber);
@@ -41,10 +40,11 @@ public class CreateBusinessLicenseByUserIdCommandHandler(
                 var errors = new List<ErrorDetail>();
                 if (conclict!.HashedLicenseNumber == hashedLicenseNumber)
                 {
-                    errors.Add(new ("BusinessLicense.LicenseNumber", "Can not have multiple license with 'Accepted' status"));
+                    errors.Add(new ("BusinessLicense", "Can not have multiple license with 'Accepted' status", request.LicenseNumber, "BusinessLicense", "Error"));
                 }
 
-                return Result.Failure("There is a conflict", ResponseStatus.BadRequest).WithErrors(errors);
+                return Result.Failure("There are conflicts", ResponseStatus.BadRequest)
+                    .WithErrors(errors);
             }
 
             var businessLicense = new BusinessLicense(

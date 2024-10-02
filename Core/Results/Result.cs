@@ -1,4 +1,6 @@
-﻿namespace Core.Results;
+﻿using Amazon.Runtime.Internal.Transform;
+
+namespace Core.Results;
 
 public class Result
 {
@@ -8,7 +10,7 @@ public class Result
     public ResponseStatus ResponseStatus { get; set; }
     public List<ErrorDetail> Errors { get; set; } = []; 
     public List<string>? Links { get; set; } = []; 
-
+    public object? Next { get; set; }
     public Result WithData(object? data)
     {
         Data = data;
@@ -57,6 +59,12 @@ public class Result
         }
 
         Errors.AddRange(errors);
+        return this;
+    }
+
+    public Result WithNext(object next)
+    {
+        Next = next;
         return this;
     }
 

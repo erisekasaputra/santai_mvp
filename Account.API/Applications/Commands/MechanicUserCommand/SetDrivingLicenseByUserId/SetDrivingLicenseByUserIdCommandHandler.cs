@@ -36,22 +36,19 @@ public class SetDrivingLicenseByUserIdCommandHandler : IRequestHandler<SetDrivin
 
             if (mechanicUser is null)
             {
-                return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound)
-                     .WithError(new("MechanicUser.Id", "Mechanic user not found"));
+                return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound);
             }  
 
             var accepted = await _unitOfWork.DrivingLicenses.GetAcceptedByUserIdAsync(request.UserId);
 
             if (accepted is not null && accepted.UserId == request.UserId)
             {
-                return Result.Failure($"Driving license already accepted", ResponseStatus.Conflict)
-                     .WithError(new("DrivingLicense.Id", "Conflict driving license"));
+                return Result.Failure($"Driving license already accepted", ResponseStatus.Conflict);
             }
 
             if (accepted is not null)
             {
-                return Result.Failure($"Can only have one 'Accepted' driving license for a user", ResponseStatus.Conflict)
-                     .WithError(new("DrivingLicense.Id", "Conflict driving license"));
+                return Result.Failure($"Can only have one 'Accepted' driving license for a user", ResponseStatus.Conflict);
             }
 
             var hashedLicenseNumber = await HashAsync(request.LicenseNumber);
@@ -60,9 +57,8 @@ public class SetDrivingLicenseByUserIdCommandHandler : IRequestHandler<SetDrivin
             var registeredToOtherUser = await _unitOfWork.DrivingLicenses.GetAnyByLicenseNumberExcludingUserIdAsync(request.UserId, hashedLicenseNumber);
             
             if (registeredToOtherUser)
-            { 
-                return Result.Failure($"Driving license number already used by other user", ResponseStatus.Conflict)
-                     .WithError(new("DrivingLicense.Id", "Driving license conflict"));
+            {
+                return Result.Failure($"Driving license number already used by other user", ResponseStatus.Conflict);
             }
 
             var drivingLicense = new DrivingLicense(
@@ -87,16 +83,7 @@ public class SetDrivingLicenseByUserIdCommandHandler : IRequestHandler<SetDrivin
             _service.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
-    }
-
-    private async Task<string?> EncryptNullableAsync(string? plaintext)
-    {
-        if (string.IsNullOrEmpty(plaintext))
-            return null;
-
-        return await _kmsClient.EncryptAsync(plaintext);
-    }
-
+    } 
     private async Task<string> EncryptAsync(string plaintext)
     {
         return await _kmsClient.EncryptAsync(plaintext);

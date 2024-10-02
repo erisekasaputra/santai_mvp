@@ -18,8 +18,7 @@ public class ConfirmStaffPhoneNumberByStaffIdCommandHandler(IUnitOfWork unitOfWo
             var staff = await _unitOfWork.Staffs.GetByIdAsync(request.StaffId);
             if (staff is null)
             {
-                return Result.Failure($"Staff not found", ResponseStatus.NotFound)
-                    .WithError(new("Staff.Id", "Staff not found"));
+                return Result.Failure($"Staff not found", ResponseStatus.NotFound);
             }
 
             staff.VerifyPhoneNumber();

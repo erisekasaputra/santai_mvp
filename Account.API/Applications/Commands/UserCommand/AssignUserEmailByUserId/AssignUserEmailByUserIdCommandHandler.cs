@@ -26,8 +26,7 @@ public class AssignUserEmailByUserIdCommandHandler(
             var user = await _unitOfWork.BaseUsers.GetByIdAsync(request.UserId);
             if (user is null)
             {
-                return Result.Failure($"User not found", ResponseStatus.NotFound)
-                    .WithError(new("User.Id", "User not found"));
+                return Result.Failure($"User not found", ResponseStatus.NotFound);
             }
 
 
@@ -38,7 +37,7 @@ public class AssignUserEmailByUserIdCommandHandler(
             if (conflict)
             {
                 return Result.Failure($"Email already registered", ResponseStatus.Conflict)
-                    .WithError(new ErrorDetail("User.Email", "Email already registered"));
+                    .WithError(new ErrorDetail("Email", "Email already registered", string.Empty, "EmailValidator", "Error"));
             }
 
             user.UpdateEmail(hashedEmail, encryptedEmail);

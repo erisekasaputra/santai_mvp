@@ -22,8 +22,7 @@ public class DeleteBusinessUserByUserIdCommandHandler(IUnitOfWork unitOfWork, Ap
             if (user is null)
             {
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                return Result.Failure($"Business user {request.Id} is not found", ResponseStatus.NotFound)
-                    .WithError(new("BusinessUser.Id", "Business user id not found"));
+                return Result.Failure($"We could not find your account", ResponseStatus.NotFound);
             } 
 
             user.Delete(); 

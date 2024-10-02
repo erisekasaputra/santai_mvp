@@ -24,8 +24,7 @@ public class UpdateBusinessUserByUserIdCommandHandler(
             var user = await _unitOfWork.BaseUsers.GetBusinessUserByIdAsync(request.Id);
             if (user is null)
             {
-                return Result.Failure($"Business user not found", ResponseStatus.NotFound)
-                    .WithError(new("BusinessUser.Id", "Business user not found"));
+                return Result.Failure($"We could not find you account", ResponseStatus.NotFound);
             }
 
             var encryptedAddressLine1 = await EncryptAsync(request.Address.AddressLine1);

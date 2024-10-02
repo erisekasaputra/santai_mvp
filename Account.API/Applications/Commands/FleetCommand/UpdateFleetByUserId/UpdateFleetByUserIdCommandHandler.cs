@@ -56,8 +56,7 @@ public class UpdateFleetByUserIdCommandHandler : IRequestHandler<UpdateFleetByUs
 
             if (timeZoneId is null)
             {
-                return await RollbackAndReturnFailureAsync(Result.Failure("User not found", ResponseStatus.NotFound)
-                    .WithError(new("User.Id", "User not found")), cancellationToken);
+                return await RollbackAndReturnFailureAsync(Result.Failure("User not found", ResponseStatus.NotFound), cancellationToken);
             }
               
 
@@ -71,17 +70,17 @@ public class UpdateFleetByUserIdCommandHandler : IRequestHandler<UpdateFleetByUs
             {
                 if (conflict.HashedChassisNumber == hashedChassisNumber)
                 {
-                    errors.Add(new("Fleet.ChassisNumber", "Chassis number already registered"));
+                    errors.Add(new("ChassisNumber", "Chassis number already registered", request.ChassisNumber, "ChassisNumberValidator", "Error"));
                 }
 
                 if (conflict.HashedEngineNumber == hashedEngineNumber)
                 {
-                    errors.Add(new("Fleet.EngineNumber", "Engine number already registered"));
+                    errors.Add(new("EngineNumber", "Engine number already registered", request.EngineNumber, "EngineNumberValidator", "Error"));
                 }
 
                 if (conflict.HashedRegistrationNumber == hashedRegistrationNumber)
                 {
-                    errors.Add(new("Fleet.RegistrationNumber", "Registration number already registered"));
+                    errors.Add(new("RegistrationNumber", "Registration number already registered", request.RegistrationNumber, "RegistrationNumberValidator", "Error"));
                 }
             }
 
@@ -172,15 +171,7 @@ public class UpdateFleetByUserIdCommandHandler : IRequestHandler<UpdateFleetByUs
 
         return result;
     }
-
-    private async Task<string?> EncryptNullableAsync(string? plaintext)
-    {
-        if (string.IsNullOrEmpty(plaintext))
-            return null;
-
-        return await _kmsClient.EncryptAsync(plaintext);
-    }
-
+     
     private async Task<string> EncryptAsync(string plaintext)
     {
         return await _kmsClient.EncryptAsync(plaintext);

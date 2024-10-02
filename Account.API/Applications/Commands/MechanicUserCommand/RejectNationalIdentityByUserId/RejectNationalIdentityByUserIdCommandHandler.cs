@@ -35,8 +35,7 @@ public class RejectNationalIdentityByUserIdCommandHandler : IRequestHandler<Reje
 
             if (nationalIdentity is null)
             {
-                return Result.Failure($"National identity not found", ResponseStatus.NotFound)
-                     .WithError(new("NationalIdentity.Id", "National identity not found"));
+                return Result.Failure($"National identity not found", ResponseStatus.NotFound);
             }
 
             nationalIdentity.RejectDocument();

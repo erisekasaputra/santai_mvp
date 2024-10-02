@@ -28,8 +28,7 @@ public class UpdateStaffEmailByStaffIdCommandHandler(
              
             if (staff is null)
             {
-                return Result.Failure($"Staff not found", ResponseStatus.NotFound)
-                    .WithError(new("Staff.Id", "User not found"));
+                return Result.Failure($"Staff not found", ResponseStatus.NotFound);
             }
 
             var hashedEmail = await _hashClient.Hash(request.Email);
@@ -40,7 +39,7 @@ public class UpdateStaffEmailByStaffIdCommandHandler(
             if (conflict)
             {
                 return Result.Failure($"Email already registered", ResponseStatus.Conflict)
-                    .WithError(new ErrorDetail("Staff.Email", "Email already registered"));
+                    .WithError(new ErrorDetail("Email", "Email already registered", string.Empty, "EmailValidator", "Error"));
             }
 
             staff.UpdateEmail(hashedEmail, encryptedEmail);

@@ -20,8 +20,7 @@ public class RemoveBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork,
 
             if (license is null)
             {
-                return Result.Failure($"Business license not found", ResponseStatus.NotFound)
-                    .WithError(new("BusinessLicense.Id", "Business license not found"));
+                return Result.Failure($"We could not find this business license", ResponseStatus.NotFound);
             }
 
             _unitOfWork.BusinessLicenses.Delete(license);

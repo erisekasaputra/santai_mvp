@@ -61,7 +61,7 @@ public class CreateMechanicUserCommandHandler(
             if (await _unitOfWork.BaseUsers.GetAnyByIdAsync(request.IdentityId))
             {
                 return await RollbackAndReturnFailureAsync(
-                    Result.Failure("User already registered", ResponseStatus.NotFound), cancellationToken); 
+                    Result.Failure("User already registered", ResponseStatus.Conflict), cancellationToken); 
             }
 
             // get all users that already registered with related request identities such as email, username, phonenumber, and identity id(from identity database)
@@ -89,12 +89,12 @@ public class CreateMechanicUserCommandHandler(
             {  
                 if (isNationalIdentityRegistered)
                 {
-                    errors.Add(new ("NationalIdentity.IdentityNumber", "National identity already registered"));
+                    errors.Add(new ("NationalIdentity.IdentityNumber", "National identity already registered", request.NationalIdentity.IdentityNumber, "NationalIdentityNumberValidator", "Error"));
                 }
 
                 if (isDrivingLicenseRegistered)
                 {
-                    errors.Add(new("DrivingLicense.LicenseNumber", "License number already registered"));
+                    errors.Add(new("DrivingLicense.LicenseNumber", "DrivingLicense already registered", request.DrivingLicense.LicenseNumber, "DrivingLicenseNumberValidator", "Error")); 
                 } 
             }  
 
@@ -117,13 +117,13 @@ public class CreateMechanicUserCommandHandler(
                 referralProgram = await _unitOfWork.ReferralPrograms.GetByCodeAsync(request.ReferralCode);
                 if (referralProgram is null)
                 {
-                    errors.Add(new ErrorDetail("MechanicUser.ReferralCode", "Referral code is invalid")); 
+                    errors.Add(new ErrorDetail("ReferralCode", "Referral code is invalid", request.ReferralCode, "ReferralCodeValidator", "Error")); 
                 }
 
                 // check is referral program is still valid 
                 if (referralProgram is not null && referralProgram.ValidDateUtc < DateTime.UtcNow)
                 {
-                    errors.Add(new ErrorDetail("MechanicUser.ReferralCode", "Referral code is expired")); 
+                    errors.Add(new ErrorDetail("ReferralCode", "Referral code is expired", request.ReferralCode, "ReferralCodeValidator", "Error")); 
                 }  
             }
 
@@ -232,7 +232,7 @@ public class CreateMechanicUserCommandHandler(
         .SelectMany((certification, index) =>
             conflicts.Any(x => x.CertificationId == certification.CertificationId)
                 ? [ new ErrorDetail($"Certification[{index}].{nameof(certification.CertificationId)}",
-                    "Certificate id already registered") ]
+                    "Certificate id already registered", certification.CertificationId, "CertificationIdValidator", "Error") ]
                 : Array.Empty<ErrorDetail>()
         ).ToList();
 
@@ -252,15 +252,15 @@ public class CreateMechanicUserCommandHandler(
         {
             if (user.HashedEmail == email || user.NewHashedEmail == email)
             {
-                conflicts.Add(new($"MechanicUser.{nameof(user.HashedEmail)}", 
-                    "User email already registered"));
+                conflicts.Add(new($"Email", 
+                    "Email already registered", string.Empty, "EmailValidator", "Error"));
             } 
         }
 
         if (user.HashedPhoneNumber == phoneNumber || user.NewHashedPhoneNumber == phoneNumber)
         {
-            conflicts.Add(new($"MechanicUser.{nameof(user.HashedPhoneNumber)}",
-                "User phone number already registered"));
+            conflicts.Add(new($"PhoneNumber",
+                "Phone number already registered", string.Empty, "PhoneNumberValidator", "Error"));
         }
 
         return conflicts;

@@ -19,8 +19,7 @@ public class RejectBusinessLicenseByUserIdCommandHandler(IUnitOfWork unitOfWork,
             var license = await _unitOfWork.BusinessLicenses.GetByBusinessUserIdAndBusinessLicenseIdAsync(request.BusinessUserId, request.BusinessLicenseId);
             if (license is null)
             {
-                return Result.Failure($"Business license not found", ResponseStatus.NotFound)
-                    .WithError(new("BusinessLicense.Id", "Business license not found"));
+                return Result.Failure($"We could not find this business license", ResponseStatus.NotFound);
             }
 
             license.RejectDocument();

@@ -54,8 +54,7 @@ public class CreateOrderCommandHandler(
                 if (coupon is null)
                 {
                     await RollbackAsync(cancellationToken);
-                    return Result.Failure("Coupon code does not exist", ResponseStatus.NotFound)
-                        .WithError(new("Coupon.Code", "Coupon not found"));
+                    return Result.Failure("We could not find the coupon", ResponseStatus.NotFound);
                 }
             }
 
@@ -85,8 +84,7 @@ public class CreateOrderCommandHandler(
             {
                 await RollbackAsync(cancellationToken);
                 return Result.Failure("There are severals fleet that does not exist", 
-                    ResponseStatus.UnprocessableEntity)
-                    .WithError(new ErrorDetail("Fleets", "There are severals fleets not found"))
+                    ResponseStatus.UnprocessableEntity) 
                     .WithData(new 
                     {
                         Ids = buyer.Data.UnknownFleets
@@ -190,8 +188,7 @@ public class CreateOrderCommandHandler(
             }
 
             await RollbackAsync(cancellationToken);
-            return Result.Failure(items.Message ?? Messages.UnknownError, ResponseStatus.UnprocessableEntity)
-                .WithError(new ErrorDetail("LineItems", "There are severals line items could not be processed"))
+            return Result.Failure("There are severals line items could not be processed", ResponseStatus.UnprocessableEntity) 
                 .WithData(items.Data);
         }
 

@@ -28,8 +28,7 @@ public class UpdateStaffPhoneNumberByStaffIdCommandHandler(
             
             if (staff is null)
             {
-                return Result.Failure($"Staff not found", ResponseStatus.NotFound)
-                    .WithError(new("Staff.Id", "User not found"));
+                return Result.Failure($"Staff not found", ResponseStatus.NotFound);
             }
 
             var hashedPhoneNumber = await _hashClient.Hash(request.PhoneNumber);
@@ -41,7 +40,7 @@ public class UpdateStaffPhoneNumberByStaffIdCommandHandler(
             if (conflict)
             {
                 return Result.Failure($"Phone number already registered", ResponseStatus.Conflict)
-                    .WithError(new ErrorDetail("Staff.PhoneNumber", "Phone number already registered"));
+                    .WithError(new ErrorDetail("PhoneNumber", "Phone number already registered", string.Empty, "PhoneNumberValidator", "Error"));
             }
 
             staff.UpdatePhoneNumber(hashedPhoneNumber, encryptedPhoneNumber);

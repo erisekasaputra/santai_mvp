@@ -23,7 +23,7 @@ public class SetOrderFleetBasicInspectionCommandHandler(
             if (order is null)
             {
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                return Result.Failure("Data not found", ResponseStatus.NotFound);
+                return Result.Failure("We could not find the order", ResponseStatus.NotFound);
             }
 
 
@@ -31,8 +31,7 @@ public class SetOrderFleetBasicInspectionCommandHandler(
             if (fleet is null)
             {
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                return Result.Failure("Data not found", ResponseStatus.NotFound)
-                    .WithError(new($"Fleet.FleetId[0]", $"Fleet id {request.FleetId} not found"));
+                return Result.Failure("Fleet not found", ResponseStatus.NotFound);
             }
 
             foreach (var basicInspection in request.BasicInspections)

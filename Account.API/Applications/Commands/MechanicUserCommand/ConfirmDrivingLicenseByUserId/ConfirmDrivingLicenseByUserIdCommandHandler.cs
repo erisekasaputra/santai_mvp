@@ -1,8 +1,7 @@
 ﻿using Account.API.Applications.Services;
 using Core.Results;
 using Account.Domain.SeedWork;
-using MediatR;
-using Core.Services.Interfaces;
+using MediatR; 
 using Core.Exceptions;
 using Core.CustomMessages;
 
@@ -11,20 +10,14 @@ namespace Account.API.Applications.Commands.MechanicUserCommand.ConfirmDrivingLi
 public class ConfirmDrivingLicenseByUserIdCommandHandler : IRequestHandler<ConfirmDrivingLicenseByUserIdCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork; 
-    private readonly ApplicationService _service;
-    private readonly IEncryptionService _kmsClient;
-    private readonly IHashService _hashService;
+    private readonly ApplicationService _service; 
 
     public ConfirmDrivingLicenseByUserIdCommandHandler(
         IUnitOfWork unitOfWork, 
-        ApplicationService service,
-        IEncryptionService kmsClient,
-        IHashService hashService)
+        ApplicationService service )
     {
         _unitOfWork = unitOfWork; 
-        _service = service;
-        _kmsClient = kmsClient;
-        _hashService = hashService;
+        _service = service; 
     }
 
     public async Task<Result> Handle(ConfirmDrivingLicenseByUserIdCommand request, CancellationToken cancellationToken)
@@ -35,22 +28,19 @@ public class ConfirmDrivingLicenseByUserIdCommandHandler : IRequestHandler<Confi
 
             if (license is null)
             {
-                return Result.Failure($"Driving license not found", ResponseStatus.NotFound)
-                    .WithError(new("DrivingLicense.Id", "Driving license not found"));
+                return Result.Failure($"Driving license not found", ResponseStatus.NotFound);
             }
              
             var accepted = await _unitOfWork.DrivingLicenses.GetAcceptedByUserIdAsync(request.UserId);
 
             if (accepted is not null && accepted.Id == request.DrivingLicenseId)
             {
-                return Result.Failure($"Driving license already accepted", ResponseStatus.Conflict)
-                    .WithError(new("DrivingLicense.Id", "Conflict driving license"));
+                return Result.Failure($"Driving license already accepted", ResponseStatus.Conflict);
             }
 
             if (accepted is not null)
             {
-                return Result.Failure($"Can only have one 'Accepted' driving license for a user", ResponseStatus.Conflict)
-                    .WithError(new("DrivingLicense.Id", "Conflict driving license"));
+                return Result.Failure($"Can only have one 'Accepted' driving license for a user", ResponseStatus.Conflict);
             }
 
             license.VerifyDocument();
@@ -70,23 +60,5 @@ public class ConfirmDrivingLicenseByUserIdCommandHandler : IRequestHandler<Confi
             _service.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
-    }
-
-    private async Task<string?> EncryptNullableAsync(string? plaintext)
-    {
-        if (string.IsNullOrEmpty(plaintext))
-            return null;
-
-        return await _kmsClient.EncryptAsync(plaintext);
-    }
-
-    private async Task<string> EncryptAsync(string plaintext)
-    {
-        return await _kmsClient.EncryptAsync(plaintext);
-    }
-
-    private async Task<string> HashAsync(string plainText)
-    {
-        return await _hashService.Hash(plainText);
-    }
+    } 
 }

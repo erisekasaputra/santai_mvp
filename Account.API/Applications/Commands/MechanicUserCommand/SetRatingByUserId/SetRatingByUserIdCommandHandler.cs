@@ -22,8 +22,7 @@ public class SetRatingByUserIdCommandHandler(
             var user = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.UserId);
             if (user is null)
             {
-                return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound) 
-                     .WithError(new("MechanicUser.Id", "Mechanic user not found"));
+                return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound);
             }
             
             user.SetRating(request.Rating);

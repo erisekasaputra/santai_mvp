@@ -36,8 +36,7 @@ public class SetNationalIdentityByUserIdCommandHandler : IRequestHandler<SetNati
 
             if (mechanicUser is null)
             {
-                return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound)
-                     .WithError(new("MechanicUser.Id", "Mechanic user not found"));
+                return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound);
             }
 
 
@@ -45,14 +44,12 @@ public class SetNationalIdentityByUserIdCommandHandler : IRequestHandler<SetNati
 
             if (accepted is not null && accepted.UserId == request.UserId)
             {
-                return Result.Failure($"National identity already accepted", ResponseStatus.Conflict) 
-                     .WithError(new("NationalIdentity.Id", "Conflict national identity"));
+                return Result.Failure($"National identity already accepted", ResponseStatus.Conflict);
             }
 
             if (accepted is not null)
             {
-                return Result.Failure($"Can only have one 'Accepted' national identity for a user", ResponseStatus.Conflict)
-                     .WithError(new("NationalIdentity.Id", "Conflict national identity"));
+                return Result.Failure($"Can only have one 'Accepted' national identity for a user", ResponseStatus.Conflict);
             }
 
 
@@ -64,8 +61,7 @@ public class SetNationalIdentityByUserIdCommandHandler : IRequestHandler<SetNati
 
             if (registeredToOtherUser)
             {
-                return Result.Failure($"National identity number already used by other user", ResponseStatus.Conflict)
-                     .WithError(new("NationalIdentity.Id", "Conflict national identity"));
+                return Result.Failure($"National identity number already used by other user", ResponseStatus.Conflict);
             } 
 
             var nationalIdentity = new NationalIdentity(
@@ -90,16 +86,7 @@ public class SetNationalIdentityByUserIdCommandHandler : IRequestHandler<SetNati
             _service.Logger.LogError(ex, ex.InnerException?.Message);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
-    }
-
-    private async Task<string?> EncryptNullableAsync(string? plaintext)
-    {
-        if (string.IsNullOrEmpty(plaintext))
-            return null;
-
-        return await _kmsClient.EncryptAsync(plaintext);
-    }
-
+    } 
     private async Task<string> EncryptAsync(string plaintext)
     {
         return await _kmsClient.EncryptAsync(plaintext);

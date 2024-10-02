@@ -35,8 +35,7 @@ public class VerifyMechanicUserByUserIdCommandHandler : IRequestHandler<VerifyMe
 
             if (mechanicUser is null)
             {
-                return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound)
-                     .WithError(new("MechanicUser.Id", "Mechanic user not found"));
+                return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound);
             }
 
             mechanicUser.VerifyDocument();

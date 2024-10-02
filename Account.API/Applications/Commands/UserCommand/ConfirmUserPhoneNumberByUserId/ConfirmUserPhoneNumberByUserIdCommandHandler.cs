@@ -19,8 +19,7 @@ public class ConfirmUserPhoneNumberByUserIdCommandHandler(IUnitOfWork unitOfWork
             var user = await _UnitOfWork.BaseUsers.GetByIdAsync(request.Id);
             if (user is null)
             {
-                return Result.Failure($"User not found", ResponseStatus.NotFound)
-                    .WithError(new("User.Id", "User not found"));
+                return Result.Failure($"User not found", ResponseStatus.NotFound);
             }
 
             user.VerifyPhoneNumber();

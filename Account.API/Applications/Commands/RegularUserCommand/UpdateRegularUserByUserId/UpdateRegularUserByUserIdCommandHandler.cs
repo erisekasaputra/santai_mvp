@@ -26,8 +26,7 @@ public class UpdateRegularUserByUserIdCommandHandler(
             var user = await _unitOfWork.BaseUsers.GetRegularUserByIdAsync(request.UserId);
             if (user is null)
             {
-                return Result.Failure($"Regular user not found", ResponseStatus.NotFound)
-                    .WithError(new("RegularUser.Id", "User not found"));
+                return Result.Failure($"Regular user not found", ResponseStatus.NotFound);
             }
 
             var encryptedAddressLine1 = await EncryptAsync(request.Address.AddressLine1);

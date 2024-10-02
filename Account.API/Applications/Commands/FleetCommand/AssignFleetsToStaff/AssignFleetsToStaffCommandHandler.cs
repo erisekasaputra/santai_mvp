@@ -44,8 +44,7 @@ public class AssignFleetsToStaffCommandHandler : IRequestHandler<AssignFleetsToS
             if (request is null || !request.FleetIds.Any())
             {
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                return Result.Failure("Please provide the fleet ids", ResponseStatus.BadRequest)
-                    .WithError(new ("Fleet.Ids", "Fleets id request is empty"));
+                return Result.Failure("Please fill fleet id at least one id", ResponseStatus.BadRequest);
             }
 
             var fleets = await _unitOfWork.Fleets.GetByIdsAsync(request.FleetIds);
@@ -53,8 +52,7 @@ public class AssignFleetsToStaffCommandHandler : IRequestHandler<AssignFleetsToS
             if (fleets is null || !fleets.Any())
             {
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                return Result.Failure("Fleets does not have any record", ResponseStatus.NotFound)
-                     .WithError(new ErrorDetail("Fleet.Ids", "Fleets not found"));
+                return Result.Failure("Fleet not found", ResponseStatus.NotFound);
             }
 
 
@@ -63,8 +61,7 @@ public class AssignFleetsToStaffCommandHandler : IRequestHandler<AssignFleetsToS
             if (staff is null)
             {
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                return Result.Failure("Staff not found", ResponseStatus.NotFound)
-                    .WithError(new ErrorDetail("Staff.Id", "Staff not found"));
+                return Result.Failure("Fleet not found", ResponseStatus.NotFound);
             }
 
 
@@ -81,7 +78,7 @@ public class AssignFleetsToStaffCommandHandler : IRequestHandler<AssignFleetsToS
                 errors.AddRange(
                     request.FleetIds
                         .Where(x => !fleetIds.Contains(x))
-                        .Select((fleetId, index) => new ErrorDetail($"Fleet[{index}].Id", "Fleet not found")));
+                        .Select((fleetId, index) => new ErrorDetail($"FleetId[{index}]", "Fleet not found", fleetId.ToString(), "FleetIdValidator", "NotFound")));
 
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result.Failure($"{notFoundFleet} fleet(s) {(notFoundFleet <= 1 ? "was" : "were")} not found", ResponseStatus.BadRequest)

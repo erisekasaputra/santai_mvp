@@ -20,8 +20,7 @@ public class ConfirmUserEmailByUserIdCommandHandler(IUnitOfWork unitOfWork, Appl
 
             if (user is null)
             {
-                return Result.Failure($"User not found", ResponseStatus.NotFound)
-                    .WithError(new("User.Id", "User not found"));
+                return Result.Failure($"User not found", ResponseStatus.NotFound);
             }
 
             user.VerifyEmail();
