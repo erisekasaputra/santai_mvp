@@ -1,5 +1,4 @@
-using Core.Extensions;
-using Microsoft.AspNetCore.Http.Connections;
+using Core.Extensions; 
 using Notification.Worker.Extensions;
 using Notification.Worker.Infrastructure;
 using Notification.Worker.Services; 

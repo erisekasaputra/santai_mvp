@@ -1,5 +1,4 @@
-﻿using Amazon.KeyManagementService;
-using Core.Configurations; 
+﻿using Core.Configurations; 
 using Core.Services.Interfaces;
 using Core.Services;
 using FluentValidation;
@@ -303,8 +302,7 @@ public static class ServiceRegistrationExtension
     }
 
     public static WebApplicationBuilder AddDataEncryption(
-        this WebApplicationBuilder builder, 
-        IConfiguration configuration)
+        this WebApplicationBuilder builder)
     {
         builder.Services.AddSingleton<IEncryptionService>(configure =>
         {

@@ -1,0 +1,69 @@
+﻿using Core.Configurations;
+using Core.Events.Chat;
+using Core.Services.Interfaces;
+using MassTransit;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Options;
+using Notification.Worker.Repository;
+using Notification.Worker.Services.Interfaces;
+using Notification.Worker.Services;
+using Amazon.SimpleNotificationService.Model;
+
+namespace Notification.Worker.Consumers;
+
+public class ChatSentIntegrationEventConsumer(
+    IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
+    IMessageService messageService,
+    ICacheService cacheService,
+    UserProfileRepository userProfileRepository,
+    IOptionsMonitor<ProjectConfiguration> projectConfiguration) : IConsumer<ChatSentIntegrationEvent>
+{
+    private readonly IMessageService _messageService = messageService;
+    private readonly IHubContext<ActivityHub, IActivityClient> _activityHubContext = activityHubContecxt;
+    private readonly ICacheService _cacheService = cacheService;
+    private readonly UserProfileRepository _userProfileRepository = userProfileRepository;
+    private readonly ProjectConfiguration _projectConfiguration = projectConfiguration.CurrentValue;
+
+    public async Task Consume(ConsumeContext<ChatSentIntegrationEvent> context)
+    {
+        var target = await _userProfileRepository.GetProfiles(context.Message.DestinationUserId);
+        if (target is null || !target.Any())
+        {
+            return;
+        }
+        foreach (var profile in target)
+        {
+            var fcmPayload = new
+            {
+                data = new
+                {
+                    token = profile.DeviceToken,
+                    title = "Santai (New Chat)",
+                    body = context.Message.Text,
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP",
+
+                    messageId = context.Message.MessageId,
+                    timestamp = context.Message.Timestamp,
+                    originUserId = context.Message.OriginUserId
+
+                }
+            };
+
+            var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
+            {
+                @default = context.Message.Text,
+                GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
+            });
+
+            var request = new PublishRequest
+            {
+                Message = messageJson,
+                MessageStructure = "json",
+                TargetArn = profile.Arn
+            };
+
+            await _messageService.PublishPushNotificationAsync(request);
+        }
+    }
+}

@@ -15,6 +15,6 @@ public class BusinessLicenseAcceptedIntegrationEventConsumer(
     private readonly ICacheService _cacheService = cacheService;
     public async Task Consume(ConsumeContext<BusinessLicenseAcceptedIntegrationEvent> context)
     {
-        throw new NotImplementedException();
+        await Task.CompletedTask;
     } 
 }

@@ -42,7 +42,8 @@ public static class ServiceRegistrationExtension
                 ("notification-service-refund-paid-integration-queue",typeof(RefundPaidIntegrationEventConsumer)),
                 ("notification-service-service-completed-integration-queue",typeof(ServiceCompletedIntegrationEventConsumer)),
                 ("notification-service-service-incompleted-integration-queue",typeof(ServiceIncompletedIntegrationEventConsumer)),
-                ("notification-service-service-processed-integration-queue",typeof(ServiceProcessedIntegrationEventConsumer))
+                ("notification-service-service-processed-integration-queue",typeof(ServiceProcessedIntegrationEventConsumer)),
+                ("notification-service-chat-sent-integration-queue",typeof(ChatSentIntegrationEventConsumer))
             };
 
             x.AddConsumersFromNamespaceContaining<INotificationWorkerMarkerInterface>();

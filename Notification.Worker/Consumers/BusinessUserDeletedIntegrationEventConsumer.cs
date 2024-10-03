@@ -15,6 +15,6 @@ public class BusinessUserDeletedIntegrationEventConsumer(
     private readonly ICacheService _cacheService = cacheService;
     public async Task Consume(ConsumeContext<BusinessUserDeletedIntegrationEvent> context)
     {
-        throw new NotImplementedException();
+        await Task.CompletedTask;
     }
 }

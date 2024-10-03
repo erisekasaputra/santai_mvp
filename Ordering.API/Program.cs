@@ -25,7 +25,7 @@ builder.Services.AddControllers();
 builder.AddJsonEnumConverterBehavior();
 builder.AddLoggingContext();
 builder.AddApplicationService();
-builder.AddDataEncryption(builder.Configuration);
+builder.AddDataEncryption();
 builder.AddMediatorService<IOrderAPIMarkerInterface>();
 builder.AddRedisDatabase();
 builder.AddSqlDatabaseContext<OrderDbContext>();

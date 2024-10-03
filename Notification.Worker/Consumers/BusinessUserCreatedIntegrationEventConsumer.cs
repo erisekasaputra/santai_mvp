@@ -15,6 +15,6 @@ public class BusinessUserCreatedIntegrationEventConsumer(
     private readonly ICacheService _cacheService = cacheService;
     public async Task Consume(ConsumeContext<BusinessUserCreatedIntegrationEvent> context)
     {
-        throw new NotImplementedException();
+        await Task.CompletedTask;
     }
 }
