@@ -3,6 +3,7 @@ using Chat.API.Domain.Events;
 using Core.Services.Interfaces;
 using MediatR;
 using Microsoft.AspNetCore.SignalR;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Chat.API.Applications.Services;
 
@@ -21,10 +22,12 @@ public class ChatHub : Hub<IChatClient>
         _mediator = mediator;
     } 
 
-    public async Task SendMessageToUser(string originUserId, string destinationUserId, string text)
+    public async Task SendMessageToUser(string destinationUserId, string text)
     {
         try
         {
+            var originUserId = Context.UserIdentifier;
+
             if (string.IsNullOrEmpty(originUserId) || string.IsNullOrEmpty(destinationUserId) || string.IsNullOrEmpty(text)) 
             {
                 return;
@@ -42,10 +45,17 @@ public class ChatHub : Hub<IChatClient>
         }
     }
 
-    public async Task GetLatestMessagesForUser(string originUserId, string destinationUserId, long timestamp)
+    public async Task GetLatestMessagesForUser(string destinationUserId, long timestamp)
     {
         try
-        {
+        {  
+            var originUserId = Context.UserIdentifier;
+
+            if (string.IsNullOrEmpty(originUserId) || string.IsNullOrEmpty(destinationUserId))
+            {
+                return;
+            }
+
             var messages = await _chatService.GetMessageByTimestamp(originUserId, destinationUserId, timestamp);
 
             var tasks = messages.Select(async message =>
@@ -74,10 +84,17 @@ public class ChatHub : Hub<IChatClient>
         }
     }
      
-    public async Task GetPreviousMessagesForUser(string originUserId, string destinationUserId, long timestamp)
+    public async Task GetPreviousMessagesForUser(string destinationUserId, long timestamp)
     { 
         try
         {
+            var originUserId = Context.UserIdentifier;
+
+            if (string.IsNullOrEmpty(originUserId) || string.IsNullOrEmpty(destinationUserId))
+            {
+                return;
+            }
+
             var messages = await _chatService.GetMessageByTimestamp(originUserId, destinationUserId, timestamp, false);
 
             var tasks = messages.Select(async message =>

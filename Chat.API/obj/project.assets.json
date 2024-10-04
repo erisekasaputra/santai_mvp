@@ -257,10 +257,10 @@
           }
         }
       },
-      "MassTransit/8.2.5": {
+      "MassTransit/8.2.6-develop.2026": {
         "type": "package",
         "dependencies": {
-          "MassTransit.Abstractions": "8.2.5",
+          "MassTransit.Abstractions": "8.2.6-develop.2026",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "8.0.0",
           "Microsoft.Extensions.Diagnostics.HealthChecks": "8.0.0",
           "Microsoft.Extensions.Hosting.Abstractions": "8.0.0",
@@ -278,7 +278,7 @@
           }
         }
       },
-      "MassTransit.Abstractions/8.2.5": {
+      "MassTransit.Abstractions/8.2.6-develop.2026": {
         "type": "package",
         "compile": {
           "lib/net8.0/MassTransit.Abstractions.dll": {
@@ -305,6 +305,23 @@
         },
         "runtime": {
           "lib/net8.0/MassTransit.AmazonSqsTransport.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "MassTransit.RabbitMQ/8.2.6-develop.2026": {
+        "type": "package",
+        "dependencies": {
+          "MassTransit": "8.2.6-develop.2026",
+          "RabbitMQ.Client": "6.8.1"
+        },
+        "compile": {
+          "lib/net8.0/MassTransit.RabbitMqTransport.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/MassTransit.RabbitMqTransport.dll": {
             "related": ".xml"
           }
         }
@@ -1200,6 +1217,23 @@
           }
         }
       },
+      "RabbitMQ.Client/6.8.1": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.5",
+          "System.Threading.Channels": "7.0.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/RabbitMQ.Client.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/RabbitMQ.Client.dll": {
+            "related": ".xml"
+          }
+        }
+      },
       "runtime.native.System.Data.SqlClient.sni/4.7.0": {
         "type": "package",
         "dependencies": {
@@ -1705,6 +1739,22 @@
           }
         }
       },
+      "System.Threading.Channels/7.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/net7.0/System.Threading.Channels.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net7.0/System.Threading.Channels.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "buildTransitive/net6.0/_._": {}
+        }
+      },
       "System.Threading.Tasks/4.3.0": {
         "type": "package",
         "dependencies": {
@@ -2153,10 +2203,10 @@
         "libphonenumber-csharp.nuspec"
       ]
     },
-    "MassTransit/8.2.5": {
-      "sha512": "b/gNaT6IxX+BZnLCLTzjqia5iQJxpmIGOjPiLnD6SLBRX9tyIsYVNKPAqQ6txNe2ztOOaW4ntef84VxSvA0IEA==",
+    "MassTransit/8.2.6-develop.2026": {
+      "sha512": "kw4cq5/0sA87+rjDDYZxLBY0z81OdG1F3c84f5qEpbhkBWZkgM89z5EaDXon/Lu3yOxefq4e6gt2Shg6QrwzyQ==",
       "type": "package",
-      "path": "masstransit/8.2.5",
+      "path": "masstransit/8.2.6-develop.2026",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2169,15 +2219,15 @@
         "lib/net8.0/MassTransit.xml",
         "lib/netstandard2.0/MassTransit.dll",
         "lib/netstandard2.0/MassTransit.xml",
-        "masstransit.8.2.5.nupkg.sha512",
+        "masstransit.8.2.6-develop.2026.nupkg.sha512",
         "masstransit.nuspec",
         "mt-logo-small.png"
       ]
     },
-    "MassTransit.Abstractions/8.2.5": {
-      "sha512": "TcAV7ZEdXTrw6D74g55mlEYLBBQvsifNrdfwt0UCps7mZVBoXoS3fvMHCQguRgj+6k1Q1qEV9kZa0aUOT7GcPQ==",
+    "MassTransit.Abstractions/8.2.6-develop.2026": {
+      "sha512": "RXQEe1wwauPzZhZAL5kWzOW5lkHueKCoKFprUjqWQzIw+vOIq/WEa1d2xhEK+RX1pjBy10LbMA4AhO/99RooMQ==",
       "type": "package",
-      "path": "masstransit.abstractions/8.2.5",
+      "path": "masstransit.abstractions/8.2.6-develop.2026",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -2190,7 +2240,7 @@
         "lib/net8.0/MassTransit.Abstractions.xml",
         "lib/netstandard2.0/MassTransit.Abstractions.dll",
         "lib/netstandard2.0/MassTransit.Abstractions.xml",
-        "masstransit.abstractions.8.2.5.nupkg.sha512",
+        "masstransit.abstractions.8.2.6-develop.2026.nupkg.sha512",
         "masstransit.abstractions.nuspec",
         "mt-logo-small.png"
       ]
@@ -2213,6 +2263,27 @@
         "lib/netstandard2.0/MassTransit.AmazonSqsTransport.xml",
         "masstransit.amazonsqs.8.2.5.nupkg.sha512",
         "masstransit.amazonsqs.nuspec",
+        "mt-logo-small.png"
+      ]
+    },
+    "MassTransit.RabbitMQ/8.2.6-develop.2026": {
+      "sha512": "zWw/WaXgxAHx8P5Vf5TNsGLwuexbtLdwdiC0W71Zl+RvdT+fVW+HkM/k3Ju1IYXrSvu9ei29zOFLYZ5ZfD9yFw==",
+      "type": "package",
+      "path": "masstransit.rabbitmq/8.2.6-develop.2026",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NuGet.README.md",
+        "lib/net472/MassTransit.RabbitMqTransport.dll",
+        "lib/net472/MassTransit.RabbitMqTransport.xml",
+        "lib/net6.0/MassTransit.RabbitMqTransport.dll",
+        "lib/net6.0/MassTransit.RabbitMqTransport.xml",
+        "lib/net8.0/MassTransit.RabbitMqTransport.dll",
+        "lib/net8.0/MassTransit.RabbitMqTransport.xml",
+        "lib/netstandard2.0/MassTransit.RabbitMqTransport.dll",
+        "lib/netstandard2.0/MassTransit.RabbitMqTransport.xml",
+        "masstransit.rabbitmq.8.2.6-develop.2026.nupkg.sha512",
+        "masstransit.rabbitmq.nuspec",
         "mt-logo-small.png"
       ]
     },
@@ -3479,6 +3550,23 @@
         "lib/netstandard2.1/Pipelines.Sockets.Unofficial.xml",
         "pipelines.sockets.unofficial.2.2.8.nupkg.sha512",
         "pipelines.sockets.unofficial.nuspec"
+      ]
+    },
+    "RabbitMQ.Client/6.8.1": {
+      "sha512": "jNsmGgmCNw2S/NzskeN2ijtGywtH4Sk/G6jWUTD5sY9SrC27Xz6BsLIiB8hdsfjeyWCa4j4GvCIGkpE8wrjU1Q==",
+      "type": "package",
+      "path": "rabbitmq.client/6.8.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.md",
+        "icon.png",
+        "lib/net462/RabbitMQ.Client.dll",
+        "lib/net462/RabbitMQ.Client.xml",
+        "lib/netstandard2.0/RabbitMQ.Client.dll",
+        "lib/netstandard2.0/RabbitMQ.Client.xml",
+        "rabbitmq.client.6.8.1.nupkg.sha512",
+        "rabbitmq.client.nuspec"
       ]
     },
     "runtime.native.System.Data.SqlClient.sni/4.7.0": {
@@ -4811,6 +4899,35 @@
         "version.txt"
       ]
     },
+    "System.Threading.Channels/7.0.0": {
+      "sha512": "qmeeYNROMsONF6ndEZcIQ+VxR4Q/TX/7uIVLJqtwIWL7dDWeh0l1UIqgo4wYyjG//5lUNhwkLDSFl+pAWO6oiA==",
+      "type": "package",
+      "path": "system.threading.channels/7.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "buildTransitive/net461/System.Threading.Channels.targets",
+        "buildTransitive/net462/_._",
+        "buildTransitive/net6.0/_._",
+        "buildTransitive/netcoreapp2.0/System.Threading.Channels.targets",
+        "lib/net462/System.Threading.Channels.dll",
+        "lib/net462/System.Threading.Channels.xml",
+        "lib/net6.0/System.Threading.Channels.dll",
+        "lib/net6.0/System.Threading.Channels.xml",
+        "lib/net7.0/System.Threading.Channels.dll",
+        "lib/net7.0/System.Threading.Channels.xml",
+        "lib/netstandard2.0/System.Threading.Channels.dll",
+        "lib/netstandard2.0/System.Threading.Channels.xml",
+        "lib/netstandard2.1/System.Threading.Channels.dll",
+        "lib/netstandard2.1/System.Threading.Channels.xml",
+        "system.threading.channels.7.0.0.nupkg.sha512",
+        "system.threading.channels.nuspec",
+        "useSharedDesignerContext.txt"
+      ]
+    },
     "System.Threading.Tasks/4.3.0": {
       "sha512": "LbSxKEdOUhVe8BezB/9uOGGppt+nZf6e1VFyw6v3DN6lqitm0OSn2uXMOdtP0M3W4iMcqcivm2J6UgqiwwnXiA==",
       "type": "package",
@@ -4944,6 +5061,8 @@
       "AWSSDK.Core >= 4.0.0-preview.3",
       "AWSSDK.DynamoDBv2 >= 4.0.0-preview.3",
       "Core >= 1.0.0",
+      "MassTransit >= 8.2.6-develop.2026",
+      "MassTransit.RabbitMQ >= 8.2.6-develop.2026",
       "Microsoft.AspNetCore.OpenApi >= 9.0.0-preview.6.24328.4",
       "Microsoft.AspNetCore.SignalR.StackExchangeRedis >= 9.0.0-rc.1.24452.1",
       "Microsoft.Extensions.Caching.StackExchangeRedis >= 9.0.0-preview.7.24406.2",
@@ -5013,6 +5132,14 @@
           "AWSSDK.DynamoDBv2": {
             "target": "Package",
             "version": "[4.0.0-preview.3, )"
+          },
+          "MassTransit": {
+            "target": "Package",
+            "version": "[8.2.6-develop.2026, )"
+          },
+          "MassTransit.RabbitMQ": {
+            "target": "Package",
+            "version": "[8.2.6-develop.2026, )"
           },
           "Microsoft.AspNetCore.OpenApi": {
             "target": "Package",

@@ -5,20 +5,15 @@ dotnet user-secrets init
 
 Token GITHUB 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
 
-REM Set the secret key
 dotnet user-secrets set "KMS:SecretKey" "tP56kzHlfp+IUY/nhdOFbOsRjOSEbTVv6sexU/JL17I="
 
-REM Set the secret key jwt
 dotnet user-secrets set "Jwt:SecretKey" "tP56kzHlfp+IUY/nhdOFbOsRjOSEbTVv6sexU/JL17I="
 
-REM Set the secret key senangpay
 dotnet user-secrets set "SenangPay:SecretKey" "6936-735"
 
-REM Set the google client secret 
 dotnet user-secrets set "Google:ClientSecret" "NOT_PROVIDED"  
 dotnet user-secrets set "Google:ClientId" "1065462126306-sla57ni7q7n8mhs2v0miqa6u5ms8lrsi.apps.googleusercontent.com"  
 
-REM Set the aws client
 dotnet user-secrets set "AWS:AccessID" "AKIAYS2NP3RU6DEGPJUM"  
 dotnet user-secrets set "AWS:SecretKey" "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"  
 dotnet user-secrets set "AWS:Region" "ap-southeast-1"  
