@@ -27,7 +27,13 @@ public class DynamoDBChatService : IChatService
         SortKey = configuration["DynamoDB:Chat:SortKey"] ?? throw new Exception("Sort Key should be set on initialization");
     }
 
-    public async Task<string> SaveChatMessageAsync(string originUserId, string destinationUserId, string text, long timestamp)
+    public async Task<string> SaveChatMessageAsync(
+        string originUserId,
+        string destinationUserId,
+        string text,
+        string? replyMessageId,
+        string? replyMessageText,
+        long timestamp)
     {
         if (string.IsNullOrWhiteSpace(originUserId)) throw new ArgumentException("originUserId cannot be null or empty");
         if (string.IsNullOrWhiteSpace(destinationUserId)) throw new ArgumentException("destinationUserId cannot be null or empty");
@@ -39,7 +45,9 @@ public class DynamoDBChatService : IChatService
             { PartitionKey, new AttributeValue { S = $"{originUserId}#{destinationUserId}" } },
             { SortKey, new AttributeValue { N = timestamp.ToString() } },
             { "messageId", new AttributeValue { S = messageId } },
-            { "encryptedText", new AttributeValue { S = await _encryptionService.EncryptAsync(text) } }
+            { "encryptedText", new AttributeValue { S = await _encryptionService.EncryptAsync(text) } },
+            { "replyMessageId", new AttributeValue { S = string.IsNullOrEmpty(replyMessageId) ? string.Empty : replyMessageId} },
+            { "replyMessageEncryptedText", new AttributeValue { S = string.IsNullOrEmpty(replyMessageText) ? string.Empty : await _encryptionService.EncryptAsync(replyMessageText) } }
         };
 
         var request = new PutItemRequest
@@ -50,12 +58,11 @@ public class DynamoDBChatService : IChatService
 
         try
         {
-            await _dynamoDbClient.PutItemAsync(request);
+            await _dynamoDbClient.PutItemAsync(request); 
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            // Log error dan tangani exception dengan baik
-            throw new Exception("Failed to save chat message.", ex);
+            throw;
         }
 
         return messageId;
@@ -77,8 +84,8 @@ public class DynamoDBChatService : IChatService
                 { ":v_partitionKey", new AttributeValue { S = chatKey } },
                 { ":v_sortKey", new AttributeValue { N = timestamp.ToString() } }
             },
-            ScanIndexForward = forward,  // Urutkan dari yang tertua ke yang terbaru
-            Limit = 200               // Batasi jumlah pesan yang diambil
+            ScanIndexForward = forward,  
+            Limit = 200 
         };
 
         try

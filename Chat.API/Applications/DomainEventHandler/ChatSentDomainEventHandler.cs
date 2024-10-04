@@ -9,6 +9,12 @@ public class ChatSentDomainEventHandler(IMediator mediator) : INotificationHandl
     private readonly IMediator _mediator = mediator;
     public async Task Handle(ChatSentDomainEvent notification, CancellationToken cancellationToken)
     {
-        await _mediator.Publish(new ChatSentIntegrationEvent(notification.OriginUserId, notification.DestinationUserId, notification.MessageId, notification.Text, notification.Timestamp), cancellationToken);
+        await _mediator.Publish(
+            new ChatSentIntegrationEvent(
+                notification.OriginUserId,
+                notification.DestinationUserId,
+                notification.MessageId,
+                notification.Text,
+                notification.Timestamp), cancellationToken);
     }
 }

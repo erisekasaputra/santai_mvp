@@ -9,7 +9,8 @@ public class OtpRequestedIntegrationEventHandler(IPublishEndpoint publishEndpoin
     private readonly IPublishEndpoint _publisher = publishEndpoint; 
 
     public async Task Handle(OtpRequestedIntegrationEvent notification, CancellationToken cancellationToken)
-    { 
+    {
+        Console.WriteLine(notification.Token);
         await _publisher.Publish(notification, cancellationToken);
     }
 }

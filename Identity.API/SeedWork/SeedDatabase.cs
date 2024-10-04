@@ -59,7 +59,8 @@ public class SeedDatabase
                             PhoneNumberConfirmed = true,
                             EmailConfirmed = true,
                             UserType = UserType.Administrator,
-                            IsAccountRegistered = false
+                            IsAccountRegistered = false,
+                            DeviceIds = []
                         };
 
                         await userManager.CreateAsync(user, password);

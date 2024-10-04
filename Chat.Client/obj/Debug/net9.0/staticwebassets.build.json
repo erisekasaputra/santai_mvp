@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "y3h8B9w4X96gesENFvu52qA4aCX2g5I91xY5zja+acE=",
+  "Source": "Chat.Client",
+  "BasePath": "_content/Chat.Client",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}

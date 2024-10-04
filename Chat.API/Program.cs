@@ -1,3 +1,4 @@
+using Chat.API;
 using Chat.API.Applications.Services; 
 using Chat.API.Extensions; 
 using Core.Extensions;   
@@ -5,11 +6,13 @@ using Core.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Configuration.AddEnvironmentVariables();
+
+builder.AddLoggingContext();
+builder.AddMediatorService<IChatAPIMarkerInterface>();
 builder.AddJsonEnumConverterBehavior();
 builder.AddCoreOptionConfiguration(); 
 builder.AddDataEncryption(); 
-builder.AddRedisDatabase(); 
-builder.AddLoggingContext();
+builder.AddRedisDatabase();  
 builder.AddApplicationService();
 builder.AddAuth();
 
