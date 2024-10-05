@@ -28,7 +28,7 @@ public class PaymentController
     [AllowAnonymous]
     [HttpPost("callback-senangpay")]
     public async Task<IResult> CreatePayment(
-        [FromBody] SenangPayPaymentRequest request,
+        [FromForm] SenangPayPaymentRequest request,
         [FromServices] IValidator<SenangPayPaymentRequest> validator)
     {
         try
@@ -51,11 +51,11 @@ public class PaymentController
             var result = await _mediator.Send(command); 
             if (result.IsSuccess) 
             {
-                return TypedResults.Ok("OK");
+                return TypedResults.Content("OK", "text/plain");
             }
             else
             {
-                return TypedResults.InternalServerError("FAILED");
+                return TypedResults.Content("FAILED", "text/plain");
             } 
         }
         catch (Exception ex)
@@ -64,5 +64,5 @@ public class PaymentController
             return TypedResults.InternalServerError(
                 Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         }
-    }
+    } 
 }
