@@ -1,0 +1,270 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "Chat.Client/1.0.0": {
+        "dependencies": {
+          "Microsoft.AspNetCore.OpenApi": "9.0.0-rc.1.24452.1",
+          "Microsoft.AspNetCore.SignalR.Client": "9.0.0-rc.1.24452.1",
+          "Microsoft.AspNetCore.SignalR.Client.Core": "9.0.0-rc.1.24452.1"
+        },
+        "runtime": {
+          "Chat.Client.dll": {}
+        }
+      },
+      "Microsoft.AspNetCore.Connections.Abstractions/9.0.0-rc.1.24452.1": {
+        "dependencies": {
+          "Microsoft.Extensions.Features": "9.0.0-rc.1.24452.1"
+        }
+      },
+      "Microsoft.AspNetCore.Http.Connections.Client/9.0.0-rc.1.24452.1": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Connections.Common": "9.0.0-rc.1.24452.1",
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.0-rc.1.24431.7",
+          "Microsoft.Extensions.Options": "9.0.0-rc.1.24431.7",
+          "System.Net.ServerSentEvents": "9.0.0-rc.1.24431.7"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.Http.Connections.Client.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.45201"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Http.Connections.Common/9.0.0-rc.1.24452.1": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Connections.Abstractions": "9.0.0-rc.1.24452.1"
+        }
+      },
+      "Microsoft.AspNetCore.OpenApi/9.0.0-rc.1.24452.1": {
+        "dependencies": {
+          "Microsoft.OpenApi": "1.6.17"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.OpenApi.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.45201"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.SignalR.Client/9.0.0-rc.1.24452.1": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Http.Connections.Client": "9.0.0-rc.1.24452.1",
+          "Microsoft.AspNetCore.SignalR.Client.Core": "9.0.0-rc.1.24452.1"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.SignalR.Client.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.45201"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.SignalR.Client.Core/9.0.0-rc.1.24452.1": {
+        "dependencies": {
+          "Microsoft.AspNetCore.SignalR.Common": "9.0.0-rc.1.24452.1",
+          "Microsoft.AspNetCore.SignalR.Protocols.Json": "9.0.0-rc.1.24452.1",
+          "Microsoft.Extensions.DependencyInjection": "9.0.0-rc.1.24431.7",
+          "Microsoft.Extensions.Logging": "9.0.0-rc.1.24431.7",
+          "System.Threading.Channels": "9.0.0-rc.1.24431.7"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.AspNetCore.SignalR.Client.Core.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.45201"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.SignalR.Common/9.0.0-rc.1.24452.1": {
+        "dependencies": {
+          "Microsoft.AspNetCore.Connections.Abstractions": "9.0.0-rc.1.24452.1",
+          "Microsoft.Extensions.Options": "9.0.0-rc.1.24431.7"
+        }
+      },
+      "Microsoft.AspNetCore.SignalR.Protocols.Json/9.0.0-rc.1.24452.1": {
+        "dependencies": {
+          "Microsoft.AspNetCore.SignalR.Common": "9.0.0-rc.1.24452.1"
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection/9.0.0-rc.1.24431.7": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-rc.1.24431.7"
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.0-rc.1.24431.7": {},
+      "Microsoft.Extensions.Features/9.0.0-rc.1.24452.1": {},
+      "Microsoft.Extensions.Logging/9.0.0-rc.1.24431.7": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection": "9.0.0-rc.1.24431.7",
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.0-rc.1.24431.7",
+          "Microsoft.Extensions.Options": "9.0.0-rc.1.24431.7"
+        }
+      },
+      "Microsoft.Extensions.Logging.Abstractions/9.0.0-rc.1.24431.7": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-rc.1.24431.7"
+        }
+      },
+      "Microsoft.Extensions.Options/9.0.0-rc.1.24431.7": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-rc.1.24431.7",
+          "Microsoft.Extensions.Primitives": "9.0.0-rc.1.24431.7"
+        }
+      },
+      "Microsoft.Extensions.Primitives/9.0.0-rc.1.24431.7": {},
+      "Microsoft.OpenApi/1.6.17": {
+        "runtime": {
+          "lib/netstandard2.0/Microsoft.OpenApi.dll": {
+            "assemblyVersion": "1.6.17.0",
+            "fileVersion": "1.6.17.0"
+          }
+        }
+      },
+      "System.Net.ServerSentEvents/9.0.0-rc.1.24431.7": {
+        "runtime": {
+          "lib/net9.0/System.Net.ServerSentEvents.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.43107"
+          }
+        }
+      },
+      "System.Threading.Channels/9.0.0-rc.1.24431.7": {}
+    }
+  },
+  "libraries": {
+    "Chat.Client/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.AspNetCore.Connections.Abstractions/9.0.0-rc.1.24452.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-C+LFeXKR3Jg4LAunU1S26FCZFH73924IlJhaTN+8VOJHKPLXIPgKCskIDfWFimWT9cPHdmH5vr8oEl5sUKcuEA==",
+      "path": "microsoft.aspnetcore.connections.abstractions/9.0.0-rc.1.24452.1",
+      "hashPath": "microsoft.aspnetcore.connections.abstractions.9.0.0-rc.1.24452.1.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Http.Connections.Client/9.0.0-rc.1.24452.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HkMpUNy0cd8qSWLL7YTnxQVZUmxZko26qNo+CAi/CO2XKGANfTkJkrAG914awWjK0lF3aaHpY0c+3yOeOnJv7A==",
+      "path": "microsoft.aspnetcore.http.connections.client/9.0.0-rc.1.24452.1",
+      "hashPath": "microsoft.aspnetcore.http.connections.client.9.0.0-rc.1.24452.1.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Http.Connections.Common/9.0.0-rc.1.24452.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-clUegfBAjZrTis7met70P0XeAEmDQ5yZ5ro7oDk7PRhVHCQQfbLeyvb1xba+NKdkOrBcBKjL/HbswwJkA3dj8w==",
+      "path": "microsoft.aspnetcore.http.connections.common/9.0.0-rc.1.24452.1",
+      "hashPath": "microsoft.aspnetcore.http.connections.common.9.0.0-rc.1.24452.1.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.OpenApi/9.0.0-rc.1.24452.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-pMG6XHhr+9ESl6nUlXaZ/ibqqhy+EgwJ+u4jkrX/BliZ/q0tDfanCVKiozNC+ZyNbptGkeZiYsD9MdqVspmYLQ==",
+      "path": "microsoft.aspnetcore.openapi/9.0.0-rc.1.24452.1",
+      "hashPath": "microsoft.aspnetcore.openapi.9.0.0-rc.1.24452.1.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.SignalR.Client/9.0.0-rc.1.24452.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-e2mRATzUjNjJcfN5SmZRkpraFjUNl0IsCVBBR/1eKuXqemE1ZkYuovNBRwvP7K344P1gxLDP+mnMGygi4H55MQ==",
+      "path": "microsoft.aspnetcore.signalr.client/9.0.0-rc.1.24452.1",
+      "hashPath": "microsoft.aspnetcore.signalr.client.9.0.0-rc.1.24452.1.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.SignalR.Client.Core/9.0.0-rc.1.24452.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7Q4KBaz9icWWLFRW1/8GXtCgiPbQKLQ72nd/IsT9kD6qfDs7V6Fd5GXHrnYR0xsDjJXNSCm6PG5J4QRPJn6AaA==",
+      "path": "microsoft.aspnetcore.signalr.client.core/9.0.0-rc.1.24452.1",
+      "hashPath": "microsoft.aspnetcore.signalr.client.core.9.0.0-rc.1.24452.1.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.SignalR.Common/9.0.0-rc.1.24452.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5GZKkfZGX+yvj1fCis412HaUDnX0Yr4oKXN1XhQU1wKd9shH6/R9G30eXQ6caqnGUdn/ZAaYAn/NFQe7Iy/WnA==",
+      "path": "microsoft.aspnetcore.signalr.common/9.0.0-rc.1.24452.1",
+      "hashPath": "microsoft.aspnetcore.signalr.common.9.0.0-rc.1.24452.1.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.SignalR.Protocols.Json/9.0.0-rc.1.24452.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3azxS+0Sq7CDW1Lx8QSxHim3nNFKplorGWRvQFhEEukXH5Gc8XAzo1icjv1q6lZqtYVmy+dDwBsTZ5ET5jK6Ag==",
+      "path": "microsoft.aspnetcore.signalr.protocols.json/9.0.0-rc.1.24452.1",
+      "hashPath": "microsoft.aspnetcore.signalr.protocols.json.9.0.0-rc.1.24452.1.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection/9.0.0-rc.1.24431.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-n/o5Ou4JIycIJZfTybYujLbfRaDsBNDY5fPxhFT7GDWTBqM59OJQuebiPNKj0nzrRvaes8Cnr763NSdCA2Cfzg==",
+      "path": "microsoft.extensions.dependencyinjection/9.0.0-rc.1.24431.7",
+      "hashPath": "microsoft.extensions.dependencyinjection.9.0.0-rc.1.24431.7.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.0-rc.1.24431.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/Gtbv7/vlcUUx8rsVwI3zMS2gUMewMU2ukUa1mh00lRwBBmPPnempruehrhq/3LHLE4LO8tEaFtTYi1Z33PCWQ==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/9.0.0-rc.1.24431.7",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.9.0.0-rc.1.24431.7.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Features/9.0.0-rc.1.24452.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Mpk2WtCt6dTaPije4re7B4SYoYctH8ThU1oL5ovIaiZmSajlyWMlWwGI1qozncgMgqSCXopgOtn2JiUBDD0FIA==",
+      "path": "microsoft.extensions.features/9.0.0-rc.1.24452.1",
+      "hashPath": "microsoft.extensions.features.9.0.0-rc.1.24452.1.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging/9.0.0-rc.1.24431.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-y12goyBzy/ePVxUas/scjZNPvC2ZH9fYvTBt8+sVe3/SmPczhmo6+9D3F+DwzqFHT7H4LMw9nTv0HpyJvT3YPw==",
+      "path": "microsoft.extensions.logging/9.0.0-rc.1.24431.7",
+      "hashPath": "microsoft.extensions.logging.9.0.0-rc.1.24431.7.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Abstractions/9.0.0-rc.1.24431.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Dq4rgVJXE1SwINhR/D36O5fd9yZ4hQ4sWTt+gykLbWotaBEz16NhU95VKE4umsex147ZfkmDWr2Q0XldBQjuaA==",
+      "path": "microsoft.extensions.logging.abstractions/9.0.0-rc.1.24431.7",
+      "hashPath": "microsoft.extensions.logging.abstractions.9.0.0-rc.1.24431.7.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Options/9.0.0-rc.1.24431.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ZVLZmJAokgLf6JkCkDFNIegwtg+3ZcJpi1l55Od3h3RK0ofN9Cny5+WNA6sexDJP6OhPCCqsl6fK26j+ZN1kNQ==",
+      "path": "microsoft.extensions.options/9.0.0-rc.1.24431.7",
+      "hashPath": "microsoft.extensions.options.9.0.0-rc.1.24431.7.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Primitives/9.0.0-rc.1.24431.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-o0oZEbXbuc3jY3KriFAoTNAeHzv3OCzCx5chpuB+ecoloBI+zpNup0ai8RuTe4Ky9ULK9TyAUC9hgIDX0NnjRw==",
+      "path": "microsoft.extensions.primitives/9.0.0-rc.1.24431.7",
+      "hashPath": "microsoft.extensions.primitives.9.0.0-rc.1.24431.7.nupkg.sha512"
+    },
+    "Microsoft.OpenApi/1.6.17": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Le+kehlmrlQfuDFUt1zZ2dVwrhFQtKREdKBo+rexOwaCoYP0/qpgT9tLxCsZjsgR5Itk1UKPcbgO+FyaNid/bA==",
+      "path": "microsoft.openapi/1.6.17",
+      "hashPath": "microsoft.openapi.1.6.17.nupkg.sha512"
+    },
+    "System.Net.ServerSentEvents/9.0.0-rc.1.24431.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-TeSXyZJZhMlEr5lfM93O1zrJC8+fd61T9iH9WK15O/WetWcF+xGD5ZGyl5+zYoGr20XVMEl31cs0e6H3KXNuvg==",
+      "path": "system.net.serversentevents/9.0.0-rc.1.24431.7",
+      "hashPath": "system.net.serversentevents.9.0.0-rc.1.24431.7.nupkg.sha512"
+    },
+    "System.Threading.Channels/9.0.0-rc.1.24431.7": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-G/VPX6zwaQXJHEiVFRZ30AIGKbe7kdL4KllKBQxFqSB9zQ6UOg3S4TA4DBKzTJiDdtqKLeGn9M5rGuhUC2Jn2A==",
+      "path": "system.threading.channels/9.0.0-rc.1.24431.7",
+      "hashPath": "system.threading.channels.9.0.0-rc.1.24431.7.nupkg.sha512"
+    }
+  }
+}

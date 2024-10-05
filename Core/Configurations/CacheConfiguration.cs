@@ -12,4 +12,5 @@ public class CacheConfiguration
     public int SyncTimeout { get; set; }
     public int ReconnectRetryPolicy { get; set; }
     public int CacheLifeTime { get; set; }
+    public bool Ssl { get; set; } = false;
 }

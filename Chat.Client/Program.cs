@@ -59,8 +59,9 @@ var connection = new HubConnectionBuilder()
     .Build();
 
 // Define the handler for receiving chat messages
-connection.On<string, string, string, string>("ReceiveChat", (originUserId, messageId, text, timestamp) =>
+connection.On<string, string, string, string, string, string>("ReceiveChat", (originUserId, messageId, text, replyMessageId, replyMessageText, timestamp) =>
 {
+    Console.WriteLine($"On: {replyMessageId} with {replyMessageText}");
     Console.WriteLine($"Received message from {originUserId}: {text}");
 });
 
@@ -75,7 +76,7 @@ await connection.StartAsync();
 Console.WriteLine("Connection started");
 
 // Message sending loop
-while (true)
+while (true)    
 {
     Console.WriteLine("Enter message to send:");
     var message = Console.ReadLine();
@@ -87,5 +88,5 @@ while (true)
     }
 
     // Send the message to the destination user
-    await connection.InvokeAsync("SendMessageToUser", destinationUserId, message);
+    await connection.InvokeAsync("SendMessageToUser", destinationUserId, message, string.Empty, string.Empty);
 }

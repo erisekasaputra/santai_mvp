@@ -22,6 +22,6 @@ services:
       - Messaging__Host=amqps://b-e7d48130-52b4-4deb-9718-410459aa94ed.mq.ap-southeast-1.amazonaws.com:5671
       - Messaging__Username=santaitechnology
       - Messaging__Password=_SANTAItechnology2024
-      - Cache__Host=santaimvprediscache-hkpg4d.serverless.apse1.cache.amazonaws.com:6379 
-
+      - Cache__Host=santaimvpstagingv2.hkpg4d.clustercfg.apse1.cache.amazonaws.com:6379
+      - Cache__Ssl=false
     restart: always

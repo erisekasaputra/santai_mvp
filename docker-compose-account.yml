@@ -21,7 +21,8 @@ services:
       - Messaging__Username=santaitechnology
       - Messaging__Password=_SANTAItechnology2024
       - SafelyShutdown__Shutdown=false 
-      - Cache__Host=santaimvprediscache-hkpg4d.serverless.apse1.cache.amazonaws.com:6379
+      - Cache__Host=santaimvpstagingv2.hkpg4d.clustercfg.apse1.cache.amazonaws.com:6379
+      - Cache__Ssl=false
       - ReferralProgram__ValidMonth=4
       - ReferralProgram__Point=100
     restart: always
