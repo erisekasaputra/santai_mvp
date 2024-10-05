@@ -1,14 +1,18 @@
-﻿using Amazon.DynamoDBv2;
+﻿using Amazon;
+using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.Model;
+using Amazon.Runtime;
 using Chat.API.Applications.Services.Interfaces;
+using Core.Configurations;
 using Core.Services.Interfaces;
+using Microsoft.Extensions.Options;
 
 namespace Chat.API.Applications.Services;
 
 public class DynamoDBChatService : IChatService
 {
     private readonly IEncryptionService _encryptionService;
-    private readonly IAmazonDynamoDB _dynamoDbClient;
+    private readonly IAmazonDynamoDB _dynamoDbClient; 
 
     private readonly string TableName;
     private readonly string PartitionKey;
@@ -17,9 +21,16 @@ public class DynamoDBChatService : IChatService
     public DynamoDBChatService(
         IAmazonDynamoDB amazonDynamoDB,
         IEncryptionService encryptionService,
-        IConfiguration configuration)
+        IConfiguration configuration,
+        IOptionsMonitor<AWSIAMConfiguration> awsIamConfiguration)
     {
-        _dynamoDbClient = amazonDynamoDB;
+        var iam = awsIamConfiguration.CurrentValue;
+        // Create AWS credentials
+        var credentials = new BasicAWSCredentials(iam.AccessID, iam.SecretKey);
+
+        // Initialize DynamoDB client with credentials and region
+        var regionEndpoint = RegionEndpoint.GetBySystemName(iam.Region);
+        _dynamoDbClient = new AmazonDynamoDBClient(credentials, regionEndpoint);
         _encryptionService = encryptionService;
 
         TableName = configuration["DynamoDB:Chat:TableName"] ?? throw new Exception("Table Name should be set on initialization");
@@ -35,6 +46,7 @@ public class DynamoDBChatService : IChatService
         string? replyMessageText,
         long timestamp)
     {
+
         if (string.IsNullOrWhiteSpace(originUserId)) throw new ArgumentException("originUserId cannot be null or empty");
         if (string.IsNullOrWhiteSpace(destinationUserId)) throw new ArgumentException("destinationUserId cannot be null or empty");
         if (string.IsNullOrWhiteSpace(text)) throw new ArgumentException("Text cannot be null or empty");
