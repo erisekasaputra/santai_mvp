@@ -15,7 +15,7 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
             context.Message.OrderId.ToString(),
             context.Message.MechanicId.ToString());
 
-        if (isSuccess)
+        if (!isSuccess)
         {
             throw new Exception($"Failed to cancel the order by mechanic for order id {context.Message.OrderId}");
         } 

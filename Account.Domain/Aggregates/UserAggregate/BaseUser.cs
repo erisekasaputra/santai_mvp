@@ -80,6 +80,11 @@ public abstract class BaseUser : Entity, IAggregateRoot
         LoyaltyProgram = new LoyaltyProgram(Id, 0); 
     }
 
+    public void AddLoyaltyPoint(int point)
+    {
+        LoyaltyProgram.AddPoint(point);
+    }
+
     public void ResetPhoneNumber()
     {
         if (NewHashedPhoneNumber == HashedPhoneNumber)

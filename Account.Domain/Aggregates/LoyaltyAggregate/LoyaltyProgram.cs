@@ -7,14 +7,10 @@ namespace Account.Domain.Aggregates.LoyaltyAggregate;
 
 public class LoyaltyProgram : Entity, IAggregateRoot
 {   
-    public Guid LoyaltyUserId { get; private init; }
-
-    public BaseUser BaseUser { get; private set; } 
-
-    public int LoyaltyPoints { get; private set; }
-
+    public Guid LoyaltyUserId { get; private init; } 
+    public BaseUser BaseUser { get; private set; }  
+    public int LoyaltyPoints { get; private set; } 
     public LoyaltyTier LoyaltyTier { get; private set; } 
-      
       
     public LoyaltyProgram(
         Guid loyaltyUserId,

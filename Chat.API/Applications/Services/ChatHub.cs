@@ -38,16 +38,12 @@ public class ChatHub(
         try
         { 
             var originUserId = Context.UserIdentifier;
-
-            Console.WriteLine("Step 1 completed origin: {0}, destination: {1}", originUserId, destinationUserId);
-
+             
             if (string.IsNullOrEmpty(originUserId) || string.IsNullOrEmpty(destinationUserId) || string.IsNullOrEmpty(text)) 
             {
                 return;
             }
              
-            Console.WriteLine("Step 2 completed origin: {0}, destination: {1}", originUserId, destinationUserId);
-
             long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
             var messageId = await _chatService.SaveChatMessageAsync(

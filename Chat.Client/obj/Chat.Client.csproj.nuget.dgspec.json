@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Santai.MVP\\Chat.Client\\Chat.Client.csproj": {}
+    "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Chat.Client\\Chat.Client.csproj": {}
   },
   "projects": {
-    "C:\\Santai.MVP\\Chat.Client\\Chat.Client.csproj": {
+    "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Chat.Client\\Chat.Client.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Santai.MVP\\Chat.Client\\Chat.Client.csproj",
+        "projectUniqueName": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Chat.Client\\Chat.Client.csproj",
         "projectName": "Chat.Client",
-        "projectPath": "C:\\Santai.MVP\\Chat.Client\\Chat.Client.csproj",
+        "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Chat.Client\\Chat.Client.csproj",
         "packagesPath": "C:\\Users\\erise\\.nuget\\packages\\",
-        "outputPath": "C:\\Santai.MVP\\Chat.Client\\obj\\",
+        "outputPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Chat.Client\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

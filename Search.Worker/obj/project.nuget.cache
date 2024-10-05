@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "xInoDcLSVn0=",
+  "dgSpecHash": "XBFws9BTBas=",
   "success": true,
-  "projectFilePath": "C:\\Santai.MVP\\Search.Worker\\Search.Worker.csproj",
+  "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Search.Worker\\Search.Worker.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.core\\4.0.0-preview.2\\awssdk.core.4.0.0-preview.2.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.extensions.netcore.setup\\4.0.0-preview.2\\awssdk.extensions.netcore.setup.4.0.0-preview.2.nupkg.sha512",

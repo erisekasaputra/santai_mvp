@@ -12,12 +12,12 @@ public class OrderFindingMechanicIntegrationEventConsumer(
     public async Task Consume(ConsumeContext<OrderFindingMechanicIntegrationEvent> context)
     {
         await _cache.CreateOrderToQueueAndHash(
-                   new OrderTask(
-                       context.Message.OrderId.ToString(),
-                       context.Message.BuyerId.ToString(),
-                       string.Empty,
-                       context.Message.Latitude,
-                       context.Message.Longitude,
-                       OrderTaskStatus.WaitingMechanic));
+            new OrderTask(
+                context.Message.OrderId.ToString(),
+                context.Message.BuyerId.ToString(),
+                string.Empty,
+                context.Message.Latitude,
+                context.Message.Longitude,
+                OrderTaskStatus.WaitingMechanic));
     }
 }

@@ -84,10 +84,10 @@ public static class ServiceRegistrationExtension
             var secretKey = Encoding.UTF8.GetBytes(options.SecretKey ?? throw new Exception("Secret key has not been set")); 
             configure.TokenValidationParameters = new TokenValidationParameters()
             {
-                RequireExpirationTime = false,
+                RequireExpirationTime = true,
                 ValidateIssuer = true,
                 ValidateAudience = true,
-                ValidateLifetime = false,
+                ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = options.Issuer ?? throw new Exception("Issuer can not be null"),
                 ValidAudience = options.Audience ?? throw new Exception("Audience can not be null"),

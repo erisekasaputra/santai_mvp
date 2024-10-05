@@ -35,7 +35,7 @@ public class DeactivateMechanicStatusByUserIdCommandHandler : IRequestHandler<De
                 TimeSpan.FromSeconds(Math.Pow(1, retryAttempt)),
                 onRetry: (exception, timeSpan, retryCount, context) =>
                 {
-                    Console.WriteLine($"Retry on {retryCount} failed. Waiting {timeSpan} before try again. Error: {exception.Message}");
+                    logger.LogError("Retry on {retryCount} failed. Waiting {timeSpan} before try again. Error: {message}", retryCount, timeSpan, exception.Message);
                 });
     }
     public async Task<Result> Handle(DeactivateMechanicStatusByUserIdCommand request, CancellationToken cancellationToken)

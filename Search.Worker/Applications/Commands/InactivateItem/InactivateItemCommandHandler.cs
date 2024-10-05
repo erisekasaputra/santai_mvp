@@ -8,9 +8,7 @@ internal class InactivateItemCommandHandler(IItemRepository itemRepository) : IR
     private readonly IItemRepository _itemRepository = itemRepository;
 
     public async Task<Unit> Handle(InactivateItemCommand request, CancellationToken cancellationToken)
-    {
-        Console.WriteLine("Inactivate Item " + request.Id);
-
+    { 
         var item = await _itemRepository.GetItemByIdAsync(request.Id, cancellationToken);
 
         if (item is null)

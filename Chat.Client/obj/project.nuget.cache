@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "1YpjieKkl4w=",
+  "dgSpecHash": "Wy9jrCIlNoY=",
   "success": true,
-  "projectFilePath": "C:\\Santai.MVP\\Chat.Client\\Chat.Client.csproj",
+  "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Chat.Client\\Chat.Client.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.aspnetcore.connections.abstractions\\9.0.0-rc.1.24452.1\\microsoft.aspnetcore.connections.abstractions.9.0.0-rc.1.24452.1.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.aspnetcore.http.connections.client\\9.0.0-rc.1.24452.1\\microsoft.aspnetcore.http.connections.client.9.0.0-rc.1.24452.1.nupkg.sha512",

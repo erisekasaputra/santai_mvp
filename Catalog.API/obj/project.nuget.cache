@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "DIJvZXY91Jo=",
+  "dgSpecHash": "zYGEaSebHjA=",
   "success": true,
-  "projectFilePath": "C:\\Santai.MVP\\Catalog.API\\Catalog.API.csproj",
+  "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Catalog.API\\Catalog.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\erise\\.nuget\\packages\\aspnetcoreratelimit\\5.0.0\\aspnetcoreratelimit.5.0.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.core\\4.0.0-preview.2\\awssdk.core.4.0.0-preview.2.nupkg.sha512",

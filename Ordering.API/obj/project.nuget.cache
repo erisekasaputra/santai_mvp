@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "gyV76fhd95k=",
+  "dgSpecHash": "d9R74TtQ2Wo=",
   "success": true,
-  "projectFilePath": "C:\\Santai.MVP\\Ordering.API\\Ordering.API.csproj",
+  "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Ordering.API\\Ordering.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.core\\4.0.0-preview.2\\awssdk.core.4.0.0-preview.2.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.extensions.netcore.setup\\4.0.0-preview.2\\awssdk.extensions.netcore.setup.4.0.0-preview.2.nupkg.sha512",

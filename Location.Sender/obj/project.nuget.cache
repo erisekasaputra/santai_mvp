@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "p5J+EMq6IVo=",
+  "dgSpecHash": "AaZ+PHWtwKE=",
   "success": true,
-  "projectFilePath": "C:\\Santai.MVP\\Location.Sender\\Location.Sender.csproj",
+  "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Location.Sender\\Location.Sender.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.aspnetcore.connections.abstractions\\8.0.8\\microsoft.aspnetcore.connections.abstractions.8.0.8.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.aspnetcore.http.connections.client\\8.0.8\\microsoft.aspnetcore.http.connections.client.8.0.8.nupkg.sha512",

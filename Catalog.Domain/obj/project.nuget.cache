@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "6V3UxSDD2G8=",
+  "dgSpecHash": "/fpQlOgoANQ=",
   "success": true,
-  "projectFilePath": "C:\\Santai.MVP\\Catalog.Domain\\Catalog.Domain.csproj",
+  "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Catalog.Domain\\Catalog.Domain.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.core\\4.0.0-preview.2\\awssdk.core.4.0.0-preview.2.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.extensions.netcore.setup\\4.0.0-preview.2\\awssdk.extensions.netcore.setup.4.0.0-preview.2.nupkg.sha512",

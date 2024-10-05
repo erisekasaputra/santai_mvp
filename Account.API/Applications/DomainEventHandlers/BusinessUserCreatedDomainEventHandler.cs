@@ -3,16 +3,19 @@ using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Events;
 using Core.Events.Account;
 using Core.Services.Interfaces;
+using Core.Utilities;
 using MediatR;
 
 namespace Account.API.Applications.DomainEventHandlers;
 
 public class BusinessUserCreatedDomainEventHandler(
     IMediator mediator,
-    IEncryptionService kmsClient) : INotificationHandler<BusinessUserCreatedDomainEvent>
+    IEncryptionService kmsClient,
+    ILogger<BusinessUserCreatedDomainEventHandler> logger) : INotificationHandler<BusinessUserCreatedDomainEvent>
 { 
     private readonly IEncryptionService _kmsClient = kmsClient;
     private readonly IMediator _mediator = mediator;
+    private readonly ILogger<BusinessUserCreatedDomainEventHandler> _logger = logger;
 
     public async Task Handle(BusinessUserCreatedDomainEvent notification, CancellationToken cancellationToken)
     {
@@ -59,7 +62,7 @@ public class BusinessUserCreatedDomainEventHandler(
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
+            LoggerHelper.LogError(_logger, ex); 
         }
     }
 

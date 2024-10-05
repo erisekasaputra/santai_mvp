@@ -7833,11 +7833,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Santai.MVP\\Ordering.API\\Ordering.API.csproj",
+      "projectUniqueName": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Ordering.API\\Ordering.API.csproj",
       "projectName": "Ordering.API",
-      "projectPath": "C:\\Santai.MVP\\Ordering.API\\Ordering.API.csproj",
+      "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Ordering.API\\Ordering.API.csproj",
       "packagesPath": "C:\\Users\\erise\\.nuget\\packages\\",
-      "outputPath": "C:\\Santai.MVP\\Ordering.API\\obj\\",
+      "outputPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Ordering.API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -7859,14 +7859,14 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Santai.MVP\\Core\\Core.csproj": {
-              "projectPath": "C:\\Santai.MVP\\Core\\Core.csproj"
+            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Core\\Core.csproj": {
+              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Core\\Core.csproj"
             },
-            "C:\\Santai.MVP\\Ordering.Domain\\Ordering.Domain.csproj": {
-              "projectPath": "C:\\Santai.MVP\\Ordering.Domain\\Ordering.Domain.csproj"
+            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Ordering.Domain\\Ordering.Domain.csproj": {
+              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Ordering.Domain\\Ordering.Domain.csproj"
             },
-            "C:\\Santai.MVP\\Ordering.Infrastructure\\Ordering.Infrastructure.csproj": {
-              "projectPath": "C:\\Santai.MVP\\Ordering.Infrastructure\\Ordering.Infrastructure.csproj"
+            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Ordering.Infrastructure\\Ordering.Infrastructure.csproj": {
+              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Ordering.Infrastructure\\Ordering.Infrastructure.csproj"
             }
           }
         }

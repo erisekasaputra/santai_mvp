@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "vI7kVIp1x9w=",
+  "dgSpecHash": "esnxvj0OVb8=",
   "success": true,
-  "projectFilePath": "C:\\Santai.MVP\\FileHub.API\\FileHub.API.csproj",
+  "projectFilePath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\FileHub.API\\FileHub.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.core\\4.0.0-preview.2\\awssdk.core.4.0.0-preview.2.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.extensions.netcore.setup\\4.0.0-preview.2\\awssdk.extensions.netcore.setup.4.0.0-preview.2.nupkg.sha512",
