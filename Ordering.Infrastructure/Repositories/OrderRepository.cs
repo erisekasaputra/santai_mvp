@@ -28,10 +28,11 @@ public class OrderRepository : IOrderRepository
             .Include(order => order.Discount)
             .Include(order => order.Fees)
             .Include(order => order.Fleets)
-            .ThenInclude(fleet => fleet.BasicInspections)
+                .ThenInclude(fleet => fleet.BasicInspections)
             .Include(order => order.Fleets)
-            .ThenInclude(fleet => fleet.PreServiceInspections)
-            .ThenInclude(preService => preService.PreServiceInspectionResults)
+                .ThenInclude(fleet => fleet.PreServiceInspections)
+                .ThenInclude(preService => preService.PreServiceInspectionResults)
+            .AsSplitQuery()
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync(cancellationToken);
     }
@@ -53,10 +54,11 @@ public class OrderRepository : IOrderRepository
             .Include(order => order.Discount)
             .Include(order => order.Fees)
             .Include(order => order.Fleets)
-            .ThenInclude(fleet => fleet.BasicInspections)
+                .ThenInclude(fleet => fleet.BasicInspections)
             .Include(order => order.Fleets)
-            .ThenInclude(fleet => fleet.PreServiceInspections)
-            .ThenInclude(preService => preService.PreServiceInspectionResults)
+                .ThenInclude(fleet => fleet.PreServiceInspections)
+                .ThenInclude(preService => preService.PreServiceInspectionResults)
+            .AsSplitQuery()
             .Where(x => x.Id == orderId && x.Buyer.BuyerId == buyerId)
             .FirstOrDefaultAsync(cancellationToken);
     }
@@ -87,6 +89,7 @@ public class OrderRepository : IOrderRepository
             .Include(order => order.Discount)
             .Include(order => order.Fees)
             .Include(order => order.Fleets) 
+            .AsSplitQuery()
             .OrderBy(x => x.Status)
             .ThenBy(x => x.CreatedAtUtc)
             .Skip((pageNumber - 1) * pageSize)
