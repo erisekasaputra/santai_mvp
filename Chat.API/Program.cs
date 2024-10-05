@@ -17,9 +17,10 @@ builder.AddApplicationService();
 builder.AddAuth();
 
 var app = builder.Build();
-
+  
 app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapHub<ChatHub>("/chat");
 app.MapHealthChecks("/health");
 app.Run(); 
