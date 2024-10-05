@@ -18,6 +18,17 @@ public class ChatHub(
     private readonly IMediator _mediator = mediator;
     private readonly ILogger<ChatHub> _logger = logger;
 
+    public override Task OnConnectedAsync()
+    {
+        var user = Context.UserIdentifier;
+        if (user is null)
+        {
+            Context.Abort();
+        }
+     
+        return base.OnConnectedAsync();
+    }
+
     public async Task SendMessageToUser(
         string destinationUserId, 
         string text,
@@ -25,7 +36,7 @@ public class ChatHub(
         string? replyMessageText)
     {
         try
-        {
+        { 
             var originUserId = Context.UserIdentifier;
 
             Console.WriteLine("Step 1 completed origin: {0}, destination: {1}", originUserId, destinationUserId);

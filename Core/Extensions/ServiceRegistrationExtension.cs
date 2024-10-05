@@ -84,7 +84,7 @@ public static class ServiceRegistrationExtension
             var secretKey = Encoding.UTF8.GetBytes(options.SecretKey ?? throw new Exception("Secret key has not been set")); 
             configure.TokenValidationParameters = new TokenValidationParameters()
             {
-                RequireExpirationTime = true,
+                RequireExpirationTime = false,
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateLifetime = false,

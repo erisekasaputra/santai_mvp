@@ -48,12 +48,8 @@ if (string.IsNullOrEmpty(url))
 // Build the SignalR connection
 var connection = new HubConnectionBuilder()
     .WithUrl(url, options =>
-    {
-        options.AccessTokenProvider = async () =>
-        {
-            return await Task.FromResult(token);
-        };
-
+    { 
+        options.Headers.Add("Authorization", $"Bearer {token}");
         options.Transports = HttpTransportType.WebSockets;
     })
     .Build();
@@ -71,9 +67,22 @@ connection.On<string>("InternalServerError", (errorMessage) =>
     Console.WriteLine($"Error: {errorMessage}");
 });
 
-// Start the SignalR connection
-await connection.StartAsync();
-Console.WriteLine("Connection started");
+connection.Closed += async (error) =>
+{
+    Console.WriteLine(error);
+    await Task.CompletedTask;
+};
+
+try
+{
+    // Start the SignalR connection
+    await connection.StartAsync();
+    Console.WriteLine("Connection started");
+}
+catch(Exception ex)
+{
+    Console.WriteLine(ex.Message);
+}
 
 // Message sending loop
 while (true)    
