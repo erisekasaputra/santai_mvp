@@ -87,7 +87,7 @@ public class CreateOrderCommandHandler(
                     ResponseStatus.UnprocessableEntity) 
                     .WithData(new 
                     {
-                        Ids = buyer.Data.UnknownFleets
+                        Fleets = buyer.Data.UnknownFleets
                     });
             }
 
@@ -188,8 +188,11 @@ public class CreateOrderCommandHandler(
             }
 
             await RollbackAsync(cancellationToken);
-            return Result.Failure("There are severals line items could not be processed", ResponseStatus.UnprocessableEntity) 
-                .WithData(items.Data);
+            return Result.Failure("There are severals line items could not be processed", ResponseStatus.UnprocessableEntity)
+                .WithData(new 
+                {
+                    Items = items?.Data?.Select(x => x.Id) ?? []
+                });
         }
 
         var order = new Order(  

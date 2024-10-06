@@ -70,3 +70,7 @@ C:\Santai.MVP\Location.API\obj\Debug\net9.0\refint\Location.API.dll
 C:\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.pdb
 C:\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.genruntimeconfig.cache
 C:\Santai.MVP\Location.API\obj\Debug\net9.0\ref\Location.API.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Location.API\bin\Debug\net9.0\appsettings.Production.json
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Location.API\bin\Debug\net9.0\Pipelines.Sockets.Unofficial.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Location.API\bin\Debug\net9.0\StackExchange.Redis.dll

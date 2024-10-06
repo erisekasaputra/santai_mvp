@@ -18,3 +18,23 @@ C:\Santai.MVP\Ordering.Infrastructure\obj\Debug\net9.0\refint\Ordering.Infrastru
 C:\Santai.MVP\Ordering.Infrastructure\obj\Debug\net9.0\Ordering.Infrastructure.pdb
 C:\Santai.MVP\Ordering.Infrastructure\obj\Debug\net9.0\Ordering.Infrastructure.genruntimeconfig.cache
 C:\Santai.MVP\Ordering.Infrastructure\obj\Debug\net9.0\ref\Ordering.Infrastructure.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\bin\Debug\net9.0\Ordering.Infrastructure.deps.json
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\bin\Debug\net9.0\Ordering.Infrastructure.runtimeconfig.json
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\bin\Debug\net9.0\Ordering.Infrastructure.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\bin\Debug\net9.0\Ordering.Infrastructure.pdb
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\bin\Debug\net9.0\Core.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\bin\Debug\net9.0\Ordering.Domain.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\bin\Debug\net9.0\Ordering.Domain.pdb
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\bin\Debug\net9.0\Core.pdb
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\obj\Debug\net9.0\Ordering.Infrastructure.csproj.AssemblyReference.cache
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\obj\Debug\net9.0\Ordering.Infrastructure.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\obj\Debug\net9.0\Ordering.Infrastructure.AssemblyInfoInputs.cache
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\obj\Debug\net9.0\Ordering.Infrastructure.AssemblyInfo.cs
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\obj\Debug\net9.0\Ordering.Infrastructure.csproj.CoreCompileInputs.cache
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\obj\Debug\net9.0\Ordering.Infrastructure.sourcelink.json
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\obj\Debug\net9.0\Ordering.7AF05425.Up2Date
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\obj\Debug\net9.0\Ordering.Infrastructure.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\obj\Debug\net9.0\refint\Ordering.Infrastructure.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\obj\Debug\net9.0\Ordering.Infrastructure.pdb
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\obj\Debug\net9.0\Ordering.Infrastructure.genruntimeconfig.cache
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Infrastructure\obj\Debug\net9.0\ref\Ordering.Infrastructure.dll

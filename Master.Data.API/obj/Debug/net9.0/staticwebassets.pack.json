@@ -1,19 +1,19 @@
 {
   "Files": [
     {
-      "Id": "C:\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json",
+      "Id": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json",
       "PackagePath": "staticwebassets\\Order\\BasicInspection\\basic-inspection.json"
     },
     {
-      "Id": "C:\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json",
+      "Id": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json",
       "PackagePath": "staticwebassets\\Order\\CancellationFee\\cancellation-fee.json"
     },
     {
-      "Id": "C:\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json",
+      "Id": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json",
       "PackagePath": "staticwebassets\\Order\\PreServiceInspection\\pre-service-inspection.json"
     },
     {
-      "Id": "C:\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\ServiceFee\\service-fee.json",
+      "Id": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\ServiceFee\\service-fee.json",
       "PackagePath": "staticwebassets\\Order\\ServiceFee\\service-fee.json"
     },
     {

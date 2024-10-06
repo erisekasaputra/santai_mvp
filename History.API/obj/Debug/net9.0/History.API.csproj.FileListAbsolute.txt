@@ -69,3 +69,6 @@ C:\Santai.MVP\History.API\obj\Debug\net9.0\refint\History.API.dll
 C:\Santai.MVP\History.API\obj\Debug\net9.0\History.API.pdb
 C:\Santai.MVP\History.API\obj\Debug\net9.0\History.API.genruntimeconfig.cache
 C:\Santai.MVP\History.API\obj\Debug\net9.0\ref\History.API.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\History.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\History.API\bin\Debug\net9.0\Pipelines.Sockets.Unofficial.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\History.API\bin\Debug\net9.0\StackExchange.Redis.dll

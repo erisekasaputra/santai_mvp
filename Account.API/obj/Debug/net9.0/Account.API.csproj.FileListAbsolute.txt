@@ -60,17 +60,8 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Design.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.Relational.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Microsoft.EntityFrameworkCore.SqlServer.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.Abstractions.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.Memory.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Microsoft.Extensions.Configuration.Abstractions.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Microsoft.Extensions.DependencyModel.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Microsoft.Extensions.Logging.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Microsoft.Identity.Client.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Microsoft.Identity.Client.Extensions.Msal.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Microsoft.IdentityModel.Abstractions.dll
@@ -111,16 +102,12 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\System.Composition.TypedParts.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\System.Data.SqlClient.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\System.Diagnostics.DiagnosticSource.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\System.Drawing.Common.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\System.Private.Windows.Core.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\System.IO.Pipelines.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\System.Memory.Data.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\System.Runtime.Caching.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\System.Text.Encodings.Web.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\System.Text.Json.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\TimeZoneConverter.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\cs\Microsoft.CodeAnalysis.resources.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\de\Microsoft.CodeAnalysis.resources.dll
@@ -210,19 +197,10 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\runtimes\win\lib\net8.0\System.Runtime.Caching.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\runtimes\browser\lib\net9.0\System.Text.Encodings.Web.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Account.Contracts.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Account.Domain.dll
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Account.Infrastructure.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\CustomValidation.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Identity.Contracts.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\SantaiClaimType.dll
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Account.Contracts.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Account.Domain.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Account.Infrastructure.pdb
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\CustomValidation.pdb
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\SantaiClaimType.pdb
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\bin\Debug\net9.0\Identity.Contracts.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\obj\Debug\net9.0\Account.API.csproj.AssemblyReference.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\obj\Debug\net9.0\Account.API.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.Mvp\Account.API\obj\Debug\net9.0\Account.API.AssemblyInfoInputs.cache
@@ -485,3 +463,14 @@ C:\Santai.MVP\Account.API\obj\Debug\net9.0\refint\Account.API.dll
 C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.pdb
 C:\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.genruntimeconfig.cache
 C:\Santai.MVP\Account.API\obj\Debug\net9.0\ref\Account.API.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\appsettings.Staging.json
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\Hangfire.AspNetCore.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\Hangfire.Core.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\Hangfire.NetCore.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\Hangfire.SqlServer.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.Google.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\RedLockNet.Abstractions.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\RedLockNet.SERedis.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\System.Net.WebSockets.WebSocketProtocol.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\Core.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\Core.pdb

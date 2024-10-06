@@ -29,3 +29,8 @@ C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\refint\Catalog.Domain.dll
 C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.pdb
 C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.genruntimeconfig.cache
 C:\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\ref\Catalog.Domain.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Catalog.Domain\bin\Debug\net9.0\Catalog.Domain.runtimeconfig.json
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Catalog.Domain\bin\Debug\net9.0\Core.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Catalog.Domain\bin\Debug\net9.0\Core.pdb
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog..A0AFAC00.Up2Date
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Catalog.Domain\obj\Debug\net9.0\Catalog.Domain.genruntimeconfig.cache
