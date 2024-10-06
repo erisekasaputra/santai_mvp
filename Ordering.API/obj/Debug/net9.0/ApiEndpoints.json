@@ -422,6 +422,22 @@
     "ReturnTypes": []
   },
   {
+    "ContainingType": "Ordering.API.Controllers.OrderController",
+    "Method": "CalculateOrder",
+    "RelativePath": "api/v1/orders/calculate",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "Ordering.API.Applications.Dtos.Requests.CalculateOrderRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "Ordering.API.Controllers.PaymentController",
     "Method": "CreatePayment",
     "RelativePath": "api/v1/payment/callback-senangpay",

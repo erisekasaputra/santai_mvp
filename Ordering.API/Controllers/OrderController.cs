@@ -9,6 +9,7 @@ using FluentValidation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Ordering.API.Applications.Commands.Orders.CalculateOrder;
 using Ordering.API.Applications.Commands.Orders.CancelOrderByBuyer;
 using Ordering.API.Applications.Commands.Orders.CancelOrderByMechanic;
 using Ordering.API.Applications.Commands.Orders.CreateOrder;
@@ -106,6 +107,45 @@ public class OrderController : ControllerBase
                 Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         }
     }
+
+    [Authorize(Policy = "BusinessStaffRegularUserPolicy")]
+    [HttpPost("calculate")]
+    [Idempotency(nameof(CalculateOrder))]
+    public async Task<IResult> CalculateOrder(
+        [FromBody] CalculateOrderRequest request)
+    {
+        try
+        {
+            var userClaim = _userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Forbid();
+            } 
+
+            var result = await _mediator.Send(
+                new CalculateOrderCommand(
+                    userClaim.Sub,
+                    userClaim.CurrentUserType,
+                    request.AddressLine,
+                    request.Latitude,
+                    request.Longitude,
+                    request.Currency,
+                    request.IsScheduled,
+                    request.ScheduledAt,
+                    request.CouponCode,
+                    request.LineItems,
+                    request.Fleets));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            return TypedResults.InternalServerError(
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+        }
+    }
+
 
     [HttpGet("{orderId}/secret")]
     [Authorize(Policy = "BusinessStaffRegularUserPolicy")]

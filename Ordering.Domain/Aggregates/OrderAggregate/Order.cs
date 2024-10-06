@@ -676,7 +676,7 @@ public class Order : Entity
         Fees.Add(fee);
     }
 
-    public void CalculateGrandTotal(decimal grandTotal)
+    public void CalculateGrandTotal(decimal? requiredGrandTotal = null)
     {
         if (GrandTotal.Currency != Currency)
         {
@@ -707,7 +707,12 @@ public class Order : Entity
             GrandTotal += fee.Apply(holdedGrandTotal.Amount, Currency);
         }
 
-        if (GrandTotal.Amount != grandTotal)
+        if (!requiredGrandTotal.HasValue)
+        {
+            return;
+        }
+
+        if (GrandTotal.Amount != requiredGrandTotal.Value)
         {
             throw new PriceChangesException(
                 "Upps, price changes has been detected", GrandTotal.Amount);

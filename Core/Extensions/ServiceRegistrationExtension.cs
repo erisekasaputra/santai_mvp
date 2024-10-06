@@ -87,7 +87,7 @@ public static class ServiceRegistrationExtension
                 RequireExpirationTime = true,
                 ValidateIssuer = true,
                 ValidateAudience = true,
-                ValidateLifetime = true,
+                ValidateLifetime = false,
                 ValidateIssuerSigningKey = true,
                 ValidIssuer = options.Issuer ?? throw new Exception("Issuer can not be null"),
                 ValidAudience = options.Audience ?? throw new Exception("Audience can not be null"),
