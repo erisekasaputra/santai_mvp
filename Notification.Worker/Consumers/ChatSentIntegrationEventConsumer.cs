@@ -41,6 +41,7 @@ public class ChatSentIntegrationEventConsumer(
                     body = context.Message.Text,
                     image = _projectConfiguration.LogoUrl,
                 },
+                to = profile.DeviceToken,
                 data = new
                 {
                     token = profile.DeviceToken,

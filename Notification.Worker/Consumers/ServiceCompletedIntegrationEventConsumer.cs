@@ -56,6 +56,7 @@ public class ServiceCompletedIntegrationEventConsumer(
                     image = _projectConfiguration.LogoUrl,
                     click_action = "OPEN_APP"
                 },
+                to = profile.DeviceToken,
                 data = new
                 {
                     token = profile.DeviceToken,

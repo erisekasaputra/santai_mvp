@@ -34,15 +34,14 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
             orderData.MechanicId.ToString(),
             string.Empty,
             OrderStatus.MechanicSelected.ToString(),
-            string.Empty);
-         
-        
+            string.Empty); 
 
         var target = await _userProfileRepository.GetProfiles(orderData.BuyerId);
         if (target is null || !target.Any())
         {
             return;
         }
+
         foreach (var profile in target)
         {
             var confirmSeconds = orderData.ConfirmDeadlineInSeconds; 
@@ -58,7 +57,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
                     image = _projectConfiguration.LogoUrl, 
                     click_action = "OPEN_APP"
                 },
-
+                to = profile.DeviceToken,
                 data = new
                 {
                     token = profile.DeviceToken,
@@ -98,8 +97,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
                 Message = messageJson,
                 MessageStructure = "json",
                 TargetArn = profile.Arn
-            };
-
+            }; 
             await _messageService.PublishPushNotificationAsync(request);
         }
     }
