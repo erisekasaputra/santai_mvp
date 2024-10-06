@@ -676,7 +676,7 @@ public class Order : Entity
         Fees.Add(fee);
     }
 
-    public void CalculateGrandTotal()
+    public void CalculateGrandTotal(decimal grandTotal)
     {
         if (GrandTotal.Currency != Currency)
         {
@@ -705,6 +705,12 @@ public class Order : Entity
         foreach (var fee in Fees)
         {
             GrandTotal += fee.Apply(holdedGrandTotal.Amount, Currency);
+        }
+
+        if (GrandTotal.Amount != grandTotal)
+        {
+            throw new PriceChangesException(
+                "Upps, Price changes has been detected", GrandTotal.Amount);
         }
     }
 

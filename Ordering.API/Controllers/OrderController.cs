@@ -94,7 +94,8 @@ public class OrderController : ControllerBase
                     request.ScheduledAt,
                     request.CouponCode,
                     request.LineItems,
-                    request.Fleets));
+                    request.Fleets,
+                    request.GrandTotal));
 
             return result.ToIResult();
         }

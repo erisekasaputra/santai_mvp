@@ -23,7 +23,7 @@ services:
       - Cache__Host=santaimvpstagingv2.hkpg4d.clustercfg.apse1.cache.amazonaws.com:6379
       - Cache__Ssl=false
       - SafelyShutdown__Shutdown=false 
-      - SenangPay__Host=https://app.senangpay.my/payment
+      - SenangPay__Host=https://sandbox.senangpay.my/payment
       - SenangPay__MerchantId=741172360948037
       - SenangPay__SecretKey=6936-735
       - AccountService__Host=http://internal-AccountServiceLoadBalancer-783549570.ap-southeast-1.elb.amazonaws.com:80

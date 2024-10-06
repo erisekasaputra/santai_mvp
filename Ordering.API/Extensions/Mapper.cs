@@ -33,6 +33,7 @@ public static class Mapper
                 order.RatingImages,
                 order.Fees.ToFeesDto(),
                 order.Cancellation?.ToCancellationDto(),
+                order.Status,
                 order.IsPaid,
                 order.IsRated,
                 order.IsPaymentExpire 

@@ -430,9 +430,39 @@
     "Order": 0,
     "Parameters": [
       {
-        "Name": "request",
-        "Type": "Ordering.API.Applications.Dtos.Requests.SenangPayPaymentRequest",
-        "IsRequired": true
+        "Name": "TransactionId",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "OrderId",
+        "Type": "System.Guid",
+        "IsRequired": false
+      },
+      {
+        "Name": "Amount",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      },
+      {
+        "Name": "Method",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Message",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "Status",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "Hash",
+        "Type": "System.String",
+        "IsRequired": false
       }
     ],
     "ReturnTypes": []

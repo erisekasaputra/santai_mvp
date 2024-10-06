@@ -16,4 +16,5 @@ public record CreateOrderCommand(
     DateTime? ScheduledOn,
     string? CouponCode,
     IEnumerable<LineItemRequest> LineItems,
-    IEnumerable<FleetRequest> Fleets) : IRequest<Result>;
+    IEnumerable<FleetRequest> Fleets,
+    decimal GrandTotal) : IRequest<Result>;

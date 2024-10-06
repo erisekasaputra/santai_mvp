@@ -1,4 +1,5 @@
-﻿using Core.Enumerations; 
+﻿using Core.Enumerations;
+using Ordering.Domain.Enumerations;
 
 namespace Ordering.API.Applications.Dtos.Responses;
 
@@ -27,9 +28,10 @@ public class OrderResponseDto
     public IEnumerable<string>? RatingImages { get; private set; }
     public IEnumerable<FeeResponseDto> Fees { get; private set; }
     public CancellationResponseDto? Cancellation { get; private set; } 
+    public OrderStatus OrderStatus { get; private set; }
     public bool IsPaid { get; private set; }
     public bool IsRated { get; private set; }
-    public bool IsPaymentExpire { get; private set; } 
+    public bool IsPaymentExpire { get; private set; }  
     public OrderResponseDto(
         Guid orderId,
         string secret,
@@ -54,6 +56,7 @@ public class OrderResponseDto
         IEnumerable<string>? ratingImages,
         IEnumerable<FeeResponseDto> fees,
         CancellationResponseDto? cancellation,
+        OrderStatus orderStatus,
         bool isPaid,
         bool isRated,
         bool isPaymentExpire)
@@ -80,6 +83,7 @@ public class OrderResponseDto
         RatingImages = ratingImages;
         Fees = fees;
         Cancellation = cancellation;
+        OrderStatus = orderStatus;
         IsPaid = isPaid;
         IsRated = isRated;
         IsScheduled = isScheduled;

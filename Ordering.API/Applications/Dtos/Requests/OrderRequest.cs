@@ -13,6 +13,7 @@ public class OrderRequest
     public required string CouponCode { get; set; }
     public required IEnumerable<LineItemRequest> LineItems { get; set; }
     public required IEnumerable<FleetRequest> Fleets { get; set; }
+    public decimal GrandTotal { get; set; }
 
     public OrderRequest(
         string addressLine,
@@ -23,7 +24,8 @@ public class OrderRequest
         DateTime? scheduledAt,
         string couponCode,
         IEnumerable<LineItemRequest> lineItems,
-        IEnumerable<FleetRequest> fleets)
+        IEnumerable<FleetRequest> fleets,
+        decimal grandTotal)
     {
         AddressLine = addressLine;
         Latitude = latitude;
@@ -34,5 +36,6 @@ public class OrderRequest
         CouponCode = couponCode;
         LineItems = lineItems;
         Fleets = fleets;
+        GrandTotal = grandTotal;
     }
 }

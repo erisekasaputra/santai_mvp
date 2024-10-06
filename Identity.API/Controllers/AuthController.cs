@@ -775,6 +775,11 @@ public class AuthController(
         if (!string.IsNullOrWhiteSpace(request.GoogleIdToken))
         {
             googlePayload = await _googleTokenValidator.ValidateAsync(request.GoogleIdToken);
+            if (googlePayload is null) 
+            {
+                return TypedResults.BadRequest(Result.Failure("Google id token is invalid", ResponseStatus.BadRequest));
+            }
+
             var userByEmail = await _userManager.FindByEmailAsync(googlePayload.Email);
 
             // Early return if email already exists and phone number is missing

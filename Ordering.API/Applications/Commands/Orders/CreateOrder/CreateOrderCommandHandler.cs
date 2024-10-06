@@ -1,6 +1,5 @@
 ﻿using Core.CustomMessages;
-using Core.Enumerations;
-using Core.Events;
+using Core.Enumerations; 
 using Core.Events.Catalog;
 using Core.Events.Ordering;
 using Core.Exceptions;
@@ -38,8 +37,7 @@ public class CreateOrderCommandHandler(
     private readonly ICatalogServiceAPI _catalogService = catalogService;
     private readonly IPublishEndpoint _publishEndpoint = publishEndpoint;
     private readonly IEncryptionService _encryptionService = encryptionService;
-    private readonly IMasterDataServiceAPI _masterDataServiceAPI = masterDataServiceAPI;
-
+    private readonly IMasterDataServiceAPI _masterDataServiceAPI = masterDataServiceAPI; 
 
     public async Task<Result> Handle(CreateOrderCommand command, CancellationToken cancellationToken)
     {
@@ -108,6 +106,7 @@ public class CreateOrderCommandHandler(
                 buyer?.Data?.TimeZoneId,
                 initialMaster,
                 coupon,
+                command.GrandTotal,
                 cancellationToken); 
         }
         catch (InvalidDateOperationException ex)
@@ -132,6 +131,16 @@ public class CreateOrderCommandHandler(
             LoggerHelper.LogError(_logger, ex);
             await RollbackAndRecoveryStockAsync(requestItems, cancellationToken);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
+        }
+        catch (PriceChangesException ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            await RollbackAndRecoveryStockAsync(requestItems, cancellationToken);
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest)
+                .WithData(new 
+                {
+                    ExpectedGrandTotal = ex.PriceShouldBe
+                });
         }
         catch (ArgumentNullException ex)
         {
@@ -167,6 +176,7 @@ public class CreateOrderCommandHandler(
         string? timeZoneId,
         MasterDataInitializationMasterResponseDto master,
         Coupon? coupon,
+        decimal requiredGrandTotal,
         CancellationToken cancellationToken)
     {
         var lineItems = command.LineItems.Select(x => (x.Id, x.Quantity)); 
@@ -288,7 +298,8 @@ public class CreateOrderCommandHandler(
             } 
         }
 
-        order.CalculateGrandTotal(); 
+        order.CalculateGrandTotal(requiredGrandTotal); 
+         
         await _unitOfWork.Orders.CreateAsync(order, cancellationToken);
 
         if (order.IsShouldRequestPayment)
