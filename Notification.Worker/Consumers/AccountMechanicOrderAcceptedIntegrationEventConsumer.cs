@@ -47,6 +47,13 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
+                notification = new 
+                {
+                    title = "Santai",
+                    body = $"Successfully assigned a mechanic. Mechanic {orderData.MechanicName} has been assigned and will be heading to your location shortly",
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP"
+                },
                 data = new
                 {
                     token = profile.DeviceToken,

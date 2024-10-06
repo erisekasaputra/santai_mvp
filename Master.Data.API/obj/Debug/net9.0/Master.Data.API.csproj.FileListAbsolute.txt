@@ -124,8 +124,8 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\appsettings.json
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\appsettings.Production.json
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\appsettings.Staging.json
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Master.Data.API.staticwebassets.endpoints.json
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Master.Data.API.staticwebassets.runtime.json
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Master.Data.API.staticwebassets.endpoints.json
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Master.Data.API.exe
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Master.Data.API.deps.json
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Master.Data.API.runtimeconfig.json

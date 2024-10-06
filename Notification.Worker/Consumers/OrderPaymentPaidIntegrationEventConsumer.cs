@@ -50,6 +50,13 @@ public class OrderPaymentPaidIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
+                notification = new 
+                {
+                    title = "Santai",
+                    body = $"We have received your payment. Thank you.",
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP"
+                },
                 data = new
                 {
                     token = profile.DeviceToken,

@@ -35,10 +35,16 @@ public class ChatSentIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
+                notification = new
+                {
+                    title = "Santai",
+                    body = context.Message.Text,
+                    image = _projectConfiguration.LogoUrl,
+                },
                 data = new
                 {
                     token = profile.DeviceToken,
-                    title = "Santai (New Chat)",
+                    title = "Santai",
                     body = context.Message.Text,
                     image = _projectConfiguration.LogoUrl,
                     click_action = "OPEN_APP",

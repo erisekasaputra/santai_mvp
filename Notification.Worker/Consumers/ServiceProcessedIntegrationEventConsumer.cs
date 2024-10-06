@@ -50,6 +50,13 @@ public class ServiceProcessedIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
+                notification = new 
+                {
+                    title = "Santai",
+                    body = $"Your vehicle service is starting",
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP"
+                },
                 data = new
                 {
                     token = profile.DeviceToken,

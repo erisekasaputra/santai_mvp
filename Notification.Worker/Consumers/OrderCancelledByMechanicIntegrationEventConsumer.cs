@@ -52,6 +52,13 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
+                notification = new
+                {
+                    title = "Santai",
+                    body = $"The order has been canceled by the Mechanic",
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP"
+                },
                 data = new
                 {
                     token = profile.DeviceToken,

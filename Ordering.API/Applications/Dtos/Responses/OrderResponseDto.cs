@@ -60,9 +60,7 @@ public class OrderResponseDto
         bool isPaid,
         bool isRated,
         bool isPaymentExpire)
-    {
-        if (string.IsNullOrEmpty(secret)) throw new ArgumentNullException(nameof(secret));
-
+    {  
         OrderId = orderId;
         Secret = secret;
         AddressLine = addressLine;

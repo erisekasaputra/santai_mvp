@@ -3,8 +3,7 @@ using Core.Services.Interfaces;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 using Notification.Worker.Services.Interfaces;
-using Notification.Worker.Services;
-using Notification.Worker.SeedWorks;
+using Notification.Worker.Services; 
 using Notification.Worker.Enumerations;
 using Amazon.SimpleNotificationService.Model;
 using Core.Configurations;
@@ -49,6 +48,13 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
         {
             var fcmPayload = new
             {
+                notification = new 
+                {
+                    title = "Santai",
+                    body = $"The mechanic is on the way to your location",
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP"
+                },
                 data = new
                 {
                     token = profile.DeviceToken,

@@ -49,6 +49,13 @@ public class ServiceCompletedIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
+                notification = new 
+                {
+                    title = "Santai",
+                    body = $"Your service is complete, and the mechanic has successfully repaired your vehicle",
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP"
+                },
                 data = new
                 {
                     token = profile.DeviceToken,

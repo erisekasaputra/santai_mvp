@@ -50,6 +50,13 @@ public class OrderMechanicArrivedIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
+                notification = new
+                {
+                    title = "Santai",
+                    body = $"The mechanic has arrived at your location, help them get more detailed directions to your location",
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP"
+                },
                 data = new
                 {
                     token = profile.DeviceToken, 

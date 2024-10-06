@@ -53,6 +53,13 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
         {
             var fcmPayload = new
             {
+                notification = new 
+                {
+                    title = "Santai",
+                    body = $"The order has been canceled by the Customer",
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP"
+                },
                 data = new
                 {
                     token = profile.DeviceToken,

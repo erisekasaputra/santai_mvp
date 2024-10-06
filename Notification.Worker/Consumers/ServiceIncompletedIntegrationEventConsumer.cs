@@ -49,6 +49,13 @@ public class ServiceIncompletedIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
+                notification = new 
+                {
+                    title = "Santai",
+                    body = $"Your service is complete, but the mechanic was unable to repair your vehicle",
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP"
+                },
                 data = new
                 {
                     token = profile.DeviceToken,

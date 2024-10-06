@@ -53,6 +53,13 @@ public class OrderFindingMechanicIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
+                notification = new
+                {
+                    title = "Santai",
+                    body = $"The order is scheduled to find a Mechanic",
+                    image = _projectConfiguration.LogoUrl,
+                    click_action = "OPEN_APP"
+                },
                 data = new
                 {
                     token = profile.DeviceToken, 

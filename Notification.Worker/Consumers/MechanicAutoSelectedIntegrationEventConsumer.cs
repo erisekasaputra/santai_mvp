@@ -51,6 +51,14 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
 
             var fcmPayload = new
             {
+                notification = new
+                {
+                    title = "Santai",
+                    body = $"You have received a new order, the confirmation time is {minutes} minutes and {seconds} seconds",
+                    image = _projectConfiguration.LogoUrl, 
+                    click_action = "OPEN_APP"
+                },
+
                 data = new
                 {
                     token = profile.DeviceToken,
