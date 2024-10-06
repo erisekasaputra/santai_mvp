@@ -347,8 +347,7 @@ public class AuthController(
                     return TypedResults.BadRequest(
                         Result.Failure("Google token is invalid", ResponseStatus.BadRequest)
                             .WithError(new ("GoogleTokenValidator", "Google token is invalid", request.GoogleIdToken, "GoogleTokenValidator", "Error")));
-                }
-
+                } 
 
                 // if user does not exist in the database, then give the CreateIdentity instruction for Regular and Mechanic user only, otherwise need to register from administrator
                 var user = await _userManager.FindByEmailAsync(payload.Email); 

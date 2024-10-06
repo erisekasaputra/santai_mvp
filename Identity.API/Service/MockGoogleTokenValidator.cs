@@ -5,7 +5,7 @@ namespace Identity.API.Service;
 
 public class MockGoogleTokenValidator : IGoogleTokenValidator
 {
-    public async Task<GoogleJsonWebSignature.Payload> ValidateAsync(string idToken)
+    public async Task<GoogleJsonWebSignature.Payload?> ValidateAsync(string idToken)
     {
         GoogleJsonWebSignature.Payload payload = new()
         {

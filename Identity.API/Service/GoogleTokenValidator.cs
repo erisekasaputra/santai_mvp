@@ -5,21 +5,24 @@ using Microsoft.Extensions.Options;
 
 namespace Identity.API.Service;
 
-public class GoogleTokenValidator : IGoogleTokenValidator
+public class GoogleTokenValidator(IOptionsMonitor<GoogleSSOConfiguration> googleConfigs) : IGoogleTokenValidator
 { 
-    private readonly string _clientId; 
-    public GoogleTokenValidator(IOptionsMonitor<GoogleSSOConfiguration> googleConfigs)
+    private readonly string _clientId = googleConfigs.CurrentValue.ClientId;
+
+    public async Task<GoogleJsonWebSignature.Payload?> ValidateAsync(string idToken)
     {
-        _clientId = googleConfigs.CurrentValue.ClientId; 
-    }
+        try
+        {
+            var settings = new GoogleJsonWebSignature.ValidationSettings
+            {
+                Audience = [_clientId]
+            };
 
-    public async Task<GoogleJsonWebSignature.Payload> ValidateAsync(string idToken)
-    { 
-        var settings = new GoogleJsonWebSignature.ValidationSettings
-        { 
-            Audience = [_clientId]
-        };    
-
-        return await GoogleJsonWebSignature.ValidateAsync(idToken, settings); 
+            return await GoogleJsonWebSignature.ValidateAsync(idToken, settings);
+        }
+        catch (Exception) 
+        {
+            return null;
+        }
     } 
 }
