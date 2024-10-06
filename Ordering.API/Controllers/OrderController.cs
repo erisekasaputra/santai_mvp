@@ -109,8 +109,7 @@ public class OrderController : ControllerBase
     }
 
     [Authorize(Policy = "BusinessStaffRegularUserPolicy")]
-    [HttpPost("calculate")]
-    [Idempotency(nameof(CalculateOrder))]
+    [HttpPost("calculate")] 
     public async Task<IResult> CalculateOrder(
         [FromBody] CalculateOrderRequest request)
     {
