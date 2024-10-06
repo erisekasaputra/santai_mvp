@@ -165,7 +165,8 @@ public class AuthController(
                             PhoneNumber = phoneNumber,
                             Email = user.Email,
                             UserType = user.UserType,
-                            BusinessCode = user.BusinessCode
+                            BusinessCode = user.BusinessCode,
+                            Otp = otpToken
                         }, ResponseStatus.Accepted).WithNext(new 
                         {
                             Link = Url.Action(_verifyPhoneActionName, _controllerName),
@@ -193,7 +194,8 @@ public class AuthController(
                             PhoneNumber = phoneNumber,
                             Email = user.Email,
                             UserType = user.UserType,
-                            BusinessCode = user.BusinessCode
+                            BusinessCode = user.BusinessCode,
+                            Otp = otp
                         }, ResponseStatus.Accepted).WithNext(new
                         {
                             Link = Url.Action(_resetPasswordActionName, _controllerName),
@@ -221,6 +223,7 @@ public class AuthController(
                              Email = user.Email,
                              UserType = user.UserType,
                              BusinessCode = user.BusinessCode,
+                             Otp = otp,
                              RemainingTime = remainingTime
                          }, ResponseStatus.Accepted).WithNext(new
                          {
