@@ -45,7 +45,7 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
             query = query.Where(x => x.CategoryId == categoryId);
         }
 
-        if (brandId is not null && brandId.HasValue && categoryId != Guid.Empty)
+        if (brandId is not null && brandId.HasValue && brandId != Guid.Empty)
         {
             query = query.Where(x => x.BrandId == brandId);
         }

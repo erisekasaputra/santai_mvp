@@ -25,7 +25,12 @@ public class GetItemPaginatedQueryHandler(IUnitOfWork unitOfWork) : IRequestHand
             return Result.Failure("Data not found", ResponseStatus.NotFound);
         }
 
-        var result = new PaginatedResponseDto<ItemDto>(request.PageNumber, request.PageSize, TotalCount, TotalPages, Items.ToItemsDto().ToList());
+        var result = new PaginatedResponseDto<ItemDto>(
+            request.PageNumber, 
+            request.PageSize, 
+            TotalCount, 
+            TotalPages, 
+            Items.ToItemsDto().ToList());
 
         return Result.Success(result, ResponseStatus.Ok);
     }
