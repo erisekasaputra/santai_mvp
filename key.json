@@ -1,8 +1,0 @@
-{
-  "keys": {
-    "my-minio-key": {
-      "type": "aes-gcm",
-      "key": "32_byte_random_key_for_encryption_here"
-    }
-  }
-}

@@ -1,8 +1,0 @@
-{
-  "identities": {
-    "minio": {
-      "type": "service",
-      "service": "minio"
-    }
-  }
-}
