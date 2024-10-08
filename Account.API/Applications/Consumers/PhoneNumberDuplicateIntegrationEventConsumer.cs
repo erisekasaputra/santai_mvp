@@ -6,7 +6,7 @@ using Core.Enumerations;
 using Core.Events.Identity;
 using Core.Results;
 using MassTransit;
-using MediatR;
+using MediatR;  
 
 namespace Account.API.Applications.Consumers;
 
@@ -18,7 +18,7 @@ public class PhoneNumberDuplicateIntegrationEventConsumer(
     private readonly ILogger<PhoneNumberDuplicateIntegrationEventConsumer> _logger = logger;
 
     public async Task Consume(ConsumeContext<PhoneNumberDuplicateIntegrationEvent> context)
-    {
+    { 
         foreach (var user in context.Message.DuplicateUsers)
         {  
             if (user.UserType == UserType.BusinessUser)

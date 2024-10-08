@@ -24,7 +24,8 @@ if (builder.Environment.IsDevelopment() || builder.Environment.IsStaging())
 builder.Services.AddRouting();
 builder.Services.AddHealthChecks();
 builder.Services.AddHttpContextAccessor();
- 
+
+
 
 builder.AddCoreOptionConfiguration();
 builder.AddLoggingContext();

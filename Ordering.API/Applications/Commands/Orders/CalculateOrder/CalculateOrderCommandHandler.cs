@@ -1,4 +1,5 @@
-﻿using Core.CustomMessages; 
+﻿using Core.CustomMessages;
+using Core.Exceptions;
 using Core.Extensions;
 using Core.Results; 
 using Core.Utilities; 
@@ -25,7 +26,7 @@ public class CalculateOrderCommandHandler(
     private readonly IMasterDataServiceAPI _masterDataServiceAPI = masterDataServiceAPI;
 
     public async Task<Result> Handle(CalculateOrderCommand request, CancellationToken cancellationToken)
-    { 
+    {
         try
         {
             Coupon? coupon = null;
@@ -33,25 +34,29 @@ public class CalculateOrderCommandHandler(
             {
                 coupon = await _unitOfWork.Coupons.GetByCodeAsync(request.CouponCode);
                 if (coupon is null)
-                { 
+                {
                     return Result.Failure("Upps, can not apply this coupon", ResponseStatus.NotFound);
                 }
-            } 
+            }
 
             var initialMaster = await _masterDataServiceAPI.GetMasterDataInitializationMasterResponseDto();
             if (initialMaster is null)
             {
-                _logger.LogError("Initial master create order is null, master service did not retrive correct data"); 
+                _logger.LogError("Initial master create order is null, master service did not retrive correct data");
                 return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
             }
 
             return CreateOrderByRelatedUserType(
-                request,  
+                request,
                 initialMaster,
                 coupon);
-        } 
+        }
+        catch (DomainException ex)
+        {
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+        }
         catch (Exception ex)
-        { 
+        {
             LoggerHelper.LogError(_logger, ex);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }
