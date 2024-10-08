@@ -35,7 +35,7 @@ public class AddItemSoldQuantityCommandHandler : IRequestHandler<AddItemSoldQuan
         {
             try
             { 
-                await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken); 
+                await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken); 
 
 
 

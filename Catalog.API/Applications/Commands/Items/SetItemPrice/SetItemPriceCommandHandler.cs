@@ -40,7 +40,7 @@ public class SetItemPriceCommandHandler : IRequestHandler<SetItemPriceCommand, R
             try
             {
                 int numberOfErrors = 0; 
-                await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
+                await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
                  
 
                 // Extract the item IDs from the request

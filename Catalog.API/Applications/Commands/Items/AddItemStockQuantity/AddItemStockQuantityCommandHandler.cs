@@ -1,6 +1,5 @@
 ﻿
-using Catalog.API.Applications.Dtos.Item;
-using Catalog.API.Applications.Dtos.ItemStock;
+using Catalog.API.Applications.Dtos.Item; 
 using Catalog.API.Applications.Services;
 using Catalog.API.Extensions;
 using Catalog.Domain.SeedWork;
@@ -29,7 +28,7 @@ public class AddItemStockQuantityCommandHandler : IRequestHandler<AddItemStockQu
                                     retryCount: 3,
                                     sleepDurationProvider: attempt => TimeSpan.FromSeconds(Math.Pow(2, attempt)),
                                     onRetry: (exception, timeSpan, retryCount, context) =>
-                                        service.Logger.LogInformation("Retry {retryCount} encountered an exception: {Message}. Waiting {timeSpan} before next retry.", retryCount, exception.Message, timeSpan));
+                                        service.Logger.LogError("Retry {retryCount} encountered an exception: {Message}. Waiting {timeSpan} before next retry.", retryCount, exception.Message, timeSpan));
     }
 
     public async Task<Result> Handle(AddItemStockQuantityCommand request, CancellationToken cancellationToken)
@@ -38,9 +37,8 @@ public class AddItemStockQuantityCommandHandler : IRequestHandler<AddItemStockQu
         {
             try
             {  
-                await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
-                 
-
+                await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
+                  
                 // Extract the item IDs from the request
                 var requestItemIds = request.Items.Select(x => x.ItemId).ToList();
 

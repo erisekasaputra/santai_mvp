@@ -1,28 +1,54 @@
-﻿using Catalog.API.Applications.Commands.Items.AddItemStockQuantity;
+﻿ 
+using Catalog.API.Applications.Dtos.Item;
+using Catalog.Domain.SeedWork;
 using Core.Events.Ordering;
+using Core.Exceptions;
 using Core.Results;
-using MassTransit;
-using MediatR;
+using MassTransit; 
+using System.Data;
 
 namespace Catalog.API.Applications.Consumers;
 
 public class OrderFailedRecoveryStockIntegrationEventConsumer(
-    IMediator mediator,
+    IUnitOfWork unitOfWork,
     ILogger<OrderFailedRecoveryStockIntegrationEventConsumer> logger): IConsumer<OrderFailedRecoveryStockIntegrationEvent>
 {
-    private readonly IMediator _mediator = mediator;
+
+    private readonly IUnitOfWork _unitOfWork = unitOfWork; 
     private readonly ILogger<OrderFailedRecoveryStockIntegrationEventConsumer> _logger = logger;
     public async Task Consume(ConsumeContext<OrderFailedRecoveryStockIntegrationEvent> context)
-    {  
-        var command = new AddItemStockQuantityCommand(
-            context.Message.Items.Select(x => new AddItemStockQuantityRequest(x.Id, x.Quantity)));
+    { 
+        await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted);
+         
+        var requestItemIds = context.Message.Items.Select(x => x.Id).ToList();
 
-        var result = await _mediator.Send(command);  
+        var items = await _unitOfWork.Items.GetItemsWithLockAsync(requestItemIds);  
 
-        if (result.ResponseStatus is not ResponseStatus.UnprocessableEntity and ResponseStatus.NotFound)
+        var itemErrors = new List<ItemDto>();
+
+        foreach (var item in items)
         {
-            _logger.LogError(result.Message);
-            throw new Exception(result.Message);
+            var quantity = context.Message.Items.First(x => x.Id == item.Id).Quantity;
+            if (quantity <= 0)
+            {
+                continue;
+            }
+
+            try
+            {
+                item.AddStockQuantity(quantity);
+                _unitOfWork.Items.UpdateItem(item);
+            }
+            catch (DomainException)
+            {
+                continue;
+            }
+            catch (Exception)
+            {
+                continue;
+            }
         }
+
+        await _unitOfWork.CommitTransactionAsync();  
     }
 }

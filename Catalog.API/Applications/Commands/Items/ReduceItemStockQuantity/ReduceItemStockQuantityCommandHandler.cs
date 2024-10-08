@@ -38,7 +38,7 @@ public class ReduceItemStockQuantityCommandHandler : IRequestHandler<ReduceItemS
         {
             try
             {  
-                await _unitOfWork.BeginTransactionAsync(IsolationLevel.Serializable, cancellationToken);
+                await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
                  
 
 
