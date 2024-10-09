@@ -39,16 +39,15 @@ public class FilesController
         { 
             if (!FileValidation.IsValidImage(file))
             {
-                return await Task.FromResult(
-                    TypedResults.BadRequest(
-                        Result.Failure("Invalid file type. Only image files are allowed.", ResponseStatus.BadRequest)));
+                return TypedResults.BadRequest(
+                        Result.Failure("Invalid file type. Only image files are allowed.", ResponseStatus.BadRequest));
             }
 
             if (!await _storageService.IsBucketPrivateExistsAsync())
             {
                 _logger.LogError("Private bucket does not configured yet");
-                return await Task.FromResult(
-                    TypedResults.InternalServerError(Messages.InternalServerError));
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
             }
 
             var newFileName = UrlBuilder.Build(Guid.NewGuid().ToString(), Path.GetExtension(file.FileName));
@@ -63,8 +62,9 @@ public class FilesController
         }
         catch (MinioException ex)
         {
-            _logger.LogError(ex.Message, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
+            LoggerHelper.LogError(_logger, ex);
+            return TypedResults.InternalServerError(
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         }
     }
 
@@ -84,15 +84,15 @@ public class FilesController
 
             if (!FileValidation.IsValidImage(file))
             {
-                return await Task.FromResult(
+                return
                     TypedResults.BadRequest(
-                        Result.Failure("Invalid file type. Only image files are allowed.", ResponseStatus.BadRequest)));
+                        Result.Failure("Invalid file type. Only image files are allowed.", ResponseStatus.BadRequest));
             }
 
             if (!await _storageService.IsBucketPublicExistsAsync())
             {
                 _logger.LogError("Public bucket does not configured yet");
-                return await Task.FromResult(TypedResults.InternalServerError(Messages.InternalServerError));
+                return TypedResults.InternalServerError(Messages.InternalServerError);
             }
 
             var newFileName = UrlBuilder.Build(Guid.NewGuid().ToString(), Path.GetExtension(file.FileName));
@@ -107,8 +107,9 @@ public class FilesController
         }
         catch (MinioException ex)
         {
-            _logger.LogError(ex.Message, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
+            LoggerHelper.LogError(_logger, ex);
+            return TypedResults.InternalServerError(
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         }
     }
 
@@ -139,7 +140,7 @@ public class FilesController
             if (bytes is null)
             {
                 return TypedResults.NotFound(
-                    Result.Failure("We could not find your file", ResponseStatus.NotFound));
+                    Result.Failure("We could not find the file", ResponseStatus.NotFound));
             }
 
             await _cacheService.SetAsync(objectName, bytes, TimeSpan.FromMinutes(5)); 
@@ -147,8 +148,9 @@ public class FilesController
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.Message, ex.InnerException?.Message);
-            return TypedResults.InternalServerError(Messages.InternalServerError);
+            LoggerHelper.LogError(_logger, ex);
+            return TypedResults.InternalServerError(
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         }
     }
 
@@ -165,7 +167,7 @@ public class FilesController
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex.Message, ex.InnerException?.Message);
+            LoggerHelper.LogError(_logger, ex);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
     }

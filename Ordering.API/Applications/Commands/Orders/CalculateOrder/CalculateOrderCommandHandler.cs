@@ -50,13 +50,14 @@ public class CalculateOrderCommandHandler(
                 request,
                 initialMaster,
                 coupon);
-        }
-        catch (DomainException ex)
-        {
-            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
-        }
+        } 
         catch (Exception ex)
         {
+            if (ex is ArgumentNullException or DomainException or InvalidDateOperationException or InvalidOperationException or PriceChangesException)
+            {
+                return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+            }
+
             LoggerHelper.LogError(_logger, ex);
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }

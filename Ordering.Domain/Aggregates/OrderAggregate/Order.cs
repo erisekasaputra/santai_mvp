@@ -455,7 +455,7 @@ public class Order : Entity
 
         if (Secret != secret)
         {
-            throw new Exception("Order secret is missmatch");
+            throw new DomainException("Order secret is missmatch");
         }  
 
         if (!Mechanic.MechanicId.Equals(mechanicId))

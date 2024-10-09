@@ -22,7 +22,15 @@ public class MasterDataServiceAPI : IMasterDataServiceAPI
             var response = await _httpClient.GetAsync(endpoint);
             string content = Regex.Unescape(await response.Content.ReadAsStringAsync()).Trim('"');
             response.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<List<BasicInspectionResponseDto>>(content);
+            
+            var data = JsonConvert.DeserializeObject<ResultResponseDto<List<BasicInspectionResponseDto>>>(content);
+
+            if (data is null)
+            {
+                return null;
+            }
+
+            return data.Data;
         }
         catch (Exception)
         {
@@ -39,7 +47,14 @@ public class MasterDataServiceAPI : IMasterDataServiceAPI
             var response = await _httpClient.GetAsync(endpoint);
             string content = Regex.Unescape(await response.Content.ReadAsStringAsync()).Trim('"');
             response.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<CancellationFeeResponseDto>(content);
+            var data = JsonConvert.DeserializeObject<ResultResponseDto<CancellationFeeResponseDto>>(content);
+
+            if (data is null)
+            {
+                return null;
+            }
+
+            return data.Data;
         }
         catch (Exception)
         {
@@ -56,7 +71,14 @@ public class MasterDataServiceAPI : IMasterDataServiceAPI
             var response = await _httpClient.GetAsync(endpoint);
             string content = Regex.Unescape(await response.Content.ReadAsStringAsync()).Trim('"');
             response.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<List<FeeResponseDto>>(content);
+            var data = JsonConvert.DeserializeObject<ResultResponseDto<List<FeeResponseDto>>>(content);
+
+            if (data is null)
+            {
+                return null;
+            }
+
+            return data.Data;   
         }
         catch (Exception)
         {
@@ -73,7 +95,14 @@ public class MasterDataServiceAPI : IMasterDataServiceAPI
             var response = await _httpClient.GetAsync(endpoint);
             string content = Regex.Unescape(await response.Content.ReadAsStringAsync()).Trim('"');
             response.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<MasterDataInitializationMasterResponseDto>(content);
+            var data = JsonConvert.DeserializeObject<ResultResponseDto<MasterDataInitializationMasterResponseDto>>(content);
+        
+            if (data is null)
+            {
+                return null;
+            }
+
+            return data.Data;
         }
         catch (Exception)
         {
@@ -90,7 +119,14 @@ public class MasterDataServiceAPI : IMasterDataServiceAPI
             var response = await _httpClient.GetAsync(endpoint);
             string content = Regex.Unescape(await response.Content.ReadAsStringAsync()).Trim('"'); 
             response.EnsureSuccessStatusCode();
-            return JsonConvert.DeserializeObject<List<PreServiceInspectionResponseDto>>(content);
+            var data = JsonConvert.DeserializeObject<ResultResponseDto<List<PreServiceInspectionResponseDto>>>(content);
+            
+            if (data is null)
+            {
+                return null;
+            }
+
+            return data.Data;   
         } 
         catch (Exception)
         {
