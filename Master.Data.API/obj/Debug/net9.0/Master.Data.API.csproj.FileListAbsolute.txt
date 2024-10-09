@@ -223,10 +223,6 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.MvcApplicationPartsAssemblyInfo.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.sourcelink.json
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\scopedcss\bundle\Master.Data.API.styles.css
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\25y84c7jcg-ty7plz682s.gz
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\gtk4vznist-fiioof6xfq.gz
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\2uqe8z00nf-m1zqj1rw7l.gz
-C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\1b0leuntmr-p72ujgw9w7.gz
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\staticwebassets.build.json
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\staticwebassets.development.json
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\staticwebassets.build.endpoints.json
@@ -242,3 +238,7 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\ref\Master.Data.API.dll
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\25y84c7jcg-v5ptle4oma.gz
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\2uqe8z00nf-b2ouxlbary.gz
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\1b0leuntmr-pqaz617lra.gz
+C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\gtk4vznist-7dmtyarhod.gz

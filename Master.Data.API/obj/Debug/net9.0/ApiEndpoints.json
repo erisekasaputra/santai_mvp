@@ -21,12 +21,44 @@
   },
   {
     "ContainingType": "Master.Data.API.Controllers.DataController",
+    "Method": "UpdateBasicInspection",
+    "RelativePath": "api/v1/master/order/basic-inspection",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "basicInspectionRequest",
+        "Type": "Master.Data.API.Dtos.BasicInspectionRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Master.Data.API.Controllers.DataController",
     "Method": "GetMasterDataCancellationFee",
     "RelativePath": "api/v1/master/order/cancellation-fee",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Master.Data.API.Controllers.DataController",
+    "Method": "UpdateCancellationFee",
+    "RelativePath": "api/v1/master/order/cancellation-fee",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "cancellationFeeRequest",
+        "Type": "Master.Data.API.Dtos.CancellationFeeRequest",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   },
   {
@@ -41,12 +73,44 @@
   },
   {
     "ContainingType": "Master.Data.API.Controllers.DataController",
+    "Method": "UpdatePreServiceInspection",
+    "RelativePath": "api/v1/master/order/pre-service-inspection",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "preServiceInspectionRequest",
+        "Type": "Master.Data.API.Dtos.PreServiceInspectionRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Master.Data.API.Controllers.DataController",
     "Method": "GetMasterDataServiceFee",
     "RelativePath": "api/v1/master/order/service-fee",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
     "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "Master.Data.API.Controllers.DataController",
+    "Method": "UpdateServiceFee",
+    "RelativePath": "api/v1/master/order/service-fee",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "serviceFeeRequest",
+        "Type": "Master.Data.API.Dtos.ServiceFeeRequest",
+        "IsRequired": true
+      }
+    ],
     "ReturnTypes": []
   }
 ]

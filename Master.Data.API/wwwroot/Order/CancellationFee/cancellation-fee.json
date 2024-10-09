@@ -1,6 +1,13 @@
 {
-  "CancellationParameters": [
-    "MechanicFee",
-    "ServiceFee"
+  "CancellationFees": [
+    {
+      "Parameter": "Percentage",
+      "FeeDescriptionDetail": "Mechanic Fee",
+      "FeeDescription": "Mechanic Fee",
+      "Currency": 22,
+      "ValuePercentage": 10.0,
+      "ValueAmount": 0.0,
+      "FeeAmount": 0.0
+    }
   ]
 }

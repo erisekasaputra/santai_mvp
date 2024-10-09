@@ -1,7 +1,9 @@
-[
-  {
-    "Description": "RSprocket",
-    "Parameter": "RSprocket",
-    "Value": 0
-  } 
-]
+{
+  "BasicInspections": [
+    {
+      "Description": "string",
+      "Parameter": "string",
+      "Value": 0
+    }
+  ]
+}

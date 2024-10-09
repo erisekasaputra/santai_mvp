@@ -4,13 +4,13 @@ namespace Master.Data.API.Models;
 
 public class Fee
 {
-    public string Parameter { get; private set; }
-    public string FeeDecriptionDetail { get; private set; }
-    public string FeeDescription { get; private set; }
-    public Currency Currency { get; private set; }
-    public decimal ValuePercentage { get; private set; }
-    public decimal ValueAmount { get; private set; }
-    public decimal FeeAmount { get; private set; }
+    public string Parameter { get; set; }
+    public string FeeDescriptionDetail { get; set; }
+    public string FeeDescription { get; set; }
+    public Currency Currency { get; set; }
+    public decimal ValuePercentage { get; set; }
+    public decimal ValueAmount { get; set; }
+    public decimal FeeAmount { get; set; }
 
     public Fee(
         string parameter,
@@ -22,7 +22,7 @@ public class Fee
         decimal feeAmount)
     {
         Parameter = parameter;
-        FeeDecriptionDetail = feeDescriptionDetail;
+        FeeDescriptionDetail = feeDescriptionDetail;
         FeeDescription = feeDescription;
         Currency = currency;
         ValuePercentage = valuePercentage;

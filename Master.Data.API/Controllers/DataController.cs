@@ -136,13 +136,14 @@ public class DataController : ControllerBase
 
 
     [HttpPut("order/cancellation-fee")]
-    public IResult UpdateCancellationFee([FromBody] CancellationFeeRequest cancellationFees)
+    public IResult UpdateCancellationFee(
+        [FromBody] CancellationFeeRequest cancellationFeeRequest)
     {
         try
         {
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Order/CancellationFee/cancellation-fee.json");
 
-            string jsonString = JsonConvert.SerializeObject(cancellationFees, Formatting.Indented);
+            string jsonString = JsonConvert.SerializeObject(cancellationFeeRequest, Formatting.Indented);
             
             System.IO.File.WriteAllText(filePath, jsonString);
             return TypedResults.NoContent();
@@ -156,13 +157,14 @@ public class DataController : ControllerBase
 
 
     [HttpPut("order/service-fee")]
-    public IResult UpdateServiceFee([FromBody] ServiceFeeRequest serviceFees)
+    public IResult UpdateServiceFee(
+        [FromBody] ServiceFeeRequest serviceFeeRequest)
     {
         try
         {
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Order/ServiceFee/service-fee.json");
 
-            string jsonString = JsonConvert.SerializeObject(serviceFees, Formatting.Indented);
+            string jsonString = JsonConvert.SerializeObject(serviceFeeRequest, Formatting.Indented);
 
             System.IO.File.WriteAllText(filePath, jsonString);
             return TypedResults.NoContent();
@@ -176,13 +178,14 @@ public class DataController : ControllerBase
 
 
     [HttpPut("order/basic-inspection")]
-    public IResult UpdateBasicInspection([FromBody] BasicInspectionRequest basicInspections)
+    public IResult UpdateBasicInspection(
+        [FromBody] BasicInspectionRequest basicInspectionRequest)
     {
         try
         {
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Order/BasicInspection/basic-inspection.json");
 
-            string jsonString = JsonConvert.SerializeObject(basicInspections, Formatting.Indented);
+            string jsonString = JsonConvert.SerializeObject(basicInspectionRequest, Formatting.Indented);
 
             System.IO.File.WriteAllText(filePath, jsonString);
             return TypedResults.NoContent();
@@ -197,13 +200,17 @@ public class DataController : ControllerBase
 
 
     [HttpPut("order/pre-service-inspection")]
-    public IResult UpdatePreServiceInspection([FromBody] PreServiceInspectionRequest preServiceInspection)
+    public IResult UpdatePreServiceInspection(
+        [FromBody] PreServiceInspectionRequest preServiceInspectionRequest)
     {
         try
         {
-            string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Order/PreServiceInspection/pre-service-inspection.json");
+            string filePath = Path.Combine(
+                Directory.GetCurrentDirectory(), 
+                "wwwroot", 
+                "Order/PreServiceInspection/pre-service-inspection.json");
 
-            string jsonString = JsonConvert.SerializeObject(preServiceInspection, Formatting.Indented);
+            string jsonString = JsonConvert.SerializeObject(preServiceInspectionRequest, Formatting.Indented);
 
             System.IO.File.WriteAllText(filePath, jsonString);
             return TypedResults.NoContent();
