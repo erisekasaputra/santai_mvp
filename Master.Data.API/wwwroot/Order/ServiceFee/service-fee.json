@@ -1,20 +1,11 @@
 [
   {
-    "Parameter": "Value",
-    "FeeName": "MechanicFee",
-    "FeeDescriptionDetail": "Service Fee",
-    "FeeDescription": "MechanicFee", 
-    "Currency": "MYR",
-    "ValuePercentage": 0,
-    "ValueAmount": 30
-  },
-  {
-    "Parameter": "Value",
-    "FeeName": "MechanicFee",
-    "FeeDescriptionDetail": "Mechanic Fee",
-    "FeeDescription": "ServiceFee",
-    "Currency": "MYR",
-    "ValuePercentage": 2,
-    "ValueAmount": 5
+    "Parameter": "string",
+    "FeeDescriptionDetail": "string",
+    "FeeDescription": "string",
+    "Currency": 0,
+    "ValuePercentage": 0.0,
+    "ValueAmount": 0.0,
+    "FeeAmount": 0.0
   }
 ]

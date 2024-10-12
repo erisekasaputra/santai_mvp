@@ -143,7 +143,7 @@ public class DataController : ControllerBase
         {
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Order/CancellationFee/cancellation-fee.json");
 
-            string jsonString = JsonConvert.SerializeObject(cancellationFeeRequest, Formatting.Indented);
+            string jsonString = JsonConvert.SerializeObject(cancellationFeeRequest.CancellationFees, Formatting.Indented);
             
             System.IO.File.WriteAllText(filePath, jsonString);
             return TypedResults.NoContent();
@@ -164,7 +164,7 @@ public class DataController : ControllerBase
         {
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Order/ServiceFee/service-fee.json");
 
-            string jsonString = JsonConvert.SerializeObject(serviceFeeRequest, Formatting.Indented);
+            string jsonString = JsonConvert.SerializeObject(serviceFeeRequest.ServiceFees, Formatting.Indented);
 
             System.IO.File.WriteAllText(filePath, jsonString);
             return TypedResults.NoContent();
@@ -185,7 +185,7 @@ public class DataController : ControllerBase
         {
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Order/BasicInspection/basic-inspection.json");
 
-            string jsonString = JsonConvert.SerializeObject(basicInspectionRequest, Formatting.Indented);
+            string jsonString = JsonConvert.SerializeObject(basicInspectionRequest.BasicInspections, Formatting.Indented);
 
             System.IO.File.WriteAllText(filePath, jsonString);
             return TypedResults.NoContent();
@@ -210,7 +210,7 @@ public class DataController : ControllerBase
                 "wwwroot", 
                 "Order/PreServiceInspection/pre-service-inspection.json");
 
-            string jsonString = JsonConvert.SerializeObject(preServiceInspectionRequest, Formatting.Indented);
+            string jsonString = JsonConvert.SerializeObject(preServiceInspectionRequest.PreServiceInspections, Formatting.Indented);
 
             System.IO.File.WriteAllText(filePath, jsonString);
             return TypedResults.NoContent();

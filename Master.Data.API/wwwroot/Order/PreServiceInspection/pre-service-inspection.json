@@ -1,16 +1,14 @@
-{
-  "PreServiceInspections": [
-    {
-      "Description": "string",
-      "Parameter": "string",
-      "Rating": 0,
-      "PreServiceInspectionResults": [
-        {
-          "Description": "string",
-          "Parameter": "string",
-          "IsWorking": true
-        }
-      ]
-    }
-  ]
-}
+[
+  {
+    "Description": "string",
+    "Parameter": "string",
+    "Rating": 0,
+    "PreServiceInspectionResults": [
+      {
+        "Description": "string",
+        "Parameter": "string",
+        "IsWorking": true
+      }
+    ]
+  }
+]

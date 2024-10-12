@@ -1,9 +1,7 @@
-{
-  "BasicInspections": [
-    {
-      "Description": "string",
-      "Parameter": "string",
-      "Value": 0
-    }
-  ]
-}
+[
+  {
+    "Description": "string",
+    "Parameter": "string",
+    "Value": 0
+  }
+]
