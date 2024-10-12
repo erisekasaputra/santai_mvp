@@ -12,8 +12,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>v5ptle4oma</Fingerprint>
-      <Integrity>XW477+kmjlawZ5W9eybGqek6u2avWn5Zdef7cFFR6WA=</Integrity>
+      <Fingerprint>38jn93up96</Fingerprint>
+      <Integrity>7YmPow9U3vuZtHXdMkuGv8YVo+TetMR1KGJLo43TOTc=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\BasicInspection\basic-inspection.json'))</OriginalItemSpec>
@@ -30,8 +30,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>7dmtyarhod</Fingerprint>
-      <Integrity>hS8ElFMO2w3yDpT6eFg13BXKGl2loG3hhRzsIOqnxNk=</Integrity>
+      <Fingerprint>hjc9nyyc0k</Fingerprint>
+      <Integrity>Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\CancellationFee\cancellation-fee.json'))</OriginalItemSpec>
@@ -48,8 +48,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>b2ouxlbary</Fingerprint>
-      <Integrity>rcVFNx1qDjCU5+woRRuP96QiTIWsziDiqH9BcrDrpkU=</Integrity>
+      <Fingerprint>6iclky0jm6</Fingerprint>
+      <Integrity>crGZiVuPPyq2whSiEAMOc2vHW4DB1ciQUqUEsqznbzI=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\PreServiceInspection\pre-service-inspection.json'))</OriginalItemSpec>
@@ -66,8 +66,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>pqaz617lra</Fingerprint>
-      <Integrity>38QqaRtvr/nwF4r4Qjr8qLyoLJnadEuJHKHzzyLgY+Q=</Integrity>
+      <Fingerprint>hjc9nyyc0k</Fingerprint>
+      <Integrity>Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\ServiceFee\service-fee.json'))</OriginalItemSpec>

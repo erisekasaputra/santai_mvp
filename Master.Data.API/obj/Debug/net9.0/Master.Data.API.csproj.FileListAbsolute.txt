@@ -345,10 +345,6 @@ C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.MvcApplicationPartsAssemblyInfo.cache
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.sourcelink.json
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\scopedcss\bundle\Master.Data.API.styles.css
-C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\25y84c7jcg-v5ptle4oma.gz
-C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\gtk4vznist-7dmtyarhod.gz
-C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\2uqe8z00nf-b2ouxlbary.gz
-C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\1b0leuntmr-pqaz617lra.gz
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\staticwebassets.build.json
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\staticwebassets.development.json
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\staticwebassets.build.endpoints.json
@@ -364,3 +360,7 @@ C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\refint\Master.D
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.pdb
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\ref\Master.Data.API.dll
+C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\25y84c7jcg-38jn93up96.gz
+C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\gtk4vznist-hjc9nyyc0k.gz
+C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\2uqe8z00nf-6iclky0jm6.gz
+C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\1b0leuntmr-hjc9nyyc0k.gz

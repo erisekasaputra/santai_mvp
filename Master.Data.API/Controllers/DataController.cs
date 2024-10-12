@@ -13,8 +13,8 @@ namespace Master.Data.API.Controllers;
 [Route("api/v1/master")]
 public class DataController : ControllerBase
 {
-    private readonly Logger<DataController> _logger;
-    public DataController(Logger<DataController> logger)
+    private readonly ILogger<DataController> _logger;
+    public DataController(ILogger<DataController> logger)
     {
         _logger = logger;   
     }

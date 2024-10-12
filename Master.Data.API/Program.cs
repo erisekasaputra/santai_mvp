@@ -10,14 +10,15 @@ builder.Services.AddCors(options =>
         policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
 });
+
+builder.AddLoggingContext();
 builder.Services.AddRouting();
 builder.Services.AddControllers();
 builder.Services.AddDirectoryBrowser();
 builder.Services.AddHealthChecks();
 builder.Services.AddTransient<GlobalExceptionMiddleware>();
 
-builder.AddCoreOptionConfiguration();
-builder.AddLoggingContext();
+builder.AddCoreOptionConfiguration(); 
 builder.AddJsonEnumConverterBehavior(); 
 builder.AddRedisDatabase();
 builder.Services.AddHealthChecks();

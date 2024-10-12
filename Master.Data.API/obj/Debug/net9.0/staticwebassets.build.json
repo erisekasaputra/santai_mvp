@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "5KRNBgADmp51MGxtDL5e/wHDI015FUJnSNcsjR8Ul/0=",
+  "Hash": "6CRlOz5cMUfujWhgKFe+GV3snd3zPyu/ttm7UMd4Yzs=",
   "Source": "Master.Data.API",
   "BasePath": "_content/Master.Data.API",
   "Mode": "Default",
@@ -17,12 +17,12 @@
   ],
   "Assets": [
     {
-      "Identity": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-pqaz617lra.gz",
+      "Identity": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-hjc9nyyc0k.gz",
       "SourceId": "Master.Data.API",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/Master.Data.API",
-      "RelativePath": "Order/ServiceFee/service-fee#[.{fingerprint=pqaz617lra}]?.json.gz",
+      "RelativePath": "Order/ServiceFee/service-fee#[.{fingerprint=hjc9nyyc0k}]?.json.gz",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Alternative",
@@ -31,19 +31,19 @@
       "RelatedAsset": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\ServiceFee\\service-fee.json",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "1wal2nwirw",
-      "Integrity": "n1c7UckBUGGfMp+KvezKNE9fRaU1tFFVlTft/ksnWPk=",
+      "Fingerprint": "gjep8do23a",
+      "Integrity": "JI4VX1nYAHnh1nkE/3tRUQ87u4DoZRmuC9kcr6YF3Ls=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\ServiceFee\\service-fee.json"
     },
     {
-      "Identity": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-v5ptle4oma.gz",
+      "Identity": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-38jn93up96.gz",
       "SourceId": "Master.Data.API",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/Master.Data.API",
-      "RelativePath": "Order/BasicInspection/basic-inspection#[.{fingerprint=v5ptle4oma}]?.json.gz",
+      "RelativePath": "Order/BasicInspection/basic-inspection#[.{fingerprint=38jn93up96}]?.json.gz",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Alternative",
@@ -52,19 +52,19 @@
       "RelatedAsset": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "ma8jym36jw",
-      "Integrity": "vtq0uP5rY1gKZZWjAL3y0IqgQ4PIOI3Q7+e0JIOepSY=",
+      "Fingerprint": "b6lg2t0yu5",
+      "Integrity": "zdoFZBQG2pSNvSyyvw+N0TOo9Zl19h3zvB+q6Y9lVmI=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json"
     },
     {
-      "Identity": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-b2ouxlbary.gz",
+      "Identity": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-6iclky0jm6.gz",
       "SourceId": "Master.Data.API",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/Master.Data.API",
-      "RelativePath": "Order/PreServiceInspection/pre-service-inspection#[.{fingerprint=b2ouxlbary}]?.json.gz",
+      "RelativePath": "Order/PreServiceInspection/pre-service-inspection#[.{fingerprint=6iclky0jm6}]?.json.gz",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Alternative",
@@ -73,19 +73,19 @@
       "RelatedAsset": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "jh8r1vbpam",
-      "Integrity": "SS/9j9u0qXu2ZCuQ+8IQ38eM35qfeh6vxs94KcTy26Q=",
+      "Fingerprint": "fa54espmfy",
+      "Integrity": "x8EMio+d2t0tCFvzvm+7tDcOvdr9GNQj15LzUNrajCs=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json"
     },
     {
-      "Identity": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-7dmtyarhod.gz",
+      "Identity": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-hjc9nyyc0k.gz",
       "SourceId": "Master.Data.API",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/Master.Data.API",
-      "RelativePath": "Order/CancellationFee/cancellation-fee#[.{fingerprint=7dmtyarhod}]?.json.gz",
+      "RelativePath": "Order/CancellationFee/cancellation-fee#[.{fingerprint=hjc9nyyc0k}]?.json.gz",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Alternative",
@@ -94,8 +94,8 @@
       "RelatedAsset": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
-      "Fingerprint": "9yfwj9dqdw",
-      "Integrity": "wR/xbwshIAZQYbNdwBGYknK9f+gCwZjHXjmA447RK6I=",
+      "Fingerprint": "gjep8do23a",
+      "Integrity": "JI4VX1nYAHnh1nkE/3tRUQ87u4DoZRmuC9kcr6YF3Ls=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json"
@@ -115,8 +115,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "v5ptle4oma",
-      "Integrity": "XW477+kmjlawZ5W9eybGqek6u2avWn5Zdef7cFFR6WA=",
+      "Fingerprint": "38jn93up96",
+      "Integrity": "7YmPow9U3vuZtHXdMkuGv8YVo+TetMR1KGJLo43TOTc=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Order\\BasicInspection\\basic-inspection.json"
@@ -136,8 +136,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "7dmtyarhod",
-      "Integrity": "hS8ElFMO2w3yDpT6eFg13BXKGl2loG3hhRzsIOqnxNk=",
+      "Fingerprint": "hjc9nyyc0k",
+      "Integrity": "Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Order\\CancellationFee\\cancellation-fee.json"
@@ -157,8 +157,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "b2ouxlbary",
-      "Integrity": "rcVFNx1qDjCU5+woRRuP96QiTIWsziDiqH9BcrDrpkU=",
+      "Fingerprint": "6iclky0jm6",
+      "Integrity": "crGZiVuPPyq2whSiEAMOc2vHW4DB1ciQUqUEsqznbzI=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json"
@@ -178,8 +178,8 @@
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
-      "Fingerprint": "pqaz617lra",
-      "Integrity": "38QqaRtvr/nwF4r4Qjr8qLyoLJnadEuJHKHzzyLgY+Q=",
+      "Fingerprint": "hjc9nyyc0k",
+      "Integrity": "Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\Order\\ServiceFee\\service-fee.json"
@@ -187,13 +187,13 @@
   ],
   "Endpoints": [
     {
-      "Route": "Order/BasicInspection/basic-inspection.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-v5ptle4oma.gz",
+      "Route": "Order/BasicInspection/basic-inspection.38jn93up96.json",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-38jn93up96.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.009615384615"
+          "Quality": "0.012345679012"
         }
       ],
       "ResponseHeaders": [
@@ -203,19 +203,19 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "103"
+          "Value": "80"
         },
         {
           "Name": "ETag",
-          "Value": "\"vtq0uP5rY1gKZZWjAL3y0IqgQ4PIOI3Q7+e0JIOepSY=\""
+          "Value": "\"zdoFZBQG2pSNvSyyvw+N0TOo9Zl19h3zvB+q6Y9lVmI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:47:40 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:37 GMT"
         },
         {
           "Name": "Cache-Control",
-          "Value": "no-cache"
+          "Value": "max-age=31536000, immutable"
         },
         {
           "Name": "Content-Encoding",
@@ -231,18 +231,26 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"XW477+kmjlawZ5W9eybGqek6u2avWn5Zdef7cFFR6WA=\""
+          "Value": "W/\"7YmPow9U3vuZtHXdMkuGv8YVo+TetMR1KGJLo43TOTc=\""
         }
       ],
       "EndpointProperties": [
         {
+          "Name": "fingerprint",
+          "Value": "38jn93up96"
+        },
+        {
+          "Name": "label",
+          "Value": "Order/BasicInspection/basic-inspection.json"
+        },
+        {
           "Name": "integrity",
-          "Value": "sha256-XW477+kmjlawZ5W9eybGqek6u2avWn5Zdef7cFFR6WA="
+          "Value": "sha256-7YmPow9U3vuZtHXdMkuGv8YVo+TetMR1KGJLo43TOTc="
         }
       ]
     },
     {
-      "Route": "Order/BasicInspection/basic-inspection.json",
+      "Route": "Order/BasicInspection/basic-inspection.38jn93up96.json",
       "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json",
       "Selectors": [],
       "ResponseHeaders": [
@@ -252,7 +260,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "128"
+          "Value": "88"
         },
         {
           "Name": "Content-Type",
@@ -260,121 +268,21 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"XW477+kmjlawZ5W9eybGqek6u2avWn5Zdef7cFFR6WA=\""
+          "Value": "\"7YmPow9U3vuZtHXdMkuGv8YVo+TetMR1KGJLo43TOTc=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:47:40 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-XW477+kmjlawZ5W9eybGqek6u2avWn5Zdef7cFFR6WA="
-        }
-      ]
-    },
-    {
-      "Route": "Order/BasicInspection/basic-inspection.json.gz",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-v5ptle4oma.gz",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "103"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "application/json"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"vtq0uP5rY1gKZZWjAL3y0IqgQ4PIOI3Q7+e0JIOepSY=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:47:40 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-vtq0uP5rY1gKZZWjAL3y0IqgQ4PIOI3Q7+e0JIOepSY="
-        }
-      ]
-    },
-    {
-      "Route": "Order/BasicInspection/basic-inspection.v5ptle4oma.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-v5ptle4oma.gz",
-      "Selectors": [
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip",
-          "Quality": "0.009615384615"
-        }
-      ],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "103"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"vtq0uP5rY1gKZZWjAL3y0IqgQ4PIOI3Q7+e0JIOepSY=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:47:40 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:37 GMT"
         },
         {
           "Name": "Cache-Control",
           "Value": "max-age=31536000, immutable"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "application/json"
-        },
-        {
-          "Name": "ETag",
-          "Value": "W/\"XW477+kmjlawZ5W9eybGqek6u2avWn5Zdef7cFFR6WA=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "v5ptle4oma"
+          "Value": "38jn93up96"
         },
         {
           "Name": "label",
@@ -382,13 +290,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-XW477+kmjlawZ5W9eybGqek6u2avWn5Zdef7cFFR6WA="
+          "Value": "sha256-7YmPow9U3vuZtHXdMkuGv8YVo+TetMR1KGJLo43TOTc="
         }
       ]
     },
     {
-      "Route": "Order/BasicInspection/basic-inspection.v5ptle4oma.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json",
+      "Route": "Order/BasicInspection/basic-inspection.38jn93up96.json.gz",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-38jn93up96.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -397,7 +305,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "128"
+          "Value": "80"
         },
         {
           "Name": "Content-Type",
@@ -405,56 +313,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"XW477+kmjlawZ5W9eybGqek6u2avWn5Zdef7cFFR6WA=\""
+          "Value": "\"zdoFZBQG2pSNvSyyvw+N0TOo9Zl19h3zvB+q6Y9lVmI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:47:40 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "v5ptle4oma"
-        },
-        {
-          "Name": "label",
-          "Value": "Order/BasicInspection/basic-inspection.json"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-XW477+kmjlawZ5W9eybGqek6u2avWn5Zdef7cFFR6WA="
-        }
-      ]
-    },
-    {
-      "Route": "Order/BasicInspection/basic-inspection.v5ptle4oma.json.gz",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-v5ptle4oma.gz",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "103"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "application/json"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"vtq0uP5rY1gKZZWjAL3y0IqgQ4PIOI3Q7+e0JIOepSY=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:47:40 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:37 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -472,7 +335,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "v5ptle4oma"
+          "Value": "38jn93up96"
         },
         {
           "Name": "label",
@@ -480,18 +343,18 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-vtq0uP5rY1gKZZWjAL3y0IqgQ4PIOI3Q7+e0JIOepSY="
+          "Value": "sha256-zdoFZBQG2pSNvSyyvw+N0TOo9Zl19h3zvB+q6Y9lVmI="
         }
       ]
     },
     {
-      "Route": "Order/CancellationFee/cancellation-fee.7dmtyarhod.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-7dmtyarhod.gz",
+      "Route": "Order/BasicInspection/basic-inspection.json",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-38jn93up96.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.006097560976"
+          "Quality": "0.012345679012"
         }
       ],
       "ResponseHeaders": [
@@ -501,15 +364,152 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "163"
+          "Value": "80"
         },
         {
           "Name": "ETag",
-          "Value": "\"wR/xbwshIAZQYbNdwBGYknK9f+gCwZjHXjmA447RK6I=\""
+          "Value": "\"zdoFZBQG2pSNvSyyvw+N0TOo9Zl19h3zvB+q6Y9lVmI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:55:01 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:37 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"7YmPow9U3vuZtHXdMkuGv8YVo+TetMR1KGJLo43TOTc=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-7YmPow9U3vuZtHXdMkuGv8YVo+TetMR1KGJLo43TOTc="
+        }
+      ]
+    },
+    {
+      "Route": "Order/BasicInspection/basic-inspection.json",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "88"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"7YmPow9U3vuZtHXdMkuGv8YVo+TetMR1KGJLo43TOTc=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 12 Oct 2024 04:18:37 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-7YmPow9U3vuZtHXdMkuGv8YVo+TetMR1KGJLo43TOTc="
+        }
+      ]
+    },
+    {
+      "Route": "Order/BasicInspection/basic-inspection.json.gz",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-38jn93up96.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "80"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"zdoFZBQG2pSNvSyyvw+N0TOo9Zl19h3zvB+q6Y9lVmI=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 12 Oct 2024 04:18:37 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-zdoFZBQG2pSNvSyyvw+N0TOo9Zl19h3zvB+q6Y9lVmI="
+        }
+      ]
+    },
+    {
+      "Route": "Order/CancellationFee/cancellation-fee.hjc9nyyc0k.json",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-hjc9nyyc0k.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.007751937984"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "128"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"JI4VX1nYAHnh1nkE/3tRUQ87u4DoZRmuC9kcr6YF3Ls=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 12 Oct 2024 04:18:46 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -529,13 +529,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"hS8ElFMO2w3yDpT6eFg13BXKGl2loG3hhRzsIOqnxNk=\""
+          "Value": "W/\"Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "7dmtyarhod"
+          "Value": "hjc9nyyc0k"
         },
         {
           "Name": "label",
@@ -543,12 +543,12 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-hS8ElFMO2w3yDpT6eFg13BXKGl2loG3hhRzsIOqnxNk="
+          "Value": "sha256-Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw="
         }
       ]
     },
     {
-      "Route": "Order/CancellationFee/cancellation-fee.7dmtyarhod.json",
+      "Route": "Order/CancellationFee/cancellation-fee.hjc9nyyc0k.json",
       "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json",
       "Selectors": [],
       "ResponseHeaders": [
@@ -558,7 +558,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "276"
+          "Value": "210"
         },
         {
           "Name": "Content-Type",
@@ -566,11 +566,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"hS8ElFMO2w3yDpT6eFg13BXKGl2loG3hhRzsIOqnxNk=\""
+          "Value": "\"Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:55:01 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:46 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -580,7 +580,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "7dmtyarhod"
+          "Value": "hjc9nyyc0k"
         },
         {
           "Name": "label",
@@ -588,13 +588,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-hS8ElFMO2w3yDpT6eFg13BXKGl2loG3hhRzsIOqnxNk="
+          "Value": "sha256-Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw="
         }
       ]
     },
     {
-      "Route": "Order/CancellationFee/cancellation-fee.7dmtyarhod.json.gz",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-7dmtyarhod.gz",
+      "Route": "Order/CancellationFee/cancellation-fee.hjc9nyyc0k.json.gz",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-hjc9nyyc0k.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -603,7 +603,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "163"
+          "Value": "128"
         },
         {
           "Name": "Content-Type",
@@ -611,11 +611,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"wR/xbwshIAZQYbNdwBGYknK9f+gCwZjHXjmA447RK6I=\""
+          "Value": "\"JI4VX1nYAHnh1nkE/3tRUQ87u4DoZRmuC9kcr6YF3Ls=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:55:01 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:46 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -633,7 +633,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "7dmtyarhod"
+          "Value": "hjc9nyyc0k"
         },
         {
           "Name": "label",
@@ -641,18 +641,18 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-wR/xbwshIAZQYbNdwBGYknK9f+gCwZjHXjmA447RK6I="
+          "Value": "sha256-JI4VX1nYAHnh1nkE/3tRUQ87u4DoZRmuC9kcr6YF3Ls="
         }
       ]
     },
     {
       "Route": "Order/CancellationFee/cancellation-fee.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-7dmtyarhod.gz",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-hjc9nyyc0k.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.006097560976"
+          "Quality": "0.007751937984"
         }
       ],
       "ResponseHeaders": [
@@ -662,15 +662,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "163"
+          "Value": "128"
         },
         {
           "Name": "ETag",
-          "Value": "\"wR/xbwshIAZQYbNdwBGYknK9f+gCwZjHXjmA447RK6I=\""
+          "Value": "\"JI4VX1nYAHnh1nkE/3tRUQ87u4DoZRmuC9kcr6YF3Ls=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:55:01 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:46 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -690,13 +690,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"hS8ElFMO2w3yDpT6eFg13BXKGl2loG3hhRzsIOqnxNk=\""
+          "Value": "W/\"Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-hS8ElFMO2w3yDpT6eFg13BXKGl2loG3hhRzsIOqnxNk="
+          "Value": "sha256-Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw="
         }
       ]
     },
@@ -711,7 +711,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "276"
+          "Value": "210"
         },
         {
           "Name": "Content-Type",
@@ -719,11 +719,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"hS8ElFMO2w3yDpT6eFg13BXKGl2loG3hhRzsIOqnxNk=\""
+          "Value": "\"Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:55:01 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:46 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -733,13 +733,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-hS8ElFMO2w3yDpT6eFg13BXKGl2loG3hhRzsIOqnxNk="
+          "Value": "sha256-Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw="
         }
       ]
     },
     {
       "Route": "Order/CancellationFee/cancellation-fee.json.gz",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-7dmtyarhod.gz",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-hjc9nyyc0k.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -748,7 +748,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "163"
+          "Value": "128"
         },
         {
           "Name": "Content-Type",
@@ -756,11 +756,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"wR/xbwshIAZQYbNdwBGYknK9f+gCwZjHXjmA447RK6I=\""
+          "Value": "\"JI4VX1nYAHnh1nkE/3tRUQ87u4DoZRmuC9kcr6YF3Ls=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:55:01 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:46 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -778,18 +778,18 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-wR/xbwshIAZQYbNdwBGYknK9f+gCwZjHXjmA447RK6I="
+          "Value": "sha256-JI4VX1nYAHnh1nkE/3tRUQ87u4DoZRmuC9kcr6YF3Ls="
         }
       ]
     },
     {
-      "Route": "Order/PreServiceInspection/pre-service-inspection.b2ouxlbary.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-b2ouxlbary.gz",
+      "Route": "Order/PreServiceInspection/pre-service-inspection.6iclky0jm6.json",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-6iclky0jm6.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.006802721088"
+          "Quality": "0.007299270073"
         }
       ],
       "ResponseHeaders": [
@@ -799,15 +799,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "146"
+          "Value": "136"
         },
         {
           "Name": "ETag",
-          "Value": "\"SS/9j9u0qXu2ZCuQ+8IQ38eM35qfeh6vxs94KcTy26Q=\""
+          "Value": "\"x8EMio+d2t0tCFvzvm+7tDcOvdr9GNQj15LzUNrajCs=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:47:28 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:34 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -827,13 +827,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"rcVFNx1qDjCU5+woRRuP96QiTIWsziDiqH9BcrDrpkU=\""
+          "Value": "W/\"crGZiVuPPyq2whSiEAMOc2vHW4DB1ciQUqUEsqznbzI=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "b2ouxlbary"
+          "Value": "6iclky0jm6"
         },
         {
           "Name": "label",
@@ -841,12 +841,12 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-rcVFNx1qDjCU5+woRRuP96QiTIWsziDiqH9BcrDrpkU="
+          "Value": "sha256-crGZiVuPPyq2whSiEAMOc2vHW4DB1ciQUqUEsqznbzI="
         }
       ]
     },
     {
-      "Route": "Order/PreServiceInspection/pre-service-inspection.b2ouxlbary.json",
+      "Route": "Order/PreServiceInspection/pre-service-inspection.6iclky0jm6.json",
       "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json",
       "Selectors": [],
       "ResponseHeaders": [
@@ -856,7 +856,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "305"
+          "Value": "246"
         },
         {
           "Name": "Content-Type",
@@ -864,11 +864,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"rcVFNx1qDjCU5+woRRuP96QiTIWsziDiqH9BcrDrpkU=\""
+          "Value": "\"crGZiVuPPyq2whSiEAMOc2vHW4DB1ciQUqUEsqznbzI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:47:28 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:34 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -878,7 +878,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "b2ouxlbary"
+          "Value": "6iclky0jm6"
         },
         {
           "Name": "label",
@@ -886,13 +886,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-rcVFNx1qDjCU5+woRRuP96QiTIWsziDiqH9BcrDrpkU="
+          "Value": "sha256-crGZiVuPPyq2whSiEAMOc2vHW4DB1ciQUqUEsqznbzI="
         }
       ]
     },
     {
-      "Route": "Order/PreServiceInspection/pre-service-inspection.b2ouxlbary.json.gz",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-b2ouxlbary.gz",
+      "Route": "Order/PreServiceInspection/pre-service-inspection.6iclky0jm6.json.gz",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-6iclky0jm6.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -901,7 +901,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "146"
+          "Value": "136"
         },
         {
           "Name": "Content-Type",
@@ -909,11 +909,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"SS/9j9u0qXu2ZCuQ+8IQ38eM35qfeh6vxs94KcTy26Q=\""
+          "Value": "\"x8EMio+d2t0tCFvzvm+7tDcOvdr9GNQj15LzUNrajCs=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:47:28 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:34 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -931,7 +931,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "b2ouxlbary"
+          "Value": "6iclky0jm6"
         },
         {
           "Name": "label",
@@ -939,18 +939,18 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-SS/9j9u0qXu2ZCuQ+8IQ38eM35qfeh6vxs94KcTy26Q="
+          "Value": "sha256-x8EMio+d2t0tCFvzvm+7tDcOvdr9GNQj15LzUNrajCs="
         }
       ]
     },
     {
       "Route": "Order/PreServiceInspection/pre-service-inspection.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-b2ouxlbary.gz",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-6iclky0jm6.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.006802721088"
+          "Quality": "0.007299270073"
         }
       ],
       "ResponseHeaders": [
@@ -960,15 +960,15 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "146"
+          "Value": "136"
         },
         {
           "Name": "ETag",
-          "Value": "\"SS/9j9u0qXu2ZCuQ+8IQ38eM35qfeh6vxs94KcTy26Q=\""
+          "Value": "\"x8EMio+d2t0tCFvzvm+7tDcOvdr9GNQj15LzUNrajCs=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:47:28 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:34 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -988,13 +988,13 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"rcVFNx1qDjCU5+woRRuP96QiTIWsziDiqH9BcrDrpkU=\""
+          "Value": "W/\"crGZiVuPPyq2whSiEAMOc2vHW4DB1ciQUqUEsqznbzI=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-rcVFNx1qDjCU5+woRRuP96QiTIWsziDiqH9BcrDrpkU="
+          "Value": "sha256-crGZiVuPPyq2whSiEAMOc2vHW4DB1ciQUqUEsqznbzI="
         }
       ]
     },
@@ -1009,7 +1009,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "305"
+          "Value": "246"
         },
         {
           "Name": "Content-Type",
@@ -1017,11 +1017,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"rcVFNx1qDjCU5+woRRuP96QiTIWsziDiqH9BcrDrpkU=\""
+          "Value": "\"crGZiVuPPyq2whSiEAMOc2vHW4DB1ciQUqUEsqznbzI=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:47:28 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:34 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1031,13 +1031,13 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-rcVFNx1qDjCU5+woRRuP96QiTIWsziDiqH9BcrDrpkU="
+          "Value": "sha256-crGZiVuPPyq2whSiEAMOc2vHW4DB1ciQUqUEsqznbzI="
         }
       ]
     },
     {
       "Route": "Order/PreServiceInspection/pre-service-inspection.json.gz",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-b2ouxlbary.gz",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-6iclky0jm6.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1046,7 +1046,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "146"
+          "Value": "136"
         },
         {
           "Name": "Content-Type",
@@ -1054,11 +1054,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"SS/9j9u0qXu2ZCuQ+8IQ38eM35qfeh6vxs94KcTy26Q=\""
+          "Value": "\"x8EMio+d2t0tCFvzvm+7tDcOvdr9GNQj15LzUNrajCs=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:47:28 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:34 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1076,18 +1076,18 @@
       "EndpointProperties": [
         {
           "Name": "integrity",
-          "Value": "sha256-SS/9j9u0qXu2ZCuQ+8IQ38eM35qfeh6vxs94KcTy26Q="
+          "Value": "sha256-x8EMio+d2t0tCFvzvm+7tDcOvdr9GNQj15LzUNrajCs="
         }
       ]
     },
     {
-      "Route": "Order/ServiceFee/service-fee.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-pqaz617lra.gz",
+      "Route": "Order/ServiceFee/service-fee.hjc9nyyc0k.json",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-hjc9nyyc0k.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
           "Value": "gzip",
-          "Quality": "0.005681818182"
+          "Quality": "0.007751937984"
         }
       ],
       "ResponseHeaders": [
@@ -1097,19 +1097,19 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "175"
+          "Value": "128"
         },
         {
           "Name": "ETag",
-          "Value": "\"n1c7UckBUGGfMp+KvezKNE9fRaU1tFFVlTft/ksnWPk=\""
+          "Value": "\"JI4VX1nYAHnh1nkE/3tRUQ87u4DoZRmuC9kcr6YF3Ls=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:51:36 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:41 GMT"
         },
         {
           "Name": "Cache-Control",
-          "Value": "no-cache"
+          "Value": "max-age=31536000, immutable"
         },
         {
           "Name": "Content-Encoding",
@@ -1125,18 +1125,26 @@
         },
         {
           "Name": "ETag",
-          "Value": "W/\"38QqaRtvr/nwF4r4Qjr8qLyoLJnadEuJHKHzzyLgY+Q=\""
+          "Value": "W/\"Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw=\""
         }
       ],
       "EndpointProperties": [
         {
+          "Name": "fingerprint",
+          "Value": "hjc9nyyc0k"
+        },
+        {
+          "Name": "label",
+          "Value": "Order/ServiceFee/service-fee.json"
+        },
+        {
           "Name": "integrity",
-          "Value": "sha256-38QqaRtvr/nwF4r4Qjr8qLyoLJnadEuJHKHzzyLgY+Q="
+          "Value": "sha256-Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw="
         }
       ]
     },
     {
-      "Route": "Order/ServiceFee/service-fee.json",
+      "Route": "Order/ServiceFee/service-fee.hjc9nyyc0k.json",
       "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\ServiceFee\\service-fee.json",
       "Selectors": [],
       "ResponseHeaders": [
@@ -1146,7 +1154,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "453"
+          "Value": "210"
         },
         {
           "Name": "Content-Type",
@@ -1154,121 +1162,21 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"38QqaRtvr/nwF4r4Qjr8qLyoLJnadEuJHKHzzyLgY+Q=\""
+          "Value": "\"Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:51:36 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-38QqaRtvr/nwF4r4Qjr8qLyoLJnadEuJHKHzzyLgY+Q="
-        }
-      ]
-    },
-    {
-      "Route": "Order/ServiceFee/service-fee.json.gz",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-pqaz617lra.gz",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "175"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "application/json"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"n1c7UckBUGGfMp+KvezKNE9fRaU1tFFVlTft/ksnWPk=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:51:36 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "no-cache"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "integrity",
-          "Value": "sha256-n1c7UckBUGGfMp+KvezKNE9fRaU1tFFVlTft/ksnWPk="
-        }
-      ]
-    },
-    {
-      "Route": "Order/ServiceFee/service-fee.pqaz617lra.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-pqaz617lra.gz",
-      "Selectors": [
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip",
-          "Quality": "0.005681818182"
-        }
-      ],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "175"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"n1c7UckBUGGfMp+KvezKNE9fRaU1tFFVlTft/ksnWPk=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:51:36 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:41 GMT"
         },
         {
           "Name": "Cache-Control",
           "Value": "max-age=31536000, immutable"
-        },
-        {
-          "Name": "Content-Encoding",
-          "Value": "gzip"
-        },
-        {
-          "Name": "Vary",
-          "Value": "Content-Encoding"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "application/json"
-        },
-        {
-          "Name": "ETag",
-          "Value": "W/\"38QqaRtvr/nwF4r4Qjr8qLyoLJnadEuJHKHzzyLgY+Q=\""
         }
       ],
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "pqaz617lra"
+          "Value": "hjc9nyyc0k"
         },
         {
           "Name": "label",
@@ -1276,13 +1184,13 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-38QqaRtvr/nwF4r4Qjr8qLyoLJnadEuJHKHzzyLgY+Q="
+          "Value": "sha256-Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw="
         }
       ]
     },
     {
-      "Route": "Order/ServiceFee/service-fee.pqaz617lra.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\ServiceFee\\service-fee.json",
+      "Route": "Order/ServiceFee/service-fee.hjc9nyyc0k.json.gz",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-hjc9nyyc0k.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1291,7 +1199,7 @@
         },
         {
           "Name": "Content-Length",
-          "Value": "453"
+          "Value": "128"
         },
         {
           "Name": "Content-Type",
@@ -1299,56 +1207,11 @@
         },
         {
           "Name": "ETag",
-          "Value": "\"38QqaRtvr/nwF4r4Qjr8qLyoLJnadEuJHKHzzyLgY+Q=\""
+          "Value": "\"JI4VX1nYAHnh1nkE/3tRUQ87u4DoZRmuC9kcr6YF3Ls=\""
         },
         {
           "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:51:36 GMT"
-        },
-        {
-          "Name": "Cache-Control",
-          "Value": "max-age=31536000, immutable"
-        }
-      ],
-      "EndpointProperties": [
-        {
-          "Name": "fingerprint",
-          "Value": "pqaz617lra"
-        },
-        {
-          "Name": "label",
-          "Value": "Order/ServiceFee/service-fee.json"
-        },
-        {
-          "Name": "integrity",
-          "Value": "sha256-38QqaRtvr/nwF4r4Qjr8qLyoLJnadEuJHKHzzyLgY+Q="
-        }
-      ]
-    },
-    {
-      "Route": "Order/ServiceFee/service-fee.pqaz617lra.json.gz",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-pqaz617lra.gz",
-      "Selectors": [],
-      "ResponseHeaders": [
-        {
-          "Name": "Accept-Ranges",
-          "Value": "bytes"
-        },
-        {
-          "Name": "Content-Length",
-          "Value": "175"
-        },
-        {
-          "Name": "Content-Type",
-          "Value": "application/json"
-        },
-        {
-          "Name": "ETag",
-          "Value": "\"n1c7UckBUGGfMp+KvezKNE9fRaU1tFFVlTft/ksnWPk=\""
-        },
-        {
-          "Name": "Last-Modified",
-          "Value": "Wed, 09 Oct 2024 03:51:36 GMT"
+          "Value": "Sat, 12 Oct 2024 04:18:41 GMT"
         },
         {
           "Name": "Cache-Control",
@@ -1366,7 +1229,7 @@
       "EndpointProperties": [
         {
           "Name": "fingerprint",
-          "Value": "pqaz617lra"
+          "Value": "hjc9nyyc0k"
         },
         {
           "Name": "label",
@@ -1374,7 +1237,144 @@
         },
         {
           "Name": "integrity",
-          "Value": "sha256-n1c7UckBUGGfMp+KvezKNE9fRaU1tFFVlTft/ksnWPk="
+          "Value": "sha256-JI4VX1nYAHnh1nkE/3tRUQ87u4DoZRmuC9kcr6YF3Ls="
+        }
+      ]
+    },
+    {
+      "Route": "Order/ServiceFee/service-fee.json",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-hjc9nyyc0k.gz",
+      "Selectors": [
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip",
+          "Quality": "0.007751937984"
+        }
+      ],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "128"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"JI4VX1nYAHnh1nkE/3tRUQ87u4DoZRmuC9kcr6YF3Ls=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 12 Oct 2024 04:18:41 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "W/\"Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw=\""
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw="
+        }
+      ]
+    },
+    {
+      "Route": "Order/ServiceFee/service-fee.json",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\ServiceFee\\service-fee.json",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "210"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 12 Oct 2024 04:18:41 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw="
+        }
+      ]
+    },
+    {
+      "Route": "Order/ServiceFee/service-fee.json.gz",
+      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-hjc9nyyc0k.gz",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "128"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "application/json"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"JI4VX1nYAHnh1nkE/3tRUQ87u4DoZRmuC9kcr6YF3Ls=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Sat, 12 Oct 2024 04:18:41 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "no-cache"
+        },
+        {
+          "Name": "Content-Encoding",
+          "Value": "gzip"
+        },
+        {
+          "Name": "Vary",
+          "Value": "Content-Encoding"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-JI4VX1nYAHnh1nkE/3tRUQ87u4DoZRmuC9kcr6YF3Ls="
         }
       ]
     }

@@ -1,11 +1,20 @@
 [
   {
-    "Parameter": "string",
-    "FeeDescriptionDetail": "string",
-    "FeeDescription": "string",
+    "Parameter": "Value",
+    "FeeDescriptionDetail": "Service Fee",
+    "FeeDescription": "ServiceFee",
     "Currency": 0,
     "ValuePercentage": 0.0,
-    "ValueAmount": 0.0,
+    "ValueAmount": 5,
+    "FeeAmount": 0.0
+  },
+  {
+    "Parameter": "Value",
+    "FeeDescriptionDetail": "Mechanic Fee",
+    "FeeDescription": "MechanicFee",
+    "Currency": 0,
+    "ValuePercentage": 0.0,
+    "ValueAmount": 30,
     "FeeAmount": 0.0
   }
 ]
