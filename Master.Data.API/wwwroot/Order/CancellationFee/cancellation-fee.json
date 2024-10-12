@@ -3,7 +3,7 @@
     "Parameter": "Value",
     "FeeDescriptionDetail": "Service Fee",
     "FeeDescription": "ServiceFee",
-    "Currency": 0,
+    "Currency": "MYR",
     "ValuePercentage": 0.0,
     "ValueAmount": 5,
     "FeeAmount": 0.0
