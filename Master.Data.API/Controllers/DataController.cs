@@ -1,5 +1,6 @@
 ﻿using Core.CustomMessages;
 using Core.Results;
+using Core.Utilities;
 using Master.Data.API.Dtos;
 using Master.Data.API.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +13,10 @@ namespace Master.Data.API.Controllers;
 [Route("api/v1/master")]
 public class DataController : ControllerBase
 {
-    public DataController()
+    private readonly Logger<DataController> _logger;
+    public DataController(Logger<DataController> logger)
     {
-        
+        _logger = logger;   
     }
 
     [HttpGet("order")]
@@ -148,8 +150,9 @@ public class DataController : ControllerBase
             System.IO.File.WriteAllText(filePath, jsonString);
             return TypedResults.NoContent();
         }
-        catch (Exception)
-        { 
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
             return TypedResults.InternalServerError(
                 Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         }
@@ -169,8 +172,9 @@ public class DataController : ControllerBase
             System.IO.File.WriteAllText(filePath, jsonString);
             return TypedResults.NoContent();
         }
-        catch (Exception)
-        { 
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
             return TypedResults.InternalServerError(
                 Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         }
@@ -190,8 +194,9 @@ public class DataController : ControllerBase
             System.IO.File.WriteAllText(filePath, jsonString);
             return TypedResults.NoContent();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            LoggerHelper.LogError(_logger, ex);
             return TypedResults.InternalServerError(
                 Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         }
@@ -215,8 +220,9 @@ public class DataController : ControllerBase
             System.IO.File.WriteAllText(filePath, jsonString);
             return TypedResults.NoContent();
         }
-        catch (Exception)
+        catch (Exception ex)
         {
+            LoggerHelper.LogError(_logger, ex);
             return TypedResults.InternalServerError(
                 Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         }
