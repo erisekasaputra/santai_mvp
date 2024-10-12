@@ -49,5 +49,9 @@ cd /home/ec2-user/santai_mvp
 
 sudo docker-compose -f docker-compose-{module}.yml up -d --build
 
+sudo yum install -y amazon-ssm-agent
+
+sudo systemctl start amazon-ssm-agent
+
 # Optionally, log the output for debugging
 echo "Setup complete!" >> /var/log/user-data.log
