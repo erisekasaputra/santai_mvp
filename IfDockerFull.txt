@@ -1,0 +1,5 @@
+docker image prune -a -f
+docker container prune -f
+docker volume prune -f
+docker builder prune -f
+docker builder prune -a -f

@@ -46,10 +46,8 @@ C:\Projects\Projects\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Catalog.
 C:\Projects\Projects\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Catalog.Infrastructure.runtimeconfig.json
 C:\Projects\Projects\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Catalog.Infrastructure.dll
 C:\Projects\Projects\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Catalog.Infrastructure.pdb
-C:\Projects\Projects\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Account.Domain.dll
 C:\Projects\Projects\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Catalog.Domain.dll
 C:\Projects\Projects\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Core.dll
-C:\Projects\Projects\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Account.Domain.pdb
 C:\Projects\Projects\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Catalog.Domain.pdb
 C:\Projects\Projects\Santai.MVP\Catalog.Infrastructure\bin\Debug\net9.0\Core.pdb
 C:\Projects\Projects\Santai.MVP\Catalog.Infrastructure\obj\Debug\net9.0\Catalog.Infrastructure.csproj.AssemblyReference.cache
