@@ -5165,11 +5165,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Chat.API\\Chat.API.csproj",
+      "projectUniqueName": "C:\\Projects\\Projects\\Santai.MVP\\Chat.API\\Chat.API.csproj",
       "projectName": "Chat.API",
-      "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Chat.API\\Chat.API.csproj",
+      "projectPath": "C:\\Projects\\Projects\\Santai.MVP\\Chat.API\\Chat.API.csproj",
       "packagesPath": "C:\\Users\\erise\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Chat.API\\obj\\",
+      "outputPath": "C:\\Projects\\Projects\\Santai.MVP\\Chat.API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -5191,8 +5191,8 @@
         "net9.0": {
           "targetAlias": "net9.0",
           "projectReferences": {
-            "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Core\\Core.csproj": {
-              "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\Core\\Core.csproj"
+            "C:\\Projects\\Projects\\Santai.MVP\\Core\\Core.csproj": {
+              "projectPath": "C:\\Projects\\Projects\\Santai.MVP\\Core\\Core.csproj"
             }
           }
         }
@@ -5276,5 +5276,17 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100-rc.1.24452.12/PortableRuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'System.Runtime.Caching' 8.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-qj66-m88j-hmgj",
+      "libraryId": "System.Runtime.Caching",
+      "targetGraphs": [
+        "net9.0"
+      ]
+    }
+  ]
 }

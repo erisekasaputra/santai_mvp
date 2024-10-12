@@ -72,3 +72,40 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History.API.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History.API.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\History.API\obj\Debug\net9.0\ref\History.API.dll
+C:\Projects\Projects\Santai.MVP\History.API\bin\Debug\net9.0\appsettings.Development.json
+C:\Projects\Projects\Santai.MVP\History.API\bin\Debug\net9.0\appsettings.json
+C:\Projects\Projects\Santai.MVP\History.API\bin\Debug\net9.0\History.API.staticwebassets.endpoints.json
+C:\Projects\Projects\Santai.MVP\History.API\bin\Debug\net9.0\History.API.exe
+C:\Projects\Projects\Santai.MVP\History.API\bin\Debug\net9.0\History.API.deps.json
+C:\Projects\Projects\Santai.MVP\History.API\bin\Debug\net9.0\History.API.runtimeconfig.json
+C:\Projects\Projects\Santai.MVP\History.API\bin\Debug\net9.0\History.API.dll
+C:\Projects\Projects\Santai.MVP\History.API\bin\Debug\net9.0\History.API.pdb
+C:\Projects\Projects\Santai.MVP\History.API\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
+C:\Projects\Projects\Santai.MVP\History.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+C:\Projects\Projects\Santai.MVP\History.API\bin\Debug\net9.0\Microsoft.OpenApi.dll
+C:\Projects\Projects\Santai.MVP\History.API\bin\Debug\net9.0\Pipelines.Sockets.Unofficial.dll
+C:\Projects\Projects\Santai.MVP\History.API\bin\Debug\net9.0\StackExchange.Redis.dll
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History.API.csproj.AssemblyReference.cache
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History.API.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History.API.AssemblyInfoInputs.cache
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History.API.AssemblyInfo.cs
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History.API.csproj.CoreCompileInputs.cache
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History.API.MvcApplicationPartsAssemblyInfo.cs
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History.API.sourcelink.json
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\scopedcss\bundle\History.API.styles.css
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets.build.json
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets.development.json
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets.build.endpoints.json
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets\msbuild.History.API.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets\msbuild.History.API.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets\msbuild.build.History.API.props
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.History.API.props
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.History.API.props
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets.pack.json
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History..64CC3CFB.Up2Date
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History.API.dll
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\refint\History.API.dll
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History.API.pdb
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History.API.genruntimeconfig.cache
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\ref\History.API.dll

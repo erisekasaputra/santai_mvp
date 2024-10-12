@@ -569,11 +569,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\History.API\\History.API.csproj",
+      "projectUniqueName": "C:\\Projects\\Projects\\Santai.MVP\\History.API\\History.API.csproj",
       "projectName": "History.API",
-      "projectPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\History.API\\History.API.csproj",
+      "projectPath": "C:\\Projects\\Projects\\Santai.MVP\\History.API\\History.API.csproj",
       "packagesPath": "C:\\Users\\erise\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\erise\\Documents\\Personal\\PT Infinite Technology Solutions\\Projects\\Santai.MVP\\History.API\\obj\\",
+      "outputPath": "C:\\Projects\\Projects\\Santai.MVP\\History.API\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

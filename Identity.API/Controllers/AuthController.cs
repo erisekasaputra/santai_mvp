@@ -937,10 +937,16 @@ public class AuthController(
 
     private async Task<bool> IsRefreshTokenValid(string refreshToken, string accessToken)
     {
-        if (string.IsNullOrWhiteSpace(refreshToken) || string.IsNullOrEmpty(accessToken) || await _tokenCacheService.IsRefreshTokenBlacklisted(refreshToken) || await _tokenCacheService.IsAccessTokenBlacklisted(accessToken))
+        if (string.IsNullOrWhiteSpace(refreshToken) || 
+            string.IsNullOrEmpty(accessToken) || 
+            await _tokenCacheService.IsRefreshTokenBlacklisted(refreshToken) || 
+            await _tokenCacheService.IsAccessTokenBlacklisted(accessToken))
             return false;
+
         return true;
     }
+
+
     [HttpPost("refresh-token")]
     public async Task<IResult> RefreshToken(
     [FromBody] RefreshTokenRequest refreshTokenRequest)
@@ -961,16 +967,17 @@ public class AuthController(
             await _tokenCacheService.BlackListRefreshTokenAsync(refreshTokenRequest.RefreshToken);
             await _tokenCacheService.BlackListAccessTokenAsync(refreshTokenRequest.AccessToken);
             await _tokenCacheService.SaveRefreshToken(newRefreshToken);
+            
             var user = await _userManager.FindByIdAsync(refreshToken.UserId);
             if (user is null) return TypedResults.Unauthorized();
+
             var claims = await _userManager.GetClaimsAsync(user);   
             if (claims is null || !claims.Any())
             { 
                 _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
                 return TypedResults.InternalServerError(
                     Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
-            } 
-
+            }  
 
             var roles = await _userManager.GetRolesAsync(user); 
             if (roles is null || !roles.Any())
@@ -983,6 +990,7 @@ public class AuthController(
 
             var claimsIdentity = new ClaimsIdentity(claims); 
             var accessToken = _tokenService.GenerateAccessToken(claimsIdentity);  
+
             return TypedResults.Ok(
                 Result.Success(new 
                 {

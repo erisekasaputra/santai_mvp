@@ -72,3 +72,40 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\ref\Location.Sender.dll
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\appsettings.Development.json
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\appsettings.json
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\Location.Sender.staticwebassets.endpoints.json
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\Location.Sender.exe
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\Location.Sender.deps.json
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\Location.Sender.runtimeconfig.json
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\Location.Sender.dll
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\Location.Sender.pdb
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\Microsoft.AspNetCore.Http.Connections.Client.dll
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\Microsoft.AspNetCore.SignalR.Client.dll
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\Microsoft.AspNetCore.SignalR.Client.Core.dll
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\Microsoft.OpenApi.dll
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.csproj.AssemblyReference.cache
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.AssemblyInfoInputs.cache
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.AssemblyInfo.cs
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.csproj.CoreCompileInputs.cache
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.MvcApplicationPartsAssemblyInfo.cs
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.MvcApplicationPartsAssemblyInfo.cache
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.sourcelink.json
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\scopedcss\bundle\Location.Sender.styles.css
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\staticwebassets.build.json
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\staticwebassets.development.json
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\staticwebassets.build.endpoints.json
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\staticwebassets\msbuild.Location.Sender.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\staticwebassets\msbuild.Location.Sender.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\staticwebassets\msbuild.build.Location.Sender.props
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.Location.Sender.props
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.Location.Sender.props
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\staticwebassets.pack.json
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.27C3CD65.Up2Date
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.dll
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\refint\Location.Sender.dll
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.pdb
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.genruntimeconfig.cache
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\ref\Location.Sender.dll

@@ -74,3 +74,41 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\ref\Chat.Client.dll
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\appsettings.Development.json
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\appsettings.json
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\Chat.Client.staticwebassets.endpoints.json
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\Chat.Client.exe
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\Chat.Client.deps.json
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\Chat.Client.runtimeconfig.json
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\Chat.Client.dll
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\Chat.Client.pdb
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\Microsoft.AspNetCore.Http.Connections.Client.dll
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\Microsoft.AspNetCore.OpenApi.dll
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\Microsoft.AspNetCore.SignalR.Client.dll
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\Microsoft.AspNetCore.SignalR.Client.Core.dll
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\Microsoft.OpenApi.dll
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\System.Net.ServerSentEvents.dll
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.csproj.AssemblyReference.cache
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.AssemblyInfoInputs.cache
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.AssemblyInfo.cs
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.csproj.CoreCompileInputs.cache
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.MvcApplicationPartsAssemblyInfo.cs
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.MvcApplicationPartsAssemblyInfo.cache
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.sourcelink.json
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\scopedcss\bundle\Chat.Client.styles.css
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\staticwebassets.build.json
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\staticwebassets.development.json
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\staticwebassets.build.endpoints.json
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\staticwebassets\msbuild.Chat.Client.Microsoft.AspNetCore.StaticWebAssets.props
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\staticwebassets\msbuild.Chat.Client.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\staticwebassets\msbuild.build.Chat.Client.props
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.Chat.Client.props
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.Chat.Client.props
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\staticwebassets.pack.json
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Cli.CD659857.Up2Date
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.dll
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\refint\Chat.Client.dll
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.pdb
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.genruntimeconfig.cache
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\ref\Chat.Client.dll

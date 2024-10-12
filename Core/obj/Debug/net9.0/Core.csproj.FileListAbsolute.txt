@@ -28,3 +28,18 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Core\obj\Debug\net9.0\Core.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Core\obj\Debug\net9.0\Core.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Core\obj\Debug\net9.0\ref\Core.dll
+C:\Projects\Projects\Santai.MVP\Core\bin\Debug\net9.0\Core.deps.json
+C:\Projects\Projects\Santai.MVP\Core\bin\Debug\net9.0\Core.runtimeconfig.json
+C:\Projects\Projects\Santai.MVP\Core\bin\Debug\net9.0\Core.dll
+C:\Projects\Projects\Santai.MVP\Core\bin\Debug\net9.0\Core.pdb
+C:\Projects\Projects\Santai.MVP\Core\obj\Debug\net9.0\Core.csproj.AssemblyReference.cache
+C:\Projects\Projects\Santai.MVP\Core\obj\Debug\net9.0\Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\Projects\Santai.MVP\Core\obj\Debug\net9.0\Core.AssemblyInfoInputs.cache
+C:\Projects\Projects\Santai.MVP\Core\obj\Debug\net9.0\Core.AssemblyInfo.cs
+C:\Projects\Projects\Santai.MVP\Core\obj\Debug\net9.0\Core.csproj.CoreCompileInputs.cache
+C:\Projects\Projects\Santai.MVP\Core\obj\Debug\net9.0\Core.sourcelink.json
+C:\Projects\Projects\Santai.MVP\Core\obj\Debug\net9.0\Core.dll
+C:\Projects\Projects\Santai.MVP\Core\obj\Debug\net9.0\refint\Core.dll
+C:\Projects\Projects\Santai.MVP\Core\obj\Debug\net9.0\Core.pdb
+C:\Projects\Projects\Santai.MVP\Core\obj\Debug\net9.0\Core.genruntimeconfig.cache
+C:\Projects\Projects\Santai.MVP\Core\obj\Debug\net9.0\ref\Core.dll
