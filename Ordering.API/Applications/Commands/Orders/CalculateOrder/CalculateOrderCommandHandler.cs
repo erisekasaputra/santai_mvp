@@ -32,11 +32,7 @@ public class CalculateOrderCommandHandler(
             Coupon? coupon = null;
             if (!string.IsNullOrWhiteSpace(request.CouponCode))
             {
-                coupon = await _unitOfWork.Coupons.GetByCodeAsync(request.CouponCode);
-                if (coupon is null)
-                {
-                    return Result.Failure("Upps, can not apply this coupon", ResponseStatus.NotFound);
-                }
+                coupon = await _unitOfWork.Coupons.GetByCodeAsync(request.CouponCode); 
             }
 
             var initialMaster = await _masterDataServiceAPI.GetMasterDataInitializationMasterResponseDto();
@@ -137,7 +133,7 @@ public class CalculateOrderCommandHandler(
                         coupon.Currency,
                         coupon.MinimumOrderValue));
             }
-        }
+        }  
             
         foreach (var fee in master.Fees)
         {
