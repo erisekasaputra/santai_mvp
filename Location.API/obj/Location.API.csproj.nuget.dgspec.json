@@ -66,6 +66,10 @@
             "StackExchange.Redis": {
               "target": "Package",
               "version": "[2.8.12, )"
+            },
+            "System.Runtime.Caching": {
+              "target": "Package",
+              "version": "[9.0.0-rc.2.24473.5, )"
             }
           },
           "imports": [

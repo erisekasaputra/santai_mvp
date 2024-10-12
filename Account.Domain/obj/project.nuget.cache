@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "m/aP1Kgfr2E=",
+  "dgSpecHash": "p9t/mILTSuQ=",
   "success": true,
   "projectFilePath": "C:\\Projects\\Projects\\Santai.MVP\\Account.Domain\\Account.Domain.csproj",
   "expectedPackageFiles": [
@@ -72,10 +72,10 @@
     "C:\\Users\\erise\\.nuget\\packages\\system.clientmodel\\1.0.0\\system.clientmodel.1.0.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\system.codedom\\6.0.0\\system.codedom.6.0.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\system.componentmodel.annotations\\5.0.0\\system.componentmodel.annotations.5.0.0.nupkg.sha512",
-    "C:\\Users\\erise\\.nuget\\packages\\system.configuration.configurationmanager\\8.0.0\\system.configuration.configurationmanager.8.0.0.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\system.configuration.configurationmanager\\9.0.0-rc.2.24473.5\\system.configuration.configurationmanager.9.0.0-rc.2.24473.5.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\system.data.sqlclient\\4.8.6\\system.data.sqlclient.4.8.6.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\system.diagnostics.diagnosticsource\\9.0.0-preview.7.24405.7\\system.diagnostics.diagnosticsource.9.0.0-preview.7.24405.7.nupkg.sha512",
-    "C:\\Users\\erise\\.nuget\\packages\\system.diagnostics.eventlog\\8.0.0\\system.diagnostics.eventlog.8.0.0.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\system.diagnostics.eventlog\\9.0.0-rc.2.24473.5\\system.diagnostics.eventlog.9.0.0-rc.2.24473.5.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\system.drawing.common\\9.0.0-preview.7.24405.4\\system.drawing.common.9.0.0-preview.7.24405.4.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\system.identitymodel.tokens.jwt\\8.0.0\\system.identitymodel.tokens.jwt.8.0.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\system.io\\4.3.0\\system.io.4.3.0.nupkg.sha512",
@@ -86,11 +86,11 @@
     "C:\\Users\\erise\\.nuget\\packages\\system.reflection\\4.3.0\\system.reflection.4.3.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\system.reflection.primitives\\4.3.0\\system.reflection.primitives.4.3.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\system.runtime\\4.3.1\\system.runtime.4.3.1.nupkg.sha512",
-    "C:\\Users\\erise\\.nuget\\packages\\system.runtime.caching\\8.0.0\\system.runtime.caching.8.0.0.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\system.runtime.caching\\9.0.0-rc.2.24473.5\\system.runtime.caching.9.0.0-rc.2.24473.5.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\system.runtime.handles\\4.3.0\\system.runtime.handles.4.3.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\system.runtime.interopservices\\4.3.0\\system.runtime.interopservices.4.3.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\system.security.accesscontrol\\4.7.0\\system.security.accesscontrol.4.7.0.nupkg.sha512",
-    "C:\\Users\\erise\\.nuget\\packages\\system.security.cryptography.protecteddata\\8.0.0\\system.security.cryptography.protecteddata.8.0.0.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\system.security.cryptography.protecteddata\\9.0.0-rc.2.24473.5\\system.security.cryptography.protecteddata.9.0.0-rc.2.24473.5.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\system.security.principal.windows\\4.7.0\\system.security.principal.windows.4.7.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\system.text.encoding\\4.3.0\\system.text.encoding.4.3.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\system.text.encodings.web\\4.7.2\\system.text.encodings.web.4.7.2.nupkg.sha512",
@@ -99,16 +99,5 @@
     "C:\\Users\\erise\\.nuget\\packages\\system.threading.tasks.extensions\\4.5.4\\system.threading.tasks.extensions.4.5.4.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\timezoneconverter\\6.1.0\\timezoneconverter.6.1.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'System.Runtime.Caching' 8.0.0 has a known high severity vulnerability, https://github.com/advisories/GHSA-qj66-m88j-hmgj",
-      "libraryId": "System.Runtime.Caching",
-      "targetGraphs": [
-        "net9.0"
-      ]
-    }
-  ]
+  "logs": []
 }

@@ -10,7 +10,8 @@
         "dependencies": {
           "Microsoft.AspNetCore.OpenApi": "9.0.0-rc.1.24452.1",
           "Microsoft.AspNetCore.SignalR.Client": "9.0.0-rc.1.24452.1",
-          "Microsoft.AspNetCore.SignalR.Client.Core": "9.0.0-rc.1.24452.1"
+          "Microsoft.AspNetCore.SignalR.Client.Core": "9.0.0-rc.1.24452.1",
+          "System.Runtime.Caching": "9.0.0-rc.2.24473.5"
         },
         "runtime": {
           "Chat.Client.dll": {}
@@ -123,11 +124,66 @@
           }
         }
       },
+      "System.Configuration.ConfigurationManager/9.0.0-rc.2.24473.5": {
+        "dependencies": {
+          "System.Diagnostics.EventLog": "9.0.0-rc.2.24473.5",
+          "System.Security.Cryptography.ProtectedData": "9.0.0-rc.2.24473.5"
+        },
+        "runtime": {
+          "lib/net9.0/System.Configuration.ConfigurationManager.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.47305"
+          }
+        }
+      },
+      "System.Diagnostics.EventLog/9.0.0-rc.2.24473.5": {
+        "runtime": {
+          "lib/net9.0/System.Diagnostics.EventLog.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.47305"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net9.0/System.Diagnostics.EventLog.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.47305"
+          }
+        }
+      },
       "System.Net.ServerSentEvents/9.0.0-rc.1.24431.7": {
         "runtime": {
           "lib/net9.0/System.Net.ServerSentEvents.dll": {
             "assemblyVersion": "9.0.0.0",
             "fileVersion": "9.0.24.43107"
+          }
+        }
+      },
+      "System.Runtime.Caching/9.0.0-rc.2.24473.5": {
+        "dependencies": {
+          "System.Configuration.ConfigurationManager": "9.0.0-rc.2.24473.5"
+        },
+        "runtime": {
+          "lib/net9.0/System.Runtime.Caching.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.47305"
+          }
+        },
+        "runtimeTargets": {
+          "runtimes/win/lib/net9.0/System.Runtime.Caching.dll": {
+            "rid": "win",
+            "assetType": "runtime",
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.47305"
+          }
+        }
+      },
+      "System.Security.Cryptography.ProtectedData/9.0.0-rc.2.24473.5": {
+        "runtime": {
+          "lib/net9.0/System.Security.Cryptography.ProtectedData.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.24.47305"
           }
         }
       },
@@ -252,12 +308,40 @@
       "path": "microsoft.openapi/1.6.17",
       "hashPath": "microsoft.openapi.1.6.17.nupkg.sha512"
     },
+    "System.Configuration.ConfigurationManager/9.0.0-rc.2.24473.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4f6sY++OiBxsho7BSScMDs94Oa/UbC92kpAei3w9mswEziMIlGav9miEoCm5pY1rOMYMtMRr2lBq9GDhlN/Bog==",
+      "path": "system.configuration.configurationmanager/9.0.0-rc.2.24473.5",
+      "hashPath": "system.configuration.configurationmanager.9.0.0-rc.2.24473.5.nupkg.sha512"
+    },
+    "System.Diagnostics.EventLog/9.0.0-rc.2.24473.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-d37ltVHeoZ0yLGFN1igt0FyIMz5mWPPTm/gDftPcQdefQx8NrLWr3YXv7nUe5WcfQmlk4yDT5kHIIqIXxz5xgg==",
+      "path": "system.diagnostics.eventlog/9.0.0-rc.2.24473.5",
+      "hashPath": "system.diagnostics.eventlog.9.0.0-rc.2.24473.5.nupkg.sha512"
+    },
     "System.Net.ServerSentEvents/9.0.0-rc.1.24431.7": {
       "type": "package",
       "serviceable": true,
       "sha512": "sha512-TeSXyZJZhMlEr5lfM93O1zrJC8+fd61T9iH9WK15O/WetWcF+xGD5ZGyl5+zYoGr20XVMEl31cs0e6H3KXNuvg==",
       "path": "system.net.serversentevents/9.0.0-rc.1.24431.7",
       "hashPath": "system.net.serversentevents.9.0.0-rc.1.24431.7.nupkg.sha512"
+    },
+    "System.Runtime.Caching/9.0.0-rc.2.24473.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9bGw4YnJ6iofQT56fCzNbKtycKMHieDvCKGK1CHd7r07yTpY1s59ToD9itQoN3jOC+GlW6QW9YJHtchqwsctVQ==",
+      "path": "system.runtime.caching/9.0.0-rc.2.24473.5",
+      "hashPath": "system.runtime.caching.9.0.0-rc.2.24473.5.nupkg.sha512"
+    },
+    "System.Security.Cryptography.ProtectedData/9.0.0-rc.2.24473.5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-WmEKZcNdOoUSEVQVTs8LsD0WdnliOij0G4s9ljfVTFekI82JWk3WfvlpFzDsc7sXO12w/ckXrkaaRkiUBT8Gyw==",
+      "path": "system.security.cryptography.protecteddata/9.0.0-rc.2.24473.5",
+      "hashPath": "system.security.cryptography.protecteddata.9.0.0-rc.2.24473.5.nupkg.sha512"
     },
     "System.Threading.Channels/9.0.0-rc.1.24431.7": {
       "type": "package",

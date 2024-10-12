@@ -229,6 +229,10 @@
               "target": "Package",
               "version": "[5.0.0, )"
             },
+            "System.Runtime.Caching": {
+              "target": "Package",
+              "version": "[9.0.0-rc.2.24473.5, )"
+            },
             "TimeZoneConverter": {
               "target": "Package",
               "version": "[6.1.0, )"
@@ -315,6 +319,10 @@
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[9.0.0-preview.7.24405.3, )"
+            },
+            "System.Runtime.Caching": {
+              "target": "Package",
+              "version": "[9.0.0-rc.2.24473.5, )"
             }
           },
           "imports": [
@@ -455,6 +463,10 @@
             "System.Drawing.Common": {
               "target": "Package",
               "version": "[9.0.0-preview.7.24405.4, )"
+            },
+            "System.Runtime.Caching": {
+              "target": "Package",
+              "version": "[9.0.0-rc.2.24473.5, )"
             }
           },
           "imports": [
@@ -623,6 +635,10 @@
             "System.Runtime": {
               "target": "Package",
               "version": "[4.3.1, )"
+            },
+            "System.Runtime.Caching": {
+              "target": "Package",
+              "version": "[9.0.0-rc.2.24473.5, )"
             },
             "System.Runtime.InteropServices": {
               "target": "Package",

@@ -30,8 +30,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>hjc9nyyc0k</Fingerprint>
-      <Integrity>Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw=</Integrity>
+      <Fingerprint>h0cp9lym7f</Fingerprint>
+      <Integrity>7zn7kTWBne2TBy7loH/CViBUOqrTAHlvzhDYjhHAl4g=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\CancellationFee\cancellation-fee.json'))</OriginalItemSpec>
@@ -66,8 +66,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>hjc9nyyc0k</Fingerprint>
-      <Integrity>Q/n2wgL6HAW/1Fb3RINh349bQEzn9MSIUlkbwMMggPw=</Integrity>
+      <Fingerprint>59jwi6ab2s</Fingerprint>
+      <Integrity>ebOJLwxLwGs+GtCvEaGPvqxSgR8ptu75WiU4ojbZ77c=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\ServiceFee\service-fee.json'))</OriginalItemSpec>

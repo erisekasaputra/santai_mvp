@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "xfCIdNNIxA4=",
+  "dgSpecHash": "VnwIqoFe5S0=",
   "success": true,
   "projectFilePath": "C:\\Projects\\Projects\\Santai.MVP\\Chat.Client\\Chat.Client.csproj",
   "expectedPackageFiles": [
@@ -20,7 +20,11 @@
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.extensions.options\\9.0.0-rc.1.24431.7\\microsoft.extensions.options.9.0.0-rc.1.24431.7.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.extensions.primitives\\9.0.0-rc.1.24431.7\\microsoft.extensions.primitives.9.0.0-rc.1.24431.7.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.openapi\\1.6.17\\microsoft.openapi.1.6.17.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\system.configuration.configurationmanager\\9.0.0-rc.2.24473.5\\system.configuration.configurationmanager.9.0.0-rc.2.24473.5.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\system.diagnostics.eventlog\\9.0.0-rc.2.24473.5\\system.diagnostics.eventlog.9.0.0-rc.2.24473.5.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\system.net.serversentevents\\9.0.0-rc.1.24431.7\\system.net.serversentevents.9.0.0-rc.1.24431.7.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\system.runtime.caching\\9.0.0-rc.2.24473.5\\system.runtime.caching.9.0.0-rc.2.24473.5.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\system.security.cryptography.protecteddata\\9.0.0-rc.2.24473.5\\system.security.cryptography.protecteddata.9.0.0-rc.2.24473.5.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\system.threading.channels\\9.0.0-rc.1.24431.7\\system.threading.channels.9.0.0-rc.1.24431.7.nupkg.sha512"
   ],
   "logs": []

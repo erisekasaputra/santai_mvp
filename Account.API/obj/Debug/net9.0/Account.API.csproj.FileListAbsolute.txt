@@ -681,7 +681,6 @@ C:\Projects\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\runtimes\win-x64\na
 C:\Projects\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\runtimes\win-x86\native\sni.dll
 C:\Projects\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Projects\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
-C:\Projects\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\runtimes\win\lib\net8.0\System.Runtime.Caching.dll
 C:\Projects\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\Account.Domain.dll
 C:\Projects\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\Account.Infrastructure.dll
 C:\Projects\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\Core.dll
@@ -712,3 +711,6 @@ C:\Projects\Projects\Santai.MVP\Account.API\obj\Debug\net9.0\refint\Account.API.
 C:\Projects\Projects\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.pdb
 C:\Projects\Projects\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Account.API\obj\Debug\net9.0\ref\Account.API.dll
+C:\Projects\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\System.Diagnostics.EventLog.dll
+C:\Projects\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Diagnostics.EventLog.dll
+C:\Projects\Projects\Santai.MVP\Account.API\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Runtime.Caching.dll
