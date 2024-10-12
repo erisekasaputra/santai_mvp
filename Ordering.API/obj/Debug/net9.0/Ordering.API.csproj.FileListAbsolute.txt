@@ -500,6 +500,7 @@ C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\System.Composition
 C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\System.Composition.TypedParts.dll
 C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
 C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\System.Data.SqlClient.dll
+C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\System.Diagnostics.EventLog.dll
 C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\System.Drawing.Common.dll
 C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\System.Private.Windows.Core.dll
 C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
@@ -594,6 +595,8 @@ C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\runtimes\win-x64\n
 C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\runtimes\win-x86\native\sni.dll
 C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Diagnostics.EventLog.dll
+C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Runtime.Caching.dll
 C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\Core.dll
 C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\Ordering.Domain.dll
 C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\Ordering.Infrastructure.dll
@@ -624,6 +627,3 @@ C:\Projects\Projects\Santai.MVP\Ordering.API\obj\Debug\net9.0\refint\Ordering.AP
 C:\Projects\Projects\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.pdb
 C:\Projects\Projects\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Ordering.API\obj\Debug\net9.0\ref\Ordering.API.dll
-C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\System.Diagnostics.EventLog.dll
-C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Diagnostics.EventLog.dll
-C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Runtime.Caching.dll

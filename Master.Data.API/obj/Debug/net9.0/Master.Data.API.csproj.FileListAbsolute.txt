@@ -246,8 +246,8 @@ C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\appsettings.Dev
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\appsettings.json
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\appsettings.Production.json
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\appsettings.Staging.json
-C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Master.Data.API.staticwebassets.endpoints.json
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Master.Data.API.staticwebassets.runtime.json
+C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Master.Data.API.staticwebassets.endpoints.json
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Master.Data.API.exe
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Master.Data.API.deps.json
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Master.Data.API.runtimeconfig.json
@@ -304,6 +304,7 @@ C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\System.ClientMo
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\System.CodeDom.dll
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\System.Data.SqlClient.dll
+C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\System.Diagnostics.EventLog.dll
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\System.Drawing.Common.dll
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\System.Private.Windows.Core.dll
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
@@ -333,6 +334,8 @@ C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\runtimes\win-x6
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\runtimes\win-x86\native\sni.dll
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Diagnostics.EventLog.dll
+C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Runtime.Caching.dll
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Core.dll
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Core.pdb
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.csproj.AssemblyReference.cache
@@ -344,6 +347,10 @@ C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.MvcApplicationPartsAssemblyInfo.cache
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.sourcelink.json
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\scopedcss\bundle\Master.Data.API.styles.css
+C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\25y84c7jcg-38jn93up96.gz
+C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\gtk4vznist-h0cp9lym7f.gz
+C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\2uqe8z00nf-6iclky0jm6.gz
+C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\1b0leuntmr-59jwi6ab2s.gz
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\staticwebassets.build.json
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\staticwebassets.development.json
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\staticwebassets.build.endpoints.json
@@ -359,10 +366,3 @@ C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\refint\Master.D
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.pdb
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\ref\Master.Data.API.dll
-C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\25y84c7jcg-38jn93up96.gz
-C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\2uqe8z00nf-6iclky0jm6.gz
-C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\gtk4vznist-h0cp9lym7f.gz
-C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\1b0leuntmr-59jwi6ab2s.gz
-C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\System.Diagnostics.EventLog.dll
-C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Diagnostics.EventLog.dll
-C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Runtime.Caching.dll

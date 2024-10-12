@@ -81,21 +81,11 @@ public class Fee : Entity
                 throw new DomainException($"Fee currency ({Currency}) does not match order currency ({orderCurrency}).");
             }
 
-            feeAmount = new Money(ValueAmount, Currency);
-
-            if (orderAmount < feeAmount.Amount)
-            {
-                throw new DomainException("Fee amount can not greather than order amount");
-            }
+            feeAmount = new Money(ValueAmount, Currency); 
         }
         else if (PercentageOrValueType == PercentageOrValueType.Percentage && ValuePercentage > 0)
         {
-            feeAmount = new Money(orderAmount * (ValuePercentage / 100), orderCurrency);
-
-            if (orderAmount < feeAmount.Amount)
-            {
-                throw new DomainException("Fee amount can not greather than order amount");
-            }
+            feeAmount = new Money(orderAmount * (ValuePercentage / 100), orderCurrency); 
         }
         else
         {

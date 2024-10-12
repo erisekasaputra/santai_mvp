@@ -480,6 +480,7 @@ C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\System.Comp
 C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\System.Composition.TypedParts.dll
 C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
 C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\System.Data.SqlClient.dll
+C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\System.Diagnostics.EventLog.dll
 C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\System.Drawing.Common.dll
 C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\System.Private.Windows.Core.dll
 C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\System.IdentityModel.Tokens.Jwt.dll
@@ -574,6 +575,8 @@ C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\runtimes\wi
 C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\runtimes\win-x86\native\sni.dll
 C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\runtimes\unix\lib\netcoreapp2.1\System.Data.SqlClient.dll
 C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\runtimes\win\lib\netcoreapp2.1\System.Data.SqlClient.dll
+C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Diagnostics.EventLog.dll
+C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Runtime.Caching.dll
 C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\Core.dll
 C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\Core.pdb
 C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\Notification.Worker.csproj.AssemblyReference.cache
@@ -600,6 +603,3 @@ C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\refint\Noti
 C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\Notification.Worker.pdb
 C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\Notification.Worker.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\ref\Notification.Worker.dll
-C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\System.Diagnostics.EventLog.dll
-C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Diagnostics.EventLog.dll
-C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Runtime.Caching.dll

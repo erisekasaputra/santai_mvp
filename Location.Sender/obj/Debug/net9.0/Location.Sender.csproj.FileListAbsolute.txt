@@ -85,6 +85,12 @@ C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\Microsoft.AspNe
 C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\Microsoft.AspNetCore.SignalR.Client.dll
 C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\Microsoft.AspNetCore.SignalR.Client.Core.dll
 C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\Microsoft.OpenApi.dll
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\System.Diagnostics.EventLog.dll
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\System.Runtime.Caching.dll
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Diagnostics.EventLog.dll
+C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Runtime.Caching.dll
 C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.csproj.AssemblyReference.cache
 C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.GeneratedMSBuildEditorConfig.editorconfig
 C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.AssemblyInfoInputs.cache
@@ -109,9 +115,3 @@ C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\refint\Location
 C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.pdb
 C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\ref\Location.Sender.dll
-C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\System.Configuration.ConfigurationManager.dll
-C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\System.Diagnostics.EventLog.dll
-C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\System.Runtime.Caching.dll
-C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\System.Security.Cryptography.ProtectedData.dll
-C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Diagnostics.EventLog.dll
-C:\Projects\Projects\Santai.MVP\Location.Sender\bin\Debug\net9.0\runtimes\win\lib\net9.0\System.Runtime.Caching.dll
