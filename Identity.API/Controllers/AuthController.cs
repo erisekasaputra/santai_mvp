@@ -214,7 +214,7 @@ public class AuthController(
 
                     await _dbContext.SaveChangesAsync(); 
                     await transaction.CommitAsync(); 
-                    return TypedResults.Ok(
+                    return TypedResults.Accepted(_verifyLoginActionName,
                          Result.Success(new
                          {
                              Sub = user.Id,
