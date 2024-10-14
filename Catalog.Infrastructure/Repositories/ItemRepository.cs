@@ -34,7 +34,11 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
     }
 
     public async Task<(int TotalCount, int TotalPages, IEnumerable<Item> Items)> GetPaginatedItemsAsync(
-        int pageNumber, int pageSize, Guid? categoryId, Guid? brandId)
+        int pageNumber,
+        int pageSize,
+        Guid? categoryId,
+        Guid? brandId,
+        bool availableStockOnly = true)
     {
         var query = _context.Items
             .Where(w => !w.IsDeleted)
@@ -48,6 +52,11 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
         if (brandId is not null && brandId.HasValue && brandId != Guid.Empty)
         {
             query = query.Where(x => x.BrandId == brandId);
+        }
+
+        if (availableStockOnly)
+        {
+            query = query.Where(x => x.StockQuantity > 0);
         }
 
         var totalCount = await query.CountAsync(); 

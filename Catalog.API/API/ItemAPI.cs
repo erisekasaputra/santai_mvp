@@ -18,6 +18,7 @@ using Catalog.API.Applications.Services;
 using Catalog.API.Extensions;
 using Core.CustomMessages;
 using Core.Dtos;
+using Core.Enumerations;
 using Core.SeedWorks;
 using Core.Services.Interfaces;
 using FluentValidation;
@@ -34,7 +35,7 @@ public static class ItemAPI
             .RequireAuthorization();
 
         app.MapGet("/items", GetPaginatedItem)
-            .AllowAnonymous();
+            .RequireAuthorization();
 
         app.MapPost("/items", CreateNewItem)
             .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
@@ -109,15 +110,23 @@ public static class ItemAPI
         [AsParameters] PaginatedRequestDto paginatedRequest,
         [AsParameters] ItemQueryFilter queryFilter,
         [FromServices] ApplicationService service,
-        [FromServices] IValidator<GetItemPaginatedQuery> validator)
+        [FromServices] IValidator<GetItemPaginatedQuery> validator,  
+        [FromServices] IUserInfoService userInfoService)
     {
         try
         {
+            var user = userInfoService.GetUserInfo(); 
+            if (user is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
             var query = new GetItemPaginatedQuery(
                 paginatedRequest.PageNumber, 
                 paginatedRequest.PageSize,
                 queryFilter.CategoryId,
-                queryFilter.BrandId);
+                queryFilter.BrandId,
+                (user.CurrentUserType is not UserType.Administrator));
 
             var validation = await validator.ValidateAsync(query);
 

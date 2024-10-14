@@ -8,4 +8,5 @@ public record GetItemPaginatedQuery(
     int PageNumber = 1, 
     int PageSize = 10,
     Guid? CategoryId = null,
-    Guid? BrandId = null) : IRequest<Result>;
+    Guid? BrandId = null,
+    bool AvailableStockOnly = true) : IRequest<Result>;

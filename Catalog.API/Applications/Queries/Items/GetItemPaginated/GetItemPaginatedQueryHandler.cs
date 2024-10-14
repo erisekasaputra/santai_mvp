@@ -18,7 +18,7 @@ public class GetItemPaginatedQueryHandler(IUnitOfWork unitOfWork) : IRequestHand
         Guid? brandId = request.BrandId is null ? Guid.Empty : request.BrandId;
 
         var (TotalCount, TotalPages, Items) = await _unitOfWork.Items.GetPaginatedItemsAsync(
-            request.PageNumber, request.PageSize, categoryId, brandId);
+            request.PageNumber, request.PageSize, categoryId, brandId, request.AvailableStockOnly);
 
         if (Items is null)
         {
