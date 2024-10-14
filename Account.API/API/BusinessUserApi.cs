@@ -60,7 +60,7 @@ public static class BusinessUserApi
             .RequireAuthorization(
                 PolicyName.BusinessUserAndAdministratorUserPolicy.ToString());
 
-        app.MapGet("/{businessUserId}/staffs/{staffId}", GetStaffByUserIdAndStaffId) 
+        app.MapGet("/staffs/{staffId}", GetStaffByUserIdAndStaffId) 
             .RequireAuthorization(
                 PolicyName.BusinessUserAndStaffUserAndAdministratorUserPolicy.ToString()); 
 
@@ -83,7 +83,7 @@ public static class BusinessUserApi
             .RequireAuthorization(
                 PolicyName.BusinessUserAndAdministratorUserPolicy.ToString());
 
-        app.MapPut("/{businessUserId}/staffs/{staffId}", UpdateStaffByStaffId)
+        app.MapPut("/staffs/{staffId}", UpdateStaffByStaffId)
             .RequireAuthorization(
                 PolicyName.BusinessUserAndStaffUserAndAdministratorUserPolicy.ToString());
 
@@ -204,8 +204,7 @@ public static class BusinessUserApi
 
 
 
-    private static async Task<IResult> GetStaffByUserIdAndStaffId(
-        Guid businessUserId, 
+    private static async Task<IResult> GetStaffByUserIdAndStaffId( 
         Guid staffId,
         [FromServices] ApplicationService service,
         [FromServices] IUserInfoService userInfoService)
@@ -218,7 +217,7 @@ public static class BusinessUserApi
                 return TypedResults.Unauthorized();
             }
 
-            if (userClaim.CurrentUserType == UserType.BusinessUser && businessUserId != userClaim.Sub) 
+            if (userClaim.CurrentUserType == UserType.BusinessUser) 
             {
                 return TypedResults.Forbid();
             }
@@ -228,7 +227,7 @@ public static class BusinessUserApi
                 return TypedResults.Forbid();
             }
 
-            var result = await service.Mediator.Send(new GetStaffByUserIdAndStaffIdQuery(businessUserId, staffId));
+            var result = await service.Mediator.Send(new GetStaffByUserIdAndStaffIdQuery(staffId));
 
             return result.ToIResult();
         }
@@ -669,8 +668,7 @@ public static class BusinessUserApi
         }
     }
      
-    private static async Task<IResult> UpdateStaffByStaffId(
-        Guid businessUserId,
+    private static async Task<IResult> UpdateStaffByStaffId( 
         Guid staffId,
         [FromBody] UpdateStaffRequestDto request,
         [FromServices] ApplicationService service,
@@ -685,7 +683,7 @@ public static class BusinessUserApi
                 return TypedResults.Unauthorized();
             }
 
-            if (userClaim.CurrentUserType == UserType.BusinessUser && businessUserId != userClaim.Sub)
+            if (userClaim.CurrentUserType == UserType.BusinessUser)
             {
                 return TypedResults.Forbid();
             }
@@ -703,7 +701,7 @@ public static class BusinessUserApi
                 return TypedResults.BadRequest(error);
             }
 
-            var result = await service.Mediator.Send(new UpdateStaffByStaffIdCommand(businessUserId, staffId, request.Name, request.Address, request.TimeZoneId)); 
+            var result = await service.Mediator.Send(new UpdateStaffByStaffIdCommand(staffId, request.Name, request.Address, request.TimeZoneId)); 
             return result.ToIResult();
         }
         catch (Exception ex)

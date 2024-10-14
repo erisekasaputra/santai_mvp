@@ -26,7 +26,7 @@ public class GetStaffByUserIdAndStaffIdQueryHandler(
     {
         try
         {
-            var staff = await _unitOfWork.Staffs.GetByBusinessUserIdAndStaffIdAsync(request.UserId, request.StaffId);
+            var staff = await _unitOfWork.Staffs.GetByIdAsync(request.StaffId);
 
             if (staff is null)
             {
