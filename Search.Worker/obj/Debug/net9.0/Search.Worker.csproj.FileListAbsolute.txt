@@ -690,3 +690,9 @@ C:\Projects\Projects\Santai.MVP\Search.Worker\obj\Debug\net9.0\refint\Search.Wor
 C:\Projects\Projects\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.pdb
 C:\Projects\Projects\Santai.MVP\Search.Worker\obj\Debug\net9.0\Search.Worker.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Search.Worker\obj\Debug\net9.0\ref\Search.Worker.dll
+C:\Projects\Projects\Santai.MVP\Search.Worker\bin\Debug\net9.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Projects\Projects\Santai.MVP\Search.Worker\bin\Debug\net9.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Projects\Projects\Santai.MVP\Search.Worker\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Projects\Projects\Santai.MVP\Search.Worker\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Projects\Projects\Santai.MVP\Search.Worker\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
+C:\Projects\Projects\Santai.MVP\Search.Worker\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll

@@ -366,3 +366,9 @@ C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\refint\Master.D
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.pdb
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\ref\Master.Data.API.dll
+C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
+C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll

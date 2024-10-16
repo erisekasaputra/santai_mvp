@@ -118,3 +118,9 @@ C:\Projects\Projects\Santai.MVP\Location.API\obj\Debug\net9.0\refint\Location.AP
 C:\Projects\Projects\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.pdb
 C:\Projects\Projects\Santai.MVP\Location.API\obj\Debug\net9.0\Location.API.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Location.API\obj\Debug\net9.0\ref\Location.API.dll
+C:\Projects\Projects\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Projects\Projects\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Projects\Projects\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Projects\Projects\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Projects\Projects\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
+C:\Projects\Projects\Santai.MVP\Location.API\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll

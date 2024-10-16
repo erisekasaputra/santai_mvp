@@ -118,3 +118,9 @@ C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\refint\Chat.Client.
 C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.pdb
 C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\ref\Chat.Client.dll
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
+C:\Projects\Projects\Santai.MVP\Chat.Client\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll

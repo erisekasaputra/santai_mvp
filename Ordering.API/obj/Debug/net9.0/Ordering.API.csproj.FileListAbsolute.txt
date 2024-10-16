@@ -627,3 +627,9 @@ C:\Projects\Projects\Santai.MVP\Ordering.API\obj\Debug\net9.0\refint\Ordering.AP
 C:\Projects\Projects\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.pdb
 C:\Projects\Projects\Santai.MVP\Ordering.API\obj\Debug\net9.0\Ordering.API.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Ordering.API\obj\Debug\net9.0\ref\Ordering.API.dll
+C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.Abstractions.dll
+C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.Extensions.Caching.Memory.dll
+C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
+C:\Projects\Projects\Santai.MVP\Ordering.API\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll
