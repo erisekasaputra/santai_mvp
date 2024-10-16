@@ -55,22 +55,22 @@ public static class Mapper
         {
             case OrderStatus.MechanicArrived or OrderStatus.MechanicAssigned or OrderStatus.MechanicDispatched:
                 status = "On The Way";
-                step = 2;
+                step = 1;
                 break;
 
             case OrderStatus.PaymentPaid or OrderStatus.FindingMechanic:
                 status = "Order Received";
-                step = 1;
+                step = 0;
                 break;
 
             case OrderStatus.ServiceInProgress:
                 status = "Servicing";
-                step = 3;
+                step = 2;
                 break;
 
             case OrderStatus.ServiceIncompleted or OrderStatus.ServiceCompleted:
                 status = "Complete";
-                step = 4;
+                step = 3;
                 break;
             default: 
                 status = string.Empty; 
