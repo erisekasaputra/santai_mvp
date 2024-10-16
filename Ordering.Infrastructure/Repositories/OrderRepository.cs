@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Ordering.Domain.Aggregates.OrderAggregate; 
+using Ordering.Domain.Aggregates.OrderAggregate;
+using Ordering.Domain.Enumerations;
 
 namespace Ordering.Infrastructure.Repositories;
 
@@ -106,5 +107,25 @@ public class OrderRepository : IOrderRepository
             .Where(x => x.Id == orderId && x.Buyer.BuyerId == userId)
             .Select(x => x.Secret) 
             .FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<IEnumerable<Order>> GetOrderServicesActive(Guid? userId)
+    {
+        var queryStatus = new List<OrderStatus> 
+        {
+            OrderStatus.MechanicAssigned,
+            OrderStatus.MechanicDispatched,
+            OrderStatus.MechanicArrived,
+            OrderStatus.ServiceInProgress,
+            OrderStatus.ServiceCompleted,
+            OrderStatus.ServiceIncompleted,
+            OrderStatus.PaymentPaid,
+            OrderStatus.FindingMechanic
+        };
+
+        return await _dbContext.Orders
+            .AsNoTracking()
+            .Where(x => x.Buyer.BuyerId == userId && queryStatus.Contains(x.Status))
+            .ToListAsync(); 
     }
 }

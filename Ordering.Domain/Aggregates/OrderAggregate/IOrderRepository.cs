@@ -1,6 +1,4 @@
-﻿using Azure.Core;
-using System.Threading;
-
+﻿ 
 namespace Ordering.Domain.Aggregates.OrderAggregate;
 
 public interface IOrderRepository
@@ -11,4 +9,5 @@ public interface IOrderRepository
     Task<(int TotalCount, int TotalPages, IEnumerable<Order> Orders)> GetPaginatedOrders(Guid? userId, int pageNumber, int pageSize);
     Task<Order?> GetByIdAndUserIdNoTrackingAsync(Guid orderId, Guid buyerId, CancellationToken cancellationToken);
     Task<string?> GetOrderSecretByOrderIdAndUserId(Guid orderId, Guid userId, CancellationToken cancellationToken = default);
+    Task <IEnumerable<Order>> GetOrderServicesActive(Guid? userId);
 }

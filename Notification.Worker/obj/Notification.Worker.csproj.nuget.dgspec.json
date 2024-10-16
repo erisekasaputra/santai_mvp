@@ -131,6 +131,10 @@
               "target": "Package",
               "version": "[9.0.0-preview.7.24405.3, )"
             },
+            "Microsoft.Extensions.Caching.Memory": {
+              "target": "Package",
+              "version": "[9.0.0-rc.2.24473.5, )"
+            },
             "Microsoft.Extensions.Caching.StackExchangeRedis": {
               "target": "Package",
               "version": "[9.0.0-preview.7.24406.2, )"
@@ -298,6 +302,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[9.0.0-rc.1.24451.1, )"
+            },
+            "Microsoft.Extensions.Caching.Memory": {
+              "target": "Package",
+              "version": "[9.0.0-rc.2.24473.5, )"
             },
             "Microsoft.Extensions.Caching.StackExchangeRedis": {
               "target": "Package",

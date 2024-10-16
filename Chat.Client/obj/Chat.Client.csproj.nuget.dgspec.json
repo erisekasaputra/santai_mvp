@@ -63,6 +63,10 @@
               "target": "Package",
               "version": "[9.0.0-rc.1.24452.1, )"
             },
+            "Microsoft.Extensions.Caching.Memory": {
+              "target": "Package",
+              "version": "[9.0.0-rc.2.24473.5, )"
+            },
             "System.Runtime.Caching": {
               "target": "Package",
               "version": "[9.0.0-rc.2.24473.5, )"

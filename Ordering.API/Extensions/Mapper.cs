@@ -1,6 +1,7 @@
 ﻿using Ordering.API.Applications.Dtos.Responses;
 using Ordering.Domain.Aggregates.FleetAggregate;
 using Ordering.Domain.Aggregates.OrderAggregate;
+using Ordering.Domain.Enumerations;
 using Ordering.Domain.ValueObjects;
 
 namespace Ordering.API.Extensions;
@@ -39,7 +40,45 @@ public static class Mapper
                 order.IsPaymentExpire 
             ); 
     }
+    public static IEnumerable<OrdersActiveResponseDto> ToOrderActivesDto(this IEnumerable<Order> orders)
+    {
+        foreach (var order in orders)
+        {
+            yield return order.ToOrderActiveDto();
+        }
+    }
+    public static OrdersActiveResponseDto ToOrderActiveDto(this Order order)
+    {
+        string status;
+        int step = 0;
+        switch (order.Status)
+        {
+            case OrderStatus.MechanicArrived or OrderStatus.MechanicAssigned or OrderStatus.MechanicDispatched:
+                status = "On The Way";
+                step = 2;
+                break;
 
+            case OrderStatus.PaymentPaid or OrderStatus.FindingMechanic:
+                status = "Order Received";
+                step = 1;
+                break;
+
+            case OrderStatus.ServiceInProgress:
+                status = "Servicing";
+                step = 3;
+                break;
+
+            case OrderStatus.ServiceIncompleted or OrderStatus.ServiceCompleted:
+                status = "Complete";
+                step = 4;
+                break;
+            default: 
+                status = string.Empty; 
+                break;
+        }
+
+        return new OrdersActiveResponseDto(order.Id, order.Secret, status, step);
+    }
     public static BuyerResponseDto ToBuyerDto(this Buyer buyer)
     {
         return new BuyerResponseDto(
