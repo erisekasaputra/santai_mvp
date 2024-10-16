@@ -11,7 +11,7 @@ public class GetPaginatedOrderServiceActiveByUserIdQueryHandler(
     IUnitOfWork unitOfWork,
     ILogger<GetPaginatedOrderServiceActiveByUserIdQueryHandler> logger) : IRequestHandler<GetPaginatedOrderServiceActiveByUserIdQuery, Result>
 {
-    private ILogger<GetPaginatedOrderServiceActiveByUserIdQueryHandler> _logger = logger;
+    private readonly ILogger<GetPaginatedOrderServiceActiveByUserIdQueryHandler> _logger = logger;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     public async Task<Result> Handle(GetPaginatedOrderServiceActiveByUserIdQuery request, CancellationToken cancellationToken)
     {
