@@ -6,8 +6,7 @@ using Core.Enumerations;
 using Core.Extensions;
 using Core.Results;
 using Core.Services.Interfaces;
-using Core.Utilities;
-using Core.Validations;
+using Core.Utilities; 
 using FluentValidation;
 using Google.Apis.Auth;
 using Identity.API.Applications.Dto; 
@@ -20,12 +19,10 @@ using MassTransit;
 using MediatR; 
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens; 
+using Microsoft.EntityFrameworkCore; 
 using System.Data;
 using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using static System.Net.Mime.MediaTypeNames;
+using System.Security.Claims; 
 
 namespace Identity.API.Controllers;
 
@@ -76,7 +73,89 @@ public class AuthController(
     private readonly IPasswordValidator<ApplicationUser> _passwordValidator = passwordValidator;
     private readonly ITokenCacheService _tokenCacheService = tokenCacheService;
 
-     
+    [HttpPost("refresh-token")]
+    public async Task<IResult> RefreshToken(
+    [FromBody] RefreshTokenRequest refreshTokenRequest)
+    {
+        try
+        {
+            if (!await IsRefreshTokenValid(refreshTokenRequest.RefreshToken))
+            {
+                return TypedResults.Unauthorized();
+            }
+
+
+            var oldRefreshToken = await _tokenCacheService.RotateRefreshTokenAsync(refreshTokenRequest.RefreshToken);
+            if (oldRefreshToken is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            var newRefreshToken = await _tokenService.GenerateRefreshTokenAsync(oldRefreshToken.UserId);  
+
+            await _tokenCacheService.SaveRefreshToken(newRefreshToken);
+
+            var user = await _userManager.FindByIdAsync(oldRefreshToken.UserId);
+            if (user is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            var claims = await _userManager.GetClaimsAsync(user);
+            if (claims is null || !claims.Any())
+            {
+                _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            if (roles is null || !roles.Any())
+            {
+                _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
+            }
+
+
+            var claimsIdentity = new ClaimsIdentity(claims);
+            var newAccessToken = _tokenService.GenerateAccessToken(claimsIdentity);
+
+            await _tokenCacheService.BlackListRefreshTokenAsync(refreshTokenRequest.RefreshToken);
+            await _tokenCacheService.BlackListAccessTokenAsync(refreshTokenRequest.AccessToken);
+
+            return TypedResults.Ok(
+                Result.Success(new
+                {
+                    Token = newAccessToken,
+                    RefreshToken = newRefreshToken.Token,
+                    Sub = user.Id,
+                    Username = user.UserName,
+                    PhoneNumber = user.PhoneNumber,
+                    Email = user.Email,
+                    UserType = user.UserType,
+                    BusinessCode = user.BusinessCode
+                }, ResponseStatus.Ok));
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            return TypedResults.InternalServerError(
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+        }
+    }
+
+
+    private async Task<bool> IsRefreshTokenValid(string refreshToken)
+    {
+        if (string.IsNullOrWhiteSpace(refreshToken) ||
+            await _tokenCacheService.IsRefreshTokenBlacklisted(refreshToken))
+            return false;
+
+        return true;
+    }
+
+
     [HttpPost("otp")]
     public async Task<IResult> SendOtp([FromBody] SendOtpRequest request)
     {
@@ -916,87 +995,7 @@ public class AuthController(
             return TypedResults.InternalServerError(
                 Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         }
-    }
-
-
-
-    private async Task<bool> IsRefreshTokenValid(string refreshToken)
-    {
-        if (string.IsNullOrWhiteSpace(refreshToken) ||
-            await _tokenCacheService.IsRefreshTokenBlacklisted(refreshToken))
-            return false;
-
-        return true;
-    }
-
-
-    [HttpPost("refresh-token")]
-    public async Task<IResult> RefreshToken(
-    [FromBody] RefreshTokenRequest refreshTokenRequest)
-    {
-        try
-        {
-            if (!await IsRefreshTokenValid(refreshTokenRequest.RefreshToken))
-            {
-                return TypedResults.Unauthorized();
-            }
-
-
-            var refreshToken = await _tokenCacheService.RotateRefreshTokenAsync(refreshTokenRequest.RefreshToken);
-            if (refreshToken is null) return TypedResults.Unauthorized();
-
-            var newRefreshToken = await _tokenService.GenerateRefreshTokenAsync(refreshToken.UserId);
-           
-            
-            await _tokenCacheService.BlackListRefreshTokenAsync(refreshTokenRequest.RefreshToken);
-            await _tokenCacheService.BlackListAccessTokenAsync(refreshTokenRequest.AccessToken);
-
-            await _tokenCacheService.SaveRefreshToken(newRefreshToken);
-            
-            var user = await _userManager.FindByIdAsync(refreshToken.UserId);
-            if (user is null) return TypedResults.Unauthorized();
-
-            var claims = await _userManager.GetClaimsAsync(user);   
-            if (claims is null || !claims.Any())
-            { 
-                _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
-                return TypedResults.InternalServerError(
-                    Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
-            }  
-
-            var roles = await _userManager.GetRolesAsync(user); 
-            if (roles is null || !roles.Any())
-            {
-                _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
-                return TypedResults.InternalServerError(
-                    Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
-            }
-
-
-            var claimsIdentity = new ClaimsIdentity(claims); 
-            var accessToken = _tokenService.GenerateAccessToken(claimsIdentity);  
-
-            return TypedResults.Ok(
-                Result.Success(new 
-                {
-                    Token = accessToken,
-                    RefreshToken = refreshToken.Token,
-                    Sub = user.Id,
-                    Username = user.UserName,
-                    PhoneNumber = user.PhoneNumber,
-                    Email = user.Email,
-                    UserType = user.UserType,
-                    BusinessCode = user.BusinessCode
-                }, ResponseStatus.Ok));  
-        } 
-        catch (Exception ex)
-        {
-            LoggerHelper.LogError(_logger, ex);
-            return TypedResults.InternalServerError(
-                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
-        }
-    }
-
+    }   
 
     [HttpPost("forgot-password")]
     public async Task<IResult> ForgotPassword( 

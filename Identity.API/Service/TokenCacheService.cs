@@ -14,13 +14,6 @@ public class TokenCacheService(
 { 
     private readonly IOptionsMonitor<JwtConfiguration> _jwtConfigs = jwtConfigs;
     private readonly ICacheService _cacheService = cacheService;
-
-    public async Task<RefreshToken?> GetStoredRefreshToken(string refreshToken)
-    {
-        var key = CacheKey.RefreshTokenCacheKey(refreshToken);
-        var storedToken = await _cacheService.GetAsync<RefreshToken>(key); 
-        return storedToken;
-    }
      
     public async Task<RefreshToken> SaveRefreshToken(RefreshToken refreshToken)
     {
@@ -28,13 +21,29 @@ public class TokenCacheService(
         await _cacheService.SetAsync(key, refreshToken, TimeSpan.FromDays(_jwtConfigs.CurrentValue.TotalDaysRefreshTokenLifetime));
         return refreshToken;
     }
-      
+
+    public async Task<RefreshToken?> GetStoredRefreshToken(string refreshToken)
+    {
+        var key = CacheKey.RefreshTokenCacheKey(refreshToken);
+        var storedToken = await _cacheService.GetAsync<RefreshToken>(key);
+        return storedToken;
+    }
+
 
     public async Task<RefreshToken?> RotateRefreshTokenAsync(string oldToken)
-    { 
+    {  
         var storedRefreshToken = await GetStoredRefreshToken(oldToken);
-        if (storedRefreshToken is null) return null;  
-        if (!ValidateToken(storedRefreshToken)) return null;  
+
+        if (storedRefreshToken is null)
+        {
+            return null;
+        }
+
+        if (!ValidateToken(storedRefreshToken))
+        {
+            return null;
+        }
+
         await InvalidateRefreshToken(oldToken);
         return storedRefreshToken;
     }
@@ -47,7 +56,11 @@ public class TokenCacheService(
 
     public bool ValidateToken(RefreshToken storedRefreshToken)
     {
-        if (storedRefreshToken is null) return false;  
+        if (storedRefreshToken is null)
+        {
+            return false;
+        }
+
         return storedRefreshToken.ExpiryDateUtc > DateTime.UtcNow;
     }
 

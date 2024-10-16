@@ -1,8 +1,7 @@
 ﻿using Core.CustomMessages;
 using Core.Exceptions;
 using Core.Results;
-using MediatR;
-using Ordering.API.Applications.Commands.Coupons.CreateCoupon;
+using MediatR; 
 using Ordering.API.Applications.Dtos.Responses;
 using Ordering.Domain.SeedWork;
 
@@ -35,7 +34,7 @@ public class GetCouponByCodeQueryHandler(
         }
         catch (ArgumentNullException ex)
         { 
-            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+            return Result.Failure(ex.Message, ResponseStatus.NoContent);
         }
         catch (DomainException ex)
         { 
