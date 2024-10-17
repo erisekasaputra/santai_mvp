@@ -96,13 +96,27 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
             catch (EndpointDisabledException ex)
             {
                 LoggerHelper.LogError(_logger, ex);
-                await _messageService.DeregisterDevice(profile.Arn ?? string.Empty);
+                try
+                {
+                    await _messageService.DeregisterDevice(profile.Arn ?? string.Empty);
+                }
+                catch (Exception ex2)
+                {
+                    LoggerHelper.LogError(_logger, ex2);
+                }
                 target.RemoveUserProfile(profile);
             }
             catch (AmazonSimpleNotificationServiceException ex)
             {
                 LoggerHelper.LogError(_logger, ex);
-                await _messageService.DeregisterDevice(profile.Arn ?? string.Empty);
+                try
+                {
+                    await _messageService.DeregisterDevice(profile.Arn ?? string.Empty);
+                }
+                catch (Exception ex2)
+                {
+                    LoggerHelper.LogError(_logger, ex2);
+                } 
                 target.RemoveUserProfile(profile);
             }
             catch (Exception ex)
