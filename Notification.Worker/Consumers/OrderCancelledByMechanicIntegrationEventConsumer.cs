@@ -9,6 +9,9 @@ using Amazon.SimpleNotificationService.Model;
 using Core.Configurations;
 using Notification.Worker.Repository;
 using Microsoft.Extensions.Options;
+using Amazon.SimpleNotificationService;
+using Core.Utilities;
+using Notification.Worker.Infrastructure;
 
 namespace Notification.Worker.Consumers;
 
@@ -18,9 +21,13 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
     ICacheService cacheService,
     UserProfileRepository userProfileRepository,
     IOptionsMonitor<ProjectConfiguration> projectConfiguration,
-    IOptionsMonitor<OrderConfiguration> orderConfiguration) :
+    IOptionsMonitor<OrderConfiguration> orderConfiguration,
+    ILogger<OrderCancelledByMechanicIntegrationEventConsumer> logger,
+    NotificationDbContext dbContext) :
     IConsumer<OrderCancelledByMechanicIntegrationEvent>
 {
+    private readonly NotificationDbContext _dbContext = dbContext;
+    private readonly ILogger<OrderCancelledByMechanicIntegrationEventConsumer> _logger = logger;
     private readonly IMessageService _messageService = messageService;
     private readonly IHubContext<ActivityHub, IActivityClient> _activityHubContext = activityHubContecxt;
     private readonly ICacheService _cacheService = cacheService;
@@ -41,14 +48,13 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
             string.Empty);
 
 
-
-
-        var target = await _userProfileRepository.GetProfiles(orderData.BuyerId);
-        if (target is null || !target.Any())
+        var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
+        if (target is null || target.Profiles is null || target.Profiles.Count < 1)
         {
             return;
         }
-        foreach (var profile in target)
+
+        foreach (var profile in target.Profiles)
         {
             var fcmPayload = new
             {
@@ -86,7 +92,29 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
                 TargetArn = profile.Arn
             };
 
-            await _messageService.PublishPushNotificationAsync(request);
+            try
+            {
+                await _messageService.PublishPushNotificationAsync(request);
+            }
+            catch (EndpointDisabledException ex)
+            {
+                LoggerHelper.LogError(_logger, ex);
+                await _messageService.DeregisterDevice(profile.Arn ?? string.Empty);
+                target.RemoveUserProfile(profile);
+            }
+            catch (AmazonSimpleNotificationServiceException ex)
+            {
+                LoggerHelper.LogError(_logger, ex);
+                await _messageService.DeregisterDevice(profile.Arn ?? string.Empty);
+                target.RemoveUserProfile(profile);
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogError(_logger, ex);
+            }
         }
+
+        _userProfileRepository.Update(target);
+        await _dbContext.SaveChangesAsync();
     }
 }

@@ -1,4 +1,8 @@
-﻿using Core.Events.Identity;
+﻿using Amazon.SimpleNotificationService.Model;
+using Amazon.SimpleNotificationService;
+using Amazon;
+using Core.Events.Identity;
+using Core.Utilities;
 using MassTransit; 
 using Notification.Worker.Infrastructure;
 using Notification.Worker.Repository;
@@ -11,14 +15,17 @@ public class AccountSignedOutIntegrationEventConsumer : IConsumer<AccountSignedO
     private readonly IMessageService _messageService;
     private readonly UserProfileRepository _userProfileRepository;
     private readonly NotificationDbContext _notificationDbContext;
+    private readonly ILogger<AccountSignedOutIntegrationEventConsumer> _logger;
     public AccountSignedOutIntegrationEventConsumer(
         IMessageService messageService,
         UserProfileRepository userProfile,
-        NotificationDbContext notificationDbContext)
+        NotificationDbContext notificationDbContext,
+        ILogger<AccountSignedOutIntegrationEventConsumer> logger)
     {
         _messageService = messageService;
         _userProfileRepository = userProfile;
         _notificationDbContext = notificationDbContext;
+        _logger = logger;
     }
     public async Task Consume(ConsumeContext<AccountSignedOutIntegrationEvent> context)
     {
@@ -55,9 +62,9 @@ public class AccountSignedOutIntegrationEventConsumer : IConsumer<AccountSignedO
             await _messageService.DeregisterDevice(arn);
             await _notificationDbContext.SaveChangesAsync();
         } 
-        catch (Exception)
+        catch (Exception ex)
         {
-            throw;
+            LoggerHelper.LogError(_logger, ex);
         }
     }
 }

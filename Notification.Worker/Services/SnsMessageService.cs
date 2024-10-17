@@ -73,7 +73,7 @@ public class SnsMessageService : IMessageService
         {
             LoggerHelper.LogError(_logger, ex);
             throw;
-        }
+        } 
         catch (Exception ex)
         {
             LoggerHelper.LogError(_logger, ex);

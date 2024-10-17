@@ -9,6 +9,9 @@ using Amazon.SimpleNotificationService.Model;
 using Core.Configurations;
 using Notification.Worker.Repository; 
 using Microsoft.Extensions.Options;
+using Notification.Worker.Infrastructure;
+using Amazon.SimpleNotificationService;
+using Core.Utilities;
 
 namespace Notification.Worker.Consumers;
 
@@ -18,8 +21,12 @@ public class ServiceIncompletedIntegrationEventConsumer(
     ICacheService cacheService,
     UserProfileRepository userProfileRepository,
     IOptionsMonitor<ProjectConfiguration> projectConfiguration,
-    IOptionsMonitor<OrderConfiguration> orderConfiguration) : IConsumer<ServiceIncompletedIntegrationEvent>
+    IOptionsMonitor<OrderConfiguration> orderConfiguration,
+    ILogger<ServiceIncompletedIntegrationEventConsumer> logger,
+    NotificationDbContext dbContext) : IConsumer<ServiceIncompletedIntegrationEvent>
 {
+    private readonly NotificationDbContext _dbContext = dbContext;
+    private readonly ILogger<ServiceIncompletedIntegrationEventConsumer> _logger = logger;
     private readonly IMessageService _messageService = messageService;
     private readonly IHubContext<ActivityHub, IActivityClient> _activityHubContext = activityHubContecxt;
     private readonly ICacheService _cacheService = cacheService;
@@ -36,16 +43,15 @@ public class ServiceIncompletedIntegrationEventConsumer(
             orderData.MechanicId.ToString(),
             string.Empty,
             OrderStatus.ServiceIncompleted.ToString(),
-            string.Empty);
+            string.Empty); 
 
-         
-
-        var target = await _userProfileRepository.GetProfiles(orderData.BuyerId);
-        if (target is null || !target.Any())
+        var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
+        if (target is null || target.Profiles is null || target.Profiles.Count < 1)
         {
             return;
         }
-        foreach (var profile in target)
+
+        foreach (var profile in target.Profiles)
         {
             var fcmPayload = new
             {
@@ -84,7 +90,29 @@ public class ServiceIncompletedIntegrationEventConsumer(
                 TargetArn = profile.Arn
             };
 
-            await _messageService.PublishPushNotificationAsync(request);
+            try
+            {
+                await _messageService.PublishPushNotificationAsync(request);
+            }
+            catch (EndpointDisabledException ex)
+            {
+                LoggerHelper.LogError(_logger, ex);
+                await _messageService.DeregisterDevice(profile.Arn ?? string.Empty);
+                target.RemoveUserProfile(profile);
+            }
+            catch (AmazonSimpleNotificationServiceException ex)
+            {
+                LoggerHelper.LogError(_logger, ex);
+                await _messageService.DeregisterDevice(profile.Arn ?? string.Empty);
+                target.RemoveUserProfile(profile);
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogError(_logger, ex);
+            }
         }
+
+        _userProfileRepository.Update(target);
+        await _dbContext.SaveChangesAsync();
     }
 }

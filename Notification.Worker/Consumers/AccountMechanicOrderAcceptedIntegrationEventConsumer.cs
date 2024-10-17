@@ -1,11 +1,14 @@
-﻿using Amazon.SimpleNotificationService.Model;
+﻿using Amazon.SimpleNotificationService;
+using Amazon.SimpleNotificationService.Model;
 using Core.Configurations;
 using Core.Events.Account;
 using Core.Services.Interfaces;
+using Core.Utilities;
 using MassTransit;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.Extensions.Options;
-using Notification.Worker.Enumerations; 
+using Notification.Worker.Enumerations;
+using Notification.Worker.Infrastructure;
 using Notification.Worker.Repository;
 using Notification.Worker.Services;
 using Notification.Worker.Services.Interfaces;
@@ -16,8 +19,12 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
     IMessageService messageService,
     ICacheService cacheService,
     UserProfileRepository userProfileRepository,
-    IOptionsMonitor<ProjectConfiguration> projectConfiguration) : IConsumer<AccountMechanicOrderAcceptedIntegrationEvent>
+    IOptionsMonitor<ProjectConfiguration> projectConfiguration,
+    ILogger<AccountMechanicOrderAcceptedIntegrationEventConsumer> logger,
+    NotificationDbContext dbContext) : IConsumer<AccountMechanicOrderAcceptedIntegrationEvent>
 {
+    private readonly NotificationDbContext _dbContext = dbContext;
+    private readonly ILogger<AccountMechanicOrderAcceptedIntegrationEventConsumer> _logger = logger;
     private readonly IMessageService _messageService = messageService;
     private readonly IHubContext<ActivityHub, IActivityClient> _activityHubContext = activityHubContecxt;
     private readonly ICacheService _cacheService = cacheService;
@@ -35,15 +42,15 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
             orderData.MechanicName,
             OrderStatus.MechanicAssigned.ToString(),
             string.Empty);
+         
 
-
-
-        var target = await _userProfileRepository.GetProfiles(orderData.BuyerId); 
-        if (target is null || !target.Any())
-        { 
+        var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
+        if (target is null || target.Profiles is null || target.Profiles.Count < 1)
+        {
             return;
-        } 
-        foreach(var profile in target)
+        }
+
+        foreach (var profile in target.Profiles)
         {
             var fcmPayload = new
             {
@@ -82,7 +89,29 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
                 TargetArn = profile.Arn 
             };
 
-            await _messageService.PublishPushNotificationAsync(request); 
+            try
+            {
+                await _messageService.PublishPushNotificationAsync(request);
+            }
+            catch (EndpointDisabledException ex)
+            {
+                LoggerHelper.LogError(_logger, ex);
+                await _messageService.DeregisterDevice(profile.Arn ?? string.Empty);
+                target.RemoveUserProfile(profile);
+            }
+            catch (AmazonSimpleNotificationServiceException ex)
+            {
+                LoggerHelper.LogError(_logger, ex);
+                await _messageService.DeregisterDevice(profile.Arn ?? string.Empty);
+                target.RemoveUserProfile(profile);
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogError(_logger, ex);
+            }
         }
+
+        _userProfileRepository.Update(target);
+        await _dbContext.SaveChangesAsync();
     }
 }

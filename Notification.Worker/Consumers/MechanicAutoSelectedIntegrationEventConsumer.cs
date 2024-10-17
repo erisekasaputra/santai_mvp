@@ -9,6 +9,9 @@ using Amazon.SimpleNotificationService.Model;
 using Notification.Worker.Repository;
 using Core.Configurations;
 using Microsoft.Extensions.Options;
+using Amazon.SimpleNotificationService;
+using Core.Utilities;
+using Notification.Worker.Infrastructure;
 namespace Notification.Worker.Consumers;
 public class MechanicAutoSelectedIntegrationEventConsumer(
 IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
@@ -16,7 +19,9 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
     ICacheService cacheService,
     UserProfileRepository userProfileRepository,
     IOptionsMonitor<ProjectConfiguration> projectConfiguration,
-    IOptionsMonitor<OrderConfiguration> orderConfiguration) : IConsumer<MechanicAutoSelectedIntegrationEvent>
+    IOptionsMonitor<OrderConfiguration> orderConfiguration,
+    NotificationDbContext dbContext,
+    ILogger<MechanicAutoSelectedIntegrationEventConsumer> logger) : IConsumer<MechanicAutoSelectedIntegrationEvent>
 {
     private readonly IMessageService _messageService = messageService;
     private readonly IHubContext<ActivityHub, IActivityClient> _activityHubContext = activityHubContecxt;
@@ -24,6 +29,9 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
     private readonly UserProfileRepository _userProfileRepository = userProfileRepository;
     private readonly ProjectConfiguration _projectConfiguration = projectConfiguration.CurrentValue;
     private readonly OrderConfiguration _orderConfiguration = orderConfiguration.CurrentValue;
+    private readonly NotificationDbContext _dbContext = dbContext;
+    private readonly ILogger<MechanicAutoSelectedIntegrationEventConsumer> _logger = logger;
+
     public async Task Consume(ConsumeContext<MechanicAutoSelectedIntegrationEvent> context)
     {
         var orderData = context.Message;   
@@ -34,15 +42,15 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
             orderData.MechanicId.ToString(),
             string.Empty,
             OrderStatus.MechanicSelected.ToString(),
-            string.Empty); 
+            string.Empty);
 
-        var target = await _userProfileRepository.GetProfiles(orderData.BuyerId);
-        if (target is null || !target.Any())
+        var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
+        if (target is null || target.Profiles is null || target.Profiles.Count < 1)
         {
             return;
         }
 
-        foreach (var profile in target)
+        foreach (var profile in target.Profiles)
         {
             var confirmSeconds = orderData.ConfirmDeadlineInSeconds; 
             int minutes = confirmSeconds / 60; 
@@ -97,8 +105,31 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
                 Message = messageJson,
                 MessageStructure = "json",
                 TargetArn = profile.Arn
-            }; 
-            await _messageService.PublishPushNotificationAsync(request);
+            };
+
+            try
+            {
+                await _messageService.PublishPushNotificationAsync(request);
+            }
+            catch (EndpointDisabledException ex)
+            {
+                LoggerHelper.LogError(_logger, ex);
+                await _messageService.DeregisterDevice(profile.Arn ?? string.Empty);
+                target.RemoveUserProfile(profile);
+            }
+            catch (AmazonSimpleNotificationServiceException ex)
+            {
+                LoggerHelper.LogError(_logger, ex);
+                await _messageService.DeregisterDevice(profile.Arn ?? string.Empty);
+                target.RemoveUserProfile(profile);
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogError(_logger, ex);
+            }
         }
+
+        _userProfileRepository.Update(target);
+        await _dbContext.SaveChangesAsync();
     }
 }

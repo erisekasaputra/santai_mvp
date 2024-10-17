@@ -7,6 +7,9 @@ using Notification.Worker.Repository;
 using Notification.Worker.Services.Interfaces;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Data.SqlClient;
+using Core.Utilities;
+using Amazon.Runtime;
 
 namespace Notification.Worker.Consumers;
 
@@ -15,14 +18,17 @@ public class AccountSignedInIntegrationEventConsumer : IConsumer<AccountSignedIn
     private readonly IMessageService _messageService;
     private readonly UserProfileRepository _userProfileRepository;
     private readonly NotificationDbContext _notificationDbContext;
+    private readonly ILogger<AccountSignedInIntegrationEventConsumer> _logger;
     public AccountSignedInIntegrationEventConsumer(
         IMessageService messageService,
         UserProfileRepository userProfile,
-        NotificationDbContext notificationDbContext)
+        NotificationDbContext notificationDbContext,
+        ILogger<AccountSignedInIntegrationEventConsumer> logger)
     {
         _messageService = messageService;
         _userProfileRepository = userProfile;
         _notificationDbContext = notificationDbContext;
+        _logger = logger;
     }
 
     public async Task Consume(ConsumeContext<AccountSignedInIntegrationEvent> context)
@@ -68,11 +74,15 @@ public class AccountSignedInIntegrationEventConsumer : IConsumer<AccountSignedIn
             _userProfileRepository.Update(userProfile);
             await _notificationDbContext.SaveChangesAsync();
             await transaction.CommitAsync();
-        } 
-        catch (Exception)
-        {
-            if (transaction is not null) await transaction.RollbackAsync();
-            throw;
+        }  
+        catch (Exception ex) 
+        { 
+            if (transaction is not null)
+            {
+                await transaction.RollbackAsync();
+            }
+
+            LoggerHelper.LogError(_logger, ex);
         } 
     } 
 }

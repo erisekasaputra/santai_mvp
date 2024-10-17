@@ -8,6 +8,9 @@ using Notification.Worker.Repository;
 using Notification.Worker.Services.Interfaces;
 using Notification.Worker.Services;
 using Amazon.SimpleNotificationService.Model;
+using Amazon.SimpleNotificationService;
+using Core.Utilities;
+using Notification.Worker.Infrastructure;
 
 namespace Notification.Worker.Consumers;
 
@@ -16,22 +19,26 @@ public class ChatSentIntegrationEventConsumer(
     IMessageService messageService,
     ICacheService cacheService,
     UserProfileRepository userProfileRepository,
-    IOptionsMonitor<ProjectConfiguration> projectConfiguration) : IConsumer<ChatSentIntegrationEvent>
+    IOptionsMonitor<ProjectConfiguration> projectConfiguration,
+    ILogger<ChatSentIntegrationEventConsumer> logger,
+    NotificationDbContext dbContext) : IConsumer<ChatSentIntegrationEvent>
 {
+    private readonly ILogger<ChatSentIntegrationEventConsumer> _logger = logger;
     private readonly IMessageService _messageService = messageService;
     private readonly IHubContext<ActivityHub, IActivityClient> _activityHubContext = activityHubContecxt;
     private readonly ICacheService _cacheService = cacheService;
     private readonly UserProfileRepository _userProfileRepository = userProfileRepository;
     private readonly ProjectConfiguration _projectConfiguration = projectConfiguration.CurrentValue;
-
+    private readonly NotificationDbContext _dbContext = dbContext;
     public async Task Consume(ConsumeContext<ChatSentIntegrationEvent> context)
-    {
-        var target = await _userProfileRepository.GetProfiles(context.Message.DestinationUserId);
-        if (target is null || !target.Any())
+    { 
+        var target = await _userProfileRepository.GetUserByIdAsync(context.Message.DestinationUserId);
+        if (target is null || target.Profiles is null || target.Profiles.Count < 1)
         {
             return;
         }
-        foreach (var profile in target)
+
+        foreach (var profile in target.Profiles)
         {
             var fcmPayload = new
             {
@@ -70,7 +77,30 @@ public class ChatSentIntegrationEventConsumer(
                 TargetArn = profile.Arn
             };
 
-            await _messageService.PublishPushNotificationAsync(request);
+
+            try
+            {
+                await _messageService.PublishPushNotificationAsync(request);
+            }
+            catch (EndpointDisabledException ex)
+            {
+                LoggerHelper.LogError(_logger, ex);
+                await _messageService.DeregisterDevice(profile.Arn ?? string.Empty);
+                target.RemoveUserProfile(profile);
+            }
+            catch (AmazonSimpleNotificationServiceException ex)
+            {
+                LoggerHelper.LogError(_logger, ex);
+                await _messageService.DeregisterDevice(profile.Arn ?? string.Empty);
+                target.RemoveUserProfile(profile);
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogError(_logger, ex);
+            }
         }
+
+        _userProfileRepository.Update(target);
+        await _dbContext.SaveChangesAsync();
     }
 }

@@ -26,12 +26,5 @@ public class UserProfileRepository
     public async Task AddAsync(UserProfile userProfile)
     {
         await _context.Users.AddAsync(userProfile);
-    }
-
-    public async Task<IEnumerable<IdentityProfile>> GetProfiles(Guid userId)
-    {
-        var user = await _context.Users.AsNoTracking().Where(x => x.Id == userId).FirstOrDefaultAsync();
-
-        return user is null ? [] : user.Profiles;  
-    }
+    } 
 }

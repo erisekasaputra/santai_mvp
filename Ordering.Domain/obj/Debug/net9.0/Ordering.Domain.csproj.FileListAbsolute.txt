@@ -34,21 +34,3 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Domain\obj\Debug\net9.0\Ordering.Domain.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Domain\obj\Debug\net9.0\Ordering.Domain.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Ordering.Domain\obj\Debug\net9.0\ref\Ordering.Domain.dll
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\bin\Debug\net9.0\Ordering.Domain.deps.json
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\bin\Debug\net9.0\Ordering.Domain.runtimeconfig.json
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\bin\Debug\net9.0\Ordering.Domain.dll
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\bin\Debug\net9.0\Ordering.Domain.pdb
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\bin\Debug\net9.0\Core.dll
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\bin\Debug\net9.0\Core.pdb
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\obj\Debug\net9.0\Ordering.Domain.csproj.AssemblyReference.cache
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\obj\Debug\net9.0\Ordering.Domain.GeneratedMSBuildEditorConfig.editorconfig
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\obj\Debug\net9.0\Ordering.Domain.AssemblyInfoInputs.cache
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\obj\Debug\net9.0\Ordering.Domain.AssemblyInfo.cs
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\obj\Debug\net9.0\Ordering.Domain.csproj.CoreCompileInputs.cache
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\obj\Debug\net9.0\Ordering.Domain.sourcelink.json
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\obj\Debug\net9.0\Ordering.5B2A0ED2.Up2Date
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\obj\Debug\net9.0\Ordering.Domain.dll
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\obj\Debug\net9.0\refint\Ordering.Domain.dll
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\obj\Debug\net9.0\Ordering.Domain.pdb
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\obj\Debug\net9.0\Ordering.Domain.genruntimeconfig.cache
-C:\Projects\Projects\Santai.MVP\Ordering.Domain\obj\Debug\net9.0\ref\Ordering.Domain.dll
