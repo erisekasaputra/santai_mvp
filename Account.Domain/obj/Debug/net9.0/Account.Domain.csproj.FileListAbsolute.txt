@@ -34,3 +34,21 @@ C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Sant
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Account.Domain\obj\Debug\net9.0\Account.Domain.pdb
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Account.Domain\obj\Debug\net9.0\Account.Domain.genruntimeconfig.cache
 C:\Users\erise\Documents\Personal\PT Infinite Technology Solutions\Projects\Santai.MVP\Account.Domain\obj\Debug\net9.0\ref\Account.Domain.dll
+C:\Projects\Projects\Santai.MVP\Account.Domain\bin\Debug\net9.0\Account.Domain.deps.json
+C:\Projects\Projects\Santai.MVP\Account.Domain\bin\Debug\net9.0\Account.Domain.runtimeconfig.json
+C:\Projects\Projects\Santai.MVP\Account.Domain\bin\Debug\net9.0\Account.Domain.dll
+C:\Projects\Projects\Santai.MVP\Account.Domain\bin\Debug\net9.0\Account.Domain.pdb
+C:\Projects\Projects\Santai.MVP\Account.Domain\bin\Debug\net9.0\Core.dll
+C:\Projects\Projects\Santai.MVP\Account.Domain\bin\Debug\net9.0\Core.pdb
+C:\Projects\Projects\Santai.MVP\Account.Domain\obj\Debug\net9.0\Account.Domain.csproj.AssemblyReference.cache
+C:\Projects\Projects\Santai.MVP\Account.Domain\obj\Debug\net9.0\Account.Domain.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projects\Projects\Santai.MVP\Account.Domain\obj\Debug\net9.0\Account.Domain.AssemblyInfoInputs.cache
+C:\Projects\Projects\Santai.MVP\Account.Domain\obj\Debug\net9.0\Account.Domain.AssemblyInfo.cs
+C:\Projects\Projects\Santai.MVP\Account.Domain\obj\Debug\net9.0\Account.Domain.csproj.CoreCompileInputs.cache
+C:\Projects\Projects\Santai.MVP\Account.Domain\obj\Debug\net9.0\Account.Domain.sourcelink.json
+C:\Projects\Projects\Santai.MVP\Account.Domain\obj\Debug\net9.0\Account..E84285CB.Up2Date
+C:\Projects\Projects\Santai.MVP\Account.Domain\obj\Debug\net9.0\Account.Domain.dll
+C:\Projects\Projects\Santai.MVP\Account.Domain\obj\Debug\net9.0\refint\Account.Domain.dll
+C:\Projects\Projects\Santai.MVP\Account.Domain\obj\Debug\net9.0\Account.Domain.pdb
+C:\Projects\Projects\Santai.MVP\Account.Domain\obj\Debug\net9.0\Account.Domain.genruntimeconfig.cache
+C:\Projects\Projects\Santai.MVP\Account.Domain\obj\Debug\net9.0\ref\Account.Domain.dll
