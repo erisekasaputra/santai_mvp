@@ -12,6 +12,8 @@ using Microsoft.Extensions.Options;
 using Notification.Worker.Infrastructure;
 using Amazon.SimpleNotificationService;
 using Core.Utilities;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Notification.Worker.Domain;
 
 namespace Notification.Worker.Consumers;
 
@@ -51,6 +53,7 @@ public class ServiceIncompletedIntegrationEventConsumer(
             return;
         }
 
+        List<IdentityProfile> notFound = [];
         foreach (var profile in target.Profiles)
         {
             var fcmPayload = new
@@ -105,7 +108,7 @@ public class ServiceIncompletedIntegrationEventConsumer(
                 {
                     LoggerHelper.LogError(_logger, ex2);
                 }
-                target.RemoveUserProfile(profile);
+                notFound.Add(profile);
             }
             catch (AmazonSimpleNotificationServiceException ex)
             {
@@ -117,13 +120,18 @@ public class ServiceIncompletedIntegrationEventConsumer(
                 catch (Exception ex2)
                 {
                     LoggerHelper.LogError(_logger, ex2);
-                } 
-                target.RemoveUserProfile(profile);
+                }
+                notFound.Add(profile);
             }
             catch (Exception ex)
             {
                 LoggerHelper.LogError(_logger, ex);
             }
+        } 
+
+        foreach (var profile in notFound)
+        {
+            target.Profiles.Remove(profile);
         }
 
         _userProfileRepository.Update(target);

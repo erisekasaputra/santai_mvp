@@ -11,7 +11,7 @@ builder.Services.AddCors(options =>
     {
         policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
-});
+}); 
 
 builder.Services.AddRouting();
 builder.Configuration.AddEnvironmentVariables();   

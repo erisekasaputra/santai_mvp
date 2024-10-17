@@ -65,84 +65,45 @@ public class SnsMessageService : IMessageService
 
     public async Task PublishPushNotificationAsync(PublishRequest request)
     {
-        try
-        { 
-            await _snsClient.PublishAsync(request);
-        }
-        catch (AmazonSimpleNotificationServiceException ex)
-        {
-            LoggerHelper.LogError(_logger, ex);
-            throw;
-        } 
-        catch (Exception ex)
-        {
-            LoggerHelper.LogError(_logger, ex);
-            throw;
-        }
+        await _snsClient.PublishAsync(request);
     }
      
 
     public async Task<string> RegisterDevice(string deviceToken)
     {
-        try
+        if (string.IsNullOrEmpty(deviceToken))
         {
-            if (string.IsNullOrEmpty(deviceToken))
-            {
-                return string.Empty;
-            }
-
-            var request = new CreatePlatformEndpointRequest
-            {
-                PlatformApplicationArn = _snsConfig.ARN,
-                Token = deviceToken
-            };
-
-            var response = await _snsClient.CreatePlatformEndpointAsync(request); 
-            if (!string.IsNullOrEmpty(response.EndpointArn)) 
-            {
-                return response.EndpointArn;
-            }
-
             return string.Empty;
         }
-        catch (AmazonSimpleNotificationServiceException ex)
+
+        var request = new CreatePlatformEndpointRequest
         {
-            LoggerHelper.LogError(_logger, ex);
-            throw;
-        }
-        catch (Exception ex)
+            PlatformApplicationArn = _snsConfig.ARN,
+            Token = deviceToken
+        };
+
+        var response = await _snsClient.CreatePlatformEndpointAsync(request);
+        if (!string.IsNullOrEmpty(response.EndpointArn))
         {
-            LoggerHelper.LogError(_logger, ex);
-            throw;
+            return response.EndpointArn;
         }
+
+        return string.Empty;
     }
 
     public async Task PublishSmsAsync(string phoneNumber, string message)
-    { 
-        try
+    {
+        if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(message))
         {
-            if (string.IsNullOrEmpty(phoneNumber) || string.IsNullOrEmpty(message))
-            {
-                return;
-            }
+            return;
+        }
 
-            var request = new PublishRequest
-            {
-                Message = message,
-                PhoneNumber = phoneNumber
-            };
+        var request = new PublishRequest
+        {
+            Message = message,
+            PhoneNumber = phoneNumber
+        };
 
-            var response = await _snsClient.PublishAsync(request); 
-        }
-        catch (AmazonSimpleNotificationServiceException ex)
-        {
-            LoggerHelper.LogError(_logger, ex);
-            throw;
-        }
-        catch (Exception ex)
-        {
-            LoggerHelper.LogError(_logger, ex);
-            throw;
-        }
+        var response = await _snsClient.PublishAsync(request);
     }
 }

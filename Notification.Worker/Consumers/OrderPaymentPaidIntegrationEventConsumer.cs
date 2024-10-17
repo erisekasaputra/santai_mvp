@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Notification.Worker.Infrastructure;
 using Amazon.SimpleNotificationService;
 using Core.Utilities;
+using Notification.Worker.Domain;
 
 namespace Notification.Worker.Consumers;
 
@@ -35,7 +36,7 @@ public class OrderPaymentPaidIntegrationEventConsumer(
     private readonly OrderConfiguration _orderConfiguration = orderConfiguration.CurrentValue;
 
     public async Task Consume(ConsumeContext<OrderPaymentPaidIntegrationEvent> context)
-    {
+    { 
         var orderData = context.Message; 
         await _activityHubContext.Clients.User(orderData.BuyerId.ToString()).ReceiveOrderStatusUpdate(
             orderData.OrderId.ToString(),
@@ -52,6 +53,7 @@ public class OrderPaymentPaidIntegrationEventConsumer(
             return;
         }
 
+        List<IdentityProfile> notFound = []; 
         foreach (var profile in target.Profiles)
         {
             var fcmPayload = new
@@ -81,21 +83,21 @@ public class OrderPaymentPaidIntegrationEventConsumer(
             {
                 @default = "Payment successfull",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
-            });
+            }); 
 
             var request = new PublishRequest
             {
                 Message = messageJson,
                 MessageStructure = "json",
                 TargetArn = profile.Arn
-            };
+            }; 
 
             try
             {
                 await _messageService.PublishPushNotificationAsync(request);
             }
             catch (EndpointDisabledException ex)
-            {
+            { 
                 LoggerHelper.LogError(_logger, ex);
                 try
                 {
@@ -105,25 +107,30 @@ public class OrderPaymentPaidIntegrationEventConsumer(
                 {
                     LoggerHelper.LogError(_logger, ex2);
                 }
-                target.RemoveUserProfile(profile);
+                notFound.Add(profile);
             }
             catch (AmazonSimpleNotificationServiceException ex)
-            {
+            { 
                 LoggerHelper.LogError(_logger, ex);
                 try
                 {
                     await _messageService.DeregisterDevice(profile.Arn ?? string.Empty);
                 }
                 catch (Exception ex2)
-                {
+                { 
                     LoggerHelper.LogError(_logger, ex2);
-                } 
-                target.RemoveUserProfile(profile);
+                }
+                notFound.Add(profile);
             }
             catch (Exception ex)
-            {
+            { 
                 LoggerHelper.LogError(_logger, ex);
             }
+        }
+
+        foreach (var profile in notFound) 
+        {
+            target.Profiles.Remove(profile);
         }
 
         _userProfileRepository.Update(target);
