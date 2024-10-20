@@ -8,65 +8,42 @@ services:
             - "5672:5672"
             - "15672:15672"
         environment:
-            RABBITMQ_DEFAULT_USER: eris
-            RABBITMQ_DEFAULT_PASS: 000328Eris@
+            - RABBITMQ_DEFAULT_USER=santaitechnology
+            - RABBITMQ_DEFAULT_PASS=_SANTAItechnology2024
         restart: always
-        networks:
-            - backend-network
-    elasticsearch:
-        image: docker.elastic.co/elasticsearch/elasticsearch:8.8.1
-        container_name: elasticsearch-santai
-        environment:
-            - discovery.type=single-node
-            - xpack.security.enabled=false
-            - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
-        ports:
-            - 9200:9200
-            - 9300:9300
         volumes:
-            - es_data:/usr/share/elasticsearch/data
-        restart: always 
+            - rabbitmq_data:/var/lib/rabbitmq 
+            - rabbitmq_logs:/var/log/rabbitmq
         networks:
-            - backend-network
-    dynamodb:
-        image: amazon/dynamodb-local:latest
-        container_name: dynamodb-santai
-        ports:
-            - "8000:8000"
-        restart: always
-        networks:
-            - backend-network
-    minio:
-        image: minio/minio:latest
-        container_name: minio
-        ports:
-            - "9000:9000"
-            - "9001:9001"
-        environment:
-            MINIO_ROOT_USER: erisekasaputra28
-            MINIO_ROOT_PASSWORD: 000328Eris@
-        volumes:
-            - minio-data:/data
-            - minio-config:/root/.minio
-        command: server /data --console-address ":9001"
-        restart: always
-        networks:
-            - backend-network
+            - backend-network   
     redis:
         image: redis:latest
         container_name: redis
         ports:
-            - "6379:6379"
+            - "6379:6379" 
+        volumes:
+            - redis_data:/data
         networks:
-            - backend-network 
-            
-
-
+            - backend-network  
+        restart: always
+    sqlserver:
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        container_name: sqlserver
+        environment:
+          - ACCEPT_EULA=Y
+          - SA_PASSWORD=_SANTAItechnology2024
+        ports:
+          - "1433:1433"
+        volumes:
+          - sql_data:/var/opt/mssql
+        networks:
+          - backend-network  
+        restart: always
 volumes:
-    es_data:
-    minio-data:
-    minio-config:
-
+    sql_data: 
+    rabbitmq_data:   # Volume untuk data RabbitMQ
+    rabbitmq_logs:   # Volume untuk log RabbitMQ
+    redis_data:
 networks:
     backend-network:
         driver: bridge

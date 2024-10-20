@@ -18,10 +18,10 @@ services:
       - AWS__SecretKey=6mIoP493YVrGwjUOYeZ/8WstUKRU2eUKi1rD9Vbl
       - AWS__Region=ap-southeast-1
       - AWSSNS__ARN=arn:aws:sns:ap-southeast-1:590183652457:app/GCM/Notification
-      - Database__ConnectionString=Server=development.cpca622mwdeq.ap-southeast-1.rds.amazonaws.com,1433;Database=notification;User Id=santaitechnology;Password=_SANTAItechnology2024;Trusted_Connection=False;Encrypt=True;TrustServerCertificate=True;
-      - Messaging__Host=amqps://b-e7d48130-52b4-4deb-9718-410459aa94ed.mq.ap-southeast-1.amazonaws.com:5671
+      - Database__ConnectionString=Server=ec2-18-143-178-237.ap-southeast-1.compute.amazonaws.com,1433;Database=notification;User Id=santaitechnology;Password=_SANTAItechnology2024;Trusted_Connection=False;Encrypt=False;TrustServerCertificate=True;
+      - Messaging__Host=ec2-18-143-178-237.ap-southeast-1.compute.amazonaws.com:5672
       - Messaging__Username=santaitechnology
       - Messaging__Password=_SANTAItechnology2024
-      - Cache__Host=santaimvpstagingv2.hkpg4d.clustercfg.apse1.cache.amazonaws.com:6379
+      - Cache__Host=ec2-18-143-178-237.ap-southeast-1.compute.amazonaws.com:6379
       - Cache__Ssl=false
     restart: always

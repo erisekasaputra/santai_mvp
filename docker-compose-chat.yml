@@ -17,10 +17,10 @@ services:
       - AWS__AccessID=AKIAYS2NP3RU6DEGPJUM
       - AWS__SecretKey=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
       - AWS__Region=ap-southeast-1 
-      - Messaging__Host=amqps://b-e7d48130-52b4-4deb-9718-410459aa94ed.mq.ap-southeast-1.amazonaws.com:5671
+      - Messaging__Host=ec2-18-143-178-237.ap-southeast-1.compute.amazonaws.com:5672
       - Messaging__Username=santaitechnology
       - Messaging__Password=_SANTAItechnology2024
-      - Cache__Host=santaimvpstagingv2.hkpg4d.clustercfg.apse1.cache.amazonaws.com:6379
+      - Cache__Host=ec2-18-143-178-237.ap-southeast-1.compute.amazonaws.com:6379
       - Cache__Ssl=false
       - DynamoDB__Chat__TableName=SantaiChat
       - DynamoDB__Chat__PartitionKey=chatKey
