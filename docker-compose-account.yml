@@ -16,7 +16,7 @@ services:
       - AWS__AccessID=AKIAYS2NP3RU6DEGPJUM
       - AWS__SecretKey=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
       - AWS__Region=ap-southeast-1
-      - Database__ConnectionString=Server=175.41.148.241,1433;Database=account;User Id=sa;Password=_SANTAItechnology2024;Trusted_Connection=False;Encrypt=False;TrustServerCertificate=True;
+      - Database__ConnectionString=Server=175.41.148.241,1433;Database=account;User Id=sa;Password=_SANTAItechnology2024;Trusted_Connection=False;TrustServerCertificate=True;
       - Messaging__Host=rabbitmq://175.41.148.241:5672
       - Messaging__Username=santaitechnology
       - Messaging__Password=_SANTAItechnology2024

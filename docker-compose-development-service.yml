@@ -26,6 +26,7 @@ services:
         networks:
             - backend-network  
         restart: always
+        command: ["redis-server", "--appendonly", "yes"]
     sqlserver:
         image: mcr.microsoft.com/mssql/server:2022-latest
         container_name: sqlserver
