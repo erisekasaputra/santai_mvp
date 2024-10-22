@@ -1,4 +1,5 @@
-﻿using Account.Domain.Aggregates.CertificationAggregate; 
+﻿using Account.Domain.Aggregates.CertificationAggregate;
+using Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.Metadata.Builders; 
@@ -23,7 +24,8 @@ public class CertificationEntityConfiguration : IEntityTypeConfiguration<Certifi
 
         e.Property(p => p.ValidDateUtc)
             .HasColumnType("datetime2")
-            .IsRequired(false);
+            .IsRequired(false)
+            .HasConversion(DateTimeExtension.UtcConverter());    
 
         e.Property(p => p.CertificationName)
             .HasMaxLength(100)

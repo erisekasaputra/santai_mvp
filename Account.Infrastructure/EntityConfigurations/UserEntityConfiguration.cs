@@ -5,6 +5,7 @@ using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Aggregates.LoyaltyAggregate;
 using Account.Domain.Aggregates.ReferralAggregate;
 using Newtonsoft.Json;
+using Core.Extensions;
 
 namespace Account.Infrastructure.EntityConfigurations;
 
@@ -36,11 +37,13 @@ public class UserEntityConfiguration : IEntityTypeConfiguration<BaseUser>
 
         e.Property(v => v.CreatedAtUtc)
             .HasColumnType("datetime2")
-            .IsRequired();
+            .IsRequired()
+            .HasConversion(DateTimeExtension.UtcConverter());
 
         e.Property(v => v.UpdatedAtUtc)
             .HasColumnType("datetime2")
-            .IsRequired();
+            .IsRequired()
+            .HasConversion(DateTimeExtension.UtcConverter());
 
         e.Property(p => p.AccountStatus).HasConversion<string>();
 

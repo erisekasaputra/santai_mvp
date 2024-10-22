@@ -1,5 +1,6 @@
 ﻿using Account.Domain.Aggregates.BusinessLicenseAggregate;
 using Account.Domain.Enumerations;
+using Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -50,7 +51,7 @@ public class BusinessLicenseEntityConfiguration : IEntityTypeConfiguration<Busin
         e.HasOne(p => p.BusinessUser)
             .WithMany(p => p.BusinessLicenses)
             .HasForeignKey(p => p.BusinessUserId)
-            .OnDelete(DeleteBehavior.Cascade); 
+            .OnDelete(DeleteBehavior.Cascade);   
 
         e.HasQueryFilter(p => p.VerificationStatus != VerificationState.Rejected);
 

@@ -1,4 +1,5 @@
 ﻿using Account.Domain.Aggregates.UserAggregate;
+using Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -51,12 +52,20 @@ public class BusinessUserEntityConfiguration : IEntityTypeConfiguration<Business
                 v => v == null ? null : v.Trim(),
                 v => v == null ? null : v.Trim())
             .HasColumnType("nvarchar(1000)");
-         
+        
         e.HasMany(b => b.Staffs)
             .WithOne()
             .HasForeignKey(s => s.BusinessUserId)
-            .OnDelete(DeleteBehavior.Cascade);   
-        
+            .OnDelete(DeleteBehavior.Cascade);
+
+        e.Property(o => o.CreatedAtUtc)
+            .HasColumnType("datetime2") 
+            .HasConversion(DateTimeExtension.UtcConverter());
+
+        e.Property(o => o.UpdatedAtUtc)
+            .HasColumnType("datetime2") 
+            .HasConversion(DateTimeExtension.UtcConverter());
+
         e.Ignore(b => b.Password); 
         //e.Ignore(p => p.DomainEvents); // no need domain event because the parent entity (BaseUser is implementing DomainEvent ignorance)
     }

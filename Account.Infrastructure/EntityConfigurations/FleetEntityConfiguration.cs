@@ -1,4 +1,5 @@
 ﻿using Account.Domain.Aggregates.FleetAggregate;
+using Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -76,14 +77,16 @@ public class FleetEntityConfiguration : IEntityTypeConfiguration<Fleet>
 
         e.Property(v => v.LastInspectionDateUtc)
             .HasColumnType("datetime2")
-            .IsRequired();
+            .IsRequired()
+            .HasConversion(DateTimeExtension.UtcConverter());
 
         e.Property(v => v.OdometerReading)
             .IsRequired();
 
         e.Property(v => v.RegistrationDateUtc)
             .HasColumnType("datetime2")
-            .IsRequired();
+            .IsRequired()
+            .HasConversion(DateTimeExtension.UtcConverter());
 
         e.OwnsOne(p => p.Owner, owner =>
         {

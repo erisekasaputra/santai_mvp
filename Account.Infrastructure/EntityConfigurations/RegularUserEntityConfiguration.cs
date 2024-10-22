@@ -1,6 +1,7 @@
 ﻿using Account.Domain.Aggregates.UserAggregate; 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Core.Extensions;
 
 namespace Account.Infrastructure.EntityConfigurations;
 
@@ -24,6 +25,9 @@ public class RegularUserEntityConfiguration : IEntityTypeConfiguration<RegularUs
                     v => v == null ? null : v.Trim(),
                     v => v == null ? null : v.Trim());
 
+            personalInfo.Property(i => i.DateOfBirthUtc)
+                .HasConversion(DateTimeExtension.UtcConverter()); 
+            
             personalInfo.Property(i => i.LastName)
                 .HasMaxLength(50)
                 .IsRequired()

@@ -1,6 +1,7 @@
 ﻿ 
 using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Enumerations;
+using Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -28,7 +29,10 @@ public class MechanicUserEntityConfiguration : IEntityTypeConfiguration<Mechanic
                 .HasConversion(
                     v => v == null ? null : v.Trim(),
                     v => v == null ? null : v.Trim());
-
+            
+            personalInfo.Property(i => i.DateOfBirthUtc)
+                .HasConversion(DateTimeExtension.UtcConverter()); 
+            
             personalInfo.Property(i => i.LastName)
                 .HasMaxLength(50)
                 .IsRequired()

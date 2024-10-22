@@ -277,11 +277,11 @@ public static class DateTimeExtension
         }
     }
 
-    public static ValueConverter<DateTime, DateTime> UtcConverter()
+    public static ValueConverter<DateTime?, DateTime?> UtcConverter()
     {
-        return new ValueConverter<DateTime, DateTime>(
-            v => v, // Saat menyimpan ke DB
-            v => DateTime.SpecifyKind(v, DateTimeKind.Utc) // Saat mengambil dari DB
+        return new ValueConverter<DateTime?, DateTime?>(
+            v => v, // Saat menyimpan, biarkan nilai apa adanya (termasuk null)
+            v => v == null ? v : DateTime.SpecifyKind(v.Value, DateTimeKind.Utc) // Saat mengambil dari DB, pastikan hanya konversi jika tidak null
         );
     }
 }
