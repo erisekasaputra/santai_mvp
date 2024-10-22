@@ -1,4 +1,5 @@
 ﻿using Core.Enumerations;
+using Core.Extensions;
 using Core.Utilities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -73,6 +74,10 @@ public class OrderingEntityConfiguration : IEntityTypeConfiguration<Order>
                     v => Enum.Parse<Currency>(v))
                 .IsRequired(true);
         });
+
+        builder.Property(o => o.CreatedAtUtc).HasConversion(DateTimeExtension.UtcConverter());
+
+        builder.Property(o => o.PaymentExpiration).HasConversion(DateTimeExtension.UtcConverter());
 
         builder.OwnsOne(o => o.Address, buildAction =>
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Core.Extensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders; 
 using Ordering.Domain.Aggregates.ScheduledOrderAggregate;
 
@@ -14,8 +15,8 @@ public class ScheduledOrderEntityConfiguration : IEntityTypeConfiguration<Schedu
 
         builder.Property(o => o.ScheduledAt)
           .IsRequired()
-          .HasColumnType("datetime2");
-
+          .HasColumnType("datetime2")
+          .HasConversion(DateTimeExtension.UtcConverter()); 
 
         builder.Ignore(e => e.DomainEvents);
         builder.Ignore(e => e.EntityStateAction);

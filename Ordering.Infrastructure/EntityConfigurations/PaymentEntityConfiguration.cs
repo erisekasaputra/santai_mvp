@@ -1,4 +1,5 @@
 ﻿using Core.Enumerations;
+using Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Ordering.Domain.Aggregates.OrderAggregate;
@@ -21,11 +22,13 @@ public class PaymentEntityConfiguration : IEntityTypeConfiguration<Payment>
 
         builder.Property(e => e.CreatedAt)
            .IsRequired()
-           .HasColumnType("datetime2");
+           .HasColumnType("datetime2")
+           .HasConversion(DateTimeExtension.UtcConverter());
 
         builder.Property(e => e.TransactionAt)
            .IsRequired(false)
-           .HasColumnType("datetime2");
+           .HasColumnType("datetime2")
+           .HasConversion(DateTimeExtension.UtcConverter());
 
         builder.OwnsOne(p => p.Amount, buildAction =>
         {

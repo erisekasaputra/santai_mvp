@@ -1,4 +1,5 @@
-﻿using TimeZoneConverter;
+﻿using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using TimeZoneConverter;
 
 namespace Core.Extensions;
 
@@ -274,5 +275,13 @@ public static class DateTimeExtension
         {
             return false;
         }
+    }
+
+    public static ValueConverter<DateTime, DateTime> UtcConverter()
+    {
+        return new ValueConverter<DateTime, DateTime>(
+            v => v, // Saat menyimpan ke DB
+            v => DateTime.SpecifyKind(v, DateTimeKind.Utc) // Saat mengambil dari DB
+        );
     }
 }
