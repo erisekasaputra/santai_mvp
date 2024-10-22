@@ -1,7 +1,9 @@
 ﻿using Core.CustomMessages;
+using Core.Dtos;
 using Core.Exceptions;
 using Core.Results;
 using MediatR;
+using Ordering.API.Applications.Dtos.Responses;
 using Ordering.API.Extensions;
 using Ordering.Domain.SeedWork;
 
@@ -23,10 +25,11 @@ public class GetPaginatedOrdersByUserIdQueryHandler(
             if (items is null)
             {
                 return Result.Failure("Data not found", ResponseStatus.NotFound);
-            }  
+            } 
 
-            return Result.Success(
-                items.Select(x => x.ToOrderResponseDto()), ResponseStatus.Ok);
+            var response = new PaginatedResponseDto<OrderResponseDto>(request.PageNumber, request.PageSize, totalCount, totalPages, items.Select(x => x.ToOrderResponseDto()));
+
+            return Result.Success(response , ResponseStatus.Ok);
         }
         catch (ArgumentNullException ex)
         { 
