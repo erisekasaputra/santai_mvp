@@ -131,7 +131,7 @@ public class DataController : ControllerBase
         }
 
         string jsonString = System.IO.File.ReadAllText(filePath);
-        var cancellationFee = JsonConvert.DeserializeObject<CancellationFee>(jsonString);
+        var cancellationFee = JsonConvert.DeserializeObject<IEnumerable<CancellationFee>>(jsonString);
         return TypedResults.Ok(Result.Success(cancellationFee, ResponseStatus.Ok));
     }
 
