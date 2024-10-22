@@ -29,7 +29,8 @@ using Ordering.API.Applications.Queries.Orders.GetPaginatedOrdersByUserId;
 using Ordering.API.Applications.Queries.Orders.GetPaginatedOrderServiceActiveByUserId;
 using Ordering.API.Applications.Queries.Orders.GetPaymentUrlByUserIdAndOrderId;
 using Ordering.API.Applications.Services.Interfaces; 
-using Ordering.API.Extensions; 
+using Ordering.API.Extensions;
+using Ordering.Domain.Enumerations;
 
 namespace Ordering.API.Controllers;
 
@@ -177,7 +178,7 @@ public class OrderController : ControllerBase
     [HttpGet]
     [Authorize(Policy = "BusinessStaffRegularUserPolicy")]
     public async Task<IResult> GetPaginatedOrders( 
-        [FromQuery] PaginatedRequestDto request)
+        [FromQuery] PaginatedRequestDto request, [FromQuery] OrderStatus? orderStatus)
     { 
         try
         {
@@ -188,7 +189,7 @@ public class OrderController : ControllerBase
             }
 
             var result = await _mediator.Send(
-                new GetPaginatedOrdersByUserIdQuery((userClaim.CurrentUserType == UserType.Administrator ? null : userClaim.Sub), request.PageNumber, request.PageSize));
+                new GetPaginatedOrdersByUserIdQuery((userClaim.CurrentUserType == UserType.Administrator ? null : userClaim.Sub), request.PageNumber, request.PageSize, orderStatus));
 
             return result.ToIResult();
         }

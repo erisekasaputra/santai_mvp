@@ -20,7 +20,7 @@ public class GetPaginatedOrdersByUserIdQueryHandler(
     { 
         try
         {
-            (var totalCount, var totalPages, var items) = await _unitOfWork.Orders.GetPaginatedOrders(request.UserId, request.PageNumber, request.PageSize);
+            (var totalCount, var totalPages, var items) = await _unitOfWork.Orders.GetPaginatedOrders(request.UserId, request.PageNumber, request.PageSize, request.Status);
 
             if (items is null)
             {

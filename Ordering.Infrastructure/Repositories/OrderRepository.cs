@@ -67,13 +67,18 @@ public class OrderRepository : IOrderRepository
 
 
     public async Task<(int TotalCount, int TotalPages, IEnumerable<Order> Orders)> GetPaginatedOrders(
-        Guid? userId, int pageNumber, int pageSize)
+        Guid? userId, int pageNumber, int pageSize, OrderStatus? status)
     {
         var query = _dbContext.Orders.AsQueryable();
          
         if (userId is not null && userId.HasValue && userId != Guid.Empty)
         {
             query = query.Where(x => x.Buyer.BuyerId == userId);
+        }
+
+        if (status is not null)
+        {
+            query = query.Where(x => x.Status == status);
         }
 
         var totalCount = await query.CountAsync();
@@ -90,9 +95,8 @@ public class OrderRepository : IOrderRepository
             .Include(order => order.Discount)
             .Include(order => order.Fees)
             .Include(order => order.Fleets) 
-            .AsSplitQuery()
-            .OrderBy(x => x.Status)
-            .ThenBy(x => x.CreatedAtUtc)
+            .AsSplitQuery() 
+            .OrderByDescending(x => x.CreatedAtUtc)
             .Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
