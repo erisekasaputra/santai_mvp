@@ -2,6 +2,7 @@
 using Core.Exceptions;
 using Core.Results;
 using MediatR;
+using Ordering.API.Applications.Services.Interfaces; 
 using Ordering.API.Extensions;
 using Ordering.Domain.SeedWork;
 
@@ -9,10 +10,12 @@ namespace Ordering.API.Applications.Queries.Orders.GetOrderByIdAndUserId;
 
 public class GetOrderByIdAndUserIdQueryHandler(
     ILogger<GetOrderByIdAndUserIdQueryHandler> logger,
-    IUnitOfWork unitOfWork) : IRequestHandler<GetOrderByIdAndUserIdQuery, Result>
+    IUnitOfWork unitOfWork,
+    IPaymentService paymentService) : IRequestHandler<GetOrderByIdAndUserIdQuery, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     private readonly ILogger<GetOrderByIdAndUserIdQueryHandler> _logger = logger;
+    private readonly IPaymentService _paymentService = paymentService;
     public async Task<Result> Handle(GetOrderByIdAndUserIdQuery request, CancellationToken cancellationToken)
     {
         try
@@ -24,7 +27,17 @@ public class GetOrderByIdAndUserIdQueryHandler(
                 return Result.Failure("Data not found", ResponseStatus.NotFound);
             }
 
-            return Result.Success(order.ToOrderResponseDto(), ResponseStatus.Ok);
+            string paymentUrl = _paymentService.GeneratePaymentUrl(
+                order.GetDetail(),
+                order.GrandTotal.Amount,
+                order.Id,
+                order.Buyer.Name,
+                order.Buyer.Email ?? string.Empty,
+                order.Buyer.PhoneNumber ?? string.Empty);
+
+            var orderResponse = order.ToOrderResponseDto();
+            orderResponse.SetPaymentUrl(paymentUrl);
+            return Result.Success(orderResponse, ResponseStatus.Ok);
         }
         catch (ArgumentNullException ex)
         {

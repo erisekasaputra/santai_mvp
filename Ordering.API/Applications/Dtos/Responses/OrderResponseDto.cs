@@ -89,4 +89,9 @@ public class OrderResponseDto
         PaymentUrl = paymentUrl;
         IsPaymentExpire = isPaymentExpire;
     }
+
+    public void SetPaymentUrl(string paymentUrl)
+    {
+        PaymentUrl = paymentUrl;
+    }
 }
