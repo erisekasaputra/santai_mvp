@@ -1,13 +1,13 @@
 [
   {
-    "Description": "string",
-    "Parameter": "string",
+    "Description": "Head",
+    "Parameter": "Head",
     "Rating": 0,
     "PreServiceInspectionResults": [
       {
-        "Description": "string",
-        "Parameter": "string",
-        "IsWorking": true
+        "Description": "Lamp",
+        "Parameter": "Lamp",
+        "IsWorking":  false
       }
     ]
   }

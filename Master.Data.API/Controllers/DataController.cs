@@ -131,7 +131,7 @@ public class DataController : ControllerBase
         }
 
         string jsonString = System.IO.File.ReadAllText(filePath);
-        var cancellationFee = JsonConvert.DeserializeObject<IEnumerable<CancellationFee>>(jsonString);
+        var cancellationFee = JsonConvert.DeserializeObject<CancellationFee>(jsonString);
         return TypedResults.Ok(Result.Success(cancellationFee, ResponseStatus.Ok));
     }
 
@@ -139,13 +139,13 @@ public class DataController : ControllerBase
 
     [HttpPut("order/cancellation-fee")]
     public IResult UpdateCancellationFee(
-        [FromBody] CancellationFeeRequest cancellationFeeRequest)
+        [FromBody] CancellationFee cancellationFeeRequest)
     {
         try
         {
             string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Order/CancellationFee/cancellation-fee.json");
 
-            string jsonString = JsonConvert.SerializeObject(cancellationFeeRequest.CancellationFees, Formatting.Indented);
+            string jsonString = JsonConvert.SerializeObject(cancellationFeeRequest, Formatting.Indented);
             
             System.IO.File.WriteAllText(filePath, jsonString);
             return TypedResults.NoContent();

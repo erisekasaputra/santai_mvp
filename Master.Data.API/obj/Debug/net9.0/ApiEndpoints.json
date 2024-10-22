@@ -55,7 +55,7 @@
     "Parameters": [
       {
         "Name": "cancellationFeeRequest",
-        "Type": "Master.Data.API.Dtos.CancellationFeeRequest",
+        "Type": "Master.Data.API.Models.CancellationFee",
         "IsRequired": true
       }
     ],

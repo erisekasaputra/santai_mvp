@@ -30,8 +30,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>h0cp9lym7f</Fingerprint>
-      <Integrity>7zn7kTWBne2TBy7loH/CViBUOqrTAHlvzhDYjhHAl4g=</Integrity>
+      <Fingerprint>z6udjxu1z3</Fingerprint>
+      <Integrity>GxHxR5ylLXQTK2nFaqgvvvxLYnWP2G87sSGzEspG6c4=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\CancellationFee\cancellation-fee.json'))</OriginalItemSpec>

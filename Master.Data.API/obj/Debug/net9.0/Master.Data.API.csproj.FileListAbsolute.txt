@@ -348,7 +348,6 @@ C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\Master.Data.API.sourcelink.json
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\scopedcss\bundle\Master.Data.API.styles.css
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\25y84c7jcg-38jn93up96.gz
-C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\gtk4vznist-h0cp9lym7f.gz
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\2uqe8z00nf-6iclky0jm6.gz
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\1b0leuntmr-59jwi6ab2s.gz
 C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\staticwebassets.build.json
@@ -372,3 +371,4 @@ C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Microsoft.Exten
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Microsoft.Extensions.Options.dll
 C:\Projects\Projects\Santai.MVP\Master.Data.API\bin\Debug\net9.0\Microsoft.Extensions.Primitives.dll
+C:\Projects\Projects\Santai.MVP\Master.Data.API\obj\Debug\net9.0\compressed\gtk4vznist-z6udjxu1z3.gz

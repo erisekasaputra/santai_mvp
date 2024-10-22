@@ -1,11 +1,6 @@
-[
-  {
-    "Parameter": "Value",
-    "FeeDescriptionDetail": "Service Fee",
-    "FeeDescription": "ServiceFee",
-    "Currency": "MYR",
-    "ValuePercentage": 0.0,
-    "ValueAmount": 5,
-    "FeeAmount": 0.0
-  }
-]
+{
+  "CancellationParameters": [
+    "ServiceFee",
+    "MechanicFee"
+  ]
+}
