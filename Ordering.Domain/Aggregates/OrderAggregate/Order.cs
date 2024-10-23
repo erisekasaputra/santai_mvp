@@ -715,7 +715,7 @@ public class Order : Entity
         if (GrandTotal.Amount != requiredGrandTotal.Value)
         {
             throw new PriceChangesException(
-                "Upps, price changes has been detected", GrandTotal.Amount);
+                "Whoops! A price change has been detected. Please refresh or try again", GrandTotal.Amount);
         }
     }
 

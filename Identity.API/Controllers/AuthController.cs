@@ -79,11 +79,10 @@ public class AuthController(
     {
         try
         {
-            if (!await IsRefreshTokenValid(refreshTokenRequest.RefreshToken))
-            {
-                return TypedResults.Unauthorized();
-            }
-
+            //if (!await IsRefreshTokenValid(refreshTokenRequest.RefreshToken))
+            //{
+            //    return TypedResults.Unauthorized();
+            //} 
 
             var oldRefreshToken = await _tokenCacheService.RotateRefreshTokenAsync(refreshTokenRequest.RefreshToken);
             if (oldRefreshToken is null)

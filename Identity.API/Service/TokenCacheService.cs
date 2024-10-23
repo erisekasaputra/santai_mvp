@@ -44,7 +44,7 @@ public class TokenCacheService(
             return null;
         }
 
-        await InvalidateRefreshToken(oldToken);
+        //await InvalidateRefreshToken(oldToken);
         return storedRefreshToken;
     }
 
