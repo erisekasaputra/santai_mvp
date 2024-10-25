@@ -6,8 +6,7 @@ public interface ITokenCacheService
 {
     Task<RefreshToken?> GetStoredRefreshToken(string token); 
     Task<RefreshToken> SaveRefreshToken(RefreshToken refreshToken);  
-    Task<RefreshToken?> RotateRefreshTokenAsync(string oldToken); 
-    Task<bool> InvalidateRefreshToken(string oldToken);
+    Task<RefreshToken?> RotateRefreshTokenAsync(string oldToken);  
     bool ValidateToken(RefreshToken storedRefreshToken); 
     Task<bool> BlackListRefreshTokenAsync(string refreshToken); 
     Task<bool> BlackListAccessTokenAsync(string accessToken); 

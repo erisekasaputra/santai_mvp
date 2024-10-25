@@ -1,2 +1,5 @@
 .vs 
 UserScript.sh
+secret.txt
+UserScript.sh
+docker-compose-*.yml

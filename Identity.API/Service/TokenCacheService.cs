@@ -45,16 +45,10 @@ public class TokenCacheService(
         {
             return null;
         }
-
-        //await InvalidateRefreshToken(oldToken);
+         
         return storedRefreshToken;
     }
-
-    public async Task<bool> InvalidateRefreshToken(string oldToken)
-    {
-        var cacheKey = CacheKey.RefreshTokenCacheKey(oldToken); 
-        return await _cacheService.DeleteAsync(cacheKey);
-    }
+     
 
     public bool ValidateToken(RefreshToken storedRefreshToken)
     {

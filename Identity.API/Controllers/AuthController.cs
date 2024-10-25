@@ -78,12 +78,7 @@ public class AuthController(
     [FromBody] RefreshTokenRequest refreshTokenRequest)
     {
         try
-        {
-            //if (!await IsRefreshTokenValid(refreshTokenRequest.RefreshToken))
-            //{
-            //    return TypedResults.Unauthorized();
-            //} 
-
+        {  
             var oldRefreshToken = await _tokenCacheService.RotateRefreshTokenAsync(refreshTokenRequest.RefreshToken);
             if (oldRefreshToken is null)
             {
