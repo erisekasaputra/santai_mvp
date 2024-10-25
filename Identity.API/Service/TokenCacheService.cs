@@ -31,13 +31,11 @@ public class TokenCacheService(
 
 
     public async Task<RefreshToken?> RotateRefreshTokenAsync(string oldToken)
-    {
-        Console.WriteLine("OLD TOKEN : " + oldToken);
+    { 
         var storedRefreshToken = await GetStoredRefreshToken(oldToken);
 
         if (storedRefreshToken is null)
-        {
-            Console.WriteLine("TOKEN NOT FOUND");
+        { 
             return null;
         }
 
@@ -55,8 +53,7 @@ public class TokenCacheService(
         if (storedRefreshToken is null)
         { 
             return false;
-        }
-        Console.WriteLine("NOT EXPIRED : " + (storedRefreshToken.ExpiryDateUtc > DateTime.UtcNow));
+        } 
         return storedRefreshToken.ExpiryDateUtc > DateTime.UtcNow;
     }
 

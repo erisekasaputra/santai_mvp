@@ -79,10 +79,14 @@ public class AuthController(
     {
         try
         {  
+            if (!await IsRefreshTokenValid(refreshTokenRequest.RefreshToken))
+            {
+                return TypedResults.Unauthorized();
+            }
+
             var oldRefreshToken = await _tokenCacheService.RotateRefreshTokenAsync(refreshTokenRequest.RefreshToken);
             if (oldRefreshToken is null)
-            {
-                Console.WriteLine(1);
+            { 
                 return TypedResults.Unauthorized();
             }
 
@@ -92,8 +96,7 @@ public class AuthController(
 
             var user = await _userManager.FindByIdAsync(oldRefreshToken.UserId);
             if (user is null)
-            {
-                Console.WriteLine(2);
+            { 
                 return TypedResults.Unauthorized();
             }
 
