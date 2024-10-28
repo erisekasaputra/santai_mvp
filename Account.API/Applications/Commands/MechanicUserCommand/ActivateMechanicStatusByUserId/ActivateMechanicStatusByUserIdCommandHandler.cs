@@ -64,8 +64,7 @@ public class ActivateMechanicStatusByUserIdCommandHandler : IRequestHandler<Acti
                 var result = await _cache.Activate(request.MechanicId.ToString());
 
                 if (result)
-                {
-
+                { 
                     return Result.Success(null, ResponseStatus.NoContent);
                 }
 

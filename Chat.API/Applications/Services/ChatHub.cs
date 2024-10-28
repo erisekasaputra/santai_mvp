@@ -3,7 +3,8 @@ using Chat.API.Domain.Events;
 using Core.Services.Interfaces;
 using Core.Utilities;
 using MediatR;
-using Microsoft.AspNetCore.SignalR; 
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Chat.API.Applications.Services;
 
@@ -19,14 +20,19 @@ public class ChatHub(
     private readonly ILogger<ChatHub> _logger = logger;
 
     public override Task OnConnectedAsync()
-    {
-        var user = Context.UserIdentifier;
-        if (user is null)
-        {
-            Context.Abort();
+    { 
+        if (Context?.User?.Identity == null || !Context.User.Identity.IsAuthenticated)
+        { 
+            Context?.Abort(); 
+            return Task.CompletedTask;  
         }
-     
+
         return base.OnConnectedAsync();
+    }
+
+    public override Task OnDisconnectedAsync(Exception? exception)
+    { 
+        return base.OnDisconnectedAsync(exception);
     }
 
     public async Task SendMessageToUser(
