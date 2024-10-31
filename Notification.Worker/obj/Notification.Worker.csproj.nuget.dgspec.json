@@ -275,6 +275,10 @@
               "target": "Package",
               "version": "[8.2.5, )"
             },
+            "MessagePack": {
+              "target": "Package",
+              "version": "[3.0.238-rc.1, )"
+            },
             "Microsoft.AspNetCore.SignalR.StackExchangeRedis": {
               "target": "Package",
               "version": "[8.0.8, )"

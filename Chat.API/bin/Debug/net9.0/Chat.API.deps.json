@@ -13,6 +13,7 @@
           "Core": "1.0.0",
           "MassTransit": "8.2.6-develop.2026",
           "MassTransit.RabbitMQ": "8.2.6-develop.2026",
+          "MessagePack": "3.0.238-rc.1",
           "Microsoft.AspNetCore.OpenApi": "9.0.0-preview.6.24328.4",
           "Microsoft.AspNetCore.SignalR.StackExchangeRedis": "9.0.0-rc.1.24452.1",
           "Microsoft.Extensions.Caching.Memory": "9.0.0-rc.2.24473.5",
@@ -268,27 +269,28 @@
           }
         }
       },
-      "MessagePack/2.5.108": {
+      "MessagePack/3.0.238-rc.1": {
         "dependencies": {
-          "MessagePack.Annotations": "2.5.108",
-          "Microsoft.NET.StringTools": "17.4.0",
-          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
+          "MessagePack.Annotations": "3.0.238-rc.1",
+          "MessagePackAnalyzer": "3.0.238-rc.1",
+          "Microsoft.NET.StringTools": "17.11.4"
         },
         "runtime": {
-          "lib/net6.0/MessagePack.dll": {
-            "assemblyVersion": "2.5.0.0",
-            "fileVersion": "2.5.108.51978"
+          "lib/net8.0/MessagePack.dll": {
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.0.238.43850"
           }
         }
       },
-      "MessagePack.Annotations/2.5.108": {
+      "MessagePack.Annotations/3.0.238-rc.1": {
         "runtime": {
           "lib/netstandard2.0/MessagePack.Annotations.dll": {
-            "assemblyVersion": "2.5.0.0",
-            "fileVersion": "2.5.108.51978"
+            "assemblyVersion": "3.0.0.0",
+            "fileVersion": "3.0.238.43850"
           }
         }
       },
+      "MessagePackAnalyzer/3.0.238-rc.1": {},
       "Microsoft.AspNetCore.Authentication.Google/9.0.0-preview.7.24406.2": {
         "runtime": {
           "lib/net9.0/Microsoft.AspNetCore.Authentication.Google.dll": {
@@ -340,7 +342,7 @@
       },
       "Microsoft.AspNetCore.SignalR.StackExchangeRedis/9.0.0-rc.1.24452.1": {
         "dependencies": {
-          "MessagePack": "2.5.108",
+          "MessagePack": "3.0.238-rc.1",
           "Microsoft.Extensions.Options": "9.0.0-rc.2.24473.5",
           "StackExchange.Redis": "2.8.12"
         },
@@ -498,12 +500,6 @@
       "Microsoft.Extensions.Caching.Abstractions/9.0.0-rc.2.24473.5": {
         "dependencies": {
           "Microsoft.Extensions.Primitives": "9.0.0-rc.2.24473.5"
-        },
-        "runtime": {
-          "lib/net9.0/Microsoft.Extensions.Caching.Abstractions.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.47305"
-          }
         }
       },
       "Microsoft.Extensions.Caching.Memory/9.0.0-rc.2.24473.5": {
@@ -513,12 +509,6 @@
           "Microsoft.Extensions.Logging.Abstractions": "9.0.0-rc.2.24473.5",
           "Microsoft.Extensions.Options": "9.0.0-rc.2.24473.5",
           "Microsoft.Extensions.Primitives": "9.0.0-rc.2.24473.5"
-        },
-        "runtime": {
-          "lib/net9.0/Microsoft.Extensions.Caching.Memory.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.47305"
-          }
         }
       },
       "Microsoft.Extensions.Caching.StackExchangeRedis/9.0.0-preview.7.24406.2": {
@@ -545,14 +535,7 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-rc.2.24473.5"
         }
       },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.0-rc.2.24473.5": {
-        "runtime": {
-          "lib/net9.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.47305"
-          }
-        }
-      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.0-rc.2.24473.5": {},
       "Microsoft.Extensions.Diagnostics.Abstractions/9.0.0-rc.1.24431.7": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-rc.2.24473.5",
@@ -592,34 +575,15 @@
       "Microsoft.Extensions.Logging.Abstractions/9.0.0-rc.2.24473.5": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-rc.2.24473.5"
-        },
-        "runtime": {
-          "lib/net9.0/Microsoft.Extensions.Logging.Abstractions.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.47305"
-          }
         }
       },
       "Microsoft.Extensions.Options/9.0.0-rc.2.24473.5": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-rc.2.24473.5",
           "Microsoft.Extensions.Primitives": "9.0.0-rc.2.24473.5"
-        },
-        "runtime": {
-          "lib/net9.0/Microsoft.Extensions.Options.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.47305"
-          }
         }
       },
-      "Microsoft.Extensions.Primitives/9.0.0-rc.2.24473.5": {
-        "runtime": {
-          "lib/net9.0/Microsoft.Extensions.Primitives.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.47305"
-          }
-        }
-      },
+      "Microsoft.Extensions.Primitives/9.0.0-rc.2.24473.5": {},
       "Microsoft.Identity.Client/4.64.0": {
         "dependencies": {
           "Microsoft.IdentityModel.Abstractions": "8.0.0",
@@ -708,15 +672,11 @@
           }
         }
       },
-      "Microsoft.NET.StringTools/17.4.0": {
-        "dependencies": {
-          "System.Memory": "4.5.5",
-          "System.Runtime.CompilerServices.Unsafe": "6.0.0"
-        },
+      "Microsoft.NET.StringTools/17.11.4": {
         "runtime": {
-          "lib/net7.0/Microsoft.NET.StringTools.dll": {
+          "lib/net8.0/Microsoft.NET.StringTools.dll": {
             "assemblyVersion": "1.0.0.0",
-            "fileVersion": "17.4.0.51802"
+            "fileVersion": "17.11.4.40609"
           }
         }
       },
@@ -895,22 +855,7 @@
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         }
       },
-      "System.Diagnostics.EventLog/9.0.0-rc.2.24473.5": {
-        "runtime": {
-          "lib/net9.0/System.Diagnostics.EventLog.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.47305"
-          }
-        },
-        "runtimeTargets": {
-          "runtimes/win/lib/net9.0/System.Diagnostics.EventLog.dll": {
-            "rid": "win",
-            "assetType": "runtime",
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.47305"
-          }
-        }
-      },
+      "System.Diagnostics.EventLog/9.0.0-rc.2.24473.5": {},
       "System.Drawing.Common/9.0.0-preview.7.24405.4": {
         "dependencies": {
           "Microsoft.Win32.SystemEvents": "9.0.0-preview.7.24405.7"
@@ -1247,19 +1192,26 @@
       "path": "mediatr.contracts/2.0.1",
       "hashPath": "mediatr.contracts.2.0.1.nupkg.sha512"
     },
-    "MessagePack/2.5.108": {
+    "MessagePack/3.0.238-rc.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-kcVRbdWP3xNWLZmmpm4DFO+kuXf6mUR2mHZ27WoZIEFIv9hazuUd80injXhNrZnlq/FklAdCsLOil5M76I4Ndg==",
-      "path": "messagepack/2.5.108",
-      "hashPath": "messagepack.2.5.108.nupkg.sha512"
+      "sha512": "sha512-gAVmHb2gswXviGFpAmUgGBVvZEjYGph7Co5hp6IbshEooIuZT34Rv4YcBKvVnUCHdoqxQvK6DZIOPSLSYv3LjQ==",
+      "path": "messagepack/3.0.238-rc.1",
+      "hashPath": "messagepack.3.0.238-rc.1.nupkg.sha512"
     },
-    "MessagePack.Annotations/2.5.108": {
+    "MessagePack.Annotations/3.0.238-rc.1": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-28aNCvfJClgwaKr26gf2S6LT+C1PNyPxiG+ihYpy8uCJsRLJEDoCt2I0Uk5hqOPQ8P8hI0ESy520oMkZkPmsOQ==",
-      "path": "messagepack.annotations/2.5.108",
-      "hashPath": "messagepack.annotations.2.5.108.nupkg.sha512"
+      "sha512": "sha512-yvnpKGuxZuFHnYZ9N8WQXQn0J28w2f0evh0RekDtuxIEKGPw/qQLQXyQWFzMunfb/+pKTWYlUZR1rvvNcwl10A==",
+      "path": "messagepack.annotations/3.0.238-rc.1",
+      "hashPath": "messagepack.annotations.3.0.238-rc.1.nupkg.sha512"
+    },
+    "MessagePackAnalyzer/3.0.238-rc.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qweXSZ+3mrf3RAqBs71vrF20SiNmqQdbrrt/L3749jh7OPpvdyZcHhOd20BSk+THQXgmmQfqF5F3o/J7S7tGCQ==",
+      "path": "messagepackanalyzer/3.0.238-rc.1",
+      "hashPath": "messagepackanalyzer.3.0.238-rc.1.nupkg.sha512"
     },
     "Microsoft.AspNetCore.Authentication.Google/9.0.0-preview.7.24406.2": {
       "type": "package",
@@ -1527,12 +1479,12 @@
       "path": "microsoft.identitymodel.tokens/8.0.0",
       "hashPath": "microsoft.identitymodel.tokens.8.0.0.nupkg.sha512"
     },
-    "Microsoft.NET.StringTools/17.4.0": {
+    "Microsoft.NET.StringTools/17.11.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-06T6Hqfs3JDIaBvJaBRFFMIdU7oE0OMab5Xl8LKQjWPxBQr3BgVFKMQPTC+GsSEuYREWmK6g5eOd7Xqd9p1YCA==",
-      "path": "microsoft.net.stringtools/17.4.0",
-      "hashPath": "microsoft.net.stringtools.17.4.0.nupkg.sha512"
+      "sha512": "sha512-mudqUHhNpeqIdJoUx2YDWZO/I9uEDYVowan89R6wsomfnUJQk6HteoQTlNjZDixhT2B4IXMkMtgZtoceIjLRmA==",
+      "path": "microsoft.net.stringtools/17.11.4",
+      "hashPath": "microsoft.net.stringtools.17.11.4.nupkg.sha512"
     },
     "Microsoft.NETCore.Platforms/3.1.0": {
       "type": "package",

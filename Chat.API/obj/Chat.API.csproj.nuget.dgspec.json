@@ -71,6 +71,10 @@
               "target": "Package",
               "version": "[8.2.6-develop.2026, )"
             },
+            "MessagePack": {
+              "target": "Package",
+              "version": "[3.0.238-rc.1, )"
+            },
             "Microsoft.AspNetCore.OpenApi": {
               "target": "Package",
               "version": "[9.0.0-preview.6.24328.4, )"

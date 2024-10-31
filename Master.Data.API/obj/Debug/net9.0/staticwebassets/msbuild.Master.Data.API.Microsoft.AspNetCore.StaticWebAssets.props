@@ -12,8 +12,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>38jn93up96</Fingerprint>
-      <Integrity>7YmPow9U3vuZtHXdMkuGv8YVo+TetMR1KGJLo43TOTc=</Integrity>
+      <Fingerprint>e2c95nzpxj</Fingerprint>
+      <Integrity>VvZrOLCmACZjeS1dx7hlK44j83SS1NBtyNiw9IrTro8=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\BasicInspection\basic-inspection.json'))</OriginalItemSpec>
@@ -30,8 +30,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>z6udjxu1z3</Fingerprint>
-      <Integrity>GxHxR5ylLXQTK2nFaqgvvvxLYnWP2G87sSGzEspG6c4=</Integrity>
+      <Fingerprint>1lxxpzjhll</Fingerprint>
+      <Integrity>u0L59W/ggr7jUczKhS1CZmhHKd/2iOSd2GaHWs7MfwI=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\CancellationFee\cancellation-fee.json'))</OriginalItemSpec>
@@ -48,8 +48,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>6iclky0jm6</Fingerprint>
-      <Integrity>crGZiVuPPyq2whSiEAMOc2vHW4DB1ciQUqUEsqznbzI=</Integrity>
+      <Fingerprint>5ripm4qw9r</Fingerprint>
+      <Integrity>z85q97dmC5ul1RRclSs5XoErAqI5GvFy0sZGsphwDT0=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\PreServiceInspection\pre-service-inspection.json'))</OriginalItemSpec>

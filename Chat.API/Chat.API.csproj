@@ -13,6 +13,7 @@
     <PackageReference Include="AWSSDK.DynamoDBv2" Version="4.0.0-preview.3" />
     <PackageReference Include="MassTransit" Version="8.2.6-develop.2026" />
     <PackageReference Include="MassTransit.RabbitMQ" Version="8.2.6-develop.2026" />
+    <PackageReference Include="MessagePack" Version="3.0.238-rc.1" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.0-preview.6.24328.4" />
     <PackageReference Include="Microsoft.AspNetCore.SignalR.StackExchangeRedis" Version="9.0.0-rc.1.24452.1" />
     <PackageReference Include="Microsoft.Extensions.Caching.Memory" Version="9.0.0-rc.2.24473.5" />

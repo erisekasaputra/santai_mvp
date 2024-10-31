@@ -987,12 +987,6 @@
       "Microsoft.Extensions.Caching.Abstractions/9.0.0-rc.2.24473.5": {
         "dependencies": {
           "Microsoft.Extensions.Primitives": "9.0.0-rc.2.24473.5"
-        },
-        "runtime": {
-          "lib/net9.0/Microsoft.Extensions.Caching.Abstractions.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.47305"
-          }
         }
       },
       "Microsoft.Extensions.Caching.Memory/9.0.0-rc.2.24473.5": {
@@ -1002,12 +996,6 @@
           "Microsoft.Extensions.Logging.Abstractions": "9.0.0-rc.2.24473.5",
           "Microsoft.Extensions.Options": "9.0.0-rc.2.24473.5",
           "Microsoft.Extensions.Primitives": "9.0.0-rc.2.24473.5"
-        },
-        "runtime": {
-          "lib/net9.0/Microsoft.Extensions.Caching.Memory.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.47305"
-          }
         }
       },
       "Microsoft.Extensions.Caching.StackExchangeRedis/9.0.0-preview.7.24406.2": {
@@ -1083,14 +1071,7 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-rc.2.24473.5"
         }
       },
-      "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.0-rc.2.24473.5": {
-        "runtime": {
-          "lib/net9.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.47305"
-          }
-        }
-      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.0-rc.2.24473.5": {},
       "Microsoft.Extensions.DependencyModel/9.0.0-preview.6.24327.7": {
         "dependencies": {
           "System.Text.Encodings.Web": "9.0.0-preview.6.24327.7",
@@ -1183,12 +1164,6 @@
       "Microsoft.Extensions.Logging.Abstractions/9.0.0-rc.2.24473.5": {
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-rc.2.24473.5"
-        },
-        "runtime": {
-          "lib/net9.0/Microsoft.Extensions.Logging.Abstractions.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.47305"
-          }
         }
       },
       "Microsoft.Extensions.Logging.Configuration/9.0.0-preview.6.24327.7": {
@@ -1243,12 +1218,6 @@
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-rc.2.24473.5",
           "Microsoft.Extensions.Primitives": "9.0.0-rc.2.24473.5"
-        },
-        "runtime": {
-          "lib/net9.0/Microsoft.Extensions.Options.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.47305"
-          }
         }
       },
       "Microsoft.Extensions.Options.ConfigurationExtensions/9.0.0-preview.6.24327.7": {
@@ -1260,14 +1229,7 @@
           "Microsoft.Extensions.Primitives": "9.0.0-rc.2.24473.5"
         }
       },
-      "Microsoft.Extensions.Primitives/9.0.0-rc.2.24473.5": {
-        "runtime": {
-          "lib/net9.0/Microsoft.Extensions.Primitives.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.47305"
-          }
-        }
-      },
+      "Microsoft.Extensions.Primitives/9.0.0-rc.2.24473.5": {},
       "Microsoft.Identity.Client/4.64.0": {
         "dependencies": {
           "Microsoft.IdentityModel.Abstractions": "8.0.0",
@@ -1615,22 +1577,7 @@
           "System.Runtime.CompilerServices.Unsafe": "6.0.0"
         }
       },
-      "System.Diagnostics.EventLog/9.0.0-rc.2.24473.5": {
-        "runtime": {
-          "lib/net9.0/System.Diagnostics.EventLog.dll": {
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.47305"
-          }
-        },
-        "runtimeTargets": {
-          "runtimes/win/lib/net9.0/System.Diagnostics.EventLog.dll": {
-            "rid": "win",
-            "assetType": "runtime",
-            "assemblyVersion": "9.0.0.0",
-            "fileVersion": "9.0.24.47305"
-          }
-        }
-      },
+      "System.Diagnostics.EventLog/9.0.0-rc.2.24473.5": {},
       "System.Diagnostics.PerformanceCounter/6.0.1": {
         "dependencies": {
           "System.Configuration.ConfigurationManager": "9.0.0-rc.2.24473.5"

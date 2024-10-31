@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "QCl/dh82g1k=",
+  "dgSpecHash": "1dsdwTnYi84=",
   "success": true,
   "projectFilePath": "C:\\Projects\\Projects\\Santai.MVP\\Notification.Worker\\Notification.Worker.csproj",
   "expectedPackageFiles": [
@@ -26,8 +26,9 @@
     "C:\\Users\\erise\\.nuget\\packages\\masstransit.rabbitmq\\8.2.5\\masstransit.rabbitmq.8.2.5.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\mediatr\\12.4.0\\mediatr.12.4.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\mediatr.contracts\\2.0.1\\mediatr.contracts.2.0.1.nupkg.sha512",
-    "C:\\Users\\erise\\.nuget\\packages\\messagepack\\2.5.108\\messagepack.2.5.108.nupkg.sha512",
-    "C:\\Users\\erise\\.nuget\\packages\\messagepack.annotations\\2.5.108\\messagepack.annotations.2.5.108.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\messagepack\\3.0.238-rc.1\\messagepack.3.0.238-rc.1.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\messagepack.annotations\\3.0.238-rc.1\\messagepack.annotations.3.0.238-rc.1.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\messagepackanalyzer\\3.0.238-rc.1\\messagepackanalyzer.3.0.238-rc.1.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.aspnetcore.authentication.google\\9.0.0-preview.7.24406.2\\microsoft.aspnetcore.authentication.google.9.0.0-preview.7.24406.2.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.aspnetcore.authentication.jwtbearer\\9.0.0-preview.7.24406.2\\microsoft.aspnetcore.authentication.jwtbearer.9.0.0-preview.7.24406.2.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.aspnetcore.http.features\\5.0.17\\microsoft.aspnetcore.http.features.5.0.17.nupkg.sha512",
@@ -93,7 +94,7 @@
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.identitymodel.protocols\\8.0.0\\microsoft.identitymodel.protocols.8.0.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.identitymodel.protocols.openidconnect\\8.0.0\\microsoft.identitymodel.protocols.openidconnect.8.0.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.identitymodel.tokens\\8.0.0\\microsoft.identitymodel.tokens.8.0.0.nupkg.sha512",
-    "C:\\Users\\erise\\.nuget\\packages\\microsoft.net.stringtools\\17.4.0\\microsoft.net.stringtools.17.4.0.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\microsoft.net.stringtools\\17.11.4\\microsoft.net.stringtools.17.11.4.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.netcore.platforms\\3.1.0\\microsoft.netcore.platforms.3.1.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.netcore.targets\\1.1.3\\microsoft.netcore.targets.1.1.3.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\microsoft.sqlserver.server\\1.0.0\\microsoft.sqlserver.server.1.0.0.nupkg.sha512",
@@ -151,16 +152,5 @@
     "C:\\Users\\erise\\.nuget\\packages\\system.windows.extensions\\4.7.0\\system.windows.extensions.4.7.0.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\timezoneconverter\\6.1.0\\timezoneconverter.6.1.0.nupkg.sha512"
   ],
-  "logs": [
-    {
-      "code": "NU1902",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "Package 'MessagePack' 2.5.108 has a known moderate severity vulnerability, https://github.com/advisories/GHSA-4qm4-8hg2-g2xm",
-      "libraryId": "MessagePack",
-      "targetGraphs": [
-        "net9.0"
-      ]
-    }
-  ]
+  "logs": []
 }
