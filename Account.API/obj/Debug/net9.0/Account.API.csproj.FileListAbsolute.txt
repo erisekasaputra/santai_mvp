@@ -712,4 +712,3 @@ C:\Projects\Projects\Santai.MVP\Account.API\obj\Debug\net9.0\refint\Account.API.
 C:\Projects\Projects\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.pdb
 C:\Projects\Projects\Santai.MVP\Account.API\obj\Debug\net9.0\Account.API.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Account.API\obj\Debug\net9.0\ref\Account.API.dll
-C:\Projects\Projects\Santai.MVP\Account.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
