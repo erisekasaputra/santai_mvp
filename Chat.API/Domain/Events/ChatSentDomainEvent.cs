@@ -2,4 +2,13 @@
 
 namespace Chat.API.Domain.Events;
 
-public record ChatSentDomainEvent(Guid OriginUserId, Guid DestinationUserId, Guid MessageId, string Text, long Timestamp) : INotification;
+public record ChatSentDomainEvent(
+    Guid OrderId,
+    Guid OriginUserId,
+    Guid DestinationUserId,
+    Guid MessageId,
+    string Text,
+    string Attachment,
+    Guid ReplyMessageId,
+    string ReplyMessageText,
+    long Timestamp) : INotification;

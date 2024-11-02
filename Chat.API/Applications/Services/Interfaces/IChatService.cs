@@ -1,20 +1,8 @@
 ﻿using Amazon.DynamoDBv2.Model;
+using Chat.API.Domain.Models;
 
 namespace Chat.API.Applications.Services.Interfaces;
 
 public interface IChatService
-{
-    Task<string> SaveChatMessageAsync(
-        string originUserId,
-        string destinationUserId,
-        string text,
-        string? replyMessageId,
-        string? replyMessageText,
-        long timestamp);
-
-    Task<List<Dictionary<string, AttributeValue>>> GetMessageByTimestamp(
-        string originUserId,
-        string destinationUserId,
-        long timestamp,
-        bool forward = true);
+{ 
 }
