@@ -1,16 +1,10 @@
-﻿using static System.Net.Mime.MediaTypeNames;
+﻿using Chat.API.Domain.Models; 
 
 namespace Chat.API.Applications.Services.Interfaces;
 
 public interface IChatClient
 {
-    Task ReceiveChat(
-        string originUserId,
-        string messageId,
-        string text,
-        string replyMessageId, 
-        string replyMessageText,
-        string timestamp);
-
+    Task ReceiveChat(Conversation conversation); 
     Task InternalServerError(string errorMessage);
+    Task ChatBadRequest(Guid messageId, Guid orderId);
 }

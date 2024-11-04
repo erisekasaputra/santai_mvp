@@ -1,28 +1,38 @@
-﻿namespace Chat.API.Domain.Models;
+﻿using Amazon.DynamoDBv2.DataModel;
 
+namespace Chat.API.Domain.Models;
+
+[DynamoDBTable("ChatContact")] 
 public class ChatContact
 {
-    public Guid OrderId { get; set; }
-    public Guid BuyerId { get; set; }
-    public string BuyerName { get; set; }
-    public Guid? MechanicId { get; set; }
-    public string? MechanicName { get; set; }
-    public string? LastChatText { get; set; }
-    public long LastChatTimestamp { get; set; }
+    [DynamoDBHashKey] 
+    public Guid OrderId { get; init; } 
+    [DynamoDBRangeKey]  
+    public long LastChatTimestamp { get; init; } 
+    public Guid BuyerId { get; init; } 
+    public string BuyerName { get; init; } 
+    public Guid? MechanicId { get; set; } 
+    public string? MechanicName { get; set; } 
+    public string? LastChatText { get; set; } 
     public DateTime? OrderCompletedAtUtc { get; set; }
     public DateTime? OrderChatExpiredAtUtc { get; set; }
     public bool IsOrderCompleted { get; set; }
+    public long ChatUpdateTimestamp { get; set; }
 
-    public ChatContact(Guid orderId, Guid buyerId, string buyerName, long lastChatTimestamp)
+    public ChatContact()
+    {
+        
+    }
+    public ChatContact(Guid orderId, Guid buyerId, string buyerName)
     {
         OrderId = orderId;
         BuyerId = buyerId;
         BuyerName = buyerName;
-        LastChatTimestamp = lastChatTimestamp;
+        LastChatTimestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         IsOrderCompleted = false;
     }
 
-    public void UpdateLastChat(string lastChatText, long lastChatTimestamp)
+    public void UpdateLastChat(string lastChatText)
     {
         if (IsOrderCompleted)
         {
@@ -30,7 +40,7 @@ public class ChatContact
         }
 
         LastChatText = lastChatText;
-        LastChatTimestamp = lastChatTimestamp;
+        ChatUpdateTimestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
     }
 
     public void SetMechanic(Guid mechanicId, string mechanicName)
@@ -38,10 +48,16 @@ public class ChatContact
         if (MechanicId is not null || MechanicId.HasValue || IsOrderCompleted)
         {
             return;
-        } 
+        }
 
         MechanicId = mechanicId;
         MechanicName = mechanicName;
+    }
+
+    public void ResetMechanic()
+    {
+        MechanicId = null;  
+        MechanicName = null;
     }
 
     public void SetOrderComplete(int totalHoursChatActiveAfterChatComplete = 24)

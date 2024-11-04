@@ -1,1 +1,78 @@
-[]
+[
+  {
+    "ContainingType": "Chat.API.Apis.MapChatApi",
+    "Method": "GetChatContacts",
+    "RelativePath": "api/v1/chat/contacts",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ChatContactUserType",
+        "Type": "Chat.API.Domain.Enumerations.ChatContactUserType",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Chat.API.Apis.MapChatApi",
+    "Method": "GetChatContactByOrderId",
+    "RelativePath": "api/v1/chat/contacts/order/{orderId}",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "orderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "Chat.API.Apis.MapChatApi",
+    "Method": "GetLatestChat",
+    "RelativePath": "api/v1/chat/conversations",
+    "HttpMethod": "GET",
+    "IsController": false,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "OrderId",
+        "Type": "System.Guid",
+        "IsRequired": true
+      },
+      {
+        "Name": "Timestamp",
+        "Type": "System.Int64",
+        "IsRequired": true
+      },
+      {
+        "Name": "Forward",
+        "Type": "System.Boolean",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Void",
+        "MediaTypes": [],
+        "StatusCode": 200
+      }
+    ]
+  }
+]

@@ -1,17 +1,26 @@
-﻿namespace Chat.API.Domain.Models;
+﻿using Amazon.DynamoDBv2.DataModel;
 
-public class Conversation 
+namespace Chat.API.Domain.Models;
+
+[DynamoDBTable("Conversation")] 
+public class Conversation
 {
-    public Guid MessageId { get; set; }
-    public Guid OrderId { get; set; }
-    public Guid OriginUserId { get; set; }
-    public Guid DestinationUserId { get; set; } 
+    [DynamoDBHashKey] // Partition Key
+    public Guid MessageId { get; init; }
+    public Guid OrderId { get; init; }
+    public Guid OriginUserId { get; init; }
+    public Guid DestinationUserId { get; init; }
     public string Text { get; set; }
     public string? Attachment { get; set; }
     public Guid? ReplyMessageId { get; set; }
     public string? ReplyMessageText { get; set; }
-    public long TimeStamp { get; set; }
+    [DynamoDBRangeKey] // Sort Key
+    public long Timestamp { get; init; }
 
+    public Conversation()
+    {
+        
+    }
     public Conversation(
         Guid orderId,
         Guid originUserId,
@@ -21,7 +30,7 @@ public class Conversation
         Guid? replyMessageId,
         string? replyMessageText)
     {
-        MessageId = Guid.NewGuid(); 
+        MessageId = Guid.NewGuid();
         OrderId = orderId;
         OriginUserId = originUserId;
         DestinationUserId = destinationUserId;
@@ -29,28 +38,6 @@ public class Conversation
         Attachment = attachment;
         ReplyMessageId = replyMessageId;
         ReplyMessageText = replyMessageText;
-        TimeStamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-    }
-
-    public Conversation(
-        Guid messageId,
-        Guid orderId,
-        Guid originUserId,
-        Guid destinationUserId,
-        string text,
-        string? attachment,
-        Guid? replyMessageId,
-        string? replyMessageText,
-        long timeStamp)
-    {
-        MessageId = messageId;
-        OrderId = orderId;
-        OriginUserId = originUserId;
-        DestinationUserId = destinationUserId;
-        Text = text;
-        Attachment = attachment;
-        ReplyMessageId = replyMessageId;
-        ReplyMessageText = replyMessageText;
-        TimeStamp = timeStamp;
-    }
-} 
+        Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+    } 
+}

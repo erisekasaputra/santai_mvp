@@ -1,11 +1,11 @@
-﻿using Amazon;
-using Amazon.DynamoDBv2;
-using Amazon.DynamoDBv2.Model;
+﻿using Amazon; 
+using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel; 
 using Amazon.Runtime;
 using Chat.API.Applications.Services.Interfaces;
 using Chat.API.Domain.Models;
 using Core.Configurations;
-using Core.Services.Interfaces;
+using Core.Services.Interfaces; 
 using Microsoft.Extensions.Options;
 
 namespace Chat.API.Applications.Services;
@@ -13,20 +13,14 @@ namespace Chat.API.Applications.Services;
 public class DynamoDBChatService : IChatService
 {
     private readonly IEncryptionService _encryptionService;
-    private readonly AmazonDynamoDBClient _dynamoDbClient; 
-
-    private readonly string ConversationTableName;
-    private readonly string ConversationPartitionKey;
-    private readonly string ConversationSortKey;
-
-    private readonly string ChatContactTableName;
-    private readonly string ChatContactPartitionKey;
-    private readonly string ChatContactSortKey;
+    //private readonly AmazonDynamoDBClient _dynamoDbClient;
+    private readonly IDynamoDBContext _dynamoDBContext; 
 
     public DynamoDBChatService( 
         IEncryptionService encryptionService,
         IConfiguration configuration,
-        IOptionsMonitor<AWSIAMConfiguration> awsIamConfiguration)
+        IOptionsMonitor<AWSIAMConfiguration> awsIamConfiguration,
+        IDynamoDBContext dynamoDBContext)
     {
         var iam = awsIamConfiguration.CurrentValue;
         // Create AWS credentials
@@ -34,339 +28,336 @@ public class DynamoDBChatService : IChatService
 
         // Initialize DynamoDB client with credentials and region
         var regionEndpoint = RegionEndpoint.GetBySystemName(iam.Region);
-        _dynamoDbClient = new AmazonDynamoDBClient(credentials, regionEndpoint);
+        //_dynamoDbClient = new AmazonDynamoDBClient(credentials, regionEndpoint);
         _encryptionService = encryptionService;
-
-
-        ConversationTableName = configuration["DynamoDB:Chat:ConversationTableName"] ?? throw new Exception("ConversationTableName name should be set on initialization");
-        ConversationPartitionKey = configuration["DynamoDB:Chat:ConversationPartitionKey"] ?? throw new Exception("ConversationPartitionKey key should be set on initialization");
-        ConversationSortKey = configuration["DynamoDB:Chat:ConversationSortKey"] ?? throw new Exception("ConversationSortKey key should be set on initialization");
-
-
-        ChatContactTableName = configuration["DynamoDB:Chat:ChatContactTableName"] ?? throw new Exception("ChatContactTableName name should be set on initialization");
-        ChatContactPartitionKey = configuration["DynamoDB:Chat:ChatContactPartitionKey"] ?? throw new Exception("ChatContactPartitionKey key should be set on initialization");
-        ChatContactSortKey = configuration["DynamoDB:Chat:ChatContactSortKey"] ?? throw new Exception("ChatContactSortKey key should be set on initialization");
+        _dynamoDBContext = dynamoDBContext; 
     }
 
     public async Task<bool> SaveChatMessageAsync(Conversation conversation)
     { 
-        string encryptedText;
+        var chatContact = await GetChatContactByOrderId(conversation.OrderId) ?? throw new InvalidOperationException("Chat session is no longer available");
+
+        if (chatContact.IsOrderCompleted && chatContact.OrderChatExpiredAtUtc is not null && chatContact.OrderChatExpiredAtUtc <= DateTime.UtcNow)
+        {
+            await DeleteChatContact(conversation.OrderId);
+            throw new InvalidOperationException("Chat session is no longer available");
+        }
+
+        if (chatContact.MechanicId is null || chatContact.MechanicId == Guid.Empty)
+        {
+            throw new InvalidOperationException("Waiting for mechanic assignment");
+        }
+
         try
         {
-            encryptedText = string.IsNullOrEmpty(conversation.Text) ? string.Empty : await _encryptionService.EncryptAsync(conversation.Text);
+            conversation.Text = string.IsNullOrEmpty(conversation.Text)
+                ? string.Empty
+                : await _encryptionService.EncryptAsync(conversation.Text); 
         }
         catch (Exception)
         {
-            encryptedText = string.Empty; 
+            conversation.Text = string.Empty; 
         }
 
-        string encryptedReplyMessageText;
         try
         {
-            encryptedReplyMessageText = string.IsNullOrEmpty(conversation.ReplyMessageText) ? string.Empty : await _encryptionService.EncryptAsync(conversation.ReplyMessageText);
+            conversation.ReplyMessageText = string.IsNullOrEmpty(conversation.ReplyMessageText)
+                ? string.Empty
+                : await _encryptionService.EncryptAsync(conversation.ReplyMessageText);
         }
         catch (Exception)
         {
-            encryptedReplyMessageText = string.Empty; 
+            conversation.ReplyMessageText = string.Empty;
         }
 
-        var item = new Dictionary<string, AttributeValue>
-        {
-            { ConversationPartitionKey, new AttributeValue { S = conversation.MessageId.ToString() } },
-            { ConversationSortKey, new AttributeValue { N = conversation.TimeStamp.ToString() } },
-            { nameof(conversation.OrderId), new AttributeValue { S = conversation.OrderId.ToString() } },
-            { nameof(conversation.OriginUserId), new AttributeValue { S = conversation.OriginUserId.ToString() } },
-            { nameof(conversation.DestinationUserId), new AttributeValue { S = conversation.DestinationUserId.ToString() } },
-            { nameof(conversation.Text), new AttributeValue { S = encryptedText } },
-            { nameof(conversation.Attachment), new AttributeValue { S = string.IsNullOrEmpty(conversation.Attachment) ? string.Empty : conversation.Attachment } },
-            { nameof(conversation.ReplyMessageId), new AttributeValue { S = conversation.ReplyMessageId is null ? string.Empty : conversation.ReplyMessageId.ToString() } },
-            { nameof(conversation.ReplyMessageText), new AttributeValue { S = encryptedReplyMessageText } }
-        };
-
-        var request = new PutItemRequest
-        {
-            TableName = ConversationTableName,
-            Item = item
-        };
+        chatContact.UpdateLastChat(conversation.Text);
 
         try
-        {
-            await _dynamoDbClient.PutItemAsync(request);
+        { 
+            await _dynamoDBContext.SaveAsync(conversation);
+            await _dynamoDBContext.SaveAsync(chatContact);
             return true;
         }
         catch (Exception ex)
-        { 
-            throw new Exception("Failed to put item into DynamoDB", ex);
-        } 
+        {
+            throw new Exception("Failed to save conversation into DynamoDB", ex);
+        }
+         
     }
 
-    public async Task<List<Conversation>?> GetMessageByTimestamp(Guid orderId, long timestamp, bool forward = true)
+    public async Task<List<Conversation>?> GetMessageByOrderIdAndTimestamp(Guid orderId, long timestamp, bool forward = true)
     {
-        var request = new QueryRequest
-        {
-            TableName = ConversationTableName,
-            IndexName = "OrderId-TimeStamp-index", 
-            KeyConditionExpression = $"{nameof(Conversation.OrderId)} = :v_orderId AND {nameof(Conversation.TimeStamp)} {(forward ? ">" : "<")} :v_sortKey",
-            ExpressionAttributeValues = new Dictionary<string, AttributeValue>
+        // Configure QueryConfig
+        var queryConfig = new QueryOperationConfig
+        { 
+            IndexName = "OrderId-Timestamp-index",
+            KeyExpression = new Expression
             {
-                { ":v_orderId", new AttributeValue { S = orderId.ToString() } },
-                { ":v_sortKey", new AttributeValue { N = timestamp.ToString() } }
+                ExpressionStatement = $"#orderId = :orderId AND #timestamp {(forward ? ">" : "<")} :timestamp",
+                ExpressionAttributeNames = new Dictionary<string, string>
+                {
+                    { "#orderId", nameof(Conversation.OrderId) },
+                    { "#timestamp", nameof(Conversation.Timestamp) }
+                },
+                ExpressionAttributeValues = new Dictionary<string, DynamoDBEntry>
+                {
+                    { ":orderId", orderId.ToString() },
+                    { ":timestamp", timestamp }
+                }
             },
-            ScanIndexForward = forward,
+            BackwardSearch = !forward, // Set the order of scanning
             Limit = 100
         };
 
         try
         {
-            var response = await _dynamoDbClient.QueryAsync(request);
+            // Perform query using QueryAsync with QueryConfig
+            var search = _dynamoDBContext.FromQueryAsync<Conversation>(queryConfig);
+            var results = await search.GetNextSetAsync();
 
-            var tasks = response.Items.Select(async message =>
+            // Decrypt message text after retrieving the data
+            var tasks = results.Select(async conversation =>
             {
-                var stringMessageId = message.GetValueOrDefault(nameof(Conversation.MessageId))?.S;
-                var stringOrderId = message.GetValueOrDefault(nameof(Conversation.OrderId))?.S;
-                var stringOriginUserId = message.GetValueOrDefault(nameof(Conversation.OriginUserId))?.S;
-                var stringDestinationUserId = message.GetValueOrDefault(nameof(Conversation.DestinationUserId))?.S;
-                var stringText = message.GetValueOrDefault(nameof(Conversation.Text))?.S;
-                var stringAttachment = message.GetValueOrDefault(nameof(Conversation.Attachment))?.S;
-                var stringReplyMessageId = message.GetValueOrDefault(nameof(Conversation.ReplyMessageId))?.S;
-                var stringReplyMessageText = message.GetValueOrDefault(nameof(Conversation.ReplyMessageText))?.S;
-                var stringTimeStamp = message.GetValueOrDefault(nameof(Conversation.TimeStamp))?.N;
-
-                var messageId = string.IsNullOrEmpty(stringMessageId) ? Guid.Empty : Guid.Parse(stringMessageId);
-                var retrievedOrderId = string.IsNullOrEmpty(stringOrderId) ? Guid.Empty : Guid.Parse(stringOrderId);
-                var originUserId = string.IsNullOrEmpty(stringOriginUserId) ? Guid.Empty : Guid.Parse(stringOriginUserId);
-                var destinationUserId = string.IsNullOrEmpty(stringDestinationUserId) ? Guid.Empty : Guid.Parse(stringDestinationUserId);
-
-                string text;
                 try
                 {
-                    text = string.IsNullOrEmpty(stringText) ? string.Empty : await _encryptionService.DecryptAsync(stringText);
+                    conversation.Text = string.IsNullOrEmpty(conversation.Text)
+                        ? string.Empty
+                        : await _encryptionService.DecryptAsync(conversation.Text);
+
+                    if (!string.IsNullOrEmpty(conversation.ReplyMessageText))
+                    {
+                        conversation.ReplyMessageText = await _encryptionService.DecryptAsync(conversation.ReplyMessageText);
+                    }
                 }
                 catch (Exception)
                 {
-                    text = string.Empty;
+                    conversation.Text = string.Empty;
+                    conversation.ReplyMessageText = string.Empty;
                 }
 
-                var attachment = stringAttachment;
-                var replyMessageId = string.IsNullOrEmpty(stringReplyMessageId) ? Guid.Empty : Guid.Parse(stringReplyMessageId);
-                var replyMessageText = stringReplyMessageText;
-
-                if (!long.TryParse(stringTimeStamp, out long timeStamp))
-                {
-                    timeStamp = 0;
-                }
-
-                return new Conversation(
-                    messageId,
-                    retrievedOrderId,
-                    originUserId,
-                    destinationUserId,
-                    text,
-                    attachment,
-                    replyMessageId,
-                    replyMessageText,
-                    timeStamp);
+                return conversation;
             });
 
-            var results = await Task.WhenAll(tasks);
-            return [..results];
+            return [.. (await Task.WhenAll(tasks))];
         }
         catch (Exception ex)
-        { 
+        {
             throw new Exception("Error retrieving messages", ex);
         }
+         
     }
 
 
 
-    public async Task<bool> CreateOrderContact(ChatContact chatContact)
-    { 
-        string encryptedText;
+    public async Task<bool> CreateChatContact(ChatContact chatContact)
+    {
         try
         {
-            encryptedText = string.IsNullOrEmpty(chatContact.LastChatText)
-                            ? string.Empty
-                            : await _encryptionService.EncryptAsync(chatContact.LastChatText);
+            chatContact.LastChatText = string.IsNullOrEmpty(chatContact.LastChatText)
+                ? string.Empty
+                : await _encryptionService.EncryptAsync(chatContact.LastChatText);
         }
         catch (Exception)
         {
-            encryptedText = string.Empty; 
+            chatContact.LastChatText = string.Empty;
         }
-         
-        var item = new Dictionary<string, AttributeValue>
-        {
-            { ChatContactPartitionKey, new AttributeValue { S = chatContact.OrderId.ToString() } },
-            { ChatContactSortKey, new AttributeValue { N = chatContact.LastChatTimestamp.ToString() } },
-            { nameof(chatContact.OrderId), new AttributeValue { S = chatContact.OrderId.ToString() } },
-            { nameof(chatContact.BuyerId), new AttributeValue { S = chatContact.BuyerId.ToString() } },
-            { nameof(chatContact.BuyerName), new AttributeValue { S = chatContact.BuyerName } },
-            { nameof(chatContact.MechanicId), new AttributeValue { S = chatContact.MechanicId?.ToString() ?? string.Empty } },
-            { nameof(chatContact.MechanicName), new AttributeValue { S = chatContact.MechanicName ?? string.Empty } },
-            { nameof(chatContact.LastChatText), new AttributeValue { S = encryptedText } },
-            { nameof(chatContact.LastChatTimestamp), new AttributeValue { N = chatContact.LastChatTimestamp.ToString() } },
-            { nameof(chatContact.OrderCompletedAtUtc), new AttributeValue { S = chatContact.OrderCompletedAtUtc?.ToString("o") ?? string.Empty } }, 
-            { nameof(chatContact.OrderChatExpiredAtUtc), new AttributeValue { S = chatContact.OrderChatExpiredAtUtc?.ToString("o") ?? string.Empty } },
-            { nameof(chatContact.IsOrderCompleted), new AttributeValue { BOOL = chatContact.IsOrderCompleted } }
-        };
-
-        var request = new PutItemRequest
-        {
-            TableName = ChatContactTableName,
-            Item = item
-        };
 
         try
         {
-            await _dynamoDbClient.PutItemAsync(request);
+            // Save the ChatContact object directly to DynamoDB
+            await _dynamoDBContext.SaveAsync(chatContact);
             return true;
         }
         catch (Exception ex)
         {
-            throw new Exception("Failed to put item into DynamoDB", ex);
-        }
+            throw new Exception("Failed to save ChatContact into DynamoDB", ex);
+        } 
     }
 
 
-    public async Task<List<ChatContact>?> GetMessagesByBuyerId(Guid buyerId, long timestamp, bool forward = true)
+    public async Task<List<ChatContact>?> GetChatContactsByBuyerId(Guid buyerId)
     {
-        var request = new QueryRequest
+        var queryConfig = new QueryOperationConfig
         {
-            TableName = ChatContactTableName,
-            IndexName = "BuyerId-LastChatTimestamp-index", // GSI for BuyerId
-            KeyConditionExpression = $"{nameof(ChatContact.BuyerId)} = :v_buyerId AND {nameof(ChatContact.LastChatTimestamp)} {(forward ? " > " : " < ")} :v_sortKey",
-            ExpressionAttributeValues = new Dictionary<string, AttributeValue>
+            IndexName = "BuyerId-LastChatTimestamp-index",
+            KeyExpression = new Expression
             {
-                { ":v_buyerId", new AttributeValue { S = buyerId.ToString() } },
-                { ":v_sortKey", new AttributeValue { N = timestamp.ToString() } }
+                ExpressionStatement = $"#buyerId = :buyerId",
+                ExpressionAttributeNames = new Dictionary<string, string>
+                {
+                    { "#buyerId", nameof(ChatContact.BuyerId) }, 
+                },
+                ExpressionAttributeValues = new Dictionary<string, DynamoDBEntry>
+                {
+                    { ":buyerId", buyerId.ToString() } 
+                }
             },
-            ScanIndexForward = forward,
-            Limit = 100
+            BackwardSearch = false,
+            Limit = 1000
         };
 
         try
         {
-            var response = await _dynamoDbClient.QueryAsync(request);
+            var search = _dynamoDBContext.FromQueryAsync<ChatContact>(queryConfig);
+            var results = await search.GetNextSetAsync();
+             
+            var decryptedResults = new List<ChatContact>();
+            foreach (var chatContact in results)
+            { 
+                try
+                {
+                    if (!string.IsNullOrEmpty(chatContact.LastChatText))
+                    {
+                        chatContact.LastChatText = await _encryptionService.DecryptAsync(chatContact.LastChatText);
+                    }
+                }
+                catch (Exception)
+                {
+                    chatContact.LastChatText = string.Empty; // Jika gagal didekripsi, atur sebagai string kosong
+                }
 
-            var tasks = response.Items.Select(async item =>
-            {
-                return await MapChatContactAsync(item);
-            });
+                decryptedResults.Add(chatContact);
+            }
 
-            var results = await Task.WhenAll(tasks);
-            return [..results];
+            return decryptedResults;
         }
         catch (Exception ex)
         {
             throw new Exception("Error retrieving messages by BuyerId", ex);
-        }
+        } 
     }
 
-    public async Task<List<ChatContact>?> GetMessagesByMechanicId(Guid mechanicId, long timestamp, bool forward = true)
+    public async Task<List<ChatContact>?> GetChatContactsByMechanicId(Guid mechanicId)
     {
-        var request = new QueryRequest
+        var queryConfig = new QueryOperationConfig
         {
-            TableName = ChatContactTableName,
-            IndexName = "Mechanicid-LastChatTimestamp-index", // GSI for MechanicId
-            KeyConditionExpression = $"{nameof(ChatContact.MechanicId)} = :v_mechanicId AND {nameof(ChatContact.LastChatTimestamp)} {(forward ? ">" : "<")} :v_sortKey",
-            ExpressionAttributeValues = new Dictionary<string, AttributeValue>
+            IndexName = "MechanicId-LastChatTimestamp-index",
+            KeyExpression = new Expression
             {
-                { ":v_mechanicId", new AttributeValue { S = mechanicId.ToString() } },
-                { ":v_sortKey", new AttributeValue { N = timestamp.ToString() } }
+                ExpressionStatement = $"#mechanicId = :mechanicId",
+                ExpressionAttributeNames = new Dictionary<string, string>
+                {
+                    { "#mechanicId", nameof(ChatContact.MechanicId) }
+                },
+                ExpressionAttributeValues = new Dictionary<string, DynamoDBEntry>
+                {
+                    { ":mechanicId", mechanicId.ToString() } 
+                }
             },
-            ScanIndexForward = forward,
-            Limit = 100
+            BackwardSearch = false,
+            Limit = 1000
         };
 
         try
         {
-            var response = await _dynamoDbClient.QueryAsync(request);
-
-            var tasks = response.Items.Select(async item =>
+            var search = _dynamoDBContext.FromQueryAsync<ChatContact>(queryConfig);
+            var results = await search.GetNextSetAsync();
+             
+            var decryptedResults = new List<ChatContact>();
+            foreach (var chatContact in results)
             {
-                return await MapChatContactAsync(item);
-            });
+                try
+                {
+                    if (!string.IsNullOrEmpty(chatContact.LastChatText))
+                    {
+                        chatContact.LastChatText = await _encryptionService.DecryptAsync(chatContact.LastChatText);
+                    }
+                }
+                catch (Exception)
+                {
+                    chatContact.LastChatText = string.Empty;
+                }
 
-            var results = await Task.WhenAll(tasks);
-            return [.. results];
+                decryptedResults.Add(chatContact);
+            }
+
+            return decryptedResults;
         }
         catch (Exception ex)
         {
             throw new Exception("Error retrieving messages by MechanicId", ex);
-        }
-    }
-
-    private async Task<ChatContact> MapChatContactAsync(Dictionary<string, AttributeValue> item)
-    {
-        var stringOrderId = item.GetValueOrDefault(nameof(ChatContact.OrderId))?.S;
-        var stringBuyerId = item.GetValueOrDefault(nameof(ChatContact.BuyerId))?.S;
-        var buyerName = item.GetValueOrDefault(nameof(ChatContact.BuyerName))?.S;
-        var stringMechanicId = item.GetValueOrDefault(nameof(ChatContact.MechanicId))?.S;
-        var mechanicName = item.GetValueOrDefault(nameof(ChatContact.MechanicName))?.S;
-        var stringLastChatText = item.GetValueOrDefault(nameof(ChatContact.LastChatText))?.S;
-        var stringTimeStamp = item.GetValueOrDefault(nameof(ChatContact.LastChatTimestamp))?.N;
-        var stringOrderCompletedAtUtc = item.GetValueOrDefault(nameof(ChatContact.OrderCompletedAtUtc))?.S;
-        var stringOrderChatExpiredAtUtc = item.GetValueOrDefault(nameof(ChatContact.OrderChatExpiredAtUtc))?.S;
-        var isOrderCompleted = item.GetValueOrDefault(nameof(ChatContact.IsOrderCompleted))?.BOOL ?? false;
-
-        var orderId = string.IsNullOrEmpty(stringOrderId) ? Guid.Empty : Guid.Parse(stringOrderId);
-        var buyerId = string.IsNullOrEmpty(stringBuyerId) ? Guid.Empty : Guid.Parse(stringBuyerId);
-        var mechanicId = string.IsNullOrEmpty(stringMechanicId) ? (Guid?)null : Guid.Parse(stringMechanicId);
-
-        string lastChatText;
-        try
-        {
-            lastChatText = string.IsNullOrEmpty(stringLastChatText) ? string.Empty : await _encryptionService.DecryptAsync(stringLastChatText);
-        }
-        catch (Exception)
-        {
-            lastChatText = string.Empty;
-        }
-
-        if (!long.TryParse(stringTimeStamp, out long timestamp))
-        {
-            timestamp = 0;
-        }
-
-        DateTime? orderCompletedAtUtc = string.IsNullOrEmpty(stringOrderCompletedAtUtc) ? (DateTime?)null : DateTime.Parse(stringOrderCompletedAtUtc);
-        DateTime? orderChatExpiredAtUtc = string.IsNullOrEmpty(stringOrderChatExpiredAtUtc) ? (DateTime?)null : DateTime.Parse(stringOrderChatExpiredAtUtc);
-
-        return new ChatContact(orderId, buyerId, buyerName ?? string.Empty, timestamp)
-        {
-            MechanicId = mechanicId,
-            MechanicName = mechanicName,
-            LastChatText = lastChatText,
-            LastChatTimestamp = timestamp,
-            OrderCompletedAtUtc = orderCompletedAtUtc,
-            OrderChatExpiredAtUtc = orderChatExpiredAtUtc,
-            IsOrderCompleted = isOrderCompleted
-        };
-    }
+        } 
+    } 
 
     public async Task<ChatContact?> GetChatContactByOrderId(Guid orderId)
     {
-        var request = new GetItemRequest
-        {
-            TableName = ChatContactTableName,
-            Key = new Dictionary<string, AttributeValue>
-            {
-                { nameof(ChatContact.OrderId), new AttributeValue { S = orderId.ToString() } }
-            }
-        };
-
         try
-        {
-            var response = await _dynamoDbClient.GetItemAsync(request);
-
-            if (response.Item == null || response.Item.Count == 0)
-            {
-                return null;  
-            }
+        { 
+            var chatContact = await _dynamoDBContext.LoadAsync<ChatContact>(orderId.ToString());
              
-            return await MapChatContactAsync(response.Item);
+            if (chatContact != null && !string.IsNullOrEmpty(chatContact.LastChatText))
+            {
+                try
+                {
+                    chatContact.LastChatText = await _encryptionService.DecryptAsync(chatContact.LastChatText);
+                }
+                catch (Exception)
+                {
+                    chatContact.LastChatText = string.Empty;
+                }
+            }
+
+            return chatContact;
         }
         catch (Exception ex)
         {
             throw new Exception("Error retrieving ChatContact by OrderId", ex);
+        } 
+    }
+
+    public async Task<bool> UpdateChatContact(ChatContact chatContact)
+    {
+        try
+        { 
+            if (!string.IsNullOrEmpty(chatContact.LastChatText))
+            {
+                chatContact.LastChatText = await _encryptionService.EncryptAsync(chatContact.LastChatText);
+            }
+             
+            var existingChatContact = await _dynamoDBContext.LoadAsync<ChatContact>(chatContact.OrderId, chatContact.LastChatTimestamp);
+            if (existingChatContact == null)
+            {
+                return false;
+            }
+             
+            await _dynamoDBContext.SaveAsync(chatContact);
+            return true;
+        }
+        catch(Exception ex)
+        {
+            throw new Exception("Error updating ChatContact", ex);
         }
     }
+
+    public async Task DeleteChatContact(Guid orderId)
+    {
+        var itemsDeleted = 0;
+        var itemsPerBatch = 100;  
+         
+        var scanConditions = new List<ScanCondition>
+        {
+            new(nameof(Conversation.OrderId), ScanOperator.Equal, orderId.ToString())
+        };
+         
+        var search = _dynamoDBContext.ScanAsync<Conversation>(scanConditions);
+
+        do
+        { 
+            var itemsToDelete = await search.GetNextSetAsync();
+             
+            foreach (var batch in itemsToDelete.Chunk(itemsPerBatch))
+            {
+                var batchWrite = _dynamoDBContext.CreateBatchWrite<Conversation>();
+
+                foreach (var item in batch)
+                {
+                    batchWrite.AddDeleteItem(item);
+                }
+
+                await batchWrite.ExecuteAsync();
+                itemsDeleted += batch.Length;
+            }
+
+        } while (!string.IsNullOrEmpty(search.PaginationToken));
+    } 
 }

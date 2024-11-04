@@ -1,9 +1,15 @@
-﻿using Amazon.DynamoDBv2;
+﻿using Amazon;
+using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
+using Amazon.Runtime;
 using Chat.API.Applications.Consumers;
 using Chat.API.Applications.Services;
 using Chat.API.Applications.Services.Interfaces;
 using Core.Configurations;
+using Core.Services;
+using Core.Services.Interfaces;
 using MassTransit;
+using Microsoft.Extensions.Options;
 using StackExchange.Redis;
 
 namespace Chat.API.Extensions;
@@ -13,9 +19,10 @@ public static class ServiceRegistrationExtension
     public static WebApplicationBuilder AddApplicationService(this WebApplicationBuilder builder)
     {
         builder.Services.AddHealthChecks();
-         
-        var options = builder.Configuration.GetSection(CacheConfiguration.SectionName).Get<CacheConfiguration>() ?? throw new Exception();
 
+        builder.Services.AddScoped<IUserInfoService, UserInfoService>();
+
+        var options = builder.Configuration.GetSection(CacheConfiguration.SectionName).Get<CacheConfiguration>() ?? throw new Exception(); 
         builder.Services.AddSignalR().AddStackExchangeRedis(configure =>
         {
             var configurations = new ConfigurationOptions
@@ -26,16 +33,14 @@ public static class ServiceRegistrationExtension
                 AbortOnConnectFail = false,
                 ReconnectRetryPolicy = new ExponentialRetry((int)TimeSpan
                    .FromSeconds(options.ReconnectRetryPolicy).TotalMilliseconds),
-                ChannelPrefix = RedisChannel.Literal("ChatAPI")
+                ChannelPrefix = RedisChannel.Literal("ChatAPI"),
+                Ssl = options.Ssl
             };
-             
-            configurations.Ssl = options.Ssl;
 
             configure.Configuration = configurations;
-        });
+        }); 
 
-        builder.Services.AddAWSService<IAmazonDynamoDB>();
-        builder.Services.AddSingleton<IChatService, DynamoDBChatService>();
+
 
 
 
@@ -45,7 +50,12 @@ public static class ServiceRegistrationExtension
         {   
             var consumers = new (string QueueName, Type ConsumerType)[]
             {
-                ("chat-service-order-create-integration-event-queue", typeof(OrderCreatedIntegrationEventConsumer))
+                ("chat-service-order-created-integration-event-queue", typeof(OrderCreatedIntegrationEventConsumer)),
+                ("chat-service-order-cancelled-by-buyer-integration-event-queue", typeof(OrderCancelledByBuyerIntegrationEventConsumer)),
+                ("chat-service-order-cancelled-by-mechanic-integration-event-queue", typeof(OrderCancelledByMechanicIntegrationEventConsumer)),
+                ("chat-service-account-mechanic-order-accepted-integration-event-queue", typeof(AccountMechanicOrderAcceptedIntegrationEventConsumer)),
+                ("chat-service-service-completed-integration-event-queue", typeof(ServiceCompletedIntegrationEventConsumer)),
+                ("chat-service-service-incompleted-integration-event-queue", typeof(ServiceIncompletedIntegrationEventConsumer)),
             };
 
             x.AddConsumersFromNamespaceContaining<IChatAPIMarkerInterface>();
@@ -70,7 +80,22 @@ public static class ServiceRegistrationExtension
                     receiveBuilder.UseRateLimit(1000, TimeSpan.FromSeconds(2));
                 }
             });
-        }); 
+        });
+
+         
+        builder.Services.AddSingleton<IAmazonDynamoDB>(provider =>
+        { 
+            var awsOptions = provider.GetRequiredService<IOptionsMonitor<AWSIAMConfiguration>>().CurrentValue;
+             
+            var credentials = new BasicAWSCredentials(awsOptions.AccessID, awsOptions.SecretKey);
+             
+            var region = RegionEndpoint.GetBySystemName(awsOptions.Region);
+            return new AmazonDynamoDBClient(credentials, region);
+        });
+         
+        builder.Services.AddSingleton<IDynamoDBContext, DynamoDBContext>(); 
+        builder.Services.AddScoped<IChatService, DynamoDBChatService>();
+
         return builder;
     }
 }

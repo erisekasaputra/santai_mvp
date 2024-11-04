@@ -1,21 +1,19 @@
-﻿using Chat.API.Applications.Services.Interfaces;
+﻿using Chat.API.Applications.Dtos.Request;
+using Chat.API.Applications.Services.Interfaces;
 using Chat.API.Domain.Events;
-using Core.Services.Interfaces;
+using Chat.API.Domain.Models; 
 using Core.Utilities;
 using MediatR;
-using Microsoft.AspNetCore.SignalR;
-using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.SignalR; 
 
 namespace Chat.API.Applications.Services;
 
 public class ChatHub(
-    IChatService chatService,
-    IEncryptionService encryptionService,
+    IChatService chatService, 
     IMediator mediator,
     ILogger<ChatHub> logger) : Hub<IChatClient>
 {
-    private readonly IChatService _chatService = chatService;
-    private readonly IEncryptionService _encryptionService = encryptionService;
+    private readonly IChatService _chatService = chatService; 
     private readonly IMediator _mediator = mediator;
     private readonly ILogger<ChatHub> _logger = logger;
 
@@ -35,135 +33,44 @@ public class ChatHub(
         return base.OnDisconnectedAsync(exception);
     }
 
-    public async Task SendMessageToUser(
-        string destinationUserId, 
-        string text,
-        string? replyMessageId,
-        string? replyMessageText)
+    public async Task SendMessageToUser(SendMessageRequest request)
     {
+        Guid messageId = Guid.Empty; 
         try
         { 
-            var originUserId = Context.UserIdentifier;
-             
-            if (string.IsNullOrEmpty(originUserId) || string.IsNullOrEmpty(destinationUserId) || string.IsNullOrEmpty(text)) 
+            var originUserId = Context.UserIdentifier; 
+            if (string.IsNullOrEmpty(originUserId) || string.IsNullOrEmpty(request.DestinationUserId) || string.IsNullOrEmpty(request.Text) || string.IsNullOrEmpty(request.OrderId)) 
             {
                 return;
             }
-             
-            long timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
-            var messageId = await _chatService.SaveChatMessageAsync(
-                originUserId, 
-                destinationUserId, 
-                text, 
-                replyMessageId,
-                replyMessageText,
-                timestamp);
 
-            await Clients.User(destinationUserId).ReceiveChat(
-                originUserId,
-                messageId,
-                text,
-                string.IsNullOrEmpty(replyMessageId) ? string.Empty : replyMessageId,
-                string.IsNullOrEmpty(replyMessageText) ? string.Empty : replyMessageText,
-                timestamp.ToString());
+            var conversation = new Conversation(
+                Guid.Parse(request.OrderId),
+                Guid.Parse(originUserId),
+                Guid.Parse(request.DestinationUserId),
+                request.Text,
+                request.Attachment,
+                string.IsNullOrEmpty(request.ReplyMessageId) ? null : Guid.Parse(request.ReplyMessageId),
+                request.ReplyMessageText);
 
-            await _mediator.Publish(new ChatSentDomainEvent(Guid.Parse(originUserId), Guid.Parse(destinationUserId), Guid.Parse(messageId), text, timestamp));
+            messageId = conversation.MessageId; 
+
+            _ = await _chatService.SaveChatMessageAsync(conversation);
+
+            await Clients.User(request.DestinationUserId).ReceiveChat(conversation);
+
+            await _mediator.Publish(new ChatSentDomainEvent(conversation));
+        }
+        catch (InvalidOperationException ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            await Clients.Caller.ChatBadRequest(messageId, Guid.Parse(request.OrderId));
         }
         catch (Exception ex)
         { 
             LoggerHelper.LogError(_logger, ex);
-            await Clients.Caller.InternalServerError("Failed to send a message.");
+            await Clients.Caller.InternalServerError($"An internal server error has occured, Error: {ex.Message}, Error Detail: {ex.InnerException?.Message}");
         }
-    }
-
-    public async Task GetLatestMessagesForUser(string destinationUserId, long timestamp)
-    {
-        try
-        {  
-            var originUserId = Context.UserIdentifier;
-
-            if (string.IsNullOrEmpty(originUserId) || string.IsNullOrEmpty(destinationUserId))
-            {
-                return;
-            }
-
-            var messages = await _chatService.GetMessageByTimestamp(originUserId, destinationUserId, timestamp);
-
-            var tasks = messages.Select(async message =>
-            {
-                var text = message.GetValueOrDefault("encryptedText")?.S ?? string.Empty;
-                var messageId = message.GetValueOrDefault("messageId")?.S ?? string.Empty;
-                var replyMessageId = message.GetValueOrDefault("replyMessageId")?.S ?? string.Empty;
-                var replyMessageEncryptedText = message.GetValueOrDefault("replyMessageEncryptedText")?.S ?? string.Empty; 
-                var timestamp = message.GetValueOrDefault("timestamp")?.N ?? string.Empty;
-
-                if (!string.IsNullOrEmpty(text) && !string.IsNullOrEmpty(messageId) && !string.IsNullOrEmpty(timestamp)) 
-                {
-                    var decryptedText = await _encryptionService.DecryptAsync(text);
-                    var decryptedReplyMessageText = string.IsNullOrEmpty(replyMessageEncryptedText) ? string.Empty : await _encryptionService.DecryptAsync(replyMessageEncryptedText);
-
-                    await Clients.Caller.ReceiveChat(
-                        originUserId,
-                        messageId,
-                        decryptedText,
-                        replyMessageId,
-                        decryptedReplyMessageText,
-                        timestamp);
-                } 
-            });
-
-            await Task.WhenAll(tasks);
-        }
-        catch (Exception ex)
-        {
-            LoggerHelper.LogError(_logger, ex);
-            await Clients.Caller.InternalServerError("Failed to retrieve messages.");
-        }
-    }
-     
-    public async Task GetPreviousMessagesForUser(string destinationUserId, long timestamp)
-    { 
-        try
-        {
-            var originUserId = Context.UserIdentifier;
-
-            if (string.IsNullOrEmpty(originUserId) || string.IsNullOrEmpty(destinationUserId))
-            {
-                return;
-            }
-
-            var messages = await _chatService.GetMessageByTimestamp(originUserId, destinationUserId, timestamp, false);
-
-            var tasks = messages.Select(async message =>
-            {
-                var text = message.GetValueOrDefault("encryptedText")?.S ?? string.Empty;
-                var messageId = message.GetValueOrDefault("messageId")?.S ?? string.Empty;
-                var replyMessageId = message.GetValueOrDefault("replyMessageId")?.S ?? string.Empty;
-                var replyMessageEncryptedText = message.GetValueOrDefault("replyMessageEncryptedText")?.S ?? string.Empty;
-                var timestamp = message.GetValueOrDefault("timestamp")?.N ?? string.Empty;
-
-                if (!string.IsNullOrEmpty(text) && !string.IsNullOrEmpty(messageId) && !string.IsNullOrEmpty(timestamp))
-                {
-                    var decryptedText = await _encryptionService.DecryptAsync(text);
-                    var decryptedReplyMessageText = string.IsNullOrEmpty(replyMessageEncryptedText) ? string.Empty : await _encryptionService.DecryptAsync(replyMessageEncryptedText);
-
-                    await Clients.Caller.ReceiveChat(
-                         originUserId,
-                         messageId,
-                         decryptedText,
-                         replyMessageId,
-                         decryptedReplyMessageText,
-                         timestamp);
-                } 
-            });
-
-            await Task.WhenAll(tasks);
-        }
-        catch (Exception ex)
-        {
-            LoggerHelper.LogError(_logger, ex);
-            await Clients.Caller.InternalServerError("Failed to retrieve messages."); 
-        }
-    }
+    } 
 }

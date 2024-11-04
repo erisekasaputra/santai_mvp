@@ -1,10 +1,12 @@
 using Chat.API;
+using Chat.API.Apis;
 using Chat.API.Applications.Services; 
 using Chat.API.Extensions; 
 using Core.Extensions;   
 
 var builder = WebApplication.CreateBuilder(args);
-
+ 
+builder.AddLoggingContext();
 builder.Configuration.AddEnvironmentVariables();
 builder.Services.AddCors(options =>
 {
@@ -16,9 +18,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddRouting();
 builder.Services.AddHttpContextAccessor();
-
-
-builder.AddLoggingContext();
+ 
 builder.AddMediatorService<IChatAPIMarkerInterface>();
 builder.AddJsonEnumConverterBehavior();
 builder.AddCoreOptionConfiguration(); 
@@ -39,4 +39,7 @@ app.MapControllers();
 
 app.MapHub<ChatHub>("/chat");
 app.MapHealthChecks("/health");
+
+app.MapChatApiRouteBuilder();
+
 app.Run(); 
