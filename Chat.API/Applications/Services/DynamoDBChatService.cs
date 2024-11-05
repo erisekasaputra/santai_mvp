@@ -360,5 +360,7 @@ public class DynamoDBChatService : IChatService
             }
 
         } while (!string.IsNullOrEmpty(search.PaginationToken));
+
+        await _dynamoDBContext.DeleteAsync<ChatContact>(orderId);
     } 
 }
