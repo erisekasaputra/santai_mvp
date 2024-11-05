@@ -282,8 +282,12 @@ public class DynamoDBChatService : IChatService
     {
         try
         { 
-            var chatContact = await _dynamoDBContext.LoadAsync<ChatContact>(orderId.ToString());
+            var queryResult = await _dynamoDBContext
+                .QueryAsync<ChatContact>(orderId)
+                .GetRemainingAsync();
              
+            var chatContact = queryResult.FirstOrDefault();
+
             if (chatContact != null && !string.IsNullOrEmpty(chatContact.LastChatText))
             {
                 try
@@ -295,14 +299,14 @@ public class DynamoDBChatService : IChatService
                     chatContact.LastChatText = string.Empty;
                 }
             }
-             
-            chatContact?.IsExpired(); // dont remove this line is important
+
+            chatContact?.IsExpired(); 
             return chatContact;
         }
         catch (Exception ex)
         {
             throw new Exception("Error retrieving ChatContact by OrderId", ex);
-        } 
+        }
     }
 
     public async Task<bool> UpdateChatContact(ChatContact chatContact)
@@ -361,6 +365,12 @@ public class DynamoDBChatService : IChatService
 
         } while (!string.IsNullOrEmpty(search.PaginationToken));
 
-        await _dynamoDBContext.DeleteAsync<ChatContact>(orderId);
+        var chatContact = await GetChatContactByOrderId(orderId);
+        if (chatContact == null)
+        {
+            return;
+        }
+
+        await _dynamoDBContext.DeleteAsync<ChatContact>(orderId, chatContact.LastChatTimestamp);
     } 
 }
