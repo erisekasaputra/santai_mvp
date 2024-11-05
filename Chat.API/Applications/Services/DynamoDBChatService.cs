@@ -40,10 +40,10 @@ public class DynamoDBChatService : IChatService
             throw new InvalidOperationException("Chat session is no longer available");
         }
 
-        if (string.IsNullOrEmpty(chatContact.MechanicId))
-        {
-            throw new InvalidOperationException("Waiting for mechanic assignment");
-        }
+        //if (string.IsNullOrEmpty(chatContact.MechanicId))
+        //{
+        //    throw new InvalidOperationException("Waiting for mechanic assignment");
+        //}
 
         try
         {
