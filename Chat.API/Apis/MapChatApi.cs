@@ -54,7 +54,7 @@ public static class MapChatApi
             {
                 return TypedResults.Unauthorized();
             }
-
+             
             var contacts = request.ChatContactUserType == ChatContactUserType.User ? await chatService.GetChatContactsByBuyerId(user.Sub) : await chatService.GetChatContactsByMechanicId(user.Sub);
 
             if (contacts is null || contacts.Count == 0)

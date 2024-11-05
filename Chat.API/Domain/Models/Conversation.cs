@@ -19,7 +19,7 @@ public class Conversation
 
     public Conversation()
     {
-        
+        Text = string.Empty;
     }
     public Conversation(
         Guid orderId,

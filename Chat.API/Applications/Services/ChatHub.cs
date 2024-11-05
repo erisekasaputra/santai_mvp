@@ -33,7 +33,7 @@ public class ChatHub(
         return base.OnDisconnectedAsync(exception);
     }
 
-    public async Task SendMessageToUser(SendMessageRequest request)
+    public async Task SendMessage(SendMessageRequest request)
     {
         Guid messageId = Guid.Empty; 
         try
@@ -42,8 +42,7 @@ public class ChatHub(
             if (string.IsNullOrEmpty(originUserId) || string.IsNullOrEmpty(request.DestinationUserId) || string.IsNullOrEmpty(request.Text) || string.IsNullOrEmpty(request.OrderId)) 
             {
                 return;
-            }
-
+            } 
 
             var conversation = new Conversation(
                 Guid.Parse(request.OrderId),
@@ -58,7 +57,7 @@ public class ChatHub(
 
             _ = await _chatService.SaveChatMessageAsync(conversation);
 
-            await Clients.User(request.DestinationUserId).ReceiveChat(conversation);
+            await Clients.User(request.DestinationUserId).ReceiveMessage(conversation);
 
             await _mediator.Publish(new ChatSentDomainEvent(conversation));
         }

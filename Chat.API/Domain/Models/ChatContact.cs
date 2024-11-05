@@ -14,14 +14,17 @@ public class ChatContact
     public Guid? MechanicId { get; set; } 
     public string? MechanicName { get; set; } 
     public string? LastChatText { get; set; } 
+    public Guid? ChatOriginUserId { get; set; }
     public DateTime? OrderCompletedAtUtc { get; set; }
     public DateTime? OrderChatExpiredAtUtc { get; set; }
     public bool IsOrderCompleted { get; set; }
     public long ChatUpdateTimestamp { get; set; }
+    public bool IsChatExpired { get; set; }
+
 
     public ChatContact()
     {
-        
+        BuyerName = string.Empty;
     }
     public ChatContact(Guid orderId, Guid buyerId, string buyerName)
     {
@@ -30,15 +33,17 @@ public class ChatContact
         BuyerName = buyerName;
         LastChatTimestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         IsOrderCompleted = false;
+        IsChatExpired = false;
     }
 
-    public void UpdateLastChat(string lastChatText)
+    public void UpdateLastChat(Guid originUserId, string lastChatText)
     {
         if (IsOrderCompleted)
         {
             return;
         }
 
+        ChatOriginUserId = originUserId;
         LastChatText = lastChatText;
         ChatUpdateTimestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
     }
@@ -70,5 +75,17 @@ public class ChatContact
         OrderCompletedAtUtc = DateTime.UtcNow;
         OrderChatExpiredAtUtc = DateTime.UtcNow.AddHours(totalHoursChatActiveAfterChatComplete);
         IsOrderCompleted = true;
+    } 
+
+    public bool IsExpired()
+    {
+        if (IsOrderCompleted && OrderChatExpiredAtUtc is not null && OrderChatExpiredAtUtc <= DateTime.UtcNow)
+        {
+            IsChatExpired = true;
+            return true;
+        }
+
+        IsChatExpired = false;
+        return false;
     }
 }

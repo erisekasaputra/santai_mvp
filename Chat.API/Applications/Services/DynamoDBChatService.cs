@@ -22,12 +22,9 @@ public class DynamoDBChatService : IChatService
         IOptionsMonitor<AWSIAMConfiguration> awsIamConfiguration,
         IDynamoDBContext dynamoDBContext)
     {
-        var iam = awsIamConfiguration.CurrentValue;
-        // Create AWS credentials
-        var credentials = new BasicAWSCredentials(iam.AccessID, iam.SecretKey);
-
-        // Initialize DynamoDB client with credentials and region
-        var regionEndpoint = RegionEndpoint.GetBySystemName(iam.Region);
+        //var iam = awsIamConfiguration.CurrentValue; 
+        //var credentials = new BasicAWSCredentials(iam.AccessID, iam.SecretKey); 
+        //var regionEndpoint = RegionEndpoint.GetBySystemName(iam.Region);
         //_dynamoDbClient = new AmazonDynamoDBClient(credentials, regionEndpoint);
         _encryptionService = encryptionService;
         _dynamoDBContext = dynamoDBContext; 
@@ -37,9 +34,9 @@ public class DynamoDBChatService : IChatService
     { 
         var chatContact = await GetChatContactByOrderId(conversation.OrderId) ?? throw new InvalidOperationException("Chat session is no longer available");
 
-        if (chatContact.IsOrderCompleted && chatContact.OrderChatExpiredAtUtc is not null && chatContact.OrderChatExpiredAtUtc <= DateTime.UtcNow)
+        if (chatContact.IsExpired())
         {
-            await DeleteChatContact(conversation.OrderId);
+            await _dynamoDBContext.SaveAsync(chatContact);
             throw new InvalidOperationException("Chat session is no longer available");
         }
 
@@ -70,7 +67,7 @@ public class DynamoDBChatService : IChatService
             conversation.ReplyMessageText = string.Empty;
         }
 
-        chatContact.UpdateLastChat(conversation.Text);
+        chatContact.UpdateLastChat(conversation.OriginUserId, conversation.Text);
 
         try
         { 
@@ -213,9 +210,10 @@ public class DynamoDBChatService : IChatService
                 }
                 catch (Exception)
                 {
-                    chatContact.LastChatText = string.Empty; // Jika gagal didekripsi, atur sebagai string kosong
+                    chatContact.LastChatText = string.Empty; 
                 }
 
+                chatContact.IsExpired(); // this is important, dont remove
                 decryptedResults.Add(chatContact);
             }
 
@@ -268,6 +266,7 @@ public class DynamoDBChatService : IChatService
                     chatContact.LastChatText = string.Empty;
                 }
 
+                chatContact.IsExpired(); // dont remove , this is important
                 decryptedResults.Add(chatContact);
             }
 
@@ -296,7 +295,8 @@ public class DynamoDBChatService : IChatService
                     chatContact.LastChatText = string.Empty;
                 }
             }
-
+             
+            chatContact?.IsExpired(); // dont remove this line is important
             return chatContact;
         }
         catch (Exception ex)
@@ -320,6 +320,7 @@ public class DynamoDBChatService : IChatService
                 return false;
             }
              
+            chatContact.IsExpired(); // dont remove this line
             await _dynamoDBContext.SaveAsync(chatContact);
             return true;
         }
