@@ -26,7 +26,7 @@ public static class MapChatApi
     {
         try
         {
-            var conversations = await chatService.GetMessageByOrderIdAndTimestamp(request.OrderId, request.Timestamp, request.Forward);
+            var conversations = await chatService.GetMessageByOrderIdAndTimestamp(request.OrderId.ToString(), request.Timestamp, request.Forward);
             if (conversations is null || conversations.Count == 0)
             {
                 return TypedResults.NotFound(
@@ -55,7 +55,7 @@ public static class MapChatApi
                 return TypedResults.Unauthorized();
             }
              
-            var contacts = request.ChatContactUserType == ChatContactUserType.User ? await chatService.GetChatContactsByBuyerId(user.Sub) : await chatService.GetChatContactsByMechanicId(user.Sub);
+            var contacts = request.ChatContactUserType == ChatContactUserType.User ? await chatService.GetChatContactsByBuyerId(user.Sub.ToString()) : await chatService.GetChatContactsByMechanicId(user.Sub.ToString());
 
             if (contacts is null || contacts.Count == 0)
             {
@@ -85,7 +85,7 @@ public static class MapChatApi
                 return TypedResults.Unauthorized();
             }
 
-            var contact = await chatService.GetChatContactByOrderId(orderId);
+            var contact = await chatService.GetChatContactByOrderId(orderId.ToString());
 
             if (contact is null)
             {

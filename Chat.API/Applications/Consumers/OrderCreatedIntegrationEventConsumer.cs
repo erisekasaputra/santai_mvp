@@ -11,7 +11,7 @@ public class OrderCreatedIntegrationEventConsumer(IChatService chatService) : IC
     private readonly IChatService _chatService = chatService;
     public async Task Consume(ConsumeContext<OrderCreatedIntegrationEvent> context)
     {
-        var chatContact = new ChatContact(context.Message.OrderId, context.Message.BuyerId, context.Message.BuyerName);
+        var chatContact = new ChatContact(context.Message.OrderId.ToString(), context.Message.BuyerId.ToString(), context.Message.BuyerName);
         await _chatService.CreateChatContact(chatContact);
     }
 }

@@ -6,31 +6,35 @@ namespace Chat.API.Domain.Models;
 public class Conversation
 {
     [DynamoDBHashKey] // Partition Key
-    public Guid MessageId { get; init; }
-    public Guid OrderId { get; init; }
-    public Guid OriginUserId { get; init; }
-    public Guid DestinationUserId { get; init; }
+    public string MessageId { get; init; }
+    public string OrderId { get; init; }
+    public string OriginUserId { get; init; }
+    public string DestinationUserId { get; init; }
     public string Text { get; set; }
     public string? Attachment { get; set; }
-    public Guid? ReplyMessageId { get; set; }
+    public string? ReplyMessageId { get; set; }
     public string? ReplyMessageText { get; set; }
     [DynamoDBRangeKey] // Sort Key
     public long Timestamp { get; init; }
 
     public Conversation()
     {
+        MessageId = string.Empty;
+        OrderId = string.Empty;
+        OriginUserId = string.Empty;
+        DestinationUserId = string.Empty;  
         Text = string.Empty;
     }
     public Conversation(
-        Guid orderId,
-        Guid originUserId,
-        Guid destinationUserId,
+        string orderId,
+        string originUserId,
+        string destinationUserId,
         string text,
         string? attachment,
-        Guid? replyMessageId,
+        string? replyMessageId,
         string? replyMessageText)
     {
-        MessageId = Guid.NewGuid();
+        MessageId = Guid.NewGuid().ToString();
         OrderId = orderId;
         OriginUserId = originUserId;
         DestinationUserId = destinationUserId;

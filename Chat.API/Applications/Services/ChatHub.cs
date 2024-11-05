@@ -35,7 +35,7 @@ public class ChatHub(
 
     public async Task SendMessage(SendMessageRequest request)
     {
-        Guid messageId = Guid.Empty; 
+        string messageId = string.Empty;
         try
         { 
             var originUserId = Context.UserIdentifier; 
@@ -45,15 +45,15 @@ public class ChatHub(
             } 
 
             var conversation = new Conversation(
-                Guid.Parse(request.OrderId),
-                Guid.Parse(originUserId),
-                Guid.Parse(request.DestinationUserId),
+                request.OrderId,
+                originUserId,
+                request.DestinationUserId,
                 request.Text,
                 request.Attachment,
-                string.IsNullOrEmpty(request.ReplyMessageId) ? null : Guid.Parse(request.ReplyMessageId),
+                request.ReplyMessageId,
                 request.ReplyMessageText);
 
-            messageId = conversation.MessageId; 
+            messageId = conversation.MessageId;
 
             _ = await _chatService.SaveChatMessageAsync(conversation);
 
@@ -64,7 +64,7 @@ public class ChatHub(
         catch (InvalidOperationException ex)
         {
             LoggerHelper.LogError(_logger, ex);
-            await Clients.Caller.ChatBadRequest(messageId, Guid.Parse(request.OrderId));
+            await Clients.Caller.ChatBadRequest(messageId, request.OrderId);
         }
         catch (Exception ex)
         { 

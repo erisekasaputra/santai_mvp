@@ -10,7 +10,7 @@ public class ServiceIncompletedIntegrationEventConsumer(
     private readonly IChatService _chatService = chatService;
     public async Task Consume(ConsumeContext<ServiceIncompletedIntegrationEvent> context)
     { 
-        var chatContact = await _chatService.GetChatContactByOrderId(context.Message.OrderId);
+        var chatContact = await _chatService.GetChatContactByOrderId(context.Message.OrderId.ToString());
         if (chatContact is null) 
         {
             return;

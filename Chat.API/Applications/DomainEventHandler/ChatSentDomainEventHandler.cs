@@ -11,13 +11,13 @@ public class ChatSentDomainEventHandler(IMediator mediator) : INotificationHandl
     {
         await _mediator.Publish(
             new ChatSentIntegrationEvent(
-                notification.Conversation.MessageId,
-                notification.Conversation.OrderId,
-                notification.Conversation.OriginUserId,
-                notification.Conversation.DestinationUserId,
+                Guid.Parse(notification.Conversation.MessageId),
+                Guid.Parse(notification.Conversation.OrderId),
+                Guid.Parse(notification.Conversation.OriginUserId),
+                Guid.Parse(notification.Conversation.DestinationUserId),
                 notification.Conversation.Text,
                 notification.Conversation.Attachment,
-                notification.Conversation.ReplyMessageId,
+                string.IsNullOrEmpty(notification.Conversation.ReplyMessageId) ? null : Guid.Parse(notification.Conversation.ReplyMessageId),
                 notification.Conversation.ReplyMessageText,
                 notification.Conversation.Timestamp), cancellationToken);
     }

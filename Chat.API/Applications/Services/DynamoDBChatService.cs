@@ -40,7 +40,7 @@ public class DynamoDBChatService : IChatService
             throw new InvalidOperationException("Chat session is no longer available");
         }
 
-        if (chatContact.MechanicId is null || chatContact.MechanicId == Guid.Empty)
+        if (string.IsNullOrEmpty(chatContact.MechanicId))
         {
             throw new InvalidOperationException("Waiting for mechanic assignment");
         }
@@ -82,7 +82,7 @@ public class DynamoDBChatService : IChatService
          
     }
 
-    public async Task<List<Conversation>?> GetMessageByOrderIdAndTimestamp(Guid orderId, long timestamp, bool forward = true)
+    public async Task<List<Conversation>?> GetMessageByOrderIdAndTimestamp(string orderId, long timestamp, bool forward = true)
     {
         // Configure QueryConfig
         var queryConfig = new QueryOperationConfig
@@ -172,7 +172,7 @@ public class DynamoDBChatService : IChatService
     }
 
 
-    public async Task<List<ChatContact>?> GetChatContactsByBuyerId(Guid buyerId)
+    public async Task<List<ChatContact>?> GetChatContactsByBuyerId(string buyerId)
     {
         var queryConfig = new QueryOperationConfig
         {
@@ -225,7 +225,7 @@ public class DynamoDBChatService : IChatService
         } 
     }
 
-    public async Task<List<ChatContact>?> GetChatContactsByMechanicId(Guid mechanicId)
+    public async Task<List<ChatContact>?> GetChatContactsByMechanicId(string mechanicId)
     {
         var queryConfig = new QueryOperationConfig
         {
@@ -278,7 +278,7 @@ public class DynamoDBChatService : IChatService
         } 
     } 
 
-    public async Task<ChatContact?> GetChatContactByOrderId(Guid orderId)
+    public async Task<ChatContact?> GetChatContactByOrderId(string orderId)
     {
         try
         { 
@@ -330,7 +330,7 @@ public class DynamoDBChatService : IChatService
         }
     }
 
-    public async Task DeleteChatContact(Guid orderId)
+    public async Task DeleteChatContact(string orderId)
     {
         var itemsDeleted = 0;
         var itemsPerBatch = 100;  

@@ -9,6 +9,6 @@ public class OrderCancelledByBuyerIntegrationEventConsumer(IChatService chatServ
     private readonly IChatService _chatService = chatService;
     public async Task Consume(ConsumeContext<OrderCancelledByBuyerIntegrationEvent> context)
     {
-        await _chatService.DeleteChatContact(context.Message.OrderId);
+        await _chatService.DeleteChatContact(context.Message.OrderId.ToString());
     }
 }

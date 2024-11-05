@@ -10,7 +10,7 @@ public class OrderCancelledByMechanicIntegrationEventConsumer
     private readonly IChatService _chatService = chatService;
     public async Task Consume(ConsumeContext<OrderCancelledByMechanicIntegrationEvent> context)
     {
-        var contacts = await _chatService.GetChatContactByOrderId(context.Message.OrderId);
+        var contacts = await _chatService.GetChatContactByOrderId(context.Message.OrderId.ToString());
 
         if (contacts is null)
         {

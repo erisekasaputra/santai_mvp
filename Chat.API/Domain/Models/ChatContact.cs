@@ -6,15 +6,15 @@ namespace Chat.API.Domain.Models;
 public class ChatContact
 {
     [DynamoDBHashKey] 
-    public Guid OrderId { get; init; } 
+    public string OrderId { get; init; } 
     [DynamoDBRangeKey]  
     public long LastChatTimestamp { get; init; } 
-    public Guid BuyerId { get; init; } 
+    public string BuyerId { get; init; } 
     public string BuyerName { get; init; } 
-    public Guid? MechanicId { get; set; } 
+    public string? MechanicId { get; set; } 
     public string? MechanicName { get; set; } 
     public string? LastChatText { get; set; } 
-    public Guid? ChatOriginUserId { get; set; }
+    public string? ChatOriginUserId { get; set; }
     public DateTime? OrderCompletedAtUtc { get; set; }
     public DateTime? OrderChatExpiredAtUtc { get; set; }
     public bool IsOrderCompleted { get; set; }
@@ -24,9 +24,11 @@ public class ChatContact
 
     public ChatContact()
     {
+        OrderId = string.Empty;
+        BuyerId = string.Empty;
         BuyerName = string.Empty;
     }
-    public ChatContact(Guid orderId, Guid buyerId, string buyerName)
+    public ChatContact(string orderId, string buyerId, string buyerName)
     {
         OrderId = orderId;
         BuyerId = buyerId;
@@ -36,7 +38,7 @@ public class ChatContact
         IsChatExpired = false;
     }
 
-    public void UpdateLastChat(Guid originUserId, string lastChatText)
+    public void UpdateLastChat(string originUserId, string lastChatText)
     {
         if (IsOrderCompleted)
         {
@@ -48,9 +50,9 @@ public class ChatContact
         ChatUpdateTimestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
     }
 
-    public void SetMechanic(Guid mechanicId, string mechanicName)
+    public void SetMechanic(string mechanicId, string mechanicName)
     {
-        if (MechanicId is not null || MechanicId.HasValue || IsOrderCompleted)
+        if (MechanicId is not null || !string.IsNullOrEmpty(MechanicId) || IsOrderCompleted)
         {
             return;
         }
@@ -87,5 +89,5 @@ public class ChatContact
 
         IsChatExpired = false;
         return false;
-    }
+    } 
 }

@@ -10,14 +10,14 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
     private readonly IChatService _chatService = chatService;
     public async Task Consume(ConsumeContext<AccountMechanicOrderAcceptedIntegrationEvent> context)
     {
-        var contacts = await _chatService.GetChatContactByOrderId(context.Message.OrderId);
+        var contacts = await _chatService.GetChatContactByOrderId(context.Message.OrderId.ToString());
 
         if (contacts is null)
         {
             return;
         }
 
-        contacts.SetMechanic(context.Message.MechanicId, context.Message.MechanicName);
+        contacts.SetMechanic(context.Message.MechanicId.ToString(), context.Message.MechanicName);
 
         await _chatService.UpdateChatContact(contacts);
     }
