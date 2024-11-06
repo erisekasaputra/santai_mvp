@@ -1,4 +1,5 @@
 ﻿using Chat.API.Applications.Dtos.Request;
+using Chat.API.Applications.Mapper;
 using Chat.API.Applications.Services.Interfaces;
 using Chat.API.Domain.Events;
 using Chat.API.Domain.Models; 
@@ -34,15 +35,47 @@ public class ChatHub(
     }
 
     public async Task SendMessage(SendMessageRequest request)
-    {
-        string messageId = string.Empty;
+    { 
         try
         { 
             var originUserId = Context.UserIdentifier; 
             if (string.IsNullOrEmpty(originUserId) || string.IsNullOrEmpty(request.DestinationUserId) || string.IsNullOrEmpty(request.Text) || string.IsNullOrEmpty(request.OrderId)) 
             {
+                await Clients.Caller.ChatBadRequest("Missing required fields.", string.Empty);
+                return;
+            }
+
+            var chatContact = await _chatService.GetChatContactByOrderId(request.OrderId);
+
+            if (chatContact is null)
+            {
+                await Clients.Caller.ChatBadRequest("Chat session is no longer available", request.OrderId);
                 return;
             } 
+
+            if (chatContact.IsExpired())
+            {
+                await _chatService.UpdateChatContact(chatContact);
+                await Clients.User(chatContact.BuyerId).UpdateChatContact(chatContact.ToResponse());
+                if (chatContact.MechanicId is null)
+                {
+                    return;
+                }
+                await Clients.User(chatContact.MechanicId).UpdateChatContact(chatContact.ToResponse());
+                return;
+            }
+
+            //if ((originUserId != chatContact.BuyerId && originUserId != chatContact.MechanicId) 
+            //    || (request.DestinationUserId != chatContact.BuyerId && request.DestinationUserId != chatContact.MechanicId)) 
+            //{
+            //    await Clients.Caller.ChatBadRequest("Chat session is no longer available", chatContact.OrderId);
+            //    return;
+            //} 
+
+            //if (string.IsNullOrEmpty(chatContact.MechanicId))
+            //{
+            //    throw new InvalidOperationException("Waiting for mechanic assignment");
+            //} 
 
             var conversation = new Conversation(
                 request.OrderId,
@@ -52,20 +85,19 @@ public class ChatHub(
                 request.Attachment,
                 request.ReplyMessageId,
                 request.ReplyMessageText);
-
-            messageId = conversation.MessageId;
+             
+            chatContact.UpdateLastChat(conversation.OriginUserId, conversation.Text);
 
             _ = await _chatService.SaveChatMessageAsync(conversation);
+            _ = await _chatService.UpdateChatContact(chatContact);
 
-            await Clients.User(request.DestinationUserId).ReceiveMessage(conversation);
+            await Clients.User(request.DestinationUserId).ReceiveMessage(conversation.ToResponse());
+            await Clients.User(request.DestinationUserId).UpdateChatContact(chatContact.ToResponse());
+
+            _logger.LogInformation("Chat sent: {text}", conversation.Text);
 
             await _mediator.Publish(new ChatSentDomainEvent(conversation));
-        }
-        catch (InvalidOperationException ex)
-        {
-            LoggerHelper.LogError(_logger, ex);
-            await Clients.Caller.ChatBadRequest(messageId, request.OrderId);
-        }
+        } 
         catch (Exception ex)
         { 
             LoggerHelper.LogError(_logger, ex);

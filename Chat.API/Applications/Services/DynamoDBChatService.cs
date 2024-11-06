@@ -1,7 +1,5 @@
-﻿using Amazon; 
-using Amazon.DynamoDBv2.DataModel;
-using Amazon.DynamoDBv2.DocumentModel; 
-using Amazon.Runtime;
+﻿using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;  
 using Chat.API.Applications.Services.Interfaces;
 using Chat.API.Domain.Models;
 using Core.Configurations;
@@ -31,20 +29,7 @@ public class DynamoDBChatService : IChatService
     }
 
     public async Task<bool> SaveChatMessageAsync(Conversation conversation)
-    { 
-        var chatContact = await GetChatContactByOrderId(conversation.OrderId) ?? throw new InvalidOperationException("Chat session is no longer available");
-
-        if (chatContact.IsExpired())
-        {
-            await _dynamoDBContext.SaveAsync(chatContact);
-            throw new InvalidOperationException("Chat session is no longer available");
-        }
-
-        //if (string.IsNullOrEmpty(chatContact.MechanicId))
-        //{
-        //    throw new InvalidOperationException("Waiting for mechanic assignment");
-        //}
-
+    {  
         try
         {
             conversation.Text = string.IsNullOrEmpty(conversation.Text)
@@ -65,21 +50,17 @@ public class DynamoDBChatService : IChatService
         catch (Exception)
         {
             conversation.ReplyMessageText = string.Empty;
-        }
-
-        chatContact.UpdateLastChat(conversation.OriginUserId, conversation.Text);
+        } 
 
         try
         { 
-            await _dynamoDBContext.SaveAsync(conversation);
-            await _dynamoDBContext.SaveAsync(chatContact);
+            await _dynamoDBContext.SaveAsync(conversation); 
             return true;
         }
         catch (Exception ex)
         {
             throw new Exception("Failed to save conversation into DynamoDB", ex);
-        }
-         
+        } 
     }
 
     public async Task<List<Conversation>?> GetMessageByOrderIdAndTimestamp(string orderId, long timestamp, bool forward = true)

@@ -1,10 +1,13 @@
-﻿using Chat.API.Domain.Models; 
+﻿using Chat.API.Applications.Dtos.Response; 
 
 namespace Chat.API.Applications.Services.Interfaces;
 
 public interface IChatClient
 {
-    Task ReceiveMessage(Conversation conversation); 
+    Task UpdateChatContact(ChatContactResponse chatContact);
+    Task ReceiveChatContact(ChatContactResponse chatContact);
+    Task DeleteChatContact(string orderId);
+    Task ReceiveMessage(ConversationResponse conversation); 
     Task InternalServerError(string errorMessage);
     Task ChatBadRequest(string messageId, string orderId);
 }

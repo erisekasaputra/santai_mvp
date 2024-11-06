@@ -4,6 +4,6 @@ public record SendMessageRequest(
     string OrderId,
     string DestinationUserId,
     string Text,
-    string? Attachment,
-    string? ReplyMessageId,
-    string? ReplyMessageText);
+    string Attachment,
+    string ReplyMessageId,
+    string ReplyMessageText);
