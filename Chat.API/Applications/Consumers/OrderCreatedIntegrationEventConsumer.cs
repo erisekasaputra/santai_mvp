@@ -16,6 +16,7 @@ public class OrderCreatedIntegrationEventConsumer(IChatService chatService, IHub
     public async Task Consume(ConsumeContext<OrderCreatedIntegrationEvent> context)
     {
         var chatContact = new ChatContact(context.Message.OrderId.ToString(), context.Message.BuyerId.ToString(), context.Message.BuyerName);
+
         await _chatService.CreateChatContact(chatContact);
 
         await _chatHub.Clients.User(context.Message.BuyerId.ToString()).ReceiveChatContact(chatContact.ToResponse());

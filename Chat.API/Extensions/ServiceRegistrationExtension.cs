@@ -23,7 +23,10 @@ public static class ServiceRegistrationExtension
         builder.Services.AddScoped<IUserInfoService, UserInfoService>();
 
         var options = builder.Configuration.GetSection(CacheConfiguration.SectionName).Get<CacheConfiguration>() ?? throw new Exception(); 
-        builder.Services.AddSignalR().AddStackExchangeRedis(configure =>
+        builder.Services.AddSignalR(configure =>
+        {
+            configure.KeepAliveInterval = TimeSpan.FromSeconds(5);
+        }).AddStackExchangeRedis(configure =>
         {
             var configurations = new ConfigurationOptions
             {

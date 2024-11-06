@@ -121,8 +121,7 @@ public class DynamoDBChatService : IChatService
         catch (Exception ex)
         {
             throw new Exception("Error retrieving messages", ex);
-        }
-         
+        } 
     }
 
 
@@ -170,7 +169,7 @@ public class DynamoDBChatService : IChatService
                     { ":buyerId", buyerId.ToString() } 
                 }
             },
-            BackwardSearch = false,
+            BackwardSearch = true,
             Limit = 1000
         };
 
@@ -223,7 +222,7 @@ public class DynamoDBChatService : IChatService
                     { ":mechanicId", mechanicId.ToString() } 
                 }
             },
-            BackwardSearch = false,
+            BackwardSearch = true,
             Limit = 1000
         };
 
