@@ -1,9 +1,12 @@
 ﻿using Chat.API.Applications.Dtos.Request;
+using Chat.API.Applications.Mapper;
+using Chat.API.Applications.Services;
 using Chat.API.Applications.Services.Interfaces;
 using Chat.API.Domain.Enumerations;
 using Core.Results; 
 using Core.Services.Interfaces; 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Chat.API.Apis;
 
@@ -22,26 +25,32 @@ public static class MapChatApi
 
     private static async Task<IResult> GetLatestChat(
         [AsParameters] LatestChatRequest request,
-        [FromServices] IChatService chatService)
+        [FromServices] IChatService chatService,
+        [FromServices] IUserInfoService userInfoService,
+        [FromServices] IHubContext<ChatHub, IChatClient> _chatHub)
     {
         try
-        {
-            var conversations = await chatService.GetMessageByOrderIdAndTimestamp(request.OrderId.ToString(), request.Timestamp, request.Forward);
-            if (conversations is null || conversations.Count == 0)
+        { 
+            var user = userInfoService.GetUserInfo();
+            if (user is null)
             {
-                return TypedResults.NotFound(
-                    Result.Failure("There is no recent chat", ResponseStatus.NotFound));
+                return TypedResults.Unauthorized();
+            }
+             
+            await foreach (var conversation in chatService.GetMessageByOrderId(request.OrderId.ToString(), request.Forward))
+            { 
+                await _chatHub.Clients.User(user.Sub.ToString()).ReceiveMessage(conversation.ToResponse());
             }
 
-            return TypedResults.Ok(
-                Result.Success(conversations, ResponseStatus.Ok));
+            return TypedResults.Ok(Result.Success(null, ResponseStatus.Ok));
         }
-        catch(Exception ex)
-        { 
+        catch (Exception ex)
+        {
+            // Return an internal server error with the exception message
             return TypedResults.InternalServerError(Result.Failure(ex.Message, ResponseStatus.InternalServerError));
         }
     }
-     
+
     private static async Task<IResult> GetChatContacts(
         [AsParameters] ChatContactRequest request,
         [FromServices] IChatService chatService,

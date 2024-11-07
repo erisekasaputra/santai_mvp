@@ -9,13 +9,11 @@ using Microsoft.Extensions.Options;
 namespace Chat.API.Applications.Services;
 
 public class DynamoDBChatService : IChatService
-{
-    private readonly IEncryptionService _encryptionService;
+{ 
     //private readonly AmazonDynamoDBClient _dynamoDbClient;
     private readonly IDynamoDBContext _dynamoDBContext; 
 
-    public DynamoDBChatService( 
-        IEncryptionService encryptionService,
+    public DynamoDBChatService(  
         IConfiguration configuration,
         IOptionsMonitor<AWSIAMConfiguration> awsIamConfiguration,
         IDynamoDBContext dynamoDBContext)
@@ -23,35 +21,12 @@ public class DynamoDBChatService : IChatService
         //var iam = awsIamConfiguration.CurrentValue; 
         //var credentials = new BasicAWSCredentials(iam.AccessID, iam.SecretKey); 
         //var regionEndpoint = RegionEndpoint.GetBySystemName(iam.Region);
-        //_dynamoDbClient = new AmazonDynamoDBClient(credentials, regionEndpoint);
-        _encryptionService = encryptionService;
+        //_dynamoDbClient = new AmazonDynamoDBClient(credentials, regionEndpoint); 
         _dynamoDBContext = dynamoDBContext; 
     }
 
     public async Task<bool> SaveChatMessageAsync(Conversation conversation)
-    {  
-        try
-        {
-            conversation.Text = string.IsNullOrEmpty(conversation.Text)
-                ? string.Empty
-                : await _encryptionService.EncryptAsync(conversation.Text); 
-        }
-        catch (Exception)
-        {
-            conversation.Text = string.Empty; 
-        }
-
-        try
-        {
-            conversation.ReplyMessageText = string.IsNullOrEmpty(conversation.ReplyMessageText)
-                ? string.Empty
-                : await _encryptionService.EncryptAsync(conversation.ReplyMessageText);
-        }
-        catch (Exception)
-        {
-            conversation.ReplyMessageText = string.Empty;
-        } 
-
+    {   
         try
         { 
             await _dynamoDBContext.SaveAsync(conversation); 
@@ -63,85 +38,44 @@ public class DynamoDBChatService : IChatService
         } 
     }
 
-    public async Task<List<Conversation>?> GetMessageByOrderIdAndTimestamp(string orderId, long timestamp, bool forward = true)
+    public async IAsyncEnumerable<Conversation> GetMessageByOrderId(string orderId, bool forward = true)
     {
-        // Configure QueryConfig
         var queryConfig = new QueryOperationConfig
-        { 
+        {
             IndexName = "OrderId-Timestamp-index",
             KeyExpression = new Expression
             {
-                ExpressionStatement = $"#orderId = :orderId AND #timestamp {(forward ? ">" : "<")} :timestamp",
+                ExpressionStatement = "#orderId = :orderId",
                 ExpressionAttributeNames = new Dictionary<string, string>
                 {
-                    { "#orderId", nameof(Conversation.OrderId) },
-                    { "#timestamp", nameof(Conversation.Timestamp) }
+                    { "#orderId", nameof(Conversation.OrderId) }
                 },
                 ExpressionAttributeValues = new Dictionary<string, DynamoDBEntry>
                 {
-                    { ":orderId", orderId.ToString() },
-                    { ":timestamp", timestamp }
+                    { ":orderId", orderId.ToString() }
                 }
             },
-            BackwardSearch = !forward, // Set the order of scanning
-            Limit = 100
+            BackwardSearch = !forward,
+            Limit = 1 
         };
 
-        try
-        {
-            // Perform query using QueryAsync with QueryConfig
-            var search = _dynamoDBContext.FromQueryAsync<Conversation>(queryConfig);
-            var results = await search.GetNextSetAsync();
-
-            // Decrypt message text after retrieving the data
-            var tasks = results.Select(async conversation =>
+        var search = _dynamoDBContext.FromQueryAsync<Conversation>(queryConfig);
+         
+        do
+        { 
+            var items = await search.GetNextSetAsync(); 
+            foreach (var item in items)
             {
-                try
-                {
-                    conversation.Text = string.IsNullOrEmpty(conversation.Text)
-                        ? string.Empty
-                        : await _encryptionService.DecryptAsync(conversation.Text);
+                yield return item;
+            }
 
-                    if (!string.IsNullOrEmpty(conversation.ReplyMessageText))
-                    {
-                        conversation.ReplyMessageText = await _encryptionService.DecryptAsync(conversation.ReplyMessageText);
-                    }
-                }
-                catch (Exception)
-                {
-                    conversation.Text = string.Empty;
-                    conversation.ReplyMessageText = string.Empty;
-                }
-
-                return conversation;
-            });
-
-            return [.. (await Task.WhenAll(tasks))];
-        }
-        catch (Exception ex)
-        {
-            throw new Exception("Error retrieving messages", ex);
-        } 
-    }
-
-
-
+        } while (!string.IsNullOrEmpty(search.PaginationToken));
+    } 
+     
     public async Task<bool> CreateChatContact(ChatContact chatContact)
-    {
+    { 
         try
-        {
-            chatContact.LastChatText = string.IsNullOrEmpty(chatContact.LastChatText)
-                ? string.Empty
-                : await _encryptionService.EncryptAsync(chatContact.LastChatText);
-        }
-        catch (Exception)
-        {
-            chatContact.LastChatText = string.Empty;
-        }
-
-        try
-        {
-            // Save the ChatContact object directly to DynamoDB
+        { 
             await _dynamoDBContext.SaveAsync(chatContact);
             return true;
         }
@@ -180,19 +114,7 @@ public class DynamoDBChatService : IChatService
              
             var decryptedResults = new List<ChatContact>();
             foreach (var chatContact in results)
-            { 
-                try
-                {
-                    if (!string.IsNullOrEmpty(chatContact.LastChatText))
-                    {
-                        chatContact.LastChatText = await _encryptionService.DecryptAsync(chatContact.LastChatText);
-                    }
-                }
-                catch (Exception)
-                {
-                    chatContact.LastChatText = string.Empty; 
-                }
-
+            {  
                 chatContact.IsExpired(); // this is important, dont remove
                 decryptedResults.Add(chatContact);
             }
@@ -233,19 +155,7 @@ public class DynamoDBChatService : IChatService
              
             var decryptedResults = new List<ChatContact>();
             foreach (var chatContact in results)
-            {
-                try
-                {
-                    if (!string.IsNullOrEmpty(chatContact.LastChatText))
-                    {
-                        chatContact.LastChatText = await _encryptionService.DecryptAsync(chatContact.LastChatText);
-                    }
-                }
-                catch (Exception)
-                {
-                    chatContact.LastChatText = string.Empty;
-                }
-
+            { 
                 chatContact.IsExpired(); // dont remove , this is important
                 decryptedResults.Add(chatContact);
             }
@@ -266,20 +176,7 @@ public class DynamoDBChatService : IChatService
                 .QueryAsync<ChatContact>(orderId)
                 .GetRemainingAsync();
              
-            var chatContact = queryResult.FirstOrDefault();
-
-            if (chatContact != null && !string.IsNullOrEmpty(chatContact.LastChatText))
-            {
-                try
-                {
-                    chatContact.LastChatText = await _encryptionService.DecryptAsync(chatContact.LastChatText);
-                }
-                catch (Exception)
-                {
-                    chatContact.LastChatText = string.Empty;
-                }
-            }
-
+            var chatContact = queryResult.FirstOrDefault(); 
             chatContact?.IsExpired(); 
             return chatContact;
         }
@@ -292,12 +189,7 @@ public class DynamoDBChatService : IChatService
     public async Task<bool> UpdateChatContact(ChatContact chatContact)
     {
         try
-        { 
-            if (!string.IsNullOrEmpty(chatContact.LastChatText))
-            {
-                chatContact.LastChatText = await _encryptionService.EncryptAsync(chatContact.LastChatText);
-            }
-             
+        {  
             var existingChatContact = await _dynamoDBContext.LoadAsync<ChatContact>(chatContact.OrderId, chatContact.LastChatTimestamp);
             if (existingChatContact == null)
             {
