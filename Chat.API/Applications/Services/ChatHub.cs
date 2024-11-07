@@ -91,7 +91,10 @@ public class ChatHub(
             _ = await _chatService.SaveChatMessageAsync(conversation);
             _ = await _chatService.UpdateChatContact(chatContact);
 
+            await Clients.Caller.ReceiveMessage(conversation.ToResponse());
             await Clients.User(request.DestinationUserId).ReceiveMessage(conversation.ToResponse());
+
+            await Clients.Caller.UpdateChatContact(chatContact.ToResponse());
             await Clients.User(request.DestinationUserId).UpdateChatContact(chatContact.ToResponse());
 
             _logger.LogInformation("Chat sent: {text}", conversation.Text);
