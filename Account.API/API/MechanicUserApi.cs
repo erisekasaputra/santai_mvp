@@ -15,6 +15,7 @@ using Account.API.Applications.Commands.OrderTaskCommand.AcceptOrderByMechanicUs
 using Account.API.Applications.Commands.OrderTaskCommand.RejectOrderMechanicByUserId;
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetDrivingLicenseByMechanicUserId;
+using Account.API.Applications.Queries.GetMechanicStatusExistence;
 using Account.API.Applications.Queries.GetMechanicUserById;
 using Account.API.Applications.Queries.GetNationalIdentityByMechanicUserId;
 using Account.API.Applications.Queries.GetPaginatedMechanicCertificationByUserId;
@@ -59,6 +60,8 @@ public static class MechanicUserApi
         app.MapGet("/{mechanicUserId}/national-identity", GetNationalIdentityByMechanicUserId) 
             .RequireAuthorization(PolicyName.MechanicUserAndAdministratorUserPolicy.ToString());
 
+        app.MapGet("/status", GetMechanicStatusExistence)
+            .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());
 
         app.MapPatch("/status/activate", ActivateMechanicStatus)
             .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());
@@ -213,6 +216,28 @@ public static class MechanicUserApi
             } 
 
             var result = await service.Mediator.Send(new ActivateMechanicStatusByUserIdCommand(userClaim.Sub));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    } 
+    private static async Task<IResult> GetMechanicStatusExistence( 
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
+    {
+        try
+        {
+            var userClaim = userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            } 
+
+            var result = await service.Mediator.Send(new GetMechanicStatusExistenceQuery(userClaim.Sub));
 
             return result.ToIResult();
         }

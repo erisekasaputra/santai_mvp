@@ -4,9 +4,7 @@ using Account.API.Applications.Services;
 using Account.API.Extensions;  
 using Account.Infrastructure;
 using Core.Extensions;
-using Core.Middlewares;
-using Microsoft.AspNetCore.Http.Connections;
-using Microsoft.Extensions.Options;
+using Core.Middlewares; 
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,8 +15,7 @@ builder.Services.AddCors(options =>
     {
         policy.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
     });
-});
-builder.Services.AddSignalR();
+}); 
 builder.Services.AddRouting();
 builder.Services.AddHealthChecks();
 builder.Services.AddHttpContextAccessor();  

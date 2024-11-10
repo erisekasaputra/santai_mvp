@@ -247,12 +247,7 @@ public class MechanicCache : IMechanicCache
         return (false, string.Empty);
     }
 
-
-
-
-
-
-
+     
       
     public async Task<(bool isSuccess, string buyerId)> CompleteOrder(
         string orderId, string mechanicId)
@@ -945,8 +940,14 @@ public class MechanicCache : IMechanicCache
         return new OrderTaskMechanicConfirm(orderId.ToString(), mechanicId, expireAtUtc);
     }
 
+    public async Task<OrderTaskMechanicConfirm?> GetOrderWaitingMechanicConfirmationAsync(string orderId)
+    {
+        var db = _connectionMultiplexer.GetDatabase();
+        return await GetOrderWaitingMechanicConfirmAsync(db, orderId);
+    }
 
-    private async Task CreateGeoAsync(IDatabase db, MechanicExistence mechanic)
+
+    private static async Task CreateGeoAsync(IDatabase db, MechanicExistence mechanic)
     {
         try
         {
@@ -958,7 +959,7 @@ public class MechanicCache : IMechanicCache
             throw;
         }
     } 
-    private async Task CreateMechanicHashSetAsync(IDatabase db, MechanicExistence mechanic)
+    private static async Task CreateMechanicHashSetAsync(IDatabase db, MechanicExistence mechanic)
     {
         try
         {
@@ -1002,5 +1003,10 @@ public class MechanicCache : IMechanicCache
             throw;
         }
     }
-     
+
+    public async Task<MechanicExistence?> GetMechanicExistence(string mechanicId)
+    {
+        var db = _connectionMultiplexer.GetDatabase();
+        return await GetMechanicHashSetAsync(db, mechanicId);
+    }
 }

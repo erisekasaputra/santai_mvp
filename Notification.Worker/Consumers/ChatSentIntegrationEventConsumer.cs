@@ -46,7 +46,7 @@ public class ChatSentIntegrationEventConsumer(
             {
                 notification = new
                 {
-                    title = "Santai",
+                    title = "New Chat",
                     body = context.Message.Text,
                     image = _projectConfiguration.LogoUrl,
                 },
@@ -54,7 +54,7 @@ public class ChatSentIntegrationEventConsumer(
                 data = new
                 {
                     token = profile.DeviceToken,
-                    title = "Santai",
+                    title = "New Chat",
                     body = context.Message.Text,
                     image = _projectConfiguration.LogoUrl,
                     click_action = "OPEN_APP",

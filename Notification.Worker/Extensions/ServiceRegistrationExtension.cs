@@ -77,7 +77,11 @@ public static class ServiceRegistrationExtension
     {
         var options = builder.Configuration.GetSection(CacheConfiguration.SectionName).Get<CacheConfiguration>() ?? throw new Exception();  
 
-        builder.Services.AddSignalR().AddStackExchangeRedis(configure =>
+        builder.Services.AddSignalR((configure) =>
+        {
+            configure.KeepAliveInterval = TimeSpan.FromMinutes(10);
+            configure.ClientTimeoutInterval = TimeSpan.FromHours(24);
+        }).AddStackExchangeRedis(configure =>
         {
             var configurations = new ConfigurationOptions
             {
@@ -87,10 +91,9 @@ public static class ServiceRegistrationExtension
                 AbortOnConnectFail = false,
                 ReconnectRetryPolicy = new ExponentialRetry((int)TimeSpan
                    .FromSeconds(options.ReconnectRetryPolicy).TotalMilliseconds),
-                ChannelPrefix = RedisChannel.Literal("NotificationWorker")
+                ChannelPrefix = RedisChannel.Literal("NotificationWorker"),
+                Ssl = options.Ssl
             };
-             
-            configurations.Ssl = options.Ssl;
 
             configure.Configuration = configurations; 
         }); 

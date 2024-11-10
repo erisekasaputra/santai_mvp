@@ -18,11 +18,13 @@ public interface IMechanicCache
     Task<(bool isSuccess, string buyerId)> CancelOrderByMechanic(string orderId, string mechanicId);
     Task<(bool isSuccess, string buyerId)> CompleteOrder(string orderId, string mechanicId); 
     Task<(bool isSuccess, string mechanicId)> CancelOrderByUser(string orderId, string buyerId);
+    Task<MechanicExistence?> GetMechanicExistence(string mechanicId);
+    Task<OrderTaskMechanicConfirm?> GetOrderWaitingMechanicConfirmationAsync(string orderId);
 
-    
-    
-    
-    
+
+
+
+
     //Task OrderWaitingConfirmMechanic(IDatabase db, OrderTask order, MechanicExistence mechanic);
     //Task<bool> IsMechanicBlockedFromOrder(string mechanicId, string orderId);    
     //Task<MechanicExistence?> GetMechanicHashSetAsync(string mechanicId);

@@ -25,7 +25,8 @@ public static class ServiceRegistrationExtension
         var options = builder.Configuration.GetSection(CacheConfiguration.SectionName).Get<CacheConfiguration>() ?? throw new Exception(); 
         builder.Services.AddSignalR(configure =>
         {
-            configure.KeepAliveInterval = TimeSpan.FromSeconds(5);
+            configure.KeepAliveInterval = TimeSpan.FromMinutes(10);
+            configure.ClientTimeoutInterval = TimeSpan.FromHours(24);
         }).AddStackExchangeRedis(configure =>
         {
             var configurations = new ConfigurationOptions

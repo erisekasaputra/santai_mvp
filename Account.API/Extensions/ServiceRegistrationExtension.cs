@@ -28,7 +28,12 @@ public static class ServiceRegistrationExtension
         builder.Services.AddScoped<IMechanicCache, MechanicCache>();
         builder.Services.AddHostedService<OrderWaitingMechanicAssignJob>();
         builder.Services.AddHostedService<OrderWaitingMechanicConfirmExpiryJob>();
-         
+
+        builder.Services.AddSignalR(configure =>
+        {
+            configure.KeepAliveInterval = TimeSpan.FromMinutes(10);
+            configure.ClientTimeoutInterval = TimeSpan.FromHours(24);
+        }); 
 
         return builder;
     }  
