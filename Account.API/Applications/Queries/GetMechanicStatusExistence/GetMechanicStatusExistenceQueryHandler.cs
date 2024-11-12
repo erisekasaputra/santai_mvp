@@ -8,7 +8,8 @@ using MediatR;
 
 namespace Account.API.Applications.Queries.GetMechanicStatusExistence;
 
-public class GetMechanicStatusExistenceQueryHandler(IMechanicCache mechanicCache, ILogger logger) : IRequestHandler<GetMechanicStatusExistenceQuery, Result>
+public class GetMechanicStatusExistenceQueryHandler
+    (IMechanicCache mechanicCache, ILogger logger) : IRequestHandler<GetMechanicStatusExistenceQuery, Result>
 {
     private readonly IMechanicCache _mechanicCache = mechanicCache;
     private readonly ILogger _logger = logger;
@@ -33,7 +34,7 @@ public class GetMechanicStatusExistenceQueryHandler(IMechanicCache mechanicCache
             return Result.Success(ToResponse(mechanic, task), ResponseStatus.Ok);
         }
         catch (Exception ex) 
-        {
+        { 
             LoggerHelper.LogError(_logger, ex); 
             return Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
         }

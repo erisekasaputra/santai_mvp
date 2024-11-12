@@ -792,6 +792,131 @@ public class AuthController(
         }); 
     }
 
+
+    [HttpPost("signin-mechanic")]
+    public async Task<IResult> LoginMechanic(
+        [FromBody] LoginUserRequest request,
+        [FromServices] IValidator<LoginUserRequest> validator)
+    {
+        var strategy = _dbContext.Database.CreateExecutionStrategy();
+
+        return await strategy.ExecuteAsync<IResult>(async () =>
+        {
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
+            try
+            {
+                var validation = await validator.ValidateAsync(request);
+
+                if (!validation.IsValid)
+                {
+                    return TypedResults.BadRequest(validation.Errors);
+                }
+
+
+                var phoneNumber = request.PhoneNumber.NormalizePhoneNumber(request.RegionCode);
+
+                if (phoneNumber is null)
+                {
+                    return TypedResults.BadRequest(
+                        Result.Failure("Phone number format is invalid", ResponseStatus.BadRequest)
+                            .WithError(new("PhoneNumber", "Phone number format is invalid", request.PhoneNumber, "PhoneNumberValidator", "Error")));
+                }
+
+                var user = await _userManager.FindByNameAsync(phoneNumber);
+
+                if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
+                {
+                    return TypedResults.NotFound(
+                        Result.Failure("We could not find you account", ResponseStatus.NotFound));
+                }
+
+                if (user.UserType != UserType.MechanicUser)
+                {
+                    return TypedResults.Forbid();
+                }
+
+
+                if (!user.PhoneNumberConfirmed)
+                {
+                    (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(
+                        phoneNumber, user.Email, OtpRequestFor.VerifyPhoneNumber);
+
+                    await _dbContext.SaveChangesAsync();
+                    await transaction.CommitAsync();
+
+                    return TypedResults.Accepted(_sendOtpActionName,
+                        Result.Success(null, ResponseStatus.Accepted)
+                        .WithNext(new
+                        {
+                            Link = Url.Action(_sendOtpActionName, _controllerName),
+                            Action = _sendOtpActionName,
+                            Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                            OtpRequestToken = otpRequestToken,
+                            OtpRequestId = requestId,
+                            OtpProviderTypes = AllowedOtpProviderType.GetAll
+                        }));
+                }
+
+
+                var signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false);
+                if (!signInResult.Succeeded)
+                {
+                    return TypedResults.Unauthorized();
+                }
+
+
+                var claims = await _userManager.GetClaimsAsync(user);
+                if (claims is null || !claims.Any())
+                {
+                    _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
+                    return TypedResults.InternalServerError(
+                        Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
+                }
+
+                var roles = await _userManager.GetRolesAsync(user);
+
+                if (roles is null || !roles.Any())
+                {
+                    _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
+                    return TypedResults.InternalServerError(
+                        Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
+                }
+
+
+                (Guid newRequestId, string newOtpRequestToken) = await _otpService.GenerateRequestOtpAsync(phoneNumber, user.Email, OtpRequestFor.VerifyLogin);
+
+                await _dbContext.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return TypedResults.Accepted(_sendOtpActionName,
+                    Result.Success(new
+                    {
+                        Sub = user.Id,
+                        Username = user.UserName,
+                        PhoneNumber = phoneNumber,
+                        Email = user.Email,
+                        UserType = user.UserType,
+                        BusinessCode = user.BusinessCode
+                    }).WithNext(new
+                    {
+                        Link = Url.Action(_sendOtpActionName, _controllerName),
+                        Action = _sendOtpActionName,
+                        Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                        OtpRequestToken = newOtpRequestToken,
+                        OtpRequestId = newRequestId,
+                        OtpProviderTypes = AllowedOtpProviderType.GetAll
+                    }));
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogError(_logger, ex);
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+            }
+        });
+    }
+
     [HttpPost("register")]
     [Idempotency(nameof(CreateIdentity))]
     public async Task<IResult> CreateIdentity(

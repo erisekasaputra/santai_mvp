@@ -95,9 +95,7 @@ public class ChatHub(
             await Clients.User(request.DestinationUserId).ReceiveMessage(conversation.ToResponse());
 
             await Clients.Caller.UpdateChatContact(chatContact.ToResponse());
-            await Clients.User(request.DestinationUserId).UpdateChatContact(chatContact.ToResponse());
-
-            _logger.LogInformation("Chat sent: {text}", conversation.Text);
+            await Clients.User(request.DestinationUserId).UpdateChatContact(chatContact.ToResponse()); 
 
             await _mediator.Publish(new ChatSentDomainEvent(conversation));
         } 
