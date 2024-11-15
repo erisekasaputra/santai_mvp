@@ -92,8 +92,7 @@ public class MechanicCache : IMechanicCache
                 await CreateMechanicHashSetAsync(db, mech); 
                 return true;
             }
-            await CreateGeoAsync(db, mech);
-
+            await CreateGeoAsync(db, mech); 
             return true;
         }
     }
@@ -117,7 +116,7 @@ public class MechanicCache : IMechanicCache
                 return true;
             }
 
-            return true;
+            return false;
         }
     }
 
