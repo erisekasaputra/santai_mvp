@@ -20,6 +20,7 @@ public interface IMechanicCache
     Task<(bool isSuccess, string mechanicId)> CancelOrderByUser(string orderId, string buyerId);
     Task<MechanicExistence?> GetMechanicExistence(string mechanicId);
     Task<OrderTaskMechanicConfirm?> GetOrderWaitingMechanicConfirmationAsync(string orderId);
+    Task<OrderTask?> GetOrderTaskByOrderIdAsync(string orderId);
 
 
 

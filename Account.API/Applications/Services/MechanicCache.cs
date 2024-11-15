@@ -924,6 +924,12 @@ public class MechanicCache : IMechanicCache
         return new OrderTask(orderId.ToString(), buyerId, mechanicId, latitude, longitude, status);
     }
 
+    public async Task<OrderTask?> GetOrderTaskByOrderIdAsync(string orderId)
+    {
+        var db = _connectionMultiplexer.GetDatabase();
+        return await GetOrderTaskAsync(db, orderId);
+    }
+
     private async Task<OrderTaskMechanicConfirm?> GetOrderWaitingMechanicConfirmAsync(IDatabase db, string orderId)
     {
         var hashKey = CacheKey.OrderWaitingMechanicConfirmDataPrefix(orderId);
