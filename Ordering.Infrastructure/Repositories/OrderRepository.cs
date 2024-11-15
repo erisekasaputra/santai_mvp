@@ -132,4 +132,41 @@ public class OrderRepository : IOrderRepository
             .Where(x => x.Buyer.BuyerId == userId && queryStatus.Contains(x.Status))
             .ToListAsync(); 
     }
+
+    public async Task<(int TotalCount, int TotalPages, IEnumerable<Order> Orders)> GetPaginatedOrdersByMechanicId(Guid? userId, int pageNumber, int pageSize, OrderStatus? status)
+    {
+        var query = _dbContext.Orders.AsQueryable();
+
+        if (userId is not null && userId.HasValue && userId != Guid.Empty)
+        {
+            query = query.Where(x => x.Mechanic != null && x.Mechanic.MechanicId == userId);
+        }
+
+        if (status is not null)
+        {
+            query = query.Where(x => x.Status == status);
+        }
+
+        var totalCount = await query.CountAsync();
+
+        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+        var items = await query
+            .AsNoTracking()
+            .Include(order => order.LineItems)
+            .Include(order => order.Payment)
+            .Include(order => order.Cancellation)
+            .Include(order => order.Mechanic)
+            .Include(order => order.Buyer)
+            .Include(order => order.Discount)
+            .Include(order => order.Fees)
+            .Include(order => order.Fleets)
+            .AsSplitQuery()
+            .OrderByDescending(x => x.CreatedAtUtc)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (totalCount, totalPages, items);
+    }
 }

@@ -25,6 +25,7 @@ using Ordering.API.Applications.Commands.Orders.SetServiceSuccessByOrderIdAndMec
 using Ordering.API.Applications.Dtos.Requests;
 using Ordering.API.Applications.Queries.Orders.GetOrderByIdAndUserId;
 using Ordering.API.Applications.Queries.Orders.GetOrderSecretByOrderId;
+using Ordering.API.Applications.Queries.Orders.GetPaginatedOrdersByMechanicUserId;
 using Ordering.API.Applications.Queries.Orders.GetPaginatedOrdersByUserId;
 using Ordering.API.Applications.Queries.Orders.GetPaginatedOrderServiceActiveByUserId;
 using Ordering.API.Applications.Queries.Orders.GetPaymentUrlByUserIdAndOrderId;
@@ -190,6 +191,33 @@ public class OrderController : ControllerBase
 
             var result = await _mediator.Send(
                 new GetPaginatedOrdersByUserIdQuery((userClaim.CurrentUserType == UserType.Administrator ? null : userClaim.Sub), request.PageNumber, request.PageSize, orderStatus));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            return TypedResults.InternalServerError(
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+        }
+    }
+
+
+    [HttpGet]
+    [Authorize(Policy = "MechanicUserOnlyPolicy")]
+    public async Task<IResult> GetPaginatedOrdersByMechanic(
+        [FromQuery] PaginatedRequestDto request, [FromQuery] OrderStatus? orderStatus = null)
+    {
+        try
+        {
+            var userClaim = _userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Forbid();
+            }
+
+            var result = await _mediator.Send(
+                new GetPaginatedOrdersByMechanicUserIdQuery(userClaim.Sub, request.PageNumber, request.PageSize, orderStatus));
 
             return result.ToIResult();
         }
