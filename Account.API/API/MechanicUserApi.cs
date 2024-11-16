@@ -9,6 +9,7 @@ using Account.API.Applications.Commands.MechanicUserCommand.RejectNationalIdenti
 using Account.API.Applications.Commands.MechanicUserCommand.SetDrivingLicenseByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.SetNationalIdentityByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.SetRatingByUserId;
+using Account.API.Applications.Commands.MechanicUserCommand.UpdateLocationByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.UpdateMechanicUserByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.VerifyMechanicUserByUserId;
 using Account.API.Applications.Commands.OrderTaskCommand.AcceptOrderByMechanicUserId;
@@ -61,6 +62,9 @@ public static class MechanicUserApi
             .RequireAuthorization(PolicyName.MechanicUserAndAdministratorUserPolicy.ToString());
 
         app.MapGet("/status", GetMechanicStatusExistence)
+            .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());   
+        
+        app.MapPatch("/location", UpdateMechanicLocation)
             .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());
 
         app.MapPatch("/status/activate", ActivateMechanicStatus)
@@ -224,7 +228,36 @@ public static class MechanicUserApi
             service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
+    }  
+    
+    private static async Task<IResult> UpdateMechanicLocation(
+        [AsParameters] LocationRequestDto location, 
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
+    {
+        try
+        {
+            var userClaim = userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            } 
+
+            var result = await service.Mediator.Send(new UpdateLocationByUserIdCommand(
+                userClaim.Sub,
+                location.Latitude,
+                location.Longitude));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
     } 
+
+
     private static async Task<IResult> GetMechanicStatusExistence( 
         [FromServices] ApplicationService service,
         [FromServices] IUserInfoService userInfoService)
