@@ -22,15 +22,10 @@ public class GetOrderByIdAndMechanicIdQueryHandler(
         {
             var order = await _unitOfWork.Orders.GetByIdAsync(request.OrderId, cancellationToken);
 
-            if (order is null)
+            if (order is null || order.Mechanic is null || order.Mechanic.MechanicId != request.UserId)
             {
                 return Result.Failure("Order not found", ResponseStatus.NotFound);
-            }
-
-            if (order.Mechanic is null || order.Mechanic.MechanicId != request.UserId)
-            {
-                return Result.Failure("Order not found", ResponseStatus.NotFound);
-            }
+            } 
 
             string paymentUrl = _paymentService.GeneratePaymentUrl(
                 order.GetDetail(),
