@@ -23,6 +23,7 @@ using Ordering.API.Applications.Commands.Orders.SetServiceFailedByOrderIdAndMech
 using Ordering.API.Applications.Commands.Orders.SetServiceInProgressByOrderIdAndMechanicId;
 using Ordering.API.Applications.Commands.Orders.SetServiceSuccessByOrderIdAndMechanicId;
 using Ordering.API.Applications.Dtos.Requests;
+using Ordering.API.Applications.Queries.Orders.GetOrderByIdAndMechanicId;
 using Ordering.API.Applications.Queries.Orders.GetOrderByIdAndUserId;
 using Ordering.API.Applications.Queries.Orders.GetOrderSecretByOrderId;
 using Ordering.API.Applications.Queries.Orders.GetPaginatedOrdersByMechanicUserId;
@@ -269,6 +270,32 @@ public class OrderController : ControllerBase
 
             var result = await _mediator.Send(
                 new GetOrderByIdAndUserIdQuery(orderId, userClaim.Sub));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            return TypedResults.InternalServerError(
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+        }
+    }
+
+    [HttpGet("{orderId}/mechanic")]
+    [Authorize(Policy = "MechanicUserOnlyPolicy")]
+    public async Task<IResult> GetOrderByIdAndMechanicId(
+       Guid orderId)
+    {
+        try
+        {
+            var userClaim = _userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Forbid();
+            }
+
+            var result = await _mediator.Send(
+                new GetOrderByIdAndMechanicIdQuery(orderId, userClaim.Sub));
 
             return result.ToIResult();
         }
