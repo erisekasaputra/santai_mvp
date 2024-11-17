@@ -203,7 +203,7 @@ public class OrderController : ControllerBase
     }
 
 
-    [HttpGet]
+    [HttpGet("mechanic")]
     [Authorize(Policy = "MechanicUserOnlyPolicy")]
     public async Task<IResult> GetPaginatedOrdersByMechanic(
         [FromQuery] PaginatedRequestDto request, [FromQuery] OrderStatus? orderStatus = null)
