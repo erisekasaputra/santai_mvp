@@ -57,7 +57,7 @@ public class RejectOrderByMechanicUserIdCommandHandler : IRequestHandler<RejectO
                         return Result.Success(null, ResponseStatus.NoContent);
                     }
 
-                    throw new InvalidOperationException();
+                    return Result.Failure("Could not reject the order", ResponseStatus.BadRequest);
                 }
                 catch (Exception)
                 { 
@@ -77,6 +77,11 @@ public class RejectOrderByMechanicUserIdCommandHandler : IRequestHandler<RejectO
             return result;
         }
         catch (DomainException ex)
+        {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+        }
+        catch (InvalidOperationException ex)
         {
             await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);

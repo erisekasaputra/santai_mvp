@@ -72,8 +72,7 @@ public class AcceptOrderByMechanicUserIdCommandHandler : IRequestHandler<AcceptO
                         await _mediator.Publish(@event);
                         return Result.Success(null, ResponseStatus.NoContent);
                     }
-
-                    throw new InvalidOperationException();
+                    return Result.Failure("Could not accept the order", ResponseStatus.BadRequest);
                 }
                 catch (Exception)
                 { 
@@ -93,6 +92,11 @@ public class AcceptOrderByMechanicUserIdCommandHandler : IRequestHandler<AcceptO
             return result;
         }
         catch (DomainException ex)
+        {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+        }
+        catch (InvalidOperationException ex)
         {
             await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);

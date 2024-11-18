@@ -65,7 +65,7 @@ public class DeactivateMechanicStatusByUserIdCommandHandler : IRequestHandler<De
                     return Result.Success(null, ResponseStatus.NoContent);
                 }
 
-                throw new InvalidOperationException();
+                return Result.Failure("Could not deactivate your account", ResponseStatus.BadRequest);
             });
 
             if (result.IsSuccess) 
@@ -80,6 +80,11 @@ public class DeactivateMechanicStatusByUserIdCommandHandler : IRequestHandler<De
             return result;
         }
         catch (DomainException ex)
+        {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+        }
+        catch (InvalidOperationException ex)
         {
             await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);

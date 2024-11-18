@@ -68,7 +68,7 @@ public class ActivateMechanicStatusByUserIdCommandHandler : IRequestHandler<Acti
                     return Result.Success(null, ResponseStatus.NoContent);
                 }
 
-                throw new InvalidOperationException();
+                return Result.Failure("Could not activate your account", ResponseStatus.BadRequest);
             });
 
             if (result.IsSuccess)
@@ -83,6 +83,11 @@ public class ActivateMechanicStatusByUserIdCommandHandler : IRequestHandler<Acti
             return result;
         }
         catch (DomainException ex)
+        {
+            await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+        }
+        catch (InvalidOperationException ex)
         {
             await _unitOfWork.RollbackTransactionAsync(cancellationToken);
             return Result.Failure(ex.Message, ResponseStatus.BadRequest);
