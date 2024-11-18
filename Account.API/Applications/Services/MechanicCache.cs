@@ -818,7 +818,7 @@ public class MechanicCache : IMechanicCache
         {
             new (nameof(OrderTaskMechanicConfirm.OrderId), order.OrderId),
             new (nameof(OrderTaskMechanicConfirm.MechanicId), mechanic.MechanicId),
-            new (nameof(OrderTaskMechanicConfirm.ExpiredAtUtc), DateTime.UtcNow.AddSeconds(_orderConfiguration.OrderMechanicConfirmTimeToAcceptInSeconds).ToString())
+            new (nameof(OrderTaskMechanicConfirm.ExpiredAtUtc), DateTime.UtcNow.AddSeconds(_orderConfiguration.OrderMechanicConfirmTimeToAcceptInSeconds <= 0 ? 120 : _orderConfiguration.OrderMechanicConfirmTimeToAcceptInSeconds).ToString())
         };
 
         await db.HashSetAsync(resource, hashEntries); 
@@ -833,7 +833,7 @@ public class MechanicCache : IMechanicCache
     private async Task BlockMechanicToAnOrder(IDatabase db, string mechanicId, string orderId)
     {
         var setKey = CacheKey.MechanicOrderBlacklistPrefix($"{mechanicId}:{orderId}"); 
-        await db.StringSetAsync(setKey, "blocked", TimeSpan.FromMinutes(_orderConfiguration.PenaltyInMinutes));  
+        await db.StringSetAsync(setKey, "blocked", TimeSpan.FromMinutes(_orderConfiguration.PenaltyInMinutes <= 0 ? 10 : _orderConfiguration.PenaltyInMinutes));  
     } 
 
     private async Task DeleteKeyRedlockAsync(IDatabase db, string lockResource)
