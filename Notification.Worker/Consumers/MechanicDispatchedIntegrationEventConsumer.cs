@@ -61,8 +61,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
                 notification = new 
                 {
                     title = "Santai",
-                    body = $"The mechanic is on the way to your location",
-                    image = _projectConfiguration.LogoUrl,
+                    body = $"The mechanic is heading to your location", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
                 to = profile.DeviceToken,
@@ -70,13 +69,13 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
                 {
                     token = profile.DeviceToken,
                     title = "Santai",
-                    body = $"The mechanic is on the way to your location",
-                    image = _projectConfiguration.LogoUrl,
+                    body = $"The mechanic is heading to your location", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,
                     buyerId = orderData.BuyerId,
                     mechanicId = orderData.MechanicId,
-                    mechanicName = orderData.MechanicName
+                    mechanicName = orderData.MechanicName,
+                    status = "MECHANIC_DISPATCHED"
                 }
             };
              

@@ -61,8 +61,7 @@ public class OrderPaymentPaidIntegrationEventConsumer(
                 notification = new 
                 {
                     title = "Santai",
-                    body = $"We have received your payment. Thank you.",
-                    image = _projectConfiguration.LogoUrl,
+                    body = $"Your payment has been successfully received. Thank you for your trust and support", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
                 to = profile.DeviceToken,
@@ -70,18 +69,18 @@ public class OrderPaymentPaidIntegrationEventConsumer(
                 {
                     token = profile.DeviceToken,
                     title = "Santai",
-                    body = $"We have received your payment. Thank you.",
-                    image = _projectConfiguration.LogoUrl,
+                    body = $"Your payment has been successfully received. Thank you for your trust and support.", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,
-                    buyerId = orderData.BuyerId
+                    buyerId = orderData.BuyerId,
+                    status = "PAYMENT_PAID"
                 }
             };
 
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "Payment successfull",
+                @default = "Your payment has been successfully received. Thank you for your trust and support",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             }); 
 

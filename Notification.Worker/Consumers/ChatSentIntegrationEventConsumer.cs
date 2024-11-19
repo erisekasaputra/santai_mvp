@@ -47,22 +47,19 @@ public class ChatSentIntegrationEventConsumer(
                 notification = new
                 {
                     title = "New Chat",
-                    body = context.Message.Text,
-                    image = _projectConfiguration.LogoUrl,
+                    body = context.Message.Text 
                 },
                 to = profile.DeviceToken,
                 data = new
                 {
                     token = profile.DeviceToken,
                     title = "New Chat",
-                    body = context.Message.Text,
-                    image = _projectConfiguration.LogoUrl,
-                    click_action = "FLUTTER_NOTIFICATION_CLICK",
-
+                    body = context.Message.Text, 
+                    click_action = "FLUTTER_NOTIFICATION_CLICK", 
                     messageId = context.Message.MessageId,
                     timestamp = context.Message.Timestamp,
-                    originUserId = context.Message.OriginUserId
-
+                    originUserId = context.Message.OriginUserId,
+                    status = "CHAT_SENT"
                 }
             };
 

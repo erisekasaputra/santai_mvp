@@ -64,7 +64,6 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
                 {
                     title = "Santai",
                     body = $"You have received a new order waiting your confirmation",
-                    image = _projectConfiguration.LogoUrl, 
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
                 to = profile.DeviceToken,
@@ -72,8 +71,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
                 {
                     token = profile.DeviceToken,
                     title = "Santai",
-                    body = $"You have received a new order waiting your confirmation",
-                    image = _projectConfiguration.LogoUrl,
+                    body = $"You have received a new order waiting your confirmation", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     actions = new[]
                     {
@@ -92,13 +90,14 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
                     },
                     orderId = orderData.OrderId,
                     buyerId = orderData.BuyerId,
-                    mechanicId = orderData.MechanicId 
+                    mechanicId = orderData.MechanicId,
+                    status = "MECHANIC_AUTO_SELECTED"
                 }
             };
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "You have received a new Order",
+                @default = "You have received a new order",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

@@ -60,8 +60,7 @@ public class ServiceProcessedIntegrationEventConsumer(
                 notification = new
                 {
                     title = "Santai",
-                    body = $"Your vehicle service is starting",
-                    image = _projectConfiguration.LogoUrl,
+                    body = $"Your vehicle service is starting", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
                 to = profile.DeviceToken,
@@ -69,19 +68,19 @@ public class ServiceProcessedIntegrationEventConsumer(
                 {
                     token = profile.DeviceToken,
                     title = "Santai",
-                    body = $"Your vehicle service is starting",
-                    image = _projectConfiguration.LogoUrl,
+                    body = $"Your vehicle service is starting", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,
                     buyerId = orderData.BuyerId,
-                    mechanicId = orderData.MechanicId
+                    mechanicId = orderData.MechanicId,
+                    status = "SERVICE_STARTING"
                 }
             };
 
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "Service is starting",
+                @default = "Your vehicle service is starting",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

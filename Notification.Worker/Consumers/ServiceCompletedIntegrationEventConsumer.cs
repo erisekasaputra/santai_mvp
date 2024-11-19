@@ -62,8 +62,7 @@ public class ServiceCompletedIntegrationEventConsumer(
                 notification = new 
                 {
                     title = "Santai",
-                    body = $"Your service is complete, and the mechanic has successfully repaired your vehicle",
-                    image = _projectConfiguration.LogoUrl,
+                    body = $"Your service is complete, and the mechanic has successfully repaired your vehicle", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
                 to = profile.DeviceToken,
@@ -71,19 +70,19 @@ public class ServiceCompletedIntegrationEventConsumer(
                 {
                     token = profile.DeviceToken,
                     title = "Santai",
-                    body = $"Your service is complete, and the mechanic has successfully repaired your vehicle",
-                    image = _projectConfiguration.LogoUrl,
+                    body = $"Your service is complete, and the mechanic has successfully repaired your vehicle", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,
                     buyerId = orderData.BuyerId,
-                    mechanicId = orderData.MechanicId
+                    mechanicId = orderData.MechanicId,
+                    status = "SERVICE_COMPLETED"
                 }
             };
 
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "Servie is complete",
+                @default = "Your service is complete, and the mechanic has successfully repaired your vehicle",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

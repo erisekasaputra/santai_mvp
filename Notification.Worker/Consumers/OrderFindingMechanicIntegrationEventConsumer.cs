@@ -64,8 +64,7 @@ public class OrderFindingMechanicIntegrationEventConsumer(
                 notification = new
                 {
                     title = "Santai",
-                    body = $"The order is scheduled to find a Mechanic",
-                    image = _projectConfiguration.LogoUrl,
+                    body = $"Your order is currently being processed, and a mechanic is being scheduled to assist you shortly", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
                 to = profile.DeviceToken,
@@ -73,18 +72,18 @@ public class OrderFindingMechanicIntegrationEventConsumer(
                 {
                     token = profile.DeviceToken, 
                     title = "Santai",
-                    body = $"The order is scheduled to find a Mechanic",
-                    image = _projectConfiguration.LogoUrl,
+                    body = $"Your order is currently being processed, and a mechanic is being scheduled to assist you shortly", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,
-                    buyerId = orderData.BuyerId  
+                    buyerId = orderData.BuyerId,
+                    status = "FINDING_MECHANIC"
                 }
             };
 
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "Order is scheduled to find a Mechanic",
+                @default = "Your order is currently being processed, and a mechanic is being scheduled to assist you shortly",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

@@ -75,7 +75,8 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
                     orderId = orderData.OrderId,
                     buyerId = orderData.BuyerId,
                     mechanicId = orderData.MechanicId,
-                    mechanicName = orderData.MechanicName
+                    mechanicName = orderData.MechanicName,
+                    status = "MECHANIC_ORDER_ACCEPTED"
                 }
             }; 
 

@@ -61,8 +61,7 @@ public class ServiceIncompletedIntegrationEventConsumer(
                 notification = new 
                 {
                     title = "Santai",
-                    body = $"Your service is complete, but the mechanic was unable to repair your vehicle",
-                    image = _projectConfiguration.LogoUrl,
+                    body = $"Your service is complete, but the mechanic was unable to repair your vehicle", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
                 to = profile.DeviceToken,
@@ -70,19 +69,19 @@ public class ServiceIncompletedIntegrationEventConsumer(
                 {
                     token = profile.DeviceToken,
                     title = "Santai",
-                    body = $"Your service is complete, but the mechanic was unable to repair your vehicle",
-                    image = _projectConfiguration.LogoUrl,
+                    body = $"Your service is complete, but the mechanic was unable to repair your vehicle", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,
                     buyerId = orderData.BuyerId,
-                    mechanicId = orderData.MechanicId
+                    mechanicId = orderData.MechanicId,
+                    status = "SERVICE_INCOMPLETED"
                 }
             };
 
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "Service is complete",
+                @default = "Your service is complete, but the mechanic was unable to repair your vehicle",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

@@ -61,8 +61,7 @@ public class OrderMechanicArrivedIntegrationEventConsumer(
                 notification = new
                 {
                     title = "Santai",
-                    body = $"The mechanic has arrived at your location, help them get more detailed directions to your location",
-                    image = _projectConfiguration.LogoUrl,
+                    body = $"The mechanic has arrived at your location. Please provide detailed directions to assist them in reaching you more efficiently.", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
                 to = profile.DeviceToken,
@@ -70,19 +69,19 @@ public class OrderMechanicArrivedIntegrationEventConsumer(
                 {
                     token = profile.DeviceToken, 
                     title = "Santai",
-                    body = $"The mechanic has arrived at your location, help them get more detailed directions to your location",
-                    image = _projectConfiguration.LogoUrl,
+                    body = $"The mechanic has arrived at your location. Please provide detailed directions to assist them in reaching you more efficiently.",  
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,
                     buyerId = orderData.BuyerId,
-                    mechanicId = orderData.MechanicId
+                    mechanicId = orderData.MechanicId,
+                    status = "MECHANIC_ARRIVED"
                 }
             };
 
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "Mechanic has arrived at your location",
+                @default = "The mechanic has arrived at your location. Please provide detailed directions to assist them in reaching you more efficiently.",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 
