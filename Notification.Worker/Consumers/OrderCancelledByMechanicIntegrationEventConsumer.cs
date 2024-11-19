@@ -83,7 +83,7 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "Order has been cancelled by Mechanic",
+                @default = "We regret to inform you that your order has been canceled by the mechanic. Rest assured, we're already working to assign another mechanic to you as quickly as possible. Thank you for your patience!",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

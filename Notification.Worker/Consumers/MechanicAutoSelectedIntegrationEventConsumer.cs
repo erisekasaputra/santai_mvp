@@ -63,7 +63,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
                 notification = new
                 {
                     title = "Santai",
-                    body = $"You have received a new order waiting your confirmation",
+                    body = $"You have received a new order waiting for your confirmation",
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
                 to = profile.DeviceToken,
@@ -71,7 +71,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
                 {
                     token = profile.DeviceToken,
                     title = "Santai",
-                    body = $"You have received a new order waiting your confirmation", 
+                    body = $"You have received a new order waiting for your confirmation", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     actions = new[]
                     {
@@ -97,7 +97,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "You have received a new order",
+                @default = "You have received a new order waiting for your confirmation",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 
