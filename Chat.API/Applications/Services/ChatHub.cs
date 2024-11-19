@@ -65,17 +65,17 @@ public class ChatHub(
                 return;
             }
 
-            //if ((originUserId != chatContact.BuyerId && originUserId != chatContact.MechanicId) 
-            //    || (request.DestinationUserId != chatContact.BuyerId && request.DestinationUserId != chatContact.MechanicId)) 
-            //{
-            //    await Clients.Caller.ChatBadRequest("Chat session is no longer available", chatContact.OrderId);
-            //    return;
-            //} 
+            if ((originUserId != chatContact.BuyerId && originUserId != chatContact.MechanicId)
+                || (request.DestinationUserId != chatContact.BuyerId && request.DestinationUserId != chatContact.MechanicId))
+            {
+                await Clients.Caller.ChatBadRequest("Chat session is no longer available", chatContact.OrderId);
+                return;
+            }
 
-            //if (string.IsNullOrEmpty(chatContact.MechanicId))
-            //{
-            //    throw new InvalidOperationException("Waiting for mechanic assignment");
-            //} 
+            if (string.IsNullOrEmpty(chatContact.MechanicId))
+            {
+                throw new InvalidOperationException("Waiting for mechanic assignment");
+            }
 
             var conversation = new Conversation(
                 request.OrderId,

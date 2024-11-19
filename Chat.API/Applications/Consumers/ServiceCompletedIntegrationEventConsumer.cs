@@ -12,7 +12,7 @@ public class ServiceCompletedIntegrationEventConsumer(
     private readonly IChatService _chatService = chatService;
     private readonly IHubContext<ChatHub, IChatClient> _chatHub = chatHub;
     public async Task Consume(ConsumeContext<ServiceCompletedIntegrationEvent> context)
-    {
+    {  
         var chatContact = await _chatService.GetChatContactByOrderId(context.Message.OrderId.ToString());
         if (chatContact is null)
         {

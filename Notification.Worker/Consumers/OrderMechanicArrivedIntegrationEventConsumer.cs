@@ -63,7 +63,7 @@ public class OrderMechanicArrivedIntegrationEventConsumer(
                     title = "Santai",
                     body = $"The mechanic has arrived at your location, help them get more detailed directions to your location",
                     image = _projectConfiguration.LogoUrl,
-                    click_action = "OPEN_APP"
+                    click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
                 to = profile.DeviceToken,
                 data = new
@@ -72,7 +72,7 @@ public class OrderMechanicArrivedIntegrationEventConsumer(
                     title = "Santai",
                     body = $"The mechanic has arrived at your location, help them get more detailed directions to your location",
                     image = _projectConfiguration.LogoUrl,
-                    click_action = "OPEN_APP",
+                    click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,
                     buyerId = orderData.BuyerId,
                     mechanicId = orderData.MechanicId

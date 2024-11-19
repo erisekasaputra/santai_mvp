@@ -63,7 +63,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
                     title = "Santai",
                     body = $"The mechanic is on the way to your location",
                     image = _projectConfiguration.LogoUrl,
-                    click_action = "OPEN_APP"
+                    click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
                 to = profile.DeviceToken,
                 data = new
@@ -72,7 +72,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
                     title = "Santai",
                     body = $"The mechanic is on the way to your location",
                     image = _projectConfiguration.LogoUrl,
-                    click_action = "OPEN_APP",
+                    click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,
                     buyerId = orderData.BuyerId,
                     mechanicId = orderData.MechanicId,

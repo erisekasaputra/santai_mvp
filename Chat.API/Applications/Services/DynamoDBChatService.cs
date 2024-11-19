@@ -189,13 +189,7 @@ public class DynamoDBChatService : IChatService
     public async Task<bool> UpdateChatContact(ChatContact chatContact)
     {
         try
-        {  
-            var existingChatContact = await _dynamoDBContext.LoadAsync<ChatContact>(chatContact.OrderId, chatContact.LastChatTimestamp);
-            if (existingChatContact == null)
-            {
-                return false;
-            }
-             
+        {   
             chatContact.IsExpired(); // dont remove this line
             await _dynamoDBContext.SaveAsync(chatContact);
             return true;

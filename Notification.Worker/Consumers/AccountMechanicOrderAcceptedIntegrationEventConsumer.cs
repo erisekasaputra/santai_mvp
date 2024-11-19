@@ -62,7 +62,7 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
                     title = "Santai",
                     body = $"Successfully assigned a mechanic. Mechanic {orderData.MechanicName} has been assigned and will be heading to your location shortly",
                     image = _projectConfiguration.LogoUrl,
-                    click_action = "OPEN_APP"
+                    click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
                 to = profile.DeviceToken,
                 data = new
@@ -71,7 +71,7 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
                     title = "Santai",
                     body = $"Successfully assigned a mechanic. Mechanic {orderData.MechanicName} has been assigned and will be heading to your location shortly",
                     image = _projectConfiguration.LogoUrl,
-                    click_action = "OPEN_APP",
+                    click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,
                     buyerId = orderData.BuyerId,
                     mechanicId = orderData.MechanicId,

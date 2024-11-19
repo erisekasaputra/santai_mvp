@@ -65,7 +65,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
                     title = "Santai",
                     body = $"You have received a new order, the confirmation time is {minutes} minutes and {seconds} seconds",
                     image = _projectConfiguration.LogoUrl, 
-                    click_action = "OPEN_APP"
+                    click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
                 to = profile.DeviceToken,
                 data = new
@@ -74,7 +74,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
                     title = "Santai",
                     body = $"You have received a new order, the confirmation time is {minutes} minutes and {seconds} seconds",
                     image = _projectConfiguration.LogoUrl,
-                    click_action = "OPEN_APP",
+                    click_action = "FLUTTER_NOTIFICATION_CLICK",
                     actions = new[]
                     {
                         new

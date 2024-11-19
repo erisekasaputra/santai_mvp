@@ -19,7 +19,7 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
         if (contact is null)
         {
             return;
-        }
+        } 
 
         contact.SetMechanic(context.Message.MechanicId.ToString(), context.Message.MechanicName);
 

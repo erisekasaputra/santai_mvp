@@ -64,7 +64,7 @@ public class ServiceCompletedIntegrationEventConsumer(
                     title = "Santai",
                     body = $"Your service is complete, and the mechanic has successfully repaired your vehicle",
                     image = _projectConfiguration.LogoUrl,
-                    click_action = "OPEN_APP"
+                    click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
                 to = profile.DeviceToken,
                 data = new
@@ -73,7 +73,7 @@ public class ServiceCompletedIntegrationEventConsumer(
                     title = "Santai",
                     body = $"Your service is complete, and the mechanic has successfully repaired your vehicle",
                     image = _projectConfiguration.LogoUrl,
-                    click_action = "OPEN_APP",
+                    click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,
                     buyerId = orderData.BuyerId,
                     mechanicId = orderData.MechanicId

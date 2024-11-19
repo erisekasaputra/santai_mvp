@@ -57,7 +57,7 @@ public class ChatSentIntegrationEventConsumer(
                     title = "New Chat",
                     body = context.Message.Text,
                     image = _projectConfiguration.LogoUrl,
-                    click_action = "OPEN_APP",
+                    click_action = "FLUTTER_NOTIFICATION_CLICK",
 
                     messageId = context.Message.MessageId,
                     timestamp = context.Message.Timestamp,

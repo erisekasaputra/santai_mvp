@@ -66,7 +66,7 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
                     title = "Santai",
                     body = $"The order has been canceled by the Mechanic",
                     image = _projectConfiguration.LogoUrl,
-                    click_action = "OPEN_APP"
+                    click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
                 to = profile.DeviceToken,
                 data = new
@@ -75,7 +75,7 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
                     title = "Santai",
                     body = $"The order has been canceled by the Mechanic",
                     image = _projectConfiguration.LogoUrl,
-                    click_action = "OPEN_APP", 
+                    click_action = "FLUTTER_NOTIFICATION_CLICK", 
                     orderId = orderData.OrderId,
                     buyerId = orderData.BuyerId
                 }

@@ -20,7 +20,7 @@ public class OrderCancelledByMechanicIntegrationEventConsumer
         {
             return;
         }
-
+         
         var oldMechanicId = contact.MechanicId;
 
         contact.ResetMechanic(); 

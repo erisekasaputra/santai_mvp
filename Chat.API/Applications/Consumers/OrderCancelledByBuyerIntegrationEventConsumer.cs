@@ -17,7 +17,7 @@ public class OrderCancelledByBuyerIntegrationEventConsumer(IChatService chatServ
         {
             return;
         }
-
+         
         await _chatHub.Clients.User(context.Message.BuyerId.ToString()).DeleteChatContact(context.Message.OrderId.ToString());
 
         if (!string.IsNullOrEmpty(chatContact.MechanicId))
