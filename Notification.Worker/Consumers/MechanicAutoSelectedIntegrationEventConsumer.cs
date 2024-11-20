@@ -45,6 +45,15 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
             OrderStatus.MechanicSelected.ToString(),
             string.Empty);
 
+        await _activityHubContext.Clients.User(orderData.BuyerId.ToString()).ReceiveOrderStatusUpdate(
+            orderData.OrderId.ToString(),
+            orderData.BuyerId.ToString(),
+            string.Empty,
+            orderData.MechanicId.ToString(),
+            string.Empty,
+            OrderStatus.MechanicSelected.ToString(),
+            string.Empty);
+
         var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
         if (target is null || target.Profiles is null || target.Profiles.Count < 1)
         {

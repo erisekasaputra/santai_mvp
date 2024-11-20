@@ -47,6 +47,15 @@ public class ServiceCompletedIntegrationEventConsumer(
             OrderStatus.ServiceCompleted.ToString(),
             string.Empty);
 
+        await _activityHubContext.Clients.User(orderData.MechanicId.ToString()).ReceiveOrderStatusUpdate(
+            orderData.OrderId.ToString(),
+            orderData.BuyerId.ToString(),
+            string.Empty,
+            orderData.MechanicId.ToString(),
+            String.Empty,
+            OrderStatus.ServiceCompleted.ToString(),
+            string.Empty);
+
 
         var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
         if (target is null || target.Profiles is null || target.Profiles.Count < 1)

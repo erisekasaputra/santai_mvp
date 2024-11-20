@@ -43,7 +43,16 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
             orderData.MechanicName,
             OrderStatus.MechanicAssigned.ToString(),
             string.Empty);
-         
+
+        await _activityHubContext.Clients.User(orderData.MechanicId.ToString()).ReceiveOrderStatusUpdate(
+            orderData.OrderId.ToString(),
+            orderData.BuyerId.ToString(),
+            string.Empty,
+            orderData.MechanicId.ToString(),
+            orderData.MechanicName,
+            OrderStatus.MechanicAssigned.ToString(),
+            string.Empty);
+
 
         var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
         if (target is null || target.Profiles is null || target.Profiles.Count < 1)

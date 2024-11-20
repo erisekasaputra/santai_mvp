@@ -45,7 +45,7 @@ public class OrderPaymentPaidIntegrationEventConsumer(
             string.Empty,
             string.Empty,
             OrderStatus.PaymentPaid.ToString(),
-            string.Empty); 
+            string.Empty);  
 
         var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
         if (target is null || target.Profiles is null || target.Profiles.Count < 1)

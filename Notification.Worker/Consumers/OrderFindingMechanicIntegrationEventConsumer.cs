@@ -47,7 +47,7 @@ public class OrderFindingMechanicIntegrationEventConsumer(
             string.Empty,
             string.Empty,
             OrderStatus.FindingMechanic.ToString(),
-            string.Empty);
+            string.Empty); 
 
 
         var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
