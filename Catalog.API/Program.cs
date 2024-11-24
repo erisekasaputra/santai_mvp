@@ -1,6 +1,7 @@
 using Catalog.API;
 using Catalog.API.API; 
-using Catalog.API.Extensions; 
+using Catalog.API.Extensions;
+using Catalog.API.Utilities;
 using Catalog.Infrastructure;
 using Core.Extensions;
 using Core.Middlewares;
@@ -65,7 +66,13 @@ const string groupName = "api/v1/catalog";
 
 app.ItemRouter(groupName);     
 app.CategoryRouter(groupName); 
-app.BrandRouter(groupName); 
+app.BrandRouter(groupName);
+
+using (var scope = app.Services.CreateScope())
+{
+    var services = scope.ServiceProvider;
+    await SeedDatabase.Initialize(services);
+}
 
 app.Run();
 

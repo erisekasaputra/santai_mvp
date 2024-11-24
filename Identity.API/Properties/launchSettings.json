@@ -26,8 +26,8 @@
         "Jwt__SecretKey": "tP56kzHlfp+IUY/nhdOFbOsRjOSEbTVv6sexU/JL17I=",
         "Google__ClientID": "get-from-google-sso-generator",
         "Google__ClientSecret": "get-from-google-sso-generator",
-        "AWS__AccessID": "AKIAYS2NP3RU6DEGPJUM",
-        "AWS__AccessSecret": "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",
+        "AWS__AccessID": "AKIA5V6I6VRN55FLXZSP",
+        "AWS__AccessSecret": "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",
         "AWS__Region": "ap-southeast-1"
       },
       "publishAllPorts": true,

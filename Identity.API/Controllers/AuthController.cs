@@ -1324,7 +1324,7 @@ public class AuthController(
                     var errors = changeResult.Errors.Select(
                         e => new ErrorDetail("Unknown", e.Description, $"{request.PhoneNumber}|{request.Token}", e.Code, "Error"));
                     return TypedResults.BadRequest(
-                       Result.Failure("There are severals validation error", ResponseStatus.BadRequest)
+                       Result.Failure(errors.First().ErrorMessage, ResponseStatus.BadRequest)
                           .WithErrors(errors.ToList()));
                 }
 

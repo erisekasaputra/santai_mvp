@@ -68,7 +68,7 @@ if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
     app.MapOpenApi();
 } 
 
-app.MapControllers(); 
+app.MapControllers();
 
 using (var scope = app.Services.CreateScope())
 {
