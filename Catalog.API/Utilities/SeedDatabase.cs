@@ -16,8 +16,8 @@ public class SeedDatabase
         {
             var transaction = await dbContext.Database.BeginTransactionAsync(); 
 
-            var brand = new Brand("Yamalube", "");
-            var category = new Category("Oil", "");
+            var category = new Category("Oil", "5d14bfb1-8ca3-49c1-b3ef-1f7b8788389b.png");
+            var brand = new Brand("Yamalube", "5d14bfb1-8ca3-49c1-b3ef-1f228788389b.jpg");
 
             var item = new Item(
                 "Oil Yamaha Delta",
@@ -25,7 +25,7 @@ public class SeedDatabase
                 100,
                 Core.Enumerations.Currency.MYR,
                 "SKU123",
-                "",
+                "5d14bfb1-8ca3-49c1-b3ef-1f228788389b.jpg",
                 DateTime.UtcNow,
                 100,
                 0,
