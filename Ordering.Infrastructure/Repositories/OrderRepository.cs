@@ -32,7 +32,9 @@ public class OrderRepository : IOrderRepository
                 .ThenInclude(fleet => fleet.BasicInspections)
             .Include(order => order.Fleets)
                 .ThenInclude(fleet => fleet.PreServiceInspections)
-                .ThenInclude(preService => preService.PreServiceInspectionResults)
+                .ThenInclude(preService => preService.PreServiceInspectionResults) 
+            .Include(order => order.Fleets)
+                .ThenInclude(jobChecklist => jobChecklist.JobChecklists)
             .AsSplitQuery()
             .Where(x => x.Id == id)
             .FirstOrDefaultAsync(cancellationToken);
@@ -59,6 +61,8 @@ public class OrderRepository : IOrderRepository
             .Include(order => order.Fleets)
                 .ThenInclude(fleet => fleet.PreServiceInspections)
                 .ThenInclude(preService => preService.PreServiceInspectionResults)
+            .Include(order => order.Fleets)
+                .ThenInclude(jobChecklist => jobChecklist.JobChecklists)
             .AsSplitQuery()
             .Where(x => x.Id == orderId && x.Buyer.BuyerId == buyerId)
             .FirstOrDefaultAsync(cancellationToken);

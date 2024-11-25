@@ -134,7 +134,8 @@ public static class Mapper
             fleet.RegistrationNumber,
             fleet.ImageUrl,
             fleet.BasicInspections.Select(x => new BasicInspectionResponseDto(x.Description, x.Parameter, x.Value)),
-            fleet.PreServiceInspections.Select(x => new PreServiceInspectionResponseDto(x.Description, x.Parameter, x.Rating, x.PreServiceInspectionResults.Select(b => new PreServiceInspectionResultResponseDto(b.Description, b.Parameter, b.IsWorking)))));
+            fleet.PreServiceInspections.Select(x => new PreServiceInspectionResponseDto(x.Description, x.Parameter, x.Rating, x.PreServiceInspectionResults.Select(b => new PreServiceInspectionResultResponseDto(b.Description, b.Parameter, b.IsWorking)))),
+            fleet.JobChecklists.Select(x => new JobChecklistResponseDto(x.Description, x.Parameter, x.Value)));
     }
 
 
