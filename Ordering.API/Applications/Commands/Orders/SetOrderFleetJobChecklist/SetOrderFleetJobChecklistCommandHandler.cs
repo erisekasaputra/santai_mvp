@@ -34,6 +34,11 @@ public class SetOrderFleetJobChecklistCommandHandler(
                 return Result.Failure("Fleet not found", ResponseStatus.NotFound);
             }
 
+            if (!string.IsNullOrEmpty(request.Comment))
+            {
+                fleet.UpdateComment(request.Comment);
+            }
+
             foreach (var jobChecklist in request.JobChecklists)
             {
                 if (!fleet.PutJobChecklist(

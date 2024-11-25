@@ -15,7 +15,7 @@ public class Fleet : Entity
     public ICollection<BasicInspection> BasicInspections { get; private set; }
     public ICollection<PreServiceInspection> PreServiceInspections { get; private set; }
     public ICollection<JobChecklist> JobChecklists { get; private set; }
-
+    public string Comment { get; private set; }
     public Fleet()
     {
         Brand = string.Empty;
@@ -26,6 +26,7 @@ public class Fleet : Entity
         BasicInspections = [];
         PreServiceInspections = [];
         JobChecklists = [];
+        Comment = string.Empty;
     }
 
     public Fleet(
@@ -46,6 +47,11 @@ public class Fleet : Entity
         BasicInspections = [];
         PreServiceInspections = [];
         JobChecklists = [];
+        Comment = string.Empty;
+    }
+    public void UpdateComment(string comment)
+    {
+        Comment = comment;
     }
 
     public void AddBasicInspectionDefault(

@@ -499,9 +499,15 @@ public class OrderController : ControllerBase
                 return TypedResults.Forbid();
             }
 
+            if (string.IsNullOrEmpty(request.Comment) || !request.JobChecklists.Any())
+            {
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+            }
+
             var result = await _mediator.Send(
                 new SetOrderFleetJobChecklistCommand(
-                    orderId, fleetId, request.JobChecklists));
+                    orderId, fleetId, request.JobChecklists, request.Comment));
 
             return result.ToIResult();
         }

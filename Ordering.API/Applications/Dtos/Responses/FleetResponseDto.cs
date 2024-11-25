@@ -10,6 +10,7 @@ public class FleetResponseDto
     public IEnumerable<BasicInspectionResponseDto> BasicInspections { get; set; }
     public IEnumerable<PreServiceInspectionResponseDto> PreServiceInspections { get; set; }
     public IEnumerable<JobChecklistResponseDto> JobChecklists { get; set; }
+    public string Comment { get; set; }
     public FleetResponseDto(
         Guid fleetId,
         string brand,
@@ -18,7 +19,8 @@ public class FleetResponseDto
         string? imageUrl,
         IEnumerable<BasicInspectionResponseDto> basicInspections,
         IEnumerable<PreServiceInspectionResponseDto> preServiceInspections,
-        IEnumerable<JobChecklistResponseDto> jobChecklists)
+        IEnumerable<JobChecklistResponseDto> jobChecklists,
+        string comment)
     {
         FleetId = fleetId;
         Brand = brand;
@@ -28,5 +30,6 @@ public class FleetResponseDto
         BasicInspections = basicInspections;
         PreServiceInspections = preServiceInspections;
         JobChecklists = jobChecklists;
+        Comment = comment;
     }
 }
