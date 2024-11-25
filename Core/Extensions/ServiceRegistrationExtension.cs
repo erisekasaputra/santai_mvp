@@ -276,7 +276,7 @@ public static class ServiceRegistrationExtension
     {
         builder.Logging.ClearProviders();
         builder.Logging.AddConsole();
-        builder.Logging.AddDebug();
+        builder.Logging.AddDebug(); 
 
         return builder;
     }

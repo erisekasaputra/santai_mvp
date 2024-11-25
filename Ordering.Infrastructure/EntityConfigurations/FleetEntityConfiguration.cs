@@ -36,6 +36,11 @@ public class FleetEntityConfiguration : IEntityTypeConfiguration<Fleet>
             .HasForeignKey(e => e.FleetAggregateId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        builder.HasMany(e => e.JobChecklists)
+            .WithOne()
+            .HasForeignKey(e => e.FleetAggregateId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         builder.Ignore(p => p.EntityStateAction);
         builder.Ignore(p => p.DomainEvents);
     }

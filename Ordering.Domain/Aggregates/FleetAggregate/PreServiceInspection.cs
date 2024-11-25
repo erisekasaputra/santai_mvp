@@ -1,4 +1,4 @@
-﻿using Microsoft.Identity.Client;
+﻿ 
 using Ordering.Domain.SeedWork;
 
 namespace Ordering.Domain.Aggregates.FleetAggregate;

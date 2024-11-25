@@ -220,13 +220,7 @@ public static class FleetApi
             if (userClaim is null)
             {
                 return TypedResults.Unauthorized();
-            }
-
-            if (!QueryUserIdEqualWithClaimUserId(userClaim, userId))
-            {
-                return TypedResults.Forbid();
-            }
-
+            }  
 
             var result = await service.Mediator.Send(
                 new GetFleetByIdByUserIdQuery(userId, fleetId));

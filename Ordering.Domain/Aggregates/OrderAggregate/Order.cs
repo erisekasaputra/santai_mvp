@@ -34,6 +34,7 @@ public class Order : Entity
     public ICollection<string>? RatingImages { get; private set; }
     public ICollection<Fee> Fees { get; private set; }
     public Cancellation? Cancellation { get; private set; }
+
     public bool IsShouldRequestPayment
     {
         get
@@ -812,7 +813,9 @@ public class Order : Entity
     public void AddFleet(
         Fleet fleet,
         IEnumerable<(string description, string parameter, int value)> basicInspectionsDefaults,
-        IEnumerable<(string description, string parameter, int rating, IEnumerable<(string description, string parameter, bool isWorking)> result)> preInspectionDefaults)
+        IEnumerable<(string description, string parameter, int rating, IEnumerable<(string description, string parameter, bool isWorking)> result)> preInspectionDefaults,
+        IEnumerable<(string description, string parameter, bool value)> jobChecklistDefaults
+        )
     {
         if (fleet.FleetId == Guid.Empty)
             throw new ArgumentNullException(nameof(fleet.FleetId), "Fleet id cannot be null.");
@@ -845,6 +848,14 @@ public class Order : Entity
                 parameter,
                 rating,
                 result);
+        }
+
+        foreach (var (description, parameter, value) in jobChecklistDefaults)
+        {
+            fleet.AddJobChecklist(
+                description,
+                parameter,
+                value);
         }
 
         Fleets.Add(fleet); 

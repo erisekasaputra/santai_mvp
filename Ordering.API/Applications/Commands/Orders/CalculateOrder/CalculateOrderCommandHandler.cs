@@ -95,7 +95,9 @@ public class CalculateOrderCommandHandler(
         var masterPreServiceInspection = master.PreServiceInspections.Select(
             x => (x.Description, x.Parameter.CleanAndLowering(), x.Rating,
             x.PreServiceInspectionResults.Select(b => (b.Description, b.Parameter.CleanAndLowering(), b.IsWorking))));
-
+        
+        var masterJobChecklist = master.PreServiceInspections.Select(
+         x => (x.Description, x.Parameter.CleanAndLowering(), false));
 
         foreach (var fleet in command.Fleets ?? [])
         {
@@ -108,7 +110,8 @@ public class CalculateOrderCommandHandler(
                     "Calculation",
                     "Calculation"), 
                 masterBasicInspection, 
-                masterPreServiceInspection);
+                masterPreServiceInspection,
+                masterJobChecklist);
         } 
 
         if (!string.IsNullOrWhiteSpace(command.CouponCode) && coupon is not null)

@@ -51,12 +51,7 @@ public class ChatContact
     }
 
     public void SetMechanic(string mechanicId, string mechanicName)
-    {
-        if (MechanicId is not null || !string.IsNullOrEmpty(MechanicId) || IsOrderCompleted)
-        {
-            return;
-        }
-
+    { 
         MechanicId = mechanicId;
         MechanicName = mechanicName;
     }

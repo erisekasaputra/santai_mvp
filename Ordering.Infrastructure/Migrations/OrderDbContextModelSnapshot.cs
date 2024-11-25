@@ -307,6 +307,42 @@ namespace Ordering.Infrastructure.Migrations
                     b.ToTable("Fleets");
                 });
 
+            modelBuilder.Entity("Ordering.Domain.Aggregates.FleetAggregate.JobChecklist", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EntityStateAction")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("FleetAggregateId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("FleetId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("OrderId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Parameter")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Value")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FleetAggregateId");
+
+                    b.ToTable("JobChecklist");
+                });
+
             modelBuilder.Entity("Ordering.Domain.Aggregates.FleetAggregate.PreServiceInspection", b =>
                 {
                     b.Property<Guid>("Id")
@@ -744,6 +780,15 @@ namespace Ordering.Infrastructure.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("Ordering.Domain.Aggregates.FleetAggregate.JobChecklist", b =>
+                {
+                    b.HasOne("Ordering.Domain.Aggregates.FleetAggregate.Fleet", null)
+                        .WithMany("JobChecklists")
+                        .HasForeignKey("FleetAggregateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Ordering.Domain.Aggregates.FleetAggregate.PreServiceInspection", b =>
                 {
                     b.HasOne("Ordering.Domain.Aggregates.FleetAggregate.Fleet", null)
@@ -1127,6 +1172,8 @@ namespace Ordering.Infrastructure.Migrations
             modelBuilder.Entity("Ordering.Domain.Aggregates.FleetAggregate.Fleet", b =>
                 {
                     b.Navigation("BasicInspections");
+
+                    b.Navigation("JobChecklists");
 
                     b.Navigation("PreServiceInspections");
                 });

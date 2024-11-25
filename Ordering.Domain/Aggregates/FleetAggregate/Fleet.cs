@@ -14,6 +14,7 @@ public class Fleet : Entity
     public InspectionStatus InspectionStatus { get; private set; }
     public ICollection<BasicInspection> BasicInspections { get; private set; }
     public ICollection<PreServiceInspection> PreServiceInspections { get; private set; }
+    public ICollection<JobChecklist> JobChecklists { get; private set; }
 
     public Fleet()
     {
@@ -24,6 +25,7 @@ public class Fleet : Entity
         InspectionStatus = InspectionStatus.BasicInspection;
         BasicInspections = [];
         PreServiceInspections = [];
+        JobChecklists = [];
     }
 
     public Fleet(
@@ -43,6 +45,7 @@ public class Fleet : Entity
         InspectionStatus = InspectionStatus.BasicInspection;
         BasicInspections = [];
         PreServiceInspections = [];
+        JobChecklists = [];
     }
 
     public void AddBasicInspectionDefault(
@@ -122,5 +125,43 @@ public class Fleet : Entity
         }
 
         return true;
-    }    
+    }
+
+    public bool PutJobChecklist(string parameter, bool value)
+    {
+        JobChecklists ??= [];
+        var jobChecklist = JobChecklists.FirstOrDefault(x => x.Parameter == parameter);
+        if (jobChecklist is null)
+        {
+            return false;
+        }
+
+        jobChecklist.UpdateValue(value);
+        return true;
+    }
+
+    public void AddJobChecklist(
+       string description,
+       string parameter,
+       bool value)
+    {
+        JobChecklists ??= [];
+
+        var check = JobChecklists.FirstOrDefault(x => x.Parameter == parameter);
+        if (check is not null)
+        {
+            return;
+        }
+
+        var preServiceInspection = new JobChecklist(
+            OrderId,
+            FleetId,
+            Id,
+            description,
+            parameter,
+            value);
+
+        JobChecklists.Add(preServiceInspection);
+    }
+
 }

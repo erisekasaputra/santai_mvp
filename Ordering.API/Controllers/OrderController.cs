@@ -17,6 +17,7 @@ using Ordering.API.Applications.Commands.Orders.PayCancellationRefundByOrderId;
 using Ordering.API.Applications.Commands.Orders.SetMechanicArriveByOrderIdAndMechanicId;
 using Ordering.API.Applications.Commands.Orders.SetMechanicDispatchByOrderIdAndMechanicId;
 using Ordering.API.Applications.Commands.Orders.SetOrderFleetBasicInspection;
+using Ordering.API.Applications.Commands.Orders.SetOrderFleetJobChecklist;
 using Ordering.API.Applications.Commands.Orders.SetOrderFleetPreServiceInspection;
 using Ordering.API.Applications.Commands.Orders.SetOrderRatingByOrderIdAndUserId;
 using Ordering.API.Applications.Commands.Orders.SetServiceFailedByOrderIdAndMechanicId;
@@ -471,6 +472,36 @@ public class OrderController : ControllerBase
             var result = await _mediator.Send(
                 new SetOrderFleetPreServiceInspectionCommand(
                     orderId, fleetId, request.PreServiceInspections));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            return TypedResults.InternalServerError(
+                Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+        }
+    }
+
+
+    [HttpPatch("{orderId}/service/fleet/{fleetId}/job-checklist")]
+    [Authorize(Policy = "MechanicUserOnlyPolicy")]
+    public async Task<IResult> UpdateJobChecklist(
+       Guid orderId,
+       Guid fleetId,
+       [FromBody] JobChecklistsRequest request)
+    {
+        try
+        {
+            var userClaim = _userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Forbid();
+            }
+
+            var result = await _mediator.Send(
+                new SetOrderFleetJobChecklistCommand(
+                    orderId, fleetId, request.JobChecklists));
 
             return result.ToIResult();
         }

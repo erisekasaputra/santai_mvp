@@ -247,6 +247,9 @@ public class CreateOrderCommandHandler(
             x => (x.Description, x.Parameter.CleanAndLowering(), x.Rating,
             x.PreServiceInspectionResults.Select(b => (b.Description, b.Parameter.CleanAndLowering(), b.IsWorking))));
 
+        var masterJobChecklist = master.PreServiceInspections.Select(
+           x => (x.Description, x.Parameter.CleanAndLowering(), false));
+
         foreach (var fleet in fleets)
         {
             order.AddFleet(new(
@@ -257,7 +260,8 @@ public class CreateOrderCommandHandler(
                 fleet.RegistrationNumber,
                 fleet.ImageUrl),
                 masterBasicInspection,
-                masterPreServiceInspection);
+                masterPreServiceInspection,
+                masterJobChecklist);
         } 
 
         if (!string.IsNullOrWhiteSpace(command.CouponCode) && coupon is not null)
