@@ -69,12 +69,12 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
 
             var fcmPayload = new
             {
-                //notification = new
-                //{
-                //    title = "Santai",
-                //    body = $"You have received a new order waiting for your confirmation",
-                //    click_action = "FLUTTER_NOTIFICATION_CLICK"
-                //},
+                notification = new
+                {
+                    title = "Santai",
+                    body = $"You have received a new order waiting for your confirmation",
+                    click_action = "FLUTTER_NOTIFICATION_CLICK"
+                },
                 to = profile.DeviceToken,
                 data = new
                 {

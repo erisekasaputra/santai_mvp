@@ -67,12 +67,12 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
         {
             var fcmPayload = new
             {
-                //notification = new 
-                //{
-                //    title = "Santai",
-                //    body = $"The mechanic is heading to your location", 
-                //    click_action = "FLUTTER_NOTIFICATION_CLICK"
-                //},
+                notification = new
+                {
+                    title = "Santai",
+                    body = $"The mechanic is heading to your location",
+                    click_action = "FLUTTER_NOTIFICATION_CLICK"
+                },
                 to = profile.DeviceToken,
                 data = new
                 {

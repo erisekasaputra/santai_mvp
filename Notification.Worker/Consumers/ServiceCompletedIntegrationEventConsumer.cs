@@ -68,12 +68,12 @@ public class ServiceCompletedIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
-                //notification = new 
-                //{
-                //    title = "Santai",
-                //    body = $"Your service is complete, and the mechanic has successfully repaired your vehicle", 
-                //    click_action = "FLUTTER_NOTIFICATION_CLICK"
-                //},
+                notification = new
+                {
+                    title = "Santai",
+                    body = $"Your service is complete, and the mechanic has successfully repaired your vehicle",
+                    click_action = "FLUTTER_NOTIFICATION_CLICK"
+                },
                 to = profile.DeviceToken,
                 data = new
                 {

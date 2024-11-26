@@ -44,11 +44,11 @@ public class ChatSentIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
-                //notification = new
-                //{
-                //    title = "New Chat",
-                //    body = context.Message.Text 
-                //},
+                notification = new
+                {
+                    title = "New Chat",
+                    body = context.Message.Text
+                },
                 to = profile.DeviceToken,
                 data = new
                 {
