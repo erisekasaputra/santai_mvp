@@ -67,13 +67,13 @@ public class ServiceIncompletedIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
-                notification = new
-                {
-                    title = "Santai",
-                    body = $"Your service is complete, but the mechanic was unable to repair your vehicle",
-                    click_action = "FLUTTER_NOTIFICATION_CLICK"
-                },
-                to = profile.DeviceToken,
+                //notification = new
+                //{
+                //    title = "Santai",
+                //    body = $"Your service is complete, but the mechanic was unable to repair your vehicle",
+                //    click_action = "FLUTTER_NOTIFICATION_CLICK"
+                //},
+                //to = profile.DeviceToken,
                 data = new
                 {
                     token = profile.DeviceToken,

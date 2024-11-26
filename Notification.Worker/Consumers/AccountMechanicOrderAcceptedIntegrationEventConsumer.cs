@@ -66,13 +66,13 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
-                notification = new
-                {
-                    title = "Santai",
-                    body = $"Mechanic {orderData.MechanicName} has been assigned and will be heading to your location shortly",
-                    click_action = "FLUTTER_NOTIFICATION_CLICK"
-                },
-                to = profile.DeviceToken,
+                //notification = new
+                //{
+                //    title = "Santai",
+                //    body = $"Mechanic {orderData.MechanicName} has been assigned and will be heading to your location shortly",
+                //    click_action = "FLUTTER_NOTIFICATION_CLICK"
+                //},
+                //to = profile.DeviceToken,
                 data = new
                 {
                     token = profile.DeviceToken,

@@ -42,6 +42,11 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
             return;
         } 
 
+        if (orderData.MechanicId is null || !orderData.MechanicId.HasValue)
+        {
+            return;
+        }
+
         await _activityHubContext.Clients.User(orderData.MechanicId.ToString()!).ReceiveOrderStatusUpdate(
             orderData.OrderId.ToString(),
             orderData.BuyerId.ToString(),
@@ -64,13 +69,13 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
         {
             var fcmPayload = new
             {
-                notification = new
-                {
-                    title = "Santai",
-                    body = $"Uhh, Order has been canceled by customer",
-                    click_action = "FLUTTER_NOTIFICATION_CLICK"
-                },
-                to = profile.DeviceToken,
+                //notification = new
+                //{
+                //    title = "Santai",
+                //    body = $"Uhh, Order has been canceled by customer",
+                //    click_action = "FLUTTER_NOTIFICATION_CLICK"
+                //},
+                //to = profile.DeviceToken,
                 data = new
                 {
                     token = profile.DeviceToken,

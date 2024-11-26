@@ -67,13 +67,13 @@ public class OrderMechanicArrivedIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
-                notification = new
-                {
-                    title = "Santai",
-                    body = $"The mechanic has arrived at your location. Please provide detailed directions to assist them in reaching you more efficiently.",
-                    click_action = "FLUTTER_NOTIFICATION_CLICK"
-                },
-                to = profile.DeviceToken,
+                //notification = new
+                //{
+                //    title = "Santai",
+                //    body = $"The mechanic has arrived at your location. Please provide detailed directions to assist them in reaching you more efficiently.",
+                //    click_action = "FLUTTER_NOTIFICATION_CLICK"
+                //},
+                //to = profile.DeviceToken,
                 data = new
                 {
                     token = profile.DeviceToken, 
