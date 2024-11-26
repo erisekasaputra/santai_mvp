@@ -58,12 +58,12 @@ public class OrderPaymentPaidIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
-                //notification = new
-                //{
-                //    title = "Santai",
-                //    body = $"Your payment has been successfully received. Thank you for your trust and support",
-                //    click_action = "FLUTTER_NOTIFICATION_CLICK"
-                //},
+                notification = new
+                {
+                    title = "Santai",
+                    body = $"Your payment has been successfully received. Thank you for your trust and support",
+                    click_action = "FLUTTER_NOTIFICATION_CLICK"
+                },
                 to = profile.DeviceToken,
                 data = new
                 {

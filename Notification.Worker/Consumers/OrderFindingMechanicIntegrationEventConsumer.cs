@@ -61,13 +61,13 @@ public class OrderFindingMechanicIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
-                //notification = new
-                //{
-                //    title = "Santai",
-                //    body = $"Your order is currently being processed, and a mechanic is being scheduled to assist you shortly",
-                //    click_action = "FLUTTER_NOTIFICATION_CLICK"
-                //},
-                //to = profile.DeviceToken,
+                notification = new
+                {
+                    title = "Santai",
+                    body = $"Your order is currently being processed, and a mechanic is being scheduled to assist you shortly",
+                    click_action = "FLUTTER_NOTIFICATION_CLICK"
+                },
+                to = profile.DeviceToken,
                 data = new
                 {
                     token = profile.DeviceToken, 

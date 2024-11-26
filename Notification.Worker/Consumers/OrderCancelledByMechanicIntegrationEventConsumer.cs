@@ -70,13 +70,13 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
-                //notification = new
-                //{
-                //    title = "Santai",
-                //    body = $"We regret to inform you that your order has been canceled by the mechanic. Rest assured, we're already working to assign another mechanic to you as quickly as possible. Thank you for your patience!",
-                //    click_action = "FLUTTER_NOTIFICATION_CLICK"
-                //},
-                //to = profile.DeviceToken,
+                notification = new
+                {
+                    title = "Santai",
+                    body = $"We regret to inform you that your order has been canceled by the mechanic. Rest assured, we're already working to assign another mechanic to you as quickly as possible. Thank you for your patience!",
+                    click_action = "FLUTTER_NOTIFICATION_CLICK"
+                },
+                to = profile.DeviceToken,
                 data = new
                 {
                     token = profile.DeviceToken,
