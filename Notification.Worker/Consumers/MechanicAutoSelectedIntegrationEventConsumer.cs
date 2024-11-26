@@ -54,7 +54,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
             OrderStatus.MechanicSelected.ToString(),
             string.Empty);
 
-        var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
+        var target = await _userProfileRepository.GetUserByIdAsync(orderData.MechanicId);
         if (target is null || target.Profiles is null || target.Profiles.Count < 1)
         {
             return;
