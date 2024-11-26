@@ -89,7 +89,7 @@ public class ServiceProcessedIntegrationEventConsumer(
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "Your vehicle service is starting",
+                //@default = "Your vehicle service is starting",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

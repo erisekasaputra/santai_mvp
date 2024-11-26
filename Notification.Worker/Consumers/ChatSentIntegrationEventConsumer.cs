@@ -65,7 +65,7 @@ public class ChatSentIntegrationEventConsumer(
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = context.Message.Text,
+                //@default = context.Message.Text,
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

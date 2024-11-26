@@ -106,7 +106,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "You have received a new order waiting for your confirmation",
+                //@default = "You have received a new order waiting for your confirmation",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

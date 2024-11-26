@@ -92,7 +92,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "Uhh, Order has been canceled by customer",
+                //@default = "Uhh, Order has been canceled by customer",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

@@ -90,7 +90,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
              
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "Mechanic is dispatched",
+                //@default = "Mechanic is dispatched",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

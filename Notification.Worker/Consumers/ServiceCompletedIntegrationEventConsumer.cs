@@ -91,7 +91,7 @@ public class ServiceCompletedIntegrationEventConsumer(
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "Your service is complete, and the mechanic has successfully repaired your vehicle",
+                //@default = "Your service is complete, and the mechanic has successfully repaired your vehicle",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

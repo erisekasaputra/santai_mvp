@@ -89,7 +89,7 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             { 
-                @default = $"Mechanic {orderData.MechanicName} has been assigned and will be heading to your location shortly",
+                //@default = $"Mechanic {orderData.MechanicName} has been assigned and will be heading to your location shortly",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)  
             });
              

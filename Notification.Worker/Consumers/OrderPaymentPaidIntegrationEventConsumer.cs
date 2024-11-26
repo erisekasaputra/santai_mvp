@@ -80,7 +80,7 @@ public class OrderPaymentPaidIntegrationEventConsumer(
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "Your payment has been successfully received. Thank you for your trust and support",
+                //@default = "Your payment has been successfully received. Thank you for your trust and support",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             }); 
 

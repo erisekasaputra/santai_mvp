@@ -90,7 +90,7 @@ public class OrderMechanicArrivedIntegrationEventConsumer(
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "The mechanic has arrived at your location. Please provide detailed directions to assist them in reaching you more efficiently.",
+                //@default = "The mechanic has arrived at your location. Please provide detailed directions to assist them in reaching you more efficiently.",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

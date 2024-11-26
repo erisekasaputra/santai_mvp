@@ -90,7 +90,7 @@ public class ServiceIncompletedIntegrationEventConsumer(
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "Your service is complete, but the mechanic was unable to repair your vehicle",
+                //@default = "Your service is complete, but the mechanic was unable to repair your vehicle",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 

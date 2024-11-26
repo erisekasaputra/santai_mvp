@@ -83,7 +83,7 @@ public class OrderFindingMechanicIntegrationEventConsumer(
 
             var messageJson = Newtonsoft.Json.JsonConvert.SerializeObject(new
             {
-                @default = "Your order is currently being processed, and a mechanic is being scheduled to assist you shortly",
+                //@default = "Your order is currently being processed, and a mechanic is being scheduled to assist you shortly",
                 GCM = Newtonsoft.Json.JsonConvert.SerializeObject(fcmPayload)
             });
 
