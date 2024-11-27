@@ -13,31 +13,39 @@ public class ServiceIncompletedIntegrationEventConsumer(
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     public async Task Consume(ConsumeContext<ServiceIncompletedIntegrationEvent> context)
     {
-        await _unitOfWork.BeginTransactionAsync();
-
-        (var isSuccess, _) = await _mechanicCache.CompleteOrder(
-         context.Message.OrderId.ToString(),
-         context.Message.MechanicId.ToString());
-
-        if (!isSuccess)
+        try
         {
-            throw new Exception($"Failed when completing the order {context.Message.OrderId}");
-        }
+            await _unitOfWork.BeginTransactionAsync();
 
-        var buyer = await _unitOfWork.BaseUsers.GetByIdAsync(context.Message.BuyerId);
-        if (buyer is not null)
+            (var isSuccess, _) = await _mechanicCache.CompleteOrder(
+             context.Message.OrderId.ToString(),
+             context.Message.MechanicId.ToString());
+
+            if (!isSuccess)
+            {
+                throw new Exception($"Failed when completing the order {context.Message.OrderId}");
+            }
+
+            var buyer = await _unitOfWork.BaseUsers.GetByIdAsync(context.Message.BuyerId);
+            if (buyer is not null)
+            {
+                buyer.AddLoyaltyPoint(1000);
+                _unitOfWork.BaseUsers.Update(buyer);
+            }
+
+            var mechanic = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(context.Message.MechanicId);
+            if (mechanic is not null)
+            {
+                mechanic.SetIncompleteJob();
+                _unitOfWork.BaseUsers.Update(mechanic);
+            }
+
+            await _unitOfWork.CommitTransactionAsync();
+        }
+        catch (Exception)
         {
-            buyer.AddLoyaltyPoint(1000);
-            _unitOfWork.BaseUsers.Update(buyer);
-        }
-
-        var mechanic = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(context.Message.MechanicId);
-        if (mechanic is not null)
-        {
-            mechanic.SetIncompleteJob();
-            _unitOfWork.BaseUsers.Update(mechanic);
-        }
-
-        await _unitOfWork.CommitTransactionAsync();
+            await _unitOfWork.RollbackTransactionAsync();
+            throw; // Rethrow the exception to ensure it's logged or handled further.
+        } 
     }
 }

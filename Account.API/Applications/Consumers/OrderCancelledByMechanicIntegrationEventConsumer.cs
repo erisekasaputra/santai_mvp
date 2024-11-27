@@ -14,24 +14,32 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     public async Task Consume(ConsumeContext<OrderCancelledByMechanicIntegrationEvent> context)
     {
-        await _unitOfWork.BeginTransactionAsync();
-
-        (var isSuccess, var buyerId) = await _mechanicCache.CancelOrderByMechanic(
-            context.Message.OrderId.ToString(),
-            context.Message.MechanicId.ToString());
-
-        if (!isSuccess)
+        try
         {
-            throw new Exception($"Failed to cancel the order by mechanic for order id {context.Message.OrderId}");
-        }
+            await _unitOfWork.BeginTransactionAsync();
 
-        var mechanic = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(context.Message.MechanicId);
-        if (mechanic is not null)
+            (var isSuccess, var buyerId) = await _mechanicCache.CancelOrderByMechanic(
+                context.Message.OrderId.ToString(),
+                context.Message.MechanicId.ToString());
+
+            if (!isSuccess)
+            {
+                throw new Exception($"Failed to cancel the order by mechanic for order id {context.Message.OrderId}");
+            }
+
+            var mechanic = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(context.Message.MechanicId);
+            if (mechanic is not null)
+            {
+                mechanic.CancelByMechanic();
+                _unitOfWork.BaseUsers.Update(mechanic);
+            }
+
+            await _unitOfWork.CommitTransactionAsync();
+        }
+        catch (Exception)
         {
-            mechanic.CancelByMechanic();
-            _unitOfWork.BaseUsers.Update(mechanic);
+            await _unitOfWork.RollbackTransactionAsync();
+            throw;  
         }
-
-        await _unitOfWork.CommitTransactionAsync();
     }
 }
