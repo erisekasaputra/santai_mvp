@@ -25,9 +25,11 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
     IOptionsMonitor<ProjectConfiguration> projectConfiguration,
     IOptionsMonitor<OrderConfiguration> orderConfiguration,
     ILogger<OrderCancelledByMechanicIntegrationEventConsumer> logger,
-    NotificationDbContext dbContext) :
+    NotificationDbContext dbContext, 
+    INotificationService notificationService) :
     IConsumer<OrderCancelledByMechanicIntegrationEvent>
 {
+    private readonly INotificationService _notificationService = notificationService;
     private readonly NotificationDbContext _dbContext = dbContext;
     private readonly ILogger<OrderCancelledByMechanicIntegrationEventConsumer> _logger = logger;
     private readonly IMessageService _messageService = messageService;
@@ -58,6 +60,14 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
             OrderStatus.OrderCancelledByMechanic.ToString(),
             string.Empty);
 
+        try
+        {
+            await _notificationService.SaveNotification(new Notify(orderData.BuyerId.ToString(), NotifyType.Transaction.ToString(), "Order", $"We regret to inform you that your order has been canceled by the mechanic. Rest assured, we're already working to assign another mechanic to you as quickly as possible. Thank you for your patience!"));
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+        }
 
         var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
         if (target is null || target.Profiles is null || target.Profiles.Count < 1)

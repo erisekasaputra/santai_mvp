@@ -1,10 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "1dsdwTnYi84=",
+  "dgSpecHash": "oLLMOVG6qTE=",
   "success": true,
   "projectFilePath": "C:\\Projects\\Projects\\Santai.MVP\\Notification.Worker\\Notification.Worker.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\erise\\.nuget\\packages\\awssdk.core\\4.0.0-preview.2\\awssdk.core.4.0.0-preview.2.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\awssdk.core\\4.0.0-preview.4\\awssdk.core.4.0.0-preview.4.nupkg.sha512",
+    "C:\\Users\\erise\\.nuget\\packages\\awssdk.dynamodbv2\\4.0.0-preview.4\\awssdk.dynamodbv2.4.0.0-preview.4.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.extensions.netcore.setup\\4.0.0-preview.2\\awssdk.extensions.netcore.setup.4.0.0-preview.2.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.keymanagementservice\\4.0.0-preview.2\\awssdk.keymanagementservice.4.0.0-preview.2.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.simplenotificationservice\\4.0.0-preview.2\\awssdk.simplenotificationservice.4.0.0-preview.2.nupkg.sha512",

@@ -24,8 +24,10 @@ public class ServiceProcessedIntegrationEventConsumer(
     IOptionsMonitor<ProjectConfiguration> projectConfiguration,
     IOptionsMonitor<OrderConfiguration> orderConfiguration,
     ILogger<ServiceProcessedIntegrationEventConsumer> logger,
-    NotificationDbContext dbContext) : IConsumer<ServiceProcessedIntegrationEvent>
+    NotificationDbContext dbContext, 
+    INotificationService notificationService) : IConsumer<ServiceProcessedIntegrationEvent>
 {
+    private readonly INotificationService _notificationService = notificationService;
     private readonly NotificationDbContext _dbContext = dbContext;
     private readonly ILogger<ServiceProcessedIntegrationEventConsumer> _logger = logger;
     private readonly IMessageService _messageService = messageService;
@@ -54,6 +56,15 @@ public class ServiceProcessedIntegrationEventConsumer(
             String.Empty,
             OrderStatus.ServiceInProgress.ToString(),
             string.Empty);
+
+        try
+        {
+            await _notificationService.SaveNotification(new Notify(orderData.BuyerId.ToString(), NotifyType.Transaction.ToString(), "Order", $"Your vehicle service is starting"));
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+        }
 
         var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
         if (target is null || target.Profiles is null || target.Profiles.Count < 1)

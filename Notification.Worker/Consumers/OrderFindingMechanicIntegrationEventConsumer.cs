@@ -24,9 +24,11 @@ public class OrderFindingMechanicIntegrationEventConsumer(
     IOptionsMonitor<ProjectConfiguration> projectConfiguration,
     IOptionsMonitor<OrderConfiguration> orderConfiguration,
     ILogger<OrderFindingMechanicIntegrationEventConsumer> logger,
-    NotificationDbContext dbContext) :
+    NotificationDbContext dbContext,
+    INotificationService notificationService) :
     IConsumer<OrderFindingMechanicIntegrationEvent>
 {
+    private readonly INotificationService _notificationService = notificationService;
     private readonly NotificationDbContext _dbContext = dbContext;
     private readonly ILogger<OrderFindingMechanicIntegrationEventConsumer> _logger = logger;
     private readonly IMessageService _messageService = messageService;
@@ -47,8 +49,16 @@ public class OrderFindingMechanicIntegrationEventConsumer(
             string.Empty,
             string.Empty,
             OrderStatus.FindingMechanic.ToString(),
-            string.Empty); 
+            string.Empty);
 
+        try
+        {
+            await _notificationService.SaveNotification(new Notify(orderData.BuyerId.ToString(), NotifyType.Transaction.ToString(), "Order", $"Your order is currently being processed, and a mechanic is being scheduled to assist you shortly"));
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+        }
 
         var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
         if (target is null || target.Profiles is null || target.Profiles.Count < 1)

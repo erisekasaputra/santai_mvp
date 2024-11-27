@@ -245,7 +245,11 @@
           "dependencies": {
             "AWSSDK.Core": {
               "target": "Package",
-              "version": "[4.0.0-preview.2, )"
+              "version": "[4.0.0-preview.4, )"
+            },
+            "AWSSDK.DynamoDBv2": {
+              "target": "Package",
+              "version": "[4.0.0-preview.4, )"
             },
             "AWSSDK.SimpleNotificationService": {
               "target": "Package",

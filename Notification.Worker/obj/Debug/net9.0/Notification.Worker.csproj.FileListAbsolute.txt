@@ -602,3 +602,4 @@ C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\Notificatio
 C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\Notification.Worker.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\ref\Notification.Worker.dll
 C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
+C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\AWSSDK.DynamoDBv2.dll

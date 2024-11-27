@@ -7,6 +7,7 @@ using MassTransit;
 using Notification.Worker.Infrastructure;
 using Notification.Worker.Repository;
 using Notification.Worker.Services.Interfaces;
+using Notification.Worker.Services;
 
 namespace Notification.Worker.Consumers;
 
@@ -16,11 +17,13 @@ public class AccountSignedOutIntegrationEventConsumer : IConsumer<AccountSignedO
     private readonly UserProfileRepository _userProfileRepository;
     private readonly NotificationDbContext _notificationDbContext;
     private readonly ILogger<AccountSignedOutIntegrationEventConsumer> _logger;
+    private readonly INotificationService _notificationService;
     public AccountSignedOutIntegrationEventConsumer(
         IMessageService messageService,
         UserProfileRepository userProfile,
         NotificationDbContext notificationDbContext,
-        ILogger<AccountSignedOutIntegrationEventConsumer> logger)
+        ILogger<AccountSignedOutIntegrationEventConsumer> logger, 
+        INotificationService notificationService)
     {
         _messageService = messageService;
         _userProfileRepository = userProfile;

@@ -22,8 +22,10 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
     UserProfileRepository userProfileRepository,
     IOptionsMonitor<ProjectConfiguration> projectConfiguration,
     ILogger<AccountMechanicOrderAcceptedIntegrationEventConsumer> logger,
-    NotificationDbContext dbContext) : IConsumer<AccountMechanicOrderAcceptedIntegrationEvent>
+    NotificationDbContext dbContext,
+    INotificationService notificationService) : IConsumer<AccountMechanicOrderAcceptedIntegrationEvent>
 {
+    private readonly INotificationService _notificationService = notificationService;
     private readonly NotificationDbContext _dbContext = dbContext;
     private readonly ILogger<AccountMechanicOrderAcceptedIntegrationEventConsumer> _logger = logger;
     private readonly IMessageService _messageService = messageService;
@@ -53,6 +55,14 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
             OrderStatus.MechanicAssigned.ToString(),
             string.Empty);
 
+        try
+        {
+            await _notificationService.SaveNotification(new Notify(orderData.BuyerId.ToString(), NotifyType.Transaction.ToString(), "Order", $"Mechanic {orderData.MechanicName} has been assigned and will be heading to your location shortly"));
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+        }
 
         var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
         if (target is null || target.Profiles is null || target.Profiles.Count < 1)

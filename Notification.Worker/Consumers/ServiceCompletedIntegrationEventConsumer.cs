@@ -24,8 +24,10 @@ public class ServiceCompletedIntegrationEventConsumer(
     IOptionsMonitor<ProjectConfiguration> projectConfiguration,
     IOptionsMonitor<OrderConfiguration> orderConfiguration,
     ILogger<ServiceCompletedIntegrationEventConsumer> logger,
-    NotificationDbContext dbContext) : IConsumer<ServiceCompletedIntegrationEvent>
+    NotificationDbContext dbContext, 
+    INotificationService notificationService) : IConsumer<ServiceCompletedIntegrationEvent>
 {
+    private readonly INotificationService _notificationService = notificationService;
     private readonly NotificationDbContext _dbContext = dbContext;
     private readonly ILogger<ServiceCompletedIntegrationEventConsumer> _logger = logger;
     private readonly IMessageService _messageService = messageService;
@@ -56,6 +58,15 @@ public class ServiceCompletedIntegrationEventConsumer(
             OrderStatus.ServiceCompleted.ToString(),
             string.Empty);
 
+
+        try
+        {
+            await _notificationService.SaveNotification(new Notify(orderData.BuyerId.ToString(), NotifyType.Transaction.ToString(), "Order", $"Your service is complete, and the mechanic has successfully repaired your vehicle"));
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+        }
 
         var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
         if (target is null || target.Profiles is null || target.Profiles.Count < 1)

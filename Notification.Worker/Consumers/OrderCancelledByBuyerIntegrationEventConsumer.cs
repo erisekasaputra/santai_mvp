@@ -24,8 +24,10 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
     IOptionsMonitor<ProjectConfiguration> projectConfiguration,
     IOptionsMonitor<OrderConfiguration> orderConfiguration,
     ILogger<OrderCancelledByBuyerIntegrationEventConsumer> logger,
-    NotificationDbContext dbContext) : IConsumer<OrderCancelledByBuyerIntegrationEvent>
+    NotificationDbContext dbContext, 
+    INotificationService notificationService) : IConsumer<OrderCancelledByBuyerIntegrationEvent>
 {
+    private readonly INotificationService _notificationService = notificationService;
     private readonly NotificationDbContext _dbContext = dbContext;
     private readonly ILogger<OrderCancelledByBuyerIntegrationEventConsumer> _logger = logger;
     private readonly IMessageService _messageService = messageService;
@@ -37,17 +39,12 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
     public async Task Consume(ConsumeContext<OrderCancelledByBuyerIntegrationEvent> context)
     {  
         var orderData = context.Message; 
-        if (orderData.MechanicId is null || orderData.MechanicId == Guid.Empty)
+        if (orderData.MechanicId is null || orderData.MechanicId == Guid.Empty || !orderData.MechanicId.HasValue)
         {
             return;
         } 
 
-        if (orderData.MechanicId is null || !orderData.MechanicId.HasValue)
-        {
-            return;
-        }
-
-        await _activityHubContext.Clients.User(orderData.MechanicId.ToString()!).ReceiveOrderStatusUpdate(
+        await _activityHubContext.Clients.User(orderData.MechanicId.Value.ToString()).ReceiveOrderStatusUpdate(
             orderData.OrderId.ToString(),
             orderData.BuyerId.ToString(),
             orderData.BuyerName ?? string.Empty,
@@ -56,8 +53,16 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
             OrderStatus.OrderCancelledByUser.ToString(),
             string.Empty);
 
+        try
+        {
+            await _notificationService.SaveNotification(new Notify(orderData.MechanicId.Value.ToString(), NotifyType.Transaction.ToString(), "Order", $"Uhh, Order has been canceled by customer"));
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+        }
 
-        Console.WriteLine(orderData.MechanicId.Value);
+
         var target = await _userProfileRepository.GetUserByIdAsync(orderData.MechanicId.Value);
         if (target is null || target.Profiles is null || target.Profiles.Count < 1)
         {

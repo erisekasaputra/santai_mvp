@@ -22,8 +22,10 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
     IOptionsMonitor<ProjectConfiguration> projectConfiguration,
     IOptionsMonitor<OrderConfiguration> orderConfiguration,
     NotificationDbContext dbContext,
-    ILogger<MechanicAutoSelectedIntegrationEventConsumer> logger) : IConsumer<MechanicAutoSelectedIntegrationEvent>
+    ILogger<MechanicAutoSelectedIntegrationEventConsumer> logger,
+    INotificationService notificationService) : IConsumer<MechanicAutoSelectedIntegrationEvent>
 {
+    private readonly INotificationService _notificationService = notificationService;
     private readonly IMessageService _messageService = messageService;
     private readonly IHubContext<ActivityHub, IActivityClient> _activityHubContext = activityHubContecxt;
     private readonly ICacheService _cacheService = cacheService;

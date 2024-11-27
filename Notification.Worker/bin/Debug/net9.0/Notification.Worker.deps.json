@@ -8,7 +8,8 @@
     ".NETCoreApp,Version=v9.0": {
       "Notification.Worker/1.0.0": {
         "dependencies": {
-          "AWSSDK.Core": "4.0.0-preview.2",
+          "AWSSDK.Core": "4.0.0-preview.4",
+          "AWSSDK.DynamoDBv2": "4.0.0-preview.4",
           "AWSSDK.SimpleNotificationService": "4.0.0-preview.2",
           "Core": "1.0.0",
           "MassTransit": "8.2.5",
@@ -37,7 +38,7 @@
           "Notification.Worker.dll": {}
         }
       },
-      "AWSSDK.Core/4.0.0-preview.2": {
+      "AWSSDK.Core/4.0.0-preview.4": {
         "runtime": {
           "lib/net8.0/AWSSDK.Core.dll": {
             "assemblyVersion": "4.0.0.0",
@@ -45,9 +46,20 @@
           }
         }
       },
+      "AWSSDK.DynamoDBv2/4.0.0-preview.4": {
+        "dependencies": {
+          "AWSSDK.Core": "4.0.0-preview.4"
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.DynamoDBv2.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      },
       "AWSSDK.Extensions.NETCore.Setup/4.0.0-preview.2": {
         "dependencies": {
-          "AWSSDK.Core": "4.0.0-preview.2",
+          "AWSSDK.Core": "4.0.0-preview.4",
           "Microsoft.Extensions.Configuration.Abstractions": "9.0.0-rc.1.24431.7",
           "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.0-rc.2.24473.5",
           "Microsoft.Extensions.Logging.Abstractions": "9.0.0-rc.2.24473.5"
@@ -61,7 +73,7 @@
       },
       "AWSSDK.KeyManagementService/4.0.0-preview.2": {
         "dependencies": {
-          "AWSSDK.Core": "4.0.0-preview.2"
+          "AWSSDK.Core": "4.0.0-preview.4"
         },
         "runtime": {
           "lib/net8.0/AWSSDK.KeyManagementService.dll": {
@@ -72,7 +84,7 @@
       },
       "AWSSDK.SimpleNotificationService/4.0.0-preview.2": {
         "dependencies": {
-          "AWSSDK.Core": "4.0.0-preview.2"
+          "AWSSDK.Core": "4.0.0-preview.4"
         },
         "runtime": {
           "lib/net8.0/AWSSDK.SimpleNotificationService.dll": {
@@ -83,7 +95,7 @@
       },
       "AWSSDK.SQS/3.7.400.3": {
         "dependencies": {
-          "AWSSDK.Core": "4.0.0-preview.2"
+          "AWSSDK.Core": "4.0.0-preview.4"
         },
         "runtime": {
           "lib/net8.0/AWSSDK.SQS.dll": {
@@ -1591,7 +1603,7 @@
       },
       "Core/1.0.0": {
         "dependencies": {
-          "AWSSDK.Core": "4.0.0-preview.2",
+          "AWSSDK.Core": "4.0.0-preview.4",
           "AWSSDK.Extensions.NETCore.Setup": "4.0.0-preview.2",
           "AWSSDK.KeyManagementService": "4.0.0-preview.2",
           "Azure.Identity": "1.13.0-beta.1",
@@ -1634,12 +1646,19 @@
       "serviceable": false,
       "sha512": ""
     },
-    "AWSSDK.Core/4.0.0-preview.2": {
+    "AWSSDK.Core/4.0.0-preview.4": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-6nuzxpIh7Vs2ghYvzuT1af0zgUi2grqq+ZSO9vzcMIttFY6TqrK8r262dmyY5XSdqVAl/fzA5AxPNoAbxA/waw==",
-      "path": "awssdk.core/4.0.0-preview.2",
-      "hashPath": "awssdk.core.4.0.0-preview.2.nupkg.sha512"
+      "sha512": "sha512-VeekkHkQVHoQ/5n0Bmbzh0dlfqksMLMYftijZs6zIZ3uv1JWGDTxWHNw3H7FSf1933x1DQRTLSnPbvpTwVLbxw==",
+      "path": "awssdk.core/4.0.0-preview.4",
+      "hashPath": "awssdk.core.4.0.0-preview.4.nupkg.sha512"
+    },
+    "AWSSDK.DynamoDBv2/4.0.0-preview.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7dQchd+YtceVr9aiFPU0FJmMsbiE0qO1VhRhz+7T4QZKMe8ku4gAiaimQ+HFKuiq8GvCmpLJFsN2h104RHajNA==",
+      "path": "awssdk.dynamodbv2/4.0.0-preview.4",
+      "hashPath": "awssdk.dynamodbv2.4.0.0-preview.4.nupkg.sha512"
     },
     "AWSSDK.Extensions.NETCore.Setup/4.0.0-preview.2": {
       "type": "package",

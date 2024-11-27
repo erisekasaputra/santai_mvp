@@ -522,7 +522,7 @@ public class Order : Entity
 
         Rating = new Rating(rating, comment);
         RatingImages = images?.ToList();
-        RaiseOrderRatedDomainEvent(Id, Buyer.BuyerId, rating, comment);
+        RaiseOrderRatedDomainEvent(Id, Buyer.BuyerId, Mechanic?.MechanicId ?? Guid.Empty, rating, comment);
     }
 
     private bool IsOrderMechanicAssignable(Guid mechanicId, out string errorMessage)
@@ -890,9 +890,9 @@ public class Order : Entity
         AddDomainEvent(new MechanicDispatchedDomainEvent(orderId, buyerId, mechanicId, mechanicName));
     }
 
-    private void RaiseOrderRatedDomainEvent(Guid orderId, Guid buyerId, decimal value, string? comment)
+    private void RaiseOrderRatedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId, decimal value, string? comment)
     {
-        AddDomainEvent(new OrderRatedDomainEvent(orderId, buyerId, value, comment));
+        AddDomainEvent(new OrderRatedDomainEvent(orderId, buyerId, mechanicId, value, comment));
     } 
     private void RaiseOrderCancelledByBuyerDomainEvent(Guid orderId, Guid buyerId, string buyerName, Guid? mechanicId, string mechanicName)
     { 

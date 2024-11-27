@@ -1,4 +1,8 @@
-﻿using Core.Configurations; 
+﻿using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2;
+using Amazon.Runtime;
+using Amazon;
+using Core.Configurations; 
 using Core.Services;
 using Core.Services.Interfaces;
 using MassTransit;  
@@ -6,7 +10,8 @@ using Notification.Worker.Consumers;
 using Notification.Worker.Repository;
 using Notification.Worker.Services;
 using Notification.Worker.Services.Interfaces;
-using StackExchange.Redis; 
+using StackExchange.Redis;
+using Microsoft.Extensions.Options;
 
 namespace Notification.Worker.Extensions;
 
@@ -96,12 +101,30 @@ public static class ServiceRegistrationExtension
             };
 
             configure.Configuration = configurations; 
-        }); 
+        });
 
 
+        builder.Services.AddScoped<IUserInfoService, UserInfoService>();
         builder.Services.AddSingleton<ICacheService, CacheService>();
         builder.Services.AddSingleton<IMessageService, SnsMessageService>();
-        builder.Services.AddScoped<UserProfileRepository>();
+        builder.Services.AddScoped<UserProfileRepository>(); 
+
+
+        builder.Services.AddSingleton<IAmazonDynamoDB>(provider =>
+        {
+            var awsOptions = provider.GetRequiredService<IOptionsMonitor<AWSIAMConfiguration>>().CurrentValue;
+
+            var credentials = new BasicAWSCredentials(awsOptions.AccessID, awsOptions.SecretKey);
+
+            var region = RegionEndpoint.GetBySystemName(awsOptions.Region);
+            return new AmazonDynamoDBClient(credentials, region);
+        });
+
+        builder.Services.AddSingleton<IDynamoDBContext, DynamoDBContext>();
+        builder.Services.AddScoped<INotificationService, NotificationService>();
+
+
+
         return builder;
     }
 }

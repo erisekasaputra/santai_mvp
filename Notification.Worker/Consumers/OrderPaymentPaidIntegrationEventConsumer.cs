@@ -24,8 +24,10 @@ public class OrderPaymentPaidIntegrationEventConsumer(
     IOptionsMonitor<ProjectConfiguration> projectConfiguration,
     IOptionsMonitor<OrderConfiguration> orderConfiguration,
     ILogger<OrderPaymentPaidIntegrationEventConsumer> logger,
-    NotificationDbContext dbContext) : IConsumer<OrderPaymentPaidIntegrationEvent>
+    NotificationDbContext dbContext, 
+    INotificationService notificationService) : IConsumer<OrderPaymentPaidIntegrationEvent>
 {
+    private readonly INotificationService _notificationService = notificationService;
     private readonly NotificationDbContext _dbContext = dbContext;
     private readonly ILogger<OrderPaymentPaidIntegrationEventConsumer> _logger = logger;
     private readonly IMessageService _messageService = messageService;
@@ -45,7 +47,16 @@ public class OrderPaymentPaidIntegrationEventConsumer(
             string.Empty,
             string.Empty,
             OrderStatus.PaymentPaid.ToString(),
-            string.Empty);  
+            string.Empty);
+
+        try
+        {
+            await _notificationService.SaveNotification(new Notify(orderData.BuyerId.ToString(), NotifyType.Transaction.ToString(), "Order", $"Your payment has been successfully received. Thank you for your trust and support"));
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+        }
 
         var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
         if (target is null || target.Profiles is null || target.Profiles.Count < 1)

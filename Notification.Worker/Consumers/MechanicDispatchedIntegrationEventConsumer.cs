@@ -24,8 +24,10 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
     IOptionsMonitor<ProjectConfiguration> projectConfiguration,
     IOptionsMonitor<OrderConfiguration> orderConfiguration,
     ILogger<MechanicDispatchedIntegrationEventConsumer> logger,
-    NotificationDbContext dbContext) : IConsumer<MechanicDispatchedIntegrationEvent>
+    NotificationDbContext dbContext,
+    INotificationService notificationService) : IConsumer<MechanicDispatchedIntegrationEvent>
 {
+    private readonly INotificationService _notificationService = notificationService;
     private readonly NotificationDbContext _dbContext = dbContext;
     private readonly ILogger<MechanicDispatchedIntegrationEventConsumer> _logger = logger;
     private readonly IMessageService _messageService = messageService;
@@ -55,6 +57,14 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
             OrderStatus.MechanicDispatched.ToString(),
             string.Empty);
 
+        try
+        {
+            await _notificationService.SaveNotification(new Notify(orderData.BuyerId.ToString(), NotifyType.Transaction.ToString(), "Order", $"The mechanic is heading to your location"));
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+        }
 
         var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
         if (target is null || target.Profiles is null || target.Profiles.Count < 1)

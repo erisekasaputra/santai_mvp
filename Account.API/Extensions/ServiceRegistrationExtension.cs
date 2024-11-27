@@ -64,7 +64,8 @@ public static class ServiceRegistrationExtension
                 ("account-service-order-cancelled-by-mechanic-integration-event-queue", typeof(OrderCancelledByMechanicIntegrationEventConsumer)),
                 ("account-service-order-cancelled-by-buyer-integration-event-queue", typeof(OrderCancelledByUserIntegrationEventConsumer)), 
                 ("account-service-order-service-incompleted-integration-event-queue", typeof(ServiceIncompletedIntegrationEventConsumer)), 
-                ("account-service-order-service-completed-integration-event-queue", typeof(ServiceCompletedIntegrationEventConsumer))
+                ("account-service-order-service-completed-integration-event-queue", typeof(ServiceCompletedIntegrationEventConsumer)),
+                ("account-service-order-rated-integration-event-queue", typeof(OrderRatedIntegrationEventConsumer)),
             };
              
             x.AddConsumersFromNamespaceContaining<IAccountAPIMarkerInterface>();

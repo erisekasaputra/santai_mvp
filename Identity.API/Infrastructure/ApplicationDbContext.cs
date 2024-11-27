@@ -8,8 +8,7 @@ using Newtonsoft.Json;
 namespace Identity.API.Infrastructure;
 
 public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
-{ 
-
+{  
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
     {
         

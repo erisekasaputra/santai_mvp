@@ -11,16 +11,29 @@ namespace Account.Domain.Aggregates.UserAggregate;
 
 public class MechanicUser : BaseUser
 {  
+    public ICollection<decimal> Ratings { get; set; }
     public PersonalInfo PersonalInfo { get; private set; } 
     public ICollection<Certification>? Certifications { get; private set; } 
     public ICollection<DrivingLicense>? DrivingLicenses { get; private set; } 
     public ICollection<NationalIdentity>? NationalIdentities { get; private set; } 
-    public decimal Rating { get; private set; }  
     public bool IsVerified { get; private set; } 
+    public decimal Rating
+    {
+        get
+        {
+            if (Ratings == null || Ratings.Count == 0)
+            {
+                return 5;
+            }
+
+            return Ratings.Average();
+        }
+    }
 
     protected MechanicUser() : base()
     { 
         PersonalInfo = null!;
+        Ratings = [];
     }
 
     public MechanicUser(
@@ -42,7 +55,7 @@ public class MechanicUser : BaseUser
     {  
         Id = identityId;
         PersonalInfo = personalInfo;
-        Rating = 5;
+        Ratings = [];
         IsVerified = false; 
         RaiseMechanicUserCreatedDomainEvent(this);
     } 
@@ -190,8 +203,9 @@ public class MechanicUser : BaseUser
             throw new DomainException("Rating must be between 0.0 and 5.0");
         }
 
-        Rating = rating;
-    }
+        Ratings ??= [];
+        Ratings.Add(rating);
+    } 
 
     public override string ToString()
     {

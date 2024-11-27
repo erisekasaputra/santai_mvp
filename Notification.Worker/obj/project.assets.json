@@ -2,7 +2,7 @@
   "version": 3,
   "targets": {
     "net9.0": {
-      "AWSSDK.Core/4.0.0-preview.2": {
+      "AWSSDK.Core/4.0.0-preview.4": {
         "type": "package",
         "compile": {
           "lib/net8.0/AWSSDK.Core.dll": {
@@ -11,6 +11,22 @@
         },
         "runtime": {
           "lib/net8.0/AWSSDK.Core.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "AWSSDK.DynamoDBv2/4.0.0-preview.4": {
+        "type": "package",
+        "dependencies": {
+          "AWSSDK.Core": "[4.0.0-preview.4, 5.0.0-preview.4)"
+        },
+        "compile": {
+          "lib/net8.0/AWSSDK.DynamoDBv2.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/AWSSDK.DynamoDBv2.dll": {
             "related": ".pdb;.xml"
           }
         }
@@ -2844,15 +2860,15 @@
     }
   },
   "libraries": {
-    "AWSSDK.Core/4.0.0-preview.2": {
-      "sha512": "6nuzxpIh7Vs2ghYvzuT1af0zgUi2grqq+ZSO9vzcMIttFY6TqrK8r262dmyY5XSdqVAl/fzA5AxPNoAbxA/waw==",
+    "AWSSDK.Core/4.0.0-preview.4": {
+      "sha512": "VeekkHkQVHoQ/5n0Bmbzh0dlfqksMLMYftijZs6zIZ3uv1JWGDTxWHNw3H7FSf1933x1DQRTLSnPbvpTwVLbxw==",
       "type": "package",
-      "path": "awssdk.core/4.0.0-preview.2",
+      "path": "awssdk.core/4.0.0-preview.4",
       "hasTools": true,
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
-        "awssdk.core.4.0.0-preview.2.nupkg.sha512",
+        "awssdk.core.4.0.0-preview.4.nupkg.sha512",
         "awssdk.core.nuspec",
         "images/AWSLogo.png",
         "lib/net472/AWSSDK.Core.dll",
@@ -2868,6 +2884,35 @@
         "lib/netstandard2.0/AWSSDK.Core.pdb",
         "lib/netstandard2.0/AWSSDK.Core.xml",
         "tools/account-management.ps1"
+      ]
+    },
+    "AWSSDK.DynamoDBv2/4.0.0-preview.4": {
+      "sha512": "7dQchd+YtceVr9aiFPU0FJmMsbiE0qO1VhRhz+7T4QZKMe8ku4gAiaimQ+HFKuiq8GvCmpLJFsN2h104RHajNA==",
+      "type": "package",
+      "path": "awssdk.dynamodbv2/4.0.0-preview.4",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "analyzers/dotnet/cs/AWSSDK.DynamoDBv2.CodeAnalysis.dll",
+        "analyzers/dotnet/cs/SharedAnalysisCode.dll",
+        "awssdk.dynamodbv2.4.0.0-preview.4.nupkg.sha512",
+        "awssdk.dynamodbv2.nuspec",
+        "images/AWSLogo.png",
+        "lib/net472/AWSSDK.DynamoDBv2.dll",
+        "lib/net472/AWSSDK.DynamoDBv2.pdb",
+        "lib/net472/AWSSDK.DynamoDBv2.xml",
+        "lib/net8.0/AWSSDK.DynamoDBv2.dll",
+        "lib/net8.0/AWSSDK.DynamoDBv2.pdb",
+        "lib/net8.0/AWSSDK.DynamoDBv2.xml",
+        "lib/netcoreapp3.1/AWSSDK.DynamoDBv2.dll",
+        "lib/netcoreapp3.1/AWSSDK.DynamoDBv2.pdb",
+        "lib/netcoreapp3.1/AWSSDK.DynamoDBv2.xml",
+        "lib/netstandard2.0/AWSSDK.DynamoDBv2.dll",
+        "lib/netstandard2.0/AWSSDK.DynamoDBv2.pdb",
+        "lib/netstandard2.0/AWSSDK.DynamoDBv2.xml",
+        "tools/install.ps1",
+        "tools/uninstall.ps1"
       ]
     },
     "AWSSDK.Extensions.NETCore.Setup/4.0.0-preview.2": {
@@ -8024,7 +8069,8 @@
   },
   "projectFileDependencyGroups": {
     "net9.0": [
-      "AWSSDK.Core >= 4.0.0-preview.2",
+      "AWSSDK.Core >= 4.0.0-preview.4",
+      "AWSSDK.DynamoDBv2 >= 4.0.0-preview.4",
       "AWSSDK.SimpleNotificationService >= 4.0.0-preview.2",
       "Core >= 1.0.0",
       "MassTransit >= 8.2.5",
@@ -8107,7 +8153,11 @@
         "dependencies": {
           "AWSSDK.Core": {
             "target": "Package",
-            "version": "[4.0.0-preview.2, )"
+            "version": "[4.0.0-preview.4, )"
+          },
+          "AWSSDK.DynamoDBv2": {
+            "target": "Package",
+            "version": "[4.0.0-preview.4, )"
           },
           "AWSSDK.SimpleNotificationService": {
             "target": "Package",

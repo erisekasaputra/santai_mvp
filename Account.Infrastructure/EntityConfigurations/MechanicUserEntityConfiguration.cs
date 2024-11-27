@@ -4,16 +4,15 @@ using Account.Domain.Enumerations;
 using Core.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Microsoft.Extensions.Options;
+using Newtonsoft.Json;
 
 namespace Account.Infrastructure.EntityConfigurations;
 
 public class MechanicUserEntityConfiguration : IEntityTypeConfiguration<MechanicUser>
 {
     public void Configure(EntityTypeBuilder<MechanicUser> e)
-    {
-        e.Property(p => p.Rating)
-                .HasColumnType("decimal(5, 2)"); 
-
+    { 
         e.OwnsOne(p => p.PersonalInfo, personalInfo =>
         {
             personalInfo.Property(i => i.FirstName)
@@ -52,8 +51,15 @@ public class MechanicUserEntityConfiguration : IEntityTypeConfiguration<Mechanic
                 .HasConversion(
                     v => v == null ? null : v.Trim(),
                     v => v == null ? null : v.Trim());
-        }); 
+        });
 
-        //e.Ignore(p => p.DomainEvents); // no need domain event because the parent entity (BaseUser is implementing DomainEvent ignorance) 
+
+        e.Property(p => p.Ratings)
+             .HasConversion(
+                value => JsonConvert.SerializeObject(value),
+                value => JsonConvert.DeserializeObject<List<decimal>>(value) ?? new List<decimal>()
+             );
+
+        e.Ignore(p => p.Rating); 
     }
 }

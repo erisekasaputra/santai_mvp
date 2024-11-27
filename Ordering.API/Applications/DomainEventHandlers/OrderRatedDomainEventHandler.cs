@@ -1,5 +1,4 @@
-﻿using Core.Events;
-using Core.Events.Ordering;
+﻿using Core.Events.Ordering;
 using MediatR; 
 using Ordering.Domain.Events;
 
@@ -13,6 +12,7 @@ public class OrderRatedDomainEventHandler(IMediator mediator) : INotificationHan
         await _mediator.Publish(new OrderRatedIntegrationEvent(
             notification.OrderId,
             notification.BuyerId,
+            notification.MechanicId,
             notification.Value,
             notification.Comment), cancellationToken);
     }

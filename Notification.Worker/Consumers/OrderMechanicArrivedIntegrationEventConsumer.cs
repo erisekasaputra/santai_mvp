@@ -24,8 +24,10 @@ public class OrderMechanicArrivedIntegrationEventConsumer(
     IOptionsMonitor<ProjectConfiguration> projectConfiguration,
     IOptionsMonitor<OrderConfiguration> orderConfiguration,
     ILogger<OrderMechanicArrivedIntegrationEventConsumer> logger,
-    NotificationDbContext dbContext) : IConsumer<OrderMechanicArrivedIntegrationEvent>
+    NotificationDbContext dbContext, 
+    INotificationService notificationService) : IConsumer<OrderMechanicArrivedIntegrationEvent>
 {
+    private readonly INotificationService _notificationService = notificationService;
     private readonly NotificationDbContext _dbContext = dbContext;
     private readonly ILogger<OrderMechanicArrivedIntegrationEventConsumer> _logger = logger;
     private readonly IMessageService _messageService = messageService;
@@ -55,6 +57,16 @@ public class OrderMechanicArrivedIntegrationEventConsumer(
             orderData.MechanicName,
             OrderStatus.MechanicArrived.ToString(),
             string.Empty);
+
+
+        try
+        {
+            await _notificationService.SaveNotification(new Notify(orderData.BuyerId.ToString(), NotifyType.Transaction.ToString(), "Order", $"The mechanic has arrived at your location. Please provide detailed directions to assist them in reaching you more efficiently."));
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+        }
 
         var target = await _userProfileRepository.GetUserByIdAsync(orderData.BuyerId);
         if (target is null || target.Profiles is null || target.Profiles.Count < 1)

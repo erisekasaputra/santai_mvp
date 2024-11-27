@@ -1,31 +1,28 @@
-﻿using Amazon.DynamoDBv2.DataModel;
-using Amazon.DynamoDBv2.DocumentModel;  
+﻿using Amazon.DynamoDBv2;
+using Amazon.DynamoDBv2.DataModel;
+using Amazon.DynamoDBv2.DocumentModel;
+using Amazon.DynamoDBv2.Model;
 using Chat.API.Applications.Services.Interfaces;
-using Chat.API.Domain.Models;
-using Core.Configurations; 
-using Core.Utilities;
-using Microsoft.Extensions.Options;
+using Chat.API.Domain.Models; 
+using Core.Utilities; 
 
 namespace Chat.API.Applications.Services;
 
 public class DynamoDBChatService : IChatService
-{ 
-    //private readonly AmazonDynamoDBClient _dynamoDbClient;
+{  
     private readonly IDynamoDBContext _dynamoDBContext; 
     private readonly ILogger<DynamoDBChatService> _logger;
+    private readonly AmazonDynamoDBClient _dynamoDBClient;
 
-    public DynamoDBChatService(  
-        IConfiguration configuration,
-        IOptionsMonitor<AWSIAMConfiguration> awsIamConfiguration,
+
+    public DynamoDBChatService(   
         IDynamoDBContext dynamoDBContext,
-        ILogger<DynamoDBChatService> logger)
-    {
-        //var iam = awsIamConfiguration.CurrentValue; 
-        //var credentials = new BasicAWSCredentials(iam.AccessID, iam.SecretKey); 
-        //var regionEndpoint = RegionEndpoint.GetBySystemName(iam.Region);
-        //_dynamoDbClient = new AmazonDynamoDBClient(credentials, regionEndpoint); 
+        ILogger<DynamoDBChatService> logger,
+        AmazonDynamoDBClient dynamoDBClient)
+    { 
         _dynamoDBContext = dynamoDBContext;
         _logger = logger;
+        _dynamoDBClient = dynamoDBClient;
     }
 
     public async Task<bool> SaveChatMessageAsync(Conversation conversation)
@@ -197,10 +194,50 @@ public class DynamoDBChatService : IChatService
     public async Task<bool> UpdateChatContact(ChatContact chatContact)
     {
         try
-        {   
-            chatContact.IsExpired(); // dont remove this line
-            await _dynamoDBContext.SaveAsync(chatContact);  
+        {
+            await DeleteChatContact(chatContact.OrderId);
+            chatContact.IsExpired();  
+            await _dynamoDBContext.SaveAsync(chatContact); 
 
+            try
+            { 
+                var updateRequest = new UpdateItemRequest
+                {
+                    TableName = "ChatContact",
+                    Key = new Dictionary<string, AttributeValue>
+                    {
+                        { "OrderId", new AttributeValue { S = chatContact.OrderId } },
+                        { "LastChatTimestamp", new AttributeValue { N = chatContact.LastChatTimestamp.ToString() } }
+                    },
+                    UpdateExpression = "SET #lastChatText = :lastChatText, #chatUpdateTimestamp = :chatUpdateTimestamp, #isChatExpired = :isChatExpired",
+                    ExpressionAttributeNames = new Dictionary<string, string>
+                    {
+                        { "#lastChatText", "LastChatText" },
+                        { "#chatUpdateTimestamp", "ChatUpdateTimestamp" },
+                        { "#isChatExpired", "IsChatExpired" }
+                    },
+                    ExpressionAttributeValues = new Dictionary<string, AttributeValue>
+                    {
+                        { ":lastChatText", new AttributeValue { S = chatContact.LastChatText ?? string.Empty } },
+                        { ":chatUpdateTimestamp", new AttributeValue { N = chatContact.ChatUpdateTimestamp.ToString() } },
+                        { ":isChatExpired", new AttributeValue { BOOL = chatContact.IsChatExpired } }
+                    },
+                    ReturnValues = "ALL_NEW"  
+                };
+                 
+                var response = await _dynamoDBClient.UpdateItemAsync(updateRequest);
+                 
+                if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    Console.WriteLine("ChatContact updated successfully.");
+                    return true;
+                } 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error updating ChatContact: {ex.Message}");
+                return false;
+            } 
             return true;
         }
         catch(Exception ex)
@@ -218,9 +255,9 @@ public class DynamoDBChatService : IChatService
             var itemsPerBatch = 100;
 
             var scanConditions = new List<ScanCondition>
-        {
-            new(nameof(Conversation.OrderId), ScanOperator.Equal, orderId.ToString())
-        };
+            {
+                new(nameof(Conversation.OrderId), ScanOperator.Equal, orderId.ToString())
+            };
 
             var search = _dynamoDBContext.ScanAsync<Conversation>(scanConditions);
 

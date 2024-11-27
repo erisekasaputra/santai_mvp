@@ -404,10 +404,6 @@ namespace Account.Infrastructure.Migrations
                     b.Property<DateTime>("CreatedAtUtc")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("DeviceIds")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("EncryptedEmail")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
@@ -497,10 +493,6 @@ namespace Account.Infrastructure.Migrations
                     b.Property<Guid>("BusinessUserId")
                         .HasMaxLength(50)
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("DeviceIds")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EncryptedEmail")
                         .HasMaxLength(255)
@@ -781,8 +773,9 @@ namespace Account.Infrastructure.Migrations
                     b.Property<bool>("IsVerified")
                         .HasColumnType("bit");
 
-                    b.Property<decimal>("Rating")
-                        .HasColumnType("decimal(5, 2)");
+                    b.Property<string>("Ratings")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasDiscriminator().HasValue("MechanicUser");
                 });

@@ -22,8 +22,10 @@ public class ChatSentIntegrationEventConsumer(
     UserProfileRepository userProfileRepository,
     IOptionsMonitor<ProjectConfiguration> projectConfiguration,
     ILogger<ChatSentIntegrationEventConsumer> logger,
-    NotificationDbContext dbContext) : IConsumer<ChatSentIntegrationEvent>
+    NotificationDbContext dbContext,
+    INotificationService notificationService) : IConsumer<ChatSentIntegrationEvent>
 {
+    private readonly INotificationService _notificationService = notificationService;
     private readonly ILogger<ChatSentIntegrationEventConsumer> _logger = logger;
     private readonly IMessageService _messageService = messageService;
     private readonly IHubContext<ActivityHub, IActivityClient> _activityHubContext = activityHubContecxt;
@@ -44,12 +46,12 @@ public class ChatSentIntegrationEventConsumer(
         {
             var fcmPayload = new
             {
-                //notification = new
-                //{
-                //    title = "New Chat",
-                //    body = context.Message.Text
-                //},
-                //to = profile.DeviceToken,
+                notification = new
+                {
+                    title = "Chat",
+                    body = context.Message.Text
+                },
+                to = profile.DeviceToken,
                 data = new
                 {
                     token = profile.DeviceToken,

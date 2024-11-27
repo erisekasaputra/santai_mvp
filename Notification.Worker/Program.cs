@@ -13,6 +13,7 @@ builder.Services.AddCors(options =>
     });
 }); 
 
+builder.Services.AddControllers();
 builder.Services.AddRouting();
 builder.Configuration.AddEnvironmentVariables();   
 builder.Services.AddHttpContextAccessor();
@@ -30,6 +31,7 @@ builder.Services.AddHealthChecks();
 var app = builder.Build(); 
 app.UseRouting();
 app.UseCors("AllowAllOrigins");
+app.MapControllers();
 app.MapHub<ActivityHub>("/notification");
 app.MapHealthChecks("/health");
 app.Run();

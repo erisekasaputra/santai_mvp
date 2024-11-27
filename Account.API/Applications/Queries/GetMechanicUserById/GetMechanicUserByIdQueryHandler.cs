@@ -65,7 +65,8 @@ public class GetMechanicUserByIdQueryHandler(
                 address, 
                 certifications,
                 drivingLicense,
-                nationalIdentity
+                nationalIdentity,
+                user.Rating
             );
              
             return Result.Success(userDto);

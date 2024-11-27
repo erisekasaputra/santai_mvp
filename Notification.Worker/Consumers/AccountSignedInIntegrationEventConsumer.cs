@@ -10,6 +10,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Data.SqlClient;
 using Core.Utilities;
 using Amazon.Runtime;
+using Notification.Worker.Services;
 
 namespace Notification.Worker.Consumers;
 
@@ -19,16 +20,19 @@ public class AccountSignedInIntegrationEventConsumer : IConsumer<AccountSignedIn
     private readonly UserProfileRepository _userProfileRepository;
     private readonly NotificationDbContext _notificationDbContext;
     private readonly ILogger<AccountSignedInIntegrationEventConsumer> _logger;
+    private readonly INotificationService _notificationService;
     public AccountSignedInIntegrationEventConsumer(
         IMessageService messageService,
         UserProfileRepository userProfile,
         NotificationDbContext notificationDbContext,
-        ILogger<AccountSignedInIntegrationEventConsumer> logger)
+        ILogger<AccountSignedInIntegrationEventConsumer> logger,
+        INotificationService notificationService)
     {
         _messageService = messageService;
         _userProfileRepository = userProfile;
         _notificationDbContext = notificationDbContext;
         _logger = logger;
+        _notificationService = notificationService;
     }
 
     public async Task Consume(ConsumeContext<AccountSignedInIntegrationEvent> context)

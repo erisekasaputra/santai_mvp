@@ -16,7 +16,8 @@ public class Conversation
     public string? ReplyMessageText { get; set; }
     [DynamoDBRangeKey] // Sort Key
     public long Timestamp { get; init; }
-
+    [DynamoDBVersion]
+    public int Version { get; set; }
     public Conversation()
     {
         MessageId = string.Empty;

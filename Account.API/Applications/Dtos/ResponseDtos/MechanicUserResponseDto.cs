@@ -11,4 +11,5 @@ public record MechanicUserResponseDto(
     AddressResponseDto Address,
     IEnumerable<CertificationResponseDto>? Certifications,
     DrivingLicenseResponseDto? DrivingLicense,
-    NationalIdentityResponseDto? NationalIdentity);
+    NationalIdentityResponseDto? NationalIdentity,
+    decimal Rating);

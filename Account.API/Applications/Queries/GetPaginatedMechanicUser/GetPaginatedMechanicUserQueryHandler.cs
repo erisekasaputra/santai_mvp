@@ -87,7 +87,8 @@ public class GetPaginatedMechanicUserQueryHandler(
                 address,
                 certifications,
                 drivingLicense,
-                nationalIdentity
+                nationalIdentity,
+                user.Rating
             )); 
         }
 
