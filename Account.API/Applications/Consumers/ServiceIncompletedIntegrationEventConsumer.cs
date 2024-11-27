@@ -2,6 +2,7 @@
 using Account.Domain.SeedWork;
 using Core.Events.Ordering;
 using MassTransit;
+using System.Data;
 
 namespace Account.API.Applications.Consumers;
 
@@ -15,7 +16,7 @@ public class ServiceIncompletedIntegrationEventConsumer(
     {
         try
         {
-            await _unitOfWork.BeginTransactionAsync();
+            await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted);
 
             (var isSuccess, _) = await _mechanicCache.CompleteOrder(
              context.Message.OrderId.ToString(),
@@ -45,7 +46,7 @@ public class ServiceIncompletedIntegrationEventConsumer(
         catch (Exception)
         {
             await _unitOfWork.RollbackTransactionAsync();
-            throw; // Rethrow the exception to ensure it's logged or handled further.
+            throw; 
         } 
     }
 }

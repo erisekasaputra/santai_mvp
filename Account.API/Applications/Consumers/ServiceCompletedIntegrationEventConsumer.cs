@@ -2,6 +2,7 @@
 using Account.Domain.SeedWork;
 using Core.Events.Ordering;
 using MassTransit;
+using System.Data;
 
 namespace Account.API.Applications.Consumers;
 
@@ -15,7 +16,7 @@ public class ServiceCompletedIntegrationEventConsumer(
     { 
         try 
         {
-            await _unitOfWork.BeginTransactionAsync();
+            await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted);
 
             (var isSuccess, _) = await _mechanicCache.CompleteOrder(
                 context.Message.OrderId.ToString(), 

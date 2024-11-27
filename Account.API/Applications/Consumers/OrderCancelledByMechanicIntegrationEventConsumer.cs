@@ -3,6 +3,7 @@ using Account.API.Applications.Services.Interfaces;
 using Account.Domain.SeedWork;
 using Core.Events.Ordering;
 using MassTransit;
+using System.Data;
 
 namespace Account.API.Applications.Consumers;
 
@@ -16,7 +17,7 @@ public class OrderCancelledByMechanicIntegrationEventConsumer(
     {
         try
         {
-            await _unitOfWork.BeginTransactionAsync();
+            await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadUncommitted);
 
             (var isSuccess, var buyerId) = await _mechanicCache.CancelOrderByMechanic(
                 context.Message.OrderId.ToString(),
