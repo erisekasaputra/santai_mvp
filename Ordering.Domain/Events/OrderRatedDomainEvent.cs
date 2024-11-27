@@ -1,5 +1,4 @@
-﻿using MediatR;
-using Ordering.Domain.Aggregates.OrderAggregate;
+﻿using MediatR; 
 
 namespace Ordering.Domain.Events;
 
