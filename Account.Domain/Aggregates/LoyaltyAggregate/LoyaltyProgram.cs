@@ -67,22 +67,18 @@ public class LoyaltyProgram : Entity, IAggregateRoot
     }
 
     private void RaisePointReducedDomainEvent()
-    {
-        throw new NotImplementedException();
+    { 
     }
 
     private void RaisePointAddedDomainEvent()
-    {
-        throw new NotImplementedException();
+    { 
     }
 
     private void RaiseTierDowngradedDomainEvent()
-    {
-        throw new NotImplementedException();
+    { 
     }
 
     private void RaiseTierUpgradedDomainEvent()
-    {
-        throw new NotImplementedException();
+    { 
     }
 }
