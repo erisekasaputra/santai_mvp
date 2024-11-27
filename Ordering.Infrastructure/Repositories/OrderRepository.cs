@@ -142,13 +142,16 @@ public class OrderRepository : IOrderRepository
 
         if (userId is not null && userId.HasValue && userId != Guid.Empty)
         {
-            query = query.Where(x => x.Mechanic != null && x.Mechanic.MechanicId == userId);
+            query = query.Where(x => x.Mechanic!.MechanicId == userId);
         }
 
-        if (status is not null)
+        var queryStatus = new List<OrderStatus>
         {
-            query = query.Where(x => x.Status == status);
-        }
+            OrderStatus.ServiceCompleted,
+            OrderStatus.ServiceIncompleted 
+        };
+
+        query = query.Where(x => queryStatus.Contains(x.Status));
 
         var totalCount = await query.CountAsync();
 
