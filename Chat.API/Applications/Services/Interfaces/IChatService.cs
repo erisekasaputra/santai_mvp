@@ -11,5 +11,5 @@ public interface IChatService
     Task<List<ChatContact>?> GetChatContactsByMechanicId(string mechanicId);
     Task<ChatContact?> GetChatContactByOrderId(string orderId);
     Task<bool> UpdateChatContact(ChatContact chatContact);
-    Task DeleteChatContact(string orderId);
+    Task DeleteChatContact(string orderId, bool isDeletingConversations = true);
 }

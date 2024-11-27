@@ -19,10 +19,8 @@ public class ChatContact
     public DateTime? OrderChatExpiredAtUtc { get; set; }
     public bool IsOrderCompleted { get; set; }
     public long ChatUpdateTimestamp { get; set; }
-    public bool IsChatExpired { get; set; }
-    [DynamoDBVersion]
-    public int Version { get; set; }
-
+    public bool IsChatExpired { get; set; } 
+    
     public ChatContact()
     {
         OrderId = string.Empty;

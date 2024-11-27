@@ -15,7 +15,7 @@ public class Notify
     [DynamoDBRangeKey]
     public long Timestamp { get; set; }
     [DynamoDBVersion]
-    public int Version { get; set; }
+    public int? Version { get; set; }
     public Notify()
     {
         NotificationId = Guid.NewGuid().ToString();

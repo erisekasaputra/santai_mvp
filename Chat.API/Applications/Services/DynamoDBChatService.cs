@@ -12,13 +12,13 @@ public class DynamoDBChatService : IChatService
 {  
     private readonly IDynamoDBContext _dynamoDBContext; 
     private readonly ILogger<DynamoDBChatService> _logger;
-    private readonly AmazonDynamoDBClient _dynamoDBClient;
+    private readonly IAmazonDynamoDB _dynamoDBClient;
 
 
     public DynamoDBChatService(   
         IDynamoDBContext dynamoDBContext,
         ILogger<DynamoDBChatService> logger,
-        AmazonDynamoDBClient dynamoDBClient)
+        IAmazonDynamoDB dynamoDBClient)
     { 
         _dynamoDBContext = dynamoDBContext;
         _logger = logger;
@@ -194,50 +194,11 @@ public class DynamoDBChatService : IChatService
     public async Task<bool> UpdateChatContact(ChatContact chatContact)
     {
         try
-        {
-            await DeleteChatContact(chatContact.OrderId);
+        { 
+            await DeleteChatContact(chatContact.OrderId, false);
             chatContact.IsExpired();  
-            await _dynamoDBContext.SaveAsync(chatContact); 
-
-            try
-            { 
-                var updateRequest = new UpdateItemRequest
-                {
-                    TableName = "ChatContact",
-                    Key = new Dictionary<string, AttributeValue>
-                    {
-                        { "OrderId", new AttributeValue { S = chatContact.OrderId } },
-                        { "LastChatTimestamp", new AttributeValue { N = chatContact.LastChatTimestamp.ToString() } }
-                    },
-                    UpdateExpression = "SET #lastChatText = :lastChatText, #chatUpdateTimestamp = :chatUpdateTimestamp, #isChatExpired = :isChatExpired",
-                    ExpressionAttributeNames = new Dictionary<string, string>
-                    {
-                        { "#lastChatText", "LastChatText" },
-                        { "#chatUpdateTimestamp", "ChatUpdateTimestamp" },
-                        { "#isChatExpired", "IsChatExpired" }
-                    },
-                    ExpressionAttributeValues = new Dictionary<string, AttributeValue>
-                    {
-                        { ":lastChatText", new AttributeValue { S = chatContact.LastChatText ?? string.Empty } },
-                        { ":chatUpdateTimestamp", new AttributeValue { N = chatContact.ChatUpdateTimestamp.ToString() } },
-                        { ":isChatExpired", new AttributeValue { BOOL = chatContact.IsChatExpired } }
-                    },
-                    ReturnValues = "ALL_NEW"  
-                };
-                 
-                var response = await _dynamoDBClient.UpdateItemAsync(updateRequest);
-                 
-                if (response.HttpStatusCode == System.Net.HttpStatusCode.OK)
-                {
-                    Console.WriteLine("ChatContact updated successfully.");
-                    return true;
-                } 
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error updating ChatContact: {ex.Message}");
-                return false;
-            } 
+            await _dynamoDBContext.SaveAsync(chatContact);  
+ 
             return true;
         }
         catch(Exception ex)
@@ -247,38 +208,41 @@ public class DynamoDBChatService : IChatService
         }
     }
 
-    public async Task DeleteChatContact(string orderId)
+    public async Task DeleteChatContact(string orderId, bool isDeletingConversations = true)
     {
         try
         {
-            var itemsDeleted = 0;
-            var itemsPerBatch = 100;
+            if (isDeletingConversations)
+            { 
+                var itemsDeleted = 0;
+                var itemsPerBatch = 100;
 
-            var scanConditions = new List<ScanCondition>
-            {
-                new(nameof(Conversation.OrderId), ScanOperator.Equal, orderId.ToString())
-            };
-
-            var search = _dynamoDBContext.ScanAsync<Conversation>(scanConditions);
-
-            do
-            {
-                var itemsToDelete = await search.GetNextSetAsync();
-
-                foreach (var batch in itemsToDelete.Chunk(itemsPerBatch))
+                var scanConditions = new List<ScanCondition>
                 {
-                    var batchWrite = _dynamoDBContext.CreateBatchWrite<Conversation>();
+                    new(nameof(Conversation.OrderId), ScanOperator.Equal, orderId.ToString())
+                };
 
-                    foreach (var item in batch)
+                var search = _dynamoDBContext.ScanAsync<Conversation>(scanConditions);
+
+                do
+                {
+                    var itemsToDelete = await search.GetNextSetAsync();
+
+                    foreach (var batch in itemsToDelete.Chunk(itemsPerBatch))
                     {
-                        batchWrite.AddDeleteItem(item);
+                        var batchWrite = _dynamoDBContext.CreateBatchWrite<Conversation>();
+
+                        foreach (var item in batch)
+                        {
+                            batchWrite.AddDeleteItem(item);
+                        }
+
+                        await batchWrite.ExecuteAsync();
+                        itemsDeleted += batch.Length;
                     }
 
-                    await batchWrite.ExecuteAsync();
-                    itemsDeleted += batch.Length;
-                }
-
-            } while (!string.IsNullOrEmpty(search.PaginationToken));
+                } while (!string.IsNullOrEmpty(search.PaginationToken));
+            }
 
             var chatContact = await GetChatContactByOrderId(orderId);
             if (chatContact == null)
