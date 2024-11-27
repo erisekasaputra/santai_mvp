@@ -13,4 +13,11 @@ public record MechanicUserResponseDto(
     DrivingLicenseResponseDto? DrivingLicense,
     NationalIdentityResponseDto? NationalIdentity,
     decimal Rating,
-    DateTime CreatedAt);
+    DateTime CreatedAt,
+    int TotalEntireJob,
+    int TotalCancelledJob,
+    int TotalEntireJobBothCompleteIncomplete,
+    int TotalCompletedJob);
+
+
+ 

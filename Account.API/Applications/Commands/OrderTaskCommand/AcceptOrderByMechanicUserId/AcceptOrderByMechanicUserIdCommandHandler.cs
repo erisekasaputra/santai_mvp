@@ -72,7 +72,8 @@ public class AcceptOrderByMechanicUserIdCommandHandler : IRequestHandler<AcceptO
                         await _mediator.Publish(@event);
                         return Result.Success(null, ResponseStatus.NoContent);
                     }
-                    return Result.Failure("Could not accept the order", ResponseStatus.BadRequest);
+                     
+                    throw new InvalidOperationException();
                 }
                 catch (Exception)
                 { 
@@ -82,6 +83,8 @@ public class AcceptOrderByMechanicUserIdCommandHandler : IRequestHandler<AcceptO
 
             if (result.IsSuccess)
             {
+                mechanic.AcceptJob(); 
+                _unitOfWork.BaseUsers.Update(mechanic); 
                 await _unitOfWork.CommitTransactionAsync(cancellationToken);
             }
             else

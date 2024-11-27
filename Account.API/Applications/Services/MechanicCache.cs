@@ -377,7 +377,7 @@ public class MechanicCache : IMechanicCache
              
             if (!string.IsNullOrEmpty(order.MechanicId))
             {
-                int retryCount = 0;      // Untuk melacak berapa kali percobaan 
+                int retryCount = 0; 
                 bool isMechanicLockAcquired = false;
 
                 do

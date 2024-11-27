@@ -16,7 +16,33 @@ public class MechanicUser : BaseUser
     public ICollection<Certification>? Certifications { get; private set; } 
     public ICollection<DrivingLicense>? DrivingLicenses { get; private set; } 
     public ICollection<NationalIdentity>? NationalIdentities { get; private set; } 
-    public bool IsVerified { get; private set; } 
+    public bool IsVerified { get; private set; }
+    public int TotalEntireJob { get; private set; } = 0;
+    public int TotalCancelledJob { get; private set; } = 0;
+    public int TotalEntireJobBothCompleteIncomplete { get; private set; } = 0;
+    public int TotalCompletedJob { get; private set; } = 0;
+
+    public void SetCompleteJob()
+    {
+        TotalEntireJobBothCompleteIncomplete += 1;
+        TotalCompletedJob++;
+    }
+
+    public void SetIncompleteJob()
+    { 
+        TotalEntireJobBothCompleteIncomplete += 1;
+    }
+
+    public void AcceptJob()
+    {
+        TotalEntireJob += 1;
+    }
+
+    public void CancelByMechanic()
+    {
+        TotalCancelledJob += 1;
+    }
+
     public decimal Rating
     {
         get

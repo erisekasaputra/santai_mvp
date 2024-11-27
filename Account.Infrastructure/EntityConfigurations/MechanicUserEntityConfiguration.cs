@@ -3,8 +3,7 @@ using Account.Domain.Aggregates.UserAggregate;
 using Account.Domain.Enumerations;
 using Core.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore.Metadata.Builders; 
 using Newtonsoft.Json;
 
 namespace Account.Infrastructure.EntityConfigurations;

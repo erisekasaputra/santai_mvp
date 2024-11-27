@@ -57,7 +57,7 @@ public class RejectOrderByMechanicUserIdCommandHandler : IRequestHandler<RejectO
                         return Result.Success(null, ResponseStatus.NoContent);
                     }
 
-                    return Result.Failure("Could not reject the order", ResponseStatus.BadRequest);
+                    throw new InvalidOperationException();
                 }
                 catch (Exception)
                 { 

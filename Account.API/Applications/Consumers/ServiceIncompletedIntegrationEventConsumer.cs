@@ -13,6 +13,8 @@ public class ServiceIncompletedIntegrationEventConsumer(
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     public async Task Consume(ConsumeContext<ServiceIncompletedIntegrationEvent> context)
     {
+        await _unitOfWork.BeginTransactionAsync();
+
         (var isSuccess, _) = await _mechanicCache.CompleteOrder(
          context.Message.OrderId.ToString(),
          context.Message.MechanicId.ToString());
@@ -23,13 +25,19 @@ public class ServiceIncompletedIntegrationEventConsumer(
         }
 
         var buyer = await _unitOfWork.BaseUsers.GetByIdAsync(context.Message.BuyerId);
-        if (buyer is null)
+        if (buyer is not null)
         {
-            return;
+            buyer.AddLoyaltyPoint(1000);
+            _unitOfWork.BaseUsers.Update(buyer);
         }
 
-        buyer.AddLoyaltyPoint(int.MaxValue);
-        _unitOfWork.BaseUsers.Update(buyer);
-        await _unitOfWork.SaveChangesAsync();
+        var mechanic = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(context.Message.MechanicId);
+        if (mechanic is not null)
+        {
+            mechanic.SetIncompleteJob();
+            _unitOfWork.BaseUsers.Update(mechanic);
+        }
+
+        await _unitOfWork.CommitTransactionAsync();
     }
 }

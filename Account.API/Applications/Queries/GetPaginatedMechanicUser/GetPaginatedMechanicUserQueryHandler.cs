@@ -89,7 +89,11 @@ public class GetPaginatedMechanicUserQueryHandler(
                 drivingLicense,
                 nationalIdentity,
                 user.Rating,
-                user.CreatedAtUtc
+                user.CreatedAtUtc, 
+                user.TotalEntireJob,
+                user.TotalCancelledJob,
+                user.TotalEntireJobBothCompleteIncomplete,
+                user.TotalCompletedJob
             )); 
         }
 

@@ -1,5 +1,4 @@
-﻿using Account.Domain.Aggregates.LoyaltyAggregate;
-using Account.Domain.Enumerations;
+﻿using Account.Domain.Aggregates.LoyaltyAggregate; 
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

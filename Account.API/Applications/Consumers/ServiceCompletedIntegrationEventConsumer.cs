@@ -12,7 +12,9 @@ public class ServiceCompletedIntegrationEventConsumer(
     private readonly IMechanicCache _mechanicCache = mechanicCache;
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     public async Task Consume(ConsumeContext<ServiceCompletedIntegrationEvent> context)
-    {
+    { 
+        await _unitOfWork.BeginTransactionAsync();
+
         (var isSuccess, _) = await _mechanicCache.CompleteOrder(
             context.Message.OrderId.ToString(), 
             context.Message.MechanicId.ToString());
@@ -21,15 +23,21 @@ public class ServiceCompletedIntegrationEventConsumer(
         {
             throw new Exception($"Failed when completing the order {context.Message.OrderId}");
         }
-
-        var buyer = await _unitOfWork.BaseUsers.GetByIdAsync(context.Message.BuyerId);
-        if(buyer is null)
-        {
-            return;
-        }
          
-        buyer.AddLoyaltyPoint(int.MaxValue);
-        _unitOfWork.BaseUsers.Update(buyer);
-        await _unitOfWork.SaveChangesAsync();
+        var buyer = await _unitOfWork.BaseUsers.GetByIdAsync(context.Message.BuyerId);
+        if(buyer is not null)
+        {
+            buyer.AddLoyaltyPoint(1000);
+            _unitOfWork.BaseUsers.Update(buyer);
+        }
+
+        var mechanic = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(context.Message.MechanicId);
+        if (mechanic is not null)
+        {
+            mechanic.SetCompleteJob();
+            _unitOfWork.BaseUsers.Update(mechanic);
+        } 
+
+        await _unitOfWork.CommitTransactionAsync();
     }
 }
