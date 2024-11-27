@@ -12,4 +12,5 @@ public record MechanicUserResponseDto(
     IEnumerable<CertificationResponseDto>? Certifications,
     DrivingLicenseResponseDto? DrivingLicense,
     NationalIdentityResponseDto? NationalIdentity,
-    decimal Rating);
+    decimal Rating,
+    DateTime CreatedAt);

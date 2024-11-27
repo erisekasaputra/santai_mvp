@@ -124,9 +124,7 @@ public class OrderRepository : IOrderRepository
             OrderStatus.MechanicAssigned,
             OrderStatus.MechanicDispatched,
             OrderStatus.MechanicArrived,
-            OrderStatus.ServiceInProgress,
-            OrderStatus.ServiceCompleted,
-            OrderStatus.ServiceIncompleted,
+            OrderStatus.ServiceInProgress, 
             OrderStatus.PaymentPaid,
             OrderStatus.FindingMechanic
         };
@@ -134,6 +132,7 @@ public class OrderRepository : IOrderRepository
         return await _dbContext.Orders
             .AsNoTracking()
             .Where(x => x.Buyer.BuyerId == userId && queryStatus.Contains(x.Status))
+            .OrderByDescending(x => x.CreatedAtUtc)
             .ToListAsync(); 
     }
 

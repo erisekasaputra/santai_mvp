@@ -336,7 +336,8 @@ public class CreateMechanicUserCommandHandler(
             certificatonResponseDto,
             drivingLicenseResponseDto,
             nationalIdResponseDto,
-            user.Rating);
+            user.Rating,
+            user.CreatedAtUtc);
 
         return mechanicResponse;
     }

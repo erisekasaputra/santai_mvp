@@ -39,7 +39,7 @@ public class ChatContact
 
     public void UpdateLastChat(string originUserId, string lastChatText)
     {
-        if (IsOrderCompleted)
+        if (IsExpired())
         {
             return;
         }

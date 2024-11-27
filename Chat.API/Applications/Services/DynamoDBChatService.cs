@@ -194,8 +194,7 @@ public class DynamoDBChatService : IChatService
     public async Task<bool> UpdateChatContact(ChatContact chatContact)
     {
         try
-        { 
-            await DeleteChatContact(chatContact.OrderId, false);
+        {  
             chatContact.IsExpired();  
             await _dynamoDBContext.SaveAsync(chatContact);  
  
