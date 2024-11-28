@@ -363,15 +363,32 @@ public class MechanicCache : IMechanicCache
         using var lockAcquired = await _redLockFactory.CreateLockAsync(key, TimeSpan.FromSeconds(10));
         if (lockAcquired.IsAcquired)
         {
+            Console.WriteLine("LOCK SUCCESS");
             var waitingConfirmData = await GetOrderWaitingMechanicConfirmAsync(db, orderId);
             if (waitingConfirmData is null || waitingConfirmData.ExpiredAtUtc <= DateTime.UtcNow)
             {
+                if (waitingConfirmData is null)
+                {
+                    Console.WriteLine("WAITING CONFIRM DATA NULL");
+                }
+                else
+                {
+                    Console.WriteLine("EXPIRED"); 
+                }
                 return (false, string.Empty);
             }   
 
             var order = await GetOrderTaskAsync(db, orderId);
             if (order is null || order.MechanicId != mechanicId)
             {
+                if (order is null)
+                {
+                    Console.WriteLine("ORDER IS NULL");
+                }
+                else
+                {
+                    Console.WriteLine("MECHANIC ID ORDER != MECHACNI ID");
+                }
                 return (false, string.Empty);
             }
              
@@ -401,6 +418,15 @@ public class MechanicCache : IMechanicCache
                         }
                         else
                         {
+                            if (mechanic is null)
+                            {
+                                Console.WriteLine("MECHANIC IS NULL");
+                            }
+
+                            if (mechanic.OrderId != orderId)
+                            {
+                                Console.WriteLine("MECHANIC ORDER ID != ORDERID"); 
+                            }
                             return (false, string.Empty);
                         }
 
@@ -418,6 +444,7 @@ public class MechanicCache : IMechanicCache
                 // Jika setelah 5 kali retry masih tidak berhasil,  return false
                 if (!isMechanicLockAcquired)
                 {
+                    Console.WriteLine("FAILED ACKUIRED LOCK");
                     return (false, string.Empty);
                 }
 
@@ -440,10 +467,11 @@ public class MechanicCache : IMechanicCache
 
                 return (true, order.BuyerId);
             }
-
+            Console.WriteLine("MECHANIC ID FROM ENTITY ORDER IS NULL");
             return (false, string.Empty);
         }
 
+        Console.WriteLine("FAILED ACCUIRED LOCK");
         return (false, string.Empty);
     }
 

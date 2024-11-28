@@ -49,20 +49,16 @@ public class PayOrderPaymentByOrderIdCommandHandler(
 
             _unitOfWork.Orders.Update(order);  
             if (order.IsScheduled && order.IsShouldRequestPayment)
-            {
-                Console.WriteLine($"Should request payment and is scheduled");
+            { 
                 var scheduledOrder = await _unitOfWork.ScheduledOrders.GetByOrderIdAsync(order.Id);
                 if (scheduledOrder is not null)
-                {
-                    Console.WriteLine($"Scheduled not null");
+                { 
                     if (order.Payment!.CreatedAt >= scheduledOrder.ScheduledAt)
                     {
                         scheduledOrder.SetNow();
                     } 
-                    scheduledOrder.MarkAsPaid();
-                    Console.WriteLine($"Scheduled order set paid status to {scheduledOrder.IsPaid}");
-                    _unitOfWork.ScheduledOrders.Update(scheduledOrder);
-                    Console.WriteLine("Complete update scheduled order");
+                    scheduledOrder.MarkAsPaid(); 
+                    _unitOfWork.ScheduledOrders.Update(scheduledOrder); 
                 }
             }
 
