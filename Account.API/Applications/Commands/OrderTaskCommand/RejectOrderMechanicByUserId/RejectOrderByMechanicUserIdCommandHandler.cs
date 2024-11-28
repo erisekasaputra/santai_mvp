@@ -51,7 +51,7 @@ public class RejectOrderByMechanicUserIdCommandHandler : IRequestHandler<RejectO
             {
                 try
                 {
-                    (var isSuccess, var buyerId) = await _mechanicCache.RejectOrderByMechanic(request.OrderId.ToString(), request.MechanicId.ToString()); 
+                    (var isSuccess, var buyerId) = await _mechanicCache.RejectOrderByMechanic(request.MechanicId.ToString(), request.OrderId.ToString()); 
                     if (isSuccess)
                     {
                         return Result.Success(null, ResponseStatus.NoContent);
