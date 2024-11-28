@@ -212,6 +212,9 @@ public class OrderController : ControllerBase
     {
         try
         {
+            Console.WriteLine(request.PageNumber);
+            Console.WriteLine(request.PageSize);
+
             var userClaim = _userInfoService.GetUserInfo();
             if (userClaim is null)
             {

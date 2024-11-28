@@ -3,8 +3,7 @@
 public class PaginatedRequestDto
 {
     public const string PageNumberName = nameof(PageNumber);
-    public const string PageSizeName = nameof(PageSize);
-
+    public const string PageSizeName = nameof(PageSize); 
     public required int PageNumber { get; set; } = 1;
     public required int PageSize { get; set; } = 10;
 

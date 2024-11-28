@@ -175,4 +175,45 @@ public class OrderRepository : IOrderRepository
 
         return (totalCount, totalPages, items);
     }
+
+
+    public async Task<(int TotalCount, int TotalPages, IEnumerable<Order> Orders)> Commented(Guid? userId, int pageNumber, int pageSize, OrderStatus? status)
+    {
+        var query = _dbContext.Orders.AsQueryable();
+
+        if (userId is not null && userId.HasValue && userId != Guid.Empty)
+        {
+            query = query.Where(x => x.Mechanic!.MechanicId == userId);
+        }
+
+        var queryStatus = new List<OrderStatus>
+        {
+            OrderStatus.ServiceCompleted,
+            OrderStatus.ServiceIncompleted
+        };
+
+        query = query.Where(x => queryStatus.Contains(x.Status));
+
+        var totalCount = await query.CountAsync();
+
+        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+        var items = await query
+            .AsNoTracking()
+            .Include(order => order.LineItems)
+            .Include(order => order.Payment)
+            .Include(order => order.Cancellation)
+            .Include(order => order.Mechanic)
+            .Include(order => order.Buyer)
+            .Include(order => order.Discount)
+            .Include(order => order.Fees)
+            .Include(order => order.Fleets)
+            .AsSplitQuery()
+            .OrderByDescending(x => x.CreatedAtUtc)
+            .Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (totalCount, totalPages, items);
+    }
 }
