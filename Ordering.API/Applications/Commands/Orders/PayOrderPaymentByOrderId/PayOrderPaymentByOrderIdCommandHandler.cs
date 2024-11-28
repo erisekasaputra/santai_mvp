@@ -1,9 +1,7 @@
-﻿using Core.CustomMessages;
-using Core.Enumerations;
+﻿using Core.CustomMessages; 
 using Core.Exceptions;
 using Core.Results;
-using MediatR;
-using Ordering.API.Applications.Commands.Orders.CreateOrder;
+using MediatR; 
 using Ordering.API.Applications.Commands.Orders.PayOrderPaymentByOrderId;
 using Ordering.API.Applications.Dtos.Requests;
 using Ordering.API.Applications.Services.Interfaces;
@@ -14,12 +12,12 @@ using System.Data;
 namespace Ordering.API.Applications.Commands.Orders.PayOrder;
 
 public class PayOrderPaymentByOrderIdCommandHandler(
-    ILogger<CreateOrderCommandHandler> logger, 
+    ILogger<PayOrderPaymentByOrderIdCommandHandler> logger, 
     IPaymentService paymentService,
     IUnitOfWork unitOfWork) : IRequestHandler<PayOrderPaymentByOrderIdCommand, Result>
 {
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
-    private readonly ILogger<CreateOrderCommandHandler> _logger = logger;
+    private readonly ILogger<PayOrderPaymentByOrderIdCommandHandler> _logger = logger;
     private readonly IPaymentService _paymentService = paymentService;
     public async Task<Result> Handle(PayOrderPaymentByOrderIdCommand request, CancellationToken cancellationToken)
     {
@@ -52,15 +50,19 @@ public class PayOrderPaymentByOrderIdCommandHandler(
             _unitOfWork.Orders.Update(order);  
             if (order.IsScheduled && order.IsShouldRequestPayment)
             {
+                Console.WriteLine($"Should request payment and is scheduled");
                 var scheduledOrder = await _unitOfWork.ScheduledOrders.GetByOrderIdAsync(order.Id);
                 if (scheduledOrder is not null)
                 {
+                    Console.WriteLine($"Scheduled not null");
                     if (order.Payment!.CreatedAt >= scheduledOrder.ScheduledAt)
                     {
                         scheduledOrder.SetNow();
                     } 
                     scheduledOrder.MarkAsPaid();
+                    Console.WriteLine($"Scheduled order set paid status to {scheduledOrder.IsPaid}");
                     _unitOfWork.ScheduledOrders.Update(scheduledOrder);
+                    Console.WriteLine("Complete update scheduled order");
                 }
             }
 

@@ -16,8 +16,7 @@ public class ScheduledOrderRepository : IScheduledOrderRepository
         if (rowNumber < 1)
         {
             rowNumber = 1;
-        }
-
+        } 
 
         var query = $"SELECT TOP {rowNumber} * FROM [{nameof(_context.ScheduledOrders)}] WITH (UPDLOCK, ROWLOCK, READPAST) WHERE [{nameof(ScheduledOrder.IsEventProcessed)}] = 0 AND GETUTCDATE() >= [{nameof(ScheduledOrder.ScheduledAt)}] AND [{nameof(ScheduledOrder.IsPaid)}] = 1 ORDER BY [{nameof(ScheduledOrder.ScheduledAt)}] ASC ";
 

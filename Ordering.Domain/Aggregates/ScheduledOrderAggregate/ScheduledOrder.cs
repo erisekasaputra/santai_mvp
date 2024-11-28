@@ -32,12 +32,7 @@ public class ScheduledOrder : Entity
     }
 
     public void MarkAsPaid()
-    {
-        if (!IsPaid) 
-        {
-            return;
-        }
-
+    { 
         IsPaid = true;
     }
 

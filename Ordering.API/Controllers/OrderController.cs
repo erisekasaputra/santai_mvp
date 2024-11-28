@@ -505,7 +505,7 @@ public class OrderController : ControllerBase
             if (string.IsNullOrEmpty(request.Comment) || !request.JobChecklists.Any())
             {
                 return TypedResults.InternalServerError(
-                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+                    Result.Failure("Please fill out all the blanks", ResponseStatus.BadRequest));
             }
 
             var result = await _mediator.Send(
