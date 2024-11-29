@@ -1,7 +1,6 @@
 ﻿using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DataModel;
-using Amazon.DynamoDBv2.DocumentModel;
-using Amazon.DynamoDBv2.Model;
+using Amazon.DynamoDBv2.DocumentModel; 
 using Chat.API.Applications.Services.Interfaces;
 using Chat.API.Domain.Models; 
 using Core.Utilities; 
@@ -48,13 +47,13 @@ public class DynamoDBChatService : IChatService
             {
                 ExpressionStatement = "#orderId = :orderId",
                 ExpressionAttributeNames = new Dictionary<string, string>
-                    {
-                        { "#orderId", nameof(Conversation.OrderId) }
-                    },
+                {
+                    { "#orderId", nameof(Conversation.OrderId) }
+                },
                 ExpressionAttributeValues = new Dictionary<string, DynamoDBEntry>
-                    {
-                        { ":orderId", orderId.ToString() }
-                    }
+                {
+                    { ":orderId", orderId.ToString() }
+                }
             },
             BackwardSearch = !forward,
             Limit = 1
@@ -71,8 +70,51 @@ public class DynamoDBChatService : IChatService
             }
 
         } while (!string.IsNullOrEmpty(search.PaginationToken));
-    } 
-     
+    }
+
+
+    public async IAsyncEnumerable<Conversation> GetMessageByLastTimestamp(
+        string orderId,
+        long timestamp,
+        bool forward = true)
+    {
+        var queryConfig = new QueryOperationConfig
+        {
+            IndexName = "OrderId-Timestamp-index",
+            KeyExpression = new Expression
+            {
+                ExpressionStatement = forward
+                    ? "#orderId = :orderId AND #timestamp > :timestamp"  
+                    : "#orderId = :orderId AND #timestamp < :timestamp",
+                ExpressionAttributeNames = new Dictionary<string, string>
+                {
+                    { "#orderId", nameof(Conversation.OrderId) },
+                    { "#timestamp", nameof(Conversation.Timestamp) },
+                },
+                ExpressionAttributeValues = new Dictionary<string, DynamoDBEntry>
+                {
+                    { ":orderId", orderId },
+                    { ":timestamp", timestamp }
+                }
+            },
+            BackwardSearch = !forward,
+            Limit = 20
+        };
+
+        var search = _dynamoDBContext.FromQueryAsync<Conversation>(queryConfig);
+
+        do
+        {
+            var items = await search.GetNextSetAsync();
+            foreach (var item in items)
+            {
+                yield return item;
+            }
+
+        } while (!string.IsNullOrEmpty(search.PaginationToken));
+    }
+
+
     public async Task<bool> CreateChatContact(ChatContact chatContact)
     { 
         try

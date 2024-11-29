@@ -12,4 +12,8 @@ public interface IChatService
     Task<ChatContact?> GetChatContactByOrderId(string orderId);
     Task<bool> UpdateChatContact(ChatContact chatContact);
     Task DeleteChatContact(string orderId, bool isDeletingConversations = true);
+    IAsyncEnumerable<Conversation> GetMessageByLastTimestamp(
+        string orderId,
+        long timestamp,
+        bool forward = true);
 }

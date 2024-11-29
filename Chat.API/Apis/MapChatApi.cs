@@ -3,8 +3,9 @@ using Chat.API.Applications.Mapper;
 using Chat.API.Applications.Services;
 using Chat.API.Applications.Services.Interfaces;
 using Chat.API.Domain.Enumerations;
-using Core.Results; 
-using Core.Services.Interfaces; 
+using Chat.API.Domain.Models;
+using Core.Results;
+using Core.Services.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 
@@ -15,8 +16,8 @@ public static class MapChatApi
     public static IEndpointRouteBuilder MapChatApiRouteBuilder(this IEndpointRouteBuilder builder)
     {
         var app = builder.MapGroup("api/v1/chat");
-
-        app.MapGet("/conversations", GetLatestChat); 
+         
+        app.MapGet("/conversations", GetLatestChatByTimestamp); 
         app.MapGet("/contacts", GetChatContacts);
         app.MapGet("/contacts/order/{orderId}", GetChatContactByOrderId);
 
@@ -43,6 +44,40 @@ public static class MapChatApi
             }
 
             return TypedResults.Ok(Result.Success(null, ResponseStatus.Ok));
+        }
+        catch (Exception ex)
+        {
+            // Return an internal server error with the exception message
+            return TypedResults.InternalServerError(Result.Failure(ex.Message, ResponseStatus.InternalServerError));
+        }
+    }
+
+
+
+    private static async Task<IResult> GetLatestChatByTimestamp(
+        [AsParameters] LatestChatByTimestampRequest request,
+        [FromServices] IChatService chatService,
+        [FromServices] IUserInfoService userInfoService,
+        [FromServices] IHubContext<ChatHub, IChatClient> _chatHub)
+    {
+        try
+        {
+            var user = userInfoService.GetUserInfo();
+            if (user is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            List<Conversation> conversations = [];
+            await foreach (var conversation in chatService.GetMessageByLastTimestamp(request.OrderId.ToString(), request.Timestamp, request.Forward))
+            {
+                conversations.Add(conversation); 
+            }
+
+            return TypedResults.Ok(Result.Success(new 
+            {
+                Conversations = conversations
+            }, ResponseStatus.Ok));
         }
         catch (Exception ex)
         {
