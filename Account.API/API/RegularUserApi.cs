@@ -14,6 +14,8 @@ using Core.Dtos;
 using Core.Services.Interfaces;
 using Core.CustomMessages;
 using Core.CustomAttributes;
+using Account.API.Applications.Commands.RegularUserCommand.UpdateProfilPictureRegularUser;
+using Core.Results;
 
 namespace Account.API.API;
 
@@ -35,7 +37,10 @@ public static class RegularUserApi
             .RequireAuthorization(PolicyName.RegularUserOnlyPolicy.ToString());
         
         app.MapPut("/", UpdateRegularUserByUserId)
-            .RequireAuthorization(PolicyName.RegularUserOnlyPolicy.ToString()); 
+            .RequireAuthorization(PolicyName.RegularUserOnlyPolicy.ToString());
+
+        app.MapPatch("/image/profile", UpdateRegularUserImageProfile)
+          .RequireAuthorization(PolicyName.RegularUserOnlyPolicy.ToString());
 
         app.MapDelete("/{regularUserId}", DeleteRegularUserByUserId)
             .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
@@ -114,6 +119,38 @@ public static class RegularUserApi
                 request.TimeZoneId,
                 request.Address,
                 request.PersonalInfo));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+    private static async Task<IResult> UpdateRegularUserImageProfile(
+      [FromBody] UpdateRegularUserProfilePictureRequestDto request,
+      [FromServices] ApplicationService service, 
+      [FromServices] IUserInfoService userInfoService)
+    {
+        try
+        {
+            var userClaim = userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+             
+            if (string.IsNullOrEmpty(request.ImageUrl))
+            {
+                return TypedResults.BadRequest(Result.Failure("Image url can not be empty", ResponseStatus.BadRequest));
+            }
+
+            var result = await service.Mediator.Send(new UpdateProfilePictureRegularUserCommand(
+                userClaim.Sub,
+                request.ImageUrl
+                ));
 
             return result.ToIResult();
         }

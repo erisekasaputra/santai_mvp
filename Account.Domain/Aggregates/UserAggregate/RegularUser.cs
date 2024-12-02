@@ -45,6 +45,16 @@ public class RegularUser : BaseUser
         UpdatedAtUtc = DateTime.UtcNow;
     }
 
+    public void UpdateProfilePicture(String path)
+    {
+        if (string.IsNullOrEmpty(path))
+        {
+            throw new ArgumentNullException(nameof(path));
+        }
+
+        PersonalInfo.ProfilePictureUrl = path;
+    }
+
     public void Delete()
     {
         RaiseRegularUserDeletedDomainEvent(Id);
