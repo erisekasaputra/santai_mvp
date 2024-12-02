@@ -59,6 +59,7 @@ public class UserRepository : IUserRepository
             .Include(x => x.LoyaltyProgram)
             .Include(x => x.ReferralProgram)
             .Include(x => x.Fleets)
+            .Include(x => x.PersonalInfo) 
             .FirstOrDefaultAsync(x => x.Id == id);
     } 
 
@@ -69,6 +70,7 @@ public class UserRepository : IUserRepository
             .Include(x => x.ReferralProgram)
             .Include(x => x.NationalIdentities)
             .Include(x => x.DrivingLicenses)
+            .Include(x => x.PersonalInfo)
             .Include(x => x.Certifications) 
             .FirstOrDefaultAsync(x => x.Id == id);
     }
@@ -223,6 +225,7 @@ public class UserRepository : IUserRepository
             .OfType<RegularUser>()
             .Include(x => x.ReferralProgram)
             .Include(x => x.LoyaltyProgram)
+            .Include(x => x.PersonalInfo)
             .OrderByDescending(x => x.AccountStatus == AccountStatus.Active) 
             .OrderBy(x => x.PersonalInfo.FirstName)
             .ToListAsync();
@@ -264,7 +267,8 @@ public class UserRepository : IUserRepository
             .AsNoTracking()
             .OfType<MechanicUser>()
             .Include(x => x.ReferralProgram)
-            .Include(x => x.LoyaltyProgram)   
+            .Include(x => x.LoyaltyProgram) 
+            .Include(x => x.PersonalInfo)
             .OrderByDescending(x => x.AccountStatus == AccountStatus.Active)
             .OrderByDescending(x => x.IsVerified)
             .OrderBy(x => x.PersonalInfo.FirstName)

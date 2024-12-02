@@ -44,6 +44,9 @@ public static class MechanicUserApi
     {
         var app = builder.MapGroup("api/v1/users/mechanic");
 
+        app.MapPatch("/image/profile", UpdateMechanicUserImageProfile)
+            .RequireAuthorization(PolicyName.RegularUserOnlyPolicy.ToString()); 
+
         app.MapPost("/", CreateMechanicUser) 
             .WithMetadata(new IdempotencyAttribute(nameof(CreateMechanicUser)))
             .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString()); 
