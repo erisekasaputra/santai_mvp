@@ -29,8 +29,14 @@ builder.AddSqlDatabaseContext<NotificationDbContext>();
 builder.Services.AddHealthChecks();
 
 var app = builder.Build(); 
+
 app.UseRouting();
 app.UseCors("AllowAllOrigins");
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+
 app.MapControllers();
 app.MapHub<ActivityHub>("/notification");
 app.MapHealthChecks("/health");
