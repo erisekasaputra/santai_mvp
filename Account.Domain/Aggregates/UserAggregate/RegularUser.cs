@@ -45,7 +45,7 @@ public class RegularUser : BaseUser
         UpdatedAtUtc = DateTime.UtcNow;
     }
 
-    public void UpdateProfilePicture(String path)
+    public void UpdateProfilePicture(string path)
     {
         if (string.IsNullOrEmpty(path))
         {

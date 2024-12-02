@@ -11,9 +11,10 @@ using Account.API.Applications.Commands.MechanicUserCommand.SetNationalIdentityB
 using Account.API.Applications.Commands.MechanicUserCommand.SetRatingByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.UpdateLocationByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.UpdateMechanicUserByUserId;
+using Account.API.Applications.Commands.MechanicUserCommand.UpdateProfilePictureMechanicUser;
 using Account.API.Applications.Commands.MechanicUserCommand.VerifyMechanicUserByUserId;
 using Account.API.Applications.Commands.OrderTaskCommand.AcceptOrderByMechanicUserId;
-using Account.API.Applications.Commands.OrderTaskCommand.RejectOrderMechanicByUserId;
+using Account.API.Applications.Commands.OrderTaskCommand.RejectOrderMechanicByUserId; 
 using Account.API.Applications.Dtos.RequestDtos;
 using Account.API.Applications.Queries.GetDrivingLicenseByMechanicUserId;
 using Account.API.Applications.Queries.GetMechanicStatusExistence;
@@ -28,6 +29,7 @@ using Core.CustomAttributes;
 using Core.CustomMessages;
 using Core.Dtos;
 using Core.Enumerations;
+using Core.Results;
 using Core.SeedWorks;
 using Core.Services.Interfaces;
 using FluentValidation;
@@ -115,7 +117,37 @@ public static class MechanicUserApi
         return app;
     }
 
+    private static async Task<IResult> UpdateMechanicUserImageProfile(
+      [FromBody] UpdateUserProfilePictureRequestDto request,
+      [FromServices] ApplicationService service,
+      [FromServices] IUserInfoService userInfoService)
+    {
+        try
+        {
+            var userClaim = userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
 
+            if (string.IsNullOrEmpty(request.ImageUrl))
+            {
+                return TypedResults.BadRequest(Result.Failure("Image url can not be empty", ResponseStatus.BadRequest));
+            }
+
+            var result = await service.Mediator.Send(new UpdateProfilePictureMechanicUserCommand(
+                userClaim.Sub,
+                request.ImageUrl
+                ));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
 
     private static async Task<IResult> TestAccept(
         Guid mechanicId,

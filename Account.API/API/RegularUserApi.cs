@@ -130,7 +130,7 @@ public static class RegularUserApi
     }
 
     private static async Task<IResult> UpdateRegularUserImageProfile(
-      [FromBody] UpdateRegularUserProfilePictureRequestDto request,
+      [FromBody] UpdateUserProfilePictureRequestDto request,
       [FromServices] ApplicationService service, 
       [FromServices] IUserInfoService userInfoService)
     {

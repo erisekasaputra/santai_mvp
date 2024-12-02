@@ -43,6 +43,15 @@ public class MechanicUser : BaseUser
         TotalCancelledJob += 1;
     }
 
+    public void UpdateProfilePicture(string path)
+    {
+        if (string.IsNullOrEmpty(path))
+        {
+            throw new ArgumentNullException(nameof(path));
+        }
+
+        PersonalInfo.ProfilePictureUrl = path;
+    }
     public decimal Rating
     {
         get
