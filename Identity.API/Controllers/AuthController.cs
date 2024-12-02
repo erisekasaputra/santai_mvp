@@ -835,6 +835,11 @@ public class AuthController(
                 {
                     return TypedResults.NotFound(
                         Result.Failure("We could not find you account", ResponseStatus.NotFound));
+                }
+
+                if (user.UserType != UserType.Administrator)
+                {
+                    return TypedResults.Forbid();
                 }  
 
                 if (!user.PhoneNumberConfirmed)
