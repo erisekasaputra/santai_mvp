@@ -25,11 +25,15 @@ public class GetPaginatedFleetByUserIdQueryHandler(
     {
         try
         {
-            var timeZone = await _unitOfWork.BaseUsers.GetTimeZoneById(request.UserId);
+            var timeZone = await _unitOfWork.BaseUsers.GetTimeZoneById(request.UserId); 
 
             if (timeZone == null) 
             {
-                return Result.Failure($"User not found", ResponseStatus.NotFound);
+                timeZone = await _unitOfWork.Staffs.GetTimeZoneByIdAsync(request.UserId);
+                if (timeZone == null)
+                {
+                    return Result.Failure($"User not found", ResponseStatus.NotFound);
+                }
             }
 
             (int totalCount, int totalPages, IEnumerable<Fleet> fleets) = await _unitOfWork.Fleets.GetPaginatedFleetByUserId(

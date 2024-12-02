@@ -701,7 +701,7 @@ public class AuthController(
                         Result.Failure("We could not find you account", ResponseStatus.NotFound));
                 }
 
-                if (user.UserType == UserType.MechanicUser || user.UserType == UserType.Administrator)
+                if (user.UserType == UserType.MechanicUser || user.UserType == UserType.Administrator || user.UserType == UserType.StaffUser)
                 {
                     return TypedResults.Forbid();
                 }
