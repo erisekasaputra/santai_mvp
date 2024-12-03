@@ -1,13 +1,30 @@
 [
   {
-    "Description": "Head",
-    "Parameter": "Head",
+    "Description": "Light and Indicator",
+    "Parameter": "Headlight",
     "Rating": 0,
     "PreServiceInspectionResults": [
       {
-        "Description": "Lamp",
-        "Parameter": "Lamp",
-        "IsWorking":  false
+        "Description": "High Beam",
+        "Parameter": "HighBeam",
+        "IsWorking": false
+      },
+      {
+        "Description": "Low Beam",
+        "Parameter": "LowBeam",
+        "IsWorking": false
+      }
+    ]
+  },
+  {
+    "Description": "Tail Light",
+    "Parameter": "TailLight",
+    "Rating": 0,
+    "PreServiceInspectionResults": [
+      {
+        "Description": "Flicker",
+        "Parameter": "Flicker",
+        "IsWorking": false
       }
     ]
   }

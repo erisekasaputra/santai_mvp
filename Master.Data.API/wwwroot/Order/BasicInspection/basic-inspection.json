@@ -1,7 +1,47 @@
 [
   {
-    "Description": "Chain",
-    "Parameter": "Chain",
+    "Description": "(F) Tyre",
+    "Parameter": "FTyre",
+    "Value": 0
+  },
+  {
+    "Description": "(F) Brake",
+    "Parameter": "FBrake",
+    "Value": 0
+  },
+  {
+    "Description": "(F) Sprocket",
+    "Parameter": "FSprocket",
+    "Value": 0
+  },
+  {
+    "Description": "Bearing",
+    "Parameter": "Bearing",
+    "Value": 0
+  },
+  {
+    "Description": "Engine",
+    "Parameter": "Engine",
+    "Value": 0
+  },
+  {
+    "Description": "Lights",
+    "Parameter": "Lights",
+    "Value": 0
+  },
+  {
+    "Description": "(R) Brake",
+    "Parameter": "RBrake",
+    "Value": 0
+  },
+  {
+    "Description": "(R) Sprocket",
+    "Parameter": "RSprocket",
+    "Value": 0
+  },
+  {
+    "Description": "(R) Tyre",
+    "Parameter": "RTyre",
     "Value": 0
   }
 ]
