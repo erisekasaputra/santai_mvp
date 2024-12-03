@@ -1,8 +1,0 @@
-C:\Projects\Projects\Santai.MVP\Master.Data.API\wwwroot\Order\ServiceFee\service-fee.json
-C:\Projects\Projects\Santai.MVP\Master.Data.API\wwwroot\Order\BasicInspection\basic-inspection.json
-C:\Projects\Projects\Santai.MVP\Master.Data.API\wwwroot\Order\PreServiceInspection\pre-service-inspection.json
-C:\Projects\Projects\Santai.MVP\Master.Data.API\wwwroot\Order\CancellationFee\cancellation-fee.json
-wwwroot\Order\BasicInspection\basic-inspection.json
-wwwroot\Order\CancellationFee\cancellation-fee.json
-wwwroot\Order\PreServiceInspection\pre-service-inspection.json
-wwwroot\Order\ServiceFee\service-fee.json

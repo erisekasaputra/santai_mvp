@@ -1,5 +1,6 @@
 using Core.Extensions;
 using Core.Middlewares;
+using Master.Data.API.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,11 +18,11 @@ builder.Services.AddControllers();
 builder.Services.AddDirectoryBrowser();
 builder.Services.AddHealthChecks();
 builder.Services.AddTransient<GlobalExceptionMiddleware>();
-
 builder.AddCoreOptionConfiguration(); 
 builder.AddJsonEnumConverterBehavior(); 
 builder.AddRedisDatabase();
-builder.Services.AddHealthChecks();
+builder.AddSqlDatabaseContext<MasterDbContext>();
+builder.AddAuth();
 
 if (builder.Environment.IsDevelopment() || builder.Environment.IsStaging())
 {
@@ -34,6 +35,9 @@ var app = builder.Build();
 app.UseRouting();
 app.UseCors("AllowAllOrigins"); 
 app.UseMiddleware<GlobalExceptionMiddleware>();
+
+app.UseAuthentication();
+app.UseAuthorization();
 
 if (app.Environment.IsDevelopment() || app.Environment.IsStaging())
 {

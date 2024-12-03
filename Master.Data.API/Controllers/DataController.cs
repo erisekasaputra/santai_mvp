@@ -3,6 +3,7 @@ using Core.Results;
 using Core.Utilities;
 using Master.Data.API.Dtos;
 using Master.Data.API.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.OutputCaching;
 using Newtonsoft.Json;
@@ -21,6 +22,7 @@ public class DataController : ControllerBase
 
     [HttpGet("order")]
     [OutputCache(Duration = 60)]
+    [AllowAnonymous]
     public IResult GetInitializeOrder()
     {
         string filePathPreService = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Order/PreServiceInspection/pre-service-inspection.json");
@@ -66,6 +68,7 @@ public class DataController : ControllerBase
 
     [HttpGet("order/pre-service-inspection")]
     [OutputCache(Duration = 60)]
+    [AllowAnonymous]
     public IResult GetMasterDataPreServiceInspection()
     { 
         string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Order/PreServiceInspection/pre-service-inspection.json");
@@ -84,7 +87,8 @@ public class DataController : ControllerBase
 
 
     [HttpGet("order/basic-inspection")]
-    [OutputCache(Duration = 60)] 
+    [OutputCache(Duration = 60)]
+    [AllowAnonymous]
     public IResult GetMasterDataBasicInspection()
     {
         string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Order/BasicInspection/basic-inspection.json");
@@ -103,6 +107,7 @@ public class DataController : ControllerBase
 
     [HttpGet("order/service-fee")]
     [OutputCache(Duration = 60)]
+    [AllowAnonymous]
     public IResult GetMasterDataServiceFee()
     {
         string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Order/ServiceFee/service-fee.json");
@@ -121,6 +126,7 @@ public class DataController : ControllerBase
 
     [HttpGet("order/cancellation-fee")]
     [OutputCache(Duration = 60)]
+    [AllowAnonymous]
     public IResult GetMasterDataCancellationFee()
     {
         string filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "Order/CancellationFee/cancellation-fee.json");
@@ -138,6 +144,7 @@ public class DataController : ControllerBase
 
 
     [HttpPut("order/cancellation-fee")]
+    [AllowAnonymous]
     public IResult UpdateCancellationFee(
         [FromBody] CancellationFee cancellationFeeRequest)
     {
@@ -160,6 +167,7 @@ public class DataController : ControllerBase
 
 
     [HttpPut("order/service-fee")]
+    [AllowAnonymous]
     public IResult UpdateServiceFee(
         [FromBody] ServiceFeeRequest serviceFeeRequest)
     {
@@ -182,6 +190,7 @@ public class DataController : ControllerBase
 
 
     [HttpPut("order/basic-inspection")]
+    [AllowAnonymous]
     public IResult UpdateBasicInspection(
         [FromBody] BasicInspectionRequest basicInspectionRequest)
     {
@@ -205,6 +214,7 @@ public class DataController : ControllerBase
 
 
     [HttpPut("order/pre-service-inspection")]
+    [AllowAnonymous]
     public IResult UpdatePreServiceInspection(
         [FromBody] PreServiceInspectionRequest preServiceInspectionRequest)
     {
