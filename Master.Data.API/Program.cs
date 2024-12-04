@@ -1,6 +1,7 @@
 using Core.Extensions;
 using Core.Middlewares;
 using Master.Data.API.Infrastructure;
+using Master.Data.API.Infrastructure.Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,6 +23,7 @@ builder.AddCoreOptionConfiguration();
 builder.AddJsonEnumConverterBehavior(); 
 builder.AddRedisDatabase();
 builder.AddSqlDatabaseContext<MasterDbContext>();
+builder.Services.AddScoped<BannerRepository>();
 builder.AddAuth();
 
 if (builder.Environment.IsDevelopment() || builder.Environment.IsStaging())
