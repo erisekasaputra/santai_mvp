@@ -504,7 +504,7 @@ public class OrderController : ControllerBase
 
             if (string.IsNullOrEmpty(request.Comment) || !request.JobChecklists.Any())
             {
-                return TypedResults.InternalServerError(
+                return TypedResults.BadRequest(
                     Result.Failure("Please fill out all the blanks", ResponseStatus.BadRequest));
             }
 
