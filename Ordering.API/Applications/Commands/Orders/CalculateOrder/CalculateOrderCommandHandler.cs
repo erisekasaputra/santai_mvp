@@ -96,7 +96,7 @@ public class CalculateOrderCommandHandler(
             x => (x.Description, x.Parameter.CleanAndLowering(), x.Rating,
             x.PreServiceInspectionResults.Select(b => (b.Description, b.Parameter.CleanAndLowering(), b.IsWorking))));
         
-        var masterJobChecklist = master.PreServiceInspections.Select(
+        var masterJobChecklist = master.BasicInspections.Select(
          x => (x.Description, x.Parameter.CleanAndLowering(), false));
 
         foreach (var fleet in command.Fleets ?? [])
