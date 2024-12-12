@@ -1,4 +1,5 @@
 ﻿using Account.API.Applications.Commands.MechanicUserCommand.ActivateMechanicStatusByUserId;
+using Account.API.Applications.Commands.MechanicUserCommand.BlockMechanicStatusByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.ConfirmDrivingLicenseByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.ConfirmNationalIdentityByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.CreateMechanicUser;
@@ -9,6 +10,7 @@ using Account.API.Applications.Commands.MechanicUserCommand.RejectNationalIdenti
 using Account.API.Applications.Commands.MechanicUserCommand.SetDrivingLicenseByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.SetNationalIdentityByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.SetRatingByUserId;
+using Account.API.Applications.Commands.MechanicUserCommand.UnblockMechanicStatusByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.UpdateLocationByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.UpdateMechanicUserByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.UpdateProfilePictureMechanicUser;
@@ -73,7 +75,13 @@ public static class MechanicUserApi
             .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());
 
         app.MapPatch("/status/activate", ActivateMechanicStatus)
-            .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());
+            .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());   
+        
+        app.MapPatch("/{mechanicId}/block", BlockMechanic)
+            .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());   
+        
+        app.MapPatch("/{mechanicId}/unblock", UnblockMechanic)
+            .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
         
         app.MapPatch("/status/deactivate", DeactivateMechanicStatus)
             .RequireAuthorization(PolicyName.MechanicUserOnlyPolicy.ToString());
@@ -263,7 +271,59 @@ public static class MechanicUserApi
             service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
-    }  
+    }
+
+
+    private static async Task<IResult> BlockMechanic(
+        Guid mechanicId,
+        [FromBody] BlockMechanicRequestDto request,
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
+    {
+        try
+        {
+            var userClaim = userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            var result = await service.Mediator.Send(new BlockMechanicStatusByUserIdCommand(mechanicId, request.Reason));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+
+
+    private static async Task<IResult> UnblockMechanic(
+        Guid mechanicId,
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
+    {
+        try
+        {
+            var userClaim = userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            var result = await service.Mediator.Send(new UnblockMechanicStatusByUserIdCommand(mechanicId));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
     
     private static async Task<IResult> UpdateMechanicLocation(
         [AsParameters] LocationRequestDto location, 

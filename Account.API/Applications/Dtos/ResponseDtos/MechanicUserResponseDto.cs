@@ -17,7 +17,9 @@ public record MechanicUserResponseDto(
     int TotalEntireJob,
     int TotalCancelledJob,
     int TotalEntireJobBothCompleteIncomplete,
-    int TotalCompletedJob);
+    int TotalCompletedJob,
+    bool IsVerified,
+    bool IsActive);
 
 
  

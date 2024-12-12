@@ -21,6 +21,8 @@ public class MechanicUser : BaseUser
     public int TotalCancelledJob { get; private set; } = 0;
     public int TotalEntireJobBothCompleteIncomplete { get; private set; } = 0;
     public int TotalCompletedJob { get; private set; } = 0;
+    public bool IsActive { get; private set; } 
+    public string DisablingReason { get; private set; }
 
     public void SetCompleteJob()
     {
@@ -41,6 +43,27 @@ public class MechanicUser : BaseUser
     public void CancelByMechanic()
     {
         TotalCancelledJob += 1;
+    }
+
+    public void UnblockAccount()
+    {
+        if (!IsVerified) 
+        {
+            throw new DomainException("Your account has not been verified");
+        }
+
+        IsActive = true;
+    }
+
+    public void BlockAccount(string reason)
+    {
+        if (string.IsNullOrEmpty(reason))
+        {
+            throw new DomainException("Reason can not be empty");
+        }
+
+        IsActive = false;
+        DisablingReason = reason;
     }
 
     public void UpdateProfilePicture(string path)
@@ -69,6 +92,7 @@ public class MechanicUser : BaseUser
     { 
         PersonalInfo = null!;
         Ratings = [];
+        DisablingReason = string.Empty;
     }
 
     public MechanicUser(
@@ -91,7 +115,9 @@ public class MechanicUser : BaseUser
         Id = identityId;
         PersonalInfo = personalInfo;
         Ratings = [];
-        IsVerified = false; 
+        IsVerified = false;
+        IsActive = false;
+        DisablingReason = string.Empty;
         RaiseMechanicUserCreatedDomainEvent(this);
     } 
 
@@ -299,6 +325,7 @@ public class MechanicUser : BaseUser
         }
 
         IsVerified = true;  
+        IsActive = true;
         RaiseMechanicDocumentVerifiedDomainEvent(this);
     }
 

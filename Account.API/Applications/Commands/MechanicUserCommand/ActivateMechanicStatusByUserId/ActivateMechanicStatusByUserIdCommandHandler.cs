@@ -56,10 +56,15 @@ public class ActivateMechanicStatusByUserIdCommandHandler : IRequestHandler<Acti
 
             var result = await _asyncRetryPolicy.ExecuteAsync<Result>(async () =>
             {
-                //if (!mechanic.IsVerified)
-                //{
-                //    return Result.Failure("You account has not been verified", ResponseStatus.BadRequest);
-                //}
+                if (!mechanic.IsVerified)
+                {
+                    return Result.Failure("Your account has not been verified", ResponseStatus.BadRequest);
+                }
+
+                if (mechanic.IsActive)
+                {
+                    return Result.Failure($"Your account has been disabled by Santai Team. Reason: {mechanic.DisablingReason}", ResponseStatus.BadRequest);
+                }
 
                 var result = await _cache.Activate(request.MechanicId.ToString());
 

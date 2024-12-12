@@ -57,6 +57,7 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
         if (availableStockOnly)
         {
             query = query.Where(x => x.StockQuantity > 0);
+            query = query.Where(x => x.IsActive);
         }
 
         var totalCount = await query.CountAsync(); 

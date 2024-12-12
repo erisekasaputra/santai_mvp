@@ -12,8 +12,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>e2c95nzpxj</Fingerprint>
-      <Integrity>VvZrOLCmACZjeS1dx7hlK44j83SS1NBtyNiw9IrTro8=</Integrity>
+      <Fingerprint>f5ik8t5jts</Fingerprint>
+      <Integrity>HbsYIpztjF/ppOXVypSKTYGK6oH2AwAc0g8nqlwox6Y=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\BasicInspection\basic-inspection.json'))</OriginalItemSpec>
@@ -48,8 +48,8 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>5ripm4qw9r</Fingerprint>
-      <Integrity>z85q97dmC5ul1RRclSs5XoErAqI5GvFy0sZGsphwDT0=</Integrity>
+      <Fingerprint>sgr1j5ymqr</Fingerprint>
+      <Integrity>tPeiR66WCgnp6HQfVdHwX6uI/BhasPmKSYgyEtpyrh8=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
       <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\Order\PreServiceInspection\pre-service-inspection.json'))</OriginalItemSpec>

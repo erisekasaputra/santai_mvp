@@ -71,7 +71,9 @@ public class GetMechanicUserByIdQueryHandler(
                 user.TotalEntireJob,
                 user.TotalCancelledJob,
                 user.TotalEntireJobBothCompleteIncomplete,
-                user.TotalCompletedJob
+                user.TotalCompletedJob,
+                user.IsVerified,
+                user.IsActive
             );
              
             return Result.Success(userDto);

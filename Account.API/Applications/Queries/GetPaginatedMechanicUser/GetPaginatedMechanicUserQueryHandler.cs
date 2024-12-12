@@ -93,7 +93,9 @@ public class GetPaginatedMechanicUserQueryHandler(
                 user.TotalEntireJob,
                 user.TotalCancelledJob,
                 user.TotalEntireJobBothCompleteIncomplete,
-                user.TotalCompletedJob
+                user.TotalCompletedJob,
+                user.IsVerified,
+                user.IsActive
             )); 
         }
 

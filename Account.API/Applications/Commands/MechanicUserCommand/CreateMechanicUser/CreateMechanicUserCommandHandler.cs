@@ -341,7 +341,9 @@ public class CreateMechanicUserCommandHandler(
             user.TotalEntireJob,
             user.TotalCancelledJob,
             user.TotalEntireJobBothCompleteIncomplete,
-            user.TotalCompletedJob);
+            user.TotalCompletedJob,
+            user.IsVerified,
+            user.IsActive);
 
         return mechanicResponse;
     }
