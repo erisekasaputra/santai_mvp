@@ -1,4 +1,6 @@
 ﻿using Catalog.Domain.SeedWork;
+using Core.CustomMessages;
+using Core.Exceptions;
 using Core.Results;
 using MediatR;
 
@@ -10,17 +12,28 @@ public class DeactivateItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHand
 
     public async Task<Result> Handle(DeactivateItemCommand request, CancellationToken cancellationToken)
     {
-        var item = await _unitOfWork.Items.GetItemByIdAsync(request.Id);
-
-        if (item is not null)
+        try
         {
-            item.SetInactive();
+            var item = await _unitOfWork.Items.GetItemByIdAsync(request.Id);
 
-            _unitOfWork.Items.UpdateItem(item);
+            if (item is not null)
+            {
+                item.SetInactive();
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+                _unitOfWork.Items.UpdateItem(item);
+
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+            }
+
+            return Result.Success(Unit.Value, ResponseStatus.NoContent);
         }
-
-        return Result.Success(Unit.Value, ResponseStatus.NoContent);
+        catch (DomainException ex)
+        {
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+        }
+        catch (Exception)
+        {
+            return Result.Failure(Messages.InternalServerError, ResponseStatus.BadRequest);
+        } 
     }
 }

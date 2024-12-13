@@ -4,6 +4,7 @@ using Catalog.API.Applications.Dtos.ItemPrice;
 using Catalog.API.Applications.Services;
 using Catalog.API.Extensions;
 using Catalog.Domain.SeedWork;
+using Core.CustomMessages;
 using Core.Exceptions;
 using Core.Results;
 using MediatR;
@@ -35,78 +36,89 @@ public class SetItemPriceCommandHandler : IRequestHandler<SetItemPriceCommand, R
 
     public async Task<Result> Handle(SetItemPriceCommand request, CancellationToken cancellationToken)
     {
-        var result = await _asyncRetryPolicy.ExecuteAsync(async () =>
+        try
         {
-            try
+            var result = await _asyncRetryPolicy.ExecuteAsync(async () =>
             {
-                int numberOfErrors = 0; 
-                await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
-                 
-
-                // Extract the item IDs from the request
-                var requestItemIds = request.Items.Select(x => x.ItemId).ToList();
-
-                var items = await _unitOfWork.Items.GetItemsWithLockAsync(requestItemIds);
-
-                var missingItems = requestItemIds.Except(items.Select(x => x.Id).ToList()).ToList();
-
-                if (missingItems.Count > 0)
+                try
                 {
-                    var message = "There are serveral missing items";
+                    int numberOfErrors = 0;
+                    await _unitOfWork.BeginTransactionAsync(IsolationLevel.ReadCommitted, cancellationToken);
+
+
+                    // Extract the item IDs from the request
+                    var requestItemIds = request.Items.Select(x => x.ItemId).ToList();
+
+                    var items = await _unitOfWork.Items.GetItemsWithLockAsync(requestItemIds);
+
+                    var missingItems = requestItemIds.Except(items.Select(x => x.Id).ToList()).ToList();
+
+                    if (missingItems.Count > 0)
+                    {
+                        var message = "There are serveral missing items";
+
+                        await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+
+                        return Result.Failure(message, ResponseStatus.NotFound)
+                            .WithData(missingItems.ToFailedItemsDto());
+                    }
+
+
+
+
+                    var itemErrors = new List<ItemDto>();
+                    foreach (var item in items)
+                    {
+                        var selectedItem = request.Items.First(x => x.ItemId == item.Id);
+
+                        try
+                        {
+                            item.SetPrice(selectedItem.Amount, selectedItem.Currency);
+                            _unitOfWork.Items.UpdateItem(item);
+                        }
+                        catch (DomainException)
+                        {
+                            itemErrors.Add(item.ToItemDto());
+                        }
+                        catch (Exception)
+                        {
+                            itemErrors.Add(item.ToItemDto());
+                        }
+                    }
+
+                    if (numberOfErrors is 0)
+                    {
+                        await _unitOfWork.CommitTransactionAsync(cancellationToken);
+                        return Result.Success(items.ToItemsDto(), ResponseStatus.Ok);
+                    }
+
+                    var messageError = "There are several items with error result";
 
                     await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-
-                    return Result.Failure(message, ResponseStatus.NotFound)
-                        .WithData(missingItems.ToFailedItemsDto());
+                    return Result.Failure(messageError, ResponseStatus.UnprocessableEntity)
+                        .WithData(itemErrors);
                 }
-
-
-
-
-                var itemErrors = new List<ItemDto>();
-                foreach (var item in items)
+                catch (DBConcurrencyException)
                 {
-                    var selectedItem = request.Items.First(x => x.ItemId == item.Id); 
-
-                    try
-                    {
-                        item.SetPrice(selectedItem.Amount, selectedItem.Currency);
-                        _unitOfWork.Items.UpdateItem(item);
-                    }
-                    catch (DomainException)
-                    {
-                        itemErrors.Add(item.ToItemDto());
-                    }
-                    catch (Exception)
-                    {
-                        itemErrors.Add(item.ToItemDto());
-                    }
+                    await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                    throw;
                 }
-
-                if (numberOfErrors is 0)
+                catch
                 {
-                    await _unitOfWork.CommitTransactionAsync(cancellationToken);
-                    return Result.Success(items.ToItemsDto(), ResponseStatus.Ok);
+                    await _unitOfWork.RollbackTransactionAsync(cancellationToken);
+                    throw;
                 }
+            });
 
-                var messageError = "There are several items with error result";
-
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                return Result.Failure(messageError, ResponseStatus.UnprocessableEntity)
-                    .WithData(itemErrors);
-            }
-            catch (DBConcurrencyException)
-            {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                throw;
-            }
-            catch
-            {
-                await _unitOfWork.RollbackTransactionAsync(cancellationToken);
-                throw;
-            }
-        });
-
-        return result;
+            return result;  
+        }
+        catch (DomainException ex)
+        {
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+        }
+        catch (Exception)
+        {
+            return Result.Failure(Messages.InternalServerError, ResponseStatus.BadRequest);
+        } 
     }
 }

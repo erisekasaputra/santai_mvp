@@ -1,5 +1,7 @@
 ﻿ 
 using Catalog.Domain.SeedWork;
+using Core.CustomMessages;
+using Core.Exceptions;
 using Core.Results;
 using MediatR;
 
@@ -10,17 +12,28 @@ public class DeleteItemCommandHandler(IUnitOfWork unitOfWork) : IRequestHandler<
     private readonly IUnitOfWork _unitOfWork = unitOfWork;
     public async Task<Result> Handle(DeleteItemCommand request, CancellationToken cancellationToken)
     {
-        var item = await _unitOfWork.Items.GetItemByIdAsync(request.Id);
+        try
+        {
+            var item = await _unitOfWork.Items.GetItemByIdAsync(request.Id);
 
-        if (item is not null)
-        {  
-            item.SetDelete();
+            if (item is not null)
+            {
+                item.SetDelete();
 
-            _unitOfWork.Items.UpdateItem(item);
+                _unitOfWork.Items.UpdateItem(item);
 
-            await _unitOfWork.SaveChangesAsync(cancellationToken);
+                await _unitOfWork.SaveChangesAsync(cancellationToken);
+            }
+
+            return Result.Success(Unit.Value, ResponseStatus.NoContent);
         }
-
-        return Result.Success(Unit.Value, ResponseStatus.NoContent);
+        catch (DomainException ex)
+        {
+            return Result.Failure(ex.Message, ResponseStatus.BadRequest);
+        }
+        catch (Exception)
+        {
+            return Result.Failure(Messages.InternalServerError, ResponseStatus.BadRequest);
+        } 
     }
 }
