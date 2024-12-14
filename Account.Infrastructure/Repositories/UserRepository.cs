@@ -211,9 +211,9 @@ public class UserRepository : IUserRepository
         return await _context.BaseUsers.Where(predicate).AnyAsync(x => x.Id != id);
     }
 
-    public async Task<(int TotalCount, int TotalPages, IEnumerable<RegularUser> Brands)> GetPaginatedRegularUser(int pageNumber, int pageSize)
+    public async Task<(int TotalCount, int TotalPages, IEnumerable<RegularUser> Users)> GetPaginatedRegularUser(int pageNumber, int pageSize)
     {
-        var query = _context.BaseUsers.AsQueryable();
+        var query = _context.BaseUsers.OfType<RegularUser>().AsQueryable();
 
         var totalCount = await query.CountAsync();
 
@@ -221,8 +221,7 @@ public class UserRepository : IUserRepository
 
         var items = await query.Skip((pageNumber - 1) * pageSize)
             .Take(pageSize) 
-            .AsNoTracking()
-            .OfType<RegularUser>()
+            .AsNoTracking() 
             .Include(x => x.ReferralProgram)
             .Include(x => x.LoyaltyProgram)
             .Include(x => x.PersonalInfo)
@@ -233,9 +232,9 @@ public class UserRepository : IUserRepository
         return (totalCount, totalPages, items);
     }
 
-    public async Task<(int TotalCount, int TotalPages, IEnumerable<BusinessUser> Brands)> GetPaginatedBusinessUser(int pageNumber, int pageSize)
+    public async Task<(int TotalCount, int TotalPages, IEnumerable<BusinessUser> Users)> GetPaginatedBusinessUser(int pageNumber, int pageSize)
     {
-        var query = _context.BaseUsers.AsQueryable();
+        var query = _context.BaseUsers.OfType<BusinessUser>().AsQueryable();
 
         var totalCount = await query.CountAsync();
 
@@ -254,9 +253,9 @@ public class UserRepository : IUserRepository
         return (totalCount, totalPages, items);
     }
 
-    public async Task<(int TotalCount, int TotalPages, IEnumerable<MechanicUser> Brands)> GetPaginatedMechanicUser(int pageNumber, int pageSize)
+    public async Task<(int TotalCount, int TotalPages, IEnumerable<MechanicUser> Users)> GetPaginatedMechanicUser(int pageNumber, int pageSize)
     {
-        var query = _context.BaseUsers.AsQueryable();
+        var query = _context.BaseUsers.OfType<MechanicUser>().AsQueryable();
 
         var totalCount = await query.CountAsync();
 
@@ -265,7 +264,6 @@ public class UserRepository : IUserRepository
         var items = await query.Skip((pageNumber - 1) * pageSize)
             .Take(pageSize)
             .AsNoTracking()
-            .OfType<MechanicUser>()
             .Include(x => x.ReferralProgram)
             .Include(x => x.LoyaltyProgram) 
             .Include(x => x.PersonalInfo)

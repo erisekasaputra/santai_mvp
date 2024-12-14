@@ -17,9 +17,9 @@ public interface IUserRepository
     Task<BaseUser?> GetByIdentitiesExcludingIdAsNoTrackingAsync(Guid id, params (IdentityParameter, string?)[] identity);
     Task<bool> GetAnyByIdentitiesAsNoTrackingAsync(params (IdentityParameter, string?)[] identity);
     Task<bool> GetAnyByIdentitiesExcludingIdAsNoTrackingAsync(Guid id, params (IdentityParameter, string?)[] identity);
-    Task<(int TotalCount, int TotalPages, IEnumerable<RegularUser> Brands)> GetPaginatedRegularUser(int pageNumber, int pageSize);
-    Task<(int TotalCount, int TotalPages, IEnumerable<BusinessUser> Brands)> GetPaginatedBusinessUser(int pageNumber, int pageSize);
-    Task<(int TotalCount, int TotalPages, IEnumerable<MechanicUser> Brands)> GetPaginatedMechanicUser(int pageNumber, int pageSize);
+    Task<(int TotalCount, int TotalPages, IEnumerable<RegularUser> Users)> GetPaginatedRegularUser(int pageNumber, int pageSize);
+    Task<(int TotalCount, int TotalPages, IEnumerable<BusinessUser> Users)> GetPaginatedBusinessUser(int pageNumber, int pageSize);
+    Task<(int TotalCount, int TotalPages, IEnumerable<MechanicUser> Users)> GetPaginatedMechanicUser(int pageNumber, int pageSize);
     Task<string?> GetTimeZoneById(Guid id);
     Task<string?> GetEmailById(Guid id);
     Task<string?> GetPhoneNumberById(Guid id); 
