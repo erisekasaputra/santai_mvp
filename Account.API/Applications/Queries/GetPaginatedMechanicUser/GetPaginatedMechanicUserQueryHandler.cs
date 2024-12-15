@@ -123,7 +123,8 @@ public class GetPaginatedMechanicUserQueryHandler(
             nationalIdentity.Id,
             await DecryptAsync(nationalIdentity.EncryptedIdentityNumber),
             nationalIdentity.FrontSideImageUrl,
-            nationalIdentity.BackSideImageUrl
+            nationalIdentity.BackSideImageUrl,
+            nationalIdentity.VerificationStatus
         );
     }
 
@@ -135,7 +136,8 @@ public class GetPaginatedMechanicUserQueryHandler(
             drivingLicense.Id,
             await DecryptAsync(drivingLicense.EncryptedLicenseNumber),
             drivingLicense.FrontSideImageUrl,
-            drivingLicense.BackSideImageUrl
+            drivingLicense.BackSideImageUrl,
+            drivingLicense.VerificationStatus
         );
     }
     private async Task<string> DecryptAsync(string cipherText)

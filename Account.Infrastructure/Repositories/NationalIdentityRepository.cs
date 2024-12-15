@@ -51,9 +51,9 @@ public class NationalIdentityRepository : INationalIdentityRepository
     public async Task<NationalIdentity?> GetOrderWithAcceptedByUserIdAsync(Guid id)
     {
         return await _context.NationalIdentities
-            .Where(x => x.UserId == id)
-            .OrderByDescending(x => x.VerificationStatus == VerificationState.Accepted)
-            .ThenByDescending(x => x.VerificationStatus == VerificationState.Waiting)
-            .FirstOrDefaultAsync();
+              .Where(x => x.UserId == id)
+              .OrderByDescending(x => x.VerificationStatus == VerificationState.Accepted ? 1 : 0)
+              .ThenByDescending(x => x.VerificationStatus == VerificationState.Waiting ? 1 : 0)
+              .FirstOrDefaultAsync();
     }
 }

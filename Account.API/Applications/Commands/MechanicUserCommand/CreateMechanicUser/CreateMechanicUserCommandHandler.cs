@@ -309,7 +309,8 @@ public class CreateMechanicUserCommandHandler(
                 drivingLicenseId.Id,
                 request.DrivingLicense.LicenseNumber,
                 request.DrivingLicense.FrontSideImageUrl,
-                request.DrivingLicense.BackSideImageUrl);
+                request.DrivingLicense.BackSideImageUrl,
+                drivingLicenseId.VerificationStatus);
         }
 
 
@@ -321,7 +322,8 @@ public class CreateMechanicUserCommandHandler(
                 nationalIdentityId.Id,
                 request.NationalIdentity.IdentityNumber,
                 request.NationalIdentity.FrontSideImageUrl,
-                request.NationalIdentity.BackSideImageUrl);
+                request.NationalIdentity.BackSideImageUrl,
+                nationalIdentityId.VerificationStatus);
         } 
 
         var mechanicResponse = new MechanicUserResponseDto(

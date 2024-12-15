@@ -106,7 +106,8 @@ public class GetMechanicUserByIdQueryHandler(
             nationalIdentity.Id,
             await DecryptAsync(nationalIdentity.EncryptedIdentityNumber),
             nationalIdentity.FrontSideImageUrl,
-            nationalIdentity.BackSideImageUrl
+            nationalIdentity.BackSideImageUrl,
+            nationalIdentity.VerificationStatus
         );
     }
 
@@ -118,7 +119,8 @@ public class GetMechanicUserByIdQueryHandler(
             drivingLicense.Id,
             await DecryptAsync(drivingLicense.EncryptedLicenseNumber),
             drivingLicense.FrontSideImageUrl,
-            drivingLicense.BackSideImageUrl
+            drivingLicense.BackSideImageUrl,
+            drivingLicense.VerificationStatus
         );
     }
     private async Task<string> DecryptAsync(string cipherText)

@@ -48,8 +48,8 @@ public class DrivingLicenseRepository : IDrivingLicenseRepository
     {
         return await _context.DrivingLicenses
             .Where(x => x.UserId == id)
-            .OrderByDescending(x => x.VerificationStatus == VerificationState.Accepted)
-            .ThenByDescending(x => x.VerificationStatus == VerificationState.Waiting)
+            .OrderByDescending(x => x.VerificationStatus == VerificationState.Accepted ? 1 : 0)
+            .ThenByDescending(x => x.VerificationStatus == VerificationState.Waiting ? 1 : 0)
             .FirstOrDefaultAsync();
     }
 

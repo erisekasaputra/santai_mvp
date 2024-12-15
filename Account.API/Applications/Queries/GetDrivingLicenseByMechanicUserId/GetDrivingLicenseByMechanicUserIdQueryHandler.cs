@@ -36,7 +36,8 @@ public class GetDrivingLicenseByMechanicUserIdQueryHandler(
                 drivingLicense.Id,
                 decryptedLicenseNumber,
                 drivingLicense.FrontSideImageUrl,
-                drivingLicense.BackSideImageUrl); 
+                drivingLicense.BackSideImageUrl, 
+                drivingLicense.VerificationStatus); 
 
             return Result.Success(drivingLicenseDto);
         }

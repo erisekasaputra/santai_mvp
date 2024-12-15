@@ -37,7 +37,8 @@ public class GetNationalIdentityByMechanicUserIdQueryHandler(
                 nationalIdentity.Id,
                 decryptedIdentityNumber,
                 nationalIdentity.FrontSideImageUrl,
-                nationalIdentity.BackSideImageUrl); 
+                nationalIdentity.BackSideImageUrl, 
+                nationalIdentity.VerificationStatus); 
 
             return Result.Success(nationalIdentityDto);
         }
