@@ -39,5 +39,22 @@ public class BannerRepository
     public async Task<Banner?> GetBannerById(Guid id)
     {
         return await _context.Banners.FirstOrDefaultAsync(x => x.Id == id);
+    } 
+
+    public async Task<(int TotalCount, int TotalPages, IEnumerable<Banner> Banners)> GetPaginatedBanners(int pageNumber, int pageSize)
+    {
+        var query = _context.Banners.AsQueryable();
+
+        var totalCount = await query.CountAsync();
+
+        var totalPages = (int)Math.Ceiling(totalCount / (double)pageSize);
+
+        var items = await query.Skip((pageNumber - 1) * pageSize)
+            .Take(pageSize)
+            .AsNoTracking()
+            .OrderBy(x => x.Name)
+            .ToListAsync();
+
+        return (totalCount, totalPages, items);
     }
 }

@@ -40,4 +40,9 @@ public class Banner
         ImagePath = imagePath;
         IsActive = isActive;
     }
+
+    public void UpdateState(bool newState)
+    {
+        IsActive = newState;
+    }
 }

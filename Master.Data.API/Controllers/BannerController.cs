@@ -1,4 +1,5 @@
 ﻿using Core.CustomMessages;
+using Core.Dtos;
 using Core.Results;
 using Core.Utilities;
 using Master.Data.API.Domain.Entity;
@@ -46,6 +47,10 @@ public class BannerController : ControllerBase
             return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         }
     }
+
+
+   
+
 
 
     [HttpGet("{id}")]
@@ -98,8 +103,7 @@ public class BannerController : ControllerBase
             return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         }
     }
-
-    // Update an existing Banner
+     
     [HttpPut("{id}")]
     [AllowAnonymous]
     public async Task<IResult> UpdateBanner(Guid id, [FromBody] UpdateBannerRequestDto request)
@@ -151,5 +155,78 @@ public class BannerController : ControllerBase
             return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
         }
     }
+
+    // Delete a Banner
+    [HttpPatch("{id}/activate")]
+    [AllowAnonymous]
+    public async Task<IResult> UpdateBannerStateActivate(Guid id)
+    {
+        try
+        {
+            var banner = await _repository.GetBannerById(id);
+            if (banner == null)
+            {
+                return TypedResults.NotFound(Result.Failure("Banner not found", ResponseStatus.NotFound));
+            }
+
+            banner.UpdateState(true);
+
+            await _repository.UpdateAsync(banner);
+            return TypedResults.NoContent();
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+        }
+    }
+
+    // Delete a Banner
+    [HttpPatch("{id}/deactivate")]
+    [AllowAnonymous]
+    public async Task<IResult> UpdateBannerStateDeactivate(Guid id)
+    {
+        try
+        {
+            var banner = await _repository.GetBannerById(id);
+            if (banner == null)
+            {
+                return TypedResults.NotFound(Result.Failure("Banner not found", ResponseStatus.NotFound));
+            }
+
+            banner.UpdateState(false);
+
+            await _repository.UpdateAsync(banner);
+            return TypedResults.NoContent();
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+        }
+    }
+
+    [HttpGet("pages")]
+    [AllowAnonymous]
+    public async Task<IResult> GetPaginatedBanners([FromQuery] PaginatedRequestDto request)
+    {
+        try
+        {
+            var (totalCount, totalPages, banners) = await _repository.GetPaginatedBanners(request.PageNumber, request.PageSize);
+
+            if (banners == null)
+            {
+                return TypedResults.NotFound(Result.Failure("Banner not found", ResponseStatus.NotFound));
+            }
+
+            return TypedResults.Ok(Result.Success(new PaginatedResponseDto<Banner>(request.PageNumber, request.PageSize, totalCount, totalPages, banners)));
+        }
+        catch (Exception ex)
+        {
+            LoggerHelper.LogError(_logger, ex);
+            return TypedResults.InternalServerError(Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+        }
+    }
+
 }
 
