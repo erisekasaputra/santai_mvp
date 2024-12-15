@@ -8,8 +8,8 @@ public class PasswordResetRequest
 
     public PasswordResetRequest(string identity, string otpCode, string newPassword)
     {
-        Identity = identity;
-        OtpCode = otpCode;
-        NewPassword = newPassword;
+        Identity = identity.Trim();
+        OtpCode = otpCode.Trim();
+        NewPassword = newPassword.Trim();
     }
 }

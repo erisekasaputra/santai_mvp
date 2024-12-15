@@ -46,14 +46,15 @@ public class OtpService : IOtpService
 
     public async Task<(string?, int)> GenerateOtpAsync(string phoneNumber)
     {
-        int lockingTime = (_otpConfig.LockTimeSecond <= 0 ? 60 : _otpConfig.LockTimeSecond);
+        int lockingTime = 0;
+        //int lockingTime = (_otpConfig.LockTimeSecond <= 0 ? 60 : _otpConfig.LockTimeSecond);
           
-        (var isLockReleased, var remainingTime) = await CheckIsLockReleasedAsync(phoneNumber);
+        //(var isLockReleased, var remainingTime) = await CheckIsLockReleasedAsync(phoneNumber);
 
-        if (!isLockReleased)
-        {
-            return (null, remainingTime);
-        } 
+        //if (!isLockReleased)
+        //{
+        //    return (null, remainingTime);
+        //} 
 
         var otp = SecretGenerator.GenerateOtp();
         var otpObject = new Otp()

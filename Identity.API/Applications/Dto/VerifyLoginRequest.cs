@@ -2,7 +2,17 @@
 
 public class VerifyLoginRequest
 {
-    public required string Token { get; set; }
-    public required string PhoneNumber { get; set; }
-    public required string DeviceId { get; set; }
+    public string Token { get; set; }
+    public string PhoneNumber { get; set; }
+    public string DeviceId { get; set; }
+
+    public VerifyLoginRequest(
+        string token,
+        string phoneNumber,
+        string deviceId)
+    {
+        Token = token.Trim();
+        PhoneNumber = phoneNumber.Trim();
+        DeviceId = deviceId.Trim();
+    }
 }

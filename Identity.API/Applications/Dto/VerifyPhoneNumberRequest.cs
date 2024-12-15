@@ -7,7 +7,7 @@ public class VerifyPhoneNumberRequest
 
     public VerifyPhoneNumberRequest(string phoneNumber, string token)
     {
-        PhoneNumber = phoneNumber;
-        Token = token;
+        PhoneNumber = phoneNumber.Trim();
+        Token = token.Trim();
     }
 }
