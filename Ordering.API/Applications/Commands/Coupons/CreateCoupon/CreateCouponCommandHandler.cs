@@ -30,6 +30,7 @@ public class CreateCouponCommandHandler(
             await _unitOfWork.SaveChangesAsync(cancellationToken);
 
             return Result.Success(new DiscountResponseDto(
+                coupon.Id,
                 coupon.CouponCode,
                 coupon.CouponValueType,
                 coupon.Currency,

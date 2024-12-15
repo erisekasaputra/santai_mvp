@@ -24,6 +24,7 @@ public class GetCouponByCodeQueryHandler(
             } 
 
             return Result.Success(new DiscountResponseDto(
+                coupon.Id,
                 coupon.CouponCode,
                 coupon.CouponValueType,
                 coupon.Currency,

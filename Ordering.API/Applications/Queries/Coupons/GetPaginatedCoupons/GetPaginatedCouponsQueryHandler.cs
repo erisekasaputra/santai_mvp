@@ -29,6 +29,7 @@ public class GetPaginatedCouponsQueryHandler(
             foreach(var coupon in items)
             {
                 response.Add(new DiscountResponseDto(
+                    coupon.Id,
                     coupon.CouponCode,
                     coupon.CouponValueType,
                     coupon.Currency,

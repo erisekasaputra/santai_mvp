@@ -147,6 +147,7 @@ public static class Mapper
     public static DiscountResponseDto ToDiscountDto(this Discount coupon)
     {
         return new DiscountResponseDto(
+            coupon.Id,
             coupon.CouponCode,
             coupon.CouponValueType,
             coupon.Currency,

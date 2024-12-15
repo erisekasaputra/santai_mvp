@@ -5,6 +5,7 @@ namespace Ordering.API.Applications.Dtos.Responses;
 
 public class DiscountResponseDto
 { 
+    public Guid Id { get; set; }
     public string CouponCode { get; set; }
     public PercentageOrValueType Parameter { get; set; }
     public Currency Currency { get; set; }
@@ -13,6 +14,7 @@ public class DiscountResponseDto
     public decimal MinimumOrderValue { get; set; }
     public decimal DiscountAmount { get; set; }
     public DiscountResponseDto(
+        Guid id,
         string couponCode,
         PercentageOrValueType parameter,
         Currency currency,
@@ -21,6 +23,7 @@ public class DiscountResponseDto
         decimal minimumOrderValue,
         decimal discountAmount)
     {
+        Id = id;
         CouponCode = couponCode;
         Parameter = parameter;
         Currency = currency;
