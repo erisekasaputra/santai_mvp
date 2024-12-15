@@ -61,7 +61,7 @@ public class ActivateMechanicStatusByUserIdCommandHandler : IRequestHandler<Acti
                     return Result.Failure("Your account has not been verified", ResponseStatus.BadRequest);
                 }
 
-                if (mechanic.IsActive)
+                if (!mechanic.IsActive)
                 {
                     return Result.Failure($"Your account has been disabled by Santai Team. Reason: {mechanic.DisablingReason}", ResponseStatus.BadRequest);
                 }

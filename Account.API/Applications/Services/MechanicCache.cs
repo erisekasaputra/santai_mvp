@@ -87,7 +87,7 @@ public class MechanicCache : IMechanicCache
         else
         {
             var mech = new MechanicExistence(mechanicId.ToString(), string.Empty, 0, 0, MechanicStatus.Available);   
-            if (mechanic.Status == MechanicStatus.Unavailable)
+            if (mechanic.Status == MechanicStatus.Unavailable || mechanic.Status == MechanicStatus.Available)
             { 
                 await CreateMechanicHashSetAsync(db, mech); 
                 return true;
@@ -110,7 +110,7 @@ public class MechanicCache : IMechanicCache
         else
         {
             var mech = new MechanicExistence(mechanicId.ToString(), string.Empty, 0, 0, MechanicStatus.Unavailable);
-            if (mechanic.Status == MechanicStatus.Available)
+            if (mechanic.Status == MechanicStatus.Available || mechanic.Status == MechanicStatus.Unavailable)
             {
                 await CreateMechanicHashSetAsync(db, mech); 
                 return true;
