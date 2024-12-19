@@ -6,6 +6,7 @@ using Account.API.Applications.Commands.MechanicUserCommand.CreateMechanicUser;
 using Account.API.Applications.Commands.MechanicUserCommand.DeactivateMechanicStatusByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.DeleteMechanicUserByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.RejectDrivingLicenseByUserId;
+using Account.API.Applications.Commands.MechanicUserCommand.RejectMechanicUserByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.RejectNationalIdentityByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.SetDrivingLicenseByUserId;
 using Account.API.Applications.Commands.MechanicUserCommand.SetNationalIdentityByUserId;
@@ -91,6 +92,9 @@ public static class MechanicUserApi
 
         app.MapPatch("/{mechanicUserId}/verify", VerifyMechanicUserByUserId)
              .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
+
+        app.MapPatch("/{mechanicUserId}/reject", RejectMechanicUserByUserId)
+            .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
 
         app.MapPatch("/{mechanicUserId}/driving-license/{drivingLicenseId}/confirm", ConfirmDrivingLicenseByUserId)
              .RequireAuthorization(PolicyName.AdministratorUserOnlyPolicy.ToString());
@@ -773,8 +777,33 @@ public static class MechanicUserApi
             service.Logger.LogError(ex, ex.InnerException?.Message);
             return TypedResults.InternalServerError(Messages.InternalServerError);
         }
-    } 
-     
+    }
+
+    private static async Task<IResult> RejectMechanicUserByUserId(
+     Guid mechanicUserId,
+     [FromServices] ApplicationService service,
+     [FromServices] IUserInfoService userInfoService)
+    {
+        try
+        {
+            var userClaim = userInfoService.GetUserInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            var result = await service.Mediator.Send(new RejectMechanicUserByUserIdCommand(mechanicUserId));
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+
     private static async Task<IResult> SetRating(
         Guid mechanicUserId, 
         [FromBody] SetRatingRequestDto request,
