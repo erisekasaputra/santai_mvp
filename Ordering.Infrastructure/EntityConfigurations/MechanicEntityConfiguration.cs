@@ -14,12 +14,13 @@ public class MechanicEntityConfiguration : IEntityTypeConfiguration<Mechanic>
             .IsRequired()
             .HasMaxLength(100);
 
+        builder.Property(e => e.ImageUrl)
+          .IsRequired()
+          .HasMaxLength(100);
+
         builder.Property(e => e.Performance)
             .IsRequired()
-            .HasPrecision(18, 4);
-
-
-
+            .HasPrecision(18, 4); 
 
         builder.OwnsOne(p => p.Rating, buildAction =>
         {

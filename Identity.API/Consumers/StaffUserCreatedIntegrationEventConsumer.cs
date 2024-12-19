@@ -63,6 +63,7 @@ public class StaffUserCreatedIntegrationEventConsumer(
                 {
                     var user = new ApplicationUser()
                     {
+                        PhoneNumberConfirmed = true,
                         Id = staff.Id.ToString(),
                         UserName = staff.PhoneNumber,
                         PhoneNumber = staff.PhoneNumber,

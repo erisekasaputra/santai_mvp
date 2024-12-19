@@ -10,7 +10,13 @@ public class AccountMechanicAutoSelectedToAnOrderDomainEventHandler(
     private readonly IMediator _mediator = mediator;
     public async Task Handle(AccountMechanicAutoSelectedToAnOrderDomainEvent notification, CancellationToken cancellationToken)
     {
-        var @event = new MechanicAutoSelectedIntegrationEvent(notification.OrderId, notification.BuyerId, notification.MechanicId, notification.ConfirmDeadlineInSeconds);
+        var @event = new MechanicAutoSelectedIntegrationEvent(
+            notification.OrderId,
+            notification.BuyerId,
+            notification.MechanicId,
+            notification.MechanicName,
+            notification.MechanicImageUrl,
+            notification.ConfirmDeadlineInSeconds);
 
         await _mediator.Publish(@event, cancellationToken);
     }

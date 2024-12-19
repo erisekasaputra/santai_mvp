@@ -68,7 +68,7 @@ public static class ServiceRegistrationExtension
     {
         builder.Services.AddIdentity<ApplicationUser, IdentityRole>(configure =>
         {
-            configure.SignIn.RequireConfirmedPhoneNumber = true;
+            configure.SignIn.RequireConfirmedPhoneNumber = false;
             configure.SignIn.RequireConfirmedEmail = false;
             configure.SignIn.RequireConfirmedAccount = false;
 

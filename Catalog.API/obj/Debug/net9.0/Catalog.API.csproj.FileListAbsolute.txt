@@ -737,10 +737,10 @@ C:\Projects\Projects\Santai.MVP\Catalog.API\obj\Debug\net9.0\staticwebassets\msb
 C:\Projects\Projects\Santai.MVP\Catalog.API\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.Catalog.API.props
 C:\Projects\Projects\Santai.MVP\Catalog.API\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.Catalog.API.props
 C:\Projects\Projects\Santai.MVP\Catalog.API\obj\Debug\net9.0\staticwebassets.pack.json
+C:\Projects\Projects\Santai.MVP\Catalog.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Projects\Projects\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog..F07FDCDC.Up2Date
 C:\Projects\Projects\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.dll
 C:\Projects\Projects\Santai.MVP\Catalog.API\obj\Debug\net9.0\refint\Catalog.API.dll
 C:\Projects\Projects\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.pdb
 C:\Projects\Projects\Santai.MVP\Catalog.API\obj\Debug\net9.0\Catalog.API.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Catalog.API\obj\Debug\net9.0\ref\Catalog.API.dll
-C:\Projects\Projects\Santai.MVP\Catalog.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

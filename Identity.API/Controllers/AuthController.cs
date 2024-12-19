@@ -453,34 +453,34 @@ public class AuthController(
 
 
                 var phoneNumber = user.PhoneNumber ?? throw new Exception(Messages.AccountError); 
-                if (!user.PhoneNumberConfirmed)
-                {
-                    (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(
-                        phoneNumber, user.Email, OtpRequestFor.VerifyPhoneNumber);
+                //if (!user.PhoneNumberConfirmed)
+                //{
+                //    (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(
+                //        phoneNumber, user.Email, OtpRequestFor.VerifyPhoneNumber);
 
-                    await _dbContext.SaveChangesAsync();
-                    await transaction.CommitAsync();
+                //    await _dbContext.SaveChangesAsync();
+                //    await transaction.CommitAsync();
 
-                    return TypedResults.Accepted(_sendOtpActionName,
-                        Result.Success(new 
-                        {
-                            Sub = user.Id,
-                            Username = user.UserName,
-                            PhoneNumber = phoneNumber,
-                            Email = user.Email,
-                            UserType = user.UserType,
-                            BusinessCode = user.BusinessCode
-                        }, ResponseStatus.Accepted).WithNext(new 
-                        {
-                            Link = Url.Action(_sendOtpActionName, _controllerName),
-                            Action = _sendOtpActionName,
-                            Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
-                            OtpRequestToken = otpRequestToken,
-                            OtpRequestId = requestId,
-                            OtpProviderTypes = AllowedOtpProviderType.GetAll
-                        }) 
-                    );
-                }
+                //    return TypedResults.Accepted(_sendOtpActionName,
+                //        Result.Success(new 
+                //        {
+                //            Sub = user.Id,
+                //            Username = user.UserName,
+                //            PhoneNumber = phoneNumber,
+                //            Email = user.Email,
+                //            UserType = user.UserType,
+                //            BusinessCode = user.BusinessCode
+                //        }, ResponseStatus.Accepted).WithNext(new 
+                //        {
+                //            Link = Url.Action(_sendOtpActionName, _controllerName),
+                //            Action = _sendOtpActionName,
+                //            Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                //            OtpRequestToken = otpRequestToken,
+                //            OtpRequestId = requestId,
+                //            OtpProviderTypes = AllowedOtpProviderType.GetAll
+                //        }) 
+                //    );
+                //}
 
 
 
@@ -525,8 +525,8 @@ public class AuthController(
     }  
 
 
-    [HttpPost("signin-staff")]
-    public async Task<IResult> LoginStaff(
+    [HttpPost("signin-business")]
+    public async Task<IResult> LoginBusiness(
         [FromBody] LoginStaffRequest request,
         [FromServices] IValidator<LoginStaffRequest> validator)
     {
@@ -562,10 +562,9 @@ public class AuthController(
                         Result.Failure("We could not find you account", ResponseStatus.NotFound));
                 } 
 
-                if (user.UserType is not UserType.StaffUser || string.IsNullOrWhiteSpace(request.BusinessCode))
+                if ((user.UserType is not UserType.StaffUser && user.UserType is not UserType.BusinessUser) || string.IsNullOrWhiteSpace(request.BusinessCode))
                 {
-                    return TypedResults.NotFound(
-                       Result.Failure("We could not find you account", ResponseStatus.NotFound));
+                    return TypedResults.Forbid();
                 }
 
                 if (!request.BusinessCode.Equals(user.BusinessCode, StringComparison.CurrentCultureIgnoreCase))
@@ -574,28 +573,28 @@ public class AuthController(
                         Result.Failure("We could not find you account", ResponseStatus.NotFound));
                 }
 
-                if (!user.PhoneNumberConfirmed)
-                {
-                    (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(
-                        phoneNumber, user.Email, OtpRequestFor.VerifyPhoneNumber);
+                //if (!user.PhoneNumberConfirmed)
+                //{
+                //    (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(
+                //        phoneNumber, user.Email, OtpRequestFor.VerifyPhoneNumber);
 
-                    await _dbContext.SaveChangesAsync();
+                //    await _dbContext.SaveChangesAsync();
 
-                    await transaction.CommitAsync();
+                //    await transaction.CommitAsync();
 
-                    return TypedResults.Accepted(_sendOtpActionName, 
-                        Result.Success(null, ResponseStatus.Accepted)
-                            .WithNext(new
-                            {
-                                Link = Url.Action(_sendOtpActionName, _controllerName),
-                                Action = _sendOtpActionName,
-                                Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
-                                OtpRequestToken = otpRequestToken,
-                                OtpRequestId = requestId,
-                                OtpProviderTypes = AllowedOtpProviderType.GetAll
-                            })
-                        );
-                }
+                //    return TypedResults.Accepted(_sendOtpActionName, 
+                //        Result.Success(null, ResponseStatus.Accepted)
+                //            .WithNext(new
+                //            {
+                //                Link = Url.Action(_sendOtpActionName, _controllerName),
+                //                Action = _sendOtpActionName,
+                //                Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                //                OtpRequestToken = otpRequestToken,
+                //                OtpRequestId = requestId,
+                //                OtpProviderTypes = AllowedOtpProviderType.GetAll
+                //            })
+                //        );
+                //}
 
 
                 var signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false); 
@@ -698,42 +697,32 @@ public class AuthController(
                         Result.Failure("We could not find you account", ResponseStatus.NotFound));
                 }
 
-                if (user.UserType == UserType.MechanicUser || user.UserType == UserType.Administrator || user.UserType == UserType.StaffUser)
+                if (user.UserType != UserType.RegularUser)
                 {
                     return TypedResults.Forbid();
-                }
-
-                if (user.UserType == UserType.StaffUser)
-                {
-                    return TypedResults.Ok(Result.Success(null, ResponseStatus.Ok).WithNext(new
-                    {
-                        Link = Url.Action(_staffLoginActionName, _controllerName),
-                        Action = _staffLoginActionName,
-                        Method = _actionMethodService.GetHttpMethodByActionName(_staffLoginActionName, _controllerName)
-                    }));
-                }
+                } 
 
 
-                if (!user.PhoneNumberConfirmed)
-                {
-                    (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(
-                        phoneNumber, user.Email, OtpRequestFor.VerifyPhoneNumber);
+                //if (!user.PhoneNumberConfirmed)
+                //{
+                //    (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(
+                //        phoneNumber, user.Email, OtpRequestFor.VerifyPhoneNumber);
 
-                    await _dbContext.SaveChangesAsync();
-                    await transaction.CommitAsync();
+                //    await _dbContext.SaveChangesAsync();
+                //    await transaction.CommitAsync();
 
-                    return TypedResults.Accepted(_sendOtpActionName, 
-                        Result.Success(null, ResponseStatus.Accepted)
-                        .WithNext(new 
-                        {
-                            Link = Url.Action(_sendOtpActionName, _controllerName),
-                            Action = _sendOtpActionName,
-                            Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
-                            OtpRequestToken = otpRequestToken,
-                            OtpRequestId = requestId,
-                            OtpProviderTypes = AllowedOtpProviderType.GetAll
-                        }));
-                }
+                //    return TypedResults.Accepted(_sendOtpActionName, 
+                //        Result.Success(null, ResponseStatus.Accepted)
+                //        .WithNext(new 
+                //        {
+                //            Link = Url.Action(_sendOtpActionName, _controllerName),
+                //            Action = _sendOtpActionName,
+                //            Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                //            OtpRequestToken = otpRequestToken,
+                //            OtpRequestId = requestId,
+                //            OtpProviderTypes = AllowedOtpProviderType.GetAll
+                //        }));
+                //}
 
 
                 var signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false); 
@@ -839,26 +828,26 @@ public class AuthController(
                     return TypedResults.Forbid();
                 }  
 
-                if (!user.PhoneNumberConfirmed)
-                {
-                    (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(
-                        phoneNumber, user.Email, OtpRequestFor.VerifyPhoneNumber);
+                //if (!user.PhoneNumberConfirmed)
+                //{
+                //    (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(
+                //        phoneNumber, user.Email, OtpRequestFor.VerifyPhoneNumber);
 
-                    await _dbContext.SaveChangesAsync();
-                    await transaction.CommitAsync();
+                //    await _dbContext.SaveChangesAsync();
+                //    await transaction.CommitAsync();
 
-                    return TypedResults.Accepted(_sendOtpActionName,
-                        Result.Success(null, ResponseStatus.Accepted)
-                        .WithNext(new
-                        {
-                            Link = Url.Action(_sendOtpActionName, _controllerName),
-                            Action = _sendOtpActionName,
-                            Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
-                            OtpRequestToken = otpRequestToken,
-                            OtpRequestId = requestId,
-                            OtpProviderTypes = AllowedOtpProviderType.GetAll
-                        }));
-                }
+                //    return TypedResults.Accepted(_sendOtpActionName,
+                //        Result.Success(null, ResponseStatus.Accepted)
+                //        .WithNext(new
+                //        {
+                //            Link = Url.Action(_sendOtpActionName, _controllerName),
+                //            Action = _sendOtpActionName,
+                //            Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                //            OtpRequestToken = otpRequestToken,
+                //            OtpRequestId = requestId,
+                //            OtpProviderTypes = AllowedOtpProviderType.GetAll
+                //        }));
+                //}
 
 
                 var signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false);
@@ -965,26 +954,26 @@ public class AuthController(
                 }
 
 
-                if (!user.PhoneNumberConfirmed)
-                {
-                    (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(
-                        phoneNumber, user.Email, OtpRequestFor.VerifyPhoneNumber);
+                //if (!user.PhoneNumberConfirmed)
+                //{
+                //    (Guid requestId, string otpRequestToken) = await _otpService.GenerateRequestOtpAsync(
+                //        phoneNumber, user.Email, OtpRequestFor.VerifyPhoneNumber);
 
-                    await _dbContext.SaveChangesAsync();
-                    await transaction.CommitAsync();
+                //    await _dbContext.SaveChangesAsync();
+                //    await transaction.CommitAsync();
 
-                    return TypedResults.Accepted(_sendOtpActionName,
-                        Result.Success(null, ResponseStatus.Accepted)
-                        .WithNext(new
-                        {
-                            Link = Url.Action(_sendOtpActionName, _controllerName),
-                            Action = _sendOtpActionName,
-                            Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
-                            OtpRequestToken = otpRequestToken,
-                            OtpRequestId = requestId,
-                            OtpProviderTypes = AllowedOtpProviderType.GetAll
-                        }));
-                }
+                //    return TypedResults.Accepted(_sendOtpActionName,
+                //        Result.Success(null, ResponseStatus.Accepted)
+                //        .WithNext(new
+                //        {
+                //            Link = Url.Action(_sendOtpActionName, _controllerName),
+                //            Action = _sendOtpActionName,
+                //            Method = _actionMethodService.GetHttpMethodByActionName(_sendOtpActionName, _controllerName),
+                //            OtpRequestToken = otpRequestToken,
+                //            OtpRequestId = requestId,
+                //            OtpProviderTypes = AllowedOtpProviderType.GetAll
+                //        }));
+                //}
 
 
                 var signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false);
@@ -1123,10 +1112,10 @@ public class AuthController(
                 }
 
                 // Handle phone number confirmation flow
-                if (userByEmail is not null && !userByEmail.PhoneNumberConfirmed)
+                if (userByEmail is not null) //  && !userByEmail.PhoneNumberConfirmed
                 {
                     var (newRequestId, newOtpRequestToken) = await _otpService.GenerateRequestOtpAsync(
-                        normalizedPhoneNumber, userByEmail.Email, OtpRequestFor.VerifyPhoneNumber);
+                        normalizedPhoneNumber, userByEmail.Email, OtpRequestFor.VerifyLogin);
 
                     await _dbContext.SaveChangesAsync();
                     return TypedResults.Accepted(_sendOtpActionName,
@@ -1169,6 +1158,7 @@ public class AuthController(
             // Create new user
             var newUser = new ApplicationUser
             {
+                PhoneNumberConfirmed = true,
                 PhoneNumber = normalizedPhoneNumber,
                 UserName = normalizedPhoneNumber,
                 Email = googlePayload?.Email,
@@ -1218,7 +1208,7 @@ public class AuthController(
 
             // Generate OTP for phone verification
             var (otpRequestId, otpRequestToken) = await _otpService.GenerateRequestOtpAsync(
-                normalizedPhoneNumber, newUser.Email, OtpRequestFor.VerifyPhoneNumber);
+                normalizedPhoneNumber, newUser.Email, OtpRequestFor.VerifyLogin);
 
             await _dbContext.SaveChangesAsync();
 

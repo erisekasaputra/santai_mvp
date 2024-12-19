@@ -54,7 +54,7 @@ public class BlockMechanicStatusByUserIdCommandHandler : IRequestHandler<BlockMe
 
             var result = await _asyncRetryPolicy.ExecuteAsync<Result>(async () =>
             { 
-                var result = await _cache.Deactivate(request.UserId.ToString());
+                var result = await _cache.Deactivate(request.UserId.ToString(), mechanic.Name, mechanic.PersonalInfo.ProfilePictureUrl ?? "");
 
                 if (result)
                 {

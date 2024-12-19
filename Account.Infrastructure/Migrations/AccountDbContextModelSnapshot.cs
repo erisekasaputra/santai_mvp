@@ -777,8 +777,8 @@ namespace Account.Infrastructure.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("IsVerified")
-                        .HasColumnType("bit");
+                    b.Property<int>("IsVerified")
+                        .HasColumnType("int");
 
                     b.Property<string>("Ratings")
                         .IsRequired()

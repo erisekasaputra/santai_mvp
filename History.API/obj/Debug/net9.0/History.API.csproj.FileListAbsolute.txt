@@ -107,10 +107,10 @@ C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets\msb
 C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.History.API.props
 C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.History.API.props
 C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets.pack.json
+C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History..64CC3CFB.Up2Date
 C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History.API.dll
 C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\refint\History.API.dll
 C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History.API.pdb
 C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\History.API.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\ref\History.API.dll
-C:\Projects\Projects\Santai.MVP\History.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

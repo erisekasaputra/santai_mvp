@@ -1,4 +1,6 @@
-﻿namespace Account.API.Applications.Dtos.ResponseDtos;
+﻿using Account.Domain.Enumerations;
+
+namespace Account.API.Applications.Dtos.ResponseDtos;
 
 public record MechanicUserResponseDto(
     Guid Id, 
@@ -18,7 +20,7 @@ public record MechanicUserResponseDto(
     int TotalCancelledJob,
     int TotalEntireJobBothCompleteIncomplete,
     int TotalCompletedJob,
-    bool IsVerified,
+    VerificationState IsVerified,
     bool IsActive);
 
 

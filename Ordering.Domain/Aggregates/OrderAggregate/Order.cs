@@ -369,7 +369,7 @@ public class Order : Entity
         }
 
         Status = OrderStatus.ServiceInProgress; 
-        RaiseServiceProcessedDomainEvent(Id, Buyer.BuyerId, mechanicId);
+        RaiseServiceProcessedDomainEvent(Id, Buyer.BuyerId, mechanicId, Mechanic.Name);
     }
 
     public void SetServiceCompleted(Guid mechanicId, string secret, Guid fleetId)
@@ -417,7 +417,7 @@ public class Order : Entity
         }
 
         Status = OrderStatus.ServiceCompleted;
-        RaiseServiceCompletedDomainEvent(Id, Buyer.BuyerId, mechanicId);
+        RaiseServiceCompletedDomainEvent(Id, Buyer.BuyerId, mechanicId, Mechanic.Name);
     }
 
     public void SetServiceIncompleted(Guid mechanicId, string secret, Guid fleetId)
@@ -465,7 +465,7 @@ public class Order : Entity
         }
          
         Status = OrderStatus.ServiceIncompleted;
-        RaiseServiceIncompletedDomainEvent(Id, Buyer.BuyerId, mechanicId);
+        RaiseServiceIncompletedDomainEvent(Id, Buyer.BuyerId, mechanicId, Mechanic.Name);
     }
 
 
@@ -866,18 +866,18 @@ public class Order : Entity
         return $"{string.Join('_', Buyer.Name.Split(' '))}_Summary_Order_Includes_{LineItems.Count}_Items";
     }
 
-    private void RaiseServiceCompletedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId)
+    private void RaiseServiceCompletedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId, string mechanicName)
     {
-        AddDomainEvent(new ServiceCompletedDomainEvent(orderId, buyerId, mechanicId));
+        AddDomainEvent(new ServiceCompletedDomainEvent(orderId, buyerId, mechanicId, mechanicName));
     }
      
-    private void RaiseServiceIncompletedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId)
+    private void RaiseServiceIncompletedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId, string mechanicName)
     {
-        AddDomainEvent(new ServiceIncompletedDomainEvent(orderId, buyerId, mechanicId));
+        AddDomainEvent(new ServiceIncompletedDomainEvent(orderId, buyerId, mechanicId, mechanicName));
     } 
-    private void RaiseServiceProcessedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId)
+    private void RaiseServiceProcessedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId, string mechanicName)
     {
-        AddDomainEvent(new ServiceProcessedDomainEvent(orderId, buyerId, mechanicId));
+        AddDomainEvent(new ServiceProcessedDomainEvent(orderId, buyerId, mechanicId, mechanicName));
     }
 
     private void RaiseMechanicArrivedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId, string mechanicName)

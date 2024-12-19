@@ -6,5 +6,7 @@ public record AccountMechanicOrderAcceptedIntegrationEvent(
     Guid OrderId, 
     Guid BuyerId, 
     Guid MechanicId,
-    string MechanicName, 
-    decimal Performance) : INotification;
+    string MechanicName,
+    string MechanicImageUrl,
+    decimal Performance
+   ) : INotification;

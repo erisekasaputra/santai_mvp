@@ -30,6 +30,7 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
                 context.Message.OrderId,
                 context.Message.MechanicId,
                 context.Message.MechanicName,
+                context.Message.MechanicImageUrl,
                 context.Message.Performance));
 
             _unitOfWork.Orders.Update(order);

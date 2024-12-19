@@ -5,12 +5,12 @@ namespace Account.API.Applications.Services.Interfaces;
 public interface IMechanicCache
 {
     Task<bool> UpdateLocationAsync(MechanicExistence mechanic); 
-    Task<bool> Activate(string mechanicId);
-    Task<bool> Deactivate(string mechanicId);
+    Task<bool> Activate(string mechanicId, string mechanicName, string mechanicImageUrl);
+    Task<bool> Deactivate(string mechanicId, string mechanicName, string mechanicImageUrl);
     Task<bool> PingAsync();
     Task CreateOrderToQueueAndHash(OrderTask orderTask);
     Task ProcessOrdersWaitingMechanicConfirmExpiryFromQueueAsync(); 
-    Task<(bool isSuccess, string orderId, string buyerId, string mechanicId)> ProcessOrdersWaitingMechanicAssignFromQueueAsync(); 
+    Task<(bool isSuccess, string orderId, string buyerId, string mechanicId, string mechanicName, string mechanicImageUrl)> ProcessOrdersWaitingMechanicAssignFromQueueAsync(); 
 
 
     Task<(bool isSuccess, string buyerId)> AcceptOrderByMechanic(string orderId, string mechanicId);

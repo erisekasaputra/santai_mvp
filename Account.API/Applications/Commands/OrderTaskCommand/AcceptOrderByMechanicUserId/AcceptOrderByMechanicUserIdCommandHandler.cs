@@ -67,8 +67,10 @@ public class AcceptOrderByMechanicUserIdCommandHandler : IRequestHandler<AcceptO
                             request.OrderId,
                             Guid.Parse(buyerId), 
                             request.MechanicId, 
-                            mechanic.ToString(), 
+                            mechanic.ToString(),
+                            mechanic.PersonalInfo.ProfilePictureUrl ?? "",
                             mechanic.Rating);
+
                         await _mediator.Publish(@event);
                         return Result.Success(null, ResponseStatus.NoContent);
                     }

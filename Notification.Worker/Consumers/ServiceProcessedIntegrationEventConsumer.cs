@@ -79,7 +79,7 @@ public class ServiceProcessedIntegrationEventConsumer(
             {
                 notification = new
                 {
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"Your vehicle service is starting",
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
@@ -87,7 +87,7 @@ public class ServiceProcessedIntegrationEventConsumer(
                 data = new
                 {
                     token = profile.DeviceToken,
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"Your vehicle service is starting", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,

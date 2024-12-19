@@ -87,15 +87,18 @@ public static class Mapper
             buyer.Email,
             buyer.PhoneNumber);
     }
+
     public static MechanicResponseDto ToMechanicDto(this Mechanic mechanic)
     {
         return new MechanicResponseDto(
             mechanic.MechanicId,
             mechanic.Name,
+            mechanic.ImageUrl,
             mechanic.Rating?.ToRatingDto(),
             mechanic.Performance,
             mechanic.IsRated);
     }
+
     public static IEnumerable<LineItemResponseDto> ToLineItemsDto(this ICollection<LineItem> lineItems)
     {
         foreach (var lineItem in lineItems)

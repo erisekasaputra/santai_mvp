@@ -1,9 +1,7 @@
-﻿using Account.Domain.Aggregates.UserAggregate;
+﻿ 
 using Account.Domain.Enumerations; 
 using Account.Domain.SeedWork;
-using Core.Exceptions;
-using System.Runtime.Intrinsics.Arm;
-
+using Core.Exceptions; 
 namespace Account.Domain.Aggregates.FleetAggregate;
 
 
@@ -103,19 +101,20 @@ public class Fleet : Entity, IAggregateRoot
         {
             throw new DomainException("Last inspection date must be in the past");
         }
-
-        HashedRegistrationNumber = hashedRegistrationNumber ?? throw new ArgumentNullException(nameof(hashedRegistrationNumber));
-        EncryptedRegistrationNumber = encryptedRegistrationNumber ?? throw new ArgumentNullException(nameof(encryptedRegistrationNumber));
-        VehicleType = vehicleType;
+   
         Brand = brand ?? throw new ArgumentNullException(nameof(brand));
         Model = model ?? throw new ArgumentNullException(nameof(model));
+
+        HashedRegistrationNumber = hashedRegistrationNumber;
+        EncryptedRegistrationNumber = encryptedRegistrationNumber;
+        VehicleType = vehicleType;
         YearOfManufacture = yearOfManufacture;
-        HashedChassisNumber = hashedChassisNumber ?? throw new ArgumentNullException(nameof(hashedChassisNumber));
-        EncryptedChassisNumber = encryptedChassisNumber ?? throw new ArgumentNullException(nameof(encryptedChassisNumber));
-        HashedEngineNumber = hashedEngineNumber ?? throw new ArgumentNullException(nameof(hashedEngineNumber));
-        EncryptedEngineNumber = encryptedEngineNumber ?? throw new ArgumentNullException(nameof(encryptedEngineNumber));
-        HashedInsuranceNumber = hashedInsuranceNumber ?? throw new ArgumentNullException(nameof(hashedInsuranceNumber));
-        EncryptedInsuranceNumber = encryptedInsuranceNumber ?? throw new ArgumentNullException(nameof(encryptedInsuranceNumber));
+        HashedChassisNumber = hashedChassisNumber;
+        EncryptedChassisNumber = encryptedChassisNumber;
+        HashedEngineNumber = hashedEngineNumber;
+        EncryptedEngineNumber = encryptedEngineNumber;
+        HashedInsuranceNumber = hashedInsuranceNumber;
+        EncryptedInsuranceNumber = encryptedInsuranceNumber;
         IsInsuranceValid = isInsuranceValid;
         LastInspectionDateUtc = lastInspectionDateUtc;
         OdometerReading = odometerReading;
@@ -157,18 +156,19 @@ public class Fleet : Entity, IAggregateRoot
             throw new DomainException("Last inspection date must be in the past");
         }
 
-        HashedRegistrationNumber = hashedRegistrationNumber ?? throw new ArgumentNullException(nameof(hashedRegistrationNumber));
-        EncryptedRegistrationNumber = encryptedRegistrationNumber ?? throw new ArgumentNullException(nameof(encryptedRegistrationNumber));
-        VehicleType = vehicleType;
         Brand = brand ?? throw new ArgumentNullException(nameof(brand));
         Model = model ?? throw new ArgumentNullException(nameof(model));
+
+        HashedRegistrationNumber = hashedRegistrationNumber;
+        EncryptedRegistrationNumber = encryptedRegistrationNumber;
+        VehicleType = vehicleType;
         YearOfManufacture = yearOfManufacture;
-        HashedChassisNumber = hashedChassisNumber ?? throw new ArgumentNullException(nameof(hashedChassisNumber));
-        EncryptedChassisNumber = encryptedChassisNumber ?? throw new ArgumentNullException(nameof(encryptedChassisNumber));
-        HashedEngineNumber = hashedEngineNumber ?? throw new ArgumentNullException(nameof(hashedEngineNumber));
-        EncryptedEngineNumber = encryptedEngineNumber ?? throw new ArgumentNullException(nameof(encryptedEngineNumber));
-        HashedInsuranceNumber = hashedInsuranceNumber ?? throw new ArgumentNullException(nameof(hashedInsuranceNumber));
-        EncryptedInsuranceNumber = encryptedInsuranceNumber ?? throw new ArgumentNullException(nameof(encryptedInsuranceNumber));
+        HashedChassisNumber = hashedChassisNumber;
+        EncryptedChassisNumber = encryptedChassisNumber;
+        HashedEngineNumber = hashedEngineNumber;
+        EncryptedEngineNumber = encryptedEngineNumber;
+        HashedInsuranceNumber = hashedInsuranceNumber;
+        EncryptedInsuranceNumber = encryptedInsuranceNumber;
         IsInsuranceValid = isInsuranceValid;
         LastInspectionDateUtc = lastInspectionDateUtc;
         OdometerReading = odometerReading;
@@ -176,9 +176,7 @@ public class Fleet : Entity, IAggregateRoot
         UsageStatus = usageStatus;
         OwnershipStatus = ownershipStatus;
         TransmissionType = transmissionType; 
-        Owner = new Owner(encryptedOwnerName 
-            ?? throw new ArgumentNullException(nameof(encryptedOwnerName)), encryptedOwnerAddress 
-            ?? throw new ArgumentNullException(nameof(encryptedOwnerAddress)));
+        Owner = new Owner(encryptedOwnerName, encryptedOwnerAddress);
         ImageUrl = imageUrl;
     }
 

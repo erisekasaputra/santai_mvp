@@ -9,6 +9,7 @@ public class ChatContactResponse
     public string BuyerName { get; init; }
     public string MechanicId { get; set; }
     public string MechanicName { get; set; }
+    public string MechanicImageUrl { get; set; }
     public string LastChatText { get; set; }
     public string ChatOriginUserId { get; set; }
     public string OrderCompletedAtUtc { get; set; }
@@ -23,6 +24,7 @@ public class ChatContactResponse
        string buyerName,
        string mechanicId,
        string mechanicName,
+       string mechanicImageUrl,
        string lastChatText,
        string chatOriginUserId,
        string orderCompletedAtUtc,
@@ -37,6 +39,7 @@ public class ChatContactResponse
         BuyerName = buyerName;
         MechanicId = mechanicId;
         MechanicName = mechanicName;
+        MechanicImageUrl = mechanicImageUrl;
         LastChatText = lastChatText;
         ChatOriginUserId = chatOriginUserId;
         OrderCompletedAtUtc = orderCompletedAtUtc;

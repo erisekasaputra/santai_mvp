@@ -9,7 +9,7 @@ public class Conversation
     public string MessageId { get; init; }
     public string OrderId { get; init; }
     public string OriginUserId { get; init; }
-    public string DestinationUserId { get; init; }
+    public string DestinationUserId { get; init; } 
     public string Text { get; set; }
     public string? Attachment { get; set; }
     public string? ReplyMessageId { get; set; }

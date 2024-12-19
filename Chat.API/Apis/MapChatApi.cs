@@ -23,36 +23,7 @@ public static class MapChatApi
 
         return app;
     }
-
-    private static async Task<IResult> GetLatestChat(
-        [AsParameters] LatestChatRequest request,
-        [FromServices] IChatService chatService,
-        [FromServices] IUserInfoService userInfoService,
-        [FromServices] IHubContext<ChatHub, IChatClient> _chatHub)
-    {
-        try
-        { 
-            var user = userInfoService.GetUserInfo();
-            if (user is null)
-            {
-                return TypedResults.Unauthorized();
-            }
-             
-            await foreach (var conversation in chatService.GetMessageByOrderId(request.OrderId.ToString(), request.Forward))
-            { 
-                await _chatHub.Clients.User(user.Sub.ToString()).ReceiveMessage(conversation.ToResponse());
-            }
-
-            return TypedResults.Ok(Result.Success(null, ResponseStatus.Ok));
-        }
-        catch (Exception ex)
-        {
-            // Return an internal server error with the exception message
-            return TypedResults.InternalServerError(Result.Failure(ex.Message, ResponseStatus.InternalServerError));
-        }
-    }
-
-
+     
 
     private static async Task<IResult> GetLatestChatByTimestamp(
         [AsParameters] LatestChatByTimestampRequest request,

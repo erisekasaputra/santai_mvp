@@ -79,7 +79,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
             {
                 notification = new
                 {
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"The mechanic is heading to your location",
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
@@ -87,7 +87,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
                 data = new
                 {
                     token = profile.DeviceToken,
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"The mechanic is heading to your location", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,

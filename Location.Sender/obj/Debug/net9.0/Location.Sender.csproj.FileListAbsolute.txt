@@ -107,10 +107,10 @@ C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\staticwebassets
 C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.Location.Sender.props
 C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.Location.Sender.props
 C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\staticwebassets.pack.json
+C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.27C3CD65.Up2Date
 C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.dll
 C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\refint\Location.Sender.dll
 C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.pdb
 C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\Location.Sender.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\ref\Location.Sender.dll
-C:\Projects\Projects\Santai.MVP\Location.Sender\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

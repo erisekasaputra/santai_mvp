@@ -411,6 +411,7 @@ C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\Notificatio
 C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\Notification.Worker.dll
 C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\Notification.Worker.pdb
 C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\AWSSDK.Core.dll
+C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\AWSSDK.DynamoDBv2.dll
 C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\AWSSDK.Extensions.NETCore.Setup.dll
 C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\AWSSDK.KeyManagementService.dll
 C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\AWSSDK.SimpleNotificationService.dll
@@ -595,11 +596,10 @@ C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\staticwebas
 C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.Notification.Worker.props
 C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.Notification.Worker.props
 C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\staticwebassets.pack.json
+C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\Notifica.23AB71EF.Up2Date
 C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\Notification.Worker.dll
 C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\refint\Notification.Worker.dll
 C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\Notification.Worker.pdb
 C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\Notification.Worker.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\ref\Notification.Worker.dll
-C:\Projects\Projects\Santai.MVP\Notification.Worker\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
-C:\Projects\Projects\Santai.MVP\Notification.Worker\bin\Debug\net9.0\AWSSDK.DynamoDBv2.dll

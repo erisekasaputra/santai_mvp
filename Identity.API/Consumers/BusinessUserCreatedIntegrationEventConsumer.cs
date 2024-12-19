@@ -71,6 +71,7 @@ public class BusinessUserCreatedIntegrationEventConsumer(
                 {
                     users.Add((new ApplicationUser()
                     {
+                        PhoneNumberConfirmed = true,
                         Id = businessUser.UserId.ToString(),
                         UserName = businessUser.PhoneNumber,
                         PhoneNumber = businessUser.PhoneNumber,
@@ -116,6 +117,7 @@ public class BusinessUserCreatedIntegrationEventConsumer(
                     {
                         users.Add((new()
                         {
+                            PhoneNumberConfirmed = true,
                             Id = staff.Id.ToString(),
                             UserName = staff.PhoneNumber,
                             PhoneNumber = staff.PhoneNumber,

@@ -13,7 +13,8 @@ public class ServiceProcessedDomainEventHandler(IMediator mediator) : INotificat
         await _mediator.Publish(new ServiceProcessedIntegrationEvent(
                 notification.OrderId,
                 notification.BuyerId,
-                notification.MechanicId 
+                notification.MechanicId,
+                notification.MechanicName
             ), cancellationToken);
     }
 }

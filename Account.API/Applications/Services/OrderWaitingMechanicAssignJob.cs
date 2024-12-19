@@ -39,7 +39,7 @@ public class OrderWaitingMechanicAssignJob : BackgroundService
             }
 
 
-            (bool isSuccess, string orderId, string buyerId, string mechanicId) = await _mechanicCache.ProcessOrdersWaitingMechanicAssignFromQueueAsync();
+            (bool isSuccess, string orderId, string buyerId, string mechanicId, string mechanicName, string mechanicImageUrl) = await _mechanicCache.ProcessOrdersWaitingMechanicAssignFromQueueAsync();
 
             if (isSuccess && !string.IsNullOrEmpty(orderId) && !string.IsNullOrEmpty(buyerId) && !string.IsNullOrEmpty(mechanicId))
             {
@@ -52,8 +52,9 @@ public class OrderWaitingMechanicAssignJob : BackgroundService
                     Guid.Parse(orderId), 
                     Guid.Parse(buyerId), 
                     Guid.Parse(mechanicId), 
-                    orderConfiguration.CurrentValue.OrderMechanicConfirmTimeToAcceptInSeconds),
-                    
+                    mechanicName,
+                    mechanicImageUrl,
+                    orderConfiguration.CurrentValue.OrderMechanicConfirmTimeToAcceptInSeconds),  
                     stoppingToken);
 
                 await unitOfWork.CommitTransactionAsync(stoppingToken);

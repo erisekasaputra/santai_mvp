@@ -14,6 +14,8 @@ public class UpdateLocationByUserIdCommandHandler(IMechanicCache mechanicCache) 
         var mechanic = new MechanicExistence(
             request.MechanicId.ToString(),
             string.Empty,
+            string.Empty,
+            string.Empty,
             request.Latitude,
             request.Longitude,
             MechanicStatus.Available); 

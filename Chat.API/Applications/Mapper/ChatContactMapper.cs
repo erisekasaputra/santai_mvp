@@ -12,6 +12,7 @@ public static class ChatContactMapper
             contact.LastChatTimestamp,
             contact.BuyerId,
             contact.BuyerName,
+            contact.MechanicImageUrl ?? "",
             contact.MechanicId ?? string.Empty,
             contact.MechanicName ?? string.Empty,
             contact.LastChatText ?? string.Empty,

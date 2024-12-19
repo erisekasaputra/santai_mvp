@@ -5,4 +5,5 @@ namespace Ordering.Domain.Events;
 public record ServiceIncompletedDomainEvent(
     Guid OrderId,
     Guid BuyerId,
-    Guid MechanicId) : INotification;
+    Guid MechanicId,
+    string MechanicName) : INotification;

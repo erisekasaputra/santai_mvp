@@ -358,10 +358,10 @@ C:\Projects\Projects\Santai.MVP\FileHub.API\obj\Debug\net9.0\staticwebassets\msb
 C:\Projects\Projects\Santai.MVP\FileHub.API\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.FileHub.API.props
 C:\Projects\Projects\Santai.MVP\FileHub.API\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.FileHub.API.props
 C:\Projects\Projects\Santai.MVP\FileHub.API\obj\Debug\net9.0\staticwebassets.pack.json
+C:\Projects\Projects\Santai.MVP\FileHub.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Projects\Projects\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub..299FAB2E.Up2Date
 C:\Projects\Projects\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.dll
 C:\Projects\Projects\Santai.MVP\FileHub.API\obj\Debug\net9.0\refint\FileHub.API.dll
 C:\Projects\Projects\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.pdb
 C:\Projects\Projects\Santai.MVP\FileHub.API\obj\Debug\net9.0\FileHub.API.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\FileHub.API\obj\Debug\net9.0\ref\FileHub.API.dll
-C:\Projects\Projects\Santai.MVP\FileHub.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

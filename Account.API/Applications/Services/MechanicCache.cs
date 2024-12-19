@@ -71,14 +71,22 @@ public class MechanicCache : IMechanicCache
     } 
   
 
-    public async Task<bool> Activate(string mechanicId)
+    public async Task<bool> Activate(string mechanicId, string mechanicName, string mechanicImageUrl)
     {
         var db = _connectionMultiplexer.GetDatabase(); 
         var mechanic = await GetMechanicHashSetAsync(db, mechanicId);
 
         if (mechanic is null)
         {
-            var mech = new MechanicExistence(mechanicId.ToString(), string.Empty, 0, 0, MechanicStatus.Available);  
+            var mech = new MechanicExistence(
+                mechanicId.ToString(),
+                mechanicName,
+                mechanicImageUrl,
+                string.Empty,
+                0,
+                0,
+                MechanicStatus.Available);  
+
             await CreateMechanicHashSetAsync(db, mech); 
             await CreateGeoAsync(db, mech);
 
@@ -86,7 +94,15 @@ public class MechanicCache : IMechanicCache
         }
         else
         {
-            var mech = new MechanicExistence(mechanicId.ToString(), string.Empty, 0, 0, MechanicStatus.Available);   
+            var mech = new MechanicExistence(
+                mechanicId.ToString(),
+                mechanicName,
+                mechanicImageUrl,
+                string.Empty,
+                0,
+                0,
+                MechanicStatus.Available);
+            
             if (mechanic.Status == MechanicStatus.Unavailable || mechanic.Status == MechanicStatus.Available)
             { 
                 await CreateMechanicHashSetAsync(db, mech); 
@@ -97,19 +113,33 @@ public class MechanicCache : IMechanicCache
         }
     }
 
-    public async Task<bool> Deactivate(string mechanicId)
+    public async Task<bool> Deactivate(string mechanicId, string mechanicName, string mechanicImageUrl)
     {
         var db = _connectionMultiplexer.GetDatabase();
         var mechanic = await GetMechanicHashSetAsync(db, mechanicId); 
         if (mechanic is null)
         {
-            var mech = new MechanicExistence(mechanicId.ToString(), string.Empty, 0, 0, MechanicStatus.Unavailable);
+            var mech = new MechanicExistence(
+                mechanicId.ToString(),
+                mechanicName,
+                mechanicImageUrl,
+                string.Empty,
+                0,
+                0,
+                MechanicStatus.Unavailable);
             await CreateMechanicHashSetAsync(db, mech);
             return true;
         }
         else
         {
-            var mech = new MechanicExistence(mechanicId.ToString(), string.Empty, 0, 0, MechanicStatus.Unavailable);
+            var mech = new MechanicExistence(
+                mechanicId.ToString(),
+                mechanicName,
+                mechanicImageUrl,
+                string.Empty,
+                0,
+                0,
+                MechanicStatus.Unavailable);
             if (mechanic.Status == MechanicStatus.Available || mechanic.Status == MechanicStatus.Unavailable)
             {
                 await CreateMechanicHashSetAsync(db, mech); 
@@ -620,14 +650,14 @@ public class MechanicCache : IMechanicCache
     } 
 
 
-    public async Task<(bool isSuccess, string orderId, string buyerId, string mechanicId)> ProcessOrdersWaitingMechanicAssignFromQueueAsync()
+    public async Task<(bool isSuccess, string orderId, string buyerId, string mechanicId, string mechanicName, string mechanicImageUrl)> ProcessOrdersWaitingMechanicAssignFromQueueAsync()
     {
         var db = _connectionMultiplexer.GetDatabase(); 
 
         var orderId = await db.ListLeftPopAsync(CacheKey.OrderWaitingMechanicAssignQueue());
         if (orderId == string.Empty || string.IsNullOrEmpty(orderId) || orderId.IsNullOrEmpty)
         {
-            return (false, string.Empty, string.Empty, string.Empty);
+            return (false, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
         }
 
         return await TryAssignMechanicToOrderAsync(db, orderId.ToString());
@@ -636,7 +666,7 @@ public class MechanicCache : IMechanicCache
 
 
 
-    private async Task<(bool isSuccess, string orderId, string buyerId, string mechanicId)> TryAssignMechanicToOrderAsync(IDatabase db, string orderId)
+    private async Task<(bool isSuccess, string orderId, string buyerId, string mechanicId, string mechanicName, string mechanicImageUrl)> TryAssignMechanicToOrderAsync(IDatabase db, string orderId)
     {
         try
         {
@@ -648,12 +678,12 @@ public class MechanicCache : IMechanicCache
                 await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
                 await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
 
-                return (false, string.Empty, string.Empty, string.Empty);
+                return (false, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
             }
 
             var order = await GetOrderTaskAsync(db, orderId);
             if (order is null || order.OrderStatus == OrderTaskStatus.OrderTaskCompleted || order.OrderStatus == OrderTaskStatus.MechanicAssigned) 
-                return (false, string.Empty, string.Empty, string.Empty);
+                return (false, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
 
             var mechanics = await db.GeoRadiusAsync(
                 CacheKey.MechanicGeo(), order.Longitude, order.Latitude, 30, GeoUnit.Miles, count: 100, order: Order.Ascending);
@@ -695,7 +725,7 @@ public class MechanicCache : IMechanicCache
                         await OrderWaitingConfirmMechanic(db, order, mechanicData);
 
 
-                        return (true, order.OrderId, order.BuyerId, mechanicId);
+                        return (true, order.OrderId, order.BuyerId, mechanicId, mechanicData.Name, mechanicData.ImageUrl);
                     }
                 }
             }
@@ -703,14 +733,14 @@ public class MechanicCache : IMechanicCache
             await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
             await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
 
-            return (false, string.Empty, string.Empty, string.Empty);
+            return (false, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
         }
         catch (Exception)
         {
             await db.ListRemoveAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId);
             await db.ListRightPushAsync(CacheKey.OrderWaitingMechanicAssignQueue(), orderId); 
 
-            return (false, string.Empty, string.Empty, string.Empty);
+            return (false, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty);
         }
     }
 
@@ -899,10 +929,12 @@ public class MechanicCache : IMechanicCache
         var longitude = RedisValueToDouble(hashEntries.FirstOrDefault(x => x.Name == nameof(MechanicExistence.Longitude)).Value);
         var orderId = RedisValueToString(hashEntries.FirstOrDefault(x => x.Name == nameof(MechanicExistence.OrderId)).Value);
         var status = RedisValueToString(hashEntries.FirstOrDefault(x => x.Name == nameof(MechanicExistence.Status)).Value);
+        var name = RedisValueToString(hashEntries.FirstOrDefault(x => x.Name == nameof(MechanicExistence.Name)).Value);
+        var imageUrl = RedisValueToString(hashEntries.FirstOrDefault(x => x.Name == nameof(MechanicExistence.ImageUrl)).Value); 
 
 
 
-        return new MechanicExistence(mechanicId.ToString(), orderId, latitude, longitude, status);
+        return new MechanicExistence(mechanicId.ToString(), name, imageUrl, orderId, latitude, longitude, status);
     }
 
 
@@ -919,8 +951,18 @@ public class MechanicCache : IMechanicCache
         var latitude = RedisValueToDouble(hashEntries.FirstOrDefault(x => x.Name == nameof(OrderTask.Latitude)).Value);
         var longitude = RedisValueToDouble(hashEntries.FirstOrDefault(x => x.Name == nameof(OrderTask.Longitude)).Value);
         var status = RedisValueToString(hashEntries.FirstOrDefault(x => x.Name == nameof(OrderTask.OrderStatus)).Value);
+        var mechanicName = RedisValueToString(hashEntries.FirstOrDefault(x => x.Name == nameof(OrderTask.MechanicName)).Value);
+        var mechanicImageUrl = RedisValueToString(hashEntries.FirstOrDefault(x => x.Name == nameof(OrderTask.MechanicImageUrl)).Value);
 
-        return new OrderTask(orderId.ToString(), buyerId, mechanicId, latitude, longitude, status);
+        return new OrderTask(
+            orderId.ToString(),
+            buyerId,
+            mechanicId,
+            mechanicName,
+            mechanicImageUrl,
+            latitude,
+            longitude,
+            status);
     }
 
     public async Task<OrderTask?> GetOrderTaskByOrderIdAsync(string orderId)
@@ -974,7 +1016,9 @@ public class MechanicCache : IMechanicCache
                 new (nameof(mechanic.Latitude), mechanic.Latitude),
                 new (nameof(mechanic.Longitude), mechanic.Longitude),
                 new (nameof(mechanic.MechanicId), mechanic.MechanicId),
-                new (nameof(mechanic.Status), mechanic.Status)
+                new (nameof(mechanic.Name), mechanic.Name),
+                new (nameof(mechanic.ImageUrl), mechanic.ImageUrl),
+                new (nameof(mechanic.Status), mechanic.Status),
             };
 
             await db.HashSetAsync(hashKey, hashEntries);
@@ -997,7 +1041,9 @@ public class MechanicCache : IMechanicCache
                 new (nameof(order.MechanicId), order.MechanicId),
                 new (nameof(order.Latitude), order.Latitude),
                 new (nameof(order.Longitude), order.Longitude),
-                new (nameof(order.OrderStatus), order.OrderStatus)
+                new (nameof(order.OrderStatus), order.OrderStatus), 
+                new (nameof(order.MechanicName), order.MechanicName),
+                new (nameof(order.MechanicImageUrl), order.MechanicImageUrl),
             };
 
             await db.HashSetAsync(hashKey, hashEntries);

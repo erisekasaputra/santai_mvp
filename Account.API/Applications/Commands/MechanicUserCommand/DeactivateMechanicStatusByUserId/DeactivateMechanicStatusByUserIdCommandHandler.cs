@@ -53,7 +53,7 @@ public class DeactivateMechanicStatusByUserIdCommandHandler : IRequestHandler<De
 
             var result = await _asyncRetryPolicy.ExecuteAsync<Result>(async () =>
             { 
-                var result = await _cache.Deactivate(request.MechanicId.ToString());
+                var result = await _cache.Deactivate(request.MechanicId.ToString(), mechanic.Name, mechanic.PersonalInfo.ProfilePictureUrl ?? "");
 
                 if (result)
                 { 

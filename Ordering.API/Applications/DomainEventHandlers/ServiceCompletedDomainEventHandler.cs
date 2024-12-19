@@ -13,6 +13,7 @@ public class ServiceCompletedDomainEventHandler(IMediator mediator) : INotificat
         await _mediator.Publish(new ServiceCompletedIntegrationEvent(
             notification.OrderId,
             notification.BuyerId,
-            notification.MechanicId), cancellationToken);
+            notification.MechanicId,
+            notification.MechanicName), cancellationToken);
     }
 }

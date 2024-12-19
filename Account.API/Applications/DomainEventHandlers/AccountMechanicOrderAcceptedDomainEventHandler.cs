@@ -16,6 +16,7 @@ public class AccountMechanicOrderAcceptedDomainEventHandler(
                 notification.BuyerId,
                 notification.MechanicId, 
                 notification.MechanicName,
+                notification.MechanicImageUrl,
                 notification.Performance),
             cancellationToken);
     }

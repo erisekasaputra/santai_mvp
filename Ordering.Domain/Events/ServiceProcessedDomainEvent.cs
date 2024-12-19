@@ -6,4 +6,5 @@ namespace Ordering.Domain.Events;
 public record ServiceProcessedDomainEvent(
     Guid OrderId,
     Guid BuyerId,
-    Guid MechanicId) : INotification;
+    Guid MechanicId,
+    string MechanicName) : INotification;

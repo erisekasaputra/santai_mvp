@@ -11,11 +11,11 @@ public class LoginUserRequest
        string phoneNumber,
        string password,
        string regionCode,
-       string returnUrl)
+       string? returnUrl)
     { 
         PhoneNumber = phoneNumber.Trim();
         Password = password.Trim();
         RegionCode = regionCode.Trim();
-        ReturnUrl = returnUrl.Trim();
+        ReturnUrl = returnUrl?.Trim();
     }
 }

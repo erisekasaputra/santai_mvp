@@ -76,7 +76,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
             {
                 notification = new
                 {
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"Uhh, Order has been canceled by customer",
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
@@ -84,7 +84,7 @@ IHubContext<ActivityHub, IActivityClient> activityHubContecxt,
                 data = new
                 {
                     token = profile.DeviceToken,
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"Uhh, Order has been canceled by customer", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,

@@ -15,8 +15,8 @@ public class MechanicUser : BaseUser
     public PersonalInfo PersonalInfo { get; private set; } 
     public ICollection<Certification>? Certifications { get; private set; } 
     public ICollection<DrivingLicense>? DrivingLicenses { get; private set; } 
-    public ICollection<NationalIdentity>? NationalIdentities { get; private set; } 
-    public bool IsVerified { get; private set; }
+    public ICollection<NationalIdentity>? NationalIdentities { get; private set; }  
+    public VerificationState IsVerified { get; private set; } 
     public int TotalEntireJob { get; private set; } = 0;
     public int TotalCancelledJob { get; private set; } = 0;
     public int TotalEntireJobBothCompleteIncomplete { get; private set; } = 0;
@@ -47,7 +47,7 @@ public class MechanicUser : BaseUser
 
     public void UnblockAccount()
     {
-        if (!IsVerified) 
+        if (IsVerified != VerificationState.Accepted) 
         {
             throw new DomainException("Your account has not been verified");
         }
@@ -115,7 +115,7 @@ public class MechanicUser : BaseUser
         Id = identityId;
         PersonalInfo = personalInfo;
         Ratings = [];
-        IsVerified = false;
+        IsVerified = VerificationState.Waiting;
         IsActive = false;
         DisablingReason = string.Empty;
         RaiseMechanicUserCreatedDomainEvent(this);
@@ -169,7 +169,7 @@ public class MechanicUser : BaseUser
             throw new DomainException("Can not set driving license because it is already set");
         } 
 
-        if (IsVerified)
+        if (IsVerified == VerificationState.Accepted)
         {
             throw new DomainException($"Can not set driving license because it is verified");
         }
@@ -182,6 +182,8 @@ public class MechanicUser : BaseUser
             encryptedLicenseNumber,
             frontSideImageUrl,
             backSideImageUrl));
+
+        IsVerified = VerificationState.Waiting;
 
         RaiseDrivingLicenseSetDomainEvent();
     }  
@@ -197,7 +199,7 @@ public class MechanicUser : BaseUser
             throw new DomainException("Can not set national id because it is already set");
         } 
 
-        if (IsVerified)
+        if (IsVerified == VerificationState.Accepted)
         {
             throw new DomainException($"Can not set national id because it is verified");
         }
@@ -210,6 +212,8 @@ public class MechanicUser : BaseUser
             encryptedIdentificationNumber,
             frontSideImageUrl,
             backSideImageUrl));
+
+        IsVerified = VerificationState.Waiting;
 
         RaiseNationalIDSetDomainEvent();
     } 
@@ -324,14 +328,40 @@ public class MechanicUser : BaseUser
             throw new DomainException("National identity is waiting for verification.");
         }
 
-        IsVerified = true;  
-        IsActive = true;
+        IsVerified = VerificationState.Accepted;  
         RaiseMechanicDocumentVerifiedDomainEvent(this);
+    }
+
+
+    public void RejectDocument()
+    {
+        if (IsVerified != VerificationState.Waiting) 
+        {
+            throw new DomainException("Verification must be in waiting stage");
+        }
+         
+        IsVerified = VerificationState.Rejected;
+
+        foreach (var identity in NationalIdentities ?? []) {
+            identity.RejectDocument();
+        }
+
+        foreach (var license in DrivingLicenses ?? [])
+        {
+            license.RejectDocument();
+        }
+
+        RaiseMechanicDocumentRejectedDomainEvent(this);
     }
 
     private void RaiseMechanicDocumentVerifiedDomainEvent(MechanicUser user)
     {
         AddDomainEvent(new MechanicDocumentVerifiedDomainEvent(user));
+    }
+
+    private void RaiseMechanicDocumentRejectedDomainEvent(MechanicUser user)
+    {
+        AddDomainEvent(new MechanicDocumentRejectedDomainEvent(user));
     }
 
     private void RaiseMechanicUserCreatedDomainEvent(MechanicUser mechanisUser)

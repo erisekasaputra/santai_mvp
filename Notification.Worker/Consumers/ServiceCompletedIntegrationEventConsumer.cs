@@ -81,7 +81,7 @@ public class ServiceCompletedIntegrationEventConsumer(
             {
                 notification = new
                 {
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"Your service is complete, and the mechanic has successfully repaired your vehicle",
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
@@ -89,7 +89,7 @@ public class ServiceCompletedIntegrationEventConsumer(
                 data = new
                 {
                     token = profile.DeviceToken,
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"Your service is complete, and the mechanic has successfully repaired your vehicle", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,

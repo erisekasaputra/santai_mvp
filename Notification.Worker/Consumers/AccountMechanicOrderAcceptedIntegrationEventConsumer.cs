@@ -78,7 +78,7 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
             {
                 notification = new
                 {
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"Mechanic {orderData.MechanicName} has been assigned and will be heading to your location shortly",
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
@@ -86,7 +86,7 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
                 data = new
                 {
                     token = profile.DeviceToken,
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"Mechanic {orderData.MechanicName} has been assigned and will be heading to your location shortly", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,

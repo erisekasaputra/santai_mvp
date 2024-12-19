@@ -110,10 +110,10 @@ C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\staticwebassets\msb
 C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.Chat.Client.props
 C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.Chat.Client.props
 C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\staticwebassets.pack.json
+C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Cli.CD659857.Up2Date
 C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.dll
 C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\refint\Chat.Client.dll
 C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.pdb
 C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\Chat.Client.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\ref\Chat.Client.dll
-C:\Projects\Projects\Santai.MVP\Chat.Client\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

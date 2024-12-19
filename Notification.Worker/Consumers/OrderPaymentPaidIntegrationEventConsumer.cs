@@ -71,7 +71,7 @@ public class OrderPaymentPaidIntegrationEventConsumer(
             {
                 notification = new
                 {
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"Your payment has been successfully received. Thank you for your trust and support",
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
@@ -79,7 +79,7 @@ public class OrderPaymentPaidIntegrationEventConsumer(
                 data = new
                 {
                     token = profile.DeviceToken,
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"Your payment has been successfully received. Thank you for your trust and support.", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,

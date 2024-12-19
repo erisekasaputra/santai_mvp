@@ -13,6 +13,7 @@ public class ChatContact
     public string BuyerName { get; init; } 
     public string? MechanicId { get; set; } 
     public string? MechanicName { get; set; } 
+    public string? MechanicImageUrl { get; set; } 
     public string? LastChatText { get; set; } 
     public string? ChatOriginUserId { get; set; }
     public DateTime? OrderCompletedAtUtc { get; set; }
@@ -49,16 +50,18 @@ public class ChatContact
         ChatUpdateTimestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
     }
 
-    public void SetMechanic(string mechanicId, string mechanicName)
+    public void SetMechanic(string mechanicId, string mechanicName, string mechanicImageUrl)
     { 
         MechanicId = mechanicId;
         MechanicName = mechanicName;
+        MechanicImageUrl = mechanicImageUrl;
     }
 
     public void ResetMechanic()
     {
         MechanicId = null;  
         MechanicName = null;
+        MechanicImageUrl = null;
     }
 
     public void SetOrderComplete(int totalHoursChatActiveAfterChatComplete = 24)

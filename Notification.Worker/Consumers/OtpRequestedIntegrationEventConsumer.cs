@@ -28,7 +28,9 @@ public class OtpRequestedIntegrationEventConsumer(
             if (otp.Provider == Core.Enumerations.OtpProviderType.Sms) 
             { 
                 string template = $"Your token is: {otp.Token}. Please keep it confidential and do not share it with anyone. For your security, never disclose this token to others";
+
                 await _messageService.PublishSmsAsync(otp.PhoneNumber, template);
+                Console.WriteLine(otp.Token);
             }
         }
         catch (Exception ex) 

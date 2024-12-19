@@ -10,6 +10,7 @@ public class Mechanic : Entity
     public Order? Order { get; private set; }
     public Guid MechanicId { get; private set; }
     public string Name { get; private set; }
+    public string ImageUrl { get; private set; }
     public Rating? Rating { get; private set; }
     public decimal Performance { get; private set; }
     public bool IsRated => Rating is not null && Rating.Value > 0.0M;
@@ -17,17 +18,20 @@ public class Mechanic : Entity
     public Mechanic()
     {
         Name = string.Empty;
+        ImageUrl = string.Empty;
     }
 
     public Mechanic(
         Guid orderId,
         Guid mechanicId,
         string name,
+        string imageUrl,
         decimal perfomance)
     {
         OrderId = orderId;
         MechanicId = mechanicId;
         Name = name;
+        ImageUrl = imageUrl;
         Performance = perfomance;
 
     }

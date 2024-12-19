@@ -1,4 +1,5 @@
 ﻿using Account.API.Applications.Services.Interfaces;
+using Account.Domain.Enumerations;
 using Account.Domain.SeedWork;
 using Core.CustomMessages;
 using Core.Exceptions;
@@ -56,9 +57,14 @@ public class ActivateMechanicStatusByUserIdCommandHandler : IRequestHandler<Acti
 
             var result = await _asyncRetryPolicy.ExecuteAsync<Result>(async () =>
             {
-                if (!mechanic.IsVerified)
+                if (mechanic.IsVerified == VerificationState.Waiting)
                 {
                     return Result.Failure("Your account has not been verified", ResponseStatus.BadRequest);
+                }
+
+                if (mechanic.IsVerified == VerificationState.Rejected)
+                {
+                    return Result.Failure("Your account was rejected", ResponseStatus.BadRequest);
                 }
 
                 if (!mechanic.IsActive)
@@ -66,7 +72,7 @@ public class ActivateMechanicStatusByUserIdCommandHandler : IRequestHandler<Acti
                     return Result.Failure($"Your account has been disabled by Santai Team. Reason: {mechanic.DisablingReason}", ResponseStatus.BadRequest);
                 }
 
-                var result = await _cache.Activate(request.MechanicId.ToString());
+                var result = await _cache.Activate(request.MechanicId.ToString(), mechanic.Name, mechanic.PersonalInfo.ProfilePictureUrl ?? "");
 
                 if (result)
                 { 

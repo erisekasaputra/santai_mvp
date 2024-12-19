@@ -80,7 +80,7 @@ public class ServiceIncompletedIntegrationEventConsumer(
             {
                 notification = new
                 {
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"Your service is complete, but the mechanic was unable to repair your vehicle",
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
@@ -88,7 +88,7 @@ public class ServiceIncompletedIntegrationEventConsumer(
                 data = new
                 {
                     token = profile.DeviceToken,
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"Your service is complete, but the mechanic was unable to repair your vehicle", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,

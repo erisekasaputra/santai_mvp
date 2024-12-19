@@ -48,14 +48,14 @@ public class ChatSentIntegrationEventConsumer(
             {
                 notification = new
                 {
-                    title = "Chat",
+                    title = "SANTAIMOTO",
                     body = context.Message.Text
                 },
                 to = profile.DeviceToken,
                 data = new
                 {
                     token = profile.DeviceToken,
-                    title = "New Chat",
+                    title = "SANTAIMOTO",
                     body = context.Message.Text, 
                     click_action = "FLUTTER_NOTIFICATION_CLICK", 
                     messageId = context.Message.MessageId,

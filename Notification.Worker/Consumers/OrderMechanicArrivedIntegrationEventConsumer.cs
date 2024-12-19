@@ -81,7 +81,7 @@ public class OrderMechanicArrivedIntegrationEventConsumer(
             {
                 notification = new
                 {
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"The mechanic has arrived at your location. Please provide detailed directions to assist them in reaching you more efficiently.",
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
@@ -89,7 +89,7 @@ public class OrderMechanicArrivedIntegrationEventConsumer(
                 data = new
                 {
                     token = profile.DeviceToken, 
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"The mechanic has arrived at your location. Please provide detailed directions to assist them in reaching you more efficiently.",  
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,

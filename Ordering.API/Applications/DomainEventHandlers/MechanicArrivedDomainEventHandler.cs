@@ -14,6 +14,6 @@ public class MechanicArrivedDomainEventHandler(IMediator mediator) : INotificati
             notification.OrderId,
             notification.BuyerId,
             notification.MechanicId,
-            notification.MechanicName), cancellationToken);
+            notification.MechanicName ), cancellationToken);
     }
 }

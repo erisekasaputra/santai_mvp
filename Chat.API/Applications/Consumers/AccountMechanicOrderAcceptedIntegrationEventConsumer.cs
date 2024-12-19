@@ -21,7 +21,7 @@ public class AccountMechanicOrderAcceptedIntegrationEventConsumer(
             return;
         } 
 
-        contact.SetMechanic(context.Message.MechanicId.ToString(), context.Message.MechanicName);
+        contact.SetMechanic(context.Message.MechanicId.ToString(), context.Message.MechanicName, context.Message.MechanicImageUrl);
 
         await _chatService.UpdateChatContact(contact);
         

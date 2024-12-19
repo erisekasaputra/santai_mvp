@@ -32,17 +32,17 @@ public class DeleteMechanicUserByUserIdCommandHandler : IRequestHandler<DeleteMe
         try
         {
             await _cache.PingAsync(); 
-            var mechanicUser = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.UserId);
+            var mechanic = await _unitOfWork.BaseUsers.GetMechanicUserByIdAsync(request.UserId);
 
-            if (mechanicUser is null)
+            if (mechanic is null)
             {
                 await _unitOfWork.RollbackTransactionAsync(cancellationToken);
                 return Result.Failure($"Mechanic user not found", ResponseStatus.NotFound);
             }
 
-            mechanicUser.Delete(); 
-            await _cache.Deactivate(request.UserId.ToString());  
-            _unitOfWork.BaseUsers.Delete(mechanicUser);   
+            mechanic.Delete(); 
+            await _cache.Deactivate(request.UserId.ToString(), mechanic.Name, mechanic.PersonalInfo.ProfilePictureUrl ?? "");  
+            _unitOfWork.BaseUsers.Delete(mechanic);   
             await _unitOfWork.CommitTransactionAsync(cancellationToken); 
             return Result.Success(null, ResponseStatus.NoContent);
         }

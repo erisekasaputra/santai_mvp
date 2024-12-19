@@ -31,6 +31,8 @@ public class LocationHub : Hub
         var mechanic = new MechanicExistence(
             mechanicId,
             string.Empty,
+            string.Empty,
+            string.Empty,
             latitude,
             longitude,
             MechanicStatus.Available);

@@ -3,8 +3,9 @@
 namespace Ordering.Domain.Events;
 
 public record MechanicAssignedDomainEvent(
-    Guid OrderId , 
+    Guid OrderId, 
     Guid BuyerId, 
     Guid MechanicId,
     string MechanicName,
+    string MechanicImageUrl,
     int ConfirmDeadlineInSeconds) : INotification;

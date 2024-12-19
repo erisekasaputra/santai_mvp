@@ -73,7 +73,7 @@ public class OrderFindingMechanicIntegrationEventConsumer(
             {
                 notification = new
                 {
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"Your order is currently being processed, and a mechanic is being scheduled to assist you shortly",
                     click_action = "FLUTTER_NOTIFICATION_CLICK"
                 },
@@ -81,7 +81,7 @@ public class OrderFindingMechanicIntegrationEventConsumer(
                 data = new
                 {
                     token = profile.DeviceToken, 
-                    title = "Santai",
+                    title = "SANTAIMOTO",
                     body = $"Your order is currently being processed, and a mechanic is being scheduled to assist you shortly", 
                     click_action = "FLUTTER_NOTIFICATION_CLICK",
                     orderId = orderData.OrderId,

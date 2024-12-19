@@ -628,10 +628,10 @@ C:\Projects\Projects\Santai.MVP\Identity.API\obj\Debug\net9.0\staticwebassets\ms
 C:\Projects\Projects\Santai.MVP\Identity.API\obj\Debug\net9.0\staticwebassets\msbuild.buildMultiTargeting.Identity.API.props
 C:\Projects\Projects\Santai.MVP\Identity.API\obj\Debug\net9.0\staticwebassets\msbuild.buildTransitive.Identity.API.props
 C:\Projects\Projects\Santai.MVP\Identity.API\obj\Debug\net9.0\staticwebassets.pack.json
+C:\Projects\Projects\Santai.MVP\Identity.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt
 C:\Projects\Projects\Santai.MVP\Identity.API\obj\Debug\net9.0\Identity.FA0E42A3.Up2Date
 C:\Projects\Projects\Santai.MVP\Identity.API\obj\Debug\net9.0\Identity.API.dll
 C:\Projects\Projects\Santai.MVP\Identity.API\obj\Debug\net9.0\refint\Identity.API.dll
 C:\Projects\Projects\Santai.MVP\Identity.API\obj\Debug\net9.0\Identity.API.pdb
 C:\Projects\Projects\Santai.MVP\Identity.API\obj\Debug\net9.0\Identity.API.genruntimeconfig.cache
 C:\Projects\Projects\Santai.MVP\Identity.API\obj\Debug\net9.0\ref\Identity.API.dll
-C:\Projects\Projects\Santai.MVP\Identity.API\obj\Debug\net9.0\staticwebassets.upToDateCheck.txt

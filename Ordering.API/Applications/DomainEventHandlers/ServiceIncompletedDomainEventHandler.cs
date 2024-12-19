@@ -12,7 +12,8 @@ public class ServiceIncompletedDomainEventHandler(IMediator mediator) : INotific
         await _mediator.Publish(new ServiceIncompletedIntegrationEvent(
                 notification.OrderId,
                 notification.BuyerId,
-                notification.MechanicId
+                notification.MechanicId,
+                notification.MechanicName  
             ), cancellationToken);
     }
 }

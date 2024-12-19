@@ -16,6 +16,8 @@ public class OrderFindingMechanicIntegrationEventConsumer(
                 context.Message.OrderId.ToString(),
                 context.Message.BuyerId.ToString(),
                 string.Empty,
+                string.Empty,
+                string.Empty,
                 context.Message.Latitude,
                 context.Message.Longitude,
                 OrderTaskStatus.WaitingMechanic));
