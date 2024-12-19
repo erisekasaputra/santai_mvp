@@ -12,7 +12,7 @@ namespace Account.Domain.Aggregates.UserAggregate;
 
 public abstract class BaseUser : Entity, IAggregateRoot
 {     
-    public string Name { get; set; }
+    public string Name { get; set; } 
     public string? HashedEmail { get; private set; } 
     public string? EncryptedEmail { get; private set; } 
     public bool IsEmailVerified { get; private set; } 

@@ -4,6 +4,7 @@ public record StaffResponseDto(
     string? Email,
     string? PhoneNumber,
     string Name,
+    string ImageUrl,
     AddressResponseDto Address,
     string TimeZoneId,
     IEnumerable<FleetResponseDto> Fleets);

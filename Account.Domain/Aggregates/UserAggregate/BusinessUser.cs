@@ -10,6 +10,7 @@ public class BusinessUser : BaseUser
 {
     public string Code { get; private init; }
     public string BusinessName { get; private set; }
+    public string BusinessImageUrl { get; private set; }
     public string EncryptedContactPerson { get; private set; }
     public string? EncryptedTaxId { get; private set; }
     public string? WebsiteUrl { get; private set; }
@@ -19,6 +20,7 @@ public class BusinessUser : BaseUser
     public ICollection<BusinessLicense>? BusinessLicenses { get; private set; } 
     protected BusinessUser() : base()
     {
+        BusinessImageUrl = string.Empty;
         Password = string.Empty;
         Code = null!;
         BusinessName = null!;
@@ -30,6 +32,7 @@ public class BusinessUser : BaseUser
         string encryptedPhoneNumber,
         Address address,
         string businessName,
+        string businessImageUrl,
         string? encryptedTaxId,
         string encryptedContactPerson,
         string? websiteUrl,
@@ -45,9 +48,10 @@ public class BusinessUser : BaseUser
             timeZoneId,  
             isEmailVerified: false, 
             isPhoneNumberVerified: true)
-    {  
+    {   
         Code = UniqueIdGenerator.Generate(Id);
         BusinessName = businessName ?? throw new ArgumentNullException(nameof(businessName));
+        BusinessImageUrl = businessImageUrl;
         EncryptedTaxId = encryptedTaxId;
         EncryptedContactPerson = encryptedContactPerson ?? throw new ArgumentNullException(nameof(encryptedContactPerson));  
         WebsiteUrl = websiteUrl;
@@ -56,9 +60,18 @@ public class BusinessUser : BaseUser
         RaiseBusinessUserCreatedDomainEvent(this);
     } 
 
-    public void Update(string businessName, string encryptedContactPerson, string? encryptedTaxId, string? websiteUrl, string? description, Address address, string timeZoneId)
+    public void Update(
+        string businessName, 
+        string businessImageUrl,
+        string encryptedContactPerson, 
+        string? encryptedTaxId, 
+        string? websiteUrl, 
+        string? description, 
+        Address address, 
+        string timeZoneId)
     {
         BusinessName = businessName ?? throw new ArgumentNullException(nameof(businessName));
+        BusinessImageUrl = businessImageUrl;
         EncryptedContactPerson = encryptedContactPerson ?? throw new ArgumentNullException(nameof(encryptedContactPerson));
         EncryptedTaxId = encryptedTaxId;
         WebsiteUrl = websiteUrl;
@@ -70,8 +83,7 @@ public class BusinessUser : BaseUser
     }
      
     public override void AddReferralProgram(int referralRewardPoint, int referralValidDate)
-    { 
-        // domain event already published in the parent class
+    {  
         base.AddReferralProgram(referralRewardPoint, referralValidDate); 
     }
 
@@ -129,6 +141,7 @@ public class BusinessUser : BaseUser
         string hashedPhoneNumber,
         string encryptedPhoneNumber,
         string name,
+        string imageUrl,
         Address address,
         string timeZoneId,
         string password)
@@ -148,6 +161,7 @@ public class BusinessUser : BaseUser
             hashedPhoneNumber,
             encryptedPhoneNumber,
             name,
+            imageUrl,
             address,
             timeZoneId, 
             password,

@@ -7,6 +7,7 @@ namespace Account.API.Applications.Commands.BusinessUserCommand.UpdateBusinessUs
 public record UpdateBusinessUserByUserIdCommand(
     Guid Id,
     string BusinessName,
+    string BusinessImageUrl,
     string ContactPerson,
     string? TaxId,
     string? WebsiteUrl,

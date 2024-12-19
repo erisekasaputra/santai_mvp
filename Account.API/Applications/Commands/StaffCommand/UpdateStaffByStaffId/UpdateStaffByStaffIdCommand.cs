@@ -4,4 +4,4 @@ using MediatR;
 
 namespace Account.API.Applications.Commands.StaffCommand.UpdateStaffByStaffId;
 
-public record UpdateStaffByStaffIdCommand(Guid StaffId, string Name, AddressRequestDto Address, string TimeZoneId) : IRequest<Result>;
+public record UpdateStaffByStaffIdCommand(Guid StaffId, string Name, string ImageUrl, AddressRequestDto Address, string TimeZoneId) : IRequest<Result>;

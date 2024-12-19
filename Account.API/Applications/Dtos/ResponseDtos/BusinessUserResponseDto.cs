@@ -7,6 +7,7 @@ public record BusinessUserResponseDto(
     string TimeZoneId,
     AddressResponseDto Address,
     string BusinessName,
+    string BusinessImageUrl,
     string ContactPerson,
     string? TaxId,
     string? WebsiteUrl,

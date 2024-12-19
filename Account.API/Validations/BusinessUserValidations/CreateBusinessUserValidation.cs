@@ -34,6 +34,9 @@ public class CreateBusinessUserValidation : AbstractValidator<BusinessUserReques
             .NotEmpty().WithMessage("Business name can not be empty")
             .Length(3, 50).WithMessage("Business name must be between 3 and 50 characters long");
 
+        RuleFor(x => x.BusinessImageUrl)
+            .NotEmpty().WithMessage("Profile picture must not be empty");
+
         RuleFor(x => x.ContactPerson)
             .NotEmpty().WithMessage("Contact person can not be empty")
             .Length(3, 254).WithMessage("Contact person must be between 3 and 254 characters long");

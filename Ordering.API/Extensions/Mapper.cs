@@ -84,6 +84,7 @@ public static class Mapper
         return new BuyerResponseDto(
             buyer.BuyerId,
             buyer.Name,
+            buyer.ImageUrl,
             buyer.Email,
             buyer.PhoneNumber);
     }

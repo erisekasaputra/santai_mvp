@@ -8,6 +8,7 @@ using Core.Results;
 using Core.Services.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Options;
+using Core.Enumerations;
 
 namespace Account.API.Applications.Queries.GetUserByUserTypeAndUserId;
 
@@ -26,29 +27,59 @@ public class GetUserByUserTypeAndUserIdQueryHandler(
     {
         try
         {
-            var baseUser = await _unitOfWork.BaseUsers.GetByIdAsync(request.UserId); 
-            if (baseUser is not null)
+            var userType = await _unitOfWork.BaseUsers.GetUserTypeById(request.UserId); 
+
+            if (userType != null && userType == UserType.BusinessUser)
             {
-                var decryptedEmail = await DecryptNullableAsync(baseUser.EncryptedEmail);
-                var decryptedPhoneNumber = await DecryptNullableAsync(baseUser.EncryptedPhoneNumber);
+                var businessUser = await _unitOfWork.BaseUsers.GetBusinessUserByIdAsync(request.UserId);
+                if (businessUser is not null)
+                {
+                    var decryptedEmail = await DecryptNullableAsync(businessUser.EncryptedEmail);
+                    var decryptedPhoneNumber = await DecryptNullableAsync(businessUser.EncryptedPhoneNumber);
 
-                var fleets = await _unitOfWork.Fleets.GetByUserIdAsync(request.UserId);
+                    var fleets = await _unitOfWork.Fleets.GetByUserIdAsync(request.UserId);
 
-                (var filteredFleets, var fleetsUnknown) = await GetFleetsDtos(fleets, request.Fleets);
+                    (var filteredFleets, var fleetsUnknown) = await GetFleetsDtos(fleets, request.Fleets);
 
-                var userResponseDto = new GlobalUserResponseDto(
-                    baseUser.Id,
-                    decryptedEmail,
-                    decryptedPhoneNumber,
-                    baseUser.TimeZoneId,
-                    baseUser.Name,
-                    filteredFleets,
-                    fleetsUnknown);
+                    var userResponseDto = new GlobalUserResponseDto(
+                        businessUser.Id,
+                        decryptedEmail,
+                        decryptedPhoneNumber,
+                        businessUser.TimeZoneId,
+                        businessUser.Name,
+                        businessUser.BusinessImageUrl,
+                        filteredFleets,
+                        fleetsUnknown);
 
-                return Result.Success(userResponseDto, ResponseStatus.Ok);
+                    return Result.Success(userResponseDto, ResponseStatus.Ok);
+                }
+            } 
+            else if (userType != null && userType == UserType.RegularUser)
+            {
+                var regularUser = await _unitOfWork.BaseUsers.GetRegularUserByIdAsync(request.UserId);
+                if (regularUser is not null)
+                {
+                    var decryptedEmail = await DecryptNullableAsync(regularUser.EncryptedEmail);
+                    var decryptedPhoneNumber = await DecryptNullableAsync(regularUser.EncryptedPhoneNumber);
+
+                    var fleets = await _unitOfWork.Fleets.GetByUserIdAsync(request.UserId);
+
+                    (var filteredFleets, var fleetsUnknown) = await GetFleetsDtos(fleets, request.Fleets);
+
+                    var userResponseDto = new GlobalUserResponseDto(
+                        regularUser.Id,
+                        decryptedEmail,
+                        decryptedPhoneNumber,
+                        regularUser.TimeZoneId,
+                        regularUser.Name,
+                        regularUser.PersonalInfo.ProfilePictureUrl ?? "",
+                        filteredFleets,
+                        fleetsUnknown);
+
+                    return Result.Success(userResponseDto, ResponseStatus.Ok);
+                }
             }
-             
-             
+
             var staffUser = await _unitOfWork.Staffs.GetByIdAsync(request.UserId);
             if (staffUser is not null)
             {
@@ -63,6 +94,7 @@ public class GetUserByUserTypeAndUserIdQueryHandler(
                     decryptedPhoneNumber,
                     staffUser.TimeZoneId,
                     staffUser.Name,
+                    staffUser.ImageUrl,
                     filteredFleets,
                     fleetsUnknown);
 

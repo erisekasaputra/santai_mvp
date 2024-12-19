@@ -8,6 +8,7 @@ public record CreateStaffBusinessUserByUserIdCommand(
     Guid Id, 
     string PhoneNumber, 
     string Name,
+    string ImageUrl,
     AddressRequestDto Address,
     string TimeZoneId,
     string Password) : IRequest<Result>;

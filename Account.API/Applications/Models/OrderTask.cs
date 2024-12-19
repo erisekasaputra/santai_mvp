@@ -4,6 +4,8 @@ public class OrderTask
 {
     public string OrderId { get; private init; }
     public string BuyerId { get; private init; }
+    public string BuyerName { get; private init; }
+    public string BuyerImageUrl { get; private init; }
     public string MechanicId { get; private set; }
     public string MechanicName { get; private set; }
     public string MechanicImageUrl { get; private set; }
@@ -14,6 +16,8 @@ public class OrderTask
     public OrderTask(
         string orderId, 
         string buyerId,
+        string buyerName,
+        string buyerImageUrl,
         string mechanicId,
         string mechanicName,
         string mechanicImageUrl,
@@ -29,6 +33,8 @@ public class OrderTask
 
         OrderId = orderId;
         BuyerId = buyerId;
+        BuyerName = buyerName;
+        BuyerImageUrl = buyerImageUrl;
         MechanicId = mechanicId;
         MechanicName = mechanicName;
         MechanicImageUrl = mechanicImageUrl;

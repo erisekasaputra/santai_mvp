@@ -9,6 +9,7 @@ public record CreateBusinessUserCommand(
         string TimeZoneId,
         AddressRequestDto Address,
         string BusinessName,
+        string BusinessImageUrl,
         string ContactPerson,
         string? TaxId,
         string? WebsiteUrl,

@@ -8,6 +8,7 @@ public class AccountIdentityResponseDto
     public string? PhoneNumber { get; set; }
     public string TimeZoneId { get; set; } 
     public string Fullname { get; set; }
+    public string ImageUrl { get; set; }
     public IEnumerable<AccountIdentityFleetResponseDto> Fleets { get; set; }
     public IEnumerable<Guid> UnknownFleets { get; set; }  
     public AccountIdentityResponseDto(
@@ -16,6 +17,7 @@ public class AccountIdentityResponseDto
         string? phoneNumber,
         string timeZoneId,
         string fullname,    
+        string imageUrl,
         IEnumerable<AccountIdentityFleetResponseDto> fleets,
         IEnumerable<Guid> unknownFleets )
     {  
@@ -24,6 +26,7 @@ public class AccountIdentityResponseDto
         PhoneNumber = phoneNumber;
         TimeZoneId = timeZoneId;
         Fullname = fullname;
+        ImageUrl = imageUrl;
         Fleets = fleets;
         UnknownFleets = unknownFleets; 
     }

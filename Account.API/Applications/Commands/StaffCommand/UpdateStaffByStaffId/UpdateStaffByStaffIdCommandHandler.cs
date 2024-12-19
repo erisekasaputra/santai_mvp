@@ -43,7 +43,7 @@ public class UpdateStaffByStaffIdCommandHandler(
                 );
 
 
-            staff.Update(request.Name, address, request.TimeZoneId);
+            staff.Update(request.Name, request.ImageUrl, address, request.TimeZoneId);
 
             _unitOfWork.Staffs.Update(staff);
             

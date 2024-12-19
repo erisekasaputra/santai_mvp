@@ -30,7 +30,14 @@ public class BusinessUserEntityConfiguration : IEntityTypeConfiguration<Business
             .IsRequired()
             .HasConversion(
                 v => v.Trim(),
-                v => v.Trim()); 
+                v => v.Trim());
+
+        e.Property(p => p.BusinessImageUrl)
+          .HasMaxLength(255)
+          .IsRequired()
+          .HasConversion(
+              v => v.Trim(),
+              v => v.Trim());
 
         e.Property(p => p.EncryptedTaxId)
             .HasMaxLength(255)

@@ -16,7 +16,10 @@ public class CreateStaffValidation : AbstractValidator<StaffRequestDto>
         RuleFor(x => x.Name)
             .NotEmpty().WithMessage("Name can not be empty")
             .Length(3, 50).WithMessage("The name must be between 3 and 50 characters long")
-            .Must(NameValidation.IsValidName).WithMessage("The name must contain only alphabet and can not have multiple spaces (only single space on each separated name), e.g: 'Michael John Doe'"); 
+            .Must(NameValidation.IsValidName).WithMessage("The name must contain only alphabet and can not have multiple spaces (only single space on each separated name), e.g: 'Michael John Doe'");
+
+        RuleFor(x => x.ImageUrl)
+            .NotEmpty().WithMessage("Profile picture must not be empty");
 
         RuleFor(x => x.PhoneNumber)
             .NotEmpty().WithMessage("Phone number can not be empty")

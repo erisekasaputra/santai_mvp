@@ -35,6 +35,7 @@ public class OrderCreatedDomainEventHandler(IMediator mediator) : INotificationH
             notification.Order.Id,
             notification.Order.Buyer.BuyerId,
             notification.Order.Buyer.Name,
+            notification.Order.Buyer.ImageUrl,
             notification.Order.Address.AddressLine,
             notification.Order.Address.Latitude,
             notification.Order.Address.Longitude,

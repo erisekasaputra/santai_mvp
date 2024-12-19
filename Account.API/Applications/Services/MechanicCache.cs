@@ -947,6 +947,8 @@ public class MechanicCache : IMechanicCache
             return null;
 
         var buyerId = RedisValueToString(hashEntries.FirstOrDefault(x => x.Name == nameof(OrderTask.BuyerId)).Value);
+        var buyerName = RedisValueToString(hashEntries.FirstOrDefault(x => x.Name == nameof(OrderTask.BuyerName)).Value);
+        var buyerImageUrl = RedisValueToString(hashEntries.FirstOrDefault(x => x.Name == nameof(OrderTask.BuyerImageUrl)).Value);
         var mechanicId = RedisValueToString(hashEntries.FirstOrDefault(x => x.Name == nameof(OrderTask.MechanicId)).Value);
         var latitude = RedisValueToDouble(hashEntries.FirstOrDefault(x => x.Name == nameof(OrderTask.Latitude)).Value);
         var longitude = RedisValueToDouble(hashEntries.FirstOrDefault(x => x.Name == nameof(OrderTask.Longitude)).Value);
@@ -957,6 +959,8 @@ public class MechanicCache : IMechanicCache
         return new OrderTask(
             orderId.ToString(),
             buyerId,
+            buyerName,
+            buyerImageUrl,
             mechanicId,
             mechanicName,
             mechanicImageUrl,

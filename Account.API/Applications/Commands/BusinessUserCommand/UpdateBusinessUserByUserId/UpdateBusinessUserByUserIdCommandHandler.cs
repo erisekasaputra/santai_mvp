@@ -45,6 +45,7 @@ public class UpdateBusinessUserByUserIdCommandHandler(
 
             user.Update(
                 request.BusinessName,
+                request.BusinessImageUrl,
                 encryptedContactPerson,
                 encryptedTaxId,
                 request.WebsiteUrl,

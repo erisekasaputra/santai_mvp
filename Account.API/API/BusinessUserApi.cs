@@ -579,6 +579,7 @@ public static class BusinessUserApi
                 businessUserId, 
                 request.PhoneNumber, 
                 request.Name,
+                request.ImageUrl,
                 request.Address,
                 request.TimeZoneId,
                 request.Password));   
@@ -650,6 +651,7 @@ public static class BusinessUserApi
                 request.TimeZoneId,
                 request.Address,
                 request.BusinessName,
+                request.BusinessImageUrl,
                 request.ContactPerson,
                 request.TaxId,
                 request.WebsiteUrl,
@@ -701,7 +703,7 @@ public static class BusinessUserApi
                 return TypedResults.BadRequest(error);
             }
 
-            var result = await service.Mediator.Send(new UpdateStaffByStaffIdCommand(staffId, request.Name, request.Address, request.TimeZoneId)); 
+            var result = await service.Mediator.Send(new UpdateStaffByStaffIdCommand(staffId, request.Name, request.ImageUrl, request.Address, request.TimeZoneId)); 
             return result.ToIResult();
         }
         catch (Exception ex)
@@ -742,6 +744,7 @@ public static class BusinessUserApi
             var result = await service.Mediator.Send(new UpdateBusinessUserByUserIdCommand(
                 businessUserId,
                 request.BusinessName,
+                request.BusinessImageUrl,
                 request.ContactPerson,
                 request.TaxId,
                 request.WebsiteUrl,

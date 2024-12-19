@@ -91,6 +91,7 @@ public class GetStaffByIdQueryHandler(
                     decryptedEmail,
                     decryptedPhoneNumber,
                     staff.Name,
+                    staff.ImageUrl, 
                     addressDto,
                     staff.TimeZoneId,
                     fleets);

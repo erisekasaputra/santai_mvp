@@ -108,6 +108,7 @@ public class GetPaginatedBusinessUserQueryHandler(
                                 decryptedStaffEmail,
                                 decryptedStaffPhoneNumber,
                                 staff.Name,
+                                staff.ImageUrl,
                                 staffAddress,
                                 staff.TimeZoneId,
                                 []
@@ -159,6 +160,7 @@ public class GetPaginatedBusinessUserQueryHandler(
                     user.TimeZoneId,
                     address,
                     user.BusinessName,
+                    user.BusinessImageUrl,
                     decryptedContactPerson,
                     decryptedTaxId,
                     user.WebsiteUrl,

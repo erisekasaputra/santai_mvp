@@ -143,6 +143,7 @@ public class GetBusinessUserByUserIdQueryHandler(
                             decryptedStaffEmail,
                             decryptedStaffPhoneNumber,
                             staff.Name,
+                            staff.ImageUrl,
                             staffAddress,
                             staff.TimeZoneId,
                             staffFleets));
@@ -199,6 +200,7 @@ public class GetBusinessUserByUserIdQueryHandler(
                 user.TimeZoneId,
                 address,
                 user.BusinessName,
+                user.BusinessImageUrl,
                 decryptedContactPerson,
                 decryptedTaxId,
                 user.WebsiteUrl,

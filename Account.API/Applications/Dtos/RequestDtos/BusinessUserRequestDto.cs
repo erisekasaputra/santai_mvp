@@ -7,6 +7,7 @@ public class BusinessUserRequestDto(
     string timeZoneId,
     AddressRequestDto address,
     string businessName,
+    string businessImageUrl,
     string contactPerson,
     string? taxId,
     string? websiteUrl,
@@ -20,6 +21,7 @@ public class BusinessUserRequestDto(
     public required string TimeZoneId { get; set; } = timeZoneId.Clean();
     public required AddressRequestDto Address { get; set; } = address;
     public required string BusinessName { get; set; } = businessName.Clean();
+    public required string BusinessImageUrl { get; set; } = businessImageUrl.Clean();
     public required string ContactPerson { get; set; } = contactPerson.Clean();
     public string? TaxId { get; set; } = taxId?.Clean();
     public string? WebsiteUrl { get; set; } = websiteUrl?.Clean();

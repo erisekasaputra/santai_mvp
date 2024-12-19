@@ -8,6 +8,7 @@ public record OrderCreatedIntegrationEvent(
     Guid OrderId,
     Guid BuyerId,
     string BuyerName,
+    string BuyerImageUrl,
     string BuyerAddressLine,
     double Latitude,
     double Longitude,

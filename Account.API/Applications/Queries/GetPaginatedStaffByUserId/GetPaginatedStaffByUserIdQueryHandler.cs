@@ -101,6 +101,7 @@ public class GetPaginatedStaffByUserIdQueryHandler(
                         decryptedStaffEmail,
                         decryptedStaffPhoneNumber,
                         staff.Name,
+                        staff.ImageUrl,
                         staffAddress,
                         staff.TimeZoneId,
                         fleets

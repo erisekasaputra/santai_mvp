@@ -11,6 +11,7 @@ public class ChatContact
     public long LastChatTimestamp { get; init; } 
     public string BuyerId { get; init; } 
     public string BuyerName { get; init; } 
+    public string BuyerImageUrl { get; init; } 
     public string? MechanicId { get; set; } 
     public string? MechanicName { get; set; } 
     public string? MechanicImageUrl { get; set; } 
@@ -27,12 +28,14 @@ public class ChatContact
         OrderId = string.Empty;
         BuyerId = string.Empty;
         BuyerName = string.Empty;
+        BuyerImageUrl = string.Empty;
     }
-    public ChatContact(string orderId, string buyerId, string buyerName)
+    public ChatContact(string orderId, string buyerId, string buyerName, string buyerImageUrl)
     {
         OrderId = orderId;
         BuyerId = buyerId;
         BuyerName = buyerName;
+        BuyerImageUrl = buyerImageUrl;
         LastChatTimestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         IsOrderCompleted = false;
         IsChatExpired = false;

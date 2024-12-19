@@ -71,6 +71,7 @@ public class CalculateOrderCommandHandler(
             command.Longitude,
             command.BuyerId,
             "Calculation", 
+            "Calculation", 
             "Calculation",
             "Calculation",
             command.BuyerType,

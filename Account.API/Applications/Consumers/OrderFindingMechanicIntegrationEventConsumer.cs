@@ -15,6 +15,8 @@ public class OrderFindingMechanicIntegrationEventConsumer(
             new OrderTask(
                 context.Message.OrderId.ToString(),
                 context.Message.BuyerId.ToString(),
+                context.Message.BuyerName,
+                context.Message.BuyerImageUrl,
                 string.Empty,
                 string.Empty,
                 string.Empty,

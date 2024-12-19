@@ -100,6 +100,7 @@ public class CreateOrderCommandHandler(
             return await CreateOrderByRelatedUserType(
                 command,
                 buyer?.Data?.Fullname,
+                buyer?.Data?.ImageUrl,
                 buyer?.Data?.Email,
                 buyer?.Data?.PhoneNumber,
                 buyer?.Data?.Fleets,
@@ -170,6 +171,7 @@ public class CreateOrderCommandHandler(
     private async Task<Result> CreateOrderByRelatedUserType(
         CreateOrderCommand command,  
         string? buyerName,
+        string? buyerImageUrl,
         string? buyerEmail,
         string? buyerPhoneNumber,
         IEnumerable<AccountIdentityFleetResponseDto>? fleets,
@@ -212,6 +214,7 @@ public class CreateOrderCommandHandler(
             command.Longitude,
             command.BuyerId,
             buyerName ?? string.Empty,
+            buyerImageUrl ?? string.Empty,
             buyerEmail,
             buyerPhoneNumber,
             command.BuyerType,

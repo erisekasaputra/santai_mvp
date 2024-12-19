@@ -81,6 +81,7 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
                 hashedPhoneNumber,
                 encryptedPhoneNumber,
                 request.Name,
+                request.ImageUrl,
                 address,
                 request.TimeZoneId,
                 request.Password,
@@ -122,6 +123,7 @@ public class CreateStaffBusinessUserByUserIdCommandHandler(
                 null,
                 request.PhoneNumber,
                 request.Name,
+                request.ImageUrl,
                 addressResponseDto,
                 request.TimeZoneId,
                 []

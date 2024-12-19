@@ -7,6 +7,7 @@ public class GlobalUserResponseDto
     public string? PhoneNumber { get; set; } 
     public string TimeZoneId { get; set; }
     public string Fullname { get; set; }
+    public string ImageUrl { get; set; }
     public IEnumerable<FleetResponseDto> Fleets { get; set; }
     public IEnumerable<Guid> UnknownFleets { get; set; } 
 
@@ -16,6 +17,7 @@ public class GlobalUserResponseDto
         string? phoneNumber,
         string timeZoneId,
         string fullname,
+        string imageUrl,
         IEnumerable<FleetResponseDto> fleets,
         IEnumerable<Guid> unknownFleets)
     {
@@ -24,6 +26,7 @@ public class GlobalUserResponseDto
         PhoneNumber = phoneNumber;
         TimeZoneId = timeZoneId;
         Fullname = fullname;
+        ImageUrl = imageUrl;
         Fleets = fleets;
         UnknownFleets = unknownFleets;   
     }

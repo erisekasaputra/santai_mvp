@@ -40,6 +40,13 @@ public class StaffEntityConfiguration : IEntityTypeConfiguration<Staff>
             .HasMaxLength(255)
             .IsRequired(false);
 
+        e.Property(p => p.ImageUrl)
+             .HasMaxLength(255)
+             .IsRequired()
+             .HasConversion(
+                 v => v.Trim(),
+                 v => v.Trim());
+
         e.Property(p => p.NewEncryptedPhoneNumber)
             .HasMaxLength(255)
             .IsRequired(false);

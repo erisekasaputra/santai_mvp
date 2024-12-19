@@ -9,6 +9,7 @@ public class Buyer : Entity
     public Guid BuyerId { get; private set; }
     public Order Order { get; private set; }
     public string Name { get; private set; }
+    public string ImageUrl { get; private set; }
     public string? Email { get; private set; }
     public string? PhoneNumber { get; private set; }
     public UserType BuyerType { get; private set; }
@@ -16,6 +17,7 @@ public class Buyer : Entity
         Guid orderId,
         Guid buyerId,
         string name,
+        string imageUrl,
         string? email,
         string? phoneNumber,
         UserType buyerType)
@@ -23,6 +25,7 @@ public class Buyer : Entity
         OrderId = orderId;
         BuyerId = buyerId;
         Name = name;
+        ImageUrl = imageUrl;
         Email = email;
         PhoneNumber = phoneNumber;
         BuyerType = buyerType;

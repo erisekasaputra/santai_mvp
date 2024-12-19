@@ -21,6 +21,7 @@ public class Staff : Entity, IAggregateRoot
     public string? NewEncryptedEmail {  get; private set; }
     public bool IsEmailVerified { get; private set; }
     public string Name { get; private set; }
+    public string ImageUrl { get; private set; }
     public Address Address { get; private set; }
     public string TimeZoneId { get; private set; }
     public string Password { get; private set; }
@@ -28,6 +29,7 @@ public class Staff : Entity, IAggregateRoot
     public Staff()
     {
         Password = string.Empty;
+        ImageUrl = string.Empty;
         Address = null!;
         BusinessUserCode = null!;
         Name = null!;
@@ -40,6 +42,7 @@ public class Staff : Entity, IAggregateRoot
         string hashedPhoneNumber,
         string encryptedPhoneNumber,
         string name,
+        string imageUrl,
         Address address,
         string timeZoneId, 
         string password, 
@@ -47,7 +50,8 @@ public class Staff : Entity, IAggregateRoot
     { 
         BusinessUserId = businessUserId != default ? businessUserId : throw new ArgumentNullException(nameof(businessUserId)); 
         BusinessUserCode = businessUserCode ?? throw new ArgumentNullException(nameof(businessUserCode));   
-        Name = name ?? throw new ArgumentNullException(nameof(name)); 
+        Name = name ?? throw new ArgumentNullException(nameof(name));
+        ImageUrl = imageUrl;
         TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId)); 
         Address = address ?? throw new ArgumentNullException(nameof(address));
            
@@ -71,9 +75,10 @@ public class Staff : Entity, IAggregateRoot
         IsPhoneNumberVerified = false;
     }
 
-    public void Update(string name, Address address, string timeZoneId)
-    { 
+    public void Update(string name, string imageUrl, Address address, string timeZoneId)
+    {
         Name = name ?? throw new ArgumentNullException(nameof(name));
+        ImageUrl = imageUrl;
         Address = address ?? throw new ArgumentNullException(nameof(address)); 
         TimeZoneId = timeZoneId ?? throw new ArgumentNullException(nameof(timeZoneId));
     } 

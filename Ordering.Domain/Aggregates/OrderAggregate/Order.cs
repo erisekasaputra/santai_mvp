@@ -75,6 +75,7 @@ public class Order : Entity
         double longitude,
         Guid buyerId,
         string buyerName,
+        string buyerImageUrl,
         string? buyerEmail,
         string? buyerPhone,
         UserType buyerType,
@@ -102,7 +103,7 @@ public class Order : Entity
         OrderAmount = 0;
         GrandTotal = new Money(0, currency);
         Address = new Address(addressLine, latitude, longitude);
-        Buyer = new Buyer(Id, buyerId, buyerName, buyerEmail, buyerPhone, buyerType);
+        Buyer = new Buyer(Id, buyerId, buyerName, buyerImageUrl, buyerEmail, buyerPhone, buyerType);
         Mechanic = null;
         Payment = null;
         LineItems = [];
@@ -133,7 +134,7 @@ public class Order : Entity
         if (!IsScheduled && !IsShouldRequestPayment)
         {  
             Status = OrderStatus.FindingMechanic;    
-            RaiseOrderFindingMechanicDomainEvent(Id, buyerId, latitude, longitude);
+            RaiseOrderFindingMechanicDomainEvent(Id, buyerId, Buyer.Name, Buyer.ImageUrl, latitude, longitude);
         }
     }
 
@@ -184,7 +185,7 @@ public class Order : Entity
             if (!IsScheduled)
             {
                 Status = OrderStatus.FindingMechanic;
-                RaiseOrderFindingMechanicDomainEvent(Id, Buyer.BuyerId, Address.Latitude, Address.Longitude);
+                RaiseOrderFindingMechanicDomainEvent(Id, Buyer.BuyerId, Buyer.Name, Buyer.ImageUrl, Address.Latitude, Address.Longitude);
             }
         }
     }
@@ -500,7 +501,7 @@ public class Order : Entity
         }
 
         Status = OrderStatus.FindingMechanic;
-        RaiseOrderFindingMechanicDomainEvent(Id, Buyer.BuyerId, Address.Latitude, Address.Longitude);
+        RaiseOrderFindingMechanicDomainEvent(Id, Buyer.BuyerId, Buyer.Name, Buyer.ImageUrl, Address.Latitude, Address.Longitude);
     }
 
     public void SetOrderRating(decimal rating, string comment, IEnumerable<string>? images)
@@ -910,9 +911,9 @@ public class Order : Entity
         AddDomainEvent(new OrderPaymentPaidDomainEvent(orderId, buyerId, amount, currency));
     }
 
-    private void RaiseOrderFindingMechanicDomainEvent(Guid orderId, Guid buyerId, double latitude, double longitude)
+    private void RaiseOrderFindingMechanicDomainEvent(Guid orderId, Guid buyerId, string buyerName, string buyerImageUrl, double latitude, double longitude)
     {
-        AddDomainEvent(new OrderFindingMechanicDomainEvent(orderId, buyerId, latitude, longitude));
+        AddDomainEvent(new OrderFindingMechanicDomainEvent(orderId, buyerId, buyerName, buyerImageUrl, latitude, longitude));
     }
     public void RaiseOrderCreatedDomainEvent()
     {

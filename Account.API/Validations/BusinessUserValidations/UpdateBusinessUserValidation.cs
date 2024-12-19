@@ -31,6 +31,9 @@ public class UpdateBusinessUserValidation : AbstractValidator<UpdateBusinessUser
             .Length(1, 1000).WithMessage("Business description must be between 1 and 1000 characters long")
             .When(x => !string.IsNullOrWhiteSpace(x.Description));
 
+        RuleFor(x => x.BusinessImageUrl)
+            .NotEmpty().WithMessage("Profile picture must not be empty");
+
         RuleFor(x => x.Address)
             .NotNull().WithMessage("Address can not be empty")
             .SetValidator(new AddressValidation());
