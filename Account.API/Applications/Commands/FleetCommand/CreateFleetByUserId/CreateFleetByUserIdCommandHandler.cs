@@ -44,17 +44,17 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
 
             var errors = new List<ErrorDetail>();
 
-            var encryptedRegistrationNumber = await EncryptAsync(request.RegistrationNumber);
-            var encryptedEngineNumber = await EncryptAsync(request.EngineNumber);
-            var encryptedChassisNumber = await EncryptAsync(request.ChassisNumber);
-            var encryptedInsuranceNumber = await EncryptAsync(request.InsuranceNumber);
-            var encryptedOwnerName = await EncryptAsync(request.OwnerName);
-            var encryptedOwnerAddress = await EncryptAsync(request.OwnerAddress);
+            var encryptedRegistrationNumber = await EncryptNullableAsync(request.RegistrationNumber);
+            var encryptedEngineNumber = await EncryptNullableAsync(request.EngineNumber);
+            var encryptedChassisNumber = await EncryptNullableAsync(request.ChassisNumber);
+            var encryptedInsuranceNumber = await EncryptNullableAsync(request.InsuranceNumber);
+            var encryptedOwnerName = await EncryptNullableAsync(request.OwnerName);
+            var encryptedOwnerAddress = await EncryptNullableAsync(request.OwnerAddress);
 
-            var hashedRegistrationNumber = await HashAsync(request.RegistrationNumber);
-            var hashedEngineNumber = await HashAsync(request.EngineNumber);
-            var hashedChassisNumber = await HashAsync(request.ChassisNumber);
-            var hashedInsuranceNumber = await HashAsync(request.InsuranceNumber);
+            var hashedRegistrationNumber = await EncryptNullableAsync(request.RegistrationNumber);
+            var hashedEngineNumber = await EncryptNullableAsync(request.EngineNumber);
+            var hashedChassisNumber = await EncryptNullableAsync(request.ChassisNumber);
+            var hashedInsuranceNumber = await EncryptNullableAsync(request.InsuranceNumber);
 
             var timeZoneId = await _unitOfWork.BaseUsers.GetTimeZoneById(request.UserId);
 
@@ -64,24 +64,39 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
                     Result.Failure("User not found", ResponseStatus.NotFound), cancellationToken);
             }
 
-            var conflict = await _unitOfWork.Fleets.GetByIdentityAsync(
-                    (FleetLegalParameter.EngineNumber, hashedEngineNumber),
-                    (FleetLegalParameter.ChassisNumber, hashedChassisNumber),
-                    (FleetLegalParameter.RegistrationNumber, hashedRegistrationNumber));
+            var clauses = new List<(FleetLegalParameter parameter, string hashedValue)>();
+
+            if (hashedEngineNumber != null)
+            {
+                clauses.Add((FleetLegalParameter.EngineNumber, hashedEngineNumber));
+            }
+
+            if (hashedChassisNumber != null)
+            {
+                clauses.Add((FleetLegalParameter.ChassisNumber, hashedChassisNumber));
+            }
+
+            if (hashedRegistrationNumber != null)
+            {
+                clauses.Add((FleetLegalParameter.RegistrationNumber, hashedRegistrationNumber));
+            }
+
+
+            var conflict = await _unitOfWork.Fleets.GetByIdentityAsync([.. clauses]);
 
             if (conflict is not null)
             {
-                if (conflict.HashedChassisNumber == hashedChassisNumber)
+                if (!string.IsNullOrEmpty(request.ChassisNumber) && conflict.HashedChassisNumber == hashedChassisNumber)
                 {
                     errors.Add(new("ChassisNumber", "Chassis number already registered", request.ChassisNumber, "ChassisNumberValidator", "Error"));
                 }
 
-                if (conflict.HashedEngineNumber == hashedEngineNumber)
+                if (!string.IsNullOrEmpty(request.EngineNumber) && conflict.HashedEngineNumber == hashedEngineNumber)
                 {
                     errors.Add(new("EngineNumber", "Engine number already registered", request.EngineNumber, "EngineNumberValidator", "Error"));
                 }
 
-                if (conflict.HashedRegistrationNumber == hashedRegistrationNumber)
+                if (!string.IsNullOrEmpty(request.RegistrationNumber) && conflict.HashedRegistrationNumber == hashedRegistrationNumber)
                 {
                     errors.Add(new("RegistrationNumber", "Registration number already registered", request.RegistrationNumber, "RegistrationNumberValidator", "Error"));
                 }
@@ -185,6 +200,16 @@ public class CreateFleetByUserIdCommandHandler : IRequestHandler<CreateFleetByUs
     } 
     private async Task<string> EncryptAsync(string plaintext)
     {
+        return await _kmsClient.EncryptAsync(plaintext);
+    }
+
+    private async Task<string?> EncryptNullableAsync(string? plaintext)
+    {
+        if (string.IsNullOrEmpty(plaintext))
+        {
+            return null;
+        }
+
         return await _kmsClient.EncryptAsync(plaintext);
     }
 

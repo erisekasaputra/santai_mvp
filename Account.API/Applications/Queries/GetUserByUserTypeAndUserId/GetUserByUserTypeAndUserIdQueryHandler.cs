@@ -93,12 +93,12 @@ public class GetUserByUserTypeAndUserIdQueryHandler(
                     continue;
                 }
 
-                var staffFleetRegistrationNumber = await DecryptAsync(fleet.EncryptedRegistrationNumber);
-                var staffFleetChassisNumber = await DecryptAsync(fleet.EncryptedChassisNumber);
-                var staffFleetEngineNumber = await DecryptAsync(fleet.EncryptedEngineNumber);
-                var staffFleetInsuranceNumber = await DecryptAsync(fleet.EncryptedInsuranceNumber);
-                var staffFleetOwnerName = await DecryptAsync(fleet.Owner.EncryptedOwnerName);
-                var staffFleetOwnerAddress = await DecryptAsync(fleet.Owner.EncryptedOwnerAddress);
+                var staffFleetRegistrationNumber = await DecryptNullableAsync(fleet.EncryptedRegistrationNumber);
+                var staffFleetChassisNumber = await DecryptNullableAsync(fleet.EncryptedChassisNumber);
+                var staffFleetEngineNumber = await DecryptNullableAsync(fleet.EncryptedEngineNumber);
+                var staffFleetInsuranceNumber = await DecryptNullableAsync(fleet.EncryptedInsuranceNumber);
+                var staffFleetOwnerName = await DecryptNullableAsync(fleet.Owner?.EncryptedOwnerName);
+                var staffFleetOwnerAddress = await DecryptNullableAsync(fleet.Owner?.EncryptedOwnerAddress);
 
                 fleetsDto.Add(new FleetResponseDto(
                     fleet.Id,
@@ -134,7 +134,7 @@ public class GetUserByUserTypeAndUserIdQueryHandler(
 
     private async Task<string?> DecryptNullableAsync(string? cipherText)
     {
-        if (cipherText == null) { return null; }
+        if (string.IsNullOrEmpty(cipherText)) { return null; }
 
         return await _kmsClient.DecryptAsync(cipherText);
     }

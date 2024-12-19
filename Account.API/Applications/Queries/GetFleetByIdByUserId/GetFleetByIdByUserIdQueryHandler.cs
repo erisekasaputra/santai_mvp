@@ -37,12 +37,12 @@ public class GetFleetByIdByUserIdQueryHandler(
                 return Result.Failure($"Fleet not found", ResponseStatus.NotFound);
             }
 
-            var decryptedRegistrationNumber = await DecryptAsync(fleet.EncryptedRegistrationNumber);
-            var decryptedEngineNumber = await DecryptAsync(fleet.EncryptedEngineNumber);
-            var decryptedChassisNumber = await DecryptAsync(fleet.EncryptedChassisNumber);
-            var decryptedInsuranceNumber = await DecryptAsync(fleet.EncryptedInsuranceNumber);
-            var decryptedOwnerName = await DecryptAsync(fleet.Owner.EncryptedOwnerName);
-            var decryptedOwnerAddress = await DecryptAsync(fleet.Owner.EncryptedOwnerAddress);
+            var decryptedRegistrationNumber = await DecryptNullableAsync(fleet.EncryptedRegistrationNumber);
+            var decryptedEngineNumber = await DecryptNullableAsync(fleet.EncryptedEngineNumber);
+            var decryptedChassisNumber = await DecryptNullableAsync(fleet.EncryptedChassisNumber);
+            var decryptedInsuranceNumber = await DecryptNullableAsync(fleet.EncryptedInsuranceNumber);
+            var decryptedOwnerName = await DecryptNullableAsync(fleet.Owner?.EncryptedOwnerName);
+            var decryptedOwnerAddress = await DecryptNullableAsync(fleet.Owner?.EncryptedOwnerAddress);
 
             var fleetDto = new FleetResponseDto(
                 fleet.Id,
@@ -81,7 +81,7 @@ public class GetFleetByIdByUserIdQueryHandler(
 
     private async Task<string?> DecryptNullableAsync(string? cipherText)
     {
-        if (string.IsNullOrWhiteSpace(cipherText)) { return null; }
+        if (string.IsNullOrEmpty(cipherText)) { return null; }
 
         return await _kmsClient.DecryptAsync(cipherText);
     }

@@ -17,14 +17,16 @@ public class FleetEntityConfiguration : IEntityTypeConfiguration<Fleet>
         e.HasIndex(p => p.HashedEngineNumber)
             .IsUnique();
 
-        e.HasIndex(p => p.HashedChassisNumber)
+        e.HasIndex(p => p.HashedChassisNumber) 
             .IsUnique(); 
          
         e.Property(v => v.HashedRegistrationNumber)
-            .HasMaxLength(255);
+            .HasMaxLength(255)
+            .IsRequired(false);
 
         e.Property(v => v.EncryptedRegistrationNumber)
-            .HasMaxLength(255);
+            .HasMaxLength(255)
+            .IsRequired(false);
 
         e.Property(v => v.Brand)
             .HasMaxLength(100)
@@ -34,68 +36,85 @@ public class FleetEntityConfiguration : IEntityTypeConfiguration<Fleet>
             .HasMaxLength(100)
             .IsRequired();
 
+        e.Property(v => v.ImageUrl)
+           .HasMaxLength(100)
+           .IsRequired();
+
         e.Property(v => v.HashedChassisNumber)
-            .HasMaxLength(255);
+            .HasMaxLength(255)
+            .IsRequired(false);
 
         e.Property(v => v.EncryptedChassisNumber)
-            .HasMaxLength(255);
+            .HasMaxLength(255)
+            .IsRequired(false);
 
         e.Property(v => v.HashedEngineNumber)
-            .HasMaxLength(255);
+            .HasMaxLength(255)
+            .IsRequired(false);
 
         e.Property(v => v.EncryptedEngineNumber)
-            .HasMaxLength(255);
+            .HasMaxLength(255)
+            .IsRequired(false);
 
         e.Property(v => v.HashedInsuranceNumber)
-            .HasMaxLength(255);
+            .HasMaxLength(255)
+            .IsRequired(false);
 
         e.Property(v => v.EncryptedInsuranceNumber)
-            .HasMaxLength(255); 
-         
+            .HasMaxLength(255)
+            .IsRequired(false);
+
         e.Property(v => v.VehicleType)
             .HasConversion<string>()
-            .IsRequired();
+            .IsRequired()
+            .IsRequired(false);
 
         e.Property(v => v.FuelType)
             .HasConversion<string>()
-            .IsRequired();
+            .IsRequired()
+            .IsRequired(false);
 
         e.Property(v => v.UsageStatus)
             .HasConversion<string>()
-            .IsRequired();
+            .IsRequired()
+            .IsRequired(false);
 
         e.Property(v => v.OwnershipStatus)
             .HasConversion<string>()
-            .IsRequired();
+            .IsRequired()
+            .IsRequired(false);
 
         e.Property(v => v.TransmissionType)
             .HasConversion<string>()
-            .IsRequired();
-         
+            .IsRequired()
+            .IsRequired(false);
+
         e.Property(v => v.YearOfManufacture)
-            .IsRequired();
+            .IsRequired()
+            .IsRequired(false);
 
         e.Property(v => v.LastInspectionDateUtc)
             .HasColumnType("datetime2")
-            .IsRequired()
+            .IsRequired(false)
             .HasConversion(DateTimeExtension.UtcConverter());
 
         e.Property(v => v.OdometerReading)
-            .IsRequired();
+            .IsRequired()
+            .IsRequired(false);
 
         e.Property(v => v.RegistrationDateUtc)
             .HasColumnType("datetime2")
-            .IsRequired()
+            .IsRequired(false)
             .HasConversion(DateTimeExtension.UtcConverter());
-
+         
         e.OwnsOne(p => p.Owner, owner =>
         {
             owner.Property(p => p.EncryptedOwnerName)
-                .IsRequired()
+                .IsRequired(false)
                 .HasMaxLength(50);
 
             owner.Property(p => p.EncryptedOwnerAddress)
-               .IsRequired()
+               .IsRequired(false)
                .HasMaxLength(255);
         });  
 

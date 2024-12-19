@@ -60,12 +60,12 @@ public class GetRegularUserByUserIdQueryHandler(
                     continue;
                 } 
 
-                var registrationNumber = await DecryptAsync(fleet.EncryptedRegistrationNumber);
-                var chassisNumber = await DecryptAsync(fleet.EncryptedChassisNumber);
-                var engineNumber = await DecryptAsync(fleet.EncryptedEngineNumber);
-                var insuranceNumber = await DecryptAsync(fleet.EncryptedInsuranceNumber);
-                var ownerName = await DecryptAsync(fleet.Owner.EncryptedOwnerName);
-                var ownerAddress = await DecryptAsync(fleet.Owner.EncryptedOwnerAddress);
+                var registrationNumber = await DecryptNullableAsync(fleet.EncryptedRegistrationNumber);
+                var chassisNumber = await DecryptNullableAsync(fleet.EncryptedChassisNumber);
+                var engineNumber = await DecryptNullableAsync(fleet.EncryptedEngineNumber);
+                var insuranceNumber = await DecryptNullableAsync(fleet.EncryptedInsuranceNumber);
+                var ownerName = await DecryptNullableAsync(fleet.Owner?.EncryptedOwnerName);
+                var ownerAddress = await DecryptNullableAsync(fleet.Owner?.EncryptedOwnerAddress);
 
                 fleets.Add(new FleetResponseDto(
                     fleet.Id,
@@ -118,7 +118,7 @@ public class GetRegularUserByUserIdQueryHandler(
 
     private async Task<string?> DecryptNullableAsync(string? cipherText)
     {
-        if (string.IsNullOrWhiteSpace(cipherText)) { return null; }
+        if (string.IsNullOrEmpty(cipherText)) { return null; }
 
         return await _kmsClient.DecryptAsync(cipherText);
     }

@@ -154,56 +154,49 @@ namespace Account.Infrastructure.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("EncryptedChassisNumber")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("EncryptedEngineNumber")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("EncryptedInsuranceNumber")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("EncryptedRegistrationNumber")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("FuelType")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HashedChassisNumber")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("HashedEngineNumber")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("HashedInsuranceNumber")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("HashedRegistrationNumber")
-                        .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("ImageUrl")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<bool>("IsInsuranceValid")
+                    b.Property<bool?>("IsInsuranceValid")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastInspectionDateUtc")
+                    b.Property<DateTime?>("LastInspectionDateUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Model")
@@ -211,47 +204,46 @@ namespace Account.Infrastructure.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("OdometerReading")
+                    b.Property<int?>("OdometerReading")
                         .HasColumnType("int");
 
                     b.Property<string>("OwnershipStatus")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("RegistrationDateUtc")
+                    b.Property<DateTime?>("RegistrationDateUtc")
                         .HasColumnType("datetime2");
 
                     b.Property<Guid?>("StaffId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TransmissionType")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UsageStatus")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("VehicleType")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("YearOfManufacture")
+                    b.Property<int?>("YearOfManufacture")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("HashedChassisNumber")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[HashedChassisNumber] IS NOT NULL");
 
                     b.HasIndex("HashedEngineNumber")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[HashedEngineNumber] IS NOT NULL");
 
                     b.HasIndex("HashedRegistrationNumber")
-                        .IsUnique();
+                        .IsUnique()
+                        .HasFilter("[HashedRegistrationNumber] IS NOT NULL");
 
                     b.HasIndex("StaffId");
 
@@ -857,12 +849,10 @@ namespace Account.Infrastructure.Migrations
                                 .HasColumnType("uniqueidentifier");
 
                             b1.Property<string>("EncryptedOwnerAddress")
-                                .IsRequired()
                                 .HasMaxLength(255)
                                 .HasColumnType("nvarchar(255)");
 
                             b1.Property<string>("EncryptedOwnerName")
-                                .IsRequired()
                                 .HasMaxLength(50)
                                 .HasColumnType("nvarchar(50)");
 

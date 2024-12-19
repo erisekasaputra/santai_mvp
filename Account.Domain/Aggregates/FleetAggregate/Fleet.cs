@@ -9,92 +9,64 @@ public class Fleet : Entity, IAggregateRoot
 {
     public Guid? UserId { get; private set; } 
 
-    public Guid? StaffId { get; private set; } 
-
-    public string HashedRegistrationNumber { get; private set; }
-
-    public string EncryptedRegistrationNumber { get; private set; }
-
-    public VehicleType VehicleType { get; private set; }
-
+    public Guid? StaffId { get; private set; }
+    public string ImageUrl { get; private set; }
     public string Brand { get; private set; }
-
     public string Model { get; private set; }
+    public string? HashedRegistrationNumber { get; private set; }
+    public string? EncryptedRegistrationNumber { get; private set; } 
+    public VehicleType? VehicleType { get; private set; } 
+    public int? YearOfManufacture { get; private set; }
+    public string? HashedChassisNumber { get; private set; }
+    public string? EncryptedChassisNumber { get; private set; }
+    public string? HashedEngineNumber { get; private set; }
+    public string? EncryptedEngineNumber { get; private set; }
+    public string? HashedInsuranceNumber { get; private set; }
+    public string? EncryptedInsuranceNumber { get; private set; } 
+    public bool? IsInsuranceValid { get; private set; } 
+    public DateTime? LastInspectionDateUtc { get; private set; } 
+    public int? OdometerReading { get; private set; } 
+    public FuelType? FuelType { get; private set; } 
+    public Owner Owner { get; private set; } 
+    public UsageStatus? UsageStatus { get; private set; } 
+    public OwnershipStatus? OwnershipStatus { get; private set; } 
+    public TransmissionType? TransmissionType { get; private set; } 
+    public DateTime? RegistrationDateUtc { get; private init; }
 
-    public int YearOfManufacture { get; private set; }
-
-    public string HashedChassisNumber { get; private set; }
-
-    public string EncryptedChassisNumber { get; private set; }
-
-    public string HashedEngineNumber { get; private set; }
-
-    public string EncryptedEngineNumber { get; private set; }
-
-    public string HashedInsuranceNumber { get; private set; }
-
-    public string EncryptedInsuranceNumber { get; private set; }
-
-    public bool IsInsuranceValid { get; private set; }
-
-    public DateTime LastInspectionDateUtc { get; private set; }
-
-    public int OdometerReading { get; private set; }
-
-    public FuelType FuelType { get; private set; } 
-
-    public Owner Owner { get; private set; }
-
-    public UsageStatus UsageStatus { get; private set; }
-
-    public OwnershipStatus OwnershipStatus { get; private set; }
-
-    public TransmissionType TransmissionType { get; private set; }
-
-    public DateTime RegistrationDateUtc { get; private init; }
-
-    public string? ImageUrl { get; private set; }
 
     public Fleet()
     {
-        HashedRegistrationNumber = null!;
-        EncryptedRegistrationNumber = null!;
-        Brand = null!;
-        Model = null!;
-        HashedChassisNumber = null!;
-        EncryptedChassisNumber = null!;
-        HashedEngineNumber = null!;
-        EncryptedEngineNumber = null!;
-        HashedInsuranceNumber = null!;
-        EncryptedInsuranceNumber = null!; 
+        Brand = string.Empty; 
+        Model = string.Empty; 
+        ImageUrl = string.Empty;
         Owner = null!;
     }
 
 
     public Fleet( 
         Guid userId,
-        string hashedRegistrationNumber,
-        string encryptedRegistrationNumber,
-        VehicleType vehicleType,
+        string? hashedRegistrationNumber,
+        string? encryptedRegistrationNumber,
+        VehicleType? vehicleType,
         string brand,
         string model,
-        int yearOfManufacture,
-        string hashedChassisNumber,
-        string encryptedChassisNumber,
-        string hashedEngineNumber,
-        string encryptedEngineNumber,
-        string hashedInsuranceNumber,
-        string encryptedInsuranceNumber,
-        bool isInsuranceValid,
-        DateTime lastInspectionDateUtc,
-        int odometerReading,
-        FuelType fuelType, 
-        string encryptedOwnerName,
-        string encryptedOwnerAddress, 
-        UsageStatus usageStatus,
-        OwnershipStatus ownershipStatus,
-        TransmissionType transmissionType,
-        string? imageUrl)
+        int? yearOfManufacture,
+        string? hashedChassisNumber,
+        string? encryptedChassisNumber,
+        string? hashedEngineNumber,
+        string? encryptedEngineNumber,
+        string? hashedInsuranceNumber,
+        string? encryptedInsuranceNumber,
+        bool? isInsuranceValid,
+        DateTime? lastInspectionDateUtc,
+        int? odometerReading,
+        FuelType? fuelType, 
+        string? encryptedOwnerName,
+        string? encryptedOwnerAddress, 
+        UsageStatus? usageStatus,
+        OwnershipStatus? ownershipStatus,
+        TransmissionType? transmissionType,
+        string imageUrl)
     { 
         UserId = userId;
         if (LastInspectionDateUtc > DateTime.UtcNow)
@@ -104,52 +76,53 @@ public class Fleet : Entity, IAggregateRoot
    
         Brand = brand ?? throw new ArgumentNullException(nameof(brand));
         Model = model ?? throw new ArgumentNullException(nameof(model));
+        ImageUrl = imageUrl ?? throw new ArgumentNullException(nameof(ImageUrl));
 
-        HashedRegistrationNumber = hashedRegistrationNumber;
-        EncryptedRegistrationNumber = encryptedRegistrationNumber;
-        VehicleType = vehicleType;
-        YearOfManufacture = yearOfManufacture;
-        HashedChassisNumber = hashedChassisNumber;
-        EncryptedChassisNumber = encryptedChassisNumber;
-        HashedEngineNumber = hashedEngineNumber;
-        EncryptedEngineNumber = encryptedEngineNumber;
-        HashedInsuranceNumber = hashedInsuranceNumber;
-        EncryptedInsuranceNumber = encryptedInsuranceNumber;
-        IsInsuranceValid = isInsuranceValid;
-        LastInspectionDateUtc = lastInspectionDateUtc;
-        OdometerReading = odometerReading;
-        FuelType = fuelType; 
-        UsageStatus = usageStatus;
-        OwnershipStatus = ownershipStatus;
-        TransmissionType = transmissionType;
+        HashedRegistrationNumber = string.IsNullOrEmpty(hashedRegistrationNumber) ? null : hashedRegistrationNumber;
+        EncryptedRegistrationNumber = string.IsNullOrEmpty(encryptedRegistrationNumber) ? null : encryptedRegistrationNumber;
+        VehicleType = vehicleType == null ? null : vehicleType;
+        YearOfManufacture = yearOfManufacture == null ? null : yearOfManufacture;
+        HashedChassisNumber = string.IsNullOrEmpty(hashedChassisNumber) ? null : hashedChassisNumber;
+        EncryptedChassisNumber = string.IsNullOrEmpty(encryptedChassisNumber) ? null : encryptedChassisNumber;
+        HashedEngineNumber = string.IsNullOrEmpty(hashedEngineNumber) ? null : hashedEngineNumber;
+        EncryptedEngineNumber = string.IsNullOrEmpty(encryptedEngineNumber) ? null : encryptedEngineNumber;
+        HashedInsuranceNumber = string.IsNullOrEmpty(hashedInsuranceNumber) ? null : hashedInsuranceNumber;
+        EncryptedInsuranceNumber = string.IsNullOrEmpty(encryptedInsuranceNumber) ? null : encryptedInsuranceNumber;
+        IsInsuranceValid = isInsuranceValid == null ? null : isInsuranceValid;
+        LastInspectionDateUtc = lastInspectionDateUtc == null ? null : lastInspectionDateUtc;
+        OdometerReading = odometerReading == null ? null : odometerReading;
+        FuelType = fuelType == null ? null : fuelType; 
+        UsageStatus = usageStatus == null ? null : usageStatus; 
+        OwnershipStatus = ownershipStatus == null ? null : ownershipStatus;
+        TransmissionType = TransmissionType == null ? null : transmissionType;
         RegistrationDateUtc = DateTime.UtcNow;
         Owner = new Owner(encryptedOwnerName, encryptedOwnerAddress);
-        ImageUrl = imageUrl;
+       
     }
      
     public void Update(
-        string hashedRegistrationNumber,
-        string encryptedRegistrationNumber,
-        VehicleType vehicleType,
+        string? hashedRegistrationNumber,
+        string? encryptedRegistrationNumber,
+        VehicleType? vehicleType,
         string brand,
         string model,
-        int yearOfManufacture,
-        string hashedChassisNumber,
-        string encryptedChassisNumber,
-        string hashedEngineNumber,
-        string encryptedEngineNumber,
-        string hashedInsuranceNumber,
-        string encryptedInsuranceNumber,
-        bool isInsuranceValid,
-        DateTime lastInspectionDateUtc,
-        int odometerReading,
-        FuelType fuelType, 
-        string encryptedOwnerName,
-        string encryptedOwnerAddress,
-        UsageStatus usageStatus,
-        OwnershipStatus ownershipStatus,
-        TransmissionType transmissionType,
-        string? imageUrl)
+        int? yearOfManufacture,
+        string? hashedChassisNumber,
+        string? encryptedChassisNumber,
+        string? hashedEngineNumber,
+        string? encryptedEngineNumber,
+        string? hashedInsuranceNumber,
+        string? encryptedInsuranceNumber,
+        bool? isInsuranceValid,
+        DateTime? lastInspectionDateUtc,
+        int? odometerReading,
+        FuelType? fuelType, 
+        string? encryptedOwnerName,
+        string? encryptedOwnerAddress,
+        UsageStatus? usageStatus,
+        OwnershipStatus? ownershipStatus,
+        TransmissionType? transmissionType,
+        string imageUrl)
     {
         if (LastInspectionDateUtc > DateTime.UtcNow)
         {
@@ -158,26 +131,26 @@ public class Fleet : Entity, IAggregateRoot
 
         Brand = brand ?? throw new ArgumentNullException(nameof(brand));
         Model = model ?? throw new ArgumentNullException(nameof(model));
+        ImageUrl = imageUrl ?? throw new ArgumentNullException(nameof(imageUrl));  
 
-        HashedRegistrationNumber = hashedRegistrationNumber;
-        EncryptedRegistrationNumber = encryptedRegistrationNumber;
-        VehicleType = vehicleType;
-        YearOfManufacture = yearOfManufacture;
-        HashedChassisNumber = hashedChassisNumber;
-        EncryptedChassisNumber = encryptedChassisNumber;
-        HashedEngineNumber = hashedEngineNumber;
-        EncryptedEngineNumber = encryptedEngineNumber;
-        HashedInsuranceNumber = hashedInsuranceNumber;
-        EncryptedInsuranceNumber = encryptedInsuranceNumber;
-        IsInsuranceValid = isInsuranceValid;
-        LastInspectionDateUtc = lastInspectionDateUtc;
-        OdometerReading = odometerReading;
-        FuelType = fuelType; 
-        UsageStatus = usageStatus;
-        OwnershipStatus = ownershipStatus;
-        TransmissionType = transmissionType; 
-        Owner = new Owner(encryptedOwnerName, encryptedOwnerAddress);
-        ImageUrl = imageUrl;
+        HashedRegistrationNumber = string.IsNullOrEmpty(hashedRegistrationNumber) ? null : hashedRegistrationNumber;
+        EncryptedRegistrationNumber = string.IsNullOrEmpty(encryptedRegistrationNumber) ? null : encryptedRegistrationNumber;
+        VehicleType = vehicleType == null ? null : vehicleType;
+        YearOfManufacture = yearOfManufacture == null ? null : yearOfManufacture;
+        HashedChassisNumber = string.IsNullOrEmpty(hashedChassisNumber) ? null : hashedChassisNumber;
+        EncryptedChassisNumber = string.IsNullOrEmpty(encryptedChassisNumber) ? null : encryptedChassisNumber;
+        HashedEngineNumber = string.IsNullOrEmpty(hashedEngineNumber) ? null : hashedEngineNumber;
+        EncryptedEngineNumber = string.IsNullOrEmpty(encryptedEngineNumber) ? null : encryptedEngineNumber;
+        HashedInsuranceNumber = string.IsNullOrEmpty(hashedInsuranceNumber) ? null : hashedInsuranceNumber;
+        EncryptedInsuranceNumber = string.IsNullOrEmpty(encryptedInsuranceNumber) ? null : encryptedInsuranceNumber;
+        IsInsuranceValid = isInsuranceValid == null ? null : isInsuranceValid;
+        LastInspectionDateUtc = lastInspectionDateUtc == null ? null : lastInspectionDateUtc;
+        OdometerReading = odometerReading == null ? null : odometerReading;
+        FuelType = fuelType == null ? null : fuelType;
+        UsageStatus = usageStatus == null ? null : usageStatus;
+        OwnershipStatus = ownershipStatus == null ? null : ownershipStatus;
+        TransmissionType = TransmissionType == null ? null : transmissionType;
+        Owner.Update(encryptedOwnerName, encryptedOwnerAddress);
     }
 
     public void AssignStaff(Guid businessUserId, Guid staffId)

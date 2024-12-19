@@ -168,12 +168,12 @@ public class CreateRegularUserCommandHandler(
         {
             foreach (var fleet in user.Fleets)
             { 
-                var registrationNumber = await DecryptAsync(fleet.EncryptedRegistrationNumber);
-                var chassisNumber = await DecryptAsync(fleet.EncryptedChassisNumber);
-                var engineNumber = await DecryptAsync(fleet.EncryptedEngineNumber);
-                var insuranceNumber = await DecryptAsync(fleet.EncryptedInsuranceNumber);
-                var ownerName = await DecryptAsync(fleet.Owner.EncryptedOwnerName);
-                var ownerAddress = await DecryptAsync(fleet.Owner.EncryptedOwnerAddress);
+                var registrationNumber = string.IsNullOrEmpty(fleet.EncryptedRegistrationNumber) ? null : await DecryptAsync(fleet.EncryptedRegistrationNumber);
+                var chassisNumber = string.IsNullOrEmpty(fleet.EncryptedChassisNumber) ? null : await DecryptAsync(fleet.EncryptedChassisNumber);
+                var engineNumber = string.IsNullOrEmpty(fleet.EncryptedEngineNumber) ? null : await DecryptAsync(fleet.EncryptedEngineNumber);
+                var insuranceNumber = string.IsNullOrEmpty(fleet.EncryptedInsuranceNumber) ? null : await DecryptAsync(fleet.EncryptedInsuranceNumber);
+                var ownerName = string.IsNullOrEmpty(fleet.Owner?.EncryptedOwnerName) ? null : await DecryptAsync(fleet.Owner.EncryptedOwnerName);
+                var ownerAddress = string.IsNullOrEmpty(fleet.Owner?.EncryptedOwnerAddress) ? null : await DecryptAsync(fleet.Owner.EncryptedOwnerAddress);
 
                 fleets.Add(new FleetResponseDto(
                     fleet.Id,

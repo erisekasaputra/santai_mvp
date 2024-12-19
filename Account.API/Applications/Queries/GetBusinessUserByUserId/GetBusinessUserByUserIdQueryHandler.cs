@@ -108,12 +108,12 @@ public class GetBusinessUserByUserIdQueryHandler(
                                 continue;
                             }
 
-                            var staffFleetRegistrationNumber = await DecryptAsync(staffFleet.EncryptedRegistrationNumber);
-                            var staffFleetChassisNumber = await DecryptAsync(staffFleet.EncryptedChassisNumber);
-                            var staffFleetEngineNumber = await DecryptAsync(staffFleet.EncryptedEngineNumber);
-                            var staffFleetInsuranceNumber = await DecryptAsync(staffFleet.EncryptedInsuranceNumber);
-                            var staffFleetOwnerName = await DecryptAsync(staffFleet.Owner.EncryptedOwnerName);
-                            var staffFleetOwnerAddress = await DecryptAsync(staffFleet.Owner.EncryptedOwnerAddress);
+                            var staffFleetRegistrationNumber = await DecryptNullableAsync(staffFleet.EncryptedRegistrationNumber);
+                            var staffFleetChassisNumber = await DecryptNullableAsync(staffFleet.EncryptedChassisNumber);
+                            var staffFleetEngineNumber = await DecryptNullableAsync(staffFleet.EncryptedEngineNumber);
+                            var staffFleetInsuranceNumber = await DecryptNullableAsync(staffFleet.EncryptedInsuranceNumber);
+                            var staffFleetOwnerName = await DecryptNullableAsync(staffFleet.Owner?.EncryptedOwnerName);
+                            var staffFleetOwnerAddress = await DecryptNullableAsync(staffFleet.Owner?.EncryptedOwnerAddress);
 
                             staffFleets.Add(new FleetResponseDto(
                                 staffFleet.Id,
@@ -145,8 +145,7 @@ public class GetBusinessUserByUserIdQueryHandler(
                             staff.Name,
                             staffAddress,
                             staff.TimeZoneId,
-                            staffFleets
-                        ));
+                            staffFleets));
                 }
             }
 
@@ -162,12 +161,12 @@ public class GetBusinessUserByUserIdQueryHandler(
                         continue;
                     }
 
-                    var registrationNumber = await DecryptAsync(fleet.EncryptedRegistrationNumber);
-                    var chassisNumber = await DecryptAsync(fleet.EncryptedChassisNumber);
-                    var engineNumber = await DecryptAsync(fleet.EncryptedEngineNumber);
-                    var insuranceNumber = await DecryptAsync(fleet.EncryptedInsuranceNumber);
-                    var ownerName = await DecryptAsync(fleet.Owner.EncryptedOwnerName);
-                    var ownerAddress = await DecryptAsync(fleet.Owner.EncryptedOwnerAddress);
+                    var registrationNumber = await DecryptNullableAsync(fleet.EncryptedRegistrationNumber);
+                    var chassisNumber = await DecryptNullableAsync(fleet.EncryptedChassisNumber);
+                    var engineNumber = await DecryptNullableAsync(fleet.EncryptedEngineNumber);
+                    var insuranceNumber = await DecryptNullableAsync(fleet.EncryptedInsuranceNumber);
+                    var ownerName = await DecryptNullableAsync(fleet.Owner?.EncryptedOwnerName);
+                    var ownerAddress = await DecryptNullableAsync(fleet.Owner?.EncryptedOwnerAddress);
 
                     fleets.Add(new FleetResponseDto(
                         fleet.Id,

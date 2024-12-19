@@ -6,8 +6,7 @@ using Core.Utilities;
 using MassTransit; 
 using Notification.Worker.Infrastructure;
 using Notification.Worker.Repository;
-using Notification.Worker.Services.Interfaces;
-using Notification.Worker.Services;
+using Notification.Worker.Services.Interfaces; 
 
 namespace Notification.Worker.Consumers;
 
@@ -29,7 +28,9 @@ public class AccountSignedOutIntegrationEventConsumer : IConsumer<AccountSignedO
         _userProfileRepository = userProfile;
         _notificationDbContext = notificationDbContext;
         _logger = logger;
+        _notificationService = notificationService;
     }
+
     public async Task Consume(ConsumeContext<AccountSignedOutIntegrationEvent> context)
     {
         try
