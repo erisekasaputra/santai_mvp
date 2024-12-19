@@ -562,9 +562,14 @@ public class AuthController(
                         Result.Failure("We could not find you account", ResponseStatus.NotFound));
                 } 
 
-                if ((user.UserType is not UserType.StaffUser && user.UserType is not UserType.BusinessUser) || string.IsNullOrWhiteSpace(request.BusinessCode))
+                if ((user.UserType is not UserType.StaffUser && user.UserType is not UserType.BusinessUser))
                 {
                     return TypedResults.Forbid();
+                }
+
+                if (string.IsNullOrEmpty(request.BusinessCode.Trim()))
+                {
+                    return TypedResults.BadRequest(Result.Failure("Please provide business code", ResponseStatus.BadRequest).WithError(new ErrorDetail("BusinessCode", "Business code must not be empty", "", "BusinesssCodeValidator", "Error")));
                 }
 
                 if (!request.BusinessCode.Equals(user.BusinessCode, StringComparison.CurrentCultureIgnoreCase))
