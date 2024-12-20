@@ -502,6 +502,11 @@ namespace Account.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
+                    b.Property<string>("ImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
                     b.Property<bool>("IsEmailVerified")
                         .HasColumnType("bit");
 
@@ -724,6 +729,11 @@ namespace Account.Infrastructure.Migrations
             modelBuilder.Entity("Account.Domain.Aggregates.UserAggregate.BusinessUser", b =>
                 {
                     b.HasBaseType("Account.Domain.Aggregates.UserAggregate.BaseUser");
+
+                    b.Property<string>("BusinessImageUrl")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<string>("BusinessName")
                         .IsRequired()

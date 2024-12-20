@@ -8,8 +8,9 @@ namespace Account.API.Extensions;
 public static class PersonalInfoMapperExtension
 {
     public static PersonalInfo ToPersonalInfo(this PersonalInfoRequestDto personalInfo, string timeZoneId)
-    {
-        return new PersonalInfo(personalInfo.FirstName, personalInfo.MiddleName, personalInfo.LastName, personalInfo.DateOfBirth.FromLocalToUtc(timeZoneId), personalInfo.Gender, personalInfo.ProfilePictureUrl);
+    { 
+
+        return new PersonalInfo(personalInfo.FirstName, personalInfo.MiddleName, personalInfo.LastName, personalInfo.DateOfBirth?.FromLocalToUtc(timeZoneId) ?? DateTime.UtcNow, personalInfo.Gender, personalInfo.ProfilePictureUrl);
     }
 
     public static PersonalInfoResponseDto ToPersonalInfoResponseDto(this PersonalInfo personalInfo, string timeZoneId)

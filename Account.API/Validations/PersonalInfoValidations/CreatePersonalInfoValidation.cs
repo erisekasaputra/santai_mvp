@@ -21,7 +21,13 @@ public class CreatePersonalInfoValidation : AbstractValidator<PersonalInfoReques
         RuleFor(x => x.LastName)
             .Length(2, 50).WithMessage("The name must be between 2 and 50 characters long")
             .Must(NameValidation.IsValidName).WithMessage("The name must contain only alphabet, e.g: 'Doe'")
-            .When(x => !string.IsNullOrWhiteSpace(x.LastName)); 
+            .When(x => !string.IsNullOrWhiteSpace(x.LastName));
+
+        RuleFor(x => x.DateOfBirth)
+            .NotNull()
+            .WithMessage("The birth date is required.")
+            .NotEmpty()
+            .WithMessage("The birth date is required.");
 
         RuleFor(x => x.Gender)
             .NotEmpty().WithMessage("Gender is empty")

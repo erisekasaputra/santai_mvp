@@ -158,7 +158,7 @@ public class CreateRegularUserCommandHandler(
             request.PersonalInfo.FirstName,
             request.PersonalInfo.MiddleName,
             request.PersonalInfo.LastName,
-            request.PersonalInfo.DateOfBirth,
+            request.PersonalInfo.DateOfBirth ?? DateTime.UtcNow,
             request.PersonalInfo.Gender,
             request.PersonalInfo.ProfilePictureUrl);
 
