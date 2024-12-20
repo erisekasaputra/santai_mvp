@@ -9,8 +9,8 @@ public class Fleet : Entity
     public Guid OrderId { get; private set; }
     public string Brand { get; private set; }
     public string Model { get; private set; }
-    public string RegistrationNumber { get; private set; }
-    public string? ImageUrl { get; private set; } 
+    public string? RegistrationNumber { get; private set; }
+    public string ImageUrl { get; private set; } 
     public InspectionStatus InspectionStatus { get; private set; }
     public ICollection<BasicInspection> BasicInspections { get; private set; }
     public ICollection<PreServiceInspection> PreServiceInspections { get; private set; }
@@ -34,8 +34,8 @@ public class Fleet : Entity
         Guid fleetId,
         string brand,
         string model,
-        string registrationNumber,
-        string? imageUrl)
+        string? registrationNumber,
+        string imageUrl)
     {
         OrderId = orderingId;
         FleetId = fleetId;

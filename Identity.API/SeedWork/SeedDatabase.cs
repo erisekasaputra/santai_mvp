@@ -84,8 +84,56 @@ public class SeedDatabase
                     }
                 }
 
-                await dbContext.SaveChangesAsync();
 
+
+                const string phoneNumber2 = "+6285791387558";
+                const string email2 = "erisekasaputra282000@gmail.com";
+                const string password2 = "000328Eris@";
+
+                var user2 = await userManager.FindByNameAsync(phoneNumber2);
+
+                if (user2 is null)
+                {
+                    user2 = await userManager.FindByEmailAsync(email2);
+
+                    if (user2 is null)
+                    {
+                        user2 = new ApplicationUser()
+                        {
+                            UserName = phoneNumber2,
+                            Email = email2,
+                            PhoneNumber = phoneNumber2,
+                            PhoneNumberConfirmed = true,
+                            EmailConfirmed = true,
+                            UserType = UserType.Administrator,
+                            IsAccountRegistered = false,
+                            DeviceIds = []
+                        };
+
+                        await userManager.CreateAsync(user, password2);
+                        await userManager.AddToRoleAsync(user, UserType.Administrator.ToString());
+
+                        var userInfoLogin2 = new UserLoginInfo("google", googleOption.CurrentValue.ClientId, "google");
+
+                        await userManager.AddLoginAsync(user2, userInfoLogin2);
+
+                        var claims2 = new List<Claim>()
+                        {
+                            new (JwtRegisteredClaimNames.Sub, user2.Id),
+                            new (ClaimTypes.Email, user2.Email),
+                            new (ClaimTypes.Name, user2.UserName),
+                            new (ClaimTypes.MobilePhone, user2.PhoneNumber),
+                            new (ClaimTypes.Role, user2.UserType.ToString()),
+                            new (SantaiClaimTypes.UserType, user2.UserType.ToString())
+                        };
+
+                        await userManager.AddClaimsAsync(user2, claims2);
+                    }
+                }
+
+
+
+                await dbContext.SaveChangesAsync(); 
                 await transaction.CommitAsync();
             }
             catch (DbUpdateException)

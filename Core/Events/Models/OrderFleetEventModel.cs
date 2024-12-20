@@ -7,8 +7,8 @@ public class OrderFleetEventModel
     public Guid OrderId { get; set; }
     public string Brand { get; set; }
     public string Model { get; set; }
-    public string RegistrationNumber { get; set; }
-    public string? ImageUrl { get; set; }
+    public string? RegistrationNumber { get; set; }
+    public string ImageUrl { get; set; }
     
     public OrderFleetEventModel(
         Guid id,
@@ -16,8 +16,8 @@ public class OrderFleetEventModel
         Guid orderId,
         string brand,
         string model,
-        string registrationNumber,
-        string? imageUrl)
+        string? registrationNumber,
+        string imageUrl)
     {
         Id = id;
         FleetId = fleetId;
