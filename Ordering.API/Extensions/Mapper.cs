@@ -49,36 +49,44 @@ public static class Mapper
     }
     public static OrdersActiveResponseDto ToOrderActiveDto(this Order order)
     {
+        List<string> statuses = ["", "", "", ""];
         string status;
         int step = 0;
         switch (order.Status)
         {
             case OrderStatus.PaymentPaid:
+                statuses[0] = "Order Received";
                 status = "Order Received";
                 step = 0;
                 break;
             case OrderStatus.FindingMechanic:
+                statuses[0] = "Discovering Technician";
                 status = "Discovering Technician";
                 step = 0;
                 break;
             case OrderStatus.MechanicAssigned:
+                statuses[1] = "Technician Discovered";
                 status = "Technician Discovered";
                 step = 1;
                 break;
             case OrderStatus.MechanicArrived:
+                statuses[1] = "Technician Arrived";
                 status = "Technician Arrived";
                 step = 1;
                 break; 
             case OrderStatus.MechanicDispatched:
+                statuses[1] = "On The Way";
                 status = "On The Way";
                 step = 1;
                 break; 
             case OrderStatus.ServiceInProgress:
+                statuses[2] = "Servicing";
                 status = "Servicing";
                 step = 2;
                 break; 
             case OrderStatus.ServiceIncompleted or OrderStatus.ServiceCompleted:
-                status = "Complete";
+                statuses[3] = "Completed";
+                status = "Completed";
                 step = 3;
                 break;
             default: 
@@ -86,7 +94,7 @@ public static class Mapper
                 break;
         }
 
-        return new OrdersActiveResponseDto(order.Id, order.Secret, status, step);
+        return new OrdersActiveResponseDto(order.Id, order.Secret, status, step, statuses);
     }
     public static BuyerResponseDto ToBuyerDto(this Buyer buyer)
     {

@@ -6,16 +6,19 @@ public class OrdersActiveResponseDto
     public string Secret { get; set; }
     public string Status { get; set; }
     public int Step { get; set; }
+    public List<string> Statuses { get; set; }
     public OrdersActiveResponseDto(
         Guid id,
         string secret,
         string status,
-        int step)
+        int step,
+        List<string> statuses)
     {
         Id = id;
         Secret = secret;
         Status = status;
         Step = step;
+        Statuses = statuses;
     }
 }
 
