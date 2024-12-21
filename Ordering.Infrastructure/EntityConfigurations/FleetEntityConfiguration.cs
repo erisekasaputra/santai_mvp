@@ -19,7 +19,7 @@ public class FleetEntityConfiguration : IEntityTypeConfiguration<Fleet>
             .HasMaxLength(100);
 
         builder.Property(e => e.RegistrationNumber)
-            .IsRequired()
+            .IsRequired(false)
             .HasMaxLength(100);
 
         builder.Property(e => e.ImageUrl)

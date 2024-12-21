@@ -53,21 +53,30 @@ public static class Mapper
         int step = 0;
         switch (order.Status)
         {
-            case OrderStatus.MechanicArrived or OrderStatus.MechanicAssigned or OrderStatus.MechanicDispatched:
-                status = "On The Way";
-                step = 1;
-                break;
-
-            case OrderStatus.PaymentPaid or OrderStatus.FindingMechanic:
+            case OrderStatus.PaymentPaid:
                 status = "Order Received";
                 step = 0;
                 break;
-
+            case OrderStatus.FindingMechanic:
+                status = "Discovering Technician";
+                step = 0;
+                break;
+            case OrderStatus.MechanicAssigned:
+                status = "Technician Discovered";
+                step = 1;
+                break;
+            case OrderStatus.MechanicArrived:
+                status = "Technician Arrived";
+                step = 1;
+                break; 
+            case OrderStatus.MechanicDispatched:
+                status = "On The Way";
+                step = 1;
+                break; 
             case OrderStatus.ServiceInProgress:
                 status = "Servicing";
                 step = 2;
-                break;
-
+                break; 
             case OrderStatus.ServiceIncompleted or OrderStatus.ServiceCompleted:
                 status = "Complete";
                 step = 3;
