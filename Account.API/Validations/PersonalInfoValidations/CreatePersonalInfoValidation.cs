@@ -25,7 +25,6 @@ public class CreatePersonalInfoValidation : AbstractValidator<PersonalInfoReques
 
         RuleFor(x => x.DateOfBirth)
             .NotNull()
-            .WithMessage("The birth date is required.")
             .NotEmpty()
             .WithMessage("The birth date is required.");
 
