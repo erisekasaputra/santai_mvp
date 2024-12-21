@@ -822,10 +822,8 @@ public class Order : Entity
             throw new ArgumentNullException(nameof(fleet.FleetId), "Fleet id cannot be null.");
 
         if (fleet is null) throw new ArgumentNullException(nameof(fleet));
-        if (fleet.Brand is null) throw new ArgumentNullException(nameof(fleet));
-        if (fleet.Model is null) throw new ArgumentNullException(nameof(fleet));
-        if (fleet.RegistrationNumber is null) throw new ArgumentNullException(nameof(fleet));
-        if (fleet.ImageUrl is null) throw new ArgumentNullException(nameof(fleet));   
+        if (fleet.Brand is null) throw new ArgumentNullException(nameof(fleet.Brand));
+        if (fleet.Model is null) throw new ArgumentNullException(nameof(fleet.Model));  
 
         if (Fleets.Where(x => x.FleetId == fleet.FleetId).ToList().Count > 0)
         {
