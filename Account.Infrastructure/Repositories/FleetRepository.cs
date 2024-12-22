@@ -137,9 +137,7 @@ public class FleetRepository : IFleetRepository
     public async Task<Fleet?> GetByUserIdAndIdAsync(Guid userId, Guid fleetId)
     {
         return await _context.Fleets
-            .Where(x => 
-                (x.UserId == userId) 
-                && x.Id == fleetId)
+            .Where(x => (x.UserId == userId || x.StaffId == userId) && x.Id == fleetId)
             .FirstOrDefaultAsync();
     }
 

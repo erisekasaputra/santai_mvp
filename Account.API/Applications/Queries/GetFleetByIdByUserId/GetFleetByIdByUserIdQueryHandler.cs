@@ -6,6 +6,7 @@ using MediatR;
 using Core.Extensions;
 using Core.Services.Interfaces;
 using Core.CustomMessages;
+using Core.Enumerations;
 
 namespace Account.API.Applications.Queries.GetFleetByIdByUserId;
 
@@ -23,11 +24,22 @@ public class GetFleetByIdByUserIdQueryHandler(
     {
         try
         {
-            var timeZone = await _unitOfWork.BaseUsers.GetTimeZoneById(request.UserId);
+
+            String? timeZone = null;
+
+            if (request.UserType == UserType.StaffUser)
+            {
+                timeZone = await _unitOfWork.Staffs.GetTimeZoneByIdAsync(request.UserId);
+            }
+
+            if (timeZone == null) 
+            { 
+                timeZone = await _unitOfWork.BaseUsers.GetTimeZoneById(request.UserId);
+            }
 
             if (timeZone == null)
             {
-                return Result.Failure($"User not found", ResponseStatus.NotFound);
+                return Result.Failure($"User time zone configuration is not found", ResponseStatus.NotFound);
             }
 
             var fleet = await _unitOfWork.Fleets.GetByUserIdAndIdAsync(request.UserId, request.FleetId);

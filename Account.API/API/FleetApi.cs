@@ -223,7 +223,7 @@ public static class FleetApi
             }  
 
             var result = await service.Mediator.Send(
-                new GetFleetByIdByUserIdQuery(userId, fleetId));
+                new GetFleetByIdByUserIdQuery(userId, fleetId, userClaim.CurrentUserType));
 
             return result.ToIResult();
         }
