@@ -42,9 +42,7 @@ public class ItemRepository(CatalogDbContext context, MetaTableHelper metaTableH
     {
         var query = _context.Items
             .Where(w => !w.IsDeleted)
-            .AsQueryable();
-        Console.WriteLine(categoryId);
-        Console.WriteLine(brandId);
+            .AsQueryable(); 
         if (categoryId is not null && categoryId.HasValue && categoryId != Guid.Empty) 
         {
             query = query.Where(x => x.CategoryId == categoryId);

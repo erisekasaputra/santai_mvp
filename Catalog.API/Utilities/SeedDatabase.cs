@@ -14,35 +14,35 @@ public class SeedDatabase
         var dbContext = serviceProvider.GetRequiredService<CatalogDbContext>(); 
         try
         {
-            var transaction = await dbContext.Database.BeginTransactionAsync(); 
+            //var transaction = await dbContext.Database.BeginTransactionAsync(); 
 
-            var category = new Category("Oil", "5d14bfb1-8ca3-49c1-b3ef-1f7b8788389b.png");
-            var brand = new Brand("Yamalube", "5d14bfb1-8ca3-49c1-b3ef-1f228788389b.jpg");
+            //var category = new Category("Oil", "5d14bfb1-8ca3-49c1-b3ef-1f7b8788389b.png");
+            //var brand = new Brand("Yamalube", "5d14bfb1-8ca3-49c1-b3ef-1f228788389b.jpg");
 
-            var item = new Item(
-                "Oil Yamaha Delta",
-                "Oil with very good performance",
-                100,
-                Core.Enumerations.Currency.MYR,
-                "SKU123",
-                "5d14bfb1-8ca3-49c1-b3ef-1f228788389b.jpg",
-                DateTime.UtcNow,
-                100,
-                0,
-                category.Id,
-                category,
-                brand.Id,
-                brand,
-                true,
-                [new OwnerReview("Performance", 9)]);
+            //var item = new Item(
+            //    "Oil Yamaha Delta",
+            //    "Oil with very good performance",
+            //    100,
+            //    Core.Enumerations.Currency.MYR,
+            //    "SKU123",
+            //    "5d14bfb1-8ca3-49c1-b3ef-1f228788389b.jpg",
+            //    DateTime.UtcNow,
+            //    100,
+            //    0,
+            //    category.Id,
+            //    category,
+            //    brand.Id,
+            //    brand,
+            //    true,
+            //    [new OwnerReview("Performance", 9)]);
 
-            await dbContext.Brands.AddAsync(brand);
-            await dbContext.Categories.AddAsync(category);
-            await dbContext.Items.AddAsync(item);
+            //await dbContext.Brands.AddAsync(brand);
+            //await dbContext.Categories.AddAsync(category);
+            //await dbContext.Items.AddAsync(item);
 
-            await dbContext.SaveChangesAsync();
+            //await dbContext.SaveChangesAsync();
 
-            await transaction.CommitAsync();
+            //await transaction.CommitAsync();
         }
         catch (DbUpdateException)
         {
