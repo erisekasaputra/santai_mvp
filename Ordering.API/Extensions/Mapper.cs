@@ -49,7 +49,7 @@ public static class Mapper
     }
     public static OrdersActiveResponseDto ToOrderActiveDto(this Order order)
     {
-        List<string> statuses = ["", "", "", ""];
+        List<string> statuses = ["Order Received", "Technician Discovered", "Servicing", "Completed"];
         string status;
         int step = 0;
         switch (order.Status)
