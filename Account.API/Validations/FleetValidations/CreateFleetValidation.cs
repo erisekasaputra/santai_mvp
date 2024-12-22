@@ -21,10 +21,24 @@ public class CreateFleetValidation : AbstractValidator<CreateFleetRequestDto>
             .NotEmpty()
             .WithMessage("Image resource name can not be empty"); 
         
-        RuleFor(x => x.RegistrationNumber)
-            .NotNull().WithMessage("Plate number cannot be null.")
+        RuleFor(x => x.RegistrationNumber) 
             .NotEmpty().WithMessage("Plate number cannot be empty.")
-            .Must(BeAValidMalaysianPlate).WithMessage("Invalid plate number.");
+            .Matches("^[A-Z]{1,3}\\s*[0-9]{1,4}\\s*[A-Z]?$")
+            .WithMessage("Plate number should be in the format: 'W 1234 A', 'W1234A', or 'ABC 1234'.")
+            .Matches("^Q[A-Z]{1,2}\\s*[0-9]{1,4}\\s*[A-Z]?$")
+            .WithMessage("Sarawak plate should be in the format: 'QA 1234 A', or 'QAB 1234'.")
+            .Matches("^KV\\s*[0-9]{1,4}\\s*[A-Z]?$")
+            .WithMessage("Langkawi plate should be in the format: 'KV 1234 A'.")
+            .Matches("^H[A-Z]{1,2}\\s*[0-9]{1,4}$")
+            .WithMessage("Taxi plate should be in the format: 'HBA 1234' or 'HWD 1234'.")
+            .Matches("^([0-9]{1,4}\\s*CD|[0-9]{1,2}\\s*CD\\s*[0-9]{1,2})$")
+            .WithMessage("Diplomatic plate should be in the format: '1234 CD', '12 CD 34'.")
+            .Matches("^Z[A-Z]?\\s*[0-9]{1,4}$")
+            .WithMessage("Military plate should be in the format: 'Z 1234' or 'ZD 1234'.")
+            .Matches("^(DYMM|Raja|SUK)\\s*[0-9]{1,4}$")
+            .WithMessage("Royal plate should be in the format: 'DYMM 1', 'SUK 1234'.")
+            .Matches("^[A-Z]\\s*[0-9]{1,4}\\s*[A-Z]$")
+            .WithMessage("Trade plate should be in the format: 'P 1234 A', 'S 1234 A'.");
     }
 
     private bool BeAValidMalaysianPlate(string? plateNumber)
