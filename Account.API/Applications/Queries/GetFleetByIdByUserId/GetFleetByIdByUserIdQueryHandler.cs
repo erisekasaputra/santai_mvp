@@ -25,17 +25,11 @@ public class GetFleetByIdByUserIdQueryHandler(
         try
         {
 
-            String? timeZone = null;
+            string? timeZone = null;
 
-            if (request.UserType == UserType.StaffUser)
-            {
-                timeZone = await _unitOfWork.Staffs.GetTimeZoneByIdAsync(request.UserId);
-            }
+            timeZone = await _unitOfWork.Staffs.GetTimeZoneByIdAsync(request.UserId);
 
-            if (timeZone == null) 
-            { 
-                timeZone = await _unitOfWork.BaseUsers.GetTimeZoneById(request.UserId);
-            }
+            timeZone ??= await _unitOfWork.BaseUsers.GetTimeZoneById(request.UserId);
 
             if (timeZone == null)
             {
