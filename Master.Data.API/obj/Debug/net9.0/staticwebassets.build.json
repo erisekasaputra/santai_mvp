@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "0AxtQmUHUqntlx/HBEGnKN838og0QqqCWyi2Nlpf1J0=",
+  "Hash": "XTNaQZ4ru1v1xaPxJ7SK+wZ9kTEWcslvNNT8TOd8Wuo=",
   "Source": "Master.Data.API",
   "BasePath": "_content/Master.Data.API",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "Master.Data.API\\wwwroot",
       "Source": "Master.Data.API",
-      "ContentRoot": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\",
       "BasePath": "_content/Master.Data.API",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-59jwi6ab2s.gz",
+      "Identity": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-59jwi6ab2s.gz",
       "SourceId": "Master.Data.API",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\",
+      "ContentRoot": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/Master.Data.API",
       "RelativePath": "Order/ServiceFee/service-fee#[.{fingerprint=59jwi6ab2s}]?.json.gz",
       "AssetKind": "All",
@@ -28,20 +28,20 @@
       "AssetRole": "Alternative",
       "AssetMergeBehavior": "",
       "AssetMergeSource": "",
-      "RelatedAsset": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\ServiceFee\\service-fee.json",
+      "RelatedAsset": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\ServiceFee\\service-fee.json",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
       "Fingerprint": "pv03q0ig1k",
       "Integrity": "NaHwCuz18j1eXFTOlJFa1MhZeR8ea98QlnkKnhxxSH0=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\ServiceFee\\service-fee.json"
+      "OriginalItemSpec": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\ServiceFee\\service-fee.json"
     },
     {
-      "Identity": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-f5ik8t5jts.gz",
+      "Identity": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-f5ik8t5jts.gz",
       "SourceId": "Master.Data.API",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\",
+      "ContentRoot": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/Master.Data.API",
       "RelativePath": "Order/BasicInspection/basic-inspection#[.{fingerprint=f5ik8t5jts}]?.json.gz",
       "AssetKind": "All",
@@ -49,20 +49,20 @@
       "AssetRole": "Alternative",
       "AssetMergeBehavior": "",
       "AssetMergeSource": "",
-      "RelatedAsset": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json",
+      "RelatedAsset": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
       "Fingerprint": "cjg26y7dfi",
       "Integrity": "yAFhiwQ3i8vzCHxJ2jNyBPV8EZJR1VRea/QE4Mkf85E=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json"
+      "OriginalItemSpec": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json"
     },
     {
-      "Identity": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-sgr1j5ymqr.gz",
+      "Identity": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-sgr1j5ymqr.gz",
       "SourceId": "Master.Data.API",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\",
+      "ContentRoot": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/Master.Data.API",
       "RelativePath": "Order/PreServiceInspection/pre-service-inspection#[.{fingerprint=sgr1j5ymqr}]?.json.gz",
       "AssetKind": "All",
@@ -70,20 +70,20 @@
       "AssetRole": "Alternative",
       "AssetMergeBehavior": "",
       "AssetMergeSource": "",
-      "RelatedAsset": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json",
+      "RelatedAsset": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
       "Fingerprint": "hrk5vx2fl7",
       "Integrity": "XXuyvFB8oVAxyLX1jY/zt2V2QD+ZdceUv/ShxhEbVwY=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json"
+      "OriginalItemSpec": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json"
     },
     {
-      "Identity": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-1lxxpzjhll.gz",
+      "Identity": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-1lxxpzjhll.gz",
       "SourceId": "Master.Data.API",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\",
+      "ContentRoot": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\",
       "BasePath": "_content/Master.Data.API",
       "RelativePath": "Order/CancellationFee/cancellation-fee#[.{fingerprint=1lxxpzjhll}]?.json.gz",
       "AssetKind": "All",
@@ -91,20 +91,20 @@
       "AssetRole": "Alternative",
       "AssetMergeBehavior": "",
       "AssetMergeSource": "",
-      "RelatedAsset": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json",
+      "RelatedAsset": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json",
       "AssetTraitName": "Content-Encoding",
       "AssetTraitValue": "gzip",
       "Fingerprint": "jcy16ofn6s",
       "Integrity": "3cWVsnBR9OWkly83KAYwfZvWq+hxgXeEj+maN+Udblk=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json"
+      "OriginalItemSpec": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json"
     },
     {
-      "Identity": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json",
+      "Identity": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json",
       "SourceId": "Master.Data.API",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\",
       "BasePath": "_content/Master.Data.API",
       "RelativePath": "Order/BasicInspection/basic-inspection#[.{fingerprint}]?.json",
       "AssetKind": "All",
@@ -122,10 +122,10 @@
       "OriginalItemSpec": "wwwroot\\Order\\BasicInspection\\basic-inspection.json"
     },
     {
-      "Identity": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json",
+      "Identity": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json",
       "SourceId": "Master.Data.API",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\",
       "BasePath": "_content/Master.Data.API",
       "RelativePath": "Order/CancellationFee/cancellation-fee#[.{fingerprint}]?.json",
       "AssetKind": "All",
@@ -143,10 +143,10 @@
       "OriginalItemSpec": "wwwroot\\Order\\CancellationFee\\cancellation-fee.json"
     },
     {
-      "Identity": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json",
+      "Identity": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json",
       "SourceId": "Master.Data.API",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\",
       "BasePath": "_content/Master.Data.API",
       "RelativePath": "Order/PreServiceInspection/pre-service-inspection#[.{fingerprint}]?.json",
       "AssetKind": "All",
@@ -164,10 +164,10 @@
       "OriginalItemSpec": "wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json"
     },
     {
-      "Identity": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\ServiceFee\\service-fee.json",
+      "Identity": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\ServiceFee\\service-fee.json",
       "SourceId": "Master.Data.API",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\",
       "BasePath": "_content/Master.Data.API",
       "RelativePath": "Order/ServiceFee/service-fee#[.{fingerprint}]?.json",
       "AssetKind": "All",
@@ -188,7 +188,7 @@
   "Endpoints": [
     {
       "Route": "Order/BasicInspection/basic-inspection.f5ik8t5jts.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-f5ik8t5jts.gz",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-f5ik8t5jts.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
@@ -251,7 +251,7 @@
     },
     {
       "Route": "Order/BasicInspection/basic-inspection.f5ik8t5jts.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -296,7 +296,7 @@
     },
     {
       "Route": "Order/BasicInspection/basic-inspection.f5ik8t5jts.json.gz",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-f5ik8t5jts.gz",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-f5ik8t5jts.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -349,7 +349,7 @@
     },
     {
       "Route": "Order/BasicInspection/basic-inspection.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-f5ik8t5jts.gz",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-f5ik8t5jts.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
@@ -404,7 +404,7 @@
     },
     {
       "Route": "Order/BasicInspection/basic-inspection.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\BasicInspection\\basic-inspection.json",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -441,7 +441,7 @@
     },
     {
       "Route": "Order/BasicInspection/basic-inspection.json.gz",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-f5ik8t5jts.gz",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\25y84c7jcg-f5ik8t5jts.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -486,7 +486,7 @@
     },
     {
       "Route": "Order/CancellationFee/cancellation-fee.1lxxpzjhll.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-1lxxpzjhll.gz",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-1lxxpzjhll.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
@@ -549,7 +549,7 @@
     },
     {
       "Route": "Order/CancellationFee/cancellation-fee.1lxxpzjhll.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -594,7 +594,7 @@
     },
     {
       "Route": "Order/CancellationFee/cancellation-fee.1lxxpzjhll.json.gz",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-1lxxpzjhll.gz",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-1lxxpzjhll.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -647,7 +647,7 @@
     },
     {
       "Route": "Order/CancellationFee/cancellation-fee.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-1lxxpzjhll.gz",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-1lxxpzjhll.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
@@ -702,7 +702,7 @@
     },
     {
       "Route": "Order/CancellationFee/cancellation-fee.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\CancellationFee\\cancellation-fee.json",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -739,7 +739,7 @@
     },
     {
       "Route": "Order/CancellationFee/cancellation-fee.json.gz",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-1lxxpzjhll.gz",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\gtk4vznist-1lxxpzjhll.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -784,7 +784,7 @@
     },
     {
       "Route": "Order/PreServiceInspection/pre-service-inspection.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-sgr1j5ymqr.gz",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-sgr1j5ymqr.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
@@ -839,7 +839,7 @@
     },
     {
       "Route": "Order/PreServiceInspection/pre-service-inspection.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -876,7 +876,7 @@
     },
     {
       "Route": "Order/PreServiceInspection/pre-service-inspection.json.gz",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-sgr1j5ymqr.gz",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-sgr1j5ymqr.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -921,7 +921,7 @@
     },
     {
       "Route": "Order/PreServiceInspection/pre-service-inspection.sgr1j5ymqr.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-sgr1j5ymqr.gz",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-sgr1j5ymqr.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
@@ -984,7 +984,7 @@
     },
     {
       "Route": "Order/PreServiceInspection/pre-service-inspection.sgr1j5ymqr.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\PreServiceInspection\\pre-service-inspection.json",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1029,7 +1029,7 @@
     },
     {
       "Route": "Order/PreServiceInspection/pre-service-inspection.sgr1j5ymqr.json.gz",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-sgr1j5ymqr.gz",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\2uqe8z00nf-sgr1j5ymqr.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1082,7 +1082,7 @@
     },
     {
       "Route": "Order/ServiceFee/service-fee.59jwi6ab2s.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-59jwi6ab2s.gz",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-59jwi6ab2s.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
@@ -1145,7 +1145,7 @@
     },
     {
       "Route": "Order/ServiceFee/service-fee.59jwi6ab2s.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\ServiceFee\\service-fee.json",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\ServiceFee\\service-fee.json",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1190,7 +1190,7 @@
     },
     {
       "Route": "Order/ServiceFee/service-fee.59jwi6ab2s.json.gz",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-59jwi6ab2s.gz",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-59jwi6ab2s.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1243,7 +1243,7 @@
     },
     {
       "Route": "Order/ServiceFee/service-fee.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-59jwi6ab2s.gz",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-59jwi6ab2s.gz",
       "Selectors": [
         {
           "Name": "Content-Encoding",
@@ -1298,7 +1298,7 @@
     },
     {
       "Route": "Order/ServiceFee/service-fee.json",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\ServiceFee\\service-fee.json",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\wwwroot\\Order\\ServiceFee\\service-fee.json",
       "Selectors": [],
       "ResponseHeaders": [
         {
@@ -1335,7 +1335,7 @@
     },
     {
       "Route": "Order/ServiceFee/service-fee.json.gz",
-      "AssetFile": "C:\\Projects\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-59jwi6ab2s.gz",
+      "AssetFile": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Master.Data.API\\obj\\Debug\\net9.0\\compressed\\1b0leuntmr-59jwi6ab2s.gz",
       "Selectors": [],
       "ResponseHeaders": [
         {

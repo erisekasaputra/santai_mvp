@@ -1,6 +1,5 @@
 {
   "Version": 1,
-  "ManifestType": "Build",
   "Endpoints": [
     {
       "Route": "Order/BasicInspection/basic-inspection.f5ik8t5jts.json",
