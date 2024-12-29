@@ -1,31 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Projects\\Projects\\Santai.MVP\\Account.API\\Account.API.csproj": {}
+    "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.API\\Account.API.csproj": {}
   },
   "projects": {
-    "C:\\Projects\\Projects\\Santai.MVP\\Account.API\\Account.API.csproj": {
+    "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.API\\Account.API.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projects\\Projects\\Santai.MVP\\Account.API\\Account.API.csproj",
+        "projectUniqueName": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.API\\Account.API.csproj",
         "projectName": "Account.API",
-        "projectPath": "C:\\Projects\\Projects\\Santai.MVP\\Account.API\\Account.API.csproj",
+        "projectPath": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.API\\Account.API.csproj",
         "packagesPath": "C:\\Users\\erise\\.nuget\\packages\\",
-        "outputPath": "C:\\Projects\\Projects\\Santai.MVP\\Account.API\\obj\\",
+        "outputPath": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.API\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\erise\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\erise\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -33,14 +27,14 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Projects\\Projects\\Santai.MVP\\Account.Domain\\Account.Domain.csproj": {
-                "projectPath": "C:\\Projects\\Projects\\Santai.MVP\\Account.Domain\\Account.Domain.csproj"
+              "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.Domain\\Account.Domain.csproj": {
+                "projectPath": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.Domain\\Account.Domain.csproj"
               },
-              "C:\\Projects\\Projects\\Santai.MVP\\Account.Infrastructure\\Account.Infrastructure.csproj": {
-                "projectPath": "C:\\Projects\\Projects\\Santai.MVP\\Account.Infrastructure\\Account.Infrastructure.csproj"
+              "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.Infrastructure\\Account.Infrastructure.csproj": {
+                "projectPath": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.Infrastructure\\Account.Infrastructure.csproj"
               },
-              "C:\\Projects\\Projects\\Santai.MVP\\Core\\Core.csproj": {
-                "projectPath": "C:\\Projects\\Projects\\Santai.MVP\\Core\\Core.csproj"
+              "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Core\\Core.csproj": {
+                "projectPath": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Core\\Core.csproj"
               }
             }
           }
@@ -54,8 +48,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "all"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+        }
       },
       "frameworks": {
         "net9.0": {
@@ -261,32 +254,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100-rc.2.24474.11/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100-preview.6.24328.19/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Projects\\Projects\\Santai.MVP\\Account.Domain\\Account.Domain.csproj": {
+    "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.Domain\\Account.Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projects\\Projects\\Santai.MVP\\Account.Domain\\Account.Domain.csproj",
+        "projectUniqueName": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.Domain\\Account.Domain.csproj",
         "projectName": "Account.Domain",
-        "projectPath": "C:\\Projects\\Projects\\Santai.MVP\\Account.Domain\\Account.Domain.csproj",
+        "projectPath": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.Domain\\Account.Domain.csproj",
         "packagesPath": "C:\\Users\\erise\\.nuget\\packages\\",
-        "outputPath": "C:\\Projects\\Projects\\Santai.MVP\\Account.Domain\\obj\\",
+        "outputPath": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.Domain\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\erise\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\erise\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -294,8 +281,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Projects\\Projects\\Santai.MVP\\Core\\Core.csproj": {
-                "projectPath": "C:\\Projects\\Projects\\Santai.MVP\\Core\\Core.csproj"
+              "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Core\\Core.csproj": {
+                "projectPath": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Core\\Core.csproj"
               }
             }
           }
@@ -309,8 +296,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "all"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+        }
       },
       "frameworks": {
         "net9.0": {
@@ -345,32 +331,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100-rc.2.24474.11/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100-preview.6.24328.19/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Projects\\Projects\\Santai.MVP\\Account.Infrastructure\\Account.Infrastructure.csproj": {
+    "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.Infrastructure\\Account.Infrastructure.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projects\\Projects\\Santai.MVP\\Account.Infrastructure\\Account.Infrastructure.csproj",
+        "projectUniqueName": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.Infrastructure\\Account.Infrastructure.csproj",
         "projectName": "Account.Infrastructure",
-        "projectPath": "C:\\Projects\\Projects\\Santai.MVP\\Account.Infrastructure\\Account.Infrastructure.csproj",
+        "projectPath": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.Infrastructure\\Account.Infrastructure.csproj",
         "packagesPath": "C:\\Users\\erise\\.nuget\\packages\\",
-        "outputPath": "C:\\Projects\\Projects\\Santai.MVP\\Account.Infrastructure\\obj\\",
+        "outputPath": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.Infrastructure\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\erise\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\erise\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -378,8 +358,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Projects\\Projects\\Santai.MVP\\Account.Domain\\Account.Domain.csproj": {
-                "projectPath": "C:\\Projects\\Projects\\Santai.MVP\\Account.Domain\\Account.Domain.csproj"
+              "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.Domain\\Account.Domain.csproj": {
+                "projectPath": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Account.Domain\\Account.Domain.csproj"
               }
             }
           }
@@ -393,8 +373,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "all"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+        }
       },
       "frameworks": {
         "net9.0": {
@@ -493,32 +472,26 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100-rc.2.24474.11/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100-preview.6.24328.19/PortableRuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Projects\\Projects\\Santai.MVP\\Core\\Core.csproj": {
+    "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Core\\Core.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Projects\\Projects\\Santai.MVP\\Core\\Core.csproj",
+        "projectUniqueName": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Core\\Core.csproj",
         "projectName": "Core",
-        "projectPath": "C:\\Projects\\Projects\\Santai.MVP\\Core\\Core.csproj",
+        "projectPath": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Core\\Core.csproj",
         "packagesPath": "C:\\Users\\erise\\.nuget\\packages\\",
-        "outputPath": "C:\\Projects\\Projects\\Santai.MVP\\Core\\obj\\",
+        "outputPath": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Core\\obj\\",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\erise\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\erise\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net9.0"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
@@ -537,8 +510,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "all"
-        },
-        "SdkAnalysisLevel": "9.0.100"
+        }
       },
       "frameworks": {
         "net9.0": {
@@ -681,7 +653,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100-rc.2.24474.11/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100-preview.6.24328.19/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

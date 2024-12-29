@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "8LiMeqxP0EQ=",
+  "dgSpecHash": "bq7QzgtZRnE=",
   "success": true,
-  "projectFilePath": "C:\\Projects\\Projects\\Santai.MVP\\Chat.API\\Chat.API.csproj",
+  "projectFilePath": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Chat.API\\Chat.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.core\\4.0.0-preview.3\\awssdk.core.4.0.0-preview.3.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.dynamodbv2\\4.0.0-preview.3\\awssdk.dynamodbv2.4.0.0-preview.3.nupkg.sha512",

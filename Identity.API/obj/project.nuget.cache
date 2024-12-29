@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "75DoWaZIcTw=",
+  "dgSpecHash": "W2z2l8TA1UY=",
   "success": true,
-  "projectFilePath": "C:\\Projects\\Projects\\Santai.MVP\\Identity.API\\Identity.API.csproj",
+  "projectFilePath": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Identity.API\\Identity.API.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.core\\4.0.0-preview.2\\awssdk.core.4.0.0-preview.2.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.extensions.netcore.setup\\4.0.0-preview.2\\awssdk.extensions.netcore.setup.4.0.0-preview.2.nupkg.sha512",

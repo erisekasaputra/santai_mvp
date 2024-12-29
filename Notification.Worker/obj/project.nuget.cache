@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "oLLMOVG6qTE=",
+  "dgSpecHash": "6QwujgdHk9s=",
   "success": true,
-  "projectFilePath": "C:\\Projects\\Projects\\Santai.MVP\\Notification.Worker\\Notification.Worker.csproj",
+  "projectFilePath": "C:\\Users\\erise\\Documents\\Projects\\Santai.MVP\\Notification.Worker\\Notification.Worker.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.core\\4.0.0-preview.4\\awssdk.core.4.0.0-preview.4.nupkg.sha512",
     "C:\\Users\\erise\\.nuget\\packages\\awssdk.dynamodbv2\\4.0.0-preview.4\\awssdk.dynamodbv2.4.0.0-preview.4.nupkg.sha512",

@@ -125,8 +125,7 @@ public class CouponController : ControllerBase
     {
         try
         { 
-            var result = await _mediator.Send(command);
-
+            var result = await _mediator.Send(command); 
             return result.ToIResult();
         }
         catch (Exception ex)
