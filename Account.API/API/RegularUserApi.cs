@@ -212,7 +212,7 @@ public static class RegularUserApi
 
             var result = await service.Mediator.Send(new CreateRegularUserCommand(
                 userClaim.Sub,
-                userClaim.Email,
+                request.Email,
                 userClaim.PhoneNumber,
                 request.TimeZoneId,
                 request.ReferralCode,

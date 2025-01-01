@@ -10,6 +10,10 @@ public class CreateRegularUserValidation : AbstractValidator<RegularUserRequestD
 {
     public CreateRegularUserValidation()
     {   
+        RuleFor(x => x.Email)
+            .NotEmpty().WithMessage("Email can not be empty")
+            .EmailAddress().WithMessage("Email format is invalid");
+
         RuleFor(x => x.TimeZoneId)
             .NotEmpty().WithMessage("Time zone can not be empty")
             .Length(2, 40).WithMessage("Time zone must be between 2 and 40 characters long")
