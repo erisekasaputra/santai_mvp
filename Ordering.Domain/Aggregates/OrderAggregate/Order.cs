@@ -681,7 +681,7 @@ public class Order : Entity
     public void CalculateGrandTotal(decimal? requiredGrandTotal = null)
     {
         if (GrandTotal.Currency != Currency)
-        {
+        { 
             throw new DomainException("Grand total currency with Order Amount currency is missmatch, incosistent state has occured");
         }
 
@@ -691,24 +691,24 @@ public class Order : Entity
         }
 
         var totalAmount = LineItems.Sum(lineItem => lineItem.CalculateTotalPrice().Amount);
-        OrderAmount = totalAmount;
+        OrderAmount = totalAmount; 
 
         if (OrderAmount <= 0)
         {
             throw new DomainException("Order amount can not less than or equal with 0");
         }
 
-        GrandTotal.SetAmount(totalAmount, Currency); 
-         
-        GrandTotal -= Discount?.Apply(totalAmount, Currency) ?? new Money(0, Currency); ;
+        GrandTotal.SetAmount(totalAmount, Currency);   
 
-        var holdedGrandTotal = GrandTotal;
+        var holdedGrandTotal = GrandTotal.Amount;
 
         foreach (var fee in Fees)
-        {
-            GrandTotal += fee.Apply(holdedGrandTotal.Amount, Currency);
-        }
-
+        {  
+            GrandTotal += fee.Apply(holdedGrandTotal, Currency); 
+        } 
+        
+        GrandTotal -= Discount?.Apply(GrandTotal.Amount, Currency) ?? new Money(0, Currency);  
+ 
         if (!requiredGrandTotal.HasValue)
         {
             return;
@@ -717,7 +717,7 @@ public class Order : Entity
         if (GrandTotal.Amount != requiredGrandTotal.Value)
         {
             throw new PriceChangesException(
-                "Whoops! A price change has been detected. Please refresh or try again", GrandTotal.Amount);
+                "A recent price change has been detected. Please refresh the page or try again to ensure you have the most up-to-date information.", GrandTotal.Amount);
         }
     }
 
@@ -890,8 +890,7 @@ public class Order : Entity
     }
 
     private void RaiseOrderRatedDomainEvent(Guid orderId, Guid buyerId, Guid mechanicId, decimal value, string? comment)
-    {
-        Console.WriteLine(mechanicId);
+    { 
         AddDomainEvent(new OrderRatedDomainEvent(orderId, buyerId, mechanicId, value, comment));
     } 
     private void RaiseOrderCancelledByBuyerDomainEvent(Guid orderId, Guid buyerId, string buyerName, Guid? mechanicId, string mechanicName)

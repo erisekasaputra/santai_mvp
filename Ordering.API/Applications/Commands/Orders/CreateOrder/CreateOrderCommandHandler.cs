@@ -63,6 +63,7 @@ public class CreateOrderCommandHandler(
             {
                 if (buyer is null || buyer.Data is null)
                 {
+                    _logger.LogError("Buyer is null");
                     await RollbackAsync(cancellationToken);
                     return  Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError);
                 }
@@ -227,7 +228,8 @@ public class CreateOrderCommandHandler(
         foreach (var lineItem in items?.Data ?? [])
         {
             if (IsNullCatalogItems(lineItem.Name, lineItem.Sku, lineItem.Price, lineItem.Currency))
-            {
+            { 
+                _logger.LogError("Catalog item is null");
                 await RollbackAndRecoveryStockAsync(command.LineItems, cancellationToken);
                 return Result.Failure(
                     Messages.InternalServerError, ResponseStatus.InternalServerError);
@@ -236,8 +238,8 @@ public class CreateOrderCommandHandler(
             order.AddOrderItem(
                 new(lineItem.Id,
                     order.Id,
-                    lineItem.Name!,
-                    lineItem.Sku!,
+                    lineItem.Name ?? "",
+                    lineItem.Sku ?? "",
                     lineItem.Price!.Value,
                     lineItem.Currency!.Value,
                     command.LineItems.First(x => x.Id == lineItem.Id).Quantity));
@@ -338,9 +340,7 @@ public class CreateOrderCommandHandler(
     }
 
     private static bool IsNullCatalogItems(string? name, string? sku, decimal? price, Currency? currency)
-    {
-        if (string.IsNullOrWhiteSpace(name)) return true;
-        if (string.IsNullOrWhiteSpace(sku)) return true;
+    { 
         if (price is null || !price.HasValue) return true;
         if (currency is null || !currency.HasValue) return true;  
         return false;

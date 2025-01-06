@@ -31,13 +31,7 @@ public class LineItem : Entity
         decimal price,
         Currency currency,
         int quantity = 1)
-    {
-        if (string.IsNullOrWhiteSpace(name))
-            throw new DomainException("Item name cannot be null or empty.");
-
-        if (string.IsNullOrWhiteSpace(sku))
-            throw new DomainException("SKU cannot be null or empty.");
-
+    { 
         if (price <= 0)
             throw new DomainException("Unit price must be greater than zero.");
 

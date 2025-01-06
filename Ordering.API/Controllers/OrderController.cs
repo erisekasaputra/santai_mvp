@@ -211,10 +211,7 @@ public class OrderController : ControllerBase
         [FromQuery] PaginatedRequestDto request, [FromQuery] OrderStatus? orderStatus = null)
     {
         try
-        {
-            Console.WriteLine(request.PageNumber);
-            Console.WriteLine(request.PageSize);
-
+        {  
             var userClaim = _userInfoService.GetUserInfo();
             if (userClaim is null)
             {
