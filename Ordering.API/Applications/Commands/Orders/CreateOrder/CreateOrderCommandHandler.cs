@@ -252,8 +252,7 @@ public class CreateOrderCommandHandler(
             x => (x.Description, x.Parameter.CleanAndLowering(), x.Rating,
             x.PreServiceInspectionResults.Select(b => (b.Description, b.Parameter.CleanAndLowering(), b.IsWorking))));
 
-        var masterJobChecklist = master.BasicInspections.Select(
-           x => (x.Description, x.Parameter.CleanAndLowering(), false));
+        var masterJobChecklist = order.LineItems.Select(x => (x.Name, x.Id.ToString().CleanAndLowering(), false));
 
         foreach (var fleet in fleets)
         {

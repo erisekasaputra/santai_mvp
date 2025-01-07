@@ -913,6 +913,115 @@ public class AuthController(
         });
     }
 
+    [HttpPost("signin-admin-v2")]
+    public async Task<IResult> LoginAdminV2(
+        [FromBody] LoginUserRequest request,
+        [FromServices] IValidator<LoginUserRequest> validator)
+    {
+        var strategy = _dbContext.Database.CreateExecutionStrategy();
+
+        return await strategy.ExecuteAsync<IResult>(async () =>
+        {
+            using var transaction = await _dbContext.Database.BeginTransactionAsync();
+
+            try
+            {
+                var validation = await validator.ValidateAsync(request);
+
+                if (!validation.IsValid)
+                {
+                    return TypedResults.BadRequest(validation.Errors);
+                }
+
+
+                var phoneNumber = request.PhoneNumber.NormalizePhoneNumber(request.RegionCode);
+
+                if (phoneNumber is null)
+                {
+                    return TypedResults.BadRequest(
+                        Result.Failure("Phone number format is invalid", ResponseStatus.BadRequest)
+                            .WithError(new("PhoneNumber", "Phone number format is invalid", request.PhoneNumber, "PhoneNumberValidator", "Error")));
+                }
+
+                var user = await _userManager.FindByNameAsync(phoneNumber);
+
+                if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
+                {
+                    return TypedResults.NotFound(
+                        Result.Failure("We could not find you account", ResponseStatus.NotFound));
+                }
+
+                if (user.UserType != UserType.Administrator)
+                {
+                    return TypedResults.Forbid();
+                }   
+
+
+                var signInResult = await _signInManager.PasswordSignInAsync(user, request.Password, false, lockoutOnFailure: false);
+                if (!signInResult.Succeeded)
+                {
+                    return TypedResults.Unauthorized();
+                }
+
+
+                var claims = await _userManager.GetClaimsAsync(user);
+                if (claims is null || !claims.Any())
+                {
+                    _logger.LogWarning("User claims are missing or invalid for user ID: {Id}", user.Id);
+                    return TypedResults.InternalServerError(
+                        Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
+                }
+
+                var roles = await _userManager.GetRolesAsync(user);
+
+                if (roles is null || !roles.Any())
+                {
+                    _logger.LogWarning("User roles are missing or invalid for user ID: {Id}", user.Id);
+                    return TypedResults.InternalServerError(
+                        Result.Failure(Messages.AccountError, ResponseStatus.InternalServerError));
+                }
+
+
+               
+                var accessToken = _tokenService.GenerateAccessToken(new ClaimsIdentity(claims)); 
+                var refreshToken = await _tokenService.GenerateRefreshTokenAsync(user.Id); 
+                await _tokenCacheService.SaveRefreshToken(refreshToken);
+
+                await _otpService.RemoveOtpAsync(request.PhoneNumber); 
+                string redirectTo = user.IsAccountRegistered ? _homePageActionName : _createAccountActionName;  
+
+
+                user.AddDeviceId("DEVICE");  
+                _dbContext.Users.Update(user);  
+                
+                await _dbContext.SaveChangesAsync(); 
+                await transaction.CommitAsync();
+
+                return TypedResults.Ok(Result.Success(new
+                {
+                    AccessToken = accessToken,
+                    RefreshToken = refreshToken,
+                    Sub = user.Id,
+                    Username = user.UserName,
+                    PhoneNumber = user.PhoneNumber,
+                    Email = user.Email,
+                    UserType = user.UserType,
+                    BusinessCode = user.BusinessCode
+                }, ResponseStatus.Ok).WithNext(new
+                {
+                    Action = redirectTo
+                })); 
+            }
+            catch (Exception ex)
+            {
+                LoggerHelper.LogError(_logger, ex);
+                return TypedResults.InternalServerError(
+                    Result.Failure(Messages.InternalServerError, ResponseStatus.InternalServerError));
+            }
+        });
+    }
+
+
 
 
     [HttpPost("signin-mechanic")]

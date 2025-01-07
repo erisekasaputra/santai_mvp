@@ -11,8 +11,24 @@ using System.Security.Claims;
 
 namespace Identity.API.SeedWork;
 
+public class UserAdmin
+{
+    public string Name { get; private set; }
+    public string PhoneNumber { get; private  set; }
+    public string Email { get; private set; }
+    public string Password { get; private  set; }
+    
+    public UserAdmin(string name, string phoneNumber, string email, string password)
+    {
+        Name = name;
+        PhoneNumber = phoneNumber;
+        Email = email;
+        Password = password;
+    }
+}
+
 public class SeedDatabase
-{ 
+{  
     public static async Task Initialize(IServiceProvider serviceProvider)
     {
         var roleManager = serviceProvider.GetRequiredService<RoleManager<IdentityRole>>();
@@ -21,13 +37,13 @@ public class SeedDatabase
         var dbContext = serviceProvider.GetRequiredService<ApplicationDbContext>(); 
 
         var strategy = dbContext.Database.CreateExecutionStrategy();
+       
 
         await strategy.ExecuteAsync(async () =>
         {
+            var transaction = await dbContext.Database.BeginTransactionAsync();
             try
-            {
-                var transaction = await dbContext.Database.BeginTransactionAsync();
-
+            { 
                 UserType[] roleNames = [.. GetUserTypeConfiguration.GetAll];
 
                 foreach (var roleName in roleNames)
@@ -37,112 +53,142 @@ public class SeedDatabase
                     {
                         await roleManager.CreateAsync(new IdentityRole(roleName.ToString()));
                     }
-                }
+                } 
 
-                const string phoneNumber = "+6285791387558";
-                const string email = "erisekasaputra282000@gmail.com";
-                const string password = "000328Eris@";
+                List<UserAdmin> newAdminUsers =
+                [ 
+                    new ("Irwan", "+601160706392", "irwan@santaitechnology.com", "Santai@admin24"),
+                    new ("Fazz", "+60189888200", "fadzle@santaitechnology.com", "Santai@admin24"),
+                ];
 
-                var user = await userManager.FindByNameAsync(phoneNumber);
 
-                if (user is null)
-                {
-                    user = await userManager.FindByEmailAsync(email);
+                foreach (var adminUser in newAdminUsers) 
+                {   
+                    var user = await userManager.FindByNameAsync(adminUser.PhoneNumber);
 
                     if (user is null)
                     {
-                        user = new ApplicationUser()
+                        user = await userManager.FindByEmailAsync(adminUser.Email);
+
+                        if (user is null)
                         {
-                            UserName = phoneNumber,
-                            Email = email,
-                            PhoneNumber = phoneNumber,
-                            PhoneNumberConfirmed = true,
-                            EmailConfirmed = true,
-                            UserType = UserType.Administrator,
-                            IsAccountRegistered = false,
-                            DeviceIds = []
-                        };
+                            user = new ApplicationUser()
+                            {
+                                UserName = adminUser.PhoneNumber,
+                                Email = adminUser.Email,
+                                PhoneNumber = adminUser.PhoneNumber,
+                                PhoneNumberConfirmed = true,
+                                EmailConfirmed = true,
+                                UserType = UserType.Administrator,
+                                IsAccountRegistered = false,
+                                DeviceIds = []
+                            };
 
-                        await userManager.CreateAsync(user, password);
-                        await userManager.AddToRoleAsync(user, UserType.Administrator.ToString());
+                            await userManager.CreateAsync(user, adminUser.Password);
+                            await userManager.AddToRoleAsync(user, UserType.Administrator.ToString());
 
-                        var userInfoLogin = new UserLoginInfo("google", googleOption.CurrentValue.ClientId, "google");
+                            var userInfoLogin = new UserLoginInfo("google", googleOption.CurrentValue.ClientId, "google");
+                            await userManager.AddLoginAsync(user, userInfoLogin);
 
-                        await userManager.AddLoginAsync(user, userInfoLogin);
+                            var claims = new List<Claim>()
+                            {
+                                new (JwtRegisteredClaimNames.Sub, user.Id),
+                                new (ClaimTypes.Email, adminUser.Email),
+                                new (ClaimTypes.Name, adminUser.Name),
+                                new (ClaimTypes.MobilePhone, adminUser.PhoneNumber),
+                                new (ClaimTypes.Role, user.UserType.ToString()),
+                                new (SantaiClaimTypes.UserType, user.UserType.ToString())
+                            };
 
+                            await userManager.AddClaimsAsync(user, claims);
+                        }
+                    }
+                    else 
+                    {   
                         var claims = new List<Claim>()
                         {
-                            new (JwtRegisteredClaimNames.Sub, user.Id),
-                            new (ClaimTypes.Email, user.Email),
-                            new (ClaimTypes.Name, user.UserName),
-                            new (ClaimTypes.MobilePhone, user.PhoneNumber),
+                            new (JwtRegisteredClaimNames.Sub, user.Id), 
+                            new (ClaimTypes.Role, user.UserType.ToString()),
+                            new (SantaiClaimTypes.UserType, user.UserType.ToString())
+                        };
+                        if (!string.IsNullOrEmpty(user.Email))
+                        {
+                            claims.Add(new Claim(ClaimTypes.Email, user.Email));
+                        }
+                        if (!string.IsNullOrEmpty(user.PhoneNumber))
+                        {
+                            claims.Add(new Claim(ClaimTypes.MobilePhone, user.PhoneNumber));
+                        } 
+                        if (!string.IsNullOrEmpty(user.UserName))
+                        {
+                            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+                        }
+
+
+                    
+
+
+
+
+
+
+                        var newClaims = new List<Claim>()
+                        {
+                            new (JwtRegisteredClaimNames.Sub, user.Id),  
                             new (ClaimTypes.Role, user.UserType.ToString()),
                             new (SantaiClaimTypes.UserType, user.UserType.ToString())
                         };
 
-                        await userManager.AddClaimsAsync(user, claims);
-                    }
-                }
-
-
-
-                const string phoneNumber2 = "+6285791387558";
-                const string email2 = "erisekasaputra282000@gmail.com";
-                const string password2 = "000328Eris@";
-
-                var user2 = await userManager.FindByNameAsync(phoneNumber2);
-
-                if (user2 is null)
-                {
-                    user2 = await userManager.FindByEmailAsync(email2);
-
-                    if (user2 is null)
-                    {
-                        user2 = new ApplicationUser()
+                        if (!string.IsNullOrEmpty(adminUser.Email))
                         {
-                            UserName = phoneNumber2,
-                            Email = email2,
-                            PhoneNumber = phoneNumber2,
-                            PhoneNumberConfirmed = true,
-                            EmailConfirmed = true,
-                            UserType = UserType.Administrator,
-                            IsAccountRegistered = false,
-                            DeviceIds = []
-                        };
-
-                        await userManager.CreateAsync(user, password2);
-                        await userManager.AddToRoleAsync(user, UserType.Administrator.ToString());
-
-                        var userInfoLogin2 = new UserLoginInfo("google", googleOption.CurrentValue.ClientId, "google");
-
-                        await userManager.AddLoginAsync(user2, userInfoLogin2);
-
-                        var claims2 = new List<Claim>()
+                            newClaims.Add(new Claim(ClaimTypes.Email, adminUser.Email));
+                        }
+                        if (!string.IsNullOrEmpty(adminUser.PhoneNumber))
                         {
-                            new (JwtRegisteredClaimNames.Sub, user2.Id),
-                            new (ClaimTypes.Email, user2.Email),
-                            new (ClaimTypes.Name, user2.UserName),
-                            new (ClaimTypes.MobilePhone, user2.PhoneNumber),
-                            new (ClaimTypes.Role, user2.UserType.ToString()),
-                            new (SantaiClaimTypes.UserType, user2.UserType.ToString())
-                        };
+                            newClaims.Add(new Claim(ClaimTypes.MobilePhone, adminUser.PhoneNumber));
+                        } 
+                        if (!string.IsNullOrEmpty(adminUser.Name))
+                        {
+                            newClaims.Add(new Claim(ClaimTypes.Name, adminUser.Name));
+                        }
 
-                        await userManager.AddClaimsAsync(user2, claims2);
+
+
+
+
+
+                        await userManager.RemoveClaimsAsync(user, claims); 
+                        await userManager.AddClaimsAsync(user, newClaims);
+
+
+
+                        var removePasswordResult = await userManager.RemovePasswordAsync(user);
+                        if (removePasswordResult.Succeeded)
+                        {
+                            var addPasswordResult = await userManager.AddPasswordAsync(user, adminUser.Password); 
+                        } 
                     }
-                }
-
-
+                } 
 
                 await dbContext.SaveChangesAsync(); 
                 await transaction.CommitAsync();
             }
             catch (DbUpdateException)
-            {
+            { 
+                await transaction.RollbackAsync();
                 throw;  
             }
             catch (Exception ex)
             {
+                await transaction.RollbackAsync();
                 Console.WriteLine(ex.Message);
+            }
+            finally
+            {
+                if (transaction != null)
+                {
+                    await transaction.DisposeAsync();  
+                }
             }
         }); 
     } 
