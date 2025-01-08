@@ -4,6 +4,7 @@ using Account.API.Applications.Queries.GetEmailByUserId;
 using Account.API.Applications.Queries.GetPhoneNumberByUserId;
 using Account.API.Applications.Queries.GetTimeZoneByUserId;
 using Account.API.Applications.Queries.GetUserByUserTypeAndUserId;
+using Account.API.Applications.Queries.GetUserCountsByUserType;
 using Account.API.Applications.Services;
 using Account.API.Extensions;
 using Core.CustomMessages;
@@ -28,6 +29,9 @@ public static class UserApi
         app.MapGet("/email", GetEmailByUserId)
             .RequireAuthorization();
 
+        app.MapGet("/count", GetUserCountByGroupUserType)
+            .RequireAuthorization();
+
         app.MapGet("/phone-number", GetPhoneNumberByUserId)
             .RequireAuthorization();
 
@@ -39,6 +43,32 @@ public static class UserApi
 
         return app;
     } 
+
+    private static async Task<IResult> GetUserCountByGroupUserType(  
+        [FromServices] ApplicationService service,
+        [FromServices] IUserInfoService userInfoService)
+    {
+        try
+        {
+            var userClaim = userInfoService.GetServiceInfo();
+            if (userClaim is null)
+            {
+                return TypedResults.Unauthorized();
+            }
+
+            var result = await service.Mediator.Send(
+                new GetUserCountsByUserTypeQuery());
+
+            return result.ToIResult();
+        }
+        catch (Exception ex)
+        {
+            service.Logger.LogError(ex, ex.InnerException?.Message);
+            return TypedResults.InternalServerError(Messages.InternalServerError);
+        }
+    }
+
+
 
     private static async Task<IResult> GetByUserId(
         Guid userId,

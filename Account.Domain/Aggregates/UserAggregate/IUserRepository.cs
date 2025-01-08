@@ -24,4 +24,5 @@ public interface IUserRepository
     Task<string?> GetEmailById(Guid id);
     Task<string?> GetPhoneNumberById(Guid id); 
     Task<UserType?> GetUserTypeById(Guid id);
+    Task<List<(string UserType, int Count)>?> CountTotalUsersByUserType();
 }

@@ -275,6 +275,28 @@ public class UserRepository : IUserRepository
         return (totalCount, totalPages, items);
     }
 
+    public async Task<List<(string UserType, int Count)>?> CountTotalUsersByUserType()
+    {
+        var userTypeCounts = await _context.BaseUsers
+            .AsNoTracking()
+            .GroupBy(a => EF.Property<string>(a, "UserType"))
+            .Select(g => new
+            {
+                UserType = g.Key,
+                Count = g.Count()
+            })
+            .ToListAsync()  
+            .ConfigureAwait(false); 
+        
+        if (userTypeCounts.Count == 0)
+        {
+            return null;
+        }
+ 
+        return userTypeCounts
+            .Select(x => (x.UserType, x.Count))
+            .ToList();
+    }
     public async Task<string?> GetTimeZoneById(Guid id)
     {
         return await _context.BaseUsers 
