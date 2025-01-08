@@ -50,8 +50,7 @@ public static class UserApi
     {
         try
         { 
-            var result = await service.Mediator.Send(
-                new GetUserCountsByUserTypeQuery());
+            var result = await service.Mediator.Send(new GetUserCountsByUserTypeQuery());
 
             return result.ToIResult();
         }
