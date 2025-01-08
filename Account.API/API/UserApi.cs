@@ -49,13 +49,7 @@ public static class UserApi
         [FromServices] IUserInfoService userInfoService)
     {
         try
-        {
-            var userClaim = userInfoService.GetServiceInfo();
-            if (userClaim is null)
-            {
-                return TypedResults.Unauthorized();
-            }
-
+        { 
             var result = await service.Mediator.Send(
                 new GetUserCountsByUserTypeQuery());
 
